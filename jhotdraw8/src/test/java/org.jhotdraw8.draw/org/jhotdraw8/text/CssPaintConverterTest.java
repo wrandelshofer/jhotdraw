@@ -7,6 +7,8 @@ package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssPaintConverter;
@@ -35,7 +37,7 @@ public class CssPaintConverterTest {
      * Test of fromString method, of class CssPaintConverter.
      */
     static
-    public void testFromString(Paintable expected, String string) throws Exception {
+    public void testFromString(@Nullable Paintable expected, @NonNull String string) throws Exception {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -47,6 +49,7 @@ public class CssPaintConverterTest {
 
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(

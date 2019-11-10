@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collections;
@@ -73,11 +73,11 @@ public class Intersection {
     }
 
 
-    @Nonnull
+    @NonNull
     private final List<IntersectionPoint> intersections;
     private final Status status;
 
-    public Intersection(@Nonnull List<IntersectionPoint> intersections) {
+    public Intersection(@NonNull List<IntersectionPoint> intersections) {
         this(intersections.isEmpty() ? Status.NO_INTERSECTION : Status.INTERSECTION, intersections);
     }
 
@@ -85,7 +85,7 @@ public class Intersection {
         this(status, Collections.emptyList());
     }
 
-    public Intersection(Status status, @Nonnull List<IntersectionPoint> intersections) {
+    public Intersection(Status status, @NonNull List<IntersectionPoint> intersections) {
         if (status == Status.INTERSECTION && intersections.isEmpty()
                 || status != Status.INTERSECTION && !intersections.isEmpty()) {
             throw new IllegalArgumentException("status=" + status + " intersections=" + intersections);
@@ -96,7 +96,7 @@ public class Intersection {
         this.status = status;
     }
 
-    @Nonnull
+    @NonNull
     public List<IntersectionPoint> getIntersections() {
         return intersections;
     }
@@ -138,7 +138,7 @@ public class Intersection {
         return intersections.size();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();

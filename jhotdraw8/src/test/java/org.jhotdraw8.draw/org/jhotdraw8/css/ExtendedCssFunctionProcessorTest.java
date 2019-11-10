@@ -1,5 +1,6 @@
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -13,11 +14,13 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class ExtendedCssFunctionProcessorTest extends SimpleCssFunctionProcessorTest {
 
+    @NonNull
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         return new ExtendedCssFunctionProcessor<>(model, customProperties);
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testProcessingOfExtendedFunctionsFactory() {
         return Arrays.asList(

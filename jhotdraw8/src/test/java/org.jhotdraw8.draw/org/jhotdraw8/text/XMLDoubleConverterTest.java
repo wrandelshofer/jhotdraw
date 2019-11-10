@@ -5,6 +5,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -36,7 +37,7 @@ public class XMLDoubleConverterTest {
     /**
      * Test of toString method, of class XmlNumberConverter.
      */
-    public static void testFromString(Double expectedValue, String inputValue) throws ParseException, IOException {
+    public static void testFromString(Double expectedValue, @NonNull String inputValue) throws ParseException, IOException {
         XmlNumberConverter c = new XmlNumberConverter();
 
         Number actualValue = c.fromString(inputValue);
@@ -44,11 +45,12 @@ public class XMLDoubleConverterTest {
         assertEquals(actualValue, expectedValue);
     }
 
-    public static void testToFromString(Double doubleValue, String stringValue) throws Exception {
+    public static void testToFromString(Double doubleValue, @NonNull String stringValue) throws Exception {
         testToString(doubleValue, stringValue);
         testFromString(doubleValue, stringValue);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(

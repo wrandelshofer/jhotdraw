@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 
 /**
@@ -21,7 +21,7 @@ import org.jhotdraw8.gui.CustomSkin;
  */
 public class TabPaneDock extends Control implements Dock {
 
-    @Nonnull
+    @NonNull
     private TabPane tabPane = new TabPane();
 
     public TabPaneDock() {
@@ -36,7 +36,7 @@ public class TabPaneDock extends Control implements Dock {
 
         getItems().addListener(new ListChangeListener<DockItem>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends DockItem> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends DockItem> c) {
                 while (c.next()) {
                     for (DockItem remitem : c.getRemoved()) {
                         remitem.setDock(null);
@@ -59,7 +59,7 @@ public class TabPaneDock extends Control implements Dock {
         return tabPane.prefWidth(height);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @SuppressWarnings("unchecked")
     public ObservableList<DockItem> getItems() {
@@ -77,10 +77,10 @@ public class TabPaneDock extends Control implements Dock {
         tabPane.resizeRelocate(0, 0, getWidth(), getHeight());
     }
 
-    @Nonnull
+    @NonNull
     private ObjectProperty<Track> track = new SimpleObjectProperty<>();
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;

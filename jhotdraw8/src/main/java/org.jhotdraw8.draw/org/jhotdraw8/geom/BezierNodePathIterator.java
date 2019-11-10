@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BezierNodePathIterator implements PathIterator {
 
-    @Nonnull
+    @NonNull
     private final List<BezierNode> nodes;
     private int index;
     private final AffineTransform affine;
@@ -27,7 +27,7 @@ public class BezierNodePathIterator implements PathIterator {
 
     private final BezierNode CLOSE_PATH = new BezierNode(0, 0);
 
-    public BezierNodePathIterator(List<BezierNode> nodes, boolean closed, int windingRule, AffineTransform affine) {
+    public BezierNodePathIterator(@NonNull List<BezierNode> nodes, boolean closed, int windingRule, AffineTransform affine) {
         this.nodes = new ArrayList<BezierNode>();
         for (BezierNode n : nodes) {
             this.nodes.add(n);
@@ -79,6 +79,7 @@ public class BezierNodePathIterator implements PathIterator {
         }
     }
 
+    @NonNull
     private double[] temp_double = new double[6];
 
     /**

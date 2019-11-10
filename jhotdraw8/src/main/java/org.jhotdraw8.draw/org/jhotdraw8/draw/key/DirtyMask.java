@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Represents a bitmask of {@code DirtyBits}.
@@ -28,7 +28,8 @@ public class DirtyMask {
         this.bitmask = bitmask;
     }
 
-    public static DirtyMask of(DirtyBits... bits) {
+    @NonNull
+    public static DirtyMask of(@NonNull DirtyBits... bits) {
         int mask = 0;
         for (DirtyBits bit : bits) {
             mask |= bit.getMask();
@@ -43,7 +44,7 @@ public class DirtyMask {
         return bitmask;
     }
 
-    public boolean containsOneOf(@Nonnull DirtyBits... bits) {
+    public boolean containsOneOf(@NonNull DirtyBits... bits) {
         for (DirtyBits bit : bits) {
             if ((bitmask & bit.getMask()) == bit.getMask()) {
                 return true;
@@ -56,7 +57,7 @@ public class DirtyMask {
         return intersects(of(bits));
     }
 
-    public boolean intersects(@Nonnull DirtyMask that) {
+    public boolean intersects(@NonNull DirtyMask that) {
         return (this.bitmask & that.bitmask) != 0;
     }
 
@@ -70,17 +71,17 @@ public class DirtyMask {
      * @param that that mask
      * @return a new mask
      */
-    @Nonnull
-    public DirtyMask add(@Nonnull DirtyMask that) {
+    @NonNull
+    public DirtyMask add(@NonNull DirtyMask that) {
         return new DirtyMask(this.bitmask | that.bitmask);
     }
 
-    @Nonnull
-    public DirtyMask add(@Nonnull DirtyBits bits) {
+    @NonNull
+    public DirtyMask add(@NonNull DirtyBits bits) {
         return new DirtyMask(this.bitmask | bits.getMask());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "DirtyMask{" + "bitmask=" + Integer.toBinaryString(bitmask) + '}';

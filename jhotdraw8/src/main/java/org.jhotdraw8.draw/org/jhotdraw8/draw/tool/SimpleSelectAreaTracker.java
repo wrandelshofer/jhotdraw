@@ -9,7 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -58,7 +58,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     /**
      * The rubberband.
      */
-    @Nonnull
+    @NonNull
     private Rectangle rubberband = new Rectangle();
 
     double x;
@@ -77,14 +77,14 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
         initNode(rubberband);
     }
 
-    protected void initNode(@Nonnull Rectangle r) {
+    protected void initNode(@NonNull Rectangle r) {
         r.setFill(null);
         r.setStroke(Color.BLACK);
         rubberband.getStyleClass().add(STYLECLASS_TOOL_RUBBERBAND);
     }
 
     @Override
-    public void trackMousePressed(@Nonnull MouseEvent event, DrawingView dv) {
+    public void trackMousePressed(@NonNull MouseEvent event, DrawingView dv) {
         Bounds b = getNode().getBoundsInParent();
         x = event.getX();
         y = event.getY();
@@ -96,7 +96,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     }
 
     @Override
-    public void trackMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    public void trackMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         rubberband.setVisible(false);
 
         double w = x - event.getX();
@@ -119,7 +119,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     }
 
     @Override
-    public void trackMouseDragged(@Nonnull MouseEvent event, DrawingView dv) {
+    public void trackMouseDragged(@NonNull MouseEvent event, DrawingView dv) {
         double w = x - event.getX();
         double h = y - event.getY();
         rubberband.setX(round(min(x, event.getX())) - 0.5);

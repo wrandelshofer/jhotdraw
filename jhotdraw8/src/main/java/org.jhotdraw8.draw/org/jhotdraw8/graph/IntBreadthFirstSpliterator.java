@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayDeque;
 
 import java.util.BitSet;
@@ -23,9 +23,9 @@ import java.util.function.IntPredicate;
 public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
 
     private final IntFunction<Spliterator.OfInt> graph;
-    @Nonnull
+    @NonNull
     private final IntArrayDeque queue;
-    @Nonnull
+    @NonNull
     private final IntPredicate visited;
 
     /**
@@ -52,7 +52,7 @@ public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
     }
 
     @Override
-    public boolean tryAdvance(@Nonnull IntConsumer action) {
+    public boolean tryAdvance(@NonNull IntConsumer action) {
         if (queue.isEmpty()) {
             return false;
         }

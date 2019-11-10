@@ -5,7 +5,7 @@
 package org.jhotdraw8.fxml;
 
 import javafx.fxml.FXMLLoader;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.concurrent.FXWorker;
 
 import java.net.URL;
@@ -31,10 +31,12 @@ public class AsyncFXMLLoader {
      * @param location the location of the FXML file
      * @return the FXMLLoader.
      */
+    @NonNull
     public static CompletionStage<FXMLLoader> load(URL location) {
         return load(location, null, ForkJoinPool.commonPool());
     }
 
+    @NonNull
     public static CompletionStage<FXMLLoader> load(URL location, ResourceBundle resources) {
         return load(location, resources, ForkJoinPool.commonPool());
     }
@@ -72,7 +74,8 @@ public class AsyncFXMLLoader {
      * @param executor  the executor on which the task should be executed
      * @return the FXMLLoader.
      */
-    public static CompletionStage<FXMLLoader> load(URL location, ResourceBundle resources, @Nonnull Executor executor) {
+    @NonNull
+    public static CompletionStage<FXMLLoader> load(URL location, ResourceBundle resources, @NonNull Executor executor) {
         return FXWorker.supply(executor,
                 () -> {
                     FXMLLoader loader = new FXMLLoader();

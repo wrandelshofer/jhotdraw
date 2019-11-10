@@ -19,7 +19,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
@@ -33,20 +33,98 @@ import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.draw.*;
-import org.jhotdraw8.draw.action.*;
+import org.jhotdraw8.draw.DrawStylesheets;
+import org.jhotdraw8.draw.DrawingEditor;
+import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.EditorView;
+import org.jhotdraw8.draw.SimpleDrawingEditor;
+import org.jhotdraw8.draw.SimpleDrawingView;
+import org.jhotdraw8.draw.action.AddToGroupAction;
+import org.jhotdraw8.draw.action.AlignBottomAction;
+import org.jhotdraw8.draw.action.AlignHorizontalAction;
+import org.jhotdraw8.draw.action.AlignLeftAction;
+import org.jhotdraw8.draw.action.AlignRightAction;
+import org.jhotdraw8.draw.action.AlignTopAction;
+import org.jhotdraw8.draw.action.AlignVerticalAction;
+import org.jhotdraw8.draw.action.BringForwardAction;
+import org.jhotdraw8.draw.action.BringToFrontAction;
+import org.jhotdraw8.draw.action.GroupAction;
+import org.jhotdraw8.draw.action.RemoveFromGroupAction;
+import org.jhotdraw8.draw.action.RemoveTransformationsAction;
+import org.jhotdraw8.draw.action.SelectChildrenAction;
+import org.jhotdraw8.draw.action.SelectSameAction;
+import org.jhotdraw8.draw.action.SendBackwardAction;
+import org.jhotdraw8.draw.action.SendToBackAction;
+import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.CombinedPathFigure;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.DrawingFigure;
+import org.jhotdraw8.draw.figure.EllipseFigure;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.FillableFigure;
+import org.jhotdraw8.draw.figure.GroupFigure;
+import org.jhotdraw8.draw.figure.ImageFigure;
+import org.jhotdraw8.draw.figure.LabelFigure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.figure.LineConnectionWithMarkersFigure;
+import org.jhotdraw8.draw.figure.LineFigure;
+import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.PageLabelFigure;
+import org.jhotdraw8.draw.figure.PolygonFigure;
+import org.jhotdraw8.draw.figure.PolylineFigure;
+import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SliceFigure;
+import org.jhotdraw8.draw.figure.StrokableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.TextAreaFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
 import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
-import org.jhotdraw8.draw.inspector.*;
-import org.jhotdraw8.draw.io.*;
+import org.jhotdraw8.draw.inspector.DrawingInspector;
+import org.jhotdraw8.draw.inspector.GridInspector;
+import org.jhotdraw8.draw.inspector.HandlesInspector;
+import org.jhotdraw8.draw.inspector.HelpTextInspector;
+import org.jhotdraw8.draw.inspector.HierarchyInspector;
+import org.jhotdraw8.draw.inspector.Inspector;
+import org.jhotdraw8.draw.inspector.LayersInspector;
+import org.jhotdraw8.draw.inspector.StyleAttributesInspector;
+import org.jhotdraw8.draw.inspector.StyleClassesInspector;
+import org.jhotdraw8.draw.inspector.StylesheetsInspector;
+import org.jhotdraw8.draw.inspector.ToolsToolbar;
+import org.jhotdraw8.draw.inspector.ZoomToolbar;
+import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.io.FigureFactory;
+import org.jhotdraw8.draw.io.PrinterExportFormat;
+import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
+import org.jhotdraw8.draw.io.SimpleXmlIO;
+import org.jhotdraw8.draw.io.SvgExportOutputFormat;
+import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
-import org.jhotdraw8.draw.tool.*;
-import org.jhotdraw8.gui.dock.*;
+import org.jhotdraw8.draw.tool.BezierCreationTool;
+import org.jhotdraw8.draw.tool.ConnectionTool;
+import org.jhotdraw8.draw.tool.CreationTool;
+import org.jhotdraw8.draw.tool.ImageCreationTool;
+import org.jhotdraw8.draw.tool.PolyCreationTool;
+import org.jhotdraw8.draw.tool.SelectionTool;
+import org.jhotdraw8.draw.tool.TextCreationTool;
+import org.jhotdraw8.draw.tool.TextEditingTool;
+import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.gui.dock.Dock;
+import org.jhotdraw8.gui.dock.DockItem;
+import org.jhotdraw8.gui.dock.DockRoot;
+import org.jhotdraw8.gui.dock.ScrollableVBoxTrack;
+import org.jhotdraw8.gui.dock.SingleItemDock;
+import org.jhotdraw8.gui.dock.SplitPaneTrack;
+import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.samples.modeler.figure.*;
+import org.jhotdraw8.samples.modeler.figure.MLConstants;
+import org.jhotdraw8.samples.modeler.figure.MLDiagramFigure;
+import org.jhotdraw8.samples.modeler.figure.MLKeyword;
+import org.jhotdraw8.samples.modeler.figure.UMLClassifierShapeFigure;
+import org.jhotdraw8.samples.modeler.figure.UMLEdgeFigure;
 import org.jhotdraw8.samples.modeler.io.ModelerFigureFactory;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.svg.SvgExporter;
@@ -55,7 +133,12 @@ import org.jhotdraw8.util.Resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
@@ -75,7 +158,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     /**
      * Counter for incrementing layer names.
      */
-    @Nonnull
+    @NonNull
     private Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
@@ -93,8 +176,8 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
-    @Nonnull
-    private DockItem addInspector(Inspector<DrawingView> inspector, String id, Priority grow) {
+    @NonNull
+    private DockItem addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = ModelerLabels.getInspectorResources();
         DockItem dockItem = new DockItem();
         dockItem.setText(r.getString(id + ".toolbar"));
@@ -103,7 +186,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         return dockItem;
     }
 
-    private void applyUserAgentStylesheet(Drawing d) {
+    private void applyUserAgentStylesheet(@NonNull Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
                     ImmutableLists.of(
@@ -120,7 +203,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new DrawingFigure();
@@ -137,7 +220,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
      * @param supplier the supplier
      * @return the created figure
      */
-    public <T extends Figure> T createFigure(@Nonnull Supplier<T> supplier) {
+    public <T extends Figure> T createFigure(@NonNull Supplier<T> supplier) {
         T created = supplier.get();
         String prefix = created.getTypeSelector().toLowerCase();
         Integer counter = counters.get(prefix);
@@ -172,7 +255,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     }
 
     @Override
-    protected void initActionMap(@Nonnull HierarchicalMap<String, Action> map) {
+    protected void initActionMap(@NonNull HierarchicalMap<String, Action> map) {
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
         map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
@@ -199,7 +282,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 
     }
 
-    @Nonnull
+    @NonNull
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
@@ -448,8 +531,9 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         });
     }
 
+    @NonNull
     @Override
-    public CompletionStage<Void> print(@Nonnull PrinterJob job, @Nonnull WorkState workState) {
+    public CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -463,7 +547,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new ModelerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -489,8 +573,9 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
+    @NonNull
     @Override
-    public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(SvgExporter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {

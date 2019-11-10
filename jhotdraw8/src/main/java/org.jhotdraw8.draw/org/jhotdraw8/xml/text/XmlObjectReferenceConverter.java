@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class XmlObjectReferenceConverter<T> implements Converter<T> {
 
     private static final Logger LOGGER = Logger.getLogger(XmlObjectReferenceConverter.class.getName());
-    @Nonnull
+    @NonNull
     private final Class<T> clazz;
 
     /**
@@ -34,12 +34,12 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
      * @param clazz the type class
      * @throws IllegalArgumentException if clazz is null
      */
-    public XmlObjectReferenceConverter(@Nonnull Class<T> clazz) {
+    public XmlObjectReferenceConverter(@NonNull Class<T> clazz) {
         this.clazz = clazz;
     }
 
     @Override
-    public <TT extends T> void toString(@Nonnull Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException {
+    public <TT extends T> void toString(@NonNull Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException {
         if (idFactory == null) {
             throw new UnsupportedOperationException("idFactory is required for this converter");
         }

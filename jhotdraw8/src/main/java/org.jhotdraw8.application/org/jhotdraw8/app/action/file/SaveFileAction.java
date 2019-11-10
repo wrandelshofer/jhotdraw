@@ -5,7 +5,7 @@
 package org.jhotdraw8.app.action.file;
 
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.gui.URIChooser;
@@ -74,7 +74,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSaveSucceeded(@Nonnull DocumentBasedActivity v, @Nonnull URI uri, DataFormat format) {
+    protected void handleSaveSucceeded(@NonNull DocumentBasedActivity v, @NonNull URI uri, DataFormat format) {
         v.setURI(uri);
         v.clearModified();
         v.setTitle(UriUtil.getName(uri));

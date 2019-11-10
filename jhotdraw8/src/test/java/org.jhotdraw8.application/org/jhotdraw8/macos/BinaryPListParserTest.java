@@ -1,5 +1,6 @@
 package org.jhotdraw8.macos;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Comment;
@@ -49,7 +50,7 @@ class BinaryPListParserTest {
         writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
     }
 
-    private static Document readXmlPropertyList(File file) throws Exception {
+    private static Document readXmlPropertyList(@NonNull File file) throws Exception {
         InputSource inputSource = new InputSource(file.toString());
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -58,7 +59,7 @@ class BinaryPListParserTest {
         return doc;
     }
 
-    private static Document readBinaryPropertyList(File file) throws Exception {
+    private static Document readBinaryPropertyList(@NonNull File file) throws Exception {
         return new BinaryPListParser().parse(file);
     }
 
@@ -82,7 +83,7 @@ class BinaryPListParserTest {
         return doc;
     }
 
-    private static void normalizeWhitespace(final Node node, final boolean stripComments) {
+    private static void normalizeWhitespace(@NonNull final Node node, final boolean stripComments) {
         final NodeList childNodes = node.getChildNodes();
         final List<Node> list = new ArrayList<>();
         for (int i = 0, n = childNodes.getLength(); i < n; i++) {

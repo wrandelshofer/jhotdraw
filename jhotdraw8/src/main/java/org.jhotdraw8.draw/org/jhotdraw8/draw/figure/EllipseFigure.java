@@ -10,7 +10,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
@@ -35,8 +36,11 @@ public class EllipseFigure extends AbstractLeafFigure
         implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, ConnectableFigure, PathIterableFigure {
 
+    @Nullable
     public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable
     public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
     public final static CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
     public final static CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
@@ -54,50 +58,50 @@ public class EllipseFigure extends AbstractLeafFigure
         reshapeInLocal(x, y, width, height);
     }
 
-    public EllipseFigure(Rectangle2D rect) {
+    public EllipseFigure(@NonNull Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Ellipse();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new EllipseConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
-        double rx = getNonnull(RADIUS_X).getConvertedValue();
-        double ry = getNonnull(RADIUS_Y).getConvertedValue();
-        double cx = getNonnull(CENTER_X).getConvertedValue();
-        double cy = getNonnull(CENTER_Y).getConvertedValue();
+        double rx = getNonNull(RADIUS_X).getConvertedValue();
+        double ry = getNonNull(RADIUS_Y).getConvertedValue();
+        double cx = getNonNull(CENTER_X).getConvertedValue();
+        double cy = getNonNull(CENTER_Y).getConvertedValue();
         return new BoundingBox(cx - rx, cy - ry, rx * 2.0, ry * 2.0);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        CssSize rx = getNonnull(RADIUS_X);
-        CssSize ry = getNonnull(RADIUS_Y);
-        return new CssRectangle2D(getNonnull(CENTER_X).subtract(rx), getNonnull(CENTER_Y).subtract(ry), rx.multiply(2.0), ry.multiply(2.0));
+        CssSize rx = getNonNull(RADIUS_X);
+        CssSize ry = getNonNull(RADIUS_Y);
+        return new CssRectangle2D(getNonNull(CENTER_X).subtract(rx), getNonNull(CENTER_Y).subtract(ry), rx.multiply(2.0), ry.multiply(2.0));
     }
 
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         Ellipse shape = new Ellipse();
-        shape.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
-        shape.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());
+        shape.setCenterX(getStyledNonNull(CENTER_X).getConvertedValue());
+        shape.setCenterY(getStyledNonNull(CENTER_Y).getConvertedValue());
 
-        double strokeWidth = getStyledNonnull(STROKE_WIDTH).getConvertedValue();
+        double strokeWidth = getStyledNonNull(STROKE_WIDTH).getConvertedValue();
         double offset;
-        switch (getStyledNonnull(STROKE_TYPE)) {
+        switch (getStyledNonNull(STROKE_TYPE)) {
             case CENTERED:
             default:
                 offset = 0;
@@ -109,19 +113,19 @@ public class EllipseFigure extends AbstractLeafFigure
                 offset = strokeWidth * 0.5;
                 break;
         }
-        shape.setRadiusX(getStyledNonnull(RADIUS_X).getConvertedValue() + offset);
-        shape.setRadiusY(getStyledNonnull(RADIUS_Y).getConvertedValue() + offset);
+        shape.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue() + offset);
+        shape.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue() + offset);
         return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         CssSize rx = CssSize.max(width.multiply(0.5), CssSize.ZERO);
         CssSize ry = CssSize.max(height.multiply(0.5), CssSize.ZERO);
         set(CENTER_X, x.add(rx));
@@ -131,7 +135,7 @@ public class EllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Ellipse n = (Ellipse) node;
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
@@ -139,10 +143,10 @@ public class EllipseFigure extends AbstractLeafFigure
         applyFillableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, node);
-        n.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
-        n.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());
-        n.setRadiusX(getStyledNonnull(RADIUS_X).getConvertedValue());
-        n.setRadiusY(getStyledNonnull(RADIUS_Y).getConvertedValue());
+        n.setCenterX(getStyledNonNull(CENTER_X).getConvertedValue());
+        n.setCenterY(getStyledNonNull(CENTER_Y).getConvertedValue());
+        n.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue());
+        n.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue());
         n.applyCss();
     }
 

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
@@ -30,14 +30,14 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app  the application
      * @param view the view
      */
-    public ClearFileAction(Application app, DocumentBasedActivity view) {
+    public ClearFileAction(@NonNull Application app, DocumentBasedActivity view) {
         super(app, view);
         Resources labels = ApplicationLabels.getResources();
         labels.configureAction(this, "file.clear");
     }
 
     @Override
-    public CompletionStage<Void> doIt(@Nonnull final DocumentBasedActivity view) {
+    public CompletionStage<Void> doIt(@NonNull final DocumentBasedActivity view) {
         return view.clear();
     }
 }

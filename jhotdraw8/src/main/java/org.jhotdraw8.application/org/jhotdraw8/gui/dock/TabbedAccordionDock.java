@@ -18,7 +18,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 
 import static java.lang.Double.max;
@@ -30,18 +30,18 @@ import static java.lang.Double.max;
  */
 public class TabbedAccordionDock extends Control implements Dock {
 
-    @Nonnull
+    @NonNull
     private ObjectProperty<Track> track = new SimpleObjectProperty<>();
 
-    @Nonnull
+    @NonNull
     private TabPane tabPane = new TabPane();
-    @Nonnull
+    @NonNull
     private Accordion accordion = new Accordion();
-    @Nonnull
+    @NonNull
     private TitledPane titlePane = new TitledPane();
-    @Nonnull
+    @NonNull
     private ResizePane resizePane = new ResizePane();
-    @Nonnull
+    @NonNull
     private ObservableList<DockItem> items = FXCollections.observableArrayList();
 
     public TabbedAccordionDock() {
@@ -61,7 +61,7 @@ public class TabbedAccordionDock extends Control implements Dock {
 
         getItems().addListener(new ListChangeListener<DockItem>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends DockItem> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends DockItem> c) {
                 while (c.next()) {
                     for (DockItem remitem : c.getRemoved()) {
                         remitem.setDock(null);
@@ -90,7 +90,7 @@ public class TabbedAccordionDock extends Control implements Dock {
         return accordion.prefWidth(height);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObservableList<DockItem> getItems() {
         return items;
@@ -101,7 +101,7 @@ public class TabbedAccordionDock extends Control implements Dock {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;

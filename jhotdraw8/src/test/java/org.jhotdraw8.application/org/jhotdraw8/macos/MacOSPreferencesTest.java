@@ -1,5 +1,6 @@
 package org.jhotdraw8.macos;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class MacOSPreferencesTest {
+    @NonNull
     @TestFactory
     List<DynamicTest> test() {
         List<DynamicTest> list = new ArrayList<>();
@@ -41,7 +43,7 @@ class MacOSPreferencesTest {
 
     }
 
-    private void doTest(String filename, String key, Object expectedValue) throws URISyntaxException {
+    private void doTest(String filename, @NonNull String key, Object expectedValue) throws URISyntaxException {
         File file = new File(getClass().getResource(filename).toURI());
         System.out.println(filename + ", " + key.replaceAll("\t", "→") + " = " + expectedValue);
         final Object actualValue = MacOSPreferences.get(file, key);

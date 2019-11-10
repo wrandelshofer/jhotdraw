@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -29,7 +30,7 @@ public class AlignBottomAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public AlignBottomAction(Application app, DrawingEditor editor) {
+    public AlignBottomAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -47,7 +48,7 @@ public class AlignBottomAction extends AbstractSelectedAction {
         alignBottom(drawingView, figures, lead);
     }
 
-    private void alignBottom(DrawingView view, Set<Figure> figures, Figure lead) {
+    private void alignBottom(@NonNull DrawingView view, @NonNull Set<Figure> figures, @NonNull Figure lead) {
         if (figures.size() < 2) {
             return;
         }

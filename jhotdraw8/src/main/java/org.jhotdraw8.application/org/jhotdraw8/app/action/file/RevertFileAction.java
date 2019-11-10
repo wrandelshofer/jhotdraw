@@ -8,7 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -40,13 +40,13 @@ public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivi
      * @param app  the application
      * @param view the view
      */
-    public RevertFileAction(Application app, DocumentBasedActivity view) {
+    public RevertFileAction(@NonNull Application app, DocumentBasedActivity view) {
         super(app, view, DocumentBasedActivity.class);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity activity) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
@@ -65,7 +65,7 @@ public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivi
         }
     }
 
-    private void doIt(DocumentBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
+    private void doIt(@NonNull DocumentBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
         WorkState workState = new SimpleWorkState(getLabel());
         view.addDisabler(workState);
 

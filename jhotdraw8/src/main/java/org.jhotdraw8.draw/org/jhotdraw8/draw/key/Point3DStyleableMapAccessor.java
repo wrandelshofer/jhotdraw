@@ -8,10 +8,10 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.Point3DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -27,17 +27,17 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
-        implements NonnullMapAccessor<Point3D> {
+        implements NonNullMapAccessor<Point3D> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Point3D> cssMetaData;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> xKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> yKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> zKey;
     private final Converter<Point3D> converter;
 
@@ -49,11 +49,11 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
      * @param yKey the key for the y coordinate of the point
      * @param zKey the key for the u coordinate of the point
      */
-    public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
+    public Point3DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> zKey) {
         this(name, xKey, yKey, zKey, new Point3DConverter(false));
     }
 
-    public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey, Converter<Point3D> converter) {
+    public Point3DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> zKey, Converter<Point3D> converter) {
         super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
         this.converter = converter;
         Function<Styleable, StyleableProperty<Point3D>> function = s -> {
@@ -72,7 +72,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         this.zKey = zKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Point3D> getCssMetaData() {
         return cssMetaData;
@@ -84,15 +84,15 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point3D get(@Nonnull Map<? super Key<?>, Object> a) {
+    public Point3D get(@NonNull Map<? super Key<?>, Object> a) {
         return new Point3D(xKey.get(a), yKey.get(a), zKey.get(a));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point3D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Point3D value) {
+    public Point3D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Point3D value) {
         Point3D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
@@ -100,9 +100,9 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point3D remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public Point3D remove(@NonNull Map<? super Key<?>, Object> a) {
         Point3D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

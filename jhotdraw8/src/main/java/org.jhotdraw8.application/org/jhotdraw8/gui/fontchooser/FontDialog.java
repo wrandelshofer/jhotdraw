@@ -74,6 +74,7 @@ public class FontDialog extends Dialog<FontFamilySize> {
         return model;
     }
 
+    @Nullable
     private FontFamilySize handleButton(@Nullable ButtonType buttonType) {
         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
@@ -89,7 +90,7 @@ public class FontDialog extends Dialog<FontFamilySize> {
         controller.setFontName(fontName);
     }
 
-    public final Optional<FontFamilySize> showAndWait(FontFamilySize font) {
+    public final Optional<FontFamilySize> showAndWait(@Nullable FontFamilySize font) {
         if (font != null) {
             selectFontName(font.getFamily());
             controller.setFontSize(font.getSize());

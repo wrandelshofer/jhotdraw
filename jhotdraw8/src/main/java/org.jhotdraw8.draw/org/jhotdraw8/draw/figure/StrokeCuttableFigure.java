@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.draw.figure;
 
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -20,21 +21,21 @@ public interface StrokeCuttableFigure extends Figure {
     /**
      * Cuts off the specified number of pixels from the start of the stroked path.
      */
-    CssSizeStyleableKey STROKE_CUT_START = new CssSizeStyleableKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey STROKE_CUT_START = new CssSizeStyleableKey("stroke-cut-start", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Cuts off the specified number of pixels from the end of the stroked path.
      */
-    CssSizeStyleableKey STROKE_CUT_END = new CssSizeStyleableKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey STROKE_CUT_END = new CssSizeStyleableKey("stroke-cut-end", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Cuts off the specified number of pixels from the start and the end of the stroked path.
      */
-    SymmetricCssPoint2DStyleableMapAccessor STROKE_CUT = new SymmetricCssPoint2DStyleableMapAccessor("stroke-cut", STROKE_CUT_START, STROKE_CUT_END);
+    @Nullable SymmetricCssPoint2DStyleableMapAccessor STROKE_CUT = new SymmetricCssPoint2DStyleableMapAccessor("stroke-cut", STROKE_CUT_START, STROKE_CUT_END);
 
     default double getStrokeCutStart() {
-        return getStyledNonnull(STROKE_CUT_START).getConvertedValue();
+        return getStyledNonNull(STROKE_CUT_START).getConvertedValue();
     }
 
     default double getStrokeCutEnd() {
-        return getStyledNonnull(STROKE_CUT_END).getConvertedValue();
+        return getStyledNonNull(STROKE_CUT_END).getConvertedValue();
     }
 }

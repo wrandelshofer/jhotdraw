@@ -5,6 +5,7 @@
 package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.text.CssColorConverter;
@@ -32,7 +33,7 @@ public class CssColorConverterTest {
     /**
      * Test of fromString method, of class CssColorConverter.
      */
-    static void testFromString(CssColor expected, String string) throws Exception {
+    static void testFromString(@NonNull CssColor expected, @NonNull String string) throws Exception {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -46,6 +47,7 @@ public class CssColorConverterTest {
         }
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(

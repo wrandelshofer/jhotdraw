@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -30,7 +31,7 @@ public class AlignHorizontalAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public AlignHorizontalAction(Application app, DrawingEditor editor) {
+    public AlignHorizontalAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -48,7 +49,7 @@ public class AlignHorizontalAction extends AbstractSelectedAction {
         alignHorizontal(drawingView, figures, lead);
     }
 
-    private void alignHorizontal(DrawingView view, Set<Figure> figures, Figure lead) {
+    private void alignHorizontal(@NonNull DrawingView view, @NonNull Set<Figure> figures, @NonNull Figure lead) {
         if (figures.size() < 2) {
             return;
         }

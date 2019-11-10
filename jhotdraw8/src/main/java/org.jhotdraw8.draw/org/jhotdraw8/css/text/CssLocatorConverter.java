@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -54,7 +54,7 @@ public class CssLocatorConverter implements Converter<Locator> {
         return null;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
@@ -68,8 +68,8 @@ public class CssLocatorConverter implements Converter<Locator> {
      * @throws ParseException if parsing fails
      * @throws IOException    if IO fails
      */
-    @Nonnull
-    public Locator parseLocator(@Nonnull CssTokenizer tt) throws ParseException, IOException {
+    @NonNull
+    public Locator parseLocator(@NonNull CssTokenizer tt) throws ParseException, IOException {
         Locator color = null;
 
         switch (tt.next()) {
@@ -119,7 +119,7 @@ public class CssLocatorConverter implements Converter<Locator> {
 
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, Locator value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, Locator value) throws IOException {
         if (value instanceof BoundsLocator) {
             BoundsLocator rl = (BoundsLocator) value;
             out.append("relative(");

@@ -6,6 +6,7 @@ package org.jhotdraw8.text;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssLinearGradient;
 import org.jhotdraw8.css.text.CssLinearGradientConverter;
@@ -47,7 +48,7 @@ public class CssLinearGradientConverterTest {
     /**
      * Test of fromString method, of class CssLinearGradientConverter.
      */
-    public static void testFromString(CssLinearGradient expected, String string) throws Exception {
+    public static void testFromString(CssLinearGradient expected, @NonNull String string) throws Exception {
         System.out.println("fromString(" + string + ")");
         CharBuffer in = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -59,6 +60,7 @@ public class CssLinearGradientConverterTest {
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
@@ -74,6 +76,7 @@ public class CssLinearGradientConverterTest {
 
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testToStringFactory() {
         return Arrays.asList(

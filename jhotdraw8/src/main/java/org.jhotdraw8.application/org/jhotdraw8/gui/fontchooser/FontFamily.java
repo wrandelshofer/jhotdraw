@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * FontFamily.
@@ -20,7 +20,7 @@ public class FontFamily {
 
     private final ObservableList<FontTypeface> typefaces = FXCollections.observableArrayList();
 
-    @Nonnull
+    @NonNull
     public ObservableList<FontTypeface> getTypefaces() {
         return typefaces;
     }
@@ -33,7 +33,7 @@ public class FontFamily {
         name.set(value);
     }
 
-    @Nonnull
+    @NonNull
     public StringProperty nameProperty() {
         return name;
     }

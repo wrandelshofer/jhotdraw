@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -23,11 +23,11 @@ public class LabelConnectionFigure extends AbstractLabelConnectionFigure
      */
     public final static String TYPE_SELECTOR = "LabelConnection";
 
-    public LabelConnectionFigure(Point2D position, String text) {
+    public LabelConnectionFigure(@NonNull Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public LabelConnectionFigure(double x, double y, String text, Object... keyValues) {
+    public LabelConnectionFigure(double x, double y, String text, @NonNull Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
@@ -42,7 +42,7 @@ public class LabelConnectionFigure extends AbstractLabelConnectionFigure
         return get(TEXT);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

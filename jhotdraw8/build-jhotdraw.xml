@@ -1038,7 +1038,7 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile-classes.main,do-compile-modules.main"
+  <target name="compile" depends="clean,do-compile-classes.main"
           description="compiles the java sources and copies resource files">
   </target>
   <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">

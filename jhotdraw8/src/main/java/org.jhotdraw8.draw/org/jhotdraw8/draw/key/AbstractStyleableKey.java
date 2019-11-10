@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
@@ -25,7 +25,7 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      * @param key   The name of the name.
      * @param clazz The type of the value.
      */
-    public AbstractStyleableKey(String key, Class<T> clazz) {
+    public AbstractStyleableKey(@NonNull String key, @NonNull Class<T> clazz) {
         this(key, clazz, null, null);
     }
 
@@ -37,7 +37,7 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(String key, Class<T> clazz, T defaultValue) {
+    public AbstractStyleableKey(@NonNull String key, @NonNull Class<T> clazz, T defaultValue) {
         this(key, clazz, null, defaultValue);
     }
 
@@ -51,7 +51,7 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      *                       type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public AbstractStyleableKey(String name, Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
+    public AbstractStyleableKey(@NonNull String name, @NonNull Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
         this(null, name, clazz, typeParameters, true, defaultValue);
     }
 
@@ -65,7 +65,7 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      * @param isNullable   Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, String name, Class<?> clazz, boolean isNullable, T defaultValue) {
+    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Class<?> clazz, boolean isNullable, T defaultValue) {
         this(namespace, name, clazz, null, isNullable, defaultValue);
     }
 
@@ -81,18 +81,18 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      * @param isNullable     Whether the value may be set to null
      * @param defaultValue   The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
+    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
         super(name, clazz, typeParameters, isNullable, defaultValue);
         this.cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
         this.namespace = namespace;
     }
 
-    @Nonnull
+    @NonNull
     private final String cssName;
     @Nullable
     private final String namespace;
 
-    @Nonnull
+    @NonNull
     public String getCssName() {
         return cssName;
     }

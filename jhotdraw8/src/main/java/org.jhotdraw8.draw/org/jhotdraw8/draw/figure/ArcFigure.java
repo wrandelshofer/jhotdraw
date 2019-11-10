@@ -11,7 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
@@ -34,13 +35,16 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
      */
     public final static String TYPE_SELECTOR = "Arc";
 
+    @Nullable
     public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     public final static CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
     public final static CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ONE);
     public final static DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
     public final static DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
     public final static EnumStyleableKey<ArcType> ARC_TYPE = new EnumStyleableKey<>("arcType", ArcType.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), ArcType.ROUND);
+    @Nullable
     public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
     public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
@@ -52,32 +56,32 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         reshapeInLocal(x, y, width, height);
     }
 
-    public ArcFigure(Rectangle2D rect) {
+    public ArcFigure(@NonNull Rectangle2D rect) {
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
-        double rx = getNonnull(RADIUS_X).getConvertedValue();
-        double ry = getNonnull(RADIUS_Y).getConvertedValue();
-        double cx = getNonnull(CENTER_X).getConvertedValue();
-        double cy = getNonnull(CENTER_Y).getConvertedValue();
+        double rx = getNonNull(RADIUS_X).getConvertedValue();
+        double ry = getNonNull(RADIUS_Y).getConvertedValue();
+        double cx = getNonNull(CENTER_X).getConvertedValue();
+        double cy = getNonNull(CENTER_Y).getConvertedValue();
         return new BoundingBox(cx - rx, cy - ry, rx * 2.0, ry * 2.0);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        CssSize rx = getNonnull(RADIUS_X);
-        CssSize ry = getNonnull(RADIUS_Y);
-        CssSize cx = getNonnull(CENTER_X);
-        CssSize cy = getNonnull(CENTER_Y);
+        CssSize rx = getNonNull(RADIUS_X);
+        CssSize ry = getNonNull(RADIUS_Y);
+        CssSize cx = getNonNull(CENTER_X);
+        CssSize cy = getNonNull(CENTER_Y);
         return new CssRectangle2D(cx.subtract(rx), cy.subtract(ry), rx.multiply(2.0), ry.multiply(2.0));
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         Bounds r = getBoundsInLocal();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
@@ -85,7 +89,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         CssSize rx = width.getValue() > 0 ? width.multiply(0.5) : CssSize.ZERO;
         CssSize ry = height.getValue() > 0 ? height.multiply(0.5) : CssSize.ZERO;
         set(CENTER_X, x.add(rx));
@@ -94,14 +98,14 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         set(RADIUS_Y, ry);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Arc();
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Arc n = (Arc) node;
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
@@ -109,17 +113,17 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         applyFillableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, node);
-        n.setCenterX(getStyledNonnull(CENTER_X).getConvertedValue());
-        n.setCenterY(getStyledNonnull(CENTER_Y).getConvertedValue());
-        n.setRadiusX(getStyledNonnull(RADIUS_X).getConvertedValue());
-        n.setRadiusY(getStyledNonnull(RADIUS_Y).getConvertedValue());
-        n.setStartAngle(getStyledNonnull(START_ANGLE));
-        n.setLength(getStyledNonnull(ARC_LENGTH));
+        n.setCenterX(getStyledNonNull(CENTER_X).getConvertedValue());
+        n.setCenterY(getStyledNonNull(CENTER_Y).getConvertedValue());
+        n.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue());
+        n.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue());
+        n.setStartAngle(getStyledNonNull(START_ANGLE));
+        n.setLength(getStyledNonNull(ARC_LENGTH));
         n.setType(getStyled(ARC_TYPE));
         n.applyCss();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
@@ -37,9 +37,9 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
         this.withComma = withComma;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssPoint2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         final CssSize x, y;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -48,14 +48,15 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
         return new CssPoint2D(x, y);
     }
 
-    private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
+    @Nullable
+    private CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 return new CssSize(tt.currentNumber().doubleValue());
             case CssTokenType.TT_DIMENSION:
                 return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
             case CssTokenType.TT_IDENT:
-                switch (tt.currentStringNonnull()) {
+                switch (tt.currentStringNonNull()) {
                     case "NaN":
                         return new CssSize(Double.NaN);
                     case "INF":
@@ -71,7 +72,7 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
     }
 
     @Override
-    protected <TT extends CssPoint2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends CssPoint2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         CssSize x = value.getX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
         if (withComma) {

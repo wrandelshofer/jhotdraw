@@ -6,7 +6,8 @@ package org.jhotdraw8.app.action;
 
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 
 /**
@@ -16,11 +17,12 @@ import org.jhotdraw8.app.Application;
  */
 public class ScreenMenuBarProxyAction extends AbstractAction {
 
-    @Nonnull
+    @NonNull
     private final Application app;
+    @Nullable
     private Action currentAction;
 
-    public ScreenMenuBarProxyAction(Application app, String id) {
+    public ScreenMenuBarProxyAction(@NonNull Application app, String id) {
         this.app = app;
         set(ID_KEY, id);
         disabled.unbind();

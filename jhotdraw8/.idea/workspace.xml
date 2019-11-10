@@ -40,21 +40,9 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Adds quick-and-dirty color chooser.">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_junit_jupiter_junit_jupiter_api_5_3_2.xml" beforeDir="false" />
+    <list default="true" id="7d420e09-c131-4164-a452-dde9501e5015" name="JHotDraw" comment="Updates to JUnit 5.5.2. Fixes tests that don't work consistently on Java 8 and Java 13.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jhotdraw8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw8.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.application/org.jhotdraw8.application.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/ast/Combinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/ast/Combinator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/ast/SelectNothingSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/css/ast/SelectNothingSelector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org.jhotdraw8.samples.modeler.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.samples.modeler/org.jhotdraw8.samples.modeler.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/data/Binary Property List.plist" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/Binary Property List.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/data/Temp.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/data/XML Property List.plist" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/XML Property List.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/BinaryPListParserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/MacOSPreferencesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.application/org/jhotdraw8/macos/MacOSPreferencesTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssScannerNGTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org.jhotdraw8.draw/org/jhotdraw8/css/CssScannerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/figure/AbstractLabelFigure.java" afterDir="false" />
     </list>
     <list id="9e30f967-3d7c-473a-a8ef-e329fad00133" name="Default" comment="Minor fixes." />
     <list id="ddd23f39-e07d-4784-83ff-2528e00c82ed" name="IDEA" comment="">
@@ -192,7 +180,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.MacOSPreferencesTest">
+  <component name="RunManager" selected="Application.Grapher">
     <configuration name="Grapher" type="Application" factoryName="Application" singleton="false">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.samples.grapher.GrapherMain" />
@@ -203,6 +191,15 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in jhotdraw8" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jhotdraw8" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -225,33 +222,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="BinaryPListParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="org.jhotdraw8.application" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.macos.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.jhotdraw8.macos" />
-      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.macos.BinaryPListParserTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MacOSPreferencesTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="org.jhotdraw8.application" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.macos.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.jhotdraw8.macos" />
-      <option name="MAIN_CLASS_NAME" value="org.jhotdraw8.macos.MacOSPreferencesTest" />
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="All in org.jhotdraw8.samples.modeler" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="org.jhotdraw8.samples.modeler" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -264,15 +238,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="org.jhotdraw8.css in org.jhotdraw8.draw" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="org.jhotdraw8.draw" />
+    <configuration name="org.jhotdraw8.beans in org.jhotdraw8.application" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="org.jhotdraw8.application" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.jhotdraw8.css.*" />
+          <option name="PATTERN" value="org.jhotdraw8.beans.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.jhotdraw8.css" />
+      <option name="PACKAGE_NAME" value="org.jhotdraw8.beans" />
       <option name="TEST_OBJECT" value="package" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
       <method v="2">
@@ -292,25 +266,25 @@
       <item itemvalue="Application.Grapher" />
       <item itemvalue="Application.Teddy" />
       <item itemvalue="Application.Modeler" />
-      <item itemvalue="JUnit.org.jhotdraw8.css in org.jhotdraw8.draw" />
       <item itemvalue="JUnit.All in org.jhotdraw8.application" />
+      <item itemvalue="JUnit.org.jhotdraw8.beans in org.jhotdraw8.application" />
+      <item itemvalue="JUnit.All in jhotdraw8" />
       <item itemvalue="JUnit.All in org.jhotdraw8.draw" />
-      <item itemvalue="JUnit.BinaryPListParserTest" />
-      <item itemvalue="JUnit.MacOSPreferencesTest" />
+      <item itemvalue="JUnit.All in org.jhotdraw8.samples.modeler" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MacOSPreferencesTest" />
-        <item itemvalue="JUnit.BinaryPListParserTest" />
+        <item itemvalue="JUnit.All in org.jhotdraw8.samples.modeler" />
         <item itemvalue="JUnit.All in org.jhotdraw8.draw" />
+        <item itemvalue="JUnit.All in jhotdraw8" />
+        <item itemvalue="JUnit.org.jhotdraw8.beans in org.jhotdraw8.application" />
         <item itemvalue="JUnit.All in org.jhotdraw8.application" />
-        <item itemvalue="JUnit.org.jhotdraw8.css in org.jhotdraw8.draw" />
       </list>
     </recent_temporary>
   </component>
   <component name="StructureViewFactory">
     <option name="AUTOSCROLL_MODE" value="false" />
-    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR,SHOW_FIELDS" />
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR,SHOW_FIELDS,SHOW_NON_PUBLIC" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -355,48 +329,6 @@
       <workItem from="1567065745590" duration="899000" />
       <workItem from="1568017202380" duration="685000" />
       <workItem from="1568185074285" duration="454000" />
-    </task>
-    <task id="LOCAL-00078" summary="Adds dummy paragraph.">
-      <created>1550467457493</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1550467457493</updated>
-    </task>
-    <task id="LOCAL-00079" summary="Updates IDE files.">
-      <created>1550467481199</created>
-      <option name="number" value="00079" />
-      <option name="presentableId" value="LOCAL-00079" />
-      <option name="project" value="LOCAL" />
-      <updated>1550467481200</updated>
-    </task>
-    <task id="LOCAL-00080" summary="Implements support for exporting javafx Text nodes with line wrapping.">
-      <created>1550835219590</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1550835219592</updated>
-    </task>
-    <task id="LOCAL-00081" summary="Minor bug fixes in CSS support.">
-      <created>1550835253789</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1550835253789</updated>
-    </task>
-    <task id="LOCAL-00082" summary="Adds documentation.">
-      <created>1550835330495</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1550835330495</updated>
-    </task>
-    <task id="LOCAL-00083" summary="Improves collections.">
-      <created>1550835355555</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1550835355555</updated>
     </task>
     <task id="LOCAL-00084" summary="Reformats code.">
       <created>1550835381370</created>
@@ -699,7 +631,49 @@
       <option name="project" value="LOCAL" />
       <updated>1573318158752</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="Updates to JUnit 5.5.2. Fixes tests that don't work consistently on Java 8 and Java 13.">
+      <created>1573374012465</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1573374012465</updated>
+    </task>
+    <task id="LOCAL-00128" summary="Adds conversion methods to class Shapes.&#10;Changes ShapesTest so that it succeeds now on Java SE 13 (fails on Java SE 8 now!).">
+      <created>1573379974690</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1573379974690</updated>
+    </task>
+    <task id="LOCAL-00129" summary="Tweaks dark theme.">
+      <created>1573389041245</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1573389041245</updated>
+    </task>
+    <task id="LOCAL-00130" summary="&quot;Select All&quot; on DrawingView only selects unlocked figures in visible and editable layers.">
+      <created>1573400647308</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1573400647308</updated>
+    </task>
+    <task id="LOCAL-00131" summary="Removes initial values on PageFigure.">
+      <created>1573400663333</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1573400663333</updated>
+    </task>
+    <task id="LOCAL-00132" summary="Adds user-agent stylesheet to Grapher.">
+      <created>1573400683372</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1573400683372</updated>
+    </task>
+    <option name="localTasksCounter" value="133" />
     <servers />
   </component>
   <component name="TodoView">
@@ -757,12 +731,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Adds diagrams.&#10;Improves SVG export of italic and bold text." />
-    <MESSAGE value="Improves documentation." />
-    <MESSAGE value="Adds documentation." />
-    <MESSAGE value="Fixes compilation issues." />
-    <MESSAGE value="Teddy demo application does not crash anymore with an NPE during launch." />
-    <MESSAGE value="Fixes translateInLocal()." />
     <MESSAGE value="Adds TextSelectionTool." />
     <MESSAGE value="Updates to latest JavaFX.&#10;Adds BrowseFileDirectoryAction." />
     <MESSAGE value="Improves comments." />
@@ -782,7 +750,13 @@
     <MESSAGE value="Implements reading of macOs preferences from PList files." />
     <MESSAGE value="Adds dark theme support to Grapher." />
     <MESSAGE value="Adds quick-and-dirty color chooser." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds quick-and-dirty color chooser." />
+    <MESSAGE value="Updates to JUnit 5.5.2. Fixes tests that don't work consistently on Java 8 and Java 13." />
+    <MESSAGE value="Adds conversion methods to class Shapes.&#10;Changes ShapesTest so that it succeeds now on Java SE 13 (fails on Java SE 8 now!)." />
+    <MESSAGE value="Tweaks dark theme." />
+    <MESSAGE value="&quot;Select All&quot; on DrawingView only selects unlocked figures in visible and editable layers." />
+    <MESSAGE value="Removes initial values on PageFigure." />
+    <MESSAGE value="Adds user-agent stylesheet to Grapher." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds user-agent stylesheet to Grapher." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

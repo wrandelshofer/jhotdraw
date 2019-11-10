@@ -5,6 +5,7 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class DepthFirstSpliteratorTest {
      *
      * @return
      */
+    @NonNull
     static DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
         builder.addVertex(1);
@@ -57,6 +59,7 @@ public class DepthFirstSpliteratorTest {
         return builder;
     }
 
+    @NonNull
     public Object[][] anyPathProvider() {
         return new Object[][]{
                 {1, 5, Arrays.asList(1, 6, 5)},

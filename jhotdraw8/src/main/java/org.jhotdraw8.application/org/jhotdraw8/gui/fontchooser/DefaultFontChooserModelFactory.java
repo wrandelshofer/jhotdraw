@@ -8,7 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.util.Resources;
 
@@ -34,7 +34,7 @@ public class DefaultFontChooserModelFactory {
         return model;
     }
 
-    @Nonnull
+    @NonNull
     public CompletableFuture<FontChooserModel> createAsync() {
         CompletableFuture<FontChooserModel> future = new CompletableFuture<>();
         Task<FontChooserModel> task = new Task<FontChooserModel>() {
@@ -57,7 +57,7 @@ public class DefaultFontChooserModelFactory {
         return future;
     }
 
-    @Nonnull
+    @NonNull
     protected List<FontFamily> loadFonts() {
         List<FontFamily> allFamilies = new ArrayList<>();
 
@@ -91,8 +91,8 @@ public class DefaultFontChooserModelFactory {
         return allFamilies;
     }
 
-    @Nonnull
-    protected ObservableList<FontCollection> generateCollections(@Nonnull List<FontFamily> families) {
+    @NonNull
+    protected ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
         ObservableList<FontCollection> root = FXCollections.observableArrayList();
 
         final Resources labels = ApplicationLabels.getGuiResources();
@@ -539,8 +539,8 @@ public class DefaultFontChooserModelFactory {
 
     }
 
-    @Nonnull
-    public static ArrayList<FontFamily> collectFamiliesNamed(List<FontFamily> allFamilies, String... names) {
+    @NonNull
+    public static ArrayList<FontFamily> collectFamiliesNamed(@NonNull List<FontFamily> allFamilies, String... names) {
         ArrayList<FontFamily> coll = new ArrayList<>();
         HashSet<String> nameMap = new HashSet<>();
         nameMap.addAll(Arrays.asList(names));

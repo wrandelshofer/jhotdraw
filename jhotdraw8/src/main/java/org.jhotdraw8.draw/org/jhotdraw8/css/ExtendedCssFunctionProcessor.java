@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 
 import java.io.IOException;
@@ -51,9 +52,9 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
     }
 
 
-    protected void doProcessToken(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    protected void doProcessToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
-            switch (tt.currentStringNonnull()) {
+            switch (tt.currentStringNonNull()) {
                 case REPLACE_FUNCTION_NAME:
                     tt.pushBack();
                     processReplaceFunction(element, tt, out);
@@ -90,9 +91,9 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
      * @param out the consumer
      * @throws IOException
      */
-    private void processReplaceFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processReplaceFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈replace〉: replace() function expected.");
-        if (!REPLACE_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
+        if (!REPLACE_FUNCTION_NAME.equals(tt.currentStringNonNull())) {
             throw new ParseException("〈replace〉: replace() function expected.", tt.getStartPosition());
         }
 
@@ -138,9 +139,9 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
      * @param out the consumer
      * @throws IOException
      */
-    private void processConcatFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processConcatFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈concat〉: concat() function expected.");
-        if (!CONCAT_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
+        if (!CONCAT_FUNCTION_NAME.equals(tt.currentStringNonNull())) {
             throw new ParseException("〈concat〉: concat() function expected.", tt.getStartPosition());
         }
 
@@ -172,7 +173,8 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
         out.accept(new CssToken(CssTokenType.TT_STRING, buf.toString(), null, line, start, end));
     }
 
-    private String evalString(T element, CssTokenizer tt, String expressionName) throws IOException, ParseException {
+    @NonNull
+    private String evalString(@NonNull T element, @NonNull CssTokenizer tt, String expressionName) throws IOException, ParseException {
         StringBuilder buf = new StringBuilder();
         List<CssToken> temp = new ArrayList<>();
         temp.clear();
@@ -206,11 +208,11 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
      * @param out the consumer
      * @throws IOException
      */
-    private void processRoundFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processRoundFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + ROUND_FUNCTION_NAME + "〉: " + ROUND_FUNCTION_NAME + "() function expected.");
-        if (!ROUND_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
+        if (!ROUND_FUNCTION_NAME.equals(tt.currentStringNonNull())) {
             throw new ParseException("〈" + ROUND_FUNCTION_NAME + "〉: " + ROUND_FUNCTION_NAME + "() function expected.", tt.getStartPosition());
         }
         CssSize dim = parseCalcValue(element, tt);
@@ -221,6 +223,7 @@ public class ExtendedCssFunctionProcessor<T> extends SimpleCssFunctionProcessor<
         produceNumberPercentageOrDimension(out, rounded, line, start, end);
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return super.getHelpText()

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds a String representation of the name.
      */
-    @Nonnull
+    @NonNull
     private final String name;
     /**
      * Holds the default value.
@@ -56,7 +56,7 @@ public class ObjectKey<T> implements Key<T> {
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
-    @Nonnull
+    @NonNull
     private final List<Class<?>> typeParameters;
 
     /**
@@ -72,7 +72,7 @@ public class ObjectKey<T> implements Key<T> {
      * @param name  The name of the key.
      * @param clazz The type of the value.
      */
-    public ObjectKey(String name, Class<T> clazz) {
+    public ObjectKey(@NonNull String name, @NonNull Class<T> clazz) {
         this(name, clazz, null, null);
     }
 
@@ -84,7 +84,7 @@ public class ObjectKey<T> implements Key<T> {
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public ObjectKey(String name, Class<T> clazz, T defaultValue) {
+    public ObjectKey(@NonNull String name, @NonNull Class<T> clazz, T defaultValue) {
         this(name, clazz, null, defaultValue);
     }
 
@@ -98,7 +98,7 @@ public class ObjectKey<T> implements Key<T> {
      *                       type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public ObjectKey(String name, Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
+    public ObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
         this(name, clazz, typeParameters, true, defaultValue);
     }
 
@@ -113,11 +113,11 @@ public class ObjectKey<T> implements Key<T> {
      * @param isNullable     Whether the value may be set to null
      * @param defaultValue   The default value.
      */
-    public ObjectKey(@Nonnull String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T defaultValue) {
+    public ObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T defaultValue) {
         this(name, clazz, typeParameters, isNullable, false, defaultValue);
     }
 
-    public ObjectKey(@Nullable String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
+    public ObjectKey(@Nullable String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -141,13 +141,13 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return name string.
      */
-    @Nonnull
+    @NonNull
     @Override
     public String getName() {
         return name;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -155,18 +155,19 @@ public class ObjectKey<T> implements Key<T> {
         return ret;
     }
 
+    @NonNull
     @Override
     public Class<?> getComponentValueType() {
         return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
@@ -210,7 +211,7 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Returns the name string.
      */
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         String keyClass = getClass().getName();

@@ -5,7 +5,7 @@
 package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
@@ -41,7 +41,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull Application app) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull Application app) {
         app.recentUrisProperty().clear();
     }
 

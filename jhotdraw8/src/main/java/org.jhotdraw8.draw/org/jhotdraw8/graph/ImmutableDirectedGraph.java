@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,28 +23,29 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     /**
      * Holds the indices of the vertices at the arrow heads.
      */
-    @Nonnull
+    @NonNull
     protected final int[] arrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @Nonnull
+    @NonNull
     protected final int[] vertices;
 
     /**
      * Holds the arrows.
      */
+    @NonNull
     protected final A[] arrows;
     /**
      * Holds the vertices.
      */
-    @Nonnull
+    @NonNull
     protected final V[] vertexObjects;
     /**
      * Holds the indices.
      */
-    @Nonnull
+    @NonNull
     protected final Map<V, Integer> vertexToIndexMap;
 
     /**
@@ -52,7 +53,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(AttributedIntDirectedGraph<V, A> graph) {
+    public ImmutableDirectedGraph(@NonNull AttributedIntDirectedGraph<V, A> graph) {
         int arrowCount = 0;
 
         final int arrowCapacity = graph.getArrowCount();
@@ -87,7 +88,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(DirectedGraph<V, A> graph) {
+    public ImmutableDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -137,13 +138,13 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         this.vertexToIndexMap = new HashMap<>(vertexCount);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public A getArrow(int index) {
         return arrows[index];
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public A getNextArrow(int vi, int i) {
         if (i < 0 || i >= getNextCount(vi)) {
@@ -152,9 +153,9 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return arrows[vertices[vi] + i];
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public A getNextArrow(@Nonnull V v, int i) {
+    public A getNextArrow(@NonNull V v, int i) {
         return getNextArrow(getVertexIndex(v), i);
     }
 
@@ -171,9 +172,9 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return arrowHeads[vertices[vi] + i];
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public V getNext(@Nonnull V vertex, int i) {
+    public V getNext(@NonNull V vertex, int i) {
         return vertexObjects[getNext(vertexToIndexMap.get(vertex), i)];
     }
 
@@ -196,7 +197,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return vertices.length;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public V getVertex(int index) {
         return vertexObjects[index];
@@ -210,11 +211,11 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
 
 
     @Override
-    public int getNextCount(@Nonnull V vertex) {
+    public int getNextCount(@NonNull V vertex) {
         return getNextCount(vertexToIndexMap.get(vertex));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Collection<V> getVertices() {
         return Arrays.asList(vertexObjects);
@@ -222,12 +223,12 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     }
 
     @Override
-    public @Nonnull Collection<A> getArrows() {
+    public @NonNull Collection<A> getArrows() {
         return Arrays.asList(arrows);
     }
 
 
-    @Nonnull
+    @NonNull
     public A getArrow(int vertex, int index) {
         return arrows[getArrowIndex(vertex, index)];
     }

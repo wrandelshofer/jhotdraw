@@ -27,7 +27,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -49,6 +49,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class BezierControlPointEditHandle extends AbstractHandle {
+    @Nullable
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
     public static final BorderWidths WIDTH_2 = new BorderWidths(2, 2, 2, 2, false, false, false, false);
 
@@ -88,7 +89,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     private int controlPointMask;
-    @Nonnull
+    @NonNull
     private final Region node;
     private Point2D pickLocation;
     private final int pointIndex;
@@ -129,6 +130,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
+    @NonNull
     private Point2D getLocation() {
         return getBezierNode().getC(controlPointMask);
 
@@ -138,9 +140,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize() * 0.8;
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -155,7 +157,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
@@ -180,7 +182,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         final Figure f = getOwner();
 
@@ -254,7 +256,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);

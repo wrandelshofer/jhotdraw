@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -32,7 +33,7 @@ public class SendToBackAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public SendToBackAction(Application app, DrawingEditor editor) {
+    public SendToBackAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -50,7 +51,7 @@ public class SendToBackAction extends AbstractSelectedAction {
 
     }
 
-    public void sendToBack(DrawingView view, Collection<Figure> figures) {
+    public void sendToBack(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
         DrawingModel model = view.getModel();
         for (Figure child : figures) {
             Figure parent = child.getParent();

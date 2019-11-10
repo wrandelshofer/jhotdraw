@@ -17,7 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -78,7 +78,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     @FXML
     private Button removeButton;
 
-    @Nonnull
+    @NonNull
     @SuppressWarnings("unchecked")
     private ObservableWordListKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
@@ -89,11 +89,11 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         this(StyleClassesInspector.class.getResource("StyleClassesInspector.fxml"));
     }
 
-    public StyleClassesInspector(@Nonnull URL fxmlUrl) {
+    public StyleClassesInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    public void addTag(@Nonnull String wordList) {
+    public void addTag(@NonNull String wordList) {
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();
@@ -141,7 +141,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         updateListLater();
     }
 
-    private void init(@Nonnull URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -172,7 +172,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         });
     }
 
-    public void removeTag(@Nonnull String wordList) {
+    public void removeTag(@NonNull String wordList) {
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();
@@ -204,7 +204,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
         boolean first = true;
         for (Figure f : newValue) {
-            ImmutableList<String> tags = f.getNonnull(tagsKey);
+            ImmutableList<String> tags = f.getNonNull(tagsKey);
             if (first) {
                 intersection.addAll(tags.asList());
                 first = false;

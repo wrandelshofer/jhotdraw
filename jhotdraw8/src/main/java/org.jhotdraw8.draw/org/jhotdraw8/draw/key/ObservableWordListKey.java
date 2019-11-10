@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 
 /**
@@ -21,7 +22,7 @@ public class ObservableWordListKey extends ObjectFigureKey<ImmutableList<String>
      *
      * @param name The name of the key.
      */
-    public ObservableWordListKey(String name) {
+    public ObservableWordListKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -31,7 +32,7 @@ public class ObservableWordListKey extends ObjectFigureKey<ImmutableList<String>
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public ObservableWordListKey(String name, ImmutableList<String> defaultValue) {
+    public ObservableWordListKey(@NonNull String name, @NonNull ImmutableList<String> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -42,7 +43,7 @@ public class ObservableWordListKey extends ObjectFigureKey<ImmutableList<String>
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public ObservableWordListKey(String name, DirtyMask mask, ImmutableList<String> defaultValue) {
+    public ObservableWordListKey(@NonNull String name, DirtyMask mask, @NonNull ImmutableList<String> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{String.class}, defaultValue);
     }
 }

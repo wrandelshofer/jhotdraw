@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
@@ -48,7 +48,7 @@ public interface MapAccessor<T> extends Serializable {
      * @return The value of the attribute.
      */
     @Nullable
-    T get(@Nonnull Map<? super Key<?>, Object> a);
+    T get(@NonNull Map<? super Key<?>, Object> a);
 
     /**
      * Puts the value of the attribute denoted by this accessor from a Map.
@@ -58,7 +58,7 @@ public interface MapAccessor<T> extends Serializable {
      * @return The old value.
      */
     @Nullable
-    T put(@Nonnull Map<? super Key<?>, Object> a, @Nullable T value);
+    T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value);
 
     /**
      * Removes the value of the attribute denoted by this accessor from a Map.
@@ -67,7 +67,7 @@ public interface MapAccessor<T> extends Serializable {
      * @return The old value.
      */
     @Nullable
-    T remove(@Nonnull Map<? super Key<?>, Object> a);
+    T remove(@NonNull Map<? super Key<?>, Object> a);
 
     /**
      * Returns the value type.
@@ -76,7 +76,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return the value type
      */
-    Class<T> getValueType();
+    @NonNull Class<T> getValueType();
 
     /**
      * Returns the component type of the value type.
@@ -93,7 +93,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return an unmodifiable list with the type parameters
      */
-    List<Class<?>> getValueTypeParameters();
+    @NonNull List<Class<?>> getValueTypeParameters();
 
     /**
      * Returns the default value of this map accessor.

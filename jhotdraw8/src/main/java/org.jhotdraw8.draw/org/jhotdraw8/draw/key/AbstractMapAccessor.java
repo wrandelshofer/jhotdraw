@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
@@ -44,10 +44,10 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
-    @Nonnull
+    @NonNull
     private final List<Class<?>> typeParameters;
 
-    @Nonnull
+    @NonNull
     private final List<MapAccessor<?>> subAccessors;
 
     /**
@@ -59,7 +59,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractMapAccessor(String name, Class<T> clazz, @Nonnull MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractMapAccessor(String name, Class<T> clazz, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, clazz, null, subAccessors, defaultValue);
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @param subAccessors   sub accessors which are used by this accessor
      * @param defaultValue   The default value.
      */
-    public AbstractMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nonnull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
+    public AbstractMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -103,7 +103,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
         return name;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -112,18 +112,19 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
     }
 
 
+    @NonNull
     @Override
     public Class<?> getComponentValueType() {
         return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
@@ -158,14 +159,14 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
     /**
      * Returns the name string.
      */
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getFullValueType() + "}";
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Collection<MapAccessor<?>> getSubAccessors() {
         return subAccessors;

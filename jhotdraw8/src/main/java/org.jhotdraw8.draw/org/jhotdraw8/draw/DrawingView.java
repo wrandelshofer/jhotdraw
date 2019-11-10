@@ -15,9 +15,9 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -127,7 +127,7 @@ public interface DrawingView extends RenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    NonnullProperty<DrawingModel> modelProperty();
+    @Nullable NonNullProperty<DrawingModel> modelProperty();
 
     /**
      * The drawing model.
@@ -148,7 +148,7 @@ public interface DrawingView extends RenderContext {
      * @return the active layer of the drawing. Returns null if the drawing has
      * no layers or no layer has been activated.
      */
-    ObjectProperty<Layer> activeLayerProperty();
+    @NonNull ObjectProperty<Layer> activeLayerProperty();
 
     default void scrollSelectedFiguresToVisible() {
         System.err.println("DO  " + getVisibleRect());
@@ -173,7 +173,7 @@ public interface DrawingView extends RenderContext {
      * @return the tool property, with {@code getBean()} returning this drawing
      * view, and {@code getName()} returning {@code TOOL_PROPERTY}.
      */
-    ObjectProperty<Tool> toolProperty();
+    @NonNull ObjectProperty<Tool> toolProperty();
 
     /**
      * The scale factor of the drawing view.
@@ -182,7 +182,7 @@ public interface DrawingView extends RenderContext {
      * larger than 1 cause a magnification. Values between 0 and 1 causes a
      * minification.
      */
-    DoubleProperty zoomFactorProperty();
+    @NonNull DoubleProperty zoomFactorProperty();
 
     /**
      * The constrainer.
@@ -191,7 +191,7 @@ public interface DrawingView extends RenderContext {
      * drawing view, and {@code getName()} returning
      * {@code CONSTRAINER_PROPERTY}.
      */
-    NonnullProperty<Constrainer> constrainerProperty();
+    @NonNull NonNullProperty<Constrainer> constrainerProperty();
 
     /**
      * The focused property is set to true, when the DrawingView has input
@@ -217,7 +217,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return the active handle if present
      */
-    ObjectProperty<Handle> activeHandleProperty();
+    @NonNull ObjectProperty<Handle> activeHandleProperty();
 
 
 
@@ -226,14 +226,14 @@ public interface DrawingView extends RenderContext {
      *
      * @return the clipboard output format handle if present
      */
-    ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
+    @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
 
     /**
      * The clipboard input format.
      *
      * @return the clipboard output format handle if present
      */
-    ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
+    @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
 
     // ---
     // methods
@@ -253,7 +253,7 @@ public interface DrawingView extends RenderContext {
      * @param f The figure
      * @return The node associated to the figure
      */
-    Node getNode(Figure f);
+    @Nullable Node getNode(Figure f);
 
     /**
      * Finds the handle at the given view coordinates. Handles are searched in
@@ -299,7 +299,7 @@ public interface DrawingView extends RenderContext {
      * @return A node or null
      */
     @Nullable
-    Node findFigureNode(@Nonnull Figure figure, double vx, double vy);
+    Node findFigureNode(@NonNull Figure figure, double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
@@ -311,7 +311,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    @Nonnull
+    @NonNull
     List<Figure> findFigures(double vx, double vy, boolean decompose);
 
     /**
@@ -326,7 +326,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     /**
      * Returns all figures that intersect the specified bounds given in view
@@ -340,7 +340,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     // Handles
 
@@ -351,14 +351,14 @@ public interface DrawingView extends RenderContext {
      * @param handle  a handle
      * @return A collection containing the figures with compatible handles.
      */
-    Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
+    @NonNull Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
 
     /**
      * Returns the world to view transformation.
      *
      * @return the transformation
      */
-    @Nonnull
+    @NonNull
     Transform getWorldToView();
 
     /**
@@ -366,7 +366,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return the transformation;
      */
-    @Nonnull
+    @NonNull
     Transform getViewToWorld();
 
     // ---
@@ -381,7 +381,8 @@ public interface DrawingView extends RenderContext {
      * @param pointInView point in view coordinates
      * @return A figure or empty
      */
-    default Figure findFigure(@Nonnull Point2D pointInView) {
+    @Nullable
+    default Figure findFigure(@NonNull Point2D pointInView) {
         return findFigure(pointInView.getX(), pointInView.getY());
     }
 
@@ -394,7 +395,8 @@ public interface DrawingView extends RenderContext {
      * @param decompose   whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFigures(@Nonnull Point2D pointInView, boolean decompose) {
+    @NonNull
+    default List<Figure> findFigures(@NonNull Point2D pointInView, boolean decompose) {
         return findFigures(pointInView.getX(), pointInView.getY(), decompose);
     }
 
@@ -407,7 +409,8 @@ public interface DrawingView extends RenderContext {
      * @param decompose       whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFiguresInside(@Nonnull Rectangle2D rectangleInView, boolean decompose) {
+    @NonNull
+    default List<Figure> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresInside(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
@@ -420,7 +423,8 @@ public interface DrawingView extends RenderContext {
      * @param decompose       whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default List<Figure> findFiguresIntersecting(@Nonnull Rectangle2D rectangleInView, boolean decompose) {
+    @NonNull
+    default List<Figure> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
@@ -505,7 +509,7 @@ public interface DrawingView extends RenderContext {
      * @param view a point in view coordinates
      * @return the corresponding point in world coordinates
      */
-    default Point2D viewToWorld(@Nonnull Point2D view) {
+    default Point2D viewToWorld(@NonNull Point2D view) {
         return getViewToWorld().transform(view);
     }
 
@@ -515,7 +519,7 @@ public interface DrawingView extends RenderContext {
      * @param view a rectangle in view coordinates
      * @return the corresponding point in world coordinates
      */
-    default Bounds viewToWorld(@Nonnull Bounds view) {
+    default Bounds viewToWorld(@NonNull Bounds view) {
         return getViewToWorld().transform(view);
     }
 
@@ -525,7 +529,7 @@ public interface DrawingView extends RenderContext {
      * @param world a point in world coordinates
      * @return the corresponding point in view coordinates
      */
-    default Point2D worldToView(@Nonnull Point2D world) {
+    default Point2D worldToView(@NonNull Point2D world) {
         return getWorldToView().transform(world);
     }
 
@@ -535,7 +539,7 @@ public interface DrawingView extends RenderContext {
      * @param world a box in world coordinates
      * @return the corresponding box in view coordinates
      */
-    default Bounds worldToView(@Nonnull Bounds world) {
+    default Bounds worldToView(@NonNull Bounds world) {
         return getWorldToView().transform(world);
     }
 
@@ -609,7 +613,7 @@ public interface DrawingView extends RenderContext {
      *
      * @param f A figure in the drawing of this DrawingView.
      */
-    default void scrollFigureToVisible(@Nonnull Figure f) {
+    default void scrollFigureToVisible(@NonNull Figure f) {
         Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
         scrollRectToVisible(boundsInView);
     }

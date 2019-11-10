@@ -36,6 +36,7 @@ public class UriResolver implements Function<URI, URI> {
         this.external = externl;
     }
 
+    @Nullable
     @Override
     public URI apply(URI uri) {
         URI resolved = uri;

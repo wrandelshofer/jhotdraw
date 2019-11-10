@@ -5,7 +5,7 @@
 package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
@@ -17,10 +17,10 @@ import org.jhotdraw8.annotation.Nullable;
  * @author Werner Randelshofer
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
-    @Nonnull
+    @NonNull
     private final MapAccessor<V> accessor;
 
-    public KeyMapEntryProperty(@Nonnull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
+    public KeyMapEntryProperty(@NonNull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
         super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getValueType());
         this.accessor = key;
     }

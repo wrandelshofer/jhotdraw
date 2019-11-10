@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
@@ -26,13 +26,13 @@ public class ConverterFormatAdapter implements Converter<Object> {
         this.format = format;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString(Object value) {
         return format.format(value);
     }
 
-    public Object fromString(String string, IdFactory idFactory, @Nonnull ParsePosition pp) {
+    public Object fromString(String string, IdFactory idFactory, @NonNull ParsePosition pp) {
         Object value = format.parseObject(string, pp);
         return value;
     }

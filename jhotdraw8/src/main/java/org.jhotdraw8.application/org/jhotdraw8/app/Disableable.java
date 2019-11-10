@@ -7,6 +7,7 @@ package org.jhotdraw8.app;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableSet;
 import javafx.concurrent.Worker;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
 
 /**
@@ -50,7 +51,7 @@ public interface Disableable {
      *
      * @return The disablers.
      */
-    ObservableSet<Object> disablers();
+    @NonNull ObservableSet<Object> disablers();
 
     // Convenience method
     default boolean isDisabled() {

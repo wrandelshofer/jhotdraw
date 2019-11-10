@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssUriConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -28,7 +28,7 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, URI> cssMetaData;
 
     /**
@@ -84,7 +84,7 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, URI> getCssMetaData() {
         return cssMetaData;

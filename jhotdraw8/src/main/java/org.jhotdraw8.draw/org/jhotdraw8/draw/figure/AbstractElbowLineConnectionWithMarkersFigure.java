@@ -12,7 +12,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
@@ -56,7 +56,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         this(0, 0, 1, 1);
     }
 
-    public AbstractElbowLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
+    public AbstractElbowLineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         super(startX, startY, endX, endY);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
@@ -76,7 +76,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -140,14 +140,14 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         javafx.scene.Group g = (javafx.scene.Group) node;
         Polyline lineNode = (Polyline) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);
 
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
+        Point2D start = getNonNull(START).getConvertedValue();
+        Point2D end = getNonNull(END).getConvertedValue();
 
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);
@@ -187,8 +187,8 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
-                                    @Nonnull Path markerNode,
-                                    @Nonnull Point2D start, @Nonnull Point2D end, @Nullable String svgString, double markerScaleFactor) {
+                                    @NonNull Path markerNode,
+                                    @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
             double angle = Math.atan2(start.getY() - end.getY(), start.getX() - end.getX());
@@ -202,6 +202,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         }
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         return path == null ? Shapes.emptyPathIterator() : Shapes.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
@@ -211,10 +212,12 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     public abstract double getStrokeCutEnd(RenderContext ctx);
 
+    @Nullable
     public abstract String getMarkerStartShape();
 
     public abstract double getMarkerStartScaleFactor();
 
+    @Nullable
     public abstract String getMarkerEndShape();
 
     public abstract double getMarkerEndScaleFactor();
@@ -231,15 +234,15 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
+    public void layout(@NonNull RenderContext ctx) {
+        Point2D start = getNonNull(START).getConvertedValue();
+        Point2D end = getNonNull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
         CssSize elbowOffset1 = getElbowOffset();
-        double elbowOffset = elbowOffset1 == null ? 0.0 : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(elbowOffset1, UnitConverter.DEFAULT);
+        double elbowOffset = elbowOffset1 == null ? 0.0 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(elbowOffset1, UnitConverter.DEFAULT);
 
 
         ObservableList<Double> points = path.getPoints();
@@ -269,7 +272,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         //ObservableList<Double> points = path.getPoints();
         // points.clear();
         CssSize elbowOffsetSize = getElbowOffset();
-        UnitConverter unitConverter = ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
+        UnitConverter unitConverter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         if (elbowOffset == 0 || endTangent == null || Geom.squaredMagnitude(endTangent) < 1e-7) {
             points.addAll(start.getX(), start.getY());
             points.addAll(end.getX(), end.getY());

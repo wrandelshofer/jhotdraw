@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.text.CssNumberConverter;
@@ -44,6 +44,7 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
 public class DrawingExportOptionsPane extends GridPane {
 
+    @NonNull
     public static Dialog<Map<? super Key<?>, Object>> createDialog(DataFormat format) {
         Resources labels = ApplicationLabels.getResources();
         final DrawingExportOptionsPane pane = new DrawingExportOptionsPane();
@@ -106,7 +107,7 @@ public class DrawingExportOptionsPane extends GridPane {
      *
      * @return the export options
      */
-    @Nonnull
+    @NonNull
     public Map<? super Key<?>, Object> getExportOptions() {
         Map<? super Key<?>, Object> map = new HashMap<>();
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.io;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.HashMap;
@@ -17,11 +17,11 @@ import java.util.Map;
  */
 public class SimpleIdFactory implements IdFactory {
 
-    @Nonnull
+    @NonNull
     private Map<String, Long> prefixToNextId = new HashMap<>();
-    @Nonnull
+    @NonNull
     private Map<String, Object> idToObject = new HashMap<>();
-    @Nonnull
+    @NonNull
     private Map<Object, String> objectToId = new HashMap<>();
 
     @Override
@@ -31,6 +31,7 @@ public class SimpleIdFactory implements IdFactory {
         objectToId.clear();
     }
 
+    @Nullable
     @Override
     public String createId(Object object) {
         return createId(object, "");

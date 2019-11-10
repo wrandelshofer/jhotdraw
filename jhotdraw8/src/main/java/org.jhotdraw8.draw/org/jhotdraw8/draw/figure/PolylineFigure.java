@@ -10,10 +10,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -65,17 +65,17 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolylineOutlineHandle(this, POINTS, false));
         } else if (handleType == HandleType.MOVE) {
             list.add(new PolylineOutlineHandle(this, POINTS, false));
-            for (int i = 0, n = getNonnull(POINTS).size(); i < n; i++) {
+            for (int i = 0, n = getNonNull(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointMoveHandle(this, POINTS, i));
             }
         } else if (handleType == HandleType.POINT) {
             list.add(new PolylineOutlineHandle(this, POINTS, true));
-            for (int i = 0, n = getNonnull(POINTS).size(); i < n; i++) {
+            for (int i = 0, n = getNonNull(POINTS).size(); i < n; i++) {
                 list.add(new PolyPointEditHandle(this, POINTS, i));
             }
         } else {
@@ -83,13 +83,13 @@ public class PolylineFigure extends AbstractLeafFigure
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polyline();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         // XXX should be cached
@@ -97,7 +97,7 @@ public class PolylineFigure extends AbstractLeafFigure
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
-        for (Point2D p : getNonnull(POINTS)) {
+        for (Point2D p : getNonNull(POINTS)) {
             minX = Math.min(minX, p.getX());
             minY = Math.min(minY, p.getY());
             maxX = Math.max(maxX, p.getX());
@@ -106,26 +106,26 @@ public class PolylineFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @Nonnull
+    @NonNull
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return Shapes.pathIteratorFromPoints(getNonnull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
+        return Shapes.pathIteratorFromPoints(getNonNull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
-        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
+    public void reshapeInLocal(@NonNull Transform transform) {
+        ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
@@ -133,8 +133,8 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(CssPoint2D t) {
-        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
+    public void translateInLocal(@NonNull CssPoint2D t) {
+        ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
@@ -143,7 +143,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Polyline lineNode = (Polyline) node;
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
@@ -151,7 +151,7 @@ public class PolylineFigure extends AbstractLeafFigure
         applyFillableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, lineNode);
-        final ImmutableList<Point2D> points = getStyledNonnull(POINTS);
+        final ImmutableList<Point2D> points = getStyledNonNull(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
             list.add(p.getX());
@@ -161,9 +161,9 @@ public class PolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    @Nonnull
-    public static double[] toPointArray(@Nonnull Figure f, @Nonnull NonnullMapAccessor<ImmutableList<Point2D>> key) {
-        ImmutableList<Point2D> points = f.getNonnull(key);
+    @NonNull
+    public static double[] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<ImmutableList<Point2D>> key) {
+        ImmutableList<Point2D> points = f.getNonNull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {
             Point2D p = points.get(i);
@@ -174,7 +174,7 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }

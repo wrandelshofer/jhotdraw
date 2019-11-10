@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
@@ -108,7 +109,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
-    ObjectProperty<DrawingView> drawingViewProperty();
+    @NonNull ObjectProperty<DrawingView> drawingViewProperty();
 
     /**
      * The currently active drawing editor. By convention, this property is only
@@ -117,7 +118,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
-    ObjectProperty<DrawingEditor> drawingEditorProperty();
+    @NonNull ObjectProperty<DrawingEditor> drawingEditorProperty();
 
     // ---
     // Behaviors
@@ -128,7 +129,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return a node
      */
-    Node getNode();
+    @NonNull Node getNode();
 
     /**
      * Deletes the selection. Depending on the tool, this could be selected
@@ -187,6 +188,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return The name
      */
+    @Nullable
     default public String getLabel() {
         return get(LABEL);
     }
@@ -196,6 +198,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return The instance
      */
+    @Nullable
     default public String getName() {
         return get(NAME);
     }

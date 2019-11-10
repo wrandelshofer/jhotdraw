@@ -8,7 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -37,7 +37,7 @@ public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivit
      *
      * @param app the application
      */
-    public PrintFileAction(Application app) {
+    public PrintFileAction(@NonNull Application app) {
         this(app, null);
     }
 
@@ -47,13 +47,13 @@ public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivit
      * @param app  the application
      * @param view the view
      */
-    public PrintFileAction(Application app, @Nullable DocumentBasedActivity view) {
+    public PrintFileAction(@NonNull Application app, @Nullable DocumentBasedActivity view) {
         super(app, view, DocumentBasedActivity.class);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity activity) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
         WorkState workState = new SimpleWorkState();
         activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();

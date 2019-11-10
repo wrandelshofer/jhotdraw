@@ -4,6 +4,7 @@
 package org.jhotdraw8.graph;
 
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +19,7 @@ public class IntAnyPathBuilderTest {
     public IntAnyPathBuilderTest() {
     }
 
+    @NonNull
     private IntDirectedGraph createGraph() {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.setVertexCount(6);
@@ -33,6 +35,7 @@ public class IntAnyPathBuilderTest {
         return builder;
     }
 
+    @NonNull
     public Object[][] anyPathProvider() {
         return new Object[][]{
                 {0, 4, VertexPath.of(0, 5, 4)},

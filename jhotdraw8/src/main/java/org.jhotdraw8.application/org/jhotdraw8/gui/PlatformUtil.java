@@ -5,7 +5,7 @@
 package org.jhotdraw8.gui;
 
 import javafx.application.Platform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -17,7 +17,7 @@ import java.util.concurrent.FutureTask;
  */
 public class PlatformUtil {
 
-    public static void invokeAndWait(@Nonnull Runnable r) {
+    public static void invokeAndWait(@NonNull Runnable r) {
         if (Platform.isFxApplicationThread()) {
             r.run();
         } else {
@@ -25,7 +25,7 @@ public class PlatformUtil {
             Platform.runLater(task);
             try {
                 task.get();
-            } catch (InterruptedException | ExecutionException ex) {
+            } catch (@NonNull InterruptedException | ExecutionException ex) {
                 throw new InternalError(ex);
             }
         }

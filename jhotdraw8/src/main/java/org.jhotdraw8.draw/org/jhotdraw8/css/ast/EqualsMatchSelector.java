@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -21,12 +21,12 @@ import java.util.function.Consumer;
 public class EqualsMatchSelector extends AbstractAttributeSelector {
     @Nullable
     private final String namespace;
-    @Nonnull
+    @NonNull
     private final String attributeName;
-    @Nonnull
+    @NonNull
     private final String attributeValue;
 
-    public EqualsMatchSelector(@Nullable String namespace, @Nonnull String attributeName, @Nonnull String attributeValue) {
+    public EqualsMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String attributeValue) {
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.attributeValue = attributeValue;
@@ -34,18 +34,18 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
 
     @Nullable
     @Override
-    protected <T> T match(@Nonnull SelectorModel<T> model, T element) {
+    protected <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
         return model.attributeValueEquals(element, namespace, attributeName, attributeValue) ? element : null;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "[" + attributeName + "=" + attributeValue + ']';
     }
 
     @Override
-    public void produceTokens(Consumer<CssToken> consumer) {
+    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
         if (namespace != null) {
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));

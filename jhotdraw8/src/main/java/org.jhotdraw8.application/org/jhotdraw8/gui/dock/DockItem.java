@@ -16,7 +16,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.prefs.Preferences;
@@ -55,7 +55,7 @@ public class DockItem extends Tab {
         selectedProperty().addListener(this::selectionChanged);
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<Dock> dockProperty() {
         return dock;
     }
@@ -88,7 +88,7 @@ public class DockItem extends Tab {
         draggedTab = null;
     }
 
-    public void handleDragDetected(@Nonnull MouseEvent e) {
+    public void handleDragDetected(@NonNull MouseEvent e) {
         Node graphic = getGraphic();
         draggedTab = this;
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);

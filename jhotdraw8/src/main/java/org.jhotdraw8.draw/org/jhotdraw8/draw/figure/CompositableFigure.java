@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssPercentageConverter;
 import org.jhotdraw8.draw.key.BlendModeStyleableKey;
@@ -70,7 +70,7 @@ public interface CompositableFigure extends Figure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyCompositableFigureProperties(RenderContext ctx, @Nonnull Node node) {
+    default void applyCompositableFigureProperties(RenderContext ctx, @NonNull Node node) {
         // Performance: JavaFX performs compositing on a Group node, when blend mode != null, altough
         //                    this should be equivalent to SRC_OVER.
         final BlendMode blendMode = getStyled(BLEND_MODE);

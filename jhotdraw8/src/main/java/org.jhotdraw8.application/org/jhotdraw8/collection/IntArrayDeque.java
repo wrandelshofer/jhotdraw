@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -135,7 +135,7 @@ public class IntArrayDeque {
         tail = n;
     }
 
-    @Nonnull
+    @NonNull
     public Iterator<Integer> iterator() {
         return new DeqIterator();
     }
@@ -199,7 +199,7 @@ public class IntArrayDeque {
         return head == tail;
     }
 
-    @Nonnull
+    @NonNull
     public String toString() {
         Iterator<Integer> it = iterator();
         if (!it.hasNext()) {

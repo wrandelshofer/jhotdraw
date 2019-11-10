@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,13 +24,13 @@ public class ReversedList<E> extends TransformationList<E, E> {
 
     private int size;
 
-    public ReversedList(@Nonnull ObservableList<E> source) {
+    public ReversedList(@NonNull ObservableList<E> source) {
         super(source);
         size = source.size();
     }
 
     @Override
-    protected void sourceChanged(ListChangeListener.Change<? extends E> c) {
+    protected void sourceChanged(@NonNull ListChangeListener.Change<? extends E> c) {
         beginChange();
         while (c.next()) {
             if (c.wasPermutated()) {

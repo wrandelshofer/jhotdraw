@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.input;
 
 import javafx.scene.input.Clipboard;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -29,7 +29,7 @@ public class MultiClipboardInputFormat implements ClipboardInputFormat {
     private ClipboardInputFormat[] formats;
 
     @SuppressWarnings("unchecked")
-    public MultiClipboardInputFormat(@Nonnull List<Supplier<ClipboardInputFormat>> formatSuppliers) {
+    public MultiClipboardInputFormat(@NonNull List<Supplier<ClipboardInputFormat>> formatSuppliers) {
         this.formatSuppliers = formatSuppliers;
     }
 

@@ -11,7 +11,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -70,7 +70,7 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    protected <TT extends Transform> void produceTokensNonnull(@Nonnull TT tx, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends Transform> void produceTokensNonNull(@NonNull TT tx, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (tx instanceof Translate) {
             Translate tr = (Translate) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "translate"));
@@ -193,7 +193,7 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Transform⟩: ⟨Affine⟩｜⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨Shear⟩｜⟨Matrix⟩"
@@ -209,9 +209,9 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
                 ;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Transform parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
         String func = tt.currentString();
         int funcPos = tt.getStartPosition();
@@ -223,7 +223,7 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
             if (tt.next() != CssTokenType.TT_NUMBER) {
                 throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentString() + "\"", tt.getStartPosition());
             }
-            m.add(tt.currentNumberNonnull().doubleValue());
+            m.add(tt.currentNumberNonNull().doubleValue());
         }
         if (tt.current() != ')') {
             throw new ParseException("')' expected: \"" + tt.currentString() + "\"", tt.getStartPosition());

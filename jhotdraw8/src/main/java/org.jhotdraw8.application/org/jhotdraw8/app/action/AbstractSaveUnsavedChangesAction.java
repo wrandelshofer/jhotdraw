@@ -14,7 +14,7 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -68,7 +68,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
      * @param app  the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(@Nonnull Application app, DocumentBasedActivity view) {
+    public AbstractSaveUnsavedChangesAction(@NonNull Application app, DocumentBasedActivity view) {
         super(app, view, DocumentBasedActivity.class);
     }
 
@@ -85,7 +85,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    public void handleActionOnViewPerformed(@Nonnull DocumentBasedActivity v) {
+    public void handleActionOnViewPerformed(@NonNull DocumentBasedActivity v) {
         if (!v.isDisabled()) {
             final Resources labels = ApplicationLabels.getResources();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -159,13 +159,14 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     @Nullable
-    protected Node getFocusOwner(@Nonnull Node node) {
+    protected Node getFocusOwner(@NonNull Node node) {
 
         Scene scene = node.getScene();
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentBasedActivity view) {
+    @Nullable
+    protected URIChooser getChooser(@NonNull DocumentBasedActivity view) {
         URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -174,7 +175,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         return chsr;
     }
 
-    protected void saveView(@Nonnull final DocumentBasedActivity v, WorkState workState) {
+    protected void saveView(@NonNull final DocumentBasedActivity v, WorkState workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -212,7 +213,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    protected void saveViewToURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
+    protected void saveViewToURI(@NonNull final DocumentBasedActivity v, @NonNull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
         v.write(uri, chooser == null ? null : dataFormat, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);

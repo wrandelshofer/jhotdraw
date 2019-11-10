@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * IntDirectedGraphBuilder.
@@ -20,8 +20,8 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
-    @Nonnull
-    public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(IntDirectedGraph graph) {
+    @NonNull
+    public static IntDirectedGraphBuilder inverseOfIntDirectedGraph(@NonNull IntDirectedGraph graph) {
         int arrowCount = graph.getArrowCount();
 
         IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
@@ -40,8 +40,8 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      * @param graph a graph
      * @return a new graph
      */
-    @Nonnull
-    public static IntDirectedGraphBuilder ofIntDirectedGraph(IntDirectedGraph graph) {
+    @NonNull
+    public static IntDirectedGraphBuilder ofIntDirectedGraph(@NonNull IntDirectedGraph graph) {
         int arrowCount = graph.getArrowCount();
 
         IntDirectedGraphBuilder b = new IntDirectedGraphBuilder(graph.getVertexCount(), arrowCount);
@@ -102,7 +102,7 @@ public class IntDirectedGraphBuilder extends AbstractDirectedGraphBuilder {
      *
      * @return the created graph
      */
-    @Nonnull
+    @NonNull
     public IntImmutableDirectedGraph build() {
         return new IntImmutableDirectedGraph(this);
     }

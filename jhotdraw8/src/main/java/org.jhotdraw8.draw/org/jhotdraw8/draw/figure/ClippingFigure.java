@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
@@ -30,7 +30,7 @@ public class ClippingFigure extends AbstractCompositeFigure
     public ClippingFigure() {
     }
 
-    public ClippingFigure(@Nonnull Collection<Figure> children) {
+    public ClippingFigure(@NonNull Collection<Figure> children) {
         getChildren().addAll(children);
     }
 
@@ -42,12 +42,12 @@ public class ClippingFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         // empty
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         applyStyleableFigureProperties(ctx, n);
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
@@ -60,7 +60,7 @@ public class ClippingFigure extends AbstractCompositeFigure
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();
@@ -96,7 +96,7 @@ public class ClippingFigure extends AbstractCompositeFigure
      * Layers never create handles.
      */
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         // empty
     }
 

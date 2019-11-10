@@ -5,6 +5,7 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * EditableComponent defines an API for objects which can perform clipboard operations
@@ -47,7 +48,7 @@ public interface EditableComponent {
      *
      * @return true if empty
      */
-    ReadOnlyBooleanProperty selectionEmptyProperty();
+    @Nullable ReadOnlyBooleanProperty selectionEmptyProperty();
 
     // ---
     // edit actions on selection

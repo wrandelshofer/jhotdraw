@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -31,11 +31,11 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Boolean parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Boolean parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨Boolean⟩ identifier expected.");
-        String s = tt.currentStringNonnull();
+        String s = tt.currentStringNonNull();
         switch (s) {
             case trueString:
                 return Boolean.TRUE;
@@ -47,11 +47,11 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
     }
 
     @Override
-    public <TT extends Boolean> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends Boolean> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_IDENT, ((Boolean) value) ? trueString : falseString));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         if (isNullable()) {

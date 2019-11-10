@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
@@ -41,7 +41,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
 
     @Nullable
     @Override
-    public CssSize parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssSize parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (nullable) {
             if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
                 //tt.skipWhitespace();
@@ -54,20 +54,20 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         String units;
         switch (tt.next()) {
             case CssTokenType.TT_DIMENSION:
-                value = tt.currentNumberNonnull();
+                value = tt.currentNumberNonNull();
                 units = tt.currentString();
                 break;
             case CssTokenType.TT_PERCENTAGE:
-                value = tt.currentNumberNonnull();
+                value = tt.currentNumberNonNull();
                 units = "%";
                 break;
             case CssTokenType.TT_NUMBER:
-                value = tt.currentNumberNonnull();
+                value = tt.currentNumberNonNull();
                 units = null;
                 break;
             case CssTokenType.TT_IDENT: {
                 units = null;
-                switch (tt.currentStringNonnull()) {
+                switch (tt.currentStringNonNull()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;
                         break;
@@ -90,7 +90,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
 
 
     @Override
-    public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (value.getUnits() == null || "".equals(value.getUnits())) {
@@ -118,7 +118,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         return nullable;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Size⟩: ⟨size⟩ | ⟨percentage⟩% | ⟨size⟩⟨Units⟩"

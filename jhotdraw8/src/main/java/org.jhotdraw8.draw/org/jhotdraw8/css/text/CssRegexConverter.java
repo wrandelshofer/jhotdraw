@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -44,7 +44,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
         this.nullable = nullable;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨RegReplace⟩: none | replace(⟨Match⟩, ⟨Replace⟩)"
@@ -53,7 +53,7 @@ public class CssRegexConverter implements Converter<RegexReplace> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable RegexReplace value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable RegexReplace value) throws IOException {
         if (value == null) {
             if (nullable) {
                 out.append(CssTokenType.IDENT_NONE);

@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
@@ -61,7 +61,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.getClickCount() != 1) {
             return;
         }
@@ -93,14 +93,14 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseMoved(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             handleMouseDragged(event, dv);
         }
     }
 
     @Override
-    protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             double x2 = event.getX();
             double y2 = event.getY();
@@ -113,7 +113,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.getClickCount() > 1) {
             if (createdFigure != null) {
                 for (int i = points.size() - 1; i > 0; i--) {
@@ -139,12 +139,13 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
 
 
     @Override
-    public void activate(DrawingEditor editor) {
+    public void activate(@NonNull DrawingEditor editor) {
         requestFocus();
         super.activate(editor);
         createdFigure = null;
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "PolyCreationTool"

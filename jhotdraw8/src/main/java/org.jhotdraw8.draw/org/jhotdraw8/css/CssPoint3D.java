@@ -5,6 +5,7 @@
 package org.jhotdraw8.css;
 
 import javafx.geometry.Point3D;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -85,6 +86,7 @@ public class CssPoint3D {
         return hash;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssPoint3D{" +
@@ -94,6 +96,7 @@ public class CssPoint3D {
                 '}';
     }
 
+    @NonNull
     public Point3D getConvertedValue() {
         return new Point3D(x.getConvertedValue(), y.getConvertedValue(), z.getConvertedValue());
 

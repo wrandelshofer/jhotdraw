@@ -8,7 +8,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -55,7 +55,7 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
      *                  specified activity.
      * @param activityClass the type of the activity. This is used for type checks.
      */
-    public AbstractActivityAction(@Nonnull Application app, @Nullable A activity, Class<A> activityClass) {
+    public AbstractActivityAction(@NonNull Application app, @Nullable A activity, Class<A> activityClass) {
         super(app);
         this.pClass = activityClass;
         this.activity = activity;

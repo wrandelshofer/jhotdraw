@@ -1,5 +1,5 @@
 /*
- * @(#)Nonnull.java
+ * @(#)NonNull.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.annotation;
@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.CLASS)
-public @interface Nonnull {
+public @interface NonNull {
 }

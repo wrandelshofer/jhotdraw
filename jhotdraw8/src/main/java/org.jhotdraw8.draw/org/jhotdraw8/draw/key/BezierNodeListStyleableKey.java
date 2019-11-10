@@ -7,9 +7,9 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
@@ -28,11 +28,11 @@ import java.util.function.Function;
 public class BezierNodeListStyleableKey
         extends AbstractStyleableKey<ImmutableList<BezierNode>>
         implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>>,
-        NonnullMapAccessor<ImmutableList<BezierNode>> {
+        NonNullMapAccessor<ImmutableList<BezierNode>> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, ImmutableList<BezierNode>> cssMetaData;
 
     /**
@@ -41,7 +41,7 @@ public class BezierNodeListStyleableKey
      *
      * @param name The name of the key.
      */
-    public BezierNodeListStyleableKey(String name) {
+    public BezierNodeListStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -51,7 +51,7 @@ public class BezierNodeListStyleableKey
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public BezierNodeListStyleableKey(String name, ImmutableList<BezierNode> defaultValue) {
+    public BezierNodeListStyleableKey(@NonNull String name, ImmutableList<BezierNode> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -62,7 +62,7 @@ public class BezierNodeListStyleableKey
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public BezierNodeListStyleableKey(String name, DirtyMask mask, ImmutableList<BezierNode> defaultValue) {
+    public BezierNodeListStyleableKey(@NonNull String name, DirtyMask mask, ImmutableList<BezierNode> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{BezierNode.class}, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<BezierNode>>> function = s -> {
@@ -77,7 +77,7 @@ public class BezierNodeListStyleableKey
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<BezierNode>> getCssMetaData() {
         return cssMetaData;
@@ -85,6 +85,7 @@ public class BezierNodeListStyleableKey
 
     private final Converter<ImmutableList<BezierNode>> converter = new CssBezierNodeListConverter(false);
 
+    @NonNull
     @Override
     public Converter<ImmutableList<BezierNode>> getConverter() {
         return converter;

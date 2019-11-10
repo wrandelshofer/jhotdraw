@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssSize;
@@ -29,17 +29,17 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssInsets parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssInsets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         List<CssSize> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
-                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue()));
+                    list.add(new CssSize(tt.currentNumberNonNull().doubleValue()));
                     break;
                 case CssTokenType.TT_DIMENSION:
-                    list.add(new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentString()));
+                    list.add(new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentString()));
                     break;
                 case CssTokenType.TT_COMMA:
                     break;
@@ -68,14 +68,14 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨DimensionInsets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
     }
 
     @Override
-    protected <TT extends CssInsets> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends CssInsets> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         CssSize top = value.getTop();
         CssSize right = value.getRight();
         CssSize bottom = value.getBottom();

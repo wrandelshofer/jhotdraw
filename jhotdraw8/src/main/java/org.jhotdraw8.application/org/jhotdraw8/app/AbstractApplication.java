@@ -18,7 +18,7 @@ import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 
@@ -84,7 +84,7 @@ public abstract class AbstractApplication extends javafx.application.Application
         return disabled;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObservableSet<Object> disablers() {
         return disablers;
@@ -147,7 +147,7 @@ public abstract class AbstractApplication extends javafx.application.Application
         });
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;

@@ -8,9 +8,9 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -25,10 +25,10 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 import java.util.function.Function;
 
 public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<MLCompartmentalizedData>
-        implements WriteableStyleableMapAccessor<MLCompartmentalizedData>, NonnullMapAccessor<MLCompartmentalizedData> {
+        implements WriteableStyleableMapAccessor<MLCompartmentalizedData>, NonNullMapAccessor<MLCompartmentalizedData> {
 
     final static long serialVersionUID = 1L;
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, MLCompartmentalizedData> cssMetaData;
 
     /**
@@ -38,7 +38,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
      * @param namespace The namespace
      * @param name      The name of the key.
      */
-    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name) {
         this(namespace, name, new MLCompartmentalizedData());
     }
 
@@ -49,7 +49,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, MLCompartmentalizedData defaultValue) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, MLCompartmentalizedData defaultValue) {
         this(namespace, name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
@@ -61,7 +61,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, DirtyMask mask, MLCompartmentalizedData defaultValue) {
         this(namespace, name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
@@ -74,7 +74,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, String name, DirtyMask mask, MLCompartmentalizedData defaultValue, String helpText) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, DirtyMask mask, MLCompartmentalizedData defaultValue, String helpText) {
         super(namespace, name, MLCompartmentalizedData.class, false, defaultValue);
         converter = new CssUmlCompartmentalizedDataConverter(true);
         Function<Styleable, StyleableProperty<MLCompartmentalizedData>> function = s -> {
@@ -90,17 +90,17 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, MLCompartmentalizedData> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     private final CssUmlCompartmentalizedDataConverter converter;
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<MLCompartmentalizedData> getConverter() {
         return converter;

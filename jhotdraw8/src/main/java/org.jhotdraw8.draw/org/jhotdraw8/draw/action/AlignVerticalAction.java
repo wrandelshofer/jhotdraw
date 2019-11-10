@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -30,7 +31,7 @@ public class AlignVerticalAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public AlignVerticalAction(Application app, DrawingEditor editor) {
+    public AlignVerticalAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -48,7 +49,7 @@ public class AlignVerticalAction extends AbstractSelectedAction {
         alignVertical(drawingView, figures, lead);
     }
 
-    private void alignVertical(DrawingView view, Set<Figure> figures, Figure lead) {
+    private void alignVertical(@NonNull DrawingView view, @NonNull Set<Figure> figures, @NonNull Figure lead) {
         if (figures.size() < 2) {
             return;
         }

@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssInsetsConverterOLD;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -27,7 +27,7 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Insets> cssMetaData;
 
     /**
@@ -74,7 +74,7 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Insets> getCssMetaData() {
         return cssMetaData;
@@ -83,6 +83,7 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
 
     private final Converter<Insets> converter = new CssInsetsConverterOLD(false);
 
+    @NonNull
     @Override
     public Converter<Insets> getConverter() {
         return converter;

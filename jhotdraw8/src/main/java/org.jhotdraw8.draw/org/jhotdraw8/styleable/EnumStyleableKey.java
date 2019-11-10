@@ -6,8 +6,8 @@ package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.text.Converter;
@@ -18,7 +18,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  */
 public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
-        implements WriteableStyleableMapAccessor<T>, NonnullMapAccessor<T> {
+        implements WriteableStyleableMapAccessor<T>, NonNullMapAccessor<T> {
 
     private final static long serialVersionUID = 1L;
 
@@ -33,7 +33,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public EnumStyleableKey(String name, Class<T> clazz, @Nonnull T defaultValue) {
+    public EnumStyleableKey(String name, Class<T> clazz, @NonNull T defaultValue) {
         super(name, clazz, null, null, defaultValue);
 
         converter = new CssEnumConverter<>(getValueType(), false);
@@ -51,8 +51,10 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
 
     }
 
+    @NonNull
     private final Converter<T> converter;
 
+    @NonNull
     @Override
     public Converter<T> getConverter() {
         return converter;

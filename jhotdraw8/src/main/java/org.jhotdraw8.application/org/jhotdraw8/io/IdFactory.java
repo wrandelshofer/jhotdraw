@@ -20,6 +20,7 @@ public interface IdFactory {
      * @param object the object
      * @return the id
      */
+    @Nullable
     default String createId(Object object) {
         String id = createId(object, "");
         return id;
@@ -45,6 +46,7 @@ public interface IdFactory {
      * @param id     the desired id
      * @return the id
      */
+    @Nullable
     public String createId(Object object, @Nullable String prefix, String id);
 
     /**

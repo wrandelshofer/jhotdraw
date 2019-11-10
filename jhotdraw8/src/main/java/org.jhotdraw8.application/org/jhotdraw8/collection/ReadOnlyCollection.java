@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -45,7 +47,8 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param a   a template array
      * @return an array
      */
-    default <T> T[] toArray(T[] a) {
+    @NonNull
+    default <T> T[] toArray(@NonNull T[] a) {
         // Estimate size of array; be prepared to see more or fewer elements
         int size = size();
         @SuppressWarnings("unchecked")
@@ -90,7 +93,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param c another collection
      * @return true if this collection contains all of c
      */
-    default boolean containsAll(Iterable<?> c) {
+    default boolean containsAll(@NonNull Iterable<?> c) {
         for (Object e : c) {
             if (!contains(e)) {
                 return false;
@@ -104,6 +107,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      *
      * @return the wrapped collection
      */
+    @NonNull
     default Collection<E> asCollection() {
         return new CollectionWrapper<>(this);
     }

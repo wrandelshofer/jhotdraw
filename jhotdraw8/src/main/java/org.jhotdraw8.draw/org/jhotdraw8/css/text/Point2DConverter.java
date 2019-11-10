@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.text;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -35,27 +35,27 @@ public class Point2DConverter extends AbstractCssConverter<Point2D> {
         this.withSpace = withSpace;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Point2D⟩: ⟨x⟩,⟨y⟩";
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Point2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         final double x, y;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨x⟩ expected.");
-        x = tt.currentNumberNonnull().doubleValue();
+        x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Point2D⟩: ⟨y⟩ expected.");
-        y = tt.currentNumberNonnull().doubleValue();
+        y = tt.currentNumberNonNull().doubleValue();
 
         return new Point2D(x, y);
     }
 
     @Override
-    protected <TT extends Point2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends Point2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
         out.accept(new CssToken(CssTokenType.TT_COMMA));
         if (withSpace) {

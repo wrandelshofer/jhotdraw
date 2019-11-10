@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -26,7 +26,7 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
         this.pseudoClass = pseudoClass;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "PseudoClass:" + pseudoClass;
@@ -34,13 +34,13 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
 
     @Nullable
     @Override
-    public <T> T match(@Nonnull SelectorModel<T> model, @Nullable T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasPseudoClass(element, pseudoClass)) //
                 ? element : null;
     }
 
     @Override
-    public void produceTokens(Consumer<CssToken> consumer) {
+    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_COLON));
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, pseudoClass));
     }

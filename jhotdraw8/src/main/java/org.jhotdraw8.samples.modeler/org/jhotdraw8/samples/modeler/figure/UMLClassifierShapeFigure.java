@@ -17,7 +17,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
@@ -132,13 +132,16 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
     public final static String TYPE_SELECTOR = "MLClassifier";
 
     public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = MLConstants.COMPARTMENTS;
+    @Nullable
     public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
+    @Nullable
     public final static StringStyleableKey NAME = MLConstants.NAME;
     public final static BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", false);
     public final static BooleanStyleableKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
     /**
      * The line spacing. Default value: {@code 0.0}
      */
+    @Nullable
     public final static CssSizeStyleableKey LINE_SPACING = TextLayoutableFigure.LINE_SPACING;
     /**
      * This key is used to tag editable nodes.
@@ -150,6 +153,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
     public UMLClassifierShapeFigure() {
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         Group g = new Group();
@@ -160,6 +164,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         return g;
     }
 
+    @Nullable
     @Override
     public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
         if (node == null) {
@@ -174,7 +179,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group g = (Group) node;
         ObservableList<Node> children = g.getChildren();
         Path p = (Path) children.get(0);
@@ -184,16 +189,16 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);
         applyFillableFigureProperties(ctx, p);
-        MLCompartmentalizedData cpData = getStyledNonnull(COMPARTMENTS);
+        MLCompartmentalizedData cpData = getStyledNonNull(COMPARTMENTS);
         applyTransformableFigureProperties(ctx, node);
 
         List<Text> textNodes = new ArrayList<Text>();
         for (int i = 1, n = children.size(); i < n; i++) {
             textNodes.add((Text) children.get(i));
         }
-        UnitConverter converter = ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        double lineSpacing = converter.convert(getStyledNonnull(LINE_SPACING), UnitConverter.DEFAULT);
-        Insets padding = getStyledNonnull(PADDING).getConvertedValue(converter);
+        UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        double lineSpacing = converter.convert(getStyledNonNull(LINE_SPACING), UnitConverter.DEFAULT);
+        Insets padding = getStyledNonNull(PADDING).getConvertedValue(converter);
         Bounds bounds = getBoundsInLocal();
         String name = get(NAME);
         updateTextNodes(ctx, textNodes,
@@ -222,17 +227,17 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
      * @param lineSpacing  the line spacing
      * @param padding      the padding
      */
-    private void updateTextNodes(@Nonnull RenderContext ctx,
-                                 List<Text> textNodes,
-                                 List<PathElement> pathElements,
-                                 @Nullable String keyword, @Nonnull String name,
-                                 MLCompartmentalizedData cpData,
-                                 Bounds bounds,
-                                 double lineSpacing, Insets padding) {
+    private void updateTextNodes(@NonNull RenderContext ctx,
+                                 @NonNull List<Text> textNodes,
+                                 @NonNull List<PathElement> pathElements,
+                                 @Nullable String keyword, @NonNull String name,
+                                 @NonNull MLCompartmentalizedData cpData,
+                                 @NonNull Bounds bounds,
+                                 double lineSpacing, @NonNull Insets padding) {
 
         // Ensure that we have enough text nodes.
-        boolean keywordLabelVisible = getStyledNonnull(KEYWORD_LABEL_VISIBLE);
-        boolean compartmentNamesVisible = getStyledNonnull(COMPARTMENT_LABELS_VISIBLE);
+        boolean keywordLabelVisible = getStyledNonNull(KEYWORD_LABEL_VISIBLE);
+        boolean compartmentNamesVisible = getStyledNonNull(COMPARTMENT_LABELS_VISIBLE);
         ensureEnoughTextNodes(textNodes, keyword, cpData,
                 keywordLabelVisible,
                 compartmentNamesVisible);
@@ -247,7 +252,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         double x = bounds.getMinX();
         double y = bounds.getMinY() + top;
 
-        UnitConverter converter = ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
+        UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         CssSize cssStrokeWidthSize = get(STROKE_WIDTH);
         double strokeWidth = cssStrokeWidthSize == null ? 0 : converter.convert(cssStrokeWidthSize, UnitConverter.DEFAULT);
 
@@ -268,7 +273,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
             Text node;
 
             // add metaclass and name
-            if (keyword != null && getStyledNonnull(KEYWORD_LABEL_VISIBLE)) {
+            if (keyword != null && getStyledNonNull(KEYWORD_LABEL_VISIBLE)) {
                 node = textNodes.get(i++);
                 applyKeywordLabelStyle(ctx, node);
                 node.setText("«" + keyword + "»");
@@ -317,7 +322,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
 
     }
 
-    @Nonnull
+    @NonNull
     private EnumSet<MLModifier> computeClassifierModifiers(@Nullable String keyword) {
         EnumSet<MLModifier> classifierModifiers = EnumSet.noneOf(MLModifier.class);
         if (keyword != null) {
@@ -331,7 +336,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         return classifierModifiers;
     }
 
-    @Nonnull
+    @NonNull
     private EnumSet<MLModifier> computeOperationModifiers(@Nullable String operation) {
         EnumSet<MLModifier> operationModifiers = EnumSet.noneOf(MLModifier.class);
         if (operation != null) {
@@ -348,22 +353,22 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         return operationModifiers;
     }
 
-    private void applyCompartmentLabelStyle(RenderContext ctx, Text node) {
+    private void applyCompartmentLabelStyle(RenderContext ctx, @NonNull Text node) {
         applyCompartmentLabelTextFontableFigureProperties(ctx, node);
         node.setTextAlignment(TextAlignment.CENTER);
     }
 
-    private void applyKeywordLabelStyle(RenderContext ctx, Text node) {
+    private void applyKeywordLabelStyle(RenderContext ctx, @NonNull Text node) {
         applyKeywordLabelTextFontableFigureProperties(ctx, node);
         node.setTextAlignment(TextAlignment.CENTER);
     }
 
-    private void applyNameStyle(RenderContext ctx, Text node) {
+    private void applyNameStyle(RenderContext ctx, @NonNull Text node) {
         applyNameTextFontableFigureProperties(ctx, node);
         node.setTextAlignment(TextAlignment.CENTER);
     }
 
-    private void applyItemStyle(RenderContext ctx, EnumSet<MLModifier> classifierModifiers, String text, Text node) {
+    private void applyItemStyle(RenderContext ctx, @NonNull EnumSet<MLModifier> classifierModifiers, String text, @NonNull Text node) {
         EnumSet<MLModifier> opModifiers = computeOperationModifiers(text);
         if (opModifiers.contains(MLModifier.STATIC)) {
             applyStaticItemTextFontableFigureProperties(ctx, node);
@@ -381,8 +386,8 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         node.setTextAlignment(TextAlignment.LEFT);
     }
 
-    private void ensureEnoughTextNodes(List<Text> list, @Nullable String keyword,
-                                       MLCompartmentalizedData cpData,
+    private void ensureEnoughTextNodes(@NonNull List<Text> list, @Nullable String keyword,
+                                       @NonNull MLCompartmentalizedData cpData,
                                        boolean keywordLabelVisible,
                                        boolean compartmentLabelsVisible) {
         // We need a text node for the keyword if present and for the name
@@ -407,6 +412,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         }
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -414,7 +420,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
 
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
+    public void layout(@NonNull RenderContext ctx) {
         if (path == null) {
             path = new Path();
         }
@@ -422,10 +428,11 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
+    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
         return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(@Nullable AffineTransform tx) {
         if (path == null) {

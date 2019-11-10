@@ -6,7 +6,7 @@ package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -26,8 +26,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return name string.
      */
-    @Nonnull
-    String getName();
+    @Nullable String getName();
 
     /**
      * Gets the CssMetaData.
@@ -52,7 +51,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return name string.
      */
-    @Nonnull
+    @NonNull
     String getCssName();
 
     /**
@@ -76,6 +75,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @param camelCaseName string
      * @return cssName string.
      */
+    @NonNull
     public static String toCssName(String camelCaseName) {
         final StringBuilder b = new StringBuilder();
         final String name = camelCaseName;

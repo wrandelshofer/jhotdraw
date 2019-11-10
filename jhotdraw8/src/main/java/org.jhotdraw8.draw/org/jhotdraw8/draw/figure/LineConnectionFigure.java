@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -32,7 +32,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         this(0, 0, 1, 1);
     }
 
-    public LineConnectionFigure(Point2D start, Point2D end) {
+    public LineConnectionFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -40,26 +40,26 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         super(startX, startY, endX, endY);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
 
         Line lineNode = (Line) node;
-        Point2D start = getNonnull(START).getConvertedValue();
+        Point2D start = getNonNull(START).getConvertedValue();
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
-        Point2D end = getNonnull(END).getConvertedValue();
+        Point2D end = getNonNull(END).getConvertedValue();
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
 
@@ -72,10 +72,10 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         return Shapes.awtShapeFromFX(new Line(
-                getNonnull(START_X).getConvertedValue(),
-                getNonnull(START_Y).getConvertedValue(),
-                getNonnull(END_X).getConvertedValue(),
-                getNonnull(END_Y).getConvertedValue())).getPathIterator(tx);
+                getNonNull(START_X).getConvertedValue(),
+                getNonNull(START_Y).getConvertedValue(),
+                getNonNull(END_X).getConvertedValue(),
+                getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
 }

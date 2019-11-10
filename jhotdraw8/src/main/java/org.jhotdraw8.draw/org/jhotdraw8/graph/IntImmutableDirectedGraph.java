@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +19,13 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
     /**
      * Holds the arrow heads.
      */
-    @Nonnull
+    @NonNull
     protected final int[] arrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @Nonnull
+    @NonNull
     protected final int[] arrowOffsets;
 
     /**
@@ -33,7 +33,7 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
      *
      * @param graph a graph
      */
-    public IntImmutableDirectedGraph(IntDirectedGraph graph) {
+    public IntImmutableDirectedGraph(@NonNull IntDirectedGraph graph) {
         int arrowCount = 0;
 
         final int arrowCapacity = graph.getArrowCount();
@@ -58,7 +58,7 @@ public class IntImmutableDirectedGraph implements IntDirectedGraph {
      * @param <A>   the arrow type
      * @param graph a graph
      */
-    public <V, A> IntImmutableDirectedGraph(DirectedGraph<V, A> graph) {
+    public <V, A> IntImmutableDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();

@@ -8,7 +8,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
@@ -29,10 +30,10 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ShapeableFigure extends Figure {
-    CssSizeStyleableKey SHAPE_SLICE_BOTTOM = new CssSizeStyleableKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssSizeStyleableKey SHAPE_SLICE_LEFT = new CssSizeStyleableKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssSizeStyleableKey SHAPE_SLICE_RIGHT = new CssSizeStyleableKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssSizeStyleableKey SHAPE_SLICE_TOP = new CssSizeStyleableKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SHAPE_SLICE_BOTTOM = new CssSizeStyleableKey("shapeSliceBottom", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SHAPE_SLICE_LEFT = new CssSizeStyleableKey("shapeSliceLeft", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SHAPE_SLICE_RIGHT = new CssSizeStyleableKey("shapeSliceRight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey SHAPE_SLICE_TOP = new CssSizeStyleableKey("shapeSliceTop", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
     /**
      * This property specifies inward offsets from the top, right, bottom, and
      * left edges of the border image defined by the {@link #SHAPE_BOUNDS}
@@ -44,7 +45,7 @@ public interface ShapeableFigure extends Figure {
      * <a href="https://www.w3.org/TR/css3-background/#border-image-slice">CSS3
      * Background: border-image-slice</a>.
      */
-    CssInsetsStyleableMapAccessor SHAPE_SLICE = new CssInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
+    @Nullable CssInsetsStyleableMapAccessor SHAPE_SLICE = new CssInsetsStyleableMapAccessor("shapeSlice", SHAPE_SLICE_TOP, SHAPE_SLICE_RIGHT, SHAPE_SLICE_BOTTOM, SHAPE_SLICE_LEFT);
     /**
      * This property specifies the bounds of a {@link #SHAPE} property. If the
      * bounds are null or empty, then the bounds of the shape are used.
@@ -57,14 +58,14 @@ public interface ShapeableFigure extends Figure {
     /**
      * Defines the border image as an SVG path.
      */
-    @Nonnull NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
+    @NonNull NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), null);
     String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
-    default void applyShapeableProperties(RenderContext ctx, @Nonnull Path node) {
+    default void applyShapeableProperties(RenderContext ctx, @NonNull Path node) {
         applyShapeableProperties(ctx, node, getBoundsInLocal());
     }
 
-    default void applyShapeableProperties(RenderContext ctx, @Nonnull Path node, Bounds b) {
+    default void applyShapeableProperties(RenderContext ctx, @NonNull Path node, @NonNull Bounds b) {
         String content = getStyled(SHAPE);
         if (content == null || content.trim().isEmpty()) {
             content = SVG_SQUARE;
@@ -80,7 +81,7 @@ public interface ShapeableFigure extends Figure {
             javafx.geometry.Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
 
             final Bounds srcBounds = shapeBounds == null || Geom.isEmpty(shapeBounds) ? Geom.getBounds(path) : Geom.getBounds(shapeBounds);
-            Insets shapeSlice = getStyledNonnull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
+            Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
             final NineRegionsScalingBuilder nineRegionsScalingBuilder = new NineRegionsScalingBuilder(builder2, srcBounds, shapeSlice, b);
 
             Shapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));

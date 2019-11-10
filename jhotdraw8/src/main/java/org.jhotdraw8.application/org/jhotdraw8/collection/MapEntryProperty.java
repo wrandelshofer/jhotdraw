@@ -8,7 +8,7 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.WeakMapChangeListener;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -32,7 +32,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
     @Nullable
     private WeakMapChangeListener<K, V> weakListener;
 
-    public MapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {
+    public MapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
         this.key = key;
         this.tClazz = tClazz;
@@ -40,6 +40,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         map.addListener(weakListener = new WeakMapChangeListener<>(this));
     }
 
+    @Nullable
     @Override
     public T get() {
         @SuppressWarnings("unchecked")
@@ -72,7 +73,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
     }
 
     @Override
-    public void onChanged(@Nonnull Change<? extends K, ? extends V> change) {
+    public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
         if (this.key.equals(change.getKey())) {
             if (change.wasAdded()) {// was added, or removed and then added
                 @SuppressWarnings("unchecked")

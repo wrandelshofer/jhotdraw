@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.List;
 
@@ -29,17 +29,17 @@ public class FontCollection {
     public FontCollection() {
     }
 
-    public FontCollection(String name, @Nonnull List<FontFamily> families) {
+    public FontCollection(String name, @NonNull List<FontFamily> families) {
         this(name, false, families);
     }
 
-    public FontCollection(String name, boolean isSmart, @Nonnull List<FontFamily> families) {
+    public FontCollection(String name, boolean isSmart, @NonNull List<FontFamily> families) {
         setName(name);
         setSmartCollection(isSmart);
         this.families.addAll(families);
     }
 
-    @Nonnull
+    @NonNull
     public ObservableList<FontFamily> getFamilies() {
         return families;
     }
@@ -60,12 +60,12 @@ public class FontCollection {
         smartCollection.set(value);
     }
 
-    @Nonnull
+    @NonNull
     public StringProperty nameProperty() {
         return name;
     }
 
-    @Nonnull
+    @NonNull
     public BooleanProperty smartCollectionProperty() {
         return smartCollection;
     }

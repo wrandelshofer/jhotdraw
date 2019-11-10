@@ -8,7 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -38,8 +39,11 @@ public class RectangleFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
+    @Nullable
     public final static CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public RectangleFigure() {
@@ -50,31 +54,31 @@ public class RectangleFigure extends AbstractLeafFigure
         reshapeInLocal(x, y, width, height);
     }
 
-    public RectangleFigure(Rectangle2D rect) {
+    public RectangleFigure(@NonNull Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         Rectangle shape = new Rectangle();
-        shape.setX(getNonnull(X).getConvertedValue());
-        shape.setY(getNonnull(Y).getConvertedValue());
-        shape.setWidth(getNonnull(WIDTH).getConvertedValue());
-        shape.setHeight(getNonnull(HEIGHT).getConvertedValue());
-        shape.setArcWidth(getStyledNonnull(ARC_WIDTH).getConvertedValue());
-        shape.setArcHeight(getStyledNonnull(ARC_HEIGHT).getConvertedValue());
+        shape.setX(getNonNull(X).getConvertedValue());
+        shape.setY(getNonNull(Y).getConvertedValue());
+        shape.setWidth(getNonNull(WIDTH).getConvertedValue());
+        shape.setHeight(getNonNull(HEIGHT).getConvertedValue());
+        shape.setArcWidth(getStyledNonNull(ARC_WIDTH).getConvertedValue());
+        shape.setArcHeight(getStyledNonNull(ARC_HEIGHT).getConvertedValue());
         return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Rectangle();
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, rectangleNode);
@@ -82,21 +86,21 @@ public class RectangleFigure extends AbstractLeafFigure
         applyStrokableFigureProperties(ctx, rectangleNode);
         applyCompositableFigureProperties(ctx, rectangleNode);
         applyStyleableFigureProperties(ctx, node);
-        rectangleNode.setX(getNonnull(X).getConvertedValue());
-        rectangleNode.setY(getNonnull(Y).getConvertedValue());
-        rectangleNode.setWidth(getNonnull(WIDTH).getConvertedValue());
-        rectangleNode.setHeight(getNonnull(HEIGHT).getConvertedValue());
-        rectangleNode.setArcWidth(getStyledNonnull(ARC_WIDTH).getConvertedValue());
-        rectangleNode.setArcHeight(getStyledNonnull(ARC_HEIGHT).getConvertedValue());
+        rectangleNode.setX(getNonNull(X).getConvertedValue());
+        rectangleNode.setY(getNonNull(Y).getConvertedValue());
+        rectangleNode.setWidth(getNonNull(WIDTH).getConvertedValue());
+        rectangleNode.setHeight(getNonNull(HEIGHT).getConvertedValue());
+        rectangleNode.setArcWidth(getStyledNonNull(ARC_WIDTH).getConvertedValue());
+        rectangleNode.setArcHeight(getStyledNonNull(ARC_HEIGHT).getConvertedValue());
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

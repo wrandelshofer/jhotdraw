@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.collection.ObjectKey;
 
 /**
@@ -15,7 +15,7 @@ import org.jhotdraw8.collection.ObjectKey;
  * @author Werner Randelshofer
  */
 public class ObjectFigureKey<T> extends ObjectKey<T> implements
-        NonnullMapAccessor<T> {
+        NonNullMapAccessor<T> {
 
     final static long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class ObjectFigureKey<T> extends ObjectKey<T> implements
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public ObjectFigureKey(@Nonnull String key, @Nonnull Class<T> clazz, @Nonnull T defaultValue) {
+    public ObjectFigureKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull T defaultValue) {
         this(key, clazz, null, defaultValue);
     }
 
@@ -39,7 +39,7 @@ public class ObjectFigureKey<T> extends ObjectKey<T> implements
      *                       type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public ObjectFigureKey(@Nonnull String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nonnull T defaultValue) {
+    public ObjectFigureKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
         super(name, clazz, typeParameters, false, false, defaultValue);
     }
 

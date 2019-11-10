@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.ToDoubleTriFunction;
 
@@ -32,19 +32,19 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
     public AnyShortestPathBuilder() {
     }
 
-    public AnyShortestPathBuilder(@Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleFunction<A> costf) {
+    public AnyShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleFunction<A> costf) {
         super(graph, costf);
     }
 
-    public AnyShortestPathBuilder(@Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public AnyShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleTriFunction<V, V, A> costf) {
         super(graph, costf);
     }
 
-    public AnyShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleFunction<A> costf) {
+    public AnyShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToDoubleFunction<A> costf) {
         super(nextNodesFunction, costf);
     }
 
-    public AnyShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public AnyShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToDoubleTriFunction<V, V, A> costf) {
         super(nextNodesFunction, costf);
     }
 
@@ -60,11 +60,12 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
      * References: <a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/"
      * geeksforgeeks.org</a>
      */
-    protected BackLink<V, A> search(@Nonnull V start,
-                                    @Nonnull Predicate<V> goalPredicate,
+    @Nullable
+    protected BackLink<V, A> search(@NonNull V start,
+                                    @NonNull Predicate<V> goalPredicate,
                                     double maxCost,
-                                    Function<V, Iterable<Arc<V, A>>> nextf,
-                                    ToDoubleTriFunction<V, V, A> costf) {
+                                    @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
+                                    @NonNull ToDoubleTriFunction<V, V, A> costf) {
 
         // Priority queue: back-links with shortest distance from start come first.
         PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
@@ -113,7 +114,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         protected final double cost;
         protected final int length;
 
-        public MyBackLink(VV node, double cost, MyBackLink<VV, AA> parent, AA arrow) {
+        public MyBackLink(VV node, double cost, @Nullable MyBackLink<VV, AA> parent, AA arrow) {
             this.vertex = node;
             this.cost = cost;
             this.parent = parent;
@@ -146,7 +147,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         }
 
         @Override
-        public int compareTo(BackLink<VV, AA> that) {
+        public int compareTo(@NonNull BackLink<VV, AA> that) {
             int result = Double.compare(this.getCost(), that.getCost());
             return result == 0
                     ? Integer.compare(this.length, that.getLength())

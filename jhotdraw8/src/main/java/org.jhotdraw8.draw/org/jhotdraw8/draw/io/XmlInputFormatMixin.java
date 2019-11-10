@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.xml.XmlUtil;
@@ -27,26 +27,26 @@ public interface XmlInputFormatMixin {
 
     boolean isNamespaceAware();
 
-    @Nonnull
+    @NonNull
     default Figure read(InputStream in, Drawing drawing) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing);
     }
 
-    @Nonnull
+    @NonNull
     default Figure read(Reader in, Drawing drawing) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing);
     }
 
-    @Nonnull
-    default Figure read(@Nonnull String string, Drawing drawing) throws IOException {
+    @NonNull
+    default Figure read(@NonNull String string, Drawing drawing) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing);
         }
     }
 
-    @Nonnull
+    @NonNull
     Figure read(Document in, Drawing drawing) throws IOException;
 
 }

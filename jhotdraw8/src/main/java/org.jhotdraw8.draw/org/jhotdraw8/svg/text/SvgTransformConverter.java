@@ -8,7 +8,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -56,7 +56,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    protected <TT extends Transform> void produceTokensNonnull(@Nonnull TT tx, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends Transform> void produceTokensNonNull(@NonNull TT tx, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (tx instanceof Translate) {
             Translate tr = (Translate) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "translate"));
@@ -108,7 +108,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩"
@@ -121,11 +121,11 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                 ;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Transform parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
-        String func = tt.currentStringNonnull();
+        String func = tt.currentStringNonNull();
         int funcPos = tt.getStartPosition();
         List<Double> m = new ArrayList<>();
         while (tt.next() != ')' && tt.current() != CssTokenType.TT_EOF) {
@@ -135,7 +135,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
             if (tt.next() != CssTokenType.TT_NUMBER) {
                 throw new ParseException("coefficient nb " + m.size() + " expected: \"" + tt.currentString() + "\"", tt.getStartPosition());
             }
-            m.add(tt.currentNumberNonnull().doubleValue());
+            m.add(tt.currentNumberNonNull().doubleValue());
         }
         if (tt.current() != ')') {
             throw new ParseException("')' expected: \"" + tt.currentString() + "\"", tt.getStartPosition());

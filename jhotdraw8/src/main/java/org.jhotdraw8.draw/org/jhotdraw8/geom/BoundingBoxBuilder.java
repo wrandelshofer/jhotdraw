@@ -12,7 +12,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Builder;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.List;
@@ -73,7 +73,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
-    @Nonnull
+    @NonNull
     public BoundingBox build() {
         if (Double.isNaN(minx)) {
             return new BoundingBox(0, 0, 0, 0);
@@ -81,7 +81,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
-    @Nonnull
+    @NonNull
     public Path getPath() {
         Path p = new Path();
         addPathElementsTo(p.getElements());
@@ -93,7 +93,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         // empty
     }
 
-    public void addPathElementsTo(@Nonnull List<PathElement> elements) {
+    public void addPathElementsTo(@NonNull List<PathElement> elements) {
         if (Double.isNaN(minx)) {
             return;
         }

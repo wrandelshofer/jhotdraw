@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -36,7 +36,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public AddToGroupAction(Application app, DrawingEditor editor) {
+    public AddToGroupAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels = DrawLabels.getResources();
         labels.configureAction(this, ID);
@@ -53,7 +53,7 @@ public class AddToGroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void addToGroup(@Nonnull DrawingView view, List<Figure> figures) {
+    public static void addToGroup(@NonNull DrawingView view, @NonNull List<Figure> figures) {
         if (figures.size() < 2) {
             // FIXME internationalize me
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You must select the figures and a group to which the figures should be added");

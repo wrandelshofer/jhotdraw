@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -79,15 +79,15 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
         y2 = y1;
         createdFigure = createFigure();
 
-        double anchorX = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
@@ -106,7 +106,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
                 CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
@@ -126,14 +126,14 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         fireToolDone();
     }
 
-    protected void reshapeInLocal(Figure figure, CssPoint2D c1, CssPoint2D c2, DrawingModel dm) {
+    protected void reshapeInLocal(Figure figure, @NonNull CssPoint2D c1, @NonNull CssPoint2D c2, @NonNull DrawingModel dm) {
         dm.reshapeInLocal(figure, c1.getX(), c1.getY(),
                 c2.getX().subtract(c1.getX()),
                 c2.getY().subtract(c1.getY()));
     }
 
     @Override
-    protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
@@ -168,11 +168,12 @@ public class CreationTool extends AbstractCreationTool<Figure> {
      * This implementation is empty.
      */
     @Override
-    public void activate(DrawingEditor editor) {
+    public void activate(@NonNull DrawingEditor editor) {
         requestFocus();
         super.activate(editor);
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "CreationTool"

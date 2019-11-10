@@ -5,7 +5,7 @@
 package org.jhotdraw8.tree;
 
 import javafx.scene.control.TreeItem;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.event.Listener;
 
@@ -27,7 +27,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     private final Map<N, TreeItem<N>> items = new HashMap<>();
     private final Listener<TreeModelEvent<N>> modelHandler = new Listener<TreeModelEvent<N>>() {
         @Override
-        public void handle(TreeModelEvent<N> event) {
+        public void handle(@NonNull TreeModelEvent<N> event) {
             updating++;
             try {
 
@@ -68,7 +68,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
 
     protected int updating;
 
-    @Nonnull
+    @NonNull
     @Override
     public TreeItem<N> getRoot() {
         return root;
@@ -79,7 +79,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         return items.get(f);
     }
 
-    public N getValue(@Nonnull TreeItem<N> item) {
+    public N getValue(@NonNull TreeItem<N> item) {
         return item.getValue();
     }
 
@@ -146,7 +146,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     @Override
-    protected void handleTreeModelChanged(@Nullable TreeModel<N> oldValue, @Nonnull TreeModel<N> newValue) {
+    protected void handleTreeModelChanged(@Nullable TreeModel<N> oldValue, @NonNull TreeModel<N> newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(modelHandler);
         }

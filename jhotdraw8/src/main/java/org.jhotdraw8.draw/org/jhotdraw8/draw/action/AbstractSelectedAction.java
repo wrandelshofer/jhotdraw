@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.action;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -35,7 +35,7 @@ public abstract class AbstractSelectedAction extends AbstractActivityAction<Acti
      * @param app    the application
      * @param editor the drawing editor
      */
-    public AbstractSelectedAction(@Nonnull Application app, DrawingEditor editor) {
+    public AbstractSelectedAction(@NonNull Application app, DrawingEditor editor) {
         super(app, null, null);
         setEditor(editor);
     }

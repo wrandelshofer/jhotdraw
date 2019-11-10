@@ -1,4 +1,4 @@
-/* @(#)ReadOnlyNonnullWrapperTest.java
+/* @(#)ReadOnlyNonNullWrapperTest.java
  * Copyright (c) 2015 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * @author wr
  */
-public class ReadOnlyNonnullWrapperTest {
+public class ReadOnlyNonNullWrapperTest {
 
     @Test
     public void testBind() {
         double minv = 0;
         double maxv = 1;
 
-        ReadOnlyNonnullWrapper<String> p1 = new ReadOnlyNonnullWrapper<>(null, null, "hello");
+        ReadOnlyNonNullWrapper<String> p1 = new ReadOnlyNonNullWrapper<>(null, null, "hello");
         ObjectProperty<String> p2 = new SimpleObjectProperty<>(null);
         p1.addListener((o, oldv, newv) -> {
             assertNotNull(newv);

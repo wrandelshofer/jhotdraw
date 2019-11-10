@@ -7,6 +7,7 @@ package org.jhotdraw8.app.action.app;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.ApplicationModel;
@@ -35,7 +36,7 @@ public class AboutAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Application app) {
+    protected void handleActionPerformed(ActionEvent event, @Nullable Application app) {
         if (app == null) {
             return;
         }

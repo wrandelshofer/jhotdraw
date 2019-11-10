@@ -10,6 +10,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.text.MessageFormat;
 
@@ -20,6 +21,7 @@ public class SimpleWorkState implements WorkState, Worker<Void> {
     private volatile boolean cancelled;
 
     private class CompletionTask extends Task<Void> {
+        @NonNull
         @Override
         protected Void call() throws Exception {
             throw new UnsupportedOperationException();
@@ -190,7 +192,7 @@ public class SimpleWorkState implements WorkState, Worker<Void> {
     }
 
     @Override
-    public void updateMessage(String pattern, Object... arguments) {
+    public void updateMessage(@NonNull String pattern, Object... arguments) {
         task.updateMessage(MessageFormat.format(pattern, arguments));
     }
 

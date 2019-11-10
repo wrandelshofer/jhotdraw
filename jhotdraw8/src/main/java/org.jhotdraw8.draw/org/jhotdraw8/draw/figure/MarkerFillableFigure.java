@@ -9,7 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.key.DirtyBits;
@@ -48,7 +48,7 @@ public interface MarkerFillableFigure extends Figure {
      * @param ctx
      * @param shape a shape node
      */
-    default void applyMarkerFillableFigureProperties(RenderContext ctx, @Nonnull Shape shape) {
+    default void applyMarkerFillableFigureProperties(RenderContext ctx, @NonNull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(MARKER_FILL));
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);

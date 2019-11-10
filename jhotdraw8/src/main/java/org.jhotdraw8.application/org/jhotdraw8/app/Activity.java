@@ -8,6 +8,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
@@ -74,7 +75,7 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    ObjectProperty<Application> applicationProperty();
+    @NonNull ObjectProperty<Application> applicationProperty();
 
     /**
      * Used by the application to display unique titles if multiple
@@ -82,14 +83,14 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    IntegerProperty disambiguationProperty();
+    @NonNull IntegerProperty disambiguationProperty();
 
     /**
      * Returns actions available for this activity.
      *
      * @return the action map
      */
-    HierarchicalMap<String, Action> getActionMap();
+    @NonNull HierarchicalMap<String, Action> getActionMap();
 
 
     // getter and setter methods for properties
@@ -157,6 +158,6 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the titel property
      */
-    StringProperty titleProperty();
+    @NonNull StringProperty titleProperty();
 
 }

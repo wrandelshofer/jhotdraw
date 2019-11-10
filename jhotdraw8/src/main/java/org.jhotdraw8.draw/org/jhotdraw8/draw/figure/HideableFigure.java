@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -34,8 +34,8 @@ public interface HideableFigure extends Figure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyHideableFigureProperties(@Nullable RenderContext ctx, @Nonnull Node node) {
-        node.setVisible(getStyledNonnull(VISIBLE));
+    default void applyHideableFigureProperties(@Nullable RenderContext ctx, @NonNull Node node) {
+        node.setVisible(getStyledNonNull(VISIBLE));
     }
 
 }

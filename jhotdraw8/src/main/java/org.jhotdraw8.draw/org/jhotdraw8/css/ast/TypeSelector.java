@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -21,15 +21,15 @@ import java.util.function.Consumer;
 public class TypeSelector extends SimpleSelector {
     @Nullable
     private final String namespace;
-    @Nonnull
+    @NonNull
     private final String type;
 
-    public TypeSelector(@Nullable String namespace, @Nonnull String type) {
+    public TypeSelector(@Nullable String namespace, @NonNull String type) {
         this.namespace = namespace;
         this.type = type;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "Type:" + type;
@@ -37,7 +37,7 @@ public class TypeSelector extends SimpleSelector {
 
     @Nullable
     @Override
-    public <T> T match(@Nonnull SelectorModel<T> model, @Nullable T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasType(element, namespace, type)) //
                 ? element : null;
     }
@@ -48,7 +48,7 @@ public class TypeSelector extends SimpleSelector {
     }
 
     @Override
-    public void produceTokens(Consumer<CssToken> consumer) {
+    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         if (namespace != null) {
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));

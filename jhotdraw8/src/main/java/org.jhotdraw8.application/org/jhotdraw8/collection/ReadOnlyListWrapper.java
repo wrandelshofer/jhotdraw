@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +36,7 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
         return backingList.get(index);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
@@ -60,7 +60,7 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
     }
 
     @SuppressWarnings("unchecked")
-    @Nonnull
+    @NonNull
     @Override
     public Spliterator<E> spliterator() {
         return (Spliterator<E>) backingList.spliterator();
@@ -78,6 +78,7 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
         }
     }
 
+    @NonNull
     public ReadOnlyList<E> subList(int fromIndex, int toIndex) {
         return new ReadOnlyListWrapper<>(backingList.subList(fromIndex, toIndex));
     }

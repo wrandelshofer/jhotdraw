@@ -12,7 +12,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
@@ -58,15 +58,18 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The label target.
      */
-    @Nonnull
+    @NonNull
     public final static NullableObjectKey<Figure> LABEL_TARGET = new NullableObjectKey<>("labelTarget", Figure.class, null);
     /**
      * The connector.
      */
-    @Nonnull
+    @NonNull
     public final static NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
+    @Nullable
     public final static CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
 
     /**
@@ -74,13 +77,16 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
+    @Nullable
     public final static CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
+    @Nullable
     public final static CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.
@@ -127,7 +133,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this));
             if (get(LABEL_CONNECTOR) == null) {
@@ -153,7 +159,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      *
      * @return a list of connected figures
      */
-    @Nonnull
+    @NonNull
     @Override
     public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
@@ -165,7 +171,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public boolean isGroupReshapeableWith(@Nonnull Set<Figure> others) {
+    public boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
         for (Figure f : getLayoutSubjects()) {
             if (others.contains(f)) {
                 return false;
@@ -180,7 +186,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
+    public void layout(@NonNull RenderContext ctx) {
 
         Figure labelTarget = get(LABEL_TARGET);
         final Point2D labeledLoc;
@@ -195,7 +201,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
             Bounds b = getTextBounds(ctx);
             double hposTranslate = 0;
-            switch (getStyledNonnull(TEXT_HPOS)) {
+            switch (getStyledNonNull(TEXT_HPOS)) {
                 case CENTER:
                     hposTranslate = b.getWidth() * -0.5;
                     break;
@@ -207,15 +213,15 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             }
 
             // FIXME must convert with current font size of label!!
-            final double labelOffsetX = getStyledNonnull(LABEL_OFFSET_X).getConvertedValue();
-            final double labelOffsetY = getStyledNonnull(LABEL_OFFSET_Y).getConvertedValue();
+            final double labelOffsetX = getStyledNonNull(LABEL_OFFSET_X).getConvertedValue();
+            final double labelOffsetY = getStyledNonNull(LABEL_OFFSET_Y).getConvertedValue();
             Point2D origin = labeledLoc
                     .add(perp.multiply(-labelOffsetY))
                     .add(tangent.multiply(labelOffsetX));
 
             Rotate rotate = null;
             final boolean layoutTransforms;
-            switch (getStyledNonnull(LABEL_AUTOROTATE)) {
+            switch (getStyledNonNull(LABEL_AUTOROTATE)) {
                 case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
                     final double theta = (Math.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
                     rotate = new Rotate(theta, origin.getX(), origin.getY());
@@ -239,7 +245,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 //        origin=origin.add(tangent.multiply(hposTranslate));
             origin = origin.add(hposTranslate, 0);
 
-            Point2D labelTranslation = getStyledNonnull(LABEL_TRANSLATE).getConvertedValue();
+            Point2D labelTranslation = getStyledNonNull(LABEL_TRANSLATE).getConvertedValue();
             origin = origin.add(labelTranslation);
             set(ORIGIN, new CssPoint2D(origin));
             List<Transform> transforms = new ArrayList<>();
@@ -270,23 +276,23 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void updateGroupNode(RenderContext ctx, @Nonnull Group node) {
+    public void updateGroupNode(@NonNull RenderContext ctx, @NonNull Group node) {
         super.updateGroupNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         if (get(LABEL_TARGET) == null) {
             super.reshapeInLocal(x, y, width, height);
-            set(LABELED_LOCATION, getNonnull(ORIGIN));
+            set(LABELED_LOCATION, getNonNull(ORIGIN));
             set(LABEL_TRANSLATE, new CssPoint2D(0, 0));
         } else {
             CssRectangle2D bounds = getCssBoundsInLocal();
             CssSize newX, newY;
             newX = width.getValue() > 0 ? x.add(width) : x;
             newY = height.getValue() > 0 ? y.add(height) : y;
-            CssPoint2D oldValue = getNonnull(LABEL_TRANSLATE);
+            CssPoint2D oldValue = getNonNull(LABEL_TRANSLATE);
             set(LABEL_TRANSLATE,
                     new CssPoint2D(x.subtract(bounds.getMinX()).add(oldValue.getX()),
                             y.subtract(bounds.getMinY()).add(oldValue.getY())));
@@ -294,13 +300,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void translateInLocal(@Nonnull CssPoint2D delta) {
+    public void translateInLocal(@NonNull CssPoint2D delta) {
         if (get(LABEL_TARGET) == null) {
             super.translateInLocal(delta);
-            set(LABELED_LOCATION, getNonnull(ORIGIN));
+            set(LABELED_LOCATION, getNonNull(ORIGIN));
             set(LABEL_TRANSLATE, new CssPoint2D(0, 0));
         } else {
-            CssPoint2D oldValue = getNonnull(LABEL_TRANSLATE);
+            CssPoint2D oldValue = getNonNull(LABEL_TRANSLATE);
             set(LABEL_TRANSLATE, oldValue.add(delta));
         }
     }

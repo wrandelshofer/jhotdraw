@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -31,8 +31,11 @@ import java.util.List;
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 
+    @NonNull
     private final Group node;
+    @NonNull
     private final Path path2;
+    @NonNull
     private final Path path1;
     private final boolean selectable;
 
@@ -56,9 +59,9 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         return null;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Node getNode(DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         path1.setStroke(Color.WHITE);
         path2.setStroke(Paintable.getPaint(color));
@@ -78,14 +81,14 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         return selectable;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterableFigure getOwner() {
         return (PathIterableFigure) super.getOwner();
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         PathIterableFigure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();

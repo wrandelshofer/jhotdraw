@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
 
@@ -23,7 +23,7 @@ public class NullableObjectKey<T> extends ObjectKey<T> {
      *  @param key       The name of the name.
      * @param clazz     The type of the value.
      */
-    public NullableObjectKey(@Nonnull String key, @Nonnull Class<T> clazz) {
+    public NullableObjectKey(@NonNull String key, @NonNull Class<T> clazz) {
         this(key, clazz, null, null);
     }
 
@@ -34,7 +34,7 @@ public class NullableObjectKey<T> extends ObjectKey<T> {
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public NullableObjectKey(@Nonnull String key, @Nonnull Class<T> clazz, @Nullable T defaultValue) {
+    public NullableObjectKey(@NonNull String key, @NonNull Class<T> clazz, @Nullable T defaultValue) {
         this(key, clazz, null, defaultValue);
     }
 
@@ -47,7 +47,7 @@ public class NullableObjectKey<T> extends ObjectKey<T> {
      *                       type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public NullableObjectKey(@Nonnull String name, @Nonnull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
+    public NullableObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
         super(name, clazz, typeParameters, true, false, defaultValue);
     }
 

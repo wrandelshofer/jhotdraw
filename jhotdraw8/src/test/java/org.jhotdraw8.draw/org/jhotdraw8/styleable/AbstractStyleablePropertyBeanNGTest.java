@@ -9,6 +9,7 @@ import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
 import javafx.css.Styleable;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.junit.jupiter.api.Test;
@@ -56,36 +57,43 @@ public class AbstractStyleablePropertyBeanNGTest {
 
     public class AbstractStyleablePropertyBeanImpl extends AbstractStyleablePropertyBean {
 
+        @NonNull
         @Override
         public String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public ObservableList<String> getStyleClass() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public String getStyle() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public Styleable getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

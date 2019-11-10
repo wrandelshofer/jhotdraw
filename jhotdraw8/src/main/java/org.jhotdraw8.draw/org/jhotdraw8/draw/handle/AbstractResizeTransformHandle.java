@@ -17,7 +17,8 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -39,9 +40,10 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
+    @Nullable
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    @Nonnull
+    @NonNull
     private final Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
@@ -50,6 +52,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
      */
     protected double preferredAspectRatio;
     protected CssRectangle2D startBounds;
+    @Nullable
     private Transform startWorldToLocal;
     private final Function<Color, Border> borderFactory;
 
@@ -69,9 +72,9 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -82,7 +85,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -109,7 +112,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
         startBounds = owner.getCssBoundsInLocal();
         startWorldToLocal = owner.getWorldToLocal();
@@ -141,12 +144,12 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         throw new UnsupportedOperationException("don't want to implement this in class " + getClass());
     }
 
-    protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+    protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
         resize(newPoint.getConvertedValue(), owner, bounds.getConvertedBoundsValue(), model, keepAspect);
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();

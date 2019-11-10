@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
@@ -23,18 +23,18 @@ import java.util.function.Consumer;
  */
 public class SelectorGroup extends Selector {
 
-    @Nonnull
+    @NonNull
     private final ReadOnlyList<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
         this.selectors = ImmutableLists.of(new Selector[]{selector});
     }
 
-    public SelectorGroup(@Nonnull List<Selector> selectors) {
+    public SelectorGroup(@NonNull List<Selector> selectors) {
         this.selectors = ImmutableLists.ofCollection(selectors);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("( ");
@@ -103,7 +103,7 @@ public class SelectorGroup extends Selector {
     }
 
     @Override
-    public void produceTokens(Consumer<CssToken> consumer) {
+    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         boolean first = true;
         for (Selector s : selectors) {
             if (first) {

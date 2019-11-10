@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -25,29 +25,29 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
 
     @Nullable
     @Override
-    public final T parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public final T parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (isNullable()) {
             if (tt.nextIsIdentNone()) {
                 return null;
             }
             tt.pushBack();
         }
-        return parseNonnull(tt, idFactory);
+        return parseNonNull(tt, idFactory);
     }
 
     @Override
-    public final <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public final <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
-            produceTokensNonnull(value, idFactory, out);
+            produceTokensNonNull(value, idFactory, out);
         }
     }
 
-    @Nonnull
-    public abstract T parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
+    @NonNull
+    public abstract T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
 
-    protected abstract <TT extends T> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out);
+    protected abstract <TT extends T> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out);
 
     @Nullable
     @Override

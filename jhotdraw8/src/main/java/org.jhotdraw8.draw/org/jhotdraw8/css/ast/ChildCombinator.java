@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -25,7 +25,7 @@ public class ChildCombinator extends Combinator {
         super(simpleSelector, selector);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "(" + firstSelector + " > " + secondSelector + ")";
@@ -33,7 +33,7 @@ public class ChildCombinator extends Combinator {
 
     @Nullable
     @Override
-    public <T> T match(@Nonnull SelectorModel<T> model, T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);
         if (result != null) {
             result = firstSelector.match(model, model.getParent(result));
@@ -47,7 +47,7 @@ public class ChildCombinator extends Combinator {
     }
 
     @Override
-    public void produceTokens(Consumer<CssToken> consumer) {
+    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         firstSelector.produceTokens(consumer);
         consumer.accept(new CssToken(CssTokenType.TT_GREATER_THAN));
         secondSelector.produceTokens(consumer);

@@ -8,10 +8,10 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,11 +28,11 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
-        implements WriteableStyleableMapAccessor<ImmutableList<Transform>>, NonnullMapAccessor<ImmutableList<Transform>> {
+        implements WriteableStyleableMapAccessor<ImmutableList<Transform>>, NonNullMapAccessor<ImmutableList<Transform>> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, ImmutableList<Transform>> cssMetaData;
     private Converter<ImmutableList<Transform>> converter;
 
@@ -42,7 +42,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      *
      * @param name The name of the key.
      */
-    public TransformListStyleableKey(String name) {
+    public TransformListStyleableKey(@NonNull String name) {
         this(name, ImmutableLists.emptyList());
     }
 
@@ -52,7 +52,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableKey(String name, ImmutableList<Transform> defaultValue) {
+    public TransformListStyleableKey(@NonNull String name, ImmutableList<Transform> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -63,7 +63,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableKey(String name, DirtyMask mask, ImmutableList<Transform> defaultValue) {
+    public TransformListStyleableKey(@NonNull String name, DirtyMask mask, ImmutableList<Transform> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{Transform.class}, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Transform>>> function = s -> {
@@ -79,7 +79,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<Transform>> getCssMetaData() {
         return cssMetaData;

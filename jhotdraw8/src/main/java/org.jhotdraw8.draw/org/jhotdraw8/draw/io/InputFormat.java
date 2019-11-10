@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
@@ -47,7 +47,8 @@ public interface InputFormat {
      * @return the figure
      * @throws java.io.IOException if an IO error occurs
      */
-    default Figure read(@Nonnull URI uri, @Nullable Drawing drawing, @Nonnull WorkState workState) throws IOException {
+    @Nullable
+    default Figure read(@NonNull URI uri, @Nullable Drawing drawing, @NonNull WorkState workState) throws IOException {
         return read(Paths.get(uri), drawing, workState);
     }
 
@@ -63,7 +64,8 @@ public interface InputFormat {
      * @return the figure
      * @throws java.io.IOException if an IO error occurs
      */
-    default Figure read(@Nonnull Path file, @Nullable Drawing drawing, @Nonnull WorkState workState) throws IOException {
+    @Nullable
+    default Figure read(@NonNull Path file, @Nullable Drawing drawing, @NonNull WorkState workState) throws IOException {
         URI documentHome = file.getParent() == null ? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri() : file.getParent().toUri();
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(in, drawing, documentHome, workState);
@@ -82,6 +84,7 @@ public interface InputFormat {
      * @return the drawing
      * @throws java.io.IOException if an IO error occurs
      */
-    public Figure read(@Nonnull InputStream in, Drawing drawing, URI documentHome, @Nonnull WorkState workState) throws IOException;
+    @Nullable
+    public Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException;
 
 }

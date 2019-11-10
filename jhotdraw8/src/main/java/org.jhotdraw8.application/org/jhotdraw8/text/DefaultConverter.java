@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
@@ -41,11 +41,11 @@ public class DefaultConverter implements Converter<Object> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable Object value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Object value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getDefaultValue() {
         return "null";

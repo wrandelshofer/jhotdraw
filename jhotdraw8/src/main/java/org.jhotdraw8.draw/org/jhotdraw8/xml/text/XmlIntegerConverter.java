@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -60,18 +60,18 @@ public class XmlIntegerConverter implements Converter<Integer> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, Integer value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, Integer value) throws IOException {
         c.toString(out, idFactory, value);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Integer fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         Number n = c.fromString(in, idFactory);
         return (n == null || n instanceof Integer) ? (Integer) n : n.intValue();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Integer getDefaultValue() {
         Number n = c.getDefaultValue();

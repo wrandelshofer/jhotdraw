@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -37,9 +37,9 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
         this.withComma = withComma;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssRectangle2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         final CssSize x, y, width, height;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -52,14 +52,15 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
         return new CssRectangle2D(x, y, width, height);
     }
 
-    private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
+    @NonNull
+    private CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumberNonnull().doubleValue());
+                return new CssSize(tt.currentNumberNonNull().doubleValue());
             case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentStringNonnull());
+                return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             case CssTokenType.TT_IDENT:
-                switch (tt.currentStringNonnull()) {
+                switch (tt.currentStringNonNull()) {
                     case "INF":
                         return new CssSize(Double.POSITIVE_INFINITY);
                     case "-INF":
@@ -75,7 +76,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     }
 
     @Override
-    protected <TT extends CssRectangle2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends CssRectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         CssSize minX = value.getMinX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, minX.getValue(), minX.getUnits()));
         if (withComma) {

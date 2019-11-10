@@ -1,6 +1,6 @@
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssToken;
@@ -31,13 +31,13 @@ public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
     private final Selector selector;
 
-    public NegationPseudoClassSelector(String functionIdentifier, @Nonnull List<CssToken> terms) {
+    public NegationPseudoClassSelector(String functionIdentifier, @NonNull List<CssToken> terms) {
         super(functionIdentifier, terms);
         CssParser p = new CssParser();
         Selector s;
         try {
             s = p.parseSelectorGroup(new ListCssTokenizer(terms));
-        } catch (IOException | ParseException e) {
+        } catch (@NonNull IOException | ParseException e) {
             s = new UniversalSelector();
         }
         this.selector=s;
@@ -45,7 +45,7 @@ public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
     @Nullable
     @Override
-    public <T> T match(@Nonnull SelectorModel<T> model, @Nullable T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         final T match = selector.match(model, element);
         return match == null ? element : null;
     }

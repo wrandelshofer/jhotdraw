@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * NullableBooleanKey.
  *
@@ -13,11 +15,11 @@ public class BooleanKey extends ObjectKey<Boolean> {
 
     private final static long serialVersionUID = 1L;
 
-    public BooleanKey(String key) {
+    public BooleanKey(@NonNull String key) {
         super(key, Boolean.class);
     }
 
-    public BooleanKey(String key, Boolean defaultValue) {
+    public BooleanKey(@NonNull String key, Boolean defaultValue) {
         super(key, Boolean.class, defaultValue);
     }
 }

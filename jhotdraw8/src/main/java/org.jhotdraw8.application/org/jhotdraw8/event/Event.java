@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.event;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.EventObject;
 
@@ -17,11 +17,11 @@ public class Event<E> extends EventObject {
 
     private final static long serialVersionUID = 1L;
 
-    public Event(@Nonnull E source) {
+    public Event(@NonNull E source) {
         super(source);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public E getSource() {
         @SuppressWarnings("unchecked")

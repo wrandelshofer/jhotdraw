@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.Effect;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssEffectConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -59,7 +59,7 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
 
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<Effect> getConverter() {
         return converter;

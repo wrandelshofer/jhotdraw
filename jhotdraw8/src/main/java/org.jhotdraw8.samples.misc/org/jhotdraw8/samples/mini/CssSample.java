@@ -8,7 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 public class CssSample extends Application {
 
     @Override
-    public void start(@Nonnull Stage primaryStage) throws Exception {
+    public void start(@NonNull Stage primaryStage) throws Exception {
         Drawing drawing = new DrawingFigure();
 
         RectangleFigure vertex1 = new RectangleFigure(10, 10, 30, 20);

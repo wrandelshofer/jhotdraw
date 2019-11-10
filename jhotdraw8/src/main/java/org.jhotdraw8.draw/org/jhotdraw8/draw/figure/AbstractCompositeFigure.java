@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.Key;
@@ -43,7 +43,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
 
         @Override
-        protected void onAdded(@Nonnull Figure e) {
+        protected void onAdded(@NonNull Figure e) {
             Figure oldParent = e.getParent();
             if (oldParent != null && oldParent != AbstractCompositeFigure.this) {
                 oldParent.removeChild(e);
@@ -52,12 +52,12 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         }
 
         @Override
-        protected void onRemoved(@Nonnull Figure e) {
+        protected void onRemoved(@NonNull Figure e) {
             e.parentProperty().set(null);
         }
 
         @Override
-        protected boolean doAdd(int index, @Nonnull Figure element, boolean checkForDuplicates) {
+        protected boolean doAdd(int index, @NonNull Figure element, boolean checkForDuplicates) {
             Figure oldParent = element.getParent();
             if (oldParent != AbstractCompositeFigure.this) {
                 return super.doAdd(index, element, false);
@@ -112,7 +112,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             }
         });
     }*/
-    @Nonnull
+    @NonNull
     @Override
     public ObservableList<Figure> getChildren() {
         return children;
@@ -123,7 +123,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         double minX = Double.POSITIVE_INFINITY;
@@ -141,13 +141,13 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInParent() {
         double minX = Double.POSITIVE_INFINITY;
@@ -168,7 +168,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public void firePropertyChangeEvent(@Nonnull FigurePropertyChangeEvent event) {
+    public void firePropertyChangeEvent(@NonNull FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
         if (source.getParent() == this) {
             children.fireItemUpdated(children.indexOf(source));
@@ -204,7 +204,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
      *
      * @return a new list instance
      */
-    @Nonnull
+    @NonNull
     public ArrayList<Figure> getChildList() {
         return new ArrayList<>(getChildren());
     }

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -32,7 +32,7 @@ public class SpliteratorIterable<T> implements Iterable<T> {
         factory.get().forEachRemaining(action);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Iterator<T> iterator() {
         return Spliterators.iterator(factory.get());

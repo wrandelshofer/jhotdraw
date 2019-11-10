@@ -12,7 +12,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Border;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 
 /**
@@ -23,7 +23,7 @@ import org.jhotdraw8.gui.CustomSkin;
 public class ScrollableSplitPaneTrack extends Control implements Track {
 
     private final SplitPane splitPane = new SplitPane();
-    @Nonnull
+    @NonNull
     private ScrollPane scrollPane = new ScrollPane(splitPane);
 
     public ScrollableSplitPaneTrack() {
@@ -44,7 +44,7 @@ public class ScrollableSplitPaneTrack extends Control implements Track {
 
         getItems().addListener(new ListChangeListener<Node>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends Node> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends Node> c) {
                 while (c.next()) {
                     for (Node remitem : c.getRemoved()) {
                         if (remitem instanceof Dock) {
@@ -82,7 +82,7 @@ public class ScrollableSplitPaneTrack extends Control implements Track {
         return splitPane.getItems();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

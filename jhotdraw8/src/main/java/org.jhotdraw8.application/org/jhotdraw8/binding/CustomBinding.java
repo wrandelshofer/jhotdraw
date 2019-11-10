@@ -11,7 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.function.Function;
 
@@ -37,7 +37,7 @@ public class CustomBinding {
      * @param propertyB property 'b'
      */
     public static <T, M> void bindBidirectional(
-            @Nonnull Property<T> propertyA, @Nonnull Property<M> mediator, @Nonnull Function<M, Property<T>> propertyB) {
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -61,7 +61,7 @@ public class CustomBinding {
      * @param propertyB property 'b'
      */
     public static <T, M> void bind(
-            @Nonnull Property<T> propertyA, @Nonnull Property<M> mediator, @Nonnull Function<M, ObservableValue<T>> propertyB) {
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, ObservableValue<T>> propertyB) {
 
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -85,8 +85,8 @@ public class CustomBinding {
      * @param propertyB       property 'b'
      * @param stringConverter the converter
      */
-    public static <T, S> void bindBidirectional(@Nonnull StringProperty propertyA, @Nonnull Property<S> mediator, @Nonnull Function<S, Property<T>> propertyB,
-                                                @Nonnull StringConverter<T> stringConverter) {
+    public static <T, S> void bindBidirectional(@NonNull StringProperty propertyA, @NonNull Property<S> mediator, @NonNull Function<S, Property<T>> propertyB,
+                                                @NonNull StringConverter<T> stringConverter) {
         final ChangeListener<S> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
                 propertyA.unbindBidirectional(propertyB.apply(oldv));
@@ -114,7 +114,7 @@ public class CustomBinding {
      * @param convertBtoA  converts a value from B to A
      */
     public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>>
-    void bindBidirectionalAndConvert(@Nonnull PROPERTY_A propertyA, @Nonnull PROPERTY_B propertyB, @Nonnull Function<A, B> convertAtoB, @Nonnull Function<B, A> convertBtoA) {
+    void bindBidirectionalAndConvert(@NonNull PROPERTY_A propertyA, @NonNull PROPERTY_B propertyB, @NonNull Function<A, B> convertAtoB, @NonNull Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
         addFlaggedChangeListener(propertyB, propertyA, convertAtoB, alreadyCalled);
         addFlaggedChangeListener(propertyA, propertyB, convertBtoA, alreadyCalled);
@@ -130,12 +130,12 @@ public class CustomBinding {
      * @param propertyA property B
      * @param updateA   converts a value from B to A
      */
-    public static <A, B> void bindAndConvert(@Nonnull WritableValue<A> propertyA, @Nonnull ObservableValue<B> propertyB, @Nonnull Function<B, A> updateA) {
+    public static <A, B> void bindAndConvert(@NonNull WritableValue<A> propertyA, @NonNull ObservableValue<B> propertyB, @NonNull Function<B, A> updateA) {
         boolean[] alreadyCalled = new boolean[1];
         addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
     }
 
-    private static <Y, X> void addFlaggedChangeListener(@Nonnull WritableValue<X> propertyX, ObservableValue<Y> propertyY, @Nonnull Function<Y, X> updateX,
+    private static <Y, X> void addFlaggedChangeListener(@NonNull WritableValue<X> propertyX, @NonNull ObservableValue<Y> propertyY, @NonNull Function<Y, X> updateX,
                                                         boolean[] alreadyCalled) {
         propertyY.addListener((observable, oldValue, newValue) -> {
                     if (!alreadyCalled[0]) {
@@ -159,6 +159,7 @@ public class CustomBinding {
      * @param args   The arguments.
      * @return The string expression
      */
+    @NonNull
     public static StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }

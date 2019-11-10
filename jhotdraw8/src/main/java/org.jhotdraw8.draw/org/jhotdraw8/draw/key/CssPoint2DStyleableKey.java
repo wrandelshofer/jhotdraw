@@ -8,8 +8,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssPoint2DConverter;
@@ -27,12 +27,12 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
-        implements WriteableStyleableMapAccessor<CssPoint2D>, NonnullMapAccessor<CssPoint2D> {
+        implements WriteableStyleableMapAccessor<CssPoint2D>, NonNullMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
     private final Converter<CssPoint2D> converter;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssPoint2D> cssMetaData;
 
     /**
@@ -41,7 +41,7 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
      *
      * @param name The name of the key.
      */
-    public CssPoint2DStyleableKey(@Nonnull String name) {
+    public CssPoint2DStyleableKey(@NonNull String name) {
         this(name, CssPoint2D.ZERO);
     }
 
@@ -51,7 +51,7 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public CssPoint2DStyleableKey(@Nonnull String name, @Nonnull CssPoint2D defaultValue) {
+    public CssPoint2DStyleableKey(@NonNull String name, @NonNull CssPoint2D defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -64,11 +64,11 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
      * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public CssPoint2DStyleableKey(@Nonnull String key, @Nonnull DirtyMask mask, @Nonnull CssPoint2D defaultValue) {
+    public CssPoint2DStyleableKey(@NonNull String key, @NonNull DirtyMask mask, @NonNull CssPoint2D defaultValue) {
         this(key, mask, defaultValue, new CssPoint2DConverter(false));
     }
 
-    public CssPoint2DStyleableKey(String key, DirtyMask mask, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {
+    public CssPoint2DStyleableKey(@NonNull String key, DirtyMask mask, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {
         super(key, CssPoint2D.class, defaultValue);
 
         Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
@@ -92,7 +92,7 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssPoint2D> getCssMetaData() {
         return cssMetaData;

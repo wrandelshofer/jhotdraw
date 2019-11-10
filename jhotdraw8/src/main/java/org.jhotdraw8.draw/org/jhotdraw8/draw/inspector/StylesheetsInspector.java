@@ -20,7 +20,7 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -71,11 +71,11 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         this(StylesheetsInspector.class.getResource("StylesheetsInspector.fxml"));
     }
 
-    public StylesheetsInspector(@Nonnull URL fxmlUrl) {
+    public StylesheetsInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(@Nonnull URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -100,7 +100,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
             listView.setOnEditCommit(new EventHandler<ListView.EditEvent<URI>>() {
                 @Override
-                public void handle(ListView.EditEvent<URI> t) {
+                public void handle(@NonNull ListView.EditEvent<URI> t) {
                     listView.getItems().set(t.getIndex(), t.getNewValue());
                 }
 
@@ -109,7 +109,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             ClipboardIO<URI> io = new ClipboardIO<URI>() {
 
                 @Override
-                public void write(@Nonnull Clipboard clipboard, List<URI> items) {
+                public void write(@NonNull Clipboard clipboard, @NonNull List<URI> items) {
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }
@@ -124,7 +124,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
                 @Nullable
                 @Override
-                public List<URI> read(Clipboard clipboard) {
+                public List<URI> read(@NonNull Clipboard clipboard) {
                     List<URI> list;
                     if (clipboard.hasUrl()) {
                         list = new ArrayList<>();
@@ -148,7 +148,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 }
 
                 @Override
-                public boolean canRead(Clipboard clipboard) {
+                public boolean canRead(@NonNull Clipboard clipboard) {
                     return clipboard.hasFiles() || clipboard.hasUrl();
                 }
 

@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -31,6 +31,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         super(app);
     }
 
+    @Nullable
     protected URIChooser getChooser(DocumentBasedActivity view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
@@ -43,7 +44,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     protected abstract boolean isReuseEmptyViews();
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
+    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
         {
             WorkState workState = new SimpleWorkState(getLabel());
             app.addDisabler(workState);
@@ -69,7 +70,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
 
-    public void doIt(@Nonnull DocumentBasedActivity view, boolean disposeView, WorkState workState) {
+    public void doIt(@NonNull DocumentBasedActivity view, boolean disposeView, WorkState workState) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -100,7 +101,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, @Nonnull final URIChooser chooser, WorkState workState) {
+    protected void openViewFromURI(@NonNull final DocumentBasedActivity v, @NonNull final URI uri, @NonNull final URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
         Map<? super Key<?>, Object> options = getReadOptions();
         if (app != null) {
@@ -155,6 +156,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
      *
      * @return options or null if the user has aborted the dialog window
      */
+    @NonNull
     protected abstract Map<? super Key<?>, Object> getReadOptions();
 
 }

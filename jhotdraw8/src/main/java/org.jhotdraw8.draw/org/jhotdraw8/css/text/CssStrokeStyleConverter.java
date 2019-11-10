@@ -7,7 +7,7 @@ package org.jhotdraw8.css.text;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -64,9 +64,9 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssStroke parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssStroke parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         CssSize width = parseSize("width", new CssSize(1.0), tt, idFactory);
         if (tt.next() == CssTokenType.TT_EOF) {
             return new CssStroke(width, CssColor.BLACK);
@@ -84,7 +84,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
-            switch (tt.currentStringNonnull()) {
+            switch (tt.currentStringNonNull()) {
                 case TYPE:
                     type = parseStrokeType(tt);
                     break;
@@ -104,21 +104,21 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
                     dashArray = parseDashArray(tt, idFactory);
                     break;
                 default:
-                    throw new ParseException("⟨StrokeStyle⟩:: Unsupported function: " + tt.currentStringNonnull(), tt.getStartPosition());
+                    throw new ParseException("⟨StrokeStyle⟩:: Unsupported function: " + tt.currentStringNonNull(), tt.getStartPosition());
             }
         }
 
         return new CssStroke(width, paint, type, lineCap, lineJoin, miterLimit, dashOffset, dashArray);
     }
 
-    @Nonnull
-    protected StrokeLineJoin parseLineJoin(@Nonnull CssTokenizer tt) throws ParseException, IOException {
-        if (tt.next() != CssTokenType.TT_FUNCTION || !LINEJOIN.equals(tt.currentStringNonnull())) {
+    @NonNull
+    protected StrokeLineJoin parseLineJoin(@NonNull CssTokenizer tt) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_FUNCTION || !LINEJOIN.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩:: Function " + LINEJOIN + "() expected.", tt.getStartPosition());
         }
         StrokeLineJoin lineJoin;
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨StrokeStyle⟩: One of " + MITER + ", " + BEVEL + ", " + ROUND + " expected.");
-        switch (tt.currentStringNonnull()) {
+        switch (tt.currentStringNonNull()) {
             case MITER:
                 lineJoin = StrokeLineJoin.MITER;
                 break;
@@ -135,14 +135,14 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
         return lineJoin;
     }
 
-    @Nonnull
-    protected StrokeLineCap parseLineCap(@Nonnull CssTokenizer tt) throws ParseException, IOException {
-        if (tt.next() != CssTokenType.TT_FUNCTION || !LINECAP.equals(tt.currentStringNonnull())) {
+    @NonNull
+    protected StrokeLineCap parseLineCap(@NonNull CssTokenizer tt) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_FUNCTION || !LINECAP.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩:: Function " + LINECAP + "() expected.", tt.getStartPosition());
         }
         StrokeLineCap lineCap;
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨StrokeStyle⟩: One of " + SQUARE + ", " + BUTT + ", " + ROUND + " expected.");
-        switch (tt.currentStringNonnull()) {
+        switch (tt.currentStringNonNull()) {
             case SQUARE:
                 lineCap = StrokeLineCap.SQUARE;
                 break;
@@ -159,14 +159,14 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
         return lineCap;
     }
 
-    @Nonnull
-    protected StrokeType parseStrokeType(@Nonnull CssTokenizer tt) throws ParseException, IOException {
-        if (tt.next() != CssTokenType.TT_FUNCTION || !TYPE.equals(tt.currentStringNonnull())) {
+    @NonNull
+    protected StrokeType parseStrokeType(@NonNull CssTokenizer tt) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_FUNCTION || !TYPE.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩:: Function " + TYPE + "() expected.", tt.getStartPosition());
         }
         StrokeType type;
         tt.requireNextToken(CssTokenType.TT_IDENT, "One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
-        switch (tt.currentStringNonnull()) {
+        switch (tt.currentStringNonNull()) {
             case INSIDE:
                 type = StrokeType.INSIDE;
                 break;
@@ -183,8 +183,9 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
         return type;
     }
 
-    private ImmutableList<CssSize> parseDashArray(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonnull())) {
+    @NonNull
+    private ImmutableList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩: Function " + DASHARRAY + "() expected.", tt.getStartPosition());
         }
 
@@ -201,8 +202,8 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
         return ImmutableLists.ofCollection(list);
     }
 
-    private CssSize parseNumericFunction(String functionName, CssSize defaultValue, @Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (tt.next() != CssTokenType.TT_FUNCTION || !functionName.equals(tt.currentStringNonnull())) {
+    private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        if (tt.next() != CssTokenType.TT_FUNCTION || !functionName.equals(tt.currentStringNonNull())) {
             throw new ParseException("Function " + functionName + "() expected.", tt.getStartPosition());
         }
 
@@ -212,14 +213,14 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
         return value;
     }
 
-    private CssSize parseSize(String name, CssSize defaultValue, CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
+    private CssSize parseSize(String name, CssSize defaultValue, @NonNull CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
         CssSize value;
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                value = new CssSize(tt.currentNumberNonnull().doubleValue());
+                value = new CssSize(tt.currentNumberNonNull().doubleValue());
                 break;
             case CssTokenType.TT_DIMENSION:
-                value = new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentStringNonnull());
+                value = new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
                 break;
             default:
                 value = defaultValue;
@@ -244,7 +245,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
 
 
     @Override
-    protected <TT extends CssStroke> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends CssStroke> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value.getPaint() == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;

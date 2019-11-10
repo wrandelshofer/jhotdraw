@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -47,16 +47,16 @@ public class CssIdentConverter extends AbstractCssConverter<String> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public String parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, " ⟨Ident⟩: ⟨identifier⟩ expected");
-        return tt.currentStringNonnull();
+        return tt.currentStringNonNull();
     }
 
 
     @Override
-    protected <TT extends String> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends String> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_IDENT, value));
     }
 

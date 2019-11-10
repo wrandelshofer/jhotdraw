@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * IntBidiGraphBuilder.
@@ -20,8 +20,8 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
-    @Nonnull
-    public static IntBidiGraphBuilder inverseOfIntBidiGraph(IntBidiGraph graph) {
+    @NonNull
+    public static IntBidiGraphBuilder inverseOfIntBidiGraph(@NonNull IntBidiGraph graph) {
         int arrowCount = graph.getArrowCount();
 
         IntBidiGraphBuilder b = new IntBidiGraphBuilder(graph.getVertexCount(), arrowCount);
@@ -40,8 +40,8 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      * @param graph a graph
      * @return a new graph
      */
-    @Nonnull
-    public static IntBidiGraphBuilder ofIntBidiGraph(IntBidiGraph graph) {
+    @NonNull
+    public static IntBidiGraphBuilder ofIntBidiGraph(@NonNull IntBidiGraph graph) {
         int arrowCount = graph.getArrowCount();
 
         IntBidiGraphBuilder b = new IntBidiGraphBuilder(graph.getVertexCount(), arrowCount);
@@ -102,7 +102,7 @@ public class IntBidiGraphBuilder extends AbstractBidiGraphBuilder {
      *
      * @return the created graph
      */
-    @Nonnull
+    @NonNull
     public IntImmutableBidiGraph build() {
         return new IntImmutableBidiGraph(this);
     }

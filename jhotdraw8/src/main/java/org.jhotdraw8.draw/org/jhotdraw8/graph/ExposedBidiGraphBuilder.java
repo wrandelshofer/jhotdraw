@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.SpliteratorIterable;
 
@@ -41,9 +41,9 @@ import java.util.function.Predicate;
  */
 public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V, A>, A extends ExposedBidiGraphBuilder.Arrow<V, A>> implements BidiGraph<V, A> {
 
-    @Nonnull
+    @NonNull
     private final Set<A> arrows;
-    @Nonnull
+    @NonNull
     private final Set<V> vertices;
 
     /**
@@ -69,7 +69,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      *
      * @param that another graph
      */
-    public ExposedBidiGraphBuilder(@Nonnull DirectedGraph<V, A> that) {
+    public ExposedBidiGraphBuilder(@NonNull DirectedGraph<V, A> that) {
         this(that, Function.identity(), Function.identity());
     }
 
@@ -85,7 +85,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param arrowMapper  a mapping function from that arrow type to the this
      *                     arrow type
      */
-    public <VV, AA> ExposedBidiGraphBuilder(DirectedGraph<VV, AA> that, @Nonnull Function<VV, V> vertexMapper, @Nonnull Function<AA, A> arrowMapper) {
+    public <VV, AA> ExposedBidiGraphBuilder(@NonNull DirectedGraph<VV, AA> that, @NonNull Function<VV, V> vertexMapper, @NonNull Function<AA, A> arrowMapper) {
         arrows = new LinkedHashSet<>(that.getArrowCount());
         vertices = new LinkedHashSet<>(that.getVertexCount());
 
@@ -107,7 +107,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param end   the vertex
      * @param arrow the arrow, can be null
      */
-    public void addArrow(@Nonnull V start, @Nonnull V end, @Nullable A arrow) {
+    public void addArrow(@NonNull V start, @NonNull V end, @Nullable A arrow) {
         if (start == null || end == null) {
             throw new IllegalArgumentException("start=" + start + ", end=" + end + ", arrow=" + arrow);
         }
@@ -139,38 +139,38 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         return arrows.size();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public V getNext(@Nonnull V vertex, int i) {
-        return getVertexDataNonnull(vertex).next.get(i).end;
+    public V getNext(@NonNull V vertex, int i) {
+        return getVertexDataNonNull(vertex).next.get(i).end;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public A getNextArrow(@Nonnull V vertex, int index) {
-        return getVertexDataNonnull(vertex).next.get(index);
-    }
-
-    @Override
-    public int getNextCount(@Nonnull V vertex) {
-        return getVertexDataNonnull(vertex).next.size();
-    }
-
-    @Nonnull
-    @Override
-    public V getPrev(@Nonnull V vertex, int i) {
-        return getVertexDataNonnull(vertex).prev.get(i).start;
-    }
-
-    @Nonnull
-    @Override
-    public A getPrevArrow(@Nonnull V vertex, int index) {
-        return getVertexDataNonnull(vertex).prev.get(index);
+    public A getNextArrow(@NonNull V vertex, int index) {
+        return getVertexDataNonNull(vertex).next.get(index);
     }
 
     @Override
-    public int getPrevCount(@Nonnull V vertex) {
-        return getVertexDataNonnull(vertex).prev.size();
+    public int getNextCount(@NonNull V vertex) {
+        return getVertexDataNonNull(vertex).next.size();
+    }
+
+    @NonNull
+    @Override
+    public V getPrev(@NonNull V vertex, int i) {
+        return getVertexDataNonNull(vertex).prev.get(i).start;
+    }
+
+    @NonNull
+    @Override
+    public A getPrevArrow(@NonNull V vertex, int index) {
+        return getVertexDataNonNull(vertex).prev.get(index);
+    }
+
+    @Override
+    public int getPrevCount(@NonNull V vertex) {
+        return getVertexDataNonNull(vertex).prev.size();
     }
 
     @Override
@@ -178,18 +178,18 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
         return vertices.size();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Collection<V> getVertices() {
         return Collections.unmodifiableCollection(vertices);
     }
 
     @Override
-    public @Nonnull Collection<A> getArrows() {
+    public @NonNull Collection<A> getArrows() {
         return Collections.unmodifiableCollection(arrows);
     }
 
-    private V getVertexDataNonnull(V vertex) {
+    private V getVertexDataNonNull(V vertex) {
         return vertex;
     }
 
@@ -200,7 +200,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param a an arrow starting at the vertex, must not be null
      */
     @SuppressWarnings("unused")
-    public void removeArrow(V v, @Nonnull A a) {
+    public void removeArrow(@NonNull V v, @NonNull A a) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (a.equals(getNextArrow(v, i))) {
                 removeNext(v, i);
@@ -216,7 +216,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param i     the index of the i-th next vertex
      */
     @SuppressWarnings("WeakerAccess")
-    public void removeNext(V start, int i) {
+    public void removeNext(@NonNull V start, int i) {
         A a = start.next.get(i);
         final V endData = a.end;
         start.next.remove(i);
@@ -231,7 +231,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param end   the end vertex of the arrow
      */
     @SuppressWarnings("unused")
-    public void removeNext(V start, V end) {
+    public void removeNext(@NonNull V start, V end) {
         for (int i = 0, n = getNextCount(start); i < n; i++) {
             if (getNext(start, i).equals(end)) {
                 removeNext(start, i);
@@ -247,7 +247,7 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      * @param v the vertex
      */
     @SuppressWarnings("unused")
-    public void removeVertex(V v) {
+    public void removeVertex(@Nullable V v) {
         if (v == null) {
             return;
         }
@@ -269,22 +269,22 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      */
     public static class Arrow<V extends Vertex<V, A>, A extends Arrow<V, A>> {
 
-        @Nonnull
+        @NonNull
         final V start;
-        @Nonnull
+        @NonNull
         final V end;
 
-        public Arrow(@Nonnull final V start, @Nonnull final V end) {
+        public Arrow(@NonNull final V start, @NonNull final V end) {
             this.start = start;
             this.end = end;
         }
 
-        @Nonnull
+        @NonNull
         public V getStart() {
             return start;
         }
 
-        @Nonnull
+        @NonNull
         public V getEnd() {
             return end;
         }
@@ -298,45 +298,45 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      */
     public static class Vertex<V extends Vertex<V, A>, A extends Arrow<V, A>> {
 
-        @Nonnull
+        @NonNull
         final List<A> next = new ArrayList<>();
-        @Nonnull
+        @NonNull
         final List<A> prev = new ArrayList<>();
 
         public Vertex() {
         }
 
-        List<A> getNext() {
+        @NonNull List<A> getNext() {
             return next;
         }
 
-        List<A> getPrev() {
+        @NonNull List<A> getPrev() {
             return prev;
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Iterable<V> breadthFirstSearchBackward(final V start, final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex<V, A>::getPrev, Arrow<V, A>::getStart, getVertexDataNonnull(start), visited));
+    public Iterable<V> breadthFirstSearchBackward(final V start, @NonNull final Predicate<V> visited) {
+        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex<V, A>::getPrev, Arrow<V, A>::getStart, getVertexDataNonNull(start), visited));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Iterable<V> breadthFirstSearch(final V start, final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex<V, A>::getNext, Arrow<V, A>::getEnd, getVertexDataNonnull(start), visited));
+    public Iterable<V> breadthFirstSearch(final V start, @NonNull final Predicate<V> visited) {
+        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex<V, A>::getNext, Arrow<V, A>::getEnd, getVertexDataNonNull(start), visited));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Iterable<V> depthFirstSearchBackward(final V start, final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex<V, A>::getPrev, Arrow<V, A>::getStart, getVertexDataNonnull(start), visited));
+    public Iterable<V> depthFirstSearchBackward(final V start, @NonNull final Predicate<V> visited) {
+        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex<V, A>::getPrev, Arrow<V, A>::getStart, getVertexDataNonNull(start), visited));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Iterable<V> depthFirstSearch(final V start, final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex<V, A>::getNext, Arrow<V, A>::getEnd, getVertexDataNonnull(start), visited));
+    public Iterable<V> depthFirstSearch(final V start, @NonNull final Predicate<V> visited) {
+        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex<V, A>::getNext, Arrow<V, A>::getEnd, getVertexDataNonNull(start), visited));
     }
 
     /**
@@ -345,13 +345,13 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
      */
     private abstract class AbstractBidiSpliterator extends Spliterators.AbstractSpliterator<V> {
 
-        @Nonnull
+        @NonNull
         protected final Function<V, Iterable<A>> nextNodesFunction;
-        @Nonnull
+        @NonNull
         protected final Function<A, V> arrowEndFunction;
-        @Nonnull
+        @NonNull
         protected final Deque<V> deque;
-        @Nonnull
+        @NonNull
         protected final Predicate<V> visited;
 
         /**
@@ -363,9 +363,9 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
          *                          if the specified vertex has been visited, and marks the specified vertex
          *                          as visited.
          */
-        public AbstractBidiSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
-                                       @Nonnull final Function<A, V> arrowEndFunction,
-                                       @Nonnull final V root, @Nonnull final Predicate<V> visited) {
+        public AbstractBidiSpliterator(@NonNull final Function<V, Iterable<A>> nextNodesFunction,
+                                       @NonNull final Function<A, V> arrowEndFunction,
+                                       @NonNull final V root, @NonNull final Predicate<V> visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             Objects.requireNonNull(nextNodesFunction, "nextNodesFunction");
             Objects.requireNonNull(root, "root");
@@ -396,15 +396,15 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
          *                          if the specified vertex has been visited, and marks the specified vertex
          *                          as visited.
          */
-        public BidiBreadthFirstSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
-                                           @Nonnull final Function<A, V> arrowEndFunction,
-                                           @Nonnull final V root, @Nonnull final Predicate<V> visited) {
+        public BidiBreadthFirstSpliterator(@NonNull final Function<V, Iterable<A>> nextNodesFunction,
+                                           @NonNull final Function<A, V> arrowEndFunction,
+                                           @NonNull final V root, @NonNull final Predicate<V> visited) {
             super(nextNodesFunction, arrowEndFunction, root, visited);
         }
 
 
         @Override
-        public boolean tryAdvance(@Nonnull final Consumer<? super V> action) {
+        public boolean tryAdvance(@NonNull final Consumer<? super V> action) {
             final V current = deque.pollFirst();
             if (current == null) {
                 return false;
@@ -435,15 +435,15 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
          *                          if the specified vertex has been visited, and marks the specified vertex
          *                          as visited.
          */
-        public BidiDepthFirstSpliterator(@Nonnull final Function<V, Iterable<A>> nextNodesFunction,
-                                         @Nonnull final Function<A, V> arrowEndFunction,
-                                         @Nonnull final V root, @Nonnull final Predicate<V> visited) {
+        public BidiDepthFirstSpliterator(@NonNull final Function<V, Iterable<A>> nextNodesFunction,
+                                         @NonNull final Function<A, V> arrowEndFunction,
+                                         @NonNull final V root, @NonNull final Predicate<V> visited) {
             super(nextNodesFunction, arrowEndFunction, root, visited);
         }
 
 
         @Override
-        public boolean tryAdvance(@Nonnull final Consumer<? super V> action) {
+        public boolean tryAdvance(@NonNull final Consumer<? super V> action) {
             final V current = deque.pollLast();
             if (current == null) {
                 return false;

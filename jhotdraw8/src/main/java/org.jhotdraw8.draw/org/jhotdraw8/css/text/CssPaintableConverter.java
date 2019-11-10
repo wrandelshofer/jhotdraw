@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssLinearGradient;
@@ -39,11 +39,11 @@ import java.util.function.Consumer;
  */
 public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
 
-    @Nonnull
+    @NonNull
     private static final CssColorConverter colorConverter = new CssColorConverter(false);
-    @Nonnull
+    @NonNull
     private static final CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter(false);
-    @Nonnull
+    @NonNull
     private static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
 
     public CssPaintableConverter(boolean nullable) {
@@ -51,7 +51,7 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    protected <TT extends Paintable> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value instanceof CssColor) {
             CssColor c = (CssColor) value;
             colorConverter.produceTokens(c, idFactory, out);
@@ -66,27 +66,27 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Paintable parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_FUNCTION) {
-            switch (tt.currentStringNonnull()) {
+            switch (tt.currentStringNonNull()) {
                 case CssLinearGradientConverter.LINEAR_GRADIENT_FUNCTION:
                     tt.pushBack();
-                    return linearGradientConverter.parseNonnull(tt, idFactory);
+                    return linearGradientConverter.parseNonNull(tt, idFactory);
                 case CssRadialGradientConverter.RADIAL_GRADIENT_FUNCTION:
                     tt.pushBack();
-                    return radialGradientConverter.parseNonnull(tt, idFactory);
+                    return radialGradientConverter.parseNonNull(tt, idFactory);
                 default:
                     break;
             }
             ;
         }
         tt.pushBack();
-        return colorConverter.parseNonnull(tt, idFactory);
+        return colorConverter.parseNonNull(tt, idFactory);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"

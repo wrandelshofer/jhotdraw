@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +22,7 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
     final static ImmutableHashSet<Object> EMPTY = new ImmutableHashSet<>(Collections.emptySet());
     private final Set<E> backingSet;
 
-    public ImmutableHashSet(Collection<? extends E> copyMe) {
+    public ImmutableHashSet(@NonNull Collection<? extends E> copyMe) {
         switch (copyMe.size()) {
             case 0:
                 backingSet = Collections.emptySet();
@@ -35,7 +35,7 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
         }
     }
 
-    public ImmutableHashSet(ReadOnlyCollection<? extends E> copyMe) {
+    public ImmutableHashSet(@NonNull ReadOnlyCollection<? extends E> copyMe) {
         switch (copyMe.size()) {
             case 0:
                 backingSet = Collections.emptySet();
@@ -51,7 +51,7 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
         }
     }
 
-    ImmutableHashSet(@Nonnull Object[] array) {
+    ImmutableHashSet(@NonNull Object[] array) {
         this(array, 0, array.length);
     }
 
@@ -82,6 +82,7 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
         return backingSet.contains(o);
     }
 
+    @NonNull
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {

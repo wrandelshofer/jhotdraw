@@ -17,7 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
@@ -49,7 +49,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private Set<Figure> groupReshapeableFigures;
-    @Nonnull
+    @NonNull
     private final Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
@@ -89,9 +89,9 @@ public class PolyPointMoveHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
             node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();
@@ -101,7 +101,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -135,7 +135,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
         // determine which figures can be reshaped together as a group
@@ -160,7 +160,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
@@ -186,7 +186,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(Figure f, @Nonnull Point2D oldPoint, @Nonnull Point2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(@NonNull Figure f, @NonNull Point2D oldPoint, @NonNull Point2D newPoint, @Nullable DrawingModel model) {
         Point2D npl = f.worldToParent(newPoint);
         Point2D opl = f.worldToParent(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());

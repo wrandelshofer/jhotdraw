@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.StreamCssTokenizer;
@@ -34,7 +34,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull String value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
         StringBuffer buf = new StringBuffer();
         boolean isIdent = true;
         buf.append('"');
@@ -76,7 +76,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getDefaultValue() {
         return "";

@@ -30,7 +30,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.Actions;
@@ -110,7 +110,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
     private final SetProperty<Activity> views = new SimpleSetProperty<>(FXCollections.observableSet());
-    @Nonnull
+    @NonNull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
@@ -151,7 +151,8 @@ public class DocumentBasedApplication extends AbstractApplication {
      * @param actions the action map
      * @return the menu bar
      */
-    protected MenuBar createMenuBar(@Nullable Stage stage, @Nonnull HierarchicalMap<String, Action> actions) {
+    @Nullable
+    protected MenuBar createMenuBar(@Nullable Stage stage, @NonNull HierarchicalMap<String, Action> actions) {
         MenuBar mb = model.createMenuBar();
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
         final List<KeyCombination> accelerators = new ArrayList<>();
@@ -237,7 +238,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     @Override
-    public void execute(@Nonnull Runnable r) {
+    public void execute(@NonNull Runnable r) {
         executor.execute(r);
     }
 
@@ -275,7 +276,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@Nonnull DocumentBasedActivity view) {
+    protected void handleViewActivated(@NonNull DocumentBasedActivity view) {
 
     }
 
@@ -285,7 +286,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@Nonnull DocumentBasedActivity view) {
+    protected void handleViewAdded(@NonNull DocumentBasedActivity view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -373,8 +374,8 @@ public class DocumentBasedApplication extends AbstractApplication {
         Platform.runLater(view::start);
     }
 
-    @Nonnull
-    protected Stage createStage(@Nonnull DocumentBasedActivity view) {
+    @NonNull
+    protected Stage createStage(@NonNull DocumentBasedActivity view) {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNIFIED);
         BorderPane borderPane = new BorderPane();
@@ -396,7 +397,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@Nonnull DocumentBasedActivity view) {
+    protected void handleViewDeactivated(@NonNull DocumentBasedActivity view) {
 
     }
 
@@ -406,7 +407,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@Nonnull DocumentBasedActivity view) {
+    protected void handleViewRemoved(@NonNull DocumentBasedActivity view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -432,7 +433,7 @@ public class DocumentBasedApplication extends AbstractApplication {
         disambiguateViews();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public SetProperty<Activity> activitiesProperty() {
         return views;
@@ -472,7 +473,7 @@ public class DocumentBasedApplication extends AbstractApplication {
         }
     }
 
-    private void openView(URI uri) {
+    private void openView(@NonNull URI uri) {
         final Resources labels = ApplicationLabels.getResources();
         createActivity().whenComplete((pv, ex1) -> {
             DocumentBasedActivity v = (DocumentBasedActivity) pv;

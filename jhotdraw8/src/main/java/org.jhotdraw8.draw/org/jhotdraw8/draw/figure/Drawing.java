@@ -5,7 +5,8 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssColor;
@@ -130,7 +131,7 @@ public interface Drawing extends Figure {
      */
     String TYPE_SELECTOR = "Drawing";
 
-    @Nonnull
+    @NonNull
     @Override
     default String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -141,7 +142,7 @@ public interface Drawing extends Figure {
      *
      * @return the style manager
      */
-    StylesheetsManager<Figure> getStyleManager();
+    @Nullable StylesheetsManager<Figure> getStyleManager();
 
     /**
      * Updates the stylesheets in the style manager.
@@ -153,7 +154,7 @@ public interface Drawing extends Figure {
      *
      * @param ctx the render context
      */
-    default void layoutAll(RenderContext ctx) {
+    default void layoutAll(@NonNull RenderContext ctx) {
         for (Figure f : layoutDependenciesIterable()) {
             f.layout(ctx);
         }
@@ -165,6 +166,7 @@ public interface Drawing extends Figure {
      *
      * @return figures in topological order according to layout dependencies
      */
+    @NonNull
     default Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively

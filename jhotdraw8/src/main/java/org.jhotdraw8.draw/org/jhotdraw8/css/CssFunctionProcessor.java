@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
@@ -44,7 +45,8 @@ public interface CssFunctionProcessor<T> {
      * @return the processed tokens
      * @throws ParseException in case of a parsing failure
      */
-    default ImmutableList<CssToken> process(T element, ReadOnlyList<CssToken> in) throws ParseException {
+    @NonNull
+    default ImmutableList<CssToken> process(T element, @NonNull ReadOnlyList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {

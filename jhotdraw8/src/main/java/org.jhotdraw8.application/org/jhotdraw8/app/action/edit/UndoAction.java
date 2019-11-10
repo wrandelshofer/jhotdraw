@@ -5,6 +5,7 @@
 package org.jhotdraw8.app.action.edit;
 
 import javafx.event.ActionEvent;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -42,7 +43,7 @@ public class UndoAction extends AbstractActivityAction<Activity> {
      * @param app  the application
      * @param view the view
      */
-    public UndoAction(Application app, Activity view) {
+    public UndoAction(@NonNull Application app, Activity view) {
         super(app, view, null);
         labels.configureAction(this, ID);
     }

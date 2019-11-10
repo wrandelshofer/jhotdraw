@@ -4,16 +4,16 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
 
 public class QualifiedName implements Comparable<QualifiedName> {
     private final @Nullable String namespace;
-    private final @Nonnull String name;
+    private final @NonNull String name;
 
-    public QualifiedName(String namespace, String name) {
+    public QualifiedName(String namespace, @NonNull String name) {
         this.namespace = namespace;
         this.name = name;
     }
@@ -23,7 +23,7 @@ public class QualifiedName implements Comparable<QualifiedName> {
         return namespace;
     }
 
-    @Nonnull
+    @NonNull
     public String getName() {
         return name;
     }
@@ -47,10 +47,11 @@ public class QualifiedName implements Comparable<QualifiedName> {
     }
 
     @Override
-    public int compareTo(@Nonnull QualifiedName o) {
+    public int compareTo(@NonNull QualifiedName o) {
         return this.name.compareTo(o.name);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "QualifiedName{" +

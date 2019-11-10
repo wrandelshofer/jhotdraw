@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -65,7 +65,7 @@ public class UnorderedPair<V> implements Pair<V> {
         return Objects.hashCode(a) + Objects.hashCode(b);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';

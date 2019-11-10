@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.app.action.file;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.collection.Key;
@@ -39,6 +40,7 @@ public class OpenFileAction extends AbstractOpenFileAction {
         return reuseEmptyViews;
     }
 
+    @NonNull
     @Override
     protected Map<? super Key<?>, Object> getReadOptions() {
         return Collections.emptyMap();

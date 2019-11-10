@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.util;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * Represents a function that accepts 4 arguments and produces a result.
  *
@@ -24,6 +26,6 @@ public interface QuadFunction<T, U, V, W, R> {
      * @param w the fourth function argument
      * @return the function result
      */
-    R apply(T t, U u, V v, W w);
+    @NonNull R apply(T t, U u, V v, W w);
 
 }

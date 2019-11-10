@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Polyline;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.AbstractElbowLineConnectionWithMarkersFigure;
@@ -49,8 +49,11 @@ public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "MLEdge";
+    @Nullable
     public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
+    @Nullable
     public final static NullableBooleanStyleableKey SOURCE_OWNED = MLConstants.SOURCE_OWNED;
+    @Nullable
     public final static NullableBooleanStyleableKey TARGET_OWNED = MLConstants.TARGET_OWNED;
     public final static BooleanStyleableKey KEYWORD_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
 
@@ -58,7 +61,7 @@ public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
         this(0, 0, 1, 1);
     }
 
-    public UMLEdgeFigure(Point2D start, Point2D end) {
+    public UMLEdgeFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -66,25 +69,25 @@ public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
         super(startX, startY, endX, endY);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    protected void updateEndMarkerNode(RenderContext ctx, @Nonnull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, @NonNull Path node) {
         super.updateEndMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
 
     @Override
-    protected void updateLineNode(RenderContext ctx, @Nonnull Polyline node) {
+    protected void updateLineNode(RenderContext ctx, @NonNull Polyline node) {
         applyStrokableFigureProperties(ctx, node);
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         super.updateNode(ctx, node);
 
         applyHideableFigureProperties(ctx, node);
@@ -93,7 +96,7 @@ public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
     }
 
     @Override
-    protected void updateStartMarkerNode(RenderContext ctx, @Nonnull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, @NonNull Path node) {
         super.updateStartMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }

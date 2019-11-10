@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.BoundingBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -31,15 +31,15 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, BoundingBox> cssMetaData;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> xKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> yKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> widthKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> heightKey;
 
     /**
@@ -51,7 +51,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
      * @param widthKey  the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public BoundingBoxStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
+    public BoundingBoxStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> widthKey, @NonNull MapAccessor<Double> heightKey) {
         super(name, BoundingBox.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new BoundingBox(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<BoundingBox>> function = s -> {
@@ -73,7 +73,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         this.heightKey = heightKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, BoundingBox> getCssMetaData() {
         return cssMetaData;
@@ -90,15 +90,15 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public BoundingBox get(@Nonnull Map<? super Key<?>, Object> a) {
+    public BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
+    public BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         if (value == null) {
             throw new IllegalArgumentException("value must not be null.");
         }
@@ -110,9 +110,9 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public BoundingBox remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

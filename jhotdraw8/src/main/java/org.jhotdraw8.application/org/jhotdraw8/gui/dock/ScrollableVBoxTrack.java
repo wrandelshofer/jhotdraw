@@ -13,7 +13,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 
 /**
@@ -24,7 +24,7 @@ import org.jhotdraw8.gui.CustomSkin;
 public class ScrollableVBoxTrack extends Control implements Track {
 
     private final VBox vbox = new VBox();
-    @Nonnull
+    @NonNull
     private ScrollPane scrollPane = new ScrollPane(vbox);
 
     public ScrollableVBoxTrack() {
@@ -45,7 +45,7 @@ public class ScrollableVBoxTrack extends Control implements Track {
 
         getItems().addListener(new ListChangeListener<Node>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends Node> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends Node> c) {
                 while (c.next()) {
                     for (Node remitem : c.getRemoved()) {
                         if (remitem instanceof Dock) {
@@ -82,7 +82,7 @@ public class ScrollableVBoxTrack extends Control implements Track {
         return vbox.getChildren();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

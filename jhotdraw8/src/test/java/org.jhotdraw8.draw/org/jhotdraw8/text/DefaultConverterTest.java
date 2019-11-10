@@ -5,6 +5,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class DefaultConverterTest {
 
 
-    public static void testFromString(String expectedOutput, String input) throws Exception {
+    public static void testFromString(String expectedOutput, @NonNull String input) throws Exception {
         DefaultConverter c = new DefaultConverter();
 
         Object actualOutput = c.fromString(input);
@@ -37,6 +38,7 @@ public class DefaultConverterTest {
         assertEquals(actualOutput, expectedOutput);
     }
 
+    @NonNull
     public static Object[][] textData() {
         return new Object[][]{
                 {"hello world", "hello world"},
@@ -44,6 +46,7 @@ public class DefaultConverterTest {
 
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
@@ -52,6 +55,7 @@ public class DefaultConverterTest {
 
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testToStringFactory() {
         return Arrays.asList(

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.app.action.edit;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -27,7 +28,7 @@ public abstract class AbstractFindAction<V extends Activity> extends AbstractAct
      * @param view      the view
      * @param viewClass the class of the view
      */
-    public AbstractFindAction(Application app, V view, Class<V> viewClass) {
+    public AbstractFindAction(@NonNull Application app, V view, Class<V> viewClass) {
         super(app, view, viewClass);
         ApplicationLabels.getResources().configureAction(this, ID);
     }

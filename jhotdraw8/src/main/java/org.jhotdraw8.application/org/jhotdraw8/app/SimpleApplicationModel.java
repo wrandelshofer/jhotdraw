@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.app.AboutAction;
@@ -54,6 +54,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private String name;
     private Supplier<DocumentBasedActivity> activityFactory;
     private Supplier<MenuBar> menuFactory;
+    @Nullable
     private String license;
 
     public SimpleApplicationModel() {
@@ -62,17 +63,17 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     public SimpleApplicationModel(
             Supplier<DocumentBasedActivity> activityFactory,
-            URL menuFxml,
-            String fileDescription,
+            @NonNull URL menuFxml,
+            @NonNull String fileDescription,
             DataFormat format,
             String fileExtension) {
         this(null, activityFactory, menuFxml, fileDescription, format, fileExtension);
     }
 
     public SimpleApplicationModel(String name,
-                                  URL activityFxml,
-                                  URL menuFxml,
-                                  String fileDescription,
+                                  @NonNull URL activityFxml,
+                                  @NonNull URL menuFxml,
+                                  @NonNull String fileDescription,
                                   DataFormat format,
                                   String fileExtension) {
         this.name = name;
@@ -85,8 +86,8 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     public SimpleApplicationModel(String name,
                                   Supplier<DocumentBasedActivity> activityFactory,
-                                  URL menuFxml,
-                                  String fileDescription,
+                                  @NonNull URL menuFxml,
+                                  @NonNull String fileDescription,
                                   DataFormat format,
                                   String fileExtension) {
         this.name = name;
@@ -100,7 +101,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     public SimpleApplicationModel(String name,
                                   Supplier<DocumentBasedActivity> activityFactory,
                                   Supplier<MenuBar> menuFactory,
-                                  String fileDescription,
+                                  @NonNull String fileDescription,
                                   DataFormat format,
                                   String fileExtension) {
         this.name = name;
@@ -111,7 +112,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.activityFactory = activityFactory;
     }
 
-    private static MenuBar createMenuBar(URL fxml, ResourceBundle resources) {
+    private static MenuBar createMenuBar(@NonNull URL fxml, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
         loader.setResources(resources);
         try (InputStream in = fxml.openStream()) {
@@ -121,7 +122,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         }
     }
 
-    private static DocumentBasedActivity createActivity(URL fxml, ResourceBundle resources) {
+    private static DocumentBasedActivity createActivity(@NonNull URL fxml, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
         loader.setResources(resources);
         try (InputStream in = fxml.openStream()) {
@@ -137,7 +138,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return activityFactory.get();
     }
 
-    public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
+    public HierarchicalMap<String, Action> createApplicationActionMap(@NonNull Application app) {
         HierarchicalMap<String, Action> map = new HierarchicalMap<>();
         map.put(AboutAction.ID, new AboutAction(app));
         map.put(ExitAction.ID, new ExitAction(app));
@@ -157,7 +158,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return map;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public URIChooser createExportChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -166,7 +167,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public URIChooser createImportChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -181,7 +182,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return menuFactory == null ? null : menuFactory.get();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public URIChooser createOpenChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -190,7 +191,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public URIChooser createSaveChooser() {
         FileURIChooser c = new FileURIChooser();
@@ -207,12 +208,12 @@ public class SimpleApplicationModel implements ApplicationModel {
         this.activityFactory = factory;
     }
 
-    @Nonnull
+    @NonNull
     public List<URIExtensionFilter> getExportExtensionFilters() {
         return exportExtensionFilters;
     }
 
-    @Nonnull
+    @NonNull
     public List<URIExtensionFilter> getImportExtensionFilters() {
         return importExtensionFilters;
     }
@@ -243,7 +244,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         name = newValue;
     }
 
-    @Nonnull
+    @NonNull
     public List<URIExtensionFilter> getOpenExtensionFilters() {
         return openExtensionFilters;
     }
@@ -258,11 +259,12 @@ public class SimpleApplicationModel implements ApplicationModel {
         return ApplicationLabels.getResources().asResourceBundle();
     }
 
-    @Nonnull
+    @NonNull
     public List<URIExtensionFilter> getSaveExtensionFilters() {
         return saveExtensionFilters;
     }
 
+    @Nullable
     @Override
     public String getVendor() {
         return getClass().getPackage().getImplementationVendor();
@@ -278,7 +280,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         return false;
     }
 
-    public void setMenuFxml(URL fxml) {
+    public void setMenuFxml(@NonNull URL fxml) {
         this.menuFactory = () -> SimpleApplicationModel.createMenuBar(fxml, getResources());
     }
 }

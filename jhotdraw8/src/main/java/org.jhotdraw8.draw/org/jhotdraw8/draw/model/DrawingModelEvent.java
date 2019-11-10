@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.model;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -50,7 +50,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     private final int index;
     private final DrawingModelEvent.EventType eventType;
 
-    private DrawingModelEvent(DrawingModel source, EventType eventType, Figure figure, Figure parent, Drawing drawing, int index, Key<?> key, Object oldValue, Object newValue) {
+    private DrawingModelEvent(@NonNull DrawingModel source, EventType eventType, Figure figure, Figure parent, Drawing drawing, int index, Key<?> key, Object oldValue, Object newValue) {
         super(source);
         this.figure = figure;
         this.key = key;
@@ -62,19 +62,23 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         this.eventType = eventType;
     }
 
-    public static <T> DrawingModelEvent propertyValueChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+    @Nullable
+    public static <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
 
-    public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
+    @Nullable
+    public static <T> DrawingModelEvent transformChanged(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    public static <T> DrawingModelEvent layoutChanged(DrawingModel source, Figure figure) {
+    @Nullable
+    public static <T> DrawingModelEvent layoutChanged(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    public static <T> DrawingModelEvent styleInvalidated(DrawingModel source, Figure figure) {
+    @Nullable
+    public static <T> DrawingModelEvent styleInvalidated(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null);
     }
 
@@ -93,7 +97,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the key
      */
-    @Nonnull
+    @NonNull
     public <T> Key<T> getKey() {
         @SuppressWarnings("unchecked")
         Key<T> tmp = (Key<T>) key;
@@ -171,7 +175,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return eventType;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "DrawingModelEvent{"

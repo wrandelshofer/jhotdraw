@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableSet;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped set
      */
+    @NonNull
     default Set<E> asSet() {
         return new SetWrapper<>(this);
     }
@@ -31,6 +33,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped set
      */
+    @NonNull
     default ObservableSet<E> asObservableSet() {
         return new ObservableSetWrapper<>(this);
     }

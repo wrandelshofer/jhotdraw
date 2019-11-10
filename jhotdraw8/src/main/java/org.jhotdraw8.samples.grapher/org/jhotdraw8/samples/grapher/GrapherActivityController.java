@@ -18,7 +18,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
@@ -154,7 +154,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     /**
      * Counter for incrementing layer names.
      */
-    @Nonnull
+    @NonNull
     private Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
@@ -172,8 +172,8 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
-    @Nonnull
-    private DockItem addInspector(Inspector<DrawingView> inspector, String id, Priority grow) {
+    @NonNull
+    private DockItem addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
         DockItem dockItem = new DockItem();
         dockItem.setText(r.getString(id + ".toolbar"));
@@ -182,7 +182,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         return dockItem;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CompletionStage<Void> clear() {
         Drawing d = new DrawingFigure();
@@ -202,7 +202,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
      * @param supplier the supplier
      * @return the created figure
      */
-    public <T extends Figure> T createFigure(@Nonnull Supplier<T> supplier) {
+    public <T extends Figure> T createFigure(@NonNull Supplier<T> supplier) {
         T created = supplier.get();
         String prefix = created.getTypeSelector().toLowerCase();
         Integer counter = counters.get(prefix);
@@ -237,7 +237,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     }
 
     @Override
-    protected void initActionMap(@Nonnull HierarchicalMap<String, Action> map) {
+    protected void initActionMap(@NonNull HierarchicalMap<String, Action> map) {
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
         map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(getApplication()));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
@@ -265,7 +265,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         map.put(DistributeVerticallyAction.ID, new DistributeVerticallyAction(getApplication(), editor));
     }
 
-    @Nonnull
+    @NonNull
     private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
@@ -425,8 +425,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         });
     }
 
+    @NonNull
     @Override
-    public CompletionStage<Void> print(@Nonnull PrinterJob job, @Nonnull WorkState workState) {
+    public CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -440,7 +441,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -467,7 +468,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
     }
 
     @Override
-    public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(SvgExporter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
@@ -495,7 +496,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         });
     }
 
-    private void applyUserAgentStylesheet(final Drawing d) {
+    private void applyUserAgentStylesheet(@NonNull final Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
                     ImmutableLists.of(
@@ -507,7 +508,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             }
             d.layoutAll(ctx);
 
-        } catch (final URISyntaxException e) {
+        } catch (@NonNull final URISyntaxException e) {
             throw new RuntimeException("can't load my own resources", e);
         }
     }

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -40,7 +40,7 @@ import java.util.function.Function;
  */
 public class XmlConnectorConverter implements Converter<Connector> {
 
-    @Nonnull
+    @NonNull
     private CssLocatorConverter locatorConverter = new CssLocatorConverter();
 
     private final static HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
@@ -56,7 +56,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable Connector value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Connector value) throws IOException {
         if (value == null) {
             out.append("none");
         }
@@ -100,7 +100,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
      * @throws IOException    if IO fails
      */
     @Nullable
-    public Connector parseConnector(@Nonnull CssTokenizer tt) throws ParseException, IOException {
+    public Connector parseConnector(@NonNull CssTokenizer tt) throws ParseException, IOException {
         Locator locator = null;
         Function<Locator, Connector> supplier;
 

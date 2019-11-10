@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssToken;
@@ -34,19 +34,19 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
-    public ImmutableList<BezierNode> parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
         }
         BezierNodePathBuilder builder = new BezierNodePathBuilder();
-        Shapes.buildFromSvgString(builder, tt.currentStringNonnull());
+        Shapes.buildFromSvgString(builder, tt.currentStringNonNull());
         return builder.build();
     }
 
     @Override
-    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {

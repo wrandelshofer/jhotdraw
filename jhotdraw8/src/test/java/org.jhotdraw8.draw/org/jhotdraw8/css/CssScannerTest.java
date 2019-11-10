@@ -5,6 +5,7 @@
 package org.jhotdraw8.css;
 
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -29,7 +30,7 @@ public class CssScannerTest {
     /**
      * Test of nextChar method, of class CssScanner.
      */
-    public void doTestScanner(String inputData, String expectedValue) throws Exception {
+    public void doTestScanner(@NonNull String inputData, String expectedValue) throws Exception {
         CssScanner s = new CssScanner(new StringReader(inputData));
         //
         StringBuilder buf = new StringBuilder();
@@ -51,6 +52,7 @@ public class CssScannerTest {
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testScanner() {
         return Arrays.asList(

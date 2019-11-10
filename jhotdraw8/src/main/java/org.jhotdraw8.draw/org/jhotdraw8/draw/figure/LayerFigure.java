@@ -11,7 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
@@ -31,19 +31,19 @@ public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         for (Figure child : getChildren()) {
             child.reshapeInLocal(transform);
         }
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         // empty
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group n = (Group) node;
         applyHideableFigureProperties(ctx, n);
         RenderingIntent renderingIntent = ctx.get(RenderContext.RENDERING_INTENT);
@@ -55,7 +55,7 @@ public class LayerFigure extends AbstractCompositeFigure
 
         List<Node> childNodes = new ArrayList<>(getChildren().size());
 
-        int maxNodesPerLayer = ctx.getNonnull(RenderContext.MAX_NODES_PER_LAYER);
+        int maxNodesPerLayer = ctx.getNonNull(RenderContext.MAX_NODES_PER_LAYER);
         Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
         if (renderingIntent == RenderingIntent.EDITOR
                 && clipBounds != null /* && getChildren().size() > maxNodesPerLayer*/) {
@@ -92,7 +92,7 @@ public class LayerFigure extends AbstractCompositeFigure
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();
@@ -141,7 +141,7 @@ public class LayerFigure extends AbstractCompositeFigure
      * Layers never create handles.
      */
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         // empty
     }
 

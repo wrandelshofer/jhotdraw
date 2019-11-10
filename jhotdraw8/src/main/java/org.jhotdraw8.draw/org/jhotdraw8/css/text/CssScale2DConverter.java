@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.text;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -27,7 +27,7 @@ public class CssScale2DConverter implements Converter<Point2D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @Nonnull Point2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull Point2D value) throws IOException {
         if (value.getX() == value.getY()) {
             formatter.toStr(out, idFactory, 1, value.getX());
         } else {
@@ -35,7 +35,7 @@ public class CssScale2DConverter implements Converter<Point2D> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Point2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -49,13 +49,13 @@ public class CssScale2DConverter implements Converter<Point2D> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Point2D getDefaultValue() {
         return new Point2D(1, 1);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";

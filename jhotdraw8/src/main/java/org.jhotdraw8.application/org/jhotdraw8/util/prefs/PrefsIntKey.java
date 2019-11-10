@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.util.prefs;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.prefs.Preferences;
 
@@ -27,11 +27,11 @@ public class PrefsIntKey {
         this.clampMax = clampMax;
     }
 
-    public int get(@Nonnull Preferences prefs) {
+    public int get(@NonNull Preferences prefs) {
         return clamp(prefs.getInt(key, defaultValue), clampMin, clampMax);
     }
 
-    public void put(@Nonnull Preferences prefs, int newValue) {
+    public void put(@NonNull Preferences prefs, int newValue) {
         prefs.putInt(key, newValue);
     }
 

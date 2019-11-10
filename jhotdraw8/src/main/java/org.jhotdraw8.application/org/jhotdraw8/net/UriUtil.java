@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.net;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URI;
@@ -33,7 +33,7 @@ public class UriUtil {
      * @param uri the uri
      * @return the name
      */
-    public static String getName(URI uri) {
+    public static String getName(@NonNull URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
             Path file = Paths.get(clearQuery(uri));
             return file.getFileName() + " [" + file.getParent() + "]";
@@ -51,7 +51,7 @@ public class UriUtil {
      * @param value the value
      * @return the updated query
      */
-    public static URI addQuery(@Nonnull URI uri, @Nullable String key, @Nullable String value) {
+    public static URI addQuery(@NonNull URI uri, @Nullable String key, @Nullable String value) {
         if (key == null || value == null) {
             return uri;
         }
@@ -73,7 +73,7 @@ public class UriUtil {
      * @param query the query
      * @return the updated query
      */
-    public static URI addQuery(@Nonnull URI uri, @Nullable String query) {
+    public static URI addQuery(@NonNull URI uri, @Nullable String query) {
         if (query == null) {
             return uri;
         }
@@ -120,8 +120,8 @@ public class UriUtil {
      * @param uri an URI
      * @return a map
      */
-    @Nonnull
-    public static Map<String, String> parseQuery(URI uri) {
+    @NonNull
+    public static Map<String, String> parseQuery(@NonNull URI uri) {
         String query = uri.getQuery();
         Map<String, String> map = new LinkedHashMap<>();
         if (query != null) {

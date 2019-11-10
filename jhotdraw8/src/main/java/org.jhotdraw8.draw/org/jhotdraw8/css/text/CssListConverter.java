@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -38,9 +38,13 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     private final Comparator<T> comparator;
 
     private final CssConverter<T> elementConverter;
+    @NonNull
     private final ImmutableList<CssToken> delimiter;
+    @NonNull
     private final ImmutableList<CssToken> prefix;
+    @NonNull
     private final ImmutableList<CssToken> suffix;
+    @NonNull
     private final Set<Integer> delimiterChars;
 
     public CssListConverter(CssConverter<T> elementConverter) {
@@ -69,7 +73,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     public CssListConverter(CssConverter<T> elementConverter,
-                            Iterable<CssToken> delimiter,
+                            @NonNull Iterable<CssToken> delimiter,
                             Iterable<CssToken> prefix,
                             Iterable<CssToken> suffix
     ) {
@@ -77,7 +81,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     public CssListConverter(CssConverter<T> elementConverter,
-                            Iterable<CssToken> delimiter,
+                            @NonNull Iterable<CssToken> delimiter,
                             Iterable<CssToken> prefix,
                             Iterable<CssToken> suffix,
                             @Nullable Comparator<T> comparator
@@ -97,7 +101,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     @Override
-    public ImmutableList<T> parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return ImmutableLists.emptyList();
         } else {
@@ -139,7 +143,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void produceTokens(TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {

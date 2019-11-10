@@ -17,7 +17,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.UnitConverter;
@@ -96,6 +96,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
 */
     }
 
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         Group g = new Group();
@@ -115,6 +116,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
 
+    @Nullable
     @Override
     public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
         if (node == null) {
@@ -129,7 +131,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group g = (Group) node;
         Path p = (Path) g.getChildren().get(0);
         Text diagramKindText = (Text) g.getChildren().get(1);
@@ -156,8 +158,8 @@ public class MLDiagramFigure extends AbstractLeafFigure
         }
         applyTransformableFigureProperties(ctx, node);
 
-        UnitConverter converter = ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        Insets padding = getStyledNonnull(PADDING).getConvertedValue(converter);
+        UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        Insets padding = getStyledNonNull(PADDING).getConvertedValue(converter);
         double size = diagramKindText.getFont().getSize();
         Bounds bounds = getBoundsInLocal();
 
@@ -188,7 +190,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
         addFramePath(p.getElements());
     }
 
-    private void addFramePath(List<PathElement> pathElements) {
+    private void addFramePath(@NonNull List<PathElement> pathElements) {
         Bounds b = getBoundsInLocal();
         pathElements.add(new MoveTo(b.getMinX(), b.getMinY()));
         pathElements.add(new LineTo(b.getMaxX(), b.getMinY()));
@@ -197,6 +199,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
         pathElements.add(new ClosePath());
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -204,7 +207,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
 
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
+    public void layout(@NonNull RenderContext ctx) {
         if (path == null) {
             path = new Path();
         }
@@ -214,10 +217,11 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
+    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
         return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(@Nullable AffineTransform tx) {
         if (path == null) {

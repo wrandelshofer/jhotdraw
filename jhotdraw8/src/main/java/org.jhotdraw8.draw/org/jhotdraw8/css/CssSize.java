@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class CssSize {
     @Nullable
     public final static CssSize ZERO = new CssSize(0);
     public static final CssSize ONE = new CssSize(1);
-    @Nonnull
+    @NonNull
     private final String units;
     private final double value;
 
@@ -35,11 +35,13 @@ public class CssSize {
         this.units = units == null ? UnitConverter.DEFAULT : units;
     }
 
-    public static CssSize max(CssSize a, CssSize b) {
+    @NonNull
+    public static CssSize max(@NonNull CssSize a, @NonNull CssSize b) {
         return (a.getConvertedValue() >= b.getConvertedValue()) ? a : b;
     }
 
-    public static CssSize min(CssSize a, CssSize b) {
+    @NonNull
+    public static CssSize min(@NonNull CssSize a, @NonNull CssSize b) {
         return (a.getConvertedValue() <= b.getConvertedValue()) ? a : b;
     }
 
@@ -69,11 +71,11 @@ public class CssSize {
         return DefaultUnitConverter.getInstance().convert(this, UnitConverter.DEFAULT);
     }
 
-    public double getConvertedValue(UnitConverter converter) {
+    public double getConvertedValue(@NonNull UnitConverter converter) {
         return converter.convert(this, UnitConverter.DEFAULT);
     }
 
-    @Nonnull
+    @NonNull
     public String getUnits() {
         return units;
     }
@@ -90,28 +92,33 @@ public class CssSize {
         return hash;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "CssSize{" + value + "\"" + units + "\"" + '}';
     }
 
-    public CssSize subtract(CssSize that) {
+    @NonNull
+    public CssSize subtract(@NonNull CssSize that) {
         return new CssSize(this.value - DefaultUnitConverter.getInstance().convert(that, this.units), this.units);
     }
 
-    public CssSize add(CssSize that) {
+    @NonNull
+    public CssSize add(@NonNull CssSize that) {
         return new CssSize(this.value + DefaultUnitConverter.getInstance().convert(that, this.units), this.units);
     }
 
+    @NonNull
     public CssSize abs() {
         return value >= 0 ? this : new CssSize(Math.abs(value), units);
     }
 
+    @NonNull
     public CssSize multiply(double factor) {
         return new CssSize(value * factor, units);
     }
 
+    @NonNull
     public CssSize divide(double divisor) {
         return new CssSize(value / divisor, units);
     }

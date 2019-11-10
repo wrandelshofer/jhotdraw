@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,7 +28,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssColor> cssMetaData;
     private final Converter<CssColor> converter = new CssColorConverter(true);
 
@@ -38,7 +38,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
      *
      * @param name The name of the key.
      */
-    public NullableCssColorStyleableKey(String name) {
+    public NullableCssColorStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -48,7 +48,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullableCssColorStyleableKey(String name, CssColor defaultValue) {
+    public NullableCssColorStyleableKey(@NonNull String name, CssColor defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -61,7 +61,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
      * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public NullableCssColorStyleableKey(String key, DirtyMask mask, CssColor defaultValue) {
+    public NullableCssColorStyleableKey(@NonNull String key, DirtyMask mask, CssColor defaultValue) {
         super(key, CssColor.class, defaultValue);
 
         Function<Styleable, StyleableProperty<CssColor>> function = s -> {
@@ -76,13 +76,14 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssColor> getCssMetaData() {
         return cssMetaData;
 
     }
 
+    @NonNull
     @Override
     public Converter<CssColor> getConverter() {
         return converter;

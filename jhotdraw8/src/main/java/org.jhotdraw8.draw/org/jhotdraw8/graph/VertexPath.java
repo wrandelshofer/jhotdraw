@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -22,19 +22,19 @@ import java.util.Objects;
  */
 public class VertexPath<V> {
 
-    @Nonnull
+    @NonNull
     private final ImmutableList<V> vertices;
 
-    public VertexPath(@Nonnull Collection<V> elements) {
+    public VertexPath(@NonNull Collection<V> elements) {
         this.vertices = ImmutableLists.ofCollection(elements);
     }
 
-    public VertexPath(@Nonnull ReadOnlyCollection<V> elements) {
+    public VertexPath(@NonNull ReadOnlyCollection<V> elements) {
         this.vertices = ImmutableLists.ofCollection(elements);
     }
 
     @SafeVarargs
-    public VertexPath(@Nonnull V... elements) {
+    public VertexPath(@NonNull V... elements) {
         this.vertices = ImmutableLists.of(elements);
     }
 
@@ -60,7 +60,7 @@ public class VertexPath<V> {
         return vertices.get(vertices.size() - 2);
     }
 
-    @Nonnull
+    @NonNull
     public ImmutableList<V> getVertices() {
         return vertices;
     }
@@ -96,7 +96,7 @@ public class VertexPath<V> {
         return vertices.size();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "VertexPath{" + vertices + '}';
@@ -109,13 +109,15 @@ public class VertexPath<V> {
      * @param vertices the vertices
      * @return the vertex path
      */
+    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <VV> VertexPath<VV> of(VV... vertices) {
         return new VertexPath<>(vertices);
     }
 
-    public VertexPath<V> joinedPath(VertexPath<V> nextPath) {
+    @NonNull
+    public VertexPath<V> joinedPath(@NonNull VertexPath<V> nextPath) {
         if (isEmpty()) {
             return nextPath;
         }

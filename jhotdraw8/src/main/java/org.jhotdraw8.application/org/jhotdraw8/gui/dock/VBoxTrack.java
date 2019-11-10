@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * VBoxTrack.
@@ -21,7 +21,7 @@ public class VBoxTrack extends VBox implements Track {
     public VBoxTrack() {
         getItems().addListener(new ListChangeListener<Node>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends Node> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends Node> c) {
                 while (c.next()) {
                     for (Node remitem : c.getRemoved()) {
                         if (remitem instanceof Dock) {
@@ -48,7 +48,7 @@ public class VBoxTrack extends VBox implements Track {
         return getChildren();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Orientation getOrientation() {
         return Orientation.VERTICAL;

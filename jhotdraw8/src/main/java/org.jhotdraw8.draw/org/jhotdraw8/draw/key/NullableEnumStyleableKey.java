@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -34,7 +35,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends AbstractStyleab
      * @param clazz The enum class.
      * @param mask  The mask.
      */
-    public NullableEnumStyleableKey(String name, Class<T> clazz, DirtyMask mask) {
+    public NullableEnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, DirtyMask mask) {
         this(name, clazz, mask, true, null);
     }
 
@@ -48,7 +49,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends AbstractStyleab
      * @param nullable     Whether the value is nullable
      * @param defaultValue The default value.
      */
-    public NullableEnumStyleableKey(String name, Class<T> clazz, DirtyMask mask, boolean nullable, @Nullable T defaultValue) {
+    public NullableEnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, DirtyMask mask, boolean nullable, @Nullable T defaultValue) {
         super(name, clazz, defaultValue);
 
         this.nullable = nullable;
@@ -72,8 +73,10 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends AbstractStyleab
 
     }
 
+    @NonNull
     private final Converter<T> converter;
 
+    @NonNull
     @Override
     public Converter<T> getConverter() {
         return converter;

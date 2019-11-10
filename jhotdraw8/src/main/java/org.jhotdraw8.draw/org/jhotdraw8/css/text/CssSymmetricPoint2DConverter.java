@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
@@ -27,7 +27,7 @@ public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,size}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @Nonnull CssPoint2D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull CssPoint2D value) throws IOException {
         CssSize x = value.getX();
         CssSize y = value.getY();
         if (x == y) {
@@ -37,7 +37,7 @@ public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssPoint2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -58,7 +58,7 @@ public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
         return new CssPoint2D(CssSize.ZERO, CssSize.ZERO);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨SymmetricSize2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";

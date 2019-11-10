@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         this.value = value;
     }
 
-    public void addChild(@Nonnull SimpleTreeNode<V> child) {
+    public void addChild(@NonNull SimpleTreeNode<V> child) {
         if (child.parent != null) {
             child.parent.removeChild(child);
         }
@@ -35,14 +35,14 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         child.parent = this;
     }
 
-    public void removeChild(@Nonnull SimpleTreeNode<V> child) {
+    public void removeChild(@NonNull SimpleTreeNode<V> child) {
         if (children != null) {
             children.remove(child);
             child.parent = null;
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<SimpleTreeNode<V>> getChildren() {
         return children == null ? Collections.emptyList() : Collections.unmodifiableList(children);

@@ -13,7 +13,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
@@ -66,7 +66,7 @@ public class BezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.POINT) {
@@ -87,19 +87,19 @@ public class BezierFigure extends AbstractLeafFigure
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
         return new Path();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new PathConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         // XXX should be cached
@@ -107,7 +107,7 @@ public class BezierFigure extends AbstractLeafFigure
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
-        for (BezierNode p : getNonnull(PATH)) {
+        for (BezierNode p : getNonNull(PATH)) {
             minX = Math.min(minX, p.getMinX());
             minY = Math.min(minY, p.getMinY());
             maxX = Math.max(maxX, p.getMaxX());
@@ -116,7 +116,7 @@ public class BezierFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @Nonnull
+    @NonNull
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
@@ -125,29 +125,30 @@ public class BezierFigure extends AbstractLeafFigure
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return new BezierNodePath(getStyledNonnull(PATH), getStyledNonnull(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
+        return new BezierNodePath(getStyledNonNull(PATH), getStyledNonNull(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
-    @Nonnull
+    @NonNull
     public Point2D getPoint(int index, int coord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     public Point2D getPointOnPath(float f, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
     }
 
@@ -157,8 +158,8 @@ public class BezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
-        ArrayList<BezierNode> newP = getNonnull(PATH).toArrayList();
+    public void reshapeInLocal(@NonNull Transform transform) {
+        ArrayList<BezierNode> newP = getNonNull(PATH).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).transform(transform));
         }
@@ -166,14 +167,14 @@ public class BezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(CssPoint2D t) {
+    public void translateInLocal(@NonNull CssPoint2D t) {
         Transform transform = new Translate(t.getX().getConvertedValue(), t.getY().getConvertedValue());
         reshapeInLocal(transform);
     }
 
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Path pathNode = (Path) node;
 
         applyHideableFigureProperties(ctx, node);

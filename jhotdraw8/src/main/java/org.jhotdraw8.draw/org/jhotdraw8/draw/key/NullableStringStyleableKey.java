@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -27,7 +27,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
@@ -36,7 +36,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
      *
      * @param name The name of the key.
      */
-    public NullableStringStyleableKey(String name) {
+    public NullableStringStyleableKey(@NonNull String name) {
         this(null, name, null);
     }
 
@@ -45,11 +45,11 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
      *
      * @param name         The name of the key.
      */
-    public NullableStringStyleableKey(String namespace, String name) {
+    public NullableStringStyleableKey(String namespace, @NonNull String name) {
         this(namespace, name, null);
     }
 
-    public NullableStringStyleableKey(String namespace, String name, String helpText) {
+    public NullableStringStyleableKey(String namespace, @NonNull String name, String helpText) {
         super(namespace, name, String.class, true, null);
         converter = new CssStringConverter(true, '\'', helpText);
         Function<Styleable, StyleableProperty<String>> function = s -> {
@@ -65,17 +65,17 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     private final CssStringConverter converter;
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<String> getConverter() {
         return converter;

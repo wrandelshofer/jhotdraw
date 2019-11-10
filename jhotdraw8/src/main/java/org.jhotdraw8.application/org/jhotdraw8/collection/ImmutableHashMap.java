@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,11 +15,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements ImmutableMap<K, V> {
+    @NonNull
     private final Map<K, V> backingMap;
     final static ImmutableMap<?, ?> EMPTY_MAP = new ImmutableHashMap<>();
 
 
-    public ImmutableHashMap(Map<? extends K, ? extends V> backingMap) {
+    public ImmutableHashMap(@NonNull Map<? extends K, ? extends V> backingMap) {
         if (backingMap.isEmpty()) {
             this.backingMap = Collections.emptyMap();
         } else {
@@ -25,7 +28,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         }
     }
 
-    public ImmutableHashMap(ReadOnlyMap<? extends K, ? extends V> backingMap) {
+    public ImmutableHashMap(@NonNull ReadOnlyMap<? extends K, ? extends V> backingMap) {
         if (backingMap.isEmpty()) {
             this.backingMap = Collections.emptyMap();
         } else {
@@ -72,7 +75,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         this.backingMap = backingMap1;
     }
 
-    public ImmutableHashMap(Collection<? extends Map.Entry<K, V>> entries) {
+    public ImmutableHashMap(@NonNull Collection<? extends Map.Entry<K, V>> entries) {
         HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size());
         for (Map.Entry<K, V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
@@ -80,7 +83,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         this.backingMap = backingMap1;
     }
 
-    public ImmutableHashMap(ReadOnlyCollection<Map.Entry<K, V>> entries) {
+    public ImmutableHashMap(@NonNull ReadOnlyCollection<Map.Entry<K, V>> entries) {
         HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size());
         for (Map.Entry<K, V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
@@ -88,7 +91,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         this.backingMap = backingMap1;
     }
 
-    public <X> ImmutableHashMap(Iterable<X> entries, Function<X, Map.Entry<K, V>> mappingFunction) {
+    public <X> ImmutableHashMap(@NonNull Iterable<X> entries, @NonNull Function<X, Map.Entry<K, V>> mappingFunction) {
         HashMap<K, V> backingMap1 = new HashMap<>();
         for (X x : entries) {
             Map.Entry<K, V> entry = mappingFunction.apply(x);
@@ -113,11 +116,13 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         return backingMap.get(key);
     }
 
+    @NonNull
     @Override
     public Iterator<Map.Entry<K, V>> entries() {
         return backingMap.entrySet().iterator();
     }
 
+    @NonNull
     @Override
     public Iterator<K> keys() {
         return backingMap.keySet().iterator();

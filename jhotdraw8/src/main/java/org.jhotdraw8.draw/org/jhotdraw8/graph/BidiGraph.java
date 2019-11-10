@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.SpliteratorIterable;
 
 import java.util.AbstractCollection;
@@ -33,8 +33,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      *                as visited.
      * @return breadth first search
      */
-    @Nonnull
-    default Iterable<V> breadthFirstSearchBackward(V start, Predicate<V> visited) {
+    @NonNull
+    default Iterable<V> breadthFirstSearchBackward(@NonNull V start, @NonNull Predicate<V> visited) {
         return new SpliteratorIterable<>(() -> new BreadthFirstSpliterator<>(this::getPrevVertices, start, visited));
     }
 
@@ -47,8 +47,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param start the start vertex
      * @return breadth first search
      */
-    @Nonnull
-    default Iterable<V> breadthFirstSearchBackward(V start) {
+    @NonNull
+    default Iterable<V> breadthFirstSearchBackward(@NonNull V start) {
         return new SpliteratorIterable<>(() -> new BreadthFirstSpliterator<>(this::getPrevVertices, start));
     }
 
@@ -64,7 +64,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      *                as visited.
      * @return breadth first search
      */
-    @Nonnull
+    @NonNull
     default Iterable<V> depthFirstSearchBackward(V start, Predicate<V> visited) {
         return new SpliteratorIterable<>(() -> new DepthFirstSpliterator<>(this::getPrevVertices, start, visited));
     }
@@ -78,7 +78,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param start the start vertex
      * @return breadth first search
      */
-    @Nonnull
+    @NonNull
     default Iterable<V> depthFirstSearchBackward(V start) {
         return new SpliteratorIterable<>(() -> new DepthFirstSpliterator<>(this::getPrevVertices, start));
     }
@@ -89,15 +89,16 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param vertex a vertex
      * @return a collection view on the direct predecessor arrows of vertex
      */
-    @Nonnull
-    default Collection<A> getPrevArrows(V vertex) {
+    @NonNull
+    default Collection<A> getPrevArrows(@NonNull V vertex) {
         class PrevArrowIterator implements Iterator<A> {
 
             private int index;
+            @NonNull
             private final V vertex;
             private final int prevCount;
 
-            public PrevArrowIterator(V vertex) {
+            public PrevArrowIterator(@NonNull V vertex) {
                 this.vertex = vertex;
                 this.prevCount = getPrevCount(vertex);
             }
@@ -107,6 +108,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
                 return index < prevCount;
             }
 
+            @NonNull
             @Override
             public A next() {
                 return getPrevArrow(vertex, index++);
@@ -114,7 +116,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
         }
 
         return new AbstractCollection<A>() {
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<A> iterator() {
                 return new PrevArrowIterator(vertex);
@@ -133,15 +135,16 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param vertex a vertex
      * @return a collection view on the direct predecessor vertices of vertex
      */
-    @Nonnull
-    default Collection<V> getPrevVertices(V vertex) {
+    @NonNull
+    default Collection<V> getPrevVertices(@NonNull V vertex) {
         class PrevVertexIterator implements Iterator<V> {
 
             private int index;
+            @NonNull
             private final V vertex;
             private final int prevCount;
 
-            public PrevVertexIterator(V vertex) {
+            public PrevVertexIterator(@NonNull V vertex) {
                 this.vertex = vertex;
                 this.prevCount = getPrevCount(vertex);
             }
@@ -151,6 +154,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
                 return index < prevCount;
             }
 
+            @NonNull
             @Override
             public V next() {
                 return getPrev(vertex, index++);
@@ -158,7 +162,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
 
         }
         return new AbstractCollection<V>() {
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<V> iterator() {
                 return new PrevVertexIterator(vertex);

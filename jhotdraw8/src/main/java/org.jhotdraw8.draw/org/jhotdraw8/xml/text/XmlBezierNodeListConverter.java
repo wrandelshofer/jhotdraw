@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -64,7 +64,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
     }
 
     @Override
-    public <TT extends ImmutableList<BezierNode>> void toString(@Nonnull Appendable out, IdFactory idFactory,
+    public <TT extends ImmutableList<BezierNode>> void toString(@NonNull Appendable out, IdFactory idFactory,
                                                                 @Nullable TT value) throws IOException {
         if (value == null) {
             if (!nullable) {

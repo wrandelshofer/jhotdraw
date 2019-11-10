@@ -74,6 +74,7 @@ public class FontFamilyDialog extends Dialog<String> {
         return model;
     }
 
+    @Nullable
     private String handleButton(@Nullable ButtonType buttonType) {
         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
@@ -87,7 +88,7 @@ public class FontFamilyDialog extends Dialog<String> {
         controller.setFontName(fontName);
     }
 
-    public final Optional<String> showAndWait(String fontFamily) {
+    public final Optional<String> showAndWait(@Nullable String fontFamily) {
         if (fontFamily != null) {
             selectFontName(fontFamily);
         }

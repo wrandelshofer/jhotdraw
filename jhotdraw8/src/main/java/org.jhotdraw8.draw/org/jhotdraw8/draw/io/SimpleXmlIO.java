@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.io;
 import javafx.css.StyleOrigin;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableList;
@@ -86,7 +86,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     /**
      * Holds the current options.
      */
-    @Nonnull
+    @NonNull
     private Map<? super Key<?>, Object> options = Collections.emptyMap();
 
     @Override
@@ -113,7 +113,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     @Nullable
     protected List<String> comments;
     protected FigureFactory figureFactory;
-    @Nonnull
+    @NonNull
     protected HashMap<Figure, Element> figureToElementMap = new HashMap<>();
     protected IdFactory idFactory;
     protected String namespaceQualifier;
@@ -137,7 +137,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         this.doAddNotifyAndUpdateCss = doAddNotifyAndUpdateCss;
     }
 
-    protected Element createElement(@Nonnull Document doc, String unqualifiedName) throws IOException {
+    protected Element createElement(@NonNull Document doc, String unqualifiedName) throws IOException {
         if (namespaceURI == null) {
             return doc.createElement(unqualifiedName);
         }
@@ -149,7 +149,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @Nullable
-    public Figure fromDocument(@Nonnull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
+    public Figure fromDocument(@NonNull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
         setUriResolver(new UriResolver(documentHome, null));
         idFactory.reset();
         if (oldDrawing != null) {
@@ -164,7 +164,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return readDrawingOrClippingFromDocument(doc, oldDrawing, documentHome);
     }
 
-    private String getAttribute(@Nonnull Element elem, String unqualifiedName) {
+    @Nullable
+    private String getAttribute(@NonNull Element elem, String unqualifiedName) {
         if (namespaceURI == null) {
             return elem.getAttribute(unqualifiedName);
         } else if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
@@ -184,7 +185,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return df;
     }
 
-    @Nonnull
+    @NonNull
     public Figure getFigure(String id) throws IOException {
         Figure f = (Figure) idFactory.getObject(id);
         /*        if (f == null) {
@@ -220,9 +221,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return namespaceURI != null;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Figure read(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
+    public Figure read(@NonNull Path file, Drawing drawing, @NonNull WorkState workState) throws IOException {
         try {
             URI documentHome = file.getParent() == null ? Paths.get(System.getProperty("user.home")).toUri() : file.getParent().toUri();
             final Drawing newDrawing;
@@ -248,12 +249,12 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @Nullable
-    public Figure read(@Nonnull Document in, Drawing drawing, URI documentHome) throws IOException {
+    public Figure read(@NonNull Document in, Drawing drawing, URI documentHome) throws IOException {
         return fromDocument(in, drawing, documentHome);
     }
 
     @Nullable
-    protected Figure read(@Nonnull String string, Drawing drawing, URI documentHome) throws IOException {
+    protected Figure read(@NonNull String string, Drawing drawing, URI documentHome) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing, documentHome);
         }
@@ -265,9 +266,9 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         return read(doc, drawing, documentHome);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Set<Figure> read(@Nonnull Clipboard clipboard, @Nonnull DrawingModel model, @Nonnull Drawing drawing, @Nullable Layer layer) throws IOException {
+    public Set<Figure> read(@NonNull Clipboard clipboard, @NonNull DrawingModel model, @NonNull Drawing drawing, @Nullable Layer layer) throws IOException {
         setUriResolver(new UriResolver(null, drawing.get(Drawing.DOCUMENT_HOME)));
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
@@ -311,7 +312,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @throws IOException in case of failure
      */
     @Nullable
-    protected Figure readDrawingOrClipping(@Nonnull Element drawingElement, Drawing oldDrawing) throws IOException {
+    protected Figure readDrawingOrClipping(@NonNull Element drawingElement, Drawing oldDrawing) throws IOException {
 
         figureToElementMap.clear();
         Drawing external = null;
@@ -375,7 +376,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @throws IOException in case of failure
      */
     @Nullable
-    protected Figure readDrawingOrClippingFromDocument(@Nonnull Document doc, Drawing oldDrawing, URI documentHome) throws IOException {
+    protected Figure readDrawingOrClippingFromDocument(@NonNull Document doc, Drawing oldDrawing, URI documentHome) throws IOException {
 
         figureToElementMap.clear();
         Drawing external = null;
@@ -446,7 +447,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @param elem   an element with attributes for the figure
      * @throws java.io.IOException in case of failure
      */
-    protected void readElementAttributes(@Nonnull Figure figure, @Nonnull Element elem) throws IOException {
+    protected void readElementAttributes(@NonNull Figure figure, @NonNull Element elem) throws IOException {
         NamedNodeMap attrs = elem.getAttributes();
         for (int i = 0, n = attrs.getLength(); i < n; i++) {
             Attr attr = (Attr) attrs.item(i);
@@ -478,7 +479,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    private IOException createIOException(Element elem, IOException ex) {
+    private IOException createIOException(@NonNull Element elem, IOException ex) {
         Locator locator = XmlUtil.getLocator(elem);
         if (locator == null) {
             return ex;
@@ -495,7 +496,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * This is a cache which checks if Figure.class is assignable from the value
      * type of a map accessor.
      */
-    @Nonnull
+    @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new HashMap<>();
 
     /**
@@ -505,7 +506,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @param elem   the element
      * @throws java.io.IOException in case of failure
      */
-    protected void readElementNodeList(@Nonnull Figure figure, @Nonnull Element elem) throws IOException {
+    protected void readElementNodeList(@NonNull Figure figure, @NonNull Element elem) throws IOException {
         Set<MapAccessor<?>> keys = figureFactory.figureNodeListKeys(figure);
         for (MapAccessor<?> ky : keys) {
             @SuppressWarnings("unchecked")
@@ -590,7 +591,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
      * @throws java.io.IOException in case of failure
      */
     @Nullable
-    protected Figure readNodesRecursively(@Nonnull Node node) throws IOException {
+    protected Figure readNodesRecursively(@NonNull Node node) throws IOException {
         switch (node.getNodeType()) {
             case Node.ELEMENT_NODE:
                 Figure figure = readNode(node);
@@ -621,7 +622,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    protected void readProcessingInstruction(Document doc, @Nonnull ProcessingInstruction pi, @Nonnull Drawing external) {
+    protected void readProcessingInstruction(Document doc, @NonNull ProcessingInstruction pi, @NonNull Drawing external) {
         if (figureFactory.getStylesheetsKey() != null) {
             if ("xml-stylesheet".equals(pi.getNodeName()) && pi.getData() != null) {
                 Matcher m = hrefPattern.matcher(pi.getData());
@@ -640,7 +641,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    protected void setAttribute(@Nonnull Element elem, String unqualifiedName, String value) throws IOException {
+    protected void setAttribute(@NonNull Element elem, String unqualifiedName, String value) throws IOException {
         if (namespaceURI == null || namespaceQualifier == null) {
             if (!elem.hasAttribute(unqualifiedName)) {
                 elem.setAttribute(unqualifiedName, value);
@@ -652,7 +653,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    public Document toDocument(URI documentHome, @Nonnull Drawing internal, @Nonnull Collection<Figure> selection) throws IOException {
+    public Document toDocument(URI documentHome, @NonNull Drawing internal, @NonNull Collection<Figure> selection) throws IOException {
         setUriResolver(new UriResolver(null, documentHome));
         if (selection.isEmpty() || selection.contains(internal)) {
             return toDocument(documentHome, internal);
@@ -709,13 +710,13 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     @Override
-    public void write(@Nonnull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
+    public void write(@NonNull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
         write(null, sw, drawing, selection);
         out.put(getDataFormat(), sw.toString());
     }
 
-    protected void writeElementAttributes(@Nonnull Element elem, @Nonnull Figure figure) throws IOException {
+    protected void writeElementAttributes(@NonNull Element elem, @NonNull Figure figure) throws IOException {
         String id = idFactory.createId(figure);
         setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
         Set<MapAccessor<?>> todo = new LinkedHashSet<>(figureFactory.figureAttributeKeys(figure));
@@ -739,7 +740,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    private void writeElementAttribute(@Nonnull Element elem, @Nonnull Figure figure, MapAccessor<Object> k) throws IOException {
+    private void writeElementAttribute(@NonNull Element elem, @NonNull Figure figure, MapAccessor<Object> k) throws IOException {
         @SuppressWarnings("unchecked")
         MapAccessor<Object> key = k;
         Object value = figure.get(key);
@@ -758,7 +759,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    private void writeElementNodeList(Document document, @Nonnull Element elem, @Nonnull Figure figure) throws IOException {
+    private void writeElementNodeList(Document document, @NonNull Element elem, @NonNull Figure figure) throws IOException {
         for (MapAccessor<?> k : figureFactory.figureNodeListKeys(figure)) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
@@ -771,7 +772,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         }
     }
 
-    protected void writeNodeRecursively(@Nonnull Document doc, @Nonnull Element parent, @Nonnull Figure figure) throws IOException {
+    protected void writeNodeRecursively(@NonNull Document doc, @NonNull Element parent, @NonNull Figure figure) throws IOException {
         try {
             String elementName = figureFactory.figureToName(figure);
             if (elementName == null) {
@@ -802,7 +803,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     }
 
     // XXX maybe this should not be in SimpleXmlIO?
-    private void writeProcessingInstructions(Document doc, @Nonnull Drawing external) {
+    private void writeProcessingInstructions(@NonNull Document doc, @NonNull Drawing external) {
         Element docElement = doc.getDocumentElement();
         if (figureFactory.getStylesheetsKey() != null && external.get(figureFactory.getStylesheetsKey()) != null) {
             for (Object stylesheet : external.get(figureFactory.getStylesheetsKey())) {

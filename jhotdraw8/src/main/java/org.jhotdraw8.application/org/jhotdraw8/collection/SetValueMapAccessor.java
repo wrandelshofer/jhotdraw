@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public Boolean get(@Nonnull Map<? super Key<?>, Object> a) {
+    public Boolean get(@NonNull Map<? super Key<?>, Object> a) {
         return setAccessor.get(a).contains(value);
     }
 
@@ -61,24 +61,25 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         return name;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Set<MapAccessor<?>> getSubAccessors() {
         return Collections.singleton(setAccessor);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Class<Boolean> getValueType() {
         return Boolean.class;
     }
 
+    @NonNull
     @Override
     public Class<?> getComponentValueType() {
         return Boolean.class;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return Collections.emptyList();
@@ -90,7 +91,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public Boolean put(@Nonnull Map<? super Key<?>, Object> a, @Nullable Boolean value) {
+    public Boolean put(@NonNull Map<? super Key<?>, Object> a, @Nullable Boolean value) {
         ImmutableSet<E> set = setAccessor.get(a);
         assert set != null;
         boolean oldValue = set.contains(this.value);
@@ -104,7 +105,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public Boolean remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public Boolean remove(@NonNull Map<? super Key<?>, Object> a) {
         return put(a, false);
     }
 

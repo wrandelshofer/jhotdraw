@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -57,7 +57,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
@@ -73,7 +73,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         t = Transforms.concat(Transform.translate(0.5, 0.5), t);

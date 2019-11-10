@@ -9,8 +9,8 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonnullKey;
-import org.jhotdraw8.collection.NonnullObjectKey;
+import org.jhotdraw8.collection.NonNullKey;
+import org.jhotdraw8.collection.NonNullObjectKey;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
@@ -36,12 +36,12 @@ public interface RenderContext extends PropertyBean {
     // ---
     // keys
     // ---
-    NonnullKey<RenderingIntent> RENDERING_INTENT = new NonnullObjectKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
+    NonNullKey<RenderingIntent> RENDERING_INTENT = new NonNullObjectKey<>("renderingIntent", RenderingIntent.class, RenderingIntent.EDITOR);
 
     /**
      * The dots per inch of the rendering device.
      */
-    NonnullKey<Double> DPI = new NonnullObjectKey<>("dpi", Double.class, 96.0);
+    NonNullKey<Double> DPI = new NonNullObjectKey<>("dpi", Double.class, 96.0);
     /**
      * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
      */
@@ -50,7 +50,7 @@ public interface RenderContext extends PropertyBean {
     /**
      * Number of nodes that can be rendered per layer in the drawing editor..
      */
-    NonnullObjectKey<Integer> MAX_NODES_PER_LAYER = new NonnullObjectKey<>("maxNodesPerLayer", Integer.class, Integer.MAX_VALUE);
+    NonNullObjectKey<Integer> MAX_NODES_PER_LAYER = new NonNullObjectKey<>("maxNodesPerLayer", Integer.class, Integer.MAX_VALUE);
 
     @Nullable
     Key<Page> RENDER_PAGE = new ObjectKey<>("renderPage", Page.class, null);
@@ -58,7 +58,7 @@ public interface RenderContext extends PropertyBean {
     Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);
     Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new ObjectKey<>("renderPageInternalNumber", Integer.class, 0);
     Key<Instant> RENDER_TIMESTAMP = new ObjectKey<>("renderTimestamp", Instant.class, Instant.now());
-    NonnullObjectKey<UnitConverter> UNIT_CONVERTER_KEY = new NonnullObjectKey<>("unitConverter", UnitConverter.class, new DefaultUnitConverter());
+    NonNullObjectKey<UnitConverter> UNIT_CONVERTER_KEY = new NonNullObjectKey<>("unitConverter", UnitConverter.class, new DefaultUnitConverter());
     // ---
     // behavior
     // ---
@@ -70,6 +70,6 @@ public interface RenderContext extends PropertyBean {
      * @param f The figure
      * @return The JavaFX node associated to the figure
      */
-    Node getNode(Figure f);
+    @Nullable Node getNode(Figure f);
 
 }

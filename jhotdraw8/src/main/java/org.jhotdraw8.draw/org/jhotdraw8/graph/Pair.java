@@ -5,6 +5,8 @@
 package org.jhotdraw8.graph;
 
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * Pair.
  *
@@ -13,7 +15,7 @@ package org.jhotdraw8.graph;
  */
 public interface Pair<V> {
 
-    V getStart();
+    @Nullable V getStart();
 
-    V getEnd();
+    @Nullable V getEnd();
 }

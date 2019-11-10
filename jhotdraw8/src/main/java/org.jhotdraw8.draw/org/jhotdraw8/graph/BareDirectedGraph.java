@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 
@@ -35,8 +35,8 @@ public interface BareDirectedGraph<V, A> {
      * @return the next vertex
      * @see #getNextCount
      */
-    @Nonnull
-    V getNext(@Nonnull V vertex, int index);
+    @NonNull
+    V getNext(@NonNull V vertex, int index);
 
     /**
      * Returns the arrow data associated with the specified vertex and outgoing arrow
@@ -47,8 +47,8 @@ public interface BareDirectedGraph<V, A> {
      * @return the arrow
      * @see #getNextCount
      */
-    @Nonnull
-    A getNextArrow(@Nonnull V vertex, int index);
+    @NonNull
+    A getNextArrow(@NonNull V vertex, int index);
 
     /**
      * Returns the number of next vertices at the specified vertex.
@@ -59,14 +59,14 @@ public interface BareDirectedGraph<V, A> {
      * @param vertex a vertex
      * @return the number of next vertices
      */
-    int getNextCount(@Nonnull V vertex);
+    int getNextCount(@NonNull V vertex);
 
     /**
      * Returns all vertices.
      *
      * @return a collection view on all vertices
      */
-    @Nonnull
+    @NonNull
     Collection<V> getVertices();
 
     /**
@@ -74,6 +74,6 @@ public interface BareDirectedGraph<V, A> {
      *
      * @return a collection view on all arrow data objects
      */
-    @Nonnull
+    @NonNull
     Collection<A> getArrows();
 }

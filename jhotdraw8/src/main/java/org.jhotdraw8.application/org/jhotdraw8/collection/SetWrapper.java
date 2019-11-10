@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -23,6 +25,7 @@ public class SetWrapper<E> extends AbstractSet<E> {
         this.backingSet = backingSet;
     }
 
+    @NonNull
     @Override
     public Iterator<E> iterator() {
         return backingSet.iterator();

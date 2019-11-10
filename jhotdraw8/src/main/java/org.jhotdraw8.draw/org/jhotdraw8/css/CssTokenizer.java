@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
@@ -110,8 +110,8 @@ public interface CssTokenizer {
     @Nullable
     Number currentNumber();
 
-    @Nonnull
-    default Number currentNumberNonnull() {
+    @NonNull
+    default Number currentNumberNonNull() {
         Number number = currentNumber();
         if (number == null) {
             throw new AssertionError("currentNumber is null");
@@ -127,8 +127,8 @@ public interface CssTokenizer {
     @Nullable
     String currentString();
 
-    @Nonnull
-    default String currentStringNonnull() {
+    @NonNull
+    default String currentStringNonNull() {
         String str = currentString();
         if (str == null) {
             throw new AssertionError("currentString is null");
@@ -187,7 +187,7 @@ public interface CssTokenizer {
      * @throws IOException on io error
      */
     default boolean nextIsIdentNone() throws IOException {
-        return next() == CssTokenType.TT_IDENT && currentStringNonnull().equals(CssTokenType.IDENT_NONE);
+        return next() == CssTokenType.TT_IDENT && currentStringNonNull().equals(CssTokenType.IDENT_NONE);
     }
 
     /**
@@ -218,6 +218,7 @@ public interface CssTokenizer {
      * @return a new list
      * @throws IOException on io exception
      */
+    @NonNull
     default List<CssToken> toTokenList() throws IOException {
         List<CssToken> list = new ArrayList<>();
         while (nextNoSkip() != CssTokenType.TT_EOF) {

@@ -5,7 +5,7 @@
 package org.jhotdraw8.xml.text;
 
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -32,7 +32,7 @@ import java.text.ParseException;
  */
 public class XmlSvgPathConverter implements Converter<SVGPath> {
 
-    @Nonnull
+    @NonNull
     @Override
     public SVGPath fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
@@ -46,12 +46,12 @@ public class XmlSvgPathConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull SVGPath value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull SVGPath value) throws IOException {
         final String content = value.getContent();
         out.append(content == null ? "none" : content);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public SVGPath getDefaultValue() {
         SVGPath p = new SVGPath();

@@ -5,7 +5,7 @@
 package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -33,7 +33,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
      * @param app  the application
      * @param view the view
      */
-    public BrowseFileDirectoryAction(Application app, DocumentBasedActivity view) {
+    public BrowseFileDirectoryAction(@NonNull Application app, DocumentBasedActivity view) {
         super(app, view, DocumentBasedActivity.class);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
@@ -43,12 +43,12 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
      *
      * @param app the application
      */
-    public BrowseFileDirectoryAction(Application app) {
+    public BrowseFileDirectoryAction(@NonNull Application app) {
         this(app, null);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull DocumentBasedActivity activity) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
@@ -67,7 +67,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
                 try {
                     try {
                         Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
-                    } catch (IllegalAccessException | InvocationTargetException e) {
+                    } catch (@NonNull IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 } catch (NoSuchMethodException e) {

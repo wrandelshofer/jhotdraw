@@ -4,7 +4,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      *
      * @param graph a graph
      */
-    public AnyPathBuilder(@Nonnull DirectedGraph<V, A> graph) {
+    public AnyPathBuilder(@NonNull DirectedGraph<V, A> graph) {
         this(graph::getNextVertices);
     }
 
@@ -42,7 +43,7 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      *
      * @param nextNodesFunction Accessor function to next nodes in graph.
      */
-    public AnyPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
+    public AnyPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
         super(nextNodesFunction);
     }
 
@@ -54,8 +55,9 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      * @param maxLength the maximal length of a path
      * @return the enumerated paths
      */
-    public List<VertexPath<V>> findAllVertexPaths(@Nonnull V start,
-                                                  @Nonnull Predicate<V> goal,
+    @NonNull
+    public List<VertexPath<V>> findAllVertexPaths(@NonNull V start,
+                                                  @NonNull Predicate<V> goal,
                                                   int maxLength) {
         List<MyBackLink<V, A>> backlinks = new ArrayList<>();
         searchAll(new MyBackLink<>(start, null, 1), goal,
@@ -85,10 +87,11 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
-    public BackLink<V, A> search(@Nonnull V root,
-                                 @Nonnull Predicate<V> goal,
-                                 Function<V, Iterable<V>> nextNodesFunction,
-                                 @Nonnull Predicate<V> visited,
+    @Nullable
+    public BackLink<V, A> search(@NonNull V root,
+                                 @NonNull Predicate<V> goal,
+                                 @NonNull Function<V, Iterable<V>> nextNodesFunction,
+                                 @NonNull Predicate<V> visited,
                                  int maxLength) {
         Queue<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
         MyBackLink<V, A> rootBackLink = new MyBackLink<>(root, null, maxLength);
@@ -114,9 +117,9 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
         return null;
     }
 
-    private void searchAll(@Nonnull MyBackLink<V, A> start, @Nonnull Predicate<V> goal,
-                           Function<V, Iterable<V>> nextNodesFunction,
-                           @Nonnull List<MyBackLink<V, A>> backlinks, int maxDepth) {
+    private void searchAll(@NonNull MyBackLink<V, A> start, @NonNull Predicate<V> goal,
+                           @NonNull Function<V, Iterable<V>> nextNodesFunction,
+                           @NonNull List<MyBackLink<V, A>> backlinks, int maxDepth) {
         Deque<MyBackLink<V, A>> stack = new ArrayDeque<>();
         stack.push(start);
 

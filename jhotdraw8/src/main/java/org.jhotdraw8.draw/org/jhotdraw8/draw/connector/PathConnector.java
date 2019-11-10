@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
@@ -38,7 +38,7 @@ public class PathConnector extends LocatorConnector {
 
     @Nullable
     @Override
-    public Intersection.IntersectionPoint intersect(Figure connection, Figure target, @Nonnull Point2D start, @Nonnull Point2D end) {
+    public Intersection.IntersectionPoint intersect(Figure connection, Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
             return super.intersect(connection, target, start, end);
         }
@@ -50,7 +50,7 @@ public class PathConnector extends LocatorConnector {
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
             double grow;
-            switch (target.getStyledNonnull(STROKE_TYPE)) {
+            switch (target.getStyledNonNull(STROKE_TYPE)) {
                 case CENTERED:
                 default:
                     // FIXME must stroke the path

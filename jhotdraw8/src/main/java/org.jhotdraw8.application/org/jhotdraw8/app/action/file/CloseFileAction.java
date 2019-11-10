@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.app.action.file;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -31,16 +31,16 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app  the application
      * @param view the view
      */
-    public CloseFileAction(Application app, DocumentBasedActivity view) {
+    public CloseFileAction(@NonNull Application app, DocumentBasedActivity view) {
         super(app, view);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
-    public CloseFileAction(Application app) {
+    public CloseFileAction(@NonNull Application app) {
         this(app, null);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected CompletionStage<Void> doIt(@Nullable DocumentBasedActivity view) {
         if (view != null) {

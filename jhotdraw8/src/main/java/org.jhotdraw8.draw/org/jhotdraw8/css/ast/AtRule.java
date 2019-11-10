@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
@@ -18,21 +18,21 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class AtRule extends Rule {
-    @Nonnull
+    @NonNull
     private final String atKeyword;
-    @Nonnull
+    @NonNull
     private final ImmutableList<CssToken> header;
-    @Nonnull
+    @NonNull
     private final ImmutableList<CssToken> body;
 
-    public AtRule(@Nonnull String atKeyword,
-                  @Nonnull List<? extends CssToken> header, @Nonnull List<? extends CssToken> body) {
+    public AtRule(@NonNull String atKeyword,
+                  @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body) {
         this.atKeyword = atKeyword;
         this.header = ImmutableLists.ofCollection(header);
         this.body = ImmutableLists.ofCollection(body);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("AtRule: ");
@@ -55,17 +55,17 @@ public class AtRule extends Rule {
         return buf.toString();
     }
 
-    @Nonnull
+    @NonNull
     public String getAtKeyword() {
         return atKeyword;
     }
 
-    @Nonnull
+    @NonNull
     public ReadOnlyList<CssToken> getHeader() {
         return header;
     }
 
-    @Nonnull
+    @NonNull
     public ReadOnlyList<CssToken> getBody() {
         return body;
     }

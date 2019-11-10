@@ -15,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.gui.CustomSkin;
 
@@ -26,7 +26,7 @@ import org.jhotdraw8.gui.CustomSkin;
  */
 public class SingleItemDock extends Control implements Dock {
 
-    @Nonnull
+    @NonNull
     private BorderPane borderPane = new BorderPane();
     private final ObservableList<DockItem> items = FXCollections.observableArrayList();
 
@@ -48,7 +48,7 @@ public class SingleItemDock extends Control implements Dock {
 
         getItems().addListener(new ListChangeListener<DockItem>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends DockItem> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends DockItem> c) {
                 while (c.next()) {
                     for (DockItem remitem : c.getRemoved()) {
                         borderPane.setCenter(null);
@@ -65,7 +65,7 @@ public class SingleItemDock extends Control implements Dock {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObservableList<DockItem> getItems() {
         return items;
@@ -92,10 +92,10 @@ public class SingleItemDock extends Control implements Dock {
         return borderPane.prefWidth(height);
     }
 
-    @Nonnull
+    @NonNull
     private ObjectProperty<Track> track = new SimpleObjectProperty<>();
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Track> trackProperty() {
         return track;

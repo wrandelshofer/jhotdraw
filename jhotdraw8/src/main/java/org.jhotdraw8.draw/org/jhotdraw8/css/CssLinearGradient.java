@@ -8,7 +8,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssStop;
 
@@ -43,7 +43,7 @@ public class CssLinearGradient implements Paintable {
         this.cstops = stops;
     }
 
-    public CssLinearGradient(LinearGradient linearGradient) {
+    public CssLinearGradient(@NonNull LinearGradient linearGradient) {
         this.linearGradient = linearGradient;
         this.startX = linearGradient.getStartX();
         this.startY = linearGradient.getStartY();
@@ -99,7 +99,7 @@ public class CssLinearGradient implements Paintable {
         return getLinearGradient();
     }
 
-    @Nonnull
+    @NonNull
     public Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
@@ -173,7 +173,7 @@ public class CssLinearGradient implements Paintable {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "CssLinearGradient{" + "startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';

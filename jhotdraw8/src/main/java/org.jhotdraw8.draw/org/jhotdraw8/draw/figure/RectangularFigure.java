@@ -4,7 +4,8 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -17,13 +18,13 @@ import org.jhotdraw8.draw.key.DirtyMask;
  * Defines properties and default methods for figures which have a rectangular shape.
  */
 public interface RectangularFigure extends Figure {
-    CssSizeStyleableKey X = new CssSizeStyleableKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssSizeStyleableKey Y = new CssSizeStyleableKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
-    CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    @Nullable CssSizeStyleableKey X = new CssSizeStyleableKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey Y = new CssSizeStyleableKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
 
-    default void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    default void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         set(X, width.getValue() < 0 ? x.add(width) : x);
         set(Y, height.getValue() < 0 ? y.add(height) : y);
         set(WIDTH, width.abs());
@@ -31,14 +32,14 @@ public interface RectangularFigure extends Figure {
     }
 
     @Override
-    default void translateInLocal(CssPoint2D t) {
-        set(X, getNonnull(X).add(t.getX()));
-        set(Y, getNonnull(Y).add(t.getY()));
+    default void translateInLocal(@NonNull CssPoint2D t) {
+        set(X, getNonNull(X).add(t.getX()));
+        set(Y, getNonNull(Y).add(t.getY()));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     default CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
+        return getNonNull(BOUNDS);
     }
 }

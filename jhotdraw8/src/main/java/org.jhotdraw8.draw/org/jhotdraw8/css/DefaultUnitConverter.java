@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * DefaultUnitConverter.
@@ -15,7 +15,7 @@ public class DefaultUnitConverter implements UnitConverter {
 
     final static DefaultUnitConverter instance = new DefaultUnitConverter(96);
 
-    @Nonnull
+    @NonNull
     public static DefaultUnitConverter getInstance() {
         return instance;
     }

@@ -7,6 +7,7 @@ package org.jhotdraw8.tree;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.ObservableMixin;
 import org.jhotdraw8.event.Listener;
@@ -31,14 +32,14 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @return a list of drawing model listeners
      */
-    CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> getTreeModelListeners();
+    @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> getTreeModelListeners();
 
     /**
      * List of invalidation listeners.
      *
      * @return a list of drawing model listeners
      */
-    CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
+    @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     /**
      * The root of the drawing model.

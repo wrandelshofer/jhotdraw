@@ -6,7 +6,8 @@ package org.jhotdraw8.util;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ class ResourcesHelper {
      * name of the property name modifier, the value of this map is a fallback
      * chain.
      */
-    @Nonnull
+    @NonNull
     static Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
 
 
@@ -50,14 +51,14 @@ class ResourcesHelper {
      * List of decoders. The first decoder which can decode a resource value is
      * will be used to convert the resource value to an object.
      */
-    @Nonnull
+    @NonNull
     static List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Generates fallback keys by processing all property name modifiers in the
      * key.
      */
-    static void generateFallbackKeys(String key, @Nonnull ArrayList<String> fallbackKeys) {
+    static void generateFallbackKeys(@NonNull String key, @NonNull ArrayList<String> fallbackKeys) {
         int p1 = key.indexOf("[$");
         if (p1 == -1) {
             fallbackKeys.add(key);
@@ -77,7 +78,8 @@ class ResourcesHelper {
         }
     }
 
-    static Node getIconProperty(Resources r, String key, String suffix, @Nonnull Class<?> baseClass) {
+    @Nullable
+    static Node getIconProperty(@NonNull Resources r, String key, String suffix, @NonNull Class<?> baseClass) {
         try {
             String rsrcName = r.getString(key + suffix);
             if ("".equals(rsrcName) || rsrcName == null) {

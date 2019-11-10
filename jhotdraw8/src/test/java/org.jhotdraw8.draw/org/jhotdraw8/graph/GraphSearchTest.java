@@ -1,5 +1,6 @@
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class GraphSearchTest {
+    @NonNull
     private DirectedGraph<String, Integer> createDisjointGraph() {
         DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
         builder.addVertex("a");
@@ -32,6 +34,7 @@ class GraphSearchTest {
         return builder;
     }
 
+    @NonNull
     private DirectedGraph<String, Integer> createLoopGraph() {
         DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
         builder.addVertex("a");
@@ -46,6 +49,7 @@ class GraphSearchTest {
         return builder;
     }
 
+    @NonNull
     private DirectedGraph<String, Integer> createNonMSTGraph() {
         // Graph with more edges than the minimal spanning tree:
         // A--1--B     C
@@ -73,6 +77,7 @@ class GraphSearchTest {
         return builder;
     }
 
+    @NonNull
     private DirectedGraph<String, Integer> createMSTGraph() {
         // Graph with only the edges for minimal spanning tree:
         // A--1--B     C
@@ -97,6 +102,7 @@ class GraphSearchTest {
         return builder;
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFindDisjointSets() {
         return Arrays.asList(
@@ -105,7 +111,7 @@ class GraphSearchTest {
         );
     }
 
-    void doFindDisjointSets(DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void doFindDisjointSets(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
         System.out.println("find disjoint sets");
         System.out.println("graph:");
         System.out.println(DumpGraphs.dumpAsAdjacencyList(graph));
@@ -142,6 +148,7 @@ class GraphSearchTest {
     void sortTopologicallyInt() {
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testSearchStronglyConnectedComponents() {
         return Arrays.asList(
@@ -150,7 +157,7 @@ class GraphSearchTest {
         );
     }
 
-    void doSearchStronglyConnectedComponents(DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void doSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
         System.out.println("find strongly connected components");
         System.out.println("graph:");
         System.out.println(DumpGraphs.dumpAsAdjacencyList(graph));

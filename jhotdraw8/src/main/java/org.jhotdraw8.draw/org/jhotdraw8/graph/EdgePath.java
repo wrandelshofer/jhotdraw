@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -22,14 +22,14 @@ import java.util.Objects;
  */
 public class EdgePath<E> {
 
-    @Nonnull
+    @NonNull
     private final ImmutableList<E> edges;
 
-    public EdgePath(@Nonnull ReadOnlyCollection<? extends E> elements) {
+    public EdgePath(@NonNull ReadOnlyCollection<? extends E> elements) {
         this.edges = ImmutableLists.ofCollection(elements);
     }
 
-    public EdgePath(@Nonnull Collection<? extends E> elements) {
+    public EdgePath(@NonNull Collection<? extends E> elements) {
         this.edges = ImmutableLists.ofCollection(elements);
     }
 
@@ -58,13 +58,14 @@ public class EdgePath<E> {
         return hash;
     }
 
+    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <VV> EdgePath<VV> of(VV... vertices) {
         return new EdgePath<>(ImmutableLists.of(vertices));
     }
 
-    @Nonnull
+    @NonNull
     public ImmutableList<E> getEdges() {
         return edges;
     }
@@ -74,7 +75,7 @@ public class EdgePath<E> {
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "EdgePath{" + edges + '}';

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -46,15 +46,15 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
         y2 = y1;
         createdFigure = createFigure();
 
-        double anchorX = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
@@ -71,7 +71,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
@@ -85,7 +85,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void reshapeInLocal(Figure figure, CssPoint2D c1, CssPoint2D c2, DrawingModel dm) {
+    protected void reshapeInLocal(@NonNull Figure figure, CssPoint2D c1, CssPoint2D c2, @NonNull DrawingModel dm) {
         dm.set(figure, p1, c1);
         dm.set(figure, p2, c2);
     }

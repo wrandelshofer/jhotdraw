@@ -12,7 +12,7 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
@@ -58,13 +58,15 @@ public class Geom {
     private Geom() {
     } // never instantiated
 
-    public static BoundingBox add(Bounds a, Bounds b) {
+    @NonNull
+    public static BoundingBox add(@NonNull Bounds a, @NonNull Bounds b) {
         double x = min(a.getMinX(), b.getMinX());
         double y = min(a.getMinY(), b.getMinY());
         return new BoundingBox(x, y, max(a.getMaxX(), b.getMaxX()) - x, max(a.getMaxY(), b.getMaxY()) - y);
     }
 
-    private static Rectangle2D add(Rectangle2D r, double newx, double newy) {
+    @NonNull
+    private static Rectangle2D add(@NonNull Rectangle2D r, double newx, double newy) {
         double x1 = Math.min(r.getMinX(), newx);
         double x2 = Math.max(r.getMaxX(), newx);
         double y1 = Math.min(r.getMinY(), newy);
@@ -107,7 +109,8 @@ public class Geom {
      * @param angle the angle of the ray starting at the center of the rectangle
      * @return a point on the rectangle
      */
-    public static Point2D angleToPoint(@Nonnull Rectangle2D r, double angle) {
+    @NonNull
+    public static Point2D angleToPoint(@NonNull Rectangle2D r, double angle) {
         double si = sin(angle);
         double co = cos(angle);
         double e = 0.0001;
@@ -165,8 +168,8 @@ public class Geom {
      * @param radius the radius
      * @return A new end point for the line.
      */
-    @Nonnull
-    public static Point2D cap(Point2D p1, Point2D p2, double radius) {
+    @NonNull
+    public static Point2D cap(@NonNull Point2D p1, @NonNull Point2D p2, double radius) {
         double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY()
                 - p1.getY());
         Point2D p3 = new Point2D(
@@ -175,7 +178,8 @@ public class Geom {
         return p3;
     }
 
-    public static Point2D center(java.awt.geom.Rectangle2D r) {
+    @NonNull
+    public static Point2D center(@NonNull java.awt.geom.Rectangle2D r) {
         return new Point2D(r.getCenterX(), r.getCenterY());
     }
 
@@ -185,7 +189,8 @@ public class Geom {
      * @param r the bounds
      * @return the center
      */
-    public static Point2D center(Rectangle2D r) {
+    @NonNull
+    public static Point2D center(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
                 + r.getHeight() * 0.5);
     }
@@ -196,7 +201,8 @@ public class Geom {
      * @param r the bounds
      * @return the center
      */
-    public static Point2D center(Bounds r) {
+    @NonNull
+    public static Point2D center(@NonNull Bounds r) {
         return new Point2D(
                 r.getMinX() + r.getWidth() * 0.5,
                 r.getMinY() + r.getHeight() * 0.5
@@ -213,7 +219,8 @@ public class Geom {
      * @param p     the point
      * @return a point on the shape
      */
-    public static Point2D chop(Shape shape, @Nonnull Point2D p) {
+    @NonNull
+    public static Point2D chop(@NonNull Shape shape, @NonNull Point2D p) {
         java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
         java.awt.geom.Point2D.Double ctr = new java.awt.geom.Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 
@@ -341,7 +348,7 @@ public class Geom {
      * @param tolerance the tolerance
      * @return true if inside
      */
-    public static boolean contains(@Nonnull Bounds r, Point2D p, double tolerance) {
+    public static boolean contains(@NonNull Bounds r, @NonNull Point2D p, double tolerance) {
         return contains(r, p.getX(), p.getY(), tolerance);
     }
 
@@ -355,7 +362,7 @@ public class Geom {
      * @param tolerance the tolerance
      * @return true if inside
      */
-    public static boolean contains(Bounds r, double x, double y, double tolerance) {
+    public static boolean contains(@NonNull Bounds r, double x, double y, double tolerance) {
         return r.getMinX() - tolerance <= x && x <= r.getMaxX() + tolerance
                 && r.getMinY() - tolerance <= y && y <= r.getMaxY() + tolerance;
     }
@@ -370,7 +377,7 @@ public class Geom {
      * @param r2 Rectangle2D 2.
      * @return true if r1 contains r2.
      */
-    public static boolean contains(Rectangle2D r1, Rectangle2D r2) {
+    public static boolean contains(@NonNull Rectangle2D r1, @NonNull Rectangle2D r2) {
         return (r2.getMinX() >= r1.getMinX()
                 && r2.getMinY() >= r1.getMinY()
                 && (r2.getMinX() + max(0, r2.getWidth())) <= r1.getMinX()
@@ -389,7 +396,7 @@ public class Geom {
      * @param r2 Rectangle 2.
      * @return true if r1 contains r2.
      */
-    public static boolean containsAWT(java.awt.geom.Rectangle2D r1, java.awt.geom.Rectangle2D r2) {
+    public static boolean containsAWT(@NonNull java.awt.geom.Rectangle2D r1, @NonNull java.awt.geom.Rectangle2D r2) {
         return (r2.getX()) >= r1.getX()
                 && r2.getY() >= r1.getY()
                 && (r2.getX() + max(0, r2.getWidth())) <= r1.getX() + max(0, r1.getWidth())
@@ -505,7 +512,8 @@ public class Geom {
          */
     }
 
-    public static Point2D east(Rectangle2D r) {
+    @NonNull
+    public static Point2D east(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth(), r.getMinY()
                 + r.getHeight() / 2);
     }
@@ -516,7 +524,8 @@ public class Geom {
      * @param shape an AWT shape
      * @return JavaFX bounds
      */
-    public static Bounds getBounds(java.awt.Shape shape) {
+    @NonNull
+    public static Bounds getBounds(@NonNull java.awt.Shape shape) {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
@@ -527,7 +536,8 @@ public class Geom {
      * @param r a rectangle
      * @return JavaFX bounds
      */
-    public static Bounds getBounds(Rectangle2D r) {
+    @NonNull
+    public static Bounds getBounds(@NonNull Rectangle2D r) {
         return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
@@ -553,7 +563,8 @@ public class Geom {
      * @param v the vertical expansion
      * @return the new rectangle
      */
-    public static Rectangle2D grow(Rectangle2D r, double h, double v) {
+    @NonNull
+    public static Rectangle2D grow(@NonNull Rectangle2D r, double h, double v) {
         return new Rectangle2D(
                 r.getMinX() - h,
                 r.getMinY() - v,
@@ -583,7 +594,8 @@ public class Geom {
      * @param v the vertical expansion
      * @return the new rectangle
      */
-    public static Bounds grow(Bounds r, double h, double v) {
+    @NonNull
+    public static Bounds grow(@NonNull Bounds r, double h, double v) {
         return new BoundingBox(
                 r.getMinX() - h,
                 r.getMinY() - v,
@@ -605,7 +617,8 @@ public class Geom {
      * @param p2 point 2
      * @return the cross product
      */
-    public static Point3D hcross(Point2D p1, Point2D p2) {
+    @NonNull
+    public static Point3D hcross(@NonNull Point2D p1, @NonNull Point2D p2) {
         return hcross(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
@@ -625,6 +638,7 @@ public class Geom {
      * @param y2 y2
      * @return the cross product
      */
+    @NonNull
     public static Point3D hcross(double x1, double y1, double x2, double y2) {
         return new Point3D(//
                 y1 * 1 - 1 * y2,//
@@ -645,7 +659,8 @@ public class Geom {
      * @param p the vector
      * @return the normalized vector
      */
-    public static Point3D homogenize(Point3D p) {
+    @NonNull
+    public static Point3D homogenize(@NonNull Point3D p) {
         return new Point3D(//
                 p.getX() / p.getZ(),//
                 p.getY() / p.getZ(),
@@ -665,7 +680,8 @@ public class Geom {
      * @param p the vector
      * @return the normalized vector
      */
-    public static Point2D homogenize2D(Point3D p) {
+    @NonNull
+    public static Point2D homogenize2D(@NonNull Point3D p) {
         double z = p.getZ();
         return new Point2D(//
                 p.getX() / z,//
@@ -689,6 +705,7 @@ public class Geom {
      * @param yd the y-coordinate of point d on line 2
      * @return the intersection point or null
      */
+    @Nullable
     public static Point2D intersect(double xa, // line 1 point 1 x
                                     double ya, // line 1 point 1 y
                                     double xb, // line 1 point 2 x
@@ -755,6 +772,7 @@ public class Geom {
      *              at the intersection point
      * @return the intersection point or null
      */
+    @Nullable
     public static Point2D intersect(
             double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
@@ -835,6 +853,7 @@ public class Geom {
      *              at the intersection point
      * @return the intersection point or null
      */
+    @Nullable
     public static java.awt.geom.Point2D.Double intersectAWT(
             double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
@@ -849,7 +868,8 @@ public class Geom {
         return p == null ? null : new java.awt.geom.Point2D.Double(p.getX(), p.getY());
     }
 
-    public static Bounds intersection(Bounds a, Bounds b) {
+    @NonNull
+    public static Bounds intersection(@NonNull Bounds a, @NonNull Bounds b) {
         double minx = Math.max(a.getMinX(), b.getMinX());
         double miny = Math.max(a.getMinY(), b.getMinY());
         double maxx = Math.min(a.getMaxX(), b.getMaxX());
@@ -877,7 +897,7 @@ public class Geom {
      * @param p2 point 2
      * @return the distance between the two points
      */
-    public static double length(Point2D p1, Point2D p2) {
+    public static double length(@NonNull Point2D p1, @NonNull Point2D p2) {
         return sqrt(length2(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
@@ -938,7 +958,8 @@ public class Geom {
         return (min(abs(x - px), abs(y - py)) <= tolerance);
     }
 
-    public static Point2D north(Rectangle2D r) {
+    @NonNull
+    public static Point2D north(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY());
     }
 
@@ -953,7 +974,7 @@ public class Geom {
      * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT,
      * OUT_BOTTOM, OUT_TOP.
      */
-    public static int outcode(Rectangle2D r1, Rectangle2D r2) {
+    public static int outcode(@NonNull Rectangle2D r1, @NonNull Rectangle2D r2) {
         int outcode = 0;
 
         if (r2.getMinX() > r1.getMinX() + r1.getWidth()) {
@@ -978,7 +999,8 @@ public class Geom {
      * @param angle the angle
      * @return a point on the oval
      */
-    public static Point2D ovalAngleToPoint(@Nonnull Rectangle2D r, double angle) {
+    @NonNull
+    public static Point2D ovalAngleToPoint(@NonNull Rectangle2D r, double angle) {
         Point2D center = Geom.center(r);
         Point2D p = Geom.polarToPoint(angle, r.getWidth() / 2.0, r.getHeight() / 2.0);
         return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
@@ -993,6 +1015,7 @@ public class Geom {
      * @param l2y point 2 on the line
      * @return the perpendicular vector of length {@code 1}
      */
+    @NonNull
     public static Point2D perp(double l1x, double l1y, double l2x, double l2y) {
         // matlab: v    = p2 - p1
         //         cv    = cross([v 1] * [0 0 1])
@@ -1015,7 +1038,8 @@ public class Geom {
      * @param tangent tangent vector
      * @return the perpendicular vector of length {@code 1}
      */
-    public static Point2D perp(Point2D tangent) {
+    @NonNull
+    public static Point2D perp(@NonNull Point2D tangent) {
         return new Point2D(tangent.getY(), -tangent.getX());
     }
 
@@ -1040,7 +1064,7 @@ public class Geom {
      * @param p the point
      * @return the angle
      */
-    public static double pointToAngle(Rectangle2D r, Point2D p) {
+    public static double pointToAngle(@NonNull Rectangle2D r, @NonNull Point2D p) {
         double px = p.getX() - (r.getMinX() + r.getWidth() * 0.5);
         double py = p.getY() - (r.getMinY() + r.getHeight() * 0.5);
         return atan2(py * r.getWidth(), px * r.getHeight());
@@ -1054,6 +1078,7 @@ public class Geom {
      * @param fy    the y coordinate of the point in polar coordinates
      * @return the point in Cartesian coordinates
      */
+    @NonNull
     public static Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
         double co = cos(angle);
@@ -1069,7 +1094,8 @@ public class Geom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    public static Point2D shiftPerp(Point2D l1, Point2D l2, Point2D p, double distance) {
+    @NonNull
+    public static Point2D shiftPerp(@NonNull Point2D l1, @NonNull Point2D l2, @NonNull Point2D p, double distance) {
 
         return shiftPerp(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
     }
@@ -1086,6 +1112,7 @@ public class Geom {
      * @param distance the shifting distance
      * @return the shifted point
      */
+    @NonNull
     public static Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
         // matlab: v    = p2 - p1
         //         line = cross([v 1] * [0 0 1])
@@ -1101,18 +1128,19 @@ public class Geom {
         return new Point2D(px + perpX * m, py + perpY * m);
     }
 
-    public static Point2D south(Rectangle2D r) {
+    @NonNull
+    public static Point2D south(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.2, r.getMinY()
                 + r.getHeight());
     }
 
-    public static double squaredDistance(Point2D p, Point2D q) {
+    public static double squaredDistance(@NonNull Point2D p, @NonNull Point2D q) {
         double Δx = p.getX() - q.getX();
         double Δy = p.getY() - q.getY();
         return Δx * Δx + Δy * Δy;
     }
 
-    public static double squaredDistance(Point2D p, double x, double y) {
+    public static double squaredDistance(@NonNull Point2D p, double x, double y) {
         double Δx = p.getX() - x;
         double Δy = p.getY() - y;
         return Δx * Δx + Δy * Δy;
@@ -1130,12 +1158,14 @@ public class Geom {
         return sqrt(Δx * Δx + Δy * Δy);
     }
 
-    public static Point2D divide(Point2D p, double factor) {
+    @NonNull
+    public static Point2D divide(@NonNull Point2D p, double factor) {
         return new Point2D(p.getX() / factor, p.getY() / factor);
     }
 
 
-    static Bounds subtractInsets(Bounds b, Insets i) {
+    @NonNull
+    static Bounds subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
         return new BoundingBox(
                 b.getMinX() + i.getLeft(),
                 b.getMinY() + i.getTop(),
@@ -1144,22 +1174,25 @@ public class Geom {
         );
     }
 
-    @Nonnull
-    public static Transform toDeltaTransform(Transform t) {
+    @NonNull
+    public static Transform toDeltaTransform(@NonNull Transform t) {
         Transform d = new Affine(t.getMxx(), t.getMxy(), 0.0,
                 t.getMyx(), t.getMyy(), 0.0);
         return d;
     }
 
+    @NonNull
     public static String toString(@Nullable Bounds b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
+    @NonNull
     public static String toString(@Nullable Rectangle2D b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-    public static Bounds union(Bounds a, Bounds... bs) {
+    @NonNull
+    public static Bounds union(@NonNull Bounds a, @NonNull Bounds... bs) {
         double minx = a.getMinX();
         double miny = a.getMinY();
         double maxx = a.getMaxX();
@@ -1174,7 +1207,8 @@ public class Geom {
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
-    public static Point2D west(Rectangle2D r) {
+    @NonNull
+    public static Point2D west(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX(), r.getMinY() + r.getHeight() / 2);
     }
 
@@ -1187,10 +1221,12 @@ public class Geom {
      *              b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    public static Point2D lerp(Point2D start, Point2D end, double t) {
+    @NonNull
+    public static Point2D lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 
+    @NonNull
     public static Point2D lerp(double x0, double y0, double x1, double y1, double t) {
         return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
@@ -1222,7 +1258,7 @@ public class Geom {
      * @param b a rectangle
      * @return true if empty
      */
-    public static boolean isEmpty(Rectangle2D b) {
+    public static boolean isEmpty(@NonNull Rectangle2D b) {
         return b.getWidth() <= 0 || b.getHeight() <= 0;
     }
 
@@ -1251,7 +1287,7 @@ public class Geom {
         }
     }
 
-    public static double squaredMagnitude(Point2D p) {
+    public static double squaredMagnitude(@NonNull Point2D p) {
         double x = p.getX();
         double y = p.getY();
         return x * x + y * y;

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
  */
 public class Stylesheet extends AST {
 
-    @Nonnull
+    @NonNull
     private final ImmutableList<Rule> rules;
-    @Nonnull
+    @NonNull
     private final ImmutableList<StyleRule> styleRules;
 
-    public Stylesheet(@Nonnull List<Rule> rules) {
+    public Stylesheet(@NonNull List<Rule> rules) {
         this.rules = ImmutableLists.ofCollection(rules);
         this.styleRules = ImmutableLists.ofCollection(
                 rules.stream()
@@ -38,7 +38,7 @@ public class Stylesheet extends AST {
      *
      * @return the rules
      */
-    @Nonnull
+    @NonNull
     public ReadOnlyList<StyleRule> getStyleRules() {
         return styleRules;
     }
@@ -48,12 +48,12 @@ public class Stylesheet extends AST {
      *
      * @return the rules
      */
-    @Nonnull
+    @NonNull
     public ReadOnlyList<Rule> getRules() {
         return rules;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

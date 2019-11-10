@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssBooleanConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -31,7 +32,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *
      * @param name The name of the key.
      */
-    public NullableBooleanStyleableKey(String name) {
+    public NullableBooleanStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -44,7 +45,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanStyleableKey(String key, Boolean defaultValue) {
+    public NullableBooleanStyleableKey(@NonNull String key, Boolean defaultValue) {
         this(null, key, defaultValue);
     }
 
@@ -56,7 +57,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanStyleableKey(@Nullable String namespace, String key, Boolean defaultValue) {
+    public NullableBooleanStyleableKey(@Nullable String namespace, @NonNull String key, Boolean defaultValue) {
         super(namespace, key, Boolean.class, true, defaultValue);
 
         StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);

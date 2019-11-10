@@ -6,6 +6,7 @@
 package org.jhotdraw8.draw.io;
 
 import javafx.css.Styleable;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.SimpleIdFactory;
 
 /**
@@ -14,6 +15,7 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * @author Werner Randelshofer
  */
 public class SimpleFigureIdFactory extends SimpleIdFactory {
+    @Nullable
     @Override
     public String createId(Object object) {
         String id = getId(object);
@@ -34,6 +36,7 @@ public class SimpleFigureIdFactory extends SimpleIdFactory {
         return id;
     }
 
+    @Nullable
     public String putId(Object object) {
         String id = getId(object);
 

@@ -5,7 +5,7 @@
 package org.jhotdraw8.app.action.edit;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.EditableComponent;
@@ -29,13 +29,13 @@ public class DeleteAction extends AbstractSelectionAction {
      *
      * @param app the app
      */
-    public DeleteAction(Application app) {
+    public DeleteAction(@NonNull Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull EditableComponent c) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
         c.deleteSelection();
     }
 

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.function.BiFunction;
@@ -25,6 +26,7 @@ public interface ConverterFactory extends BiFunction<String, String, Converter<?
      * @return the converter
      * @throws IllegalArgumentException if the type or the style are invalid
      */
+    @NonNull
     @Override
     public Converter<?> apply(@Nullable String type, @Nullable String style);
 }

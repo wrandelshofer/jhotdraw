@@ -5,7 +5,7 @@
 package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,7 +32,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return an iterator.
      */
-    @Nonnull
+    @NonNull
     @Override
     default Iterator<E> iterator() {
         return new ReadOnlyListIterator<>(this);
@@ -43,7 +43,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return an iterator.
      */
-    @Nonnull
+    @NonNull
     @Override
     default Spliterator<E> spliterator() {
         return new ReadOnlyListIterator<>(this);
@@ -54,7 +54,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return a list iterator.
      */
-    @Nonnull
+    @NonNull
     default ListIterator<E> listIterator() {
         return new ReadOnlyListIterator<>(this);
     }
@@ -64,7 +64,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return a list iterator.
      */
-    @Nonnull
+    @NonNull
     default ListIterator<E> listIterator(int index) {
         return new ReadOnlyListIterator<>(this, index, size());
     }
@@ -74,6 +74,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return a new ArrayList.
      */
+    @NonNull
     default ArrayList<E> toArrayList() {
         return new ArrayList<>(this.asList());
     }
@@ -83,6 +84,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped list
      */
+    @NonNull
     default List<E> asList() {
         return new ListWrapper<>(this);
     }
@@ -92,6 +94,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped list
      */
+    @NonNull
     default ObservableList<E> asObservableList() {
         return new ObservableListWrapper<>(this);
     }

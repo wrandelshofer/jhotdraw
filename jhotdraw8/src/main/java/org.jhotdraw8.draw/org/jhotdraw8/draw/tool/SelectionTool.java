@@ -11,7 +11,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -119,7 +119,7 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Properties
     // ---
-    @Nonnull
+    @NonNull
     public BooleanProperty selectBehindEnabledProperty() {
         return selectBehindEnabled;
     }
@@ -133,7 +133,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         requestFocus();
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
@@ -266,7 +266,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseMoved(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
         double vx = event.getX();
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
@@ -389,7 +389,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    public void activate(@Nonnull DrawingEditor editor) {
+    public void activate(@NonNull DrawingEditor editor) {
         for (DrawingView view : editor.getDrawingViews()) {
             view.getEditor().setHandleType(handleType);
             view.getEditor().setAnchorHandleType(anchorHandleType);
@@ -408,17 +408,18 @@ public class SelectionTool extends AbstractTool {
 
     double zoomFactor = 1.0;
 
-    protected void handleZoom(@Nonnull ZoomEvent event, @Nonnull DrawingView dv) {
+    protected void handleZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
         dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
     }
 
-    protected void handleZoomStarted(ZoomEvent event, @Nonnull DrawingView dv) {
+    protected void handleZoomStarted(ZoomEvent event, @NonNull DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
     }
 
     protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "SelectionTool"

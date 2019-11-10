@@ -5,6 +5,7 @@
 package org.jhotdraw8.app;
 
 import javafx.scene.control.MenuBar;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -26,6 +27,7 @@ import java.util.prefs.Preferences;
  */
 public interface ApplicationModel {
 
+    @NonNull
     default CompletionStage<Activity> createActivityAsync() {
         return FXWorker.supply(this::createActivity);
     }
@@ -45,28 +47,28 @@ public interface ApplicationModel {
      *
      * @return chooser
      */
-    URIChooser createOpenChooser();
+    @NonNull URIChooser createOpenChooser();
 
     /**
      * Creates a save chooser.
      *
      * @return chooser
      */
-    URIChooser createSaveChooser();
+    @NonNull URIChooser createSaveChooser();
 
     /**
      * Creates an export chooser.
      *
      * @return chooser
      */
-    URIChooser createExportChooser();
+    @NonNull URIChooser createExportChooser();
 
     /**
      * Creates an import chooser.
      *
      * @return chooser
      */
-    URIChooser createImportChooser();
+    @NonNull URIChooser createImportChooser();
 
     /**
      * Returns the name of the application.
@@ -115,11 +117,12 @@ public interface ApplicationModel {
      *
      * @return a menu bar
      */
+    @NonNull
     default CompletionStage<MenuBar> createMenuBarAsync() {
         return FXWorker.supply(this::createMenuBar);
     }
 
-    MenuBar createMenuBar();
+    @Nullable MenuBar createMenuBar();
 
     /**
      * Gets the resource bundle of the application.

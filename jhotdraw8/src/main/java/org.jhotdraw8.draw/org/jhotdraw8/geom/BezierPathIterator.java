@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -228,7 +228,7 @@ public class BezierPathIterator implements PathIterator {
      * @see PathIterator#SEG_CLOSE
      */
     @Override
-    public int currentSegment(@Nonnull double[] coords) {
+    public int currentSegment(@NonNull double[] coords) {
         int numCoords = 0;
         int type = 0;
         if (index == path.size()) {

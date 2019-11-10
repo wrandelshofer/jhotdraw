@@ -5,7 +5,7 @@
 package org.jhotdraw8.xml.text;
 
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -26,7 +26,7 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new XmlConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @Nonnull Point3D value) throws IOException {
+    public void toString(Appendable out, IdFactory idFactory, @NonNull Point3D value) throws IOException {
         if (value.getZ() == 0.0) {
             formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
         } else {
@@ -34,7 +34,7 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Point3D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
@@ -48,7 +48,7 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Point3D getDefaultValue() {
         return new Point3D(0, 0, 0);

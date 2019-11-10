@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.text;
 
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -38,14 +38,14 @@ public class CssInsetsConverterOLD extends AbstractCssConverter<Insets> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Insets parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Insets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         List<Number> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
                 case CssTokenType.TT_NUMBER:
-                    list.add(tt.currentNumberNonnull());
+                    list.add(tt.currentNumberNonNull());
                     break;
                 case CssTokenType.TT_COMMA:
                     break;
@@ -74,14 +74,14 @@ public class CssInsetsConverterOLD extends AbstractCssConverter<Insets> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
     }
 
     @Override
-    protected <TT extends Insets> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends Insets> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {

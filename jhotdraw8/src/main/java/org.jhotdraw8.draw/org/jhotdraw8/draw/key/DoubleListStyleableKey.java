@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -28,7 +28,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, ImmutableList<Double>> cssMetaData;
     private Converter<ImmutableList<Double>> converter;
 
@@ -38,7 +38,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      *
      * @param name The name of the key.
      */
-    public DoubleListStyleableKey(String name) {
+    public DoubleListStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -47,7 +47,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      *  @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableKey(String name, ImmutableList<Double> defaultValue) {
+    public DoubleListStyleableKey(@NonNull String name, ImmutableList<Double> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{Double.class}, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Double>>> function = s -> {
@@ -63,7 +63,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<Double>> getCssMetaData() {
         return cssMetaData;

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -49,6 +49,7 @@ public interface IntBidiGraph extends IntDirectedGraph {
      * @param vertex a vertex
      * @return an iterable for the direct predecessor vertices of vertex
      */
+    @NonNull
     default PrimitiveIterator.OfInt getPrevVertexIndicesIterator(int vertex) {
         class PrevVertexIterator implements PrimitiveIterator.OfInt {
 
@@ -81,11 +82,11 @@ public interface IntBidiGraph extends IntDirectedGraph {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor vertices of vertex
      */
-    @Nonnull
+    @NonNull
     default Collection<Integer> getPrevVertices(int vertex) {
 
         return new AbstractCollection<Integer>() {
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<Integer> iterator() {
                 return getPrevVertexIndicesIterator(vertex);

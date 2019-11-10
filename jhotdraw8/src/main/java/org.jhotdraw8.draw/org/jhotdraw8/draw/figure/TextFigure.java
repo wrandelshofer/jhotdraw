@@ -11,7 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -51,7 +51,7 @@ public class TextFigure extends AbstractLeafFigure
         this(0, 0, "");
     }
 
-    public TextFigure(Point2D position, String text) {
+    public TextFigure(@NonNull Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
@@ -60,7 +60,7 @@ public class TextFigure extends AbstractLeafFigure
         set(ORIGIN, new CssPoint2D(x, y));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         // FIXME the text node should be computed during layout
@@ -72,48 +72,49 @@ public class TextFigure extends AbstractLeafFigure
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
+    @NonNull
     @Override
     public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getBoundsInLocal(), TEXT);
     }
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
+    public void layout(@NonNull RenderContext ctx) {
         if (textNode == null) {
             textNode = new Text();
         }
         updateNode(ctx, textNode);
     }
 
-    @Nonnull
+    @NonNull
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
-        Point2D o = getNonnull(ORIGIN).getConvertedValue();
+    public void reshapeInLocal(@NonNull Transform transform) {
+        Point2D o = getNonNull(ORIGIN).getConvertedValue();
         o = transform.transform(o);
         set(ORIGIN, new CssPoint2D(o));
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         set(ORIGIN, new CssPoint2D(x, y));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Text();
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Text tn = (Text) node;
         tn.setText(get(TEXT));
-        tn.setX(getStyledNonnull(ORIGIN).getX().getConvertedValue());
-        tn.setY(getStyledNonnull(ORIGIN).getY().getConvertedValue());
+        tn.setX(getStyledNonNull(ORIGIN).getX().getConvertedValue());
+        tn.setY(getStyledNonNull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyHideableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, tn);
@@ -127,13 +128,13 @@ public class TextFigure extends AbstractLeafFigure
         tn.applyCss();// really??
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

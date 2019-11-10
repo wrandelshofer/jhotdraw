@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.draw.tool;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -58,7 +58,7 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      * @return a suitable layer for the figure
      */
     @Nullable
-    protected Layer getOrCreateLayer(@Nonnull DrawingView dv, Figure newFigure) {
+    protected Layer getOrCreateLayer(@NonNull DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Layer activeLayer = dv.getActiveLayer();
         if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {

@@ -5,6 +5,7 @@
 package org.jhotdraw8.css;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class CssPoint2D {
         this(x, y, null);
     }
 
-    public CssPoint2D(Point2D p) {
+    public CssPoint2D(@NonNull Point2D p) {
         this(p.getX(), p.getY());
     }
 
@@ -79,6 +80,7 @@ public class CssPoint2D {
         return hash;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssPoint2D{" +
@@ -87,16 +89,19 @@ public class CssPoint2D {
                 '}';
     }
 
+    @NonNull
     public Point2D getConvertedValue() {
         return new Point2D(x.getConvertedValue(), y.getConvertedValue());
 
     }
 
-    public CssPoint2D subtract(CssPoint2D that) {
+    @NonNull
+    public CssPoint2D subtract(@NonNull CssPoint2D that) {
         return new CssPoint2D(x.subtract(that.x), y.subtract(that.y));
     }
 
-    public CssPoint2D add(CssPoint2D that) {
+    @NonNull
+    public CssPoint2D add(@NonNull CssPoint2D that) {
         return new CssPoint2D(x.add(that.x), y.add(that.y));
     }
 }

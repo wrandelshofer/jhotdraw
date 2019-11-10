@@ -8,7 +8,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssStop;
 
@@ -50,7 +50,7 @@ public class CssRadialGradient implements Paintable {
         this.cstops = stops;
     }
 
-    public CssRadialGradient(RadialGradient radialGradient) {
+    public CssRadialGradient(@NonNull RadialGradient radialGradient) {
         this.radialGradient = radialGradient;
         this.centerX = radialGradient.getCenterX();
         this.centerY = radialGradient.getCenterY();
@@ -107,7 +107,7 @@ public class CssRadialGradient implements Paintable {
         return getRadialGradient();
     }
 
-    @Nonnull
+    @NonNull
     public Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
@@ -185,7 +185,7 @@ public class CssRadialGradient implements Paintable {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "CssRadialGradient{" + "focusAngle=" + focusAngle + ", focusDistance=" + focusDistance + "centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';

@@ -19,7 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.app.EditableComponent;
@@ -67,6 +67,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             setId("toolEventPane");
         }
 
+        @Nullable
         private EditableComponent getEditableParent() {
 
             DrawingView dv = getDrawingView();
@@ -254,13 +255,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         return properties;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<DrawingEditor> drawingEditorProperty() {
         return drawingEditor;
@@ -269,14 +270,14 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Behaviors
     // ---
-    protected void applyResources(@Nonnull Resources rsrc) {
+    protected void applyResources(@NonNull Resources rsrc) {
         String name = get(NAME);
         set(LABEL, rsrc.getTextProperty(name));
         set(LARGE_ICON_KEY, rsrc.getLargeIconProperty(name, getClass()));
         set(SHORT_DESCRIPTION, rsrc.getToolTipTextProperty(name));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node getNode() {
         return node;
@@ -353,7 +354,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected void handleMouseClicked(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleKeyPressed(@Nonnull KeyEvent event, DrawingView view) {
+    protected void handleKeyPressed(@NonNull KeyEvent event, DrawingView view) {
         if (event.getCode() == KeyCode.ESCAPE) {
             fireToolDone();
         } else if (event.getCode() == KeyCode.ENTER) {
@@ -371,7 +372,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * This implementation sets the help text on the drawing view.
      */
     @Override
-    public void activate(DrawingEditor editor) {
+    public void activate(@NonNull DrawingEditor editor) {
         editor.setHelpText(getHelpText());
     }
 

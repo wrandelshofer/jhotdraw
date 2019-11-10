@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
@@ -230,7 +230,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable buf, IdFactory idFactory, @Nullable Number value) throws IOException {
+    public void toString(@NonNull Appendable buf, IdFactory idFactory, @Nullable Number value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }
@@ -468,7 +468,7 @@ public class NumberConverter implements Converter<Number> {
      *                 the values, the exception is consumed and false is returned.
      */
     @SuppressWarnings({"unchecked", "WeakerAccess"})
-    boolean isValidValue(Number value, boolean wantsCCE) {
+    boolean isValidValue(@NonNull Number value, boolean wantsCCE) {
         try {
             if (min != null && min.compareTo(value) > 0) {
                 return false;
@@ -659,7 +659,7 @@ public class NumberConverter implements Converter<Number> {
         this.valueClass = valueClass;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Number getDefaultValue() {
         return 0.0;

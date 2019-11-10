@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayList;
 
 import java.util.ArrayList;
@@ -30,8 +30,8 @@ public class IntGraphSearch {
     private IntGraphSearch() {
     }
 
-    @Nonnull
-    private static <V, A> Map<V, List<V>> createForest(DirectedGraph<V, A> graph) {
+    @NonNull
+    private static <V, A> Map<V, List<V>> createForest(@NonNull DirectedGraph<V, A> graph) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(graph.getVertexCount());
         for (V v : graph.getVertices()) {
@@ -42,8 +42,8 @@ public class IntGraphSearch {
         return forest;
     }
 
-    @Nonnull
-    private static <V> Map<V, List<V>> createForest(Collection<V> vertices) {
+    @NonNull
+    private static <V> Map<V, List<V>> createForest(@NonNull Collection<V> vertices) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(vertices.size());
         for (V v : vertices) {
@@ -63,8 +63,8 @@ public class IntGraphSearch {
      * @param g   a directed graph
      * @return the disjoint sets.
      */
-    @Nonnull
-    public static <A> List<Set<Integer>> findDisjointSets(AttributedIntDirectedGraph<?, A> g) {
+    @NonNull
+    public static <A> List<Set<Integer>> findDisjointSets(@NonNull AttributedIntDirectedGraph<?, A> g) {
         // Create initial forest.
         final List<IntArrayList> sets = new ArrayList<>(g.getVertexCount());
         for (int v = 0, n = g.getVertexCount(); v < n; v++) {
@@ -113,8 +113,8 @@ public class IntGraphSearch {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    @Nonnull
-    public static <A> int[] sortTopologicallyInt(AttributedIntDirectedGraph<?, A> model) {
+    @NonNull
+    public static <A> int[] sortTopologicallyInt(@NonNull AttributedIntDirectedGraph<?, A> model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex

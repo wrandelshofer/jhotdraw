@@ -24,7 +24,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.gui.CustomSkin;
 import org.jhotdraw8.gui.RectangleTransition;
@@ -67,18 +67,18 @@ import static javafx.geometry.Orientation.VERTICAL;
  */
 public class DockRoot extends Control {
 
-    @Nonnull
+    @NonNull
     private Insets dockDrawnDropZoneInsets = new Insets(20, 20, 20, 20);
-    @Nonnull
+    @NonNull
     private Insets dockDropZoneInsets = new Insets(40, 40, 40, 40);
     private final ObjectProperty<Supplier<Dock>> dockFactory = new SimpleObjectProperty<>(this, "dockFactory", TabPaneDock::new);
-    @Nonnull
+    @NonNull
     private SetProperty<DockItem> dockableItems = new SimpleSetProperty<>(this, "dockableItems", null);
     private Rectangle dropRect;
     private final ObjectProperty<Supplier<Track>> horizontalTrackFactory = new SimpleObjectProperty<>(this, "htrackFactory", () -> new SplitPaneTrack(Orientation.HORIZONTAL));
-    @Nonnull
+    @NonNull
     private Insets rootDrawnDropZoneInsets = new Insets(10, 10, 10, 10);
-    @Nonnull
+    @NonNull
     private Insets rootDropZoneInsets = new Insets(20, 20, 20, 20);
     private StackPane stackPane;
     @Nullable
@@ -92,7 +92,7 @@ public class DockRoot extends Control {
 
     }
 
-    private void addTab(DockItem tab, @Nullable Dock parent, @Nonnull DropZone zone) {
+    private void addTab(@NonNull DockItem tab, @Nullable Dock parent, @NonNull DropZone zone) {
         // remove item from old dock, and maybe collapse parents
         Dock oldDock = tab.getDock();
         DockRoot root;
@@ -143,7 +143,7 @@ public class DockRoot extends Control {
         }
     }
 
-    private void addTabToDock(DockItem tab, @Nonnull Dock parent, DropZone zone) {
+    private void addTabToDock(DockItem tab, @NonNull Dock parent, @NonNull DropZone zone) {
         // case CENTER: => add item to existing dock
         switch (zone) {
             case CENTER:
@@ -218,7 +218,7 @@ public class DockRoot extends Control {
         return getDockFactory().get();
     }
 
-    private Track createTrack(@Nullable Track parentTrack, @Nullable Dock dock, Orientation orientation) {
+    private Track createTrack(@Nullable Track parentTrack, @Nullable Dock dock, @NonNull Orientation orientation) {
         Supplier<Track> supplier = null;
         switch (orientation) {
             case VERTICAL:
@@ -240,7 +240,7 @@ public class DockRoot extends Control {
         return supplier.get();
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<Supplier<Dock>> dockFactoryProperty() {
         return dockFactory;
     }
@@ -274,7 +274,7 @@ public class DockRoot extends Control {
         horizontalTrackFactory.set(value);
     }
 
-    private Orientation getNeededOrientation(DropZone zone) {
+    private Orientation getNeededOrientation(@NonNull DropZone zone) {
         Orientation neededOrientation;
         switch (zone) {
             case LEFT:
@@ -290,8 +290,8 @@ public class DockRoot extends Control {
         return neededOrientation;
     }
 
-    @Nonnull
-    private Track getParentTrack(Node n) {
+    @NonNull
+    private Track getParentTrack(@NonNull Node n) {
         Node node = n.getParent();
         while (node != null && !(node instanceof Track)) {
             node = node.getParent();
@@ -299,7 +299,8 @@ public class DockRoot extends Control {
         return (Track) node;
     }
 
-    private Dock getPickedDock(DragEvent e) {
+    @Nullable
+    private Dock getPickedDock(@NonNull DragEvent e) {
         PickResult pick = e.getPickResult();
         Node pickedNode = pick.getIntersectedNode();
         while (pickedNode != this && pickedNode != null && !(pickedNode instanceof Dock)) {
@@ -308,8 +309,8 @@ public class DockRoot extends Control {
         return pickedNode == this ? null : (Dock) pickedNode;
     }
 
-    @Nonnull
-    private DockRoot getDockRoot(Node n) {
+    @NonNull
+    private DockRoot getDockRoot(@NonNull Node n) {
         Node node = n.getParent();
         while (node != null && !(node instanceof DockRoot)) {
             node = node.getParent();
@@ -338,12 +339,13 @@ public class DockRoot extends Control {
         verticalRootTrackFactory.set(value);
     }
 
-    @Nonnull
+    @NonNull
     public ObservableMap<Class<?>, Supplier<Track>> getVerticalTrackFactoryMap() {
         return verticalTrackFactoryMap;
     }
 
-    private DropZone getZone(double x, double y, Bounds b, Insets insets) {
+    @Nullable
+    private DropZone getZone(double x, double y, @NonNull Bounds b, @NonNull Insets insets) {
         if (y - b.getMinY() < insets.getTop() && b.getHeight() > insets.getTop() + insets.getBottom()) {
             return DropZone.TOP;
         } else if (b.getMaxY() - y < insets.getBottom() && b.getHeight() > insets.getTop() + insets.getBottom()) {
@@ -357,7 +359,7 @@ public class DockRoot extends Control {
         }
     }
 
-    private void handleDragDrop(@Nonnull DragEvent e) {
+    private void handleDragDrop(@NonNull DragEvent e) {
         dropRect.setVisible(false);
         getChildren().remove(dropRect);
 
@@ -393,7 +395,7 @@ public class DockRoot extends Control {
         dropRect.setVisible(false);
     }
 
-    private void handleDragOver(@Nonnull DragEvent e) {
+    private void handleDragOver(@NonNull DragEvent e) {
         if (!isAcceptable(e)) {
             return;
         }
@@ -429,7 +431,7 @@ public class DockRoot extends Control {
 
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<Supplier<Track>> horizontalTrackFactoryProperty() {
         return horizontalTrackFactory;
     }
@@ -477,7 +479,7 @@ public class DockRoot extends Control {
      *
      * @param dock a dock
      */
-    public void addDock(@Nonnull Dock dock) {
+    public void addDock(@NonNull Dock dock) {
         final ObservableList<Node> children = stackPane.getChildren();
         if (children.isEmpty()) {
             children.add(dock.getNode());
@@ -516,7 +518,7 @@ public class DockRoot extends Control {
      *
      * @param track a track
      */
-    public void addTrack(@Nonnull Track track) {
+    public void addTrack(@NonNull Track track) {
         if (stackPane.getChildren().isEmpty()) {
 
         } else {
@@ -526,7 +528,7 @@ public class DockRoot extends Control {
         stackPane.getChildren().add(0, track.getNode());
     }
 
-    private void updateDropRect(@Nullable final DropZone zone, @Nonnull Bounds bounds, @Nonnull Insets ins) {
+    private void updateDropRect(@Nullable final DropZone zone, @NonNull Bounds bounds, @NonNull Insets ins) {
 
         if (zone == null) {
             dropRect.setVisible(false);
@@ -592,12 +594,12 @@ public class DockRoot extends Control {
         }
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<Supplier<Track>> verticalDockTrackFactoryProperty() {
         return verticalTrackFactory;
     }
 
-    private boolean isAcceptable(DragEvent e) {
+    private boolean isAcceptable(@NonNull DragEvent e) {
         return e.getDragboard().getContentTypes().contains(DockItem.DOCKABLE_TAB_FORMAT)
                 //    && e.getGestureSource() != null
                 && DockItem.draggedTab != null

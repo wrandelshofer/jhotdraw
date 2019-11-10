@@ -6,6 +6,8 @@ package org.jhotdraw8.styleable;
 
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Map;
 
@@ -25,19 +27,19 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
 
     boolean containsKey(StyleOrigin origin, K key);
 
-    V get(StyleOrigin origin, K key);
+    @Nullable V get(StyleOrigin origin, K key);
 
     default int getIdentityHash() {
         return System.identityHashCode(this);
     }
 
-    Map<K, V> getMap(StyleOrigin origin);
+    @NonNull Map<K, V> getMap(StyleOrigin origin);
 
-    StyleOrigin getStyleOrigin(Object key);
+    @Nullable StyleOrigin getStyleOrigin(Object key);
 
-    Map<K, V> getStyledMap();
+    @Nullable Map<K, V> getStyledMap();
 
-    V put(StyleOrigin styleOrigin, K key, V value);
+    @Nullable V put(StyleOrigin styleOrigin, K key, V value);
 
     void removeAll(StyleOrigin origin);
 

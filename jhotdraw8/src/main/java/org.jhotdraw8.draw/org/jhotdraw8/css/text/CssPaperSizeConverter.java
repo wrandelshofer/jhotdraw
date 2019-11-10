@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
@@ -28,9 +28,9 @@ import java.util.Map;
 public class CssPaperSizeConverter implements Converter<CssPoint2D> {
 
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
-    @Nonnull
+    @NonNull
     private final static Map<String, CssPoint2D> paperSizes;
-    @Nonnull
+    @NonNull
     private final static Map<CssPoint2D, String> sizePapers;
 
     static {
@@ -70,7 +70,7 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
     private final static String PORTRAIT = "portrait";
 
     @Nullable
-    private CssPoint2D parsePageSize(CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
+    private CssPoint2D parsePageSize(@NonNull CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
             CssPoint2D paperSize = paperSizes.get(tt.currentString());
             if (paperSize == null) {
@@ -99,7 +99,7 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull CssPoint2D value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull CssPoint2D value) throws IOException {
         String paper = sizePapers.get(value);
         if (paper != null) {
             out.append(paper);
@@ -124,7 +124,7 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
         return new CssPoint2D(new CssSize(0), new CssSize(0));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder();

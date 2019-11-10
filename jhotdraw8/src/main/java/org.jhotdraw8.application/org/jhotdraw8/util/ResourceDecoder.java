@@ -5,7 +5,7 @@
 package org.jhotdraw8.util;
 
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Decodes a resource value.
@@ -36,5 +36,5 @@ public interface ResourceDecoder {
      * @param <T>           The type of the decoded object
      * @return the decoded object
      */
-    @Nonnull <T> T decode(String key, String propertyValue, Class<T> type, Class<?> baseClass);
+    @NonNull <T> T decode(String key, String propertyValue, Class<T> type, Class<?> baseClass);
 }

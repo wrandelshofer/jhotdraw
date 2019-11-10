@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.text;
 
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -36,27 +36,27 @@ public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
         this.withComma = withComma;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Rectangle2D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Rectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         final double x, y, width, height;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨x⟩ expected.");
-        x = tt.currentNumberNonnull().doubleValue();
+        x = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨y⟩ expected.");
-        y = tt.currentNumberNonnull().doubleValue();
+        y = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨width⟩ expected.");
-        width = tt.currentNumberNonnull().doubleValue();
+        width = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨height⟩ expected.");
-        height = tt.currentNumberNonnull().doubleValue();
+        height = tt.currentNumberNonNull().doubleValue();
 
         return new Rectangle2D(x, y, width, height);
     }
 
     @Override
-    protected <TT extends Rectangle2D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends Rectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));

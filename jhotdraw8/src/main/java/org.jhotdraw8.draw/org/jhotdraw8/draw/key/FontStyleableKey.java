@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.text.CssFontConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,7 +27,7 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssFont> cssMetaData;
     private final Converter<CssFont> converter = new CssFontConverter(false);
 
@@ -71,13 +71,14 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssFont> getCssMetaData() {
         return cssMetaData;
 
     }
 
+    @NonNull
     @Override
     public Converter<CssFont> getConverter() {
         return converter;

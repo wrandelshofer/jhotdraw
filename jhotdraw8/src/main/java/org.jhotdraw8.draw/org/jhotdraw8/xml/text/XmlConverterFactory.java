@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.ConverterFactory;
@@ -24,7 +24,7 @@ import org.jhotdraw8.text.XmlWordConverter;
  */
 public class XmlConverterFactory implements ConverterFactory {
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {

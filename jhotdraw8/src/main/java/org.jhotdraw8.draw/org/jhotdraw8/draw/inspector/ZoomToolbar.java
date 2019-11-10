@@ -12,7 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,11 +56,11 @@ public class ZoomToolbar extends BorderPane {
         this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
     }
 
-    public ZoomToolbar(@Nonnull URL fxmlUrl) {
+    public ZoomToolbar(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -73,13 +73,13 @@ public class ZoomToolbar extends BorderPane {
         zoomSlider.valueProperty().bindBidirectional(zoomPower);
 
         zoomSlider.setLabelFormatter(new StringConverter<Double>() {
-            @Nonnull
+            @NonNull
             @Override
-            public String toString(@Nonnull Double object) {
+            public String toString(@NonNull Double object) {
                 return Integer.toString(object.intValue());
             }
 
-            @Nonnull
+            @NonNull
             @Override
             public Double fromString(String string) {
                 return 0.0;
@@ -93,7 +93,7 @@ public class ZoomToolbar extends BorderPane {
      *
      * @return zoom factor
      */
-    @Nonnull
+    @NonNull
     public DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
@@ -117,12 +117,12 @@ public class ZoomToolbar extends BorderPane {
         zoomPower.set(zoomPower.get() + 1);
     }
 
-    @Nonnull
+    @NonNull
     public DoubleProperty minProperty() {
         return zoomSlider.minProperty();
     }
 
-    @Nonnull
+    @NonNull
     public DoubleProperty maxProperty() {
         return zoomSlider.maxProperty();
     }

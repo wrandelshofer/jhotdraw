@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -84,7 +84,7 @@ public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
      * @return a collection view on the direct successor vertices of vertex
      * with the arrow pointing to the vertex
      */
-    @Nonnull
+    @NonNull
     default Collection<Map.Entry<Integer, A>> getNextIntEntries(int vertexIndex) {
         class NextVertexAndArrowIterator implements Iterator<Map.Entry<Integer, A>> {
 
@@ -102,6 +102,7 @@ public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
                 return index < nextCount;
             }
 
+            @NonNull
             @Override
             public Map.Entry<Integer, A> next() {
                 int i = index++;
@@ -113,7 +114,7 @@ public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
 
         }
         return new AbstractCollection<Map.Entry<Integer, A>>() {
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<Map.Entry<Integer, A>> iterator() {
                 return new NextVertexAndArrowIterator(vertexIndex);

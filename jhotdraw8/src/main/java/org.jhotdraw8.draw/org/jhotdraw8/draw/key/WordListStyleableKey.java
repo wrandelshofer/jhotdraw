@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,7 +28,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, ImmutableList<String>> cssMetaData;
 
     /**
@@ -37,7 +37,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
      *
      * @param name The name of the key.
      */
-    public WordListStyleableKey(String name) {
+    public WordListStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -47,7 +47,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public WordListStyleableKey(String name, ImmutableList<String> defaultValue) {
+    public WordListStyleableKey(@NonNull String name, ImmutableList<String> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{String.class}, defaultValue);
         Function<Styleable, StyleableProperty<ImmutableList<String>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -63,7 +63,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<String>> getCssMetaData() {
         return cssMetaData;

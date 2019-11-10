@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Transforms;
@@ -29,7 +29,7 @@ public class GroupFigure extends AbstractCompositeFigure
      */
     public final static String TYPE_SELECTOR = "Group";
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
@@ -37,7 +37,7 @@ public class GroupFigure extends AbstractCompositeFigure
         return g;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -55,7 +55,7 @@ public class GroupFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
@@ -66,7 +66,7 @@ public class GroupFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);

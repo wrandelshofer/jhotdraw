@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.ToDoubleTriFunction;
 
@@ -24,27 +24,28 @@ import java.util.function.ToDoubleFunction;
  * @author Werner Randelshofer
  */
 public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V, A> {
-    public UniqueShortestPathBuilder(@Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleFunction<A> costf) {
+    public UniqueShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleFunction<A> costf) {
         super(graph, costf);
     }
 
-    public UniqueShortestPathBuilder(@Nonnull DirectedGraph<V, A> graph, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public UniqueShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleTriFunction<V, V, A> costf) {
         super(graph, costf);
     }
 
-    public UniqueShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleFunction<A> costf) {
+    public UniqueShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToDoubleFunction<A> costf) {
         super(nextNodesFunction, costf);
     }
 
-    public UniqueShortestPathBuilder(@Nonnull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @Nonnull ToDoubleTriFunction<V, V, A> costf) {
+    public UniqueShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToDoubleTriFunction<V, V, A> costf) {
         super(nextNodesFunction, costf);
     }
 
-    protected BackLink<V, A> search(@Nonnull V start,
-                                    @Nonnull Predicate<V> goalPredicate,
+    @Nullable
+    protected BackLink<V, A> search(@NonNull V start,
+                                    @NonNull Predicate<V> goalPredicate,
                                     double maxCost,
-                                    Function<V, Iterable<Arc<V, A>>> nextf,
-                                    ToDoubleTriFunction<V, V, A> costf) {
+                                    @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
+                                    @NonNull ToDoubleTriFunction<V, V, A> costf) {
 
         // Priority queue: back-links with shortest distance from start come first.
         PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
@@ -145,6 +146,7 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             return arrow;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "BackLink{" +

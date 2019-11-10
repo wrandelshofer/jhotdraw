@@ -8,7 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
@@ -26,7 +26,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
@@ -47,7 +51,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     protected double pagesDpi = 72.0;
     protected double slicesDpi = 72.0;
 
-    @Nonnull
+    @NonNull
     protected abstract String getExtension();
 
 
@@ -57,14 +61,14 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     @Override
     public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
         if (options != null) {
-            exportDrawing = EXPORT_DRAWING_KEY.getNonnull(options);
-            exportPages = EXPORT_PAGES_KEY.getNonnull(options);
-            exportSlices = EXPORT_SLICES_KEY.getNonnull(options);
-            exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.getNonnull(options);
-            exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.getNonnull(options);
-            drawingDpi = EXPORT_DRAWING_DPI_KEY.getNonnull(options);
-            pagesDpi = EXPORT_PAGES_DPI_KEY.getNonnull(options);
-            slicesDpi = EXPORT_SLICES_DPI_KEY.getNonnull(options);
+            exportDrawing = EXPORT_DRAWING_KEY.getNonNull(options);
+            exportPages = EXPORT_PAGES_KEY.getNonNull(options);
+            exportSlices = EXPORT_SLICES_KEY.getNonNull(options);
+            exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.getNonNull(options);
+            exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.getNonNull(options);
+            drawingDpi = EXPORT_DRAWING_DPI_KEY.getNonNull(options);
+            pagesDpi = EXPORT_PAGES_DPI_KEY.getNonNull(options);
+            slicesDpi = EXPORT_SLICES_DPI_KEY.getNonNull(options);
         }
     }
 
@@ -112,7 +116,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      */
     protected abstract void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
-    protected void writePages(@Nullable Path dir, String basename, @Nonnull Drawing drawing) throws IOException {
+    protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
@@ -137,7 +141,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param hints    the hints
      * @throws java.io.IOException in case of failure
      */
-    protected void writePages(@Nullable Path dir, String basename, @Nonnull Drawing drawing, @Nonnull List<Page> pages, @Nonnull Map<Key<?>, Object> hints) throws IOException {
+    protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing, @NonNull List<Page> pages, @NonNull Map<Key<?>, Object> hints) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
@@ -209,7 +213,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      */
     protected abstract boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException;
 
-    protected void writeSlices(@Nullable Path dir, @Nonnull Drawing drawing) throws IOException {
+    protected void writeSlices(@Nullable Path dir, @NonNull Drawing drawing) throws IOException {
         setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
@@ -234,7 +238,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param slices
      * @throws java.io.IOException
      */
-    private void writeSlices(Path dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
+    private void writeSlices(@NonNull Path dir, @NonNull Drawing drawing, @NonNull List<Slice> slices, String suffix, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);

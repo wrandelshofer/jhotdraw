@@ -9,11 +9,11 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssFontConverter;
@@ -31,19 +31,19 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFont>
-        implements NonnullMapAccessor<CssFont> {
+        implements NonNullMapAccessor<CssFont> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssFont> cssMetaData;
-    @Nonnull
+    @NonNull
     private final MapAccessor<String> familyKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<FontWeight> weightKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<FontPosture> postureKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<CssSize> sizeKey;
 
     /**
@@ -56,8 +56,8 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
      * @param sizeKey    the font size key
      */
     public FontStyleableMapAccessor(String name,
-                                    MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey,
-                                    MapAccessor<FontPosture> postureKey, MapAccessor<CssSize> sizeKey) {
+                                    @NonNull MapAccessor<String> familyKey, @NonNull MapAccessor<FontWeight> weightKey,
+                                    @NonNull MapAccessor<FontPosture> postureKey, @NonNull MapAccessor<CssSize> sizeKey) {
         super(name, CssFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey},
                 CssFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(),
                         sizeKey.getDefaultValue()));
@@ -79,7 +79,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
         this.postureKey = postureKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssFont> getCssMetaData() {
         return cssMetaData;
@@ -89,19 +89,20 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
     private final Converter<CssFont> converter = new CssFontConverter(false);
     ;
 
+    @NonNull
     @Override
     public Converter<CssFont> getConverter() {
         return converter;
     }
 
     @Override
-    public CssFont get(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssFont get(@NonNull Map<? super Key<?>, Object> a) {
         CssFont f = CssFont.font(familyKey.get(a), weightKey.get(a), postureKey.get(a), sizeKey.get(a));
         return f;
     }
 
     @Override
-    public CssFont put(@Nonnull Map<? super Key<?>, Object> a, @Nullable CssFont value) {
+    public CssFont put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssFont value) {
         CssFont oldValue = get(a);
         if (value == null) {
             familyKey.put(a, null);
@@ -118,7 +119,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
     }
 
     @Override
-    public CssFont remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssFont remove(@NonNull Map<? super Key<?>, Object> a) {
         CssFont oldValue = get(a);
         familyKey.remove(a);
         weightKey.remove(a);

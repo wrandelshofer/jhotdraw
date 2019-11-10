@@ -6,7 +6,7 @@ package org.jhotdraw8.css.text;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
@@ -53,7 +53,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
     }
 
     @Override
-    public <TT extends CssFont> void produceTokensNonnull(@Nonnull TT font, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends CssFont> void produceTokensNonNull(@NonNull TT font, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         CssSize fontSize = font.getSize();
         String fontFamily = font.getFamily();
         final FontPosture posture = font.getPosture();
@@ -115,9 +115,9 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssFont parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssFont parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         CssSize fontSize = new CssSize(12.0);
@@ -125,7 +125,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
         // parse FontStyle
         if (tt.next() == CssTokenType.TT_IDENT) {
-            switch (tt.currentStringNonnull().toLowerCase()) {
+            switch (tt.currentStringNonNull().toLowerCase()) {
                 case NORMAL_STYLE:
                     fontPosture = FontPosture.REGULAR;
                     break;
@@ -144,7 +144,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         // parse FontWeight
         boolean fontWeightConsumed = false;
         if (tt.next() == CssTokenType.TT_IDENT) {
-            switch (tt.currentStringNonnull().toLowerCase()) {
+            switch (tt.currentStringNonNull().toLowerCase()) {
                 case NORMAL_WEIGHT:
                     fontWeight = FontWeight.NORMAL;
                     fontWeightConsumed = true;
@@ -175,7 +175,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         boolean fontWeightOrFontSizeConsumed = false;
         if (!fontWeightConsumed) {
             if (tt.next() == CssTokenType.TT_NUMBER) {
-                fontWeightOrFontSize = tt.currentNumberNonnull().doubleValue();
+                fontWeightOrFontSize = tt.currentNumberNonNull().doubleValue();
                 fontWeightOrFontSizeConsumed = true;
             } else {
                 tt.pushBack();
@@ -185,9 +185,9 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         // parse FontSize
         if (tt.next() == CssTokenType.TT_DIMENSION || tt.current() == CssTokenType.TT_NUMBER) {
             if (tt.current() == CssTokenType.TT_DIMENSION) {
-                fontSize = new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentStringNonnull());
+                fontSize = new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             } else if (tt.current() == CssTokenType.TT_NUMBER) {
-                fontSize = new CssSize(tt.currentNumberNonnull().doubleValue());
+                fontSize = new CssSize(tt.currentNumberNonNull().doubleValue());
             }
             if (fontWeightOrFontSizeConsumed) {
                 switch ((int) fontWeightOrFontSize) {

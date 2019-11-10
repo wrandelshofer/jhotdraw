@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -46,17 +46,17 @@ public class ImageFigure extends AbstractLeafFigure
      * This property is also set on the ImageView node, so that
      * {@link org.jhotdraw8.draw.io.SvgExportOutputFormat} can pick it up.
      */
-    @Nonnull
+    @NonNull
     public final static UriStyleableKey IMAGE_URI = new UriStyleableKey("src", null);
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey X = RectangleFigure.X;
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey Y = RectangleFigure.Y;
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    @Nonnull
+    @NonNull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     @Nullable
     private Image cachedImage;
@@ -75,29 +75,29 @@ public class ImageFigure extends AbstractLeafFigure
         set(BOUNDS, rect);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
+        return getNonNull(BOUNDS);
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
-        Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
+    public void reshapeInLocal(@NonNull Transform transform) {
+        Rectangle2D r = getNonNull(BOUNDS).getConvertedValue();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         set(BOUNDS, new CssRectangle2D(
                 width.getValue() < 0 ? x.add(width) : x,
                 height.getValue() < 0 ? y.add(height) : y,
                 width.abs(), height.abs()));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         ImageView imageView = new ImageView();
@@ -106,7 +106,7 @@ public class ImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         ImageView imageView = (ImageView) node;
         validateImage();
         imageView.setImage(cachedImage);
@@ -114,7 +114,7 @@ public class ImageFigure extends AbstractLeafFigure
         applyCompositableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyHideableFigureProperties(ctx, node);
-        Rectangle2D r = getNonnull(BOUNDS).getConvertedValue();
+        Rectangle2D r = getNonNull(BOUNDS).getConvertedValue();
         imageView.setX(r.getMinX());
         imageView.setY(r.getMinY());
         imageView.setFitWidth(r.getWidth());
@@ -123,13 +123,13 @@ public class ImageFigure extends AbstractLeafFigure
         imageView.getProperties().put(IMAGE_URI, get(IMAGE_URI));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

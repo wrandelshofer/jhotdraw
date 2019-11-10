@@ -15,7 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.util.prefs.Preferences;
 public class PreferencesUtil
         extends Preferences {
 
-    @Nonnull
+    @NonNull
     private HashMap<String, Object> map = new HashMap<>();
     private boolean isUserNode;
     private static HashMap<Package, Preferences> systemNodes;
@@ -51,7 +51,7 @@ public class PreferencesUtil
         map.put(key, value);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String get(String key, String def) {
         return (String) (map.containsKey(key) ? map.get(key) : def);
@@ -122,19 +122,19 @@ public class PreferencesUtil
         map.put(key, value);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public byte[] getByteArray(String key, byte[] def) {
         return (byte[]) (map.containsKey(key) ? map.get(key) : def);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String[] keys() throws BackingStoreException {
         return map.keySet().toArray(new String[map.keySet().size()]);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String[] childrenNames() throws BackingStoreException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -162,13 +162,13 @@ public class PreferencesUtil
         // empty
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String name() {
         return "Dummy";
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String absolutePath() {
         return "Dummy";
@@ -179,7 +179,7 @@ public class PreferencesUtil
         return isUserNode;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "Dummy";
@@ -232,7 +232,7 @@ public class PreferencesUtil
      * @param c The class
      * @return system node or a proxy.
      */
-    public static Preferences systemNodeForPackage(Class<?> c) {
+    public static Preferences systemNodeForPackage(@NonNull Class<?> c) {
         if (systemNodes != null) {
             if (!systemNodes.containsKey(c.getPackage())) {
                 systemNodes.put(c.getPackage(), new PreferencesUtil(false));
@@ -257,7 +257,7 @@ public class PreferencesUtil
      * @param c The class
      * @return user node or a proxy.
      */
-    public static Preferences userNodeForPackage(Class<?> c) {
+    public static Preferences userNodeForPackage(@NonNull Class<?> c) {
         if (userNodes != null) {
             if (!userNodes.containsKey(c.getPackage())) {
                 userNodes.put(c.getPackage(), new PreferencesUtil(false));
@@ -294,7 +294,7 @@ public class PreferencesUtil
      * @param name  Base name of the preference.
      * @param stage The window for which to track preferences.
      */
-    public static void installStagePrefsHandler(@Nonnull final Preferences prefs, final String name, @Nonnull Stage stage) {
+    public static void installStagePrefsHandler(@NonNull final Preferences prefs, final String name, @NonNull Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
@@ -310,7 +310,7 @@ public class PreferencesUtil
      * @param defaultSize This size is used when no preferences are stored yet for
      *                    this window.
      */
-    public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage, Dimension2D defaultSize) {
+    public static void installStagePrefsHandler(@NonNull final Preferences prefs, final String name, @NonNull Stage stage, @NonNull Dimension2D defaultSize) {
 
         double prefWidth;
         double prefHeight;
@@ -350,7 +350,7 @@ public class PreferencesUtil
      * @param splitPane          splitPane to which the node is added or removed
      * @param side               on which side of the split pane the element should be added
      */
-    public static void installVisibilityPrefsHandlers(Preferences prefs, @Nonnull Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
+    public static void installVisibilityPrefsHandlers(@NonNull Preferences prefs, @NonNull Node node, @NonNull BooleanProperty visibilityProperty, @NonNull SplitPane splitPane, Side side) {
         ChangeListener<? super Number> positionListener = (o, oldValue, newValue) -> {
             prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
         };
@@ -400,7 +400,7 @@ public class PreferencesUtil
         visibilityProperty.set(prefs.getBoolean(visibilityProperty.getName(), true));
     }
 
-    public static void installBooleanPropertyHandler(final Preferences prefs, final String name, BooleanProperty property) {
+    public static void installBooleanPropertyHandler(@NonNull final Preferences prefs, final String name, @NonNull BooleanProperty property) {
         boolean prefValue = prefs.getBoolean(name, true);
         property.setValue(prefValue);
         property.addListener((o, oldValue, newValue) -> {

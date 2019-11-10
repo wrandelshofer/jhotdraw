@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Clips the start of the path on the specified circle.
@@ -26,6 +27,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
     private final PathBuilder out;
     private double cx;
     private double cy;
+    @NonNull
     private State state = State.EXPECTING_INITIAL_MOVETO;
 
     public CutStartPathBuilder(PathBuilder out, double radius) {

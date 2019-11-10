@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.event.Event;
 
@@ -19,7 +20,7 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
     private final Object oldValue;
     private final Object newValue;
 
-    public <T> FigurePropertyChangeEvent(Figure source, Key<T> key, T oldValue, T newValue) {
+    public <T> FigurePropertyChangeEvent(@NonNull Figure source, Key<T> key, T oldValue, T newValue) {
         super(source);
         this.key = key;
         this.oldValue = oldValue;
@@ -30,11 +31,13 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
         return key;
     }
 
+    @NonNull
     public <T> T getOldValue() {
         @SuppressWarnings("unchecked") T oldValue = (T) this.oldValue;
         return oldValue;
     }
 
+    @NonNull
     public <T> T getNewValue() {
         @SuppressWarnings("unchecked") T newValue = (T) this.newValue;
         return newValue;

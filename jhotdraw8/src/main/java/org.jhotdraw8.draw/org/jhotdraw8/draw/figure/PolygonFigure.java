@@ -10,7 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
@@ -62,14 +62,14 @@ public class PolygonFigure extends AbstractLeafFigure
         set(POINTS, ImmutableLists.of(points));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
-        for (Point2D p : getNonnull(POINTS)) {
+        for (Point2D p : getNonNull(POINTS)) {
             minX = Math.min(minX, p.getX());
             minY = Math.min(minY, p.getY());
             maxX = Math.max(maxX, p.getX());
@@ -78,20 +78,20 @@ public class PolygonFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @Nonnull
+    @NonNull
     public CssRectangle2D getCssBoundsInLocal() {
         return new CssRectangle2D(getBoundsInLocal());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return Shapes.pathIteratorFromPoints(getNonnull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
+        return Shapes.pathIteratorFromPoints(getNonNull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
-        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
+    public void reshapeInLocal(@NonNull Transform transform) {
+        ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
@@ -99,22 +99,22 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(CssPoint2D t) {
-        ArrayList<Point2D> newP = getNonnull(POINTS).toArrayList();
+    public void translateInLocal(@NonNull CssPoint2D t) {
+        ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
         set(POINTS, ImmutableLists.ofCollection(newP));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Polygon();
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Polygon lineNode = (Polygon) node;
         applyHideableFigureProperties(ctx, node);
         applyFillableFigureProperties(ctx, lineNode);
@@ -134,14 +134,14 @@ public class PolygonFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Connector findConnector(@Nonnull Point2D p, Figure prototype) {
+    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new PathConnector(new BoundsLocator(getBoundsInLocal(), p));
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolygonOutlineHandle(this, POINTS, false));
         /*} else if (handleType == HandleType.MOVE) {
@@ -160,12 +160,12 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

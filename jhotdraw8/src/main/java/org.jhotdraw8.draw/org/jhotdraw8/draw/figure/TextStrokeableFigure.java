@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -48,7 +48,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -87,7 +87,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    NullablePaintableStyleableKey TEXT_STROKE = new NullablePaintableStyleableKey("text-stroke", null);
+    @Nullable NullablePaintableStyleableKey TEXT_STROKE = new NullablePaintableStyleableKey("text-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
@@ -120,7 +120,7 @@ public interface TextStrokeableFigure extends Figure {
     /**
      * Combined map accessor for all stroke style properties.
      */
-    StrokeStyleableMapAccessor TEXT_STROKE_STYLE = new StrokeStyleableMapAccessor("text-stroke-style", TEXT_STROKE_WIDTH,
+    @Nullable StrokeStyleableMapAccessor TEXT_STROKE_STYLE = new StrokeStyleableMapAccessor("text-stroke-style", TEXT_STROKE_WIDTH,
             TEXT_STROKE, TEXT_STROKE_TYPE, TEXT_STROKE_LINE_CAP, TEXT_STROKE_LINE_JOIN, TEXT_STROKE_MITER_LIMIT, TEXT_STROKE_DASH_OFFSET, TEXT_STROKE_DASH_ARRAY);
 
     /**
@@ -129,11 +129,11 @@ public interface TextStrokeableFigure extends Figure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
+    default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
         Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE));
-        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
-        double strokeWidth = units.convert(getStyledNonnull(TEXT_STROKE_WIDTH), UnitConverter.DEFAULT);
+        double strokeWidth = units.convert(getStyledNonNull(TEXT_STROKE_WIDTH), UnitConverter.DEFAULT);
         if (!Objects.equals(shape.getStroke(), paint)) {
             shape.setStroke(paint);
         }
@@ -151,7 +151,7 @@ public interface TextStrokeableFigure extends Figure {
         if (shape.getStrokeLineJoin() != slj) {
             shape.setStrokeLineJoin(slj);
         }
-        double d = units.convert(getStyledNonnull(TEXT_STROKE_MITER_LIMIT), UnitConverter.DEFAULT);
+        double d = units.convert(getStyledNonNull(TEXT_STROKE_MITER_LIMIT), UnitConverter.DEFAULT);
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
@@ -164,12 +164,12 @@ public interface TextStrokeableFigure extends Figure {
     }
 
 
-    default void applyTextStrokeDashProperties(@Nonnull Shape shape) {
-        double d = getStyledNonnull(TEXT_STROKE_DASH_OFFSET).getConvertedValue();
+    default void applyTextStrokeDashProperties(@NonNull Shape shape) {
+        double d = getStyledNonNull(TEXT_STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<CssSize> dashArray = getStyledNonnull(TEXT_STROKE_DASH_ARRAY);
+        ImmutableList<CssSize> dashArray = getStyledNonNull(TEXT_STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {

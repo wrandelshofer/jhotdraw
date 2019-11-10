@@ -8,11 +8,11 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -31,12 +31,12 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Point2D> cssMetaData;
-    @Nonnull
-    private final NonnullMapAccessor<Double> xKey;
-    @Nonnull
-    private final NonnullMapAccessor<Double> yKey;
+    @NonNull
+    private final NonNullMapAccessor<Double> xKey;
+    @NonNull
+    private final NonNullMapAccessor<Double> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -45,7 +45,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public Point2DStyleableMapAccessor(String name, NonnullMapAccessor<Double> xKey, NonnullMapAccessor<Double> yKey) {
+    public Point2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<Double> xKey, @NonNull NonNullMapAccessor<Double> yKey) {
         this(name, xKey, yKey, new Point2DConverter(false));
     }
 
@@ -57,8 +57,8 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
      * @param yKey      the key for the y coordinate of the point
      * @param converter String converter for the point
      */
-    public Point2DStyleableMapAccessor(String name, NonnullMapAccessor<Double> xKey, NonnullMapAccessor<Double> yKey, Converter<Point2D> converter) {
-        super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValueNonnull(), yKey.getDefaultValueNonnull()));
+    public Point2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<Double> xKey, @NonNull NonNullMapAccessor<Double> yKey, Converter<Point2D> converter) {
+        super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValueNonNull(), yKey.getDefaultValueNonNull()));
 
         Function<Styleable, StyleableProperty<Point2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -76,7 +76,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         this.yKey = yKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Point2D> getCssMetaData() {
         return cssMetaData;
@@ -90,15 +90,15 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D get(@Nonnull Map<? super Key<?>, Object> a) {
-        return new Point2D(xKey.getNonnull(a), yKey.getNonnull(a));
+    public Point2D get(@NonNull Map<? super Key<?>, Object> a) {
+        return new Point2D(xKey.getNonNull(a), yKey.getNonNull(a));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D put(@Nonnull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
+    public Point2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
         if (value == null) {
             throw new IllegalArgumentException("value must be nonnull");
         }
@@ -108,9 +108,9 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public Point2D remove(@NonNull Map<? super Key<?>, Object> a) {
         Point2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

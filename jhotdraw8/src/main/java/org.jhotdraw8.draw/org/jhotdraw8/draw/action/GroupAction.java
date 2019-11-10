@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -43,11 +43,11 @@ public class GroupAction extends AbstractSelectedAction {
      * @param editor       the drawing editor
      * @param groupFactory the group factory
      */
-    public GroupAction(Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
+    public GroupAction(@NonNull Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
         this(ID, app, editor, groupFactory);
     }
 
-    public GroupAction(String id, Application app, DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
+    public GroupAction(String id, @NonNull Application app, DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -69,7 +69,7 @@ public class GroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void group(@Nonnull DrawingView view, Collection<Figure> figures, @Nonnull Supplier<Figure> groupFactory) {
+    public static void group(@NonNull DrawingView view, @NonNull Collection<Figure> figures, @NonNull Supplier<Figure> groupFactory) {
         // We don't addChild an empty group
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped");

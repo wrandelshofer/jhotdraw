@@ -1,10 +1,10 @@
 /*
- * @(#)NonnullObjectKey.java
+ * @(#)NonNullObjectKey.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
@@ -32,19 +32,19 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class NonnullObjectKey<T> implements NonnullKey<T> {
+public class NonNullObjectKey<T> implements NonNullKey<T> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Holds a String representation of the name.
      */
-    @Nonnull
+    @NonNull
     private final String name;
     /**
      * Holds the default value.
      */
-    @Nonnull
+    @NonNull
     private final T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
@@ -56,7 +56,7 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
-    @Nonnull
+    @NonNull
     private final List<Class<?>> typeParameters;
 
     private final boolean isTransient;
@@ -69,7 +69,7 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public NonnullObjectKey(String name, Class<T> clazz, T defaultValue) {
+    public NonNullObjectKey(String name, Class<T> clazz, @NonNull T defaultValue) {
         this(name, clazz, null, defaultValue);
     }
 
@@ -83,11 +83,11 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
      *                       no type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public NonnullObjectKey(String name, Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nonnull T defaultValue) {
+    public NonNullObjectKey(String name, Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
         this(name, clazz, typeParameters, false, defaultValue);
     }
 
-    public NonnullObjectKey(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @Nonnull T defaultValue) {
+    public NonNullObjectKey(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
         if (name == null) {
             throw new IllegalArgumentException("key is null");
         }
@@ -110,13 +110,13 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
      *
      * @return name string.
      */
-    @Nonnull
+    @NonNull
     @Override
     public String getName() {
         return name;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Class<T> getValueType() {
         @SuppressWarnings("unchecked")
@@ -124,18 +124,19 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
         return ret;
     }
 
+    @NonNull
     @Override
     public Class<?> getComponentValueType() {
         return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getFullValueType() {
         StringBuilder buf = new StringBuilder();
@@ -161,7 +162,7 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
      *
      * @return the default value.
      */
-    @Nonnull
+    @NonNull
     @Override
     public T getDefaultValue() {
         return defaultValue;
@@ -179,7 +180,7 @@ public class NonnullObjectKey<T> implements NonnullKey<T> {
     /**
      * Returns the name string.
      */
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         String keyClass = getClass().getName();

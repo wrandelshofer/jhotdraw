@@ -10,7 +10,8 @@ import javafx.scene.Cursor;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -44,7 +45,9 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
+    @NonNull
     private TextArea textArea = new TextArea();
+    @Nullable
     private TextEditableFigure.TextEditorData editorData;
 
     /**
@@ -106,7 +109,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         event.consume();
         if (editorData != null) {
             stopEditing();
@@ -121,8 +124,8 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         y2 = y1;
         createdFigure = createFigure();
 
-        double anchorX = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = Geom.clamp(createdFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
@@ -140,7 +143,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
 
-    private void startEditing(@Nonnull TextEditableFigure.TextEditorData data, @Nonnull DrawingView dv) {
+    private void startEditing(@NonNull TextEditableFigure.TextEditorData data, @NonNull DrawingView dv) {
         dv.getSelectedFigures().clear();
         dv.getEditor().setHandleType(HandleType.SELECT);
         dv.getSelectedFigures().add(data.figure);
@@ -155,7 +158,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseReleased(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         event.consume();
         if (editorData != null) {
             return;
@@ -188,7 +191,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (editorData != null) {
             return;
         }
@@ -226,11 +229,12 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
      * This implementation is empty.
      */
     @Override
-    public void activate(DrawingEditor editor) {
+    public void activate(@NonNull DrawingEditor editor) {
         requestFocus();
         super.activate(editor);
     }
 
+    @NonNull
     @Override
     public String getHelpText() {
         return "CreationTool"

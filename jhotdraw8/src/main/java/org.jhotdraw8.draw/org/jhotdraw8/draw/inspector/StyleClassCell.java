@@ -12,7 +12,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
@@ -41,12 +41,12 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
         this(LayersInspector.class.getResource("StyleClassCell.fxml"), inspector);
     }
 
-    public StyleClassCell(@Nonnull URL fxmlUrl, StyleClassesInspector inspector) {
+    public StyleClassCell(@NonNull URL fxmlUrl, StyleClassesInspector inspector) {
         init(fxmlUrl);
         this.inspector = inspector;
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setResources(InspectorLabels.getResources().asResourceBundle());
@@ -79,6 +79,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
         }
     }
 
+    @NonNull
     public static Callback<ListView<StyleClassItem>, ListCell<StyleClassItem>> forListView(StyleClassesInspector inspector) {
         return list -> new StyleClassCell(inspector);
     }

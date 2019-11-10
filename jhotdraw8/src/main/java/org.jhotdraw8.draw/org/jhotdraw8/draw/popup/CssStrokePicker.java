@@ -5,6 +5,8 @@
 package org.jhotdraw8.draw.popup;
 
 import javafx.scene.Node;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssStroke;
 
@@ -14,7 +16,7 @@ public class CssStrokePicker extends AbstractPicker<CssStroke> {
     // FIXME create CssStrokeDialog
     private CssColorDialog dialog;
 
-    private void update(Node anchor, CssColor initialValue, BiConsumer<Boolean, CssColor> callback) {
+    private void update(@NonNull Node anchor, CssColor initialValue, @NonNull BiConsumer<Boolean, CssColor> callback) {
         if (dialog == null) {
             dialog = new CssColorDialog(anchor.getScene().getWindow());
         }
@@ -24,7 +26,7 @@ public class CssStrokePicker extends AbstractPicker<CssStroke> {
     }
 
     @Override
-    public void show(Node anchor, double screenX, double screenY, CssStroke initialValue, BiConsumer<Boolean, CssStroke> callback) {
+    public void show(@NonNull Node anchor, double screenX, double screenY, @Nullable CssStroke initialValue, @NonNull BiConsumer<Boolean, CssStroke> callback) {
         CssStroke initial = (initialValue == null) ? new CssStroke(CssColor.BLACK) : initialValue;
 
         update(anchor,

@@ -1,5 +1,7 @@
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,10 +87,12 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder {
         endTangentY = y2 - y1;
     }
 
+    @NonNull
     public List<PointAndTangent> getStartPoints() {
         return startPoints;
     }
 
+    @NonNull
     public List<PointAndTangent> getEndPoints() {
         return endPoints;
     }

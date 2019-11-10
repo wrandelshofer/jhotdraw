@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Key;
@@ -36,7 +36,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public RemoveTransformationsAction(@Nonnull Application app, DrawingEditor editor) {
+    public RemoveTransformationsAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -54,7 +54,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
 
     }
 
-    public static void removeTransformations(DrawingView view, Collection<Figure> figures) {
+    public static void removeTransformations(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
         Set<Key<?>> keys = TransformableFigure.getDeclaredKeys();
 
         DrawingModel model = view.getModel();

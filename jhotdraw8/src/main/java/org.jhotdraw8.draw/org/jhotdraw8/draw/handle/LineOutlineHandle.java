@@ -12,7 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -54,7 +54,7 @@ public class LineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         polyline1.setStroke(Color.WHITE);
         polyline2.setStroke(Paintable.getPaint(color));
@@ -72,14 +72,14 @@ public class LineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();
-        points[0] = f.getNonnull(LineConnectionFigure.START).getX().getConvertedValue();
-        points[1] = f.getNonnull(LineConnectionFigure.START).getY().getConvertedValue();
-        points[2] = f.getNonnull(LineConnectionFigure.END).getX().getConvertedValue();
-        points[3] = f.getNonnull(LineConnectionFigure.END).getY().getConvertedValue();
+        points[0] = f.getNonNull(LineConnectionFigure.START).getX().getConvertedValue();
+        points[1] = f.getNonNull(LineConnectionFigure.START).getY().getConvertedValue();
+        points[2] = f.getNonNull(LineConnectionFigure.END).getX().getConvertedValue();
+        points[3] = f.getNonNull(LineConnectionFigure.END).getY().getConvertedValue();
 
         t.transform2DPoints(points, 0, points, 0, 2);
         ObservableList<Double> pp1 = polyline1.getPoints();

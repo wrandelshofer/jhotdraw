@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.Rectangle2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -28,7 +28,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Rectangle2D> cssMetaData;
 
     /**
@@ -37,7 +37,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
      *
      * @param name The name of the key.
      */
-    public Rectangle2DStyleableKey(String name) {
+    public Rectangle2DStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -47,7 +47,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public Rectangle2DStyleableKey(String name, Rectangle2D defaultValue) {
+    public Rectangle2DStyleableKey(@NonNull String name, Rectangle2D defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -60,7 +60,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
      * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public Rectangle2DStyleableKey(String key, DirtyMask mask, Rectangle2D defaultValue) {
+    public Rectangle2DStyleableKey(@NonNull String key, DirtyMask mask, Rectangle2D defaultValue) {
         super(key, Rectangle2D.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Rectangle2D>> function = s -> {
@@ -77,7 +77,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Rectangle2D> getCssMetaData() {
         return cssMetaData;

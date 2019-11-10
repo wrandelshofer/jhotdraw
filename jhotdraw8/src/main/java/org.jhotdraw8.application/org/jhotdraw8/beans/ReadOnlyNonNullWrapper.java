@@ -1,5 +1,5 @@
 /*
- * @(#)ReadOnlyNonnullWrapper.java
+ * @(#)ReadOnlyNonNullWrapper.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.beans;
@@ -7,13 +7,13 @@ package org.jhotdraw8.beans;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
 /**
- * ReadOnlyNonnullWrapper.
+ * ReadOnlyNonNullWrapper.
  *
  * @author Werner Randelshofer
  */
-public class ReadOnlyNonnullWrapper<T> extends ReadOnlyObjectWrapper<T> {
+public class ReadOnlyNonNullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 
-    public ReadOnlyNonnullWrapper(Object bean, String name, T initialValue) {
+    public ReadOnlyNonNullWrapper(Object bean, String name, T initialValue) {
         super(bean, name, initialValue);
     }
 

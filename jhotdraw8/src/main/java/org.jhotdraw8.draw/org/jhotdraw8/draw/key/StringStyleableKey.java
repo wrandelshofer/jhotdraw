@@ -8,8 +8,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -25,10 +25,10 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class StringStyleableKey extends AbstractStyleableKey<String>
-        implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {
+        implements WriteableStyleableMapAccessor<String>, NonNullMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
@@ -79,17 +79,17 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     private final CssStringConverter converter;
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<String> getConverter() {
         return converter;

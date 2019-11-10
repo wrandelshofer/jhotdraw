@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -22,11 +22,11 @@ import java.text.ParseException;
 public class XmlUriConverter implements Converter<URI> {
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull URI value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull URI value) throws IOException {
         out.append(value.toString());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public URI fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         URI value = URI.create(in.toString());

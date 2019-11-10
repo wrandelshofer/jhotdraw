@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 
@@ -60,7 +60,7 @@ public class CssStop {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "CssStop{" + "offset=" + offset + ", " + color + '}';

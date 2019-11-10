@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.popup;
 
 import javafx.scene.Node;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 
@@ -14,7 +15,7 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
     // FIXME create CssPaintableDialog
     private CssColorDialog dialog;
 
-    private void update(Node anchor, CssColor initialValue, BiConsumer<Boolean, CssColor> callback) {
+    private void update(@NonNull Node anchor, CssColor initialValue, @NonNull BiConsumer<Boolean, CssColor> callback) {
         if (dialog == null) {
             dialog = new CssColorDialog(anchor.getScene().getWindow());
         }
@@ -26,7 +27,7 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
     }
 
     @Override
-    public void show(Node anchor, double screenX, double screenY, Paintable initial, BiConsumer<Boolean, Paintable> callback) {
+    public void show(@NonNull Node anchor, double screenX, double screenY, Paintable initial, @NonNull BiConsumer<Boolean, Paintable> callback) {
         update(anchor,
                 (initial instanceof CssColor) ? ((CssColor) initial) : null,
                 callback::accept

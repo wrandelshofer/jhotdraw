@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.key;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * NullableBooleanKey.
  *
@@ -20,7 +22,7 @@ public class NullableBooleanKey extends NullableObjectKey<Boolean> {
      *
      * @param name The name of the key.
      */
-    public NullableBooleanKey(String name) {
+    public NullableBooleanKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -33,7 +35,7 @@ public class NullableBooleanKey extends NullableObjectKey<Boolean> {
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanKey(String key, Boolean defaultValue) {
+    public NullableBooleanKey(@NonNull String key, Boolean defaultValue) {
         super(key, Boolean.class, defaultValue);
     }
 

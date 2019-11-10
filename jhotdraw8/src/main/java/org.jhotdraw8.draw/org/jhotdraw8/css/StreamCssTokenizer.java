@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.CharSequenceReader;
@@ -535,7 +535,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean identMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean identMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         boolean consumed = false;
         if (ch == '-') {
             buf.append('-');
@@ -563,7 +563,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean nameMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean nameMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (nmcharMacro(ch, buf)) {
             while (nmcharMacro(ch = in.nextChar(), buf)) {
             }
@@ -581,7 +581,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean numMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean numMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         boolean hasSign = false;
         if (ch == '-') {
             hasSign = true;
@@ -674,7 +674,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean nmstartMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean nmstartMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z') {
             buf.append((char) ch);
             return true;
@@ -695,7 +695,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean escapeMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean escapeMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (ch == '\\') {
             ch = in.nextChar();
             if ('0' <= ch && ch <= '9' || 'a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'F') {
@@ -737,7 +737,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean unicodeAfterBackslashMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean unicodeAfterBackslashMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         int unicodeScalar = hexToInt(ch);
         if (unicodeScalar == -1) {
             return false;
@@ -795,7 +795,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean nmcharMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean nmcharMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z'//
                 || '0' <= ch && ch <= '9' || ch == '-') {
             buf.append((char) ch);
@@ -815,7 +815,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean commentAfterSlashStarMacro(@Nonnull StringBuilder buf) throws IOException {
+    private boolean commentAfterSlashStarMacro(@NonNull StringBuilder buf) throws IOException {
         int ch = in.nextChar();
         while (ch != -1) {
             if (ch == '*') {
@@ -838,7 +838,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean uriMacro(@Nonnull StringBuilder buf) throws IOException {
+    private boolean uriMacro(@NonNull StringBuilder buf) throws IOException {
         int ch = in.nextChar();
         // skip whitespace
         while (ch == ' ' || ch == '\n' || ch == '\t') {
@@ -885,7 +885,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @param buf the token that we are currently building
      * @return true on success
      */
-    private boolean stringMacro(int ch, @Nonnull StringBuilder buf) throws IOException {
+    private boolean stringMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         int quote = ch;
         if (quote != '\'' && quote != '"') {
             throw new IllegalArgumentException("illegal quote character:" + (char) ch);
@@ -945,6 +945,7 @@ public class StreamCssTokenizer implements CssTokenizer {
         pushBack();
     }
 
+    @Nullable
     @Override
     public CssToken getToken() {
         return new CssToken(currentToken, stringValue, numericValue, lineNumber, startPosition, endPosition);

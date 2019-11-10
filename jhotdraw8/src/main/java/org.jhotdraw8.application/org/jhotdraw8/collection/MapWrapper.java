@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractMap;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class MapWrapper<K, V> extends AbstractMap<K, V> {
         return backingMap.size();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
         return backingMap.entrySet().asSet();

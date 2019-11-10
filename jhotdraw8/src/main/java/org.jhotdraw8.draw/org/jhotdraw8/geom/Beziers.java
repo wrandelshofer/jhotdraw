@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
@@ -39,6 +40,7 @@ public class Beziers {
      * @param t  the time
      * @return the point at time t
      */
+    @NonNull
     public static Point2D evalCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                          double t) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
@@ -73,6 +75,7 @@ public class Beziers {
      * @param t  the time
      * @return the point at time t
      */
+    @NonNull
     public static Point2D evalLine(double x0, double y0, double x1, double y1, double t) {
         return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
@@ -89,6 +92,7 @@ public class Beziers {
      * @param t  the time
      * @return the point at time t
      */
+    @NonNull
     public static Point2D evalQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = (x1 - x0) * t + x0;

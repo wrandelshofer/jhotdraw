@@ -6,6 +6,7 @@ package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
 import javafx.css.StyleablePropertyFactory;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -60,8 +61,10 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleable
 
     }
 
+    @NonNull
     private final Converter<T> converter;
 
+    @NonNull
     @Override
     public Converter<T> getConverter() {
         return converter;

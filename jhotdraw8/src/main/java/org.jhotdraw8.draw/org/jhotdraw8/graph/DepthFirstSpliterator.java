@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
@@ -23,11 +23,11 @@ import java.util.function.Predicate;
  */
 public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
-    @Nonnull
+    @NonNull
     private final Function<V, Iterable<V>> nextFunction;
-    @Nonnull
+    @NonNull
     private final Deque<V> deque;
-    @Nonnull
+    @NonNull
     private final Predicate<V> visited;
 
     /**
@@ -69,7 +69,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
 
     @Override
-    public boolean tryAdvance(@Nonnull Consumer<? super V> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
         V current = deque.pollLast();
         if (current == null) {
             return false;

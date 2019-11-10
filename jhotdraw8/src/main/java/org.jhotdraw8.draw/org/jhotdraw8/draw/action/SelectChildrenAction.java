@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.Action;
@@ -34,7 +34,7 @@ public class SelectChildrenAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public SelectChildrenAction(Application app, DrawingEditor editor) {
+    public SelectChildrenAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels = DrawLabels.getResources();
         set(Action.ID_KEY, ID);
@@ -52,7 +52,7 @@ public class SelectChildrenAction extends AbstractSelectedAction {
 
     }
 
-    public static void selectChildren(@Nonnull DrawingView view, Collection<Figure> figures) {
+    public static void selectChildren(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
         List<Figure> selectedChildren = new ArrayList<>();
         for (Figure f : figures) {
             for (Figure child : f.getChildren()) {

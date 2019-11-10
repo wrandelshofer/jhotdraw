@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Objects;
 
@@ -80,7 +80,7 @@ public interface UnitConverter {
         return 100.0;
     }
 
-    default double getFactor(@Nonnull String unit) {
+    default double getFactor(@NonNull String unit) {
         final double factor;
         switch (unit) {
             case PERCENTAGE:
@@ -159,7 +159,7 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(double value, @Nonnull String inputUnit, @Nonnull String outputUnit) {
+    default double convert(double value, @NonNull String inputUnit, @NonNull String outputUnit) {
         if (value == 0.0 || Objects.equals(inputUnit, outputUnit)) {
             return value;
         }
@@ -167,7 +167,8 @@ public interface UnitConverter {
         return value * getFactor(outputUnit) / getFactor(inputUnit);
     }
 
-    default CssSize convertSize(double value, @Nonnull String inputUnit, @Nonnull String outputUnit) {
+    @NonNull
+    default CssSize convertSize(double value, @NonNull String inputUnit, @NonNull String outputUnit) {
         return new CssSize(convert(value, inputUnit, outputUnit), outputUnit);
     }
 
@@ -178,15 +179,17 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(@Nonnull CssSize value, @Nonnull String outputUnit) {
+    default double convert(@NonNull CssSize value, @NonNull String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }
 
-    default CssSize convertSize(@Nonnull CssSize value, @Nonnull String outputUnit) {
+    @NonNull
+    default CssSize convertSize(@NonNull CssSize value, @NonNull String outputUnit) {
         return new CssSize(convert(value.getValue(), value.getUnits(), outputUnit), outputUnit);
     }
 
-    default CssPoint2D convertPoint2D(CssPoint2D cssPoint2D, @Nonnull String units) {
+    @NonNull
+    default CssPoint2D convertPoint2D(@NonNull CssPoint2D cssPoint2D, @NonNull String units) {
         return new CssPoint2D(convertSize(cssPoint2D.getX(), units),
                 convertSize(cssPoint2D.getY(), units));
     }

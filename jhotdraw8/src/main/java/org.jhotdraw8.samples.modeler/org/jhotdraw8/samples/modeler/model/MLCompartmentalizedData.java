@@ -4,7 +4,8 @@
  */
 package org.jhotdraw8.samples.modeler.model;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableMap;
 import org.jhotdraw8.collection.ImmutableMaps;
@@ -20,28 +21,28 @@ import java.util.Objects;
  * Thus this is effectively a map of type {@literal Map<String,List<String>>>}.
  */
 public class MLCompartmentalizedData {
-    @Nonnull
+    @NonNull
     private final ImmutableMap<String, ImmutableList<String>> map;
 
     public MLCompartmentalizedData() {
         this.map = ImmutableMaps.emptyMap();
     }
 
-    public MLCompartmentalizedData(ImmutableMap<String, ImmutableList<String>> map) {
+    public MLCompartmentalizedData(@NonNull ImmutableMap<String, ImmutableList<String>> map) {
         this.map = map;
     }
 
-    public MLCompartmentalizedData(Map<String, ? extends ImmutableList<String>> map) {
+    public MLCompartmentalizedData(@NonNull Map<String, ? extends ImmutableList<String>> map) {
         this.map = ImmutableMaps.ofMap(map);
     }
 
-    @Nonnull
+    @NonNull
     public ImmutableMap<String, ImmutableList<String>> getMap() {
         return map;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }
@@ -57,6 +58,7 @@ public class MLCompartmentalizedData {
         return Objects.hash(map);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "MLCompartmentalizedData{" +

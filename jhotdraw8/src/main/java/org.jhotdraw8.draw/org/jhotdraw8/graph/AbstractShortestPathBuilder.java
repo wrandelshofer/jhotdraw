@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.util.ToDoubleTriFunction;
@@ -21,32 +21,32 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
 public abstract class AbstractShortestPathBuilder<V, A> {
-    @Nonnull
+    @NonNull
     private Function<V, Iterable<Arc<V, A>>> nextNodesFunction;
-    @Nonnull
+    @NonNull
     private ToDoubleTriFunction<V, V, A> costf;
     private double maxCost = Double.MAX_VALUE;
 
     public AbstractShortestPathBuilder() {
     }
 
-    public AbstractShortestPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
-                                       @Nonnull final ToDoubleFunction<A> costf) {
+    public AbstractShortestPathBuilder(@NonNull final DirectedGraph<V, A> graph,
+                                       @NonNull final ToDoubleFunction<A> costf) {
         this(graph::getNextArcs, costf);
     }
 
-    public AbstractShortestPathBuilder(@Nonnull final DirectedGraph<V, A> graph,
-                                       @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
+    public AbstractShortestPathBuilder(@NonNull final DirectedGraph<V, A> graph,
+                                       @NonNull final ToDoubleTriFunction<V, V, A> costf) {
         this(graph::getNextArcs, costf);
     }
 
-    public AbstractShortestPathBuilder(@Nonnull final Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
-                                       @Nonnull final ToDoubleFunction<A> costf) {
+    public AbstractShortestPathBuilder(@NonNull final Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
+                                       @NonNull final ToDoubleFunction<A> costf) {
         this(nextNodesFunction, (v1, v2, a) -> costf.applyAsDouble(a));
     }
 
-    public AbstractShortestPathBuilder(@Nonnull final Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
-                                       @Nonnull final ToDoubleTriFunction<V, V, A> costf) {
+    public AbstractShortestPathBuilder(@NonNull final Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
+                                       @NonNull final ToDoubleTriFunction<V, V, A> costf) {
         this.nextNodesFunction = nextNodesFunction;
         this.costf = costf;
     }
@@ -66,7 +66,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePath(@Nonnull V start, @Nonnull V goal) {
+    public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull V goal) {
         return findEdgePath(start, goal::equals);
     }
 
@@ -85,7 +85,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate) {
+    public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
         BackLink<V, A> node = search(start, goalPredicate);
         if (node == null) {
             return null;
@@ -106,7 +106,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePathOverWaypoints(Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findEdgePathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
@@ -143,8 +143,8 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findVertexPath(@Nonnull V start,
-                                                           @Nonnull Predicate<V> goalPredicate) {
+    public Map.Entry<VertexPath<V>, Double> findVertexPath(@NonNull V start,
+                                                           @NonNull Predicate<V> goalPredicate) {
 
         BackLink<V, A> node = search(start, goalPredicate
         );
@@ -166,7 +166,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findVertexPathOverWaypoints(@Nonnull Collection<? extends V> waypoints) {
+    public Map.Entry<VertexPath<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
@@ -188,8 +188,9 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         return new AbstractMap.SimpleEntry<>(new VertexPath<>(combinedPath), cost);
     }
 
-    private BackLink<V, A> search(@Nonnull V start,
-                                  @Nonnull Predicate<V> goalPredicate) {
+    @Nullable
+    private BackLink<V, A> search(@NonNull V start,
+                                  @NonNull Predicate<V> goalPredicate) {
         return search(start, goalPredicate, maxCost, nextNodesFunction, costf);
     }
 
@@ -204,15 +205,16 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      *                          returns the cost &gt; 0.
      * @return the back links that were found from goal to start
      */
-    protected abstract BackLink<V, A> search(@Nonnull V start,
-                                             @Nonnull Predicate<V> goalPredicate,
+    @Nullable
+    protected abstract BackLink<V, A> search(@NonNull V start,
+                                             @NonNull Predicate<V> goalPredicate,
                                              double maxCost,
                                              Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                              ToDoubleTriFunction<V, V, A> costf);
 
     public static abstract class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
         @Override
-        public int compareTo(BackLink<VV, AA> that) {
+        public int compareTo(@NonNull BackLink<VV, AA> that) {
             return Double.compare(this.getCost(), that.getCost());
         }
 
@@ -249,6 +251,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
             return length;
         }
 
+        @Nullable
         public abstract BackLink<VV, AA> getParent();
 
         public abstract VV getVertex();
@@ -262,19 +265,21 @@ public abstract class AbstractShortestPathBuilder<V, A> {
 
     }
 
-    public void setCostFunction(ToDoubleTriFunction<V, V, A> costf) {
+    public void setCostFunction(@NonNull ToDoubleTriFunction<V, V, A> costf) {
         this.costf = costf;
     }
 
+    @NonNull
     public ToDoubleTriFunction<V, V, A> getCostFunction() {
         return costf;
     }
 
+    @NonNull
     public Function<V, Iterable<Arc<V, A>>> getNextNodesFunction() {
         return nextNodesFunction;
     }
 
-    public void setNextNodesFunction(Function<V, Iterable<Arc<V, A>>> nextNodesFunction) {
+    public void setNextNodesFunction(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction) {
         this.nextNodesFunction = nextNodesFunction;
     }
 }

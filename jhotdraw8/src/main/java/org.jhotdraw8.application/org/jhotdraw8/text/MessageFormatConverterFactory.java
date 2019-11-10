@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.text.DateFormat;
@@ -55,7 +55,7 @@ public class MessageFormatConverterFactory implements ConverterFactory {
         this.locale = locale;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<?> apply(@Nullable String type, @Nullable String style) {
         if (type == null || type.isEmpty()) {

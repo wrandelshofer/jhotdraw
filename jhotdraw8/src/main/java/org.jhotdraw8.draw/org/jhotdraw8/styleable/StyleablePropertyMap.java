@@ -13,7 +13,7 @@ import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMapEntryProperty;
@@ -96,11 +96,11 @@ public class StyleablePropertyMap {
      */
     private final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
 
-    @Nonnull
+    @NonNull
     private MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
 
         @Override
-        public void onChanged(MapChangeListener.Change<? extends Key<?>, ? extends Object> change) {
+        public void onChanged(@NonNull MapChangeListener.Change<? extends Key<?>, ? extends Object> change) {
             updateOutput(change.getKey());
         }
     };
@@ -269,7 +269,7 @@ public class StyleablePropertyMap {
     }
 
     @Nullable
-    public <T> T remove(@Nonnull StyleOrigin origin, Key<T> key) {
+    public <T> T remove(@NonNull StyleOrigin origin, Key<T> key) {
         T value = null;
         switch (origin) {
             case INLINE:
@@ -306,7 +306,7 @@ public class StyleablePropertyMap {
         return value;
     }
 
-    public void removeAll(@Nonnull StyleOrigin origin) {
+    public void removeAll(@NonNull StyleOrigin origin) {
         switch (origin) {
             case INLINE:
                 if (inline != null) {
@@ -338,11 +338,11 @@ public class StyleablePropertyMap {
     // ---
     public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-        @Nonnull
+        @NonNull
         private final Key<T> key;
         private final CssMetaData<?, T> metaData;
 
-        public MapStyleableProperty(@Nonnull Key<T> key, CssMetaData<?, T> metaData) {
+        public MapStyleableProperty(@NonNull Key<T> key, CssMetaData<?, T> metaData) {
             this.key = key;
             this.metaData = metaData;
 
@@ -354,6 +354,7 @@ public class StyleablePropertyMap {
             return StyleablePropertyMap.this.getBean();
         }
 
+        @Nullable
         @Override
         public String getName() {
             return key.getName();

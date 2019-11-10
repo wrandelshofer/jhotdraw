@@ -1,4 +1,4 @@
-/* @(#)NonnullPropertyTest.java
+/* @(#)NonNullPropertyTest.java
  * Copyright (c) 2015 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
@@ -13,14 +13,14 @@ import java.util.Objects;
 /**
  * @author wr
  */
-public class NonnullPropertyTest {
+public class NonNullPropertyTest {
 
     @Test
     public void testBind() {
         double minv = 0;
         double maxv = 1;
 
-        NonnullProperty<String> p1 = new NonnullProperty<>(null, null, "hello");
+        NonNullProperty<String> p1 = new NonNullProperty<>(null, null, "hello");
         ObjectProperty<String> p2 = new SimpleObjectProperty<>(null);
         p1.addListener((o, oldv, newv) -> {
             Objects.requireNonNull(newv);

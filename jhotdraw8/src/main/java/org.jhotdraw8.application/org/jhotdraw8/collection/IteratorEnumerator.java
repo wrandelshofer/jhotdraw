@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 
@@ -14,12 +14,12 @@ import java.util.Iterator;
  * @author Werner Randelshofer
  */
 public class IteratorEnumerator<E> implements Enumerator<E> {
-    @Nonnull
+    @NonNull
     private final Iterator<? extends E> iterator;
 
     private E current;
 
-    public IteratorEnumerator(final @Nonnull Iterator<? extends E> iterator) {
+    public IteratorEnumerator(final @NonNull Iterator<? extends E> iterator) {
         this.iterator = iterator;
     }
 

@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
@@ -35,7 +37,7 @@ public class CssListConverterTest {
     /**
      * Test of toString method.
      */
-    public void testToString(List<Double> value, String expected) throws Exception {
+    public void testToString(@Nullable List<Double> value, String expected) throws Exception {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -50,7 +52,7 @@ public class CssListConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type.
      */
-    public void testDoubleFromString(List<Double> expected, String string) throws Exception {
+    public void testDoubleFromString(List<Double> expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -64,7 +66,7 @@ public class CssListConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type and "=>" delimiter.
      */
-    public void testDoubleArrowFromString(List<Double> expected, String string) throws Exception {
+    public void testDoubleArrowFromString(List<Double> expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -79,7 +81,7 @@ public class CssListConverterTest {
     /**
      * Test of fromString method with a {@code String} element type.
      */
-    public void testStringFromString(List<String> expected, String string) throws Exception {
+    public void testStringFromString(List<String> expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -90,6 +92,7 @@ public class CssListConverterTest {
         assertEquals(expected, actual.toArrayList());
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testDoubleFromStringFactory() {
         return Arrays.asList(
@@ -110,6 +113,7 @@ public class CssListConverterTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testDoubleArrowFromStringFactory() {
         return Arrays.asList(
@@ -129,6 +133,8 @@ public class CssListConverterTest {
                 dynamicTest("24", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1=> 2=> 3] 4"))
         );
     }
+
+    @NonNull
     @TestFactory
     public List<DynamicTest> testStringFromStringFactory() {
         return Arrays.asList(
@@ -141,6 +147,7 @@ public class CssListConverterTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testToStringFactory() {
         return Arrays.asList(

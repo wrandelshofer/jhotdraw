@@ -5,7 +5,7 @@
 package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableListBase;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean setAll(@Nonnull Collection<? extends E> col) {
+    public boolean setAll(@NonNull Collection<? extends E> col) {
         beginChange();
         try {
             clear();
@@ -82,7 +82,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(@NonNull Collection<? extends E> c) {
         beginChange();
         try {
             boolean res = super.addAll(c);
@@ -93,7 +93,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(int index, @NonNull Collection<? extends E> c) {
         beginChange();
         try {
             boolean res = super.addAll(index, c);
@@ -114,7 +114,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(@NonNull Collection<?> c) {
         beginChange();
         try {
             boolean res = super.removeAll(c);
@@ -125,7 +125,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(@NonNull Collection<?> c) {
         beginChange();
         try {
             boolean res = super.retainAll(c);
@@ -250,7 +250,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         return old;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         return new SubObservableList(super.subList(fromIndex, toIndex));
@@ -271,27 +271,27 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         return doAdd(size(), e, true);
     }
 
-    @Nonnull
+    @NonNull
     public Iterator<E> descendingIterator(int index) {
         return new ObservableDescendingIterator(index);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Iterator<E> descendingIterator() {
         return descendingIterator(size());
     }
 
-    @Nonnull
+    @NonNull
     public Iterable<E> descending() {
         return descending(size());
     }
 
-    @Nonnull
+    @NonNull
     public Iterable<E> descending(int index) {
         return new Iterable<E>() {
 
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<E> iterator() {
                 return descendingIterator(index);
@@ -300,16 +300,16 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         };
     }
 
-    @Nonnull
+    @NonNull
     public Iterable<E> ascending() {
         return ascending(size());
     }
 
-    @Nonnull
+    @NonNull
     public Iterable<E> ascending(int index) {
         return new Iterable<E>() {
 
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<E> iterator() {
                 return listIterator(index);
@@ -318,7 +318,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         };
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ListIterator<E> listIterator(int index) {
         return new ObservableListIterator(index);
@@ -525,21 +525,25 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         return doAdd(size(), e, true);
     }
 
+    @Nullable
     @Override
     public final E pollFirst() {
         return isEmpty() ? null : removeFirst();
     }
 
+    @Nullable
     @Override
     public final E pollLast() {
         return isEmpty() ? null : removeLast();
     }
 
+    @Nullable
     @Override
     public final E peekFirst() {
         return isEmpty() ? null : getFirst();
     }
 
+    @Nullable
     @Override
     public final E peekLast() {
         return isEmpty() ? null : getLast();
@@ -615,21 +619,21 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             return sublist.contains(o);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Iterator<E> iterator() {
             return sublist.iterator();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Object[] toArray() {
             return sublist.toArray();
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> T[] toArray(T[] a) {
+        public <T> T[] toArray(@NonNull T[] a) {
             return sublist.toArray(a);
         }
 
@@ -644,12 +648,12 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
 
         @Override
-        public boolean containsAll(Collection<?> c) {
+        public boolean containsAll(@NonNull Collection<?> c) {
             return sublist.containsAll(c);
         }
 
         @Override
-        public boolean addAll(Collection<? extends E> c) {
+        public boolean addAll(@NonNull Collection<? extends E> c) {
             beginChange();
             try {
                 boolean res = sublist.addAll(c);
@@ -660,7 +664,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
 
         @Override
-        public boolean addAll(int index, Collection<? extends E> c) {
+        public boolean addAll(int index, @NonNull Collection<? extends E> c) {
             beginChange();
             try {
                 boolean res = sublist.addAll(index, c);
@@ -671,7 +675,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
 
         @Override
-        public boolean removeAll(Collection<?> c) {
+        public boolean removeAll(@NonNull Collection<?> c) {
             beginChange();
             try {
                 boolean res = sublist.removeAll(c);
@@ -682,7 +686,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
 
         @Override
-        public boolean retainAll(Collection<?> c) {
+        public boolean retainAll(@NonNull Collection<?> c) {
             beginChange();
             try {
                 boolean res = sublist.retainAll(c);
@@ -732,19 +736,19 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             return sublist.lastIndexOf(o);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ListIterator<E> listIterator() {
             return sublist.listIterator();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ListIterator<E> listIterator(int index) {
             return sublist.listIterator(index);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public List<E> subList(int fromIndex, int toIndex) {
             return new SubObservableList(sublist.subList(fromIndex, toIndex));
@@ -766,12 +770,13 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);
     }
 
+    @NonNull
     @Override
     public Stream<E> stream() {
         return StreamSupport.stream(spliterator(), false);

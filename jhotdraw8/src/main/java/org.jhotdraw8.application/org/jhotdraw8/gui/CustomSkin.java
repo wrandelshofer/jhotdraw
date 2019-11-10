@@ -6,7 +6,7 @@ package org.jhotdraw8.gui;
 
 import javafx.scene.control.Control;
 import javafx.scene.control.SkinBase;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * A custom skin without behavior.
@@ -15,7 +15,7 @@ import org.jhotdraw8.annotation.Nonnull;
  */
 public class CustomSkin<C extends Control> extends SkinBase<C> {
 
-    public CustomSkin(@Nonnull C control) {
+    public CustomSkin(@NonNull C control) {
         super(control);
     }
 

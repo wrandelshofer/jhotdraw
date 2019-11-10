@@ -14,7 +14,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * ResizeButton.
@@ -42,7 +42,7 @@ public class ResizeButton extends Region {
         target.set(value);
     }
 
-    private void mouseDragged(@Nonnull MouseEvent evt) {
+    private void mouseDragged(@NonNull MouseEvent evt) {
         final Region t = getTarget();
         if (t != null && pressed != null) {
             Point2D current = new Point2D(evt.getSceneX(), evt.getSceneY());
@@ -52,7 +52,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    private void mousePressed(@Nonnull MouseEvent evt) {
+    private void mousePressed(@NonNull MouseEvent evt) {
         final Region t = getTarget();
         if (t != null) {
             pressed = new Point2D(evt.getSceneX(), evt.getSceneY());
@@ -60,7 +60,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<Region> targetProperty() {
         return target;
     }

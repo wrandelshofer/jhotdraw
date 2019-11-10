@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
@@ -42,7 +42,7 @@ public abstract class AbstractHandle implements Handle {
      * Returns true if both handles have the same class.
      */
     @Override
-    public boolean isCompatible(@Nonnull Handle that) {
+    public boolean isCompatible(@NonNull Handle that) {
         return that.getClass() == this.getClass();
     }
 

@@ -4,6 +4,7 @@
 
 package org.jhotdraw8.tree;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.BreadthFirstSpliterator;
 import org.jhotdraw8.graph.DepthFirstSpliterator;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class TreeTraversalTest {
 
+    @NonNull
     private static SimpleTreeNode<String> createTree() {
         //       F
         //     ↙︎  ↘︎

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 
 import java.beans.DefaultPersistenceDelegate;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class FigurePersistenceDelegate extends DefaultPersistenceDelegate {
 
 
-    protected void initialixze(Class<?> type, Object oldInstance, Object newInstance, @Nonnull Encoder out) {
+    protected void initialixze(Class<?> type, Object oldInstance, Object newInstance, @NonNull Encoder out) {
         if (true) {
             return;
         }

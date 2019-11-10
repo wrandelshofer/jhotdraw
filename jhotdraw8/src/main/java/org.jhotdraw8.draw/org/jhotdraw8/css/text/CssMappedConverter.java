@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -19,17 +19,19 @@ import java.util.function.Consumer;
 
 public class CssMappedConverter<E> implements CssConverter<E> {
 
+    @NonNull
     private final Map<String, E> fromStringMap;
+    @NonNull
     private final Map<E, String> toStringMap;
     private final boolean nullable;
     private final String name;
 
 
-    public CssMappedConverter(String name, Map<String, E> fromStringMap) {
+    public CssMappedConverter(String name, @NonNull Map<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
 
-    public CssMappedConverter(String name, Map<String, E> fromStringMap, boolean nullable) {
+    public CssMappedConverter(String name, @NonNull Map<String, E> fromStringMap, boolean nullable) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {
@@ -41,7 +43,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
     @Nullable
-    public E parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public E parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());
         }
@@ -58,7 +60,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");
@@ -81,7 +83,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
     @Override
-    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> consumer) {
+    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("Value is not nullable.");

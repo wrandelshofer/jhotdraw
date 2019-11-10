@@ -1,6 +1,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.scene.shape.PathElement;
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -18,12 +19,13 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 class ShapesTest {
 
-    void testDoubleSvgStringFromAWT(String input, String expected) throws IOException {
+    void testDoubleSvgStringFromAWT(@NonNull String input, String expected) throws IOException {
         Path2D.Double path = Shapes.awtShapeFromSvgString(input);
         String actual = Shapes.doubleSvgStringFromAWT(path);
         assertEquals(expected, actual);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> doubleSvgStringFromAWTFactory() {
         return Arrays.asList(
@@ -54,24 +56,25 @@ class ShapesTest {
         );
     }
 
-    void testDoubleRelativeSvgStringFromAWT(String input, String expected) throws IOException {
+    void testDoubleRelativeSvgStringFromAWT(@NonNull String input, String expected) throws IOException {
         Path2D.Double path = Shapes.awtShapeFromSvgString(input);
         String actual = Shapes.doubleRelativeSvgStringFromAWT(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
-    void testFloatRelativeSvgStringFromAWT(String input, String expected) throws IOException {
+    void testFloatRelativeSvgStringFromAWT(@NonNull String input, String expected) throws IOException {
         Path2D.Double path = Shapes.awtShapeFromSvgString(input);
         String actual = Shapes.floatRelativeSvgStringFromAWT(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
-    void testFloatSvgStringFromAWT(String input, String expected) throws IOException {
+    void testFloatSvgStringFromAWT(@NonNull String input, String expected) throws IOException {
         Path2D.Double path = Shapes.awtShapeFromSvgString(input);
         String actual = Shapes.floatSvgStringFromAWT(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> floatSvgStringFromAWTFactory() {
         return Arrays.asList(
@@ -102,6 +105,7 @@ class ShapesTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> doubleRelativeSvgStringFromAWTFactory() {
         return Arrays.asList(
@@ -126,12 +130,13 @@ class ShapesTest {
         );
     }
 
-    void testSvgStringFromElements(String input, String expected) throws IOException {
+    void testSvgStringFromElements(@NonNull String input, String expected) throws IOException {
         List<PathElement> elements = Shapes.fxPathElementsFromSvgString(input);
         String actual = Shapes.doubleSvgStringFromElements(elements);
         assertEquals(expected, actual);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> doubleSvgStringFromElementsFactory() {
         return Arrays.asList(
@@ -151,6 +156,7 @@ class ShapesTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> floatRelativeSvgStringFromAWTFactory() {
         return Arrays.asList(

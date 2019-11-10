@@ -13,7 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
@@ -43,12 +43,12 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private ColorPicker backgroundColorPicker;
 
-    @Nonnull
+    @NonNull
     private Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
     @Nullable
     private Property<CssColor> boundBackgroundProperty;
 
-    @Nonnull
+    @NonNull
     private InvalidationListener commitHandler = o -> commitEdits();
     @FXML
     private TextField heightField;
@@ -65,7 +65,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
     }
 
-    public DrawingInspector(@Nonnull URL fxmlUrl) {
+    public DrawingInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -79,7 +79,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         return node;
     }
 
-    private void init(@Nonnull URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {

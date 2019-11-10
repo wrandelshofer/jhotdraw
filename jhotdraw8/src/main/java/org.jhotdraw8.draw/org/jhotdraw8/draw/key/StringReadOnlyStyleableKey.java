@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
@@ -28,7 +28,7 @@ import java.util.function.Function;
 public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
@@ -37,7 +37,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      *
      * @param name The name of the key.
      */
-    public StringReadOnlyStyleableKey(String name) {
+    public StringReadOnlyStyleableKey(@NonNull String name) {
         this(name, "");
     }
 
@@ -47,7 +47,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public StringReadOnlyStyleableKey(String name, String defaultValue) {
+    public StringReadOnlyStyleableKey(@NonNull String name, String defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
     }
 
@@ -58,7 +58,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public StringReadOnlyStyleableKey(String name, DirtyMask mask, String defaultValue) {
+    public StringReadOnlyStyleableKey(@NonNull String name, DirtyMask mask, String defaultValue) {
         this(name, mask, defaultValue, null);
     }
 
@@ -70,7 +70,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public StringReadOnlyStyleableKey(String name, DirtyMask mask, String defaultValue, String helpText) {
+    public StringReadOnlyStyleableKey(@NonNull String name, DirtyMask mask, String defaultValue, String helpText) {
         super(null, name, String.class, true, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
@@ -93,17 +93,17 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     private final CssStringConverter converter;
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<String> getConverter() {
 

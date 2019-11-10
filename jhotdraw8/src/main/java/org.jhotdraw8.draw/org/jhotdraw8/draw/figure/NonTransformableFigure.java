@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.Transforms;
 
@@ -46,7 +46,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
     }
 
     @Override
-    default void reshapeInLocal(@Nonnull Transform transform) {
+    default void reshapeInLocal(@NonNull Transform transform) {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());

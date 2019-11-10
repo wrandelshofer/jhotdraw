@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -29,7 +30,7 @@ public class AlignRightAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public AlignRightAction(Application app, DrawingEditor editor) {
+    public AlignRightAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -50,7 +51,7 @@ public class AlignRightAction extends AbstractSelectedAction {
         alignRight(drawingView, figures, lead);
     }
 
-    private void alignRight(DrawingView view, Set<Figure> figures, Figure lead) {
+    private void alignRight(@NonNull DrawingView view, @NonNull Set<Figure> figures, @NonNull Figure lead) {
         DrawingModel model = view.getModel();
         double xInWorld = lead.getBoundsInWorld().getMaxX();
         Point2D xPointInWorld = new Point2D(xInWorld, 0);

@@ -16,7 +16,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -66,13 +66,13 @@ public class LayerCell extends ListCell<Figure> {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
-    public LayerCell(@Nonnull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
+    public LayerCell(@NonNull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
         this.drawingModel = drawingModel;
         this.inspector = inspector;
         init(fxmlUrl);
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -139,6 +139,7 @@ public class LayerCell extends ListCell<Figure> {
      * @param inspector    the layers inspector
      * @return callback
      */
+    @NonNull
     public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
         return list -> new LayerCell(drawingModel, inspector);
     }
@@ -164,6 +165,7 @@ public class LayerCell extends ListCell<Figure> {
      *
      * @return the converter
      */
+    @Nullable
     public final StringConverter<Figure> getConverter() {
         return null;//converterProperty().get(); 
     }
@@ -185,12 +187,12 @@ public class LayerCell extends ListCell<Figure> {
         updateItem(getItem(), false);
     }
 
-    @Nonnull
+    @NonNull
     private String getItemText() {
         return getItem() == null ? "" : getItem().get(StyleableFigure.ID);
     }
 
-    @Nonnull
+    @NonNull
     private TextField createTextField() {
         final TextField textField = new TextField();
 

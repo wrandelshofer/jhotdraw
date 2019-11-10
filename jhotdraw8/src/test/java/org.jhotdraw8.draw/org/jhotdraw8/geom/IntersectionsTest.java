@@ -10,6 +10,7 @@ import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class IntersectionsTest {
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testIntersectLineQuadraticCurve_5argsFactory() {
         return Arrays.asList(
@@ -33,6 +35,7 @@ public class IntersectionsTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testLinieEllipseFactory() {
         return Arrays.asList(
@@ -43,6 +46,7 @@ public class IntersectionsTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testIntersectCubicCurvePoint_11argsFactory() {
         return Arrays.asList(
@@ -55,7 +59,7 @@ public class IntersectionsTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectLineQuadraticCurve_5args(Line a, QuadCurve b, double[] expected) {
+    public static void testIntersectLineQuadraticCurve_5args(@NonNull Line a, @NonNull QuadCurve b, @NonNull double[] expected) {
         System.out.println("intersectLineBezier2");
         Point2D b1 = new Point2D(b.getStartX(), b.getEndX());
         Point2D b2 = new Point2D(b.getControlX(), b.getControlY());
@@ -78,7 +82,7 @@ public class IntersectionsTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectLineEllipse_5args(Line a, Ellipse b, double[] expected) {
+    public static void testIntersectLineEllipse_5args(@NonNull Line a, @NonNull Ellipse b, @NonNull double[] expected) {
         System.out.println("intersectLineEllipse");
         Point2D bc = new Point2D(b.getCenterX(), b.getCenterX());
         double brx = b.getRadiusX();
@@ -100,7 +104,7 @@ public class IntersectionsTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectCubicCurvePoint_11args(CubicCurve a, Circle b, double[] expected) {
+    public static void testIntersectCubicCurvePoint_11args(@NonNull CubicCurve a, @NonNull Circle b, @NonNull double[] expected) {
         System.out.println("testIntersectBezier3Point_5args");
         System.out.println("bezier3->point");
         System.out.println("a:" + a);
@@ -122,6 +126,7 @@ public class IntersectionsTest {
         }
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testIntersectLineLine() {
         return Arrays.asList(
@@ -133,7 +138,7 @@ public class IntersectionsTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectLineLine(Line a, Line b, double[] expected) {
+    public static void testIntersectLineLine(@NonNull Line a, @NonNull Line b, @NonNull double[] expected) {
         Intersection isec = Intersections.intersectLineLine(a.getStartX(), a.getStartY(),
                 a.getEndX(), a.getEndY(),
                 b.getStartX(), b.getStartY(), b.getEndX(), b.getEndY());

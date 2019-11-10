@@ -25,7 +25,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -74,7 +74,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         elements.add(new LineTo(3, 6));
     }
 
-    @Nonnull
+    @NonNull
     private final Region node;
     private Point2D pickLocation;
     private final int pointIndex;
@@ -112,6 +112,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
+    @NonNull
     private Point2D getLocation() {
         return getBezierNode().getC0();
 
@@ -121,9 +122,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -140,7 +141,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
@@ -175,7 +176,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
     }
 
-    private void removePoint(@Nonnull DrawingView dv) {
+    private void removePoint(@NonNull DrawingView dv) {
         if (owner.get(pointKey).size() > 2) {
             BezierNodePath path = new BezierNodePath(owner.get(pointKey));
             path.join(pointIndex, 1.0);
@@ -185,7 +186,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -203,7 +204,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isSecondaryButtonDown()) {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
@@ -224,7 +225,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);

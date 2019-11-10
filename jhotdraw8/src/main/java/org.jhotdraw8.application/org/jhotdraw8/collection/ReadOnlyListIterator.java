@@ -4,6 +4,9 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Spliterator;
@@ -14,7 +17,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
     int index = 0;
     final int size;
 
-    public ReadOnlyListIterator(ReadOnlyList<E> list) {
+    public ReadOnlyListIterator(@NonNull ReadOnlyList<E> list) {
         this(list, 0, list.size());
     }
 
@@ -75,7 +78,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super E> action) {
+    public boolean tryAdvance(@Nullable Consumer<? super E> action) {
         if (action == null) {
             throw new NullPointerException();
         }
@@ -86,6 +89,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
         return false;
     }
 
+    @Nullable
     @Override
     public Spliterator<E> trySplit() {
         int lo = index, mid = (lo + size) >>> 1;

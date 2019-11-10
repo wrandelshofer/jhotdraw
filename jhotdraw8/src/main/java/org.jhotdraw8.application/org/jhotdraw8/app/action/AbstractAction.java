@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractDisableable;
 import org.jhotdraw8.collection.Key;
 
@@ -46,7 +46,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
 
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
@@ -60,7 +60,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * @param event the action event
      */
     @Override
-    public final void handle(@Nonnull ActionEvent event) {
+    public final void handle(@NonNull ActionEvent event) {
         if (!isDisabled() && !event.isConsumed()) {
             handleActionPerformed(event);
             event.consume();
@@ -75,7 +75,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      */
     protected abstract void handleActionPerformed(ActionEvent event);
 
-    @Nonnull
+    @NonNull
     @Override
     public BooleanProperty selectedProperty() {
         return selected;

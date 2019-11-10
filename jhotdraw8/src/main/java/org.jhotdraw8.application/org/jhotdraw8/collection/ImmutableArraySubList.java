@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
@@ -25,6 +25,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
 
     final static ImmutableArraySubList<Object> EMPTY = new ImmutableArraySubList<>(true, new Object[0]);
 
+    @NonNull
     private final Object[] array;
     private final int size;
     private final int offset;
@@ -41,24 +42,24 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         this.size = this.array.length;
     }
 
-    ImmutableArraySubList(@Nonnull Object[] array) {
+    ImmutableArraySubList(@NonNull Object[] array) {
         this(array, 0, array.length);
     }
 
-    ImmutableArraySubList(@Nonnull Object[] a, int offset, int length) {
+    ImmutableArraySubList(@NonNull Object[] a, int offset, int length) {
         this.array = new Object[length];
         System.arraycopy(a, offset, array, 0, length);
         this.offset = 0;
         this.size = this.array.length;
     }
 
-    ImmutableArraySubList(boolean privateMethod, Object[] array) {
+    ImmutableArraySubList(boolean privateMethod, @NonNull Object[] array) {
         this.array = array;
         this.offset = 0;
         this.size = array.length;
     }
 
-    ImmutableArraySubList(boolean privateMethod, Object[] array, int fromIndex, int toIndex) {
+    ImmutableArraySubList(boolean privateMethod, @NonNull Object[] array, int fromIndex, int toIndex) {
         if (fromIndex < 0) {
             throw new IndexOutOfBoundsException("fromIndex = " + fromIndex);
         }
@@ -75,7 +76,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
     }
 
 
-    public void copyInto(@Nonnull Object[] out, int offset) {
+    public void copyInto(@NonNull Object[] out, int offset) {
         System.arraycopy(array, 0, out, offset, array.length);
     }
 
@@ -89,7 +90,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return false;
     }
 
-    @Nonnull
+    @NonNull
     public E get(int index) {
         @SuppressWarnings("unchecked")
         E value = (E) array[offset + index];
@@ -100,7 +101,8 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return size;
     }
 
-    public <T> T[] toArray(T[] a) {
+    @NonNull
+    public <T> T[] toArray(@NonNull T[] a) {
         if (a.length < size) {
             @SuppressWarnings("unchecked")
             T[] t = (T[]) Arrays.copyOf(array, size, a.getClass());
@@ -114,10 +116,12 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
     }
 
 
+    @NonNull
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(array, offset, offset + size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
+    @NonNull
     @Override
     public ImmutableList<E> subList(int fromIndex, int toIndex) {
         if (fromIndex < 0) {
@@ -134,6 +138,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return new ImmutableArraySubList<>(true, this.array, offset + fromIndex, offset + toIndex);
     }
 
+    @NonNull
     @Override
     public Object[] toArray() {
         Object[] dest = new Object[size];

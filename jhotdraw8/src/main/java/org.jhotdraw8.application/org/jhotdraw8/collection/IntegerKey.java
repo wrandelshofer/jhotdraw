@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * DoubleKey.
  *
@@ -13,11 +15,11 @@ public class IntegerKey extends ObjectKey<Integer> {
 
     private final static long serialVersionUID = 1L;
 
-    public IntegerKey(String key) {
+    public IntegerKey(@NonNull String key) {
         super(key, Integer.class);
     }
 
-    public IntegerKey(String key, Integer defaultValue) {
+    public IntegerKey(@NonNull String key, Integer defaultValue) {
         super(key, Integer.class, defaultValue);
     }
 }

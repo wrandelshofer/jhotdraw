@@ -3,6 +3,7 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class BreadthFirstSpliteratorTest {
 
+    @NonNull
     private DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
         builder.addVertex(1);
@@ -47,6 +49,7 @@ public class BreadthFirstSpliteratorTest {
         return builder;
     }
 
+    @NonNull
     public Object[][] anyPathProvider() {
         final DirectedGraph<Integer, Double> graph = createGraph();
 
@@ -82,7 +85,7 @@ public class BreadthFirstSpliteratorTest {
         }
     }
 
-    static void testIterate(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    static void testIterate(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
@@ -105,7 +108,7 @@ public class BreadthFirstSpliteratorTest {
         }
     }
 
-    public void testTryAdvance(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testTryAdvance(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
         BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
@@ -126,7 +129,7 @@ public class BreadthFirstSpliteratorTest {
         }
     }
 
-    public void testTrySplit(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testTrySplit(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, @NonNull List<Integer> expResult) throws Exception {
 
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
@@ -160,7 +163,7 @@ public class BreadthFirstSpliteratorTest {
         }
     }
 
-    public void testTrySplitParallel(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testTrySplitParallel(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, @NonNull List<Integer> expResult) throws Exception {
 
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 

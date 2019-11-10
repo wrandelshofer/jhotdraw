@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.awt.geom.PathIterator;
 
@@ -20,6 +21,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     private double cx;
     private double cy;
 
+    @Nullable
     private PathIteratorPathBuilder path;
 
     public CutEndPathBuilder(PathBuilder out, double radius) {

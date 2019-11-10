@@ -6,7 +6,7 @@ package org.jhotdraw8.css;
 
 import javafx.beans.property.MapProperty;
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReadOnlyList;
 
@@ -22,7 +22,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public interface SelectorModel<T> {
-    @Nonnull
+    @NonNull
     MapProperty<String, Set<T>> additionalPseudoClassStatesProperty();
 
     /**
@@ -36,7 +36,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value contains the specified substring.
      */
-    default boolean attributeValueContains(@Nonnull T element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+    default boolean attributeValueContains(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = getAttributeAsString(element, namespace, attributeName);
         return actualValue != null && (actualValue.contains(substring));
     }
@@ -52,7 +52,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value contains the specified word.
      */
-    default boolean attributeValueContainsWord(@Nonnull T element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String word) {
+    default boolean attributeValueContainsWord(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
         String value = getAttributeAsString(element, namespace, attributeName);
         if (value != null) {
             String[] words = value.split("\\s+");
@@ -76,7 +76,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value ends with the specified substring.
      */
-    default boolean attributeValueEndsWith(@Nonnull T element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+    default boolean attributeValueEndsWith(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = getAttributeAsString(element, namespace, attributeName);
         return actualValue != null && (actualValue.endsWith(substring));
     }
@@ -92,7 +92,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * value
      */
-    default boolean attributeValueEquals(@Nonnull T element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String attributeValue) {
+    default boolean attributeValueEquals(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String attributeValue) {
         String actualValue = getAttributeAsString(element, namespace, attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
@@ -108,7 +108,7 @@ public interface SelectorModel<T> {
      * @return true if the element has an attribute with the specified name and
      * the value starts with the specified substring.
      */
-    default boolean attributeValueStartsWith(@Nonnull T element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+    default boolean attributeValueStartsWith(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = getAttributeAsString(element, namespace, attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
@@ -123,12 +123,12 @@ public interface SelectorModel<T> {
      * attribute with this name.
      */
     @Nullable
-    default String getAttributeAsString(@Nonnull T element, @Nullable String namespace, @Nonnull String name) {
+    default String getAttributeAsString(@NonNull T element, @Nullable String namespace, @NonNull String name) {
         return getAttributeAsString(element, StyleOrigin.USER, namespace, name);
     }
 
     @Nullable
-    default String getAttributeAsString(@Nonnull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @Nonnull String name) {
+    default String getAttributeAsString(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         List<CssToken> list = getAttribute(element, origin, namespace, name);
         if (list == null) {
             return null;
@@ -141,7 +141,7 @@ public interface SelectorModel<T> {
     }
 
     @Nullable
-    List<CssToken> getAttribute(@Nonnull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @Nonnull String name);
+    List<CssToken> getAttribute(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name);
 
     /**
      * Returns all styleable attributes of the element.
@@ -149,7 +149,7 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    Set<QualifiedName> getAttributeNames(@Nonnull T element);
+    @NonNull Set<QualifiedName> getAttributeNames(@NonNull T element);
 
     /**
      * Returns all non-decomposed styleable attributes of the element.
@@ -160,7 +160,7 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    Set<QualifiedName> getComposedAttributeNames(@Nonnull T element);
+    @NonNull Set<QualifiedName> getComposedAttributeNames(@NonNull T element);
 
     /**
      * Returns all decomposed styleable attributes of the element.
@@ -171,7 +171,7 @@ public interface SelectorModel<T> {
      * @param element An element of the document
      * @return a set of styleable attributes.
      */
-    Set<QualifiedName> getDecomposedAttributeNames(@Nonnull T element);
+    @NonNull Set<QualifiedName> getDecomposedAttributeNames(@NonNull T element);
 
     /**
      * Returns the id of the element.
@@ -180,7 +180,7 @@ public interface SelectorModel<T> {
      * @return the id or null if the element does not have an id.
      */
     @Nullable
-    String getId(@Nonnull T element);
+    String getId(@NonNull T element);
 
     /**
      * Gets the parent of the element.
@@ -189,7 +189,7 @@ public interface SelectorModel<T> {
      * @return The parent element. Returns null if the element has no parent.
      */
     @Nullable
-    T getParent(@Nonnull T element);
+    T getParent(@NonNull T element);
 
     /**
      * Gets the previous sibling of the element.
@@ -199,7 +199,7 @@ public interface SelectorModel<T> {
      * sibling.
      */
     @Nullable
-    T getPreviousSibling(@Nonnull T element);
+    T getPreviousSibling(@NonNull T element);
 
     /**
      * Returns the style classes of the element.
@@ -207,7 +207,7 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the style classes or an empty set.
      */
-    Set<String> getStyleClasses(@Nonnull T element);
+    @NonNull Set<String> getStyleClasses(@NonNull T element);
 
     /**
      * Returns the style type of the element.
@@ -217,7 +217,7 @@ public interface SelectorModel<T> {
      * return null if the element is not styleable by type.
      */
     @Nullable
-    String getType(@Nonnull T element);
+    String getType(@NonNull T element);
 
     /**
      * Returns true if the element has the specified attribute.
@@ -227,7 +227,7 @@ public interface SelectorModel<T> {
      * @param attributeName an attribute name
      * @return true if the element has an attribute with the specified name
      */
-    boolean hasAttribute(@Nonnull T element, @Nullable String namespace, @Nonnull String attributeName);
+    boolean hasAttribute(@NonNull T element, @Nullable String namespace, @NonNull String attributeName);
 
     /**
      * Returns true if the element has the specified id.
@@ -236,7 +236,7 @@ public interface SelectorModel<T> {
      * @param id      an id
      * @return true if the element has the id
      */
-    boolean hasId(@Nonnull T element, @Nonnull String id);
+    boolean hasId(@NonNull T element, @NonNull String id);
 
     /**
      * Returns true if the element has the specified pseudo class.
@@ -245,7 +245,7 @@ public interface SelectorModel<T> {
      * @param pseudoClass a pseudo class
      * @return true if the element has the id
      */
-    boolean hasPseudoClass(@Nonnull T element, @Nonnull String pseudoClass);
+    boolean hasPseudoClass(@NonNull T element, @NonNull String pseudoClass);
 
     /**
      * Returns true if the element has the specified style class.
@@ -254,7 +254,7 @@ public interface SelectorModel<T> {
      * @param clazz   a style class
      * @return true if the element has the id
      */
-    boolean hasStyleClass(@Nonnull T element, @Nonnull String clazz);
+    boolean hasStyleClass(@NonNull T element, @NonNull String clazz);
 
     /**
      * Returns true if the element has the specified type.
@@ -264,7 +264,7 @@ public interface SelectorModel<T> {
      * @param type      an id
      * @return true if the element has the id
      */
-    boolean hasType(@Nonnull T element, @Nullable String namespace, @Nonnull String type);
+    boolean hasType(@NonNull T element, @Nullable String namespace, @NonNull String type);
 
     /**
      * Resets all values with non-{@link StyleOrigin#USER} origin.
@@ -281,7 +281,7 @@ public interface SelectorModel<T> {
      * @param value   The attribute value. Null removes the attribute from the
      *                element.
      * /
-    default void setAttributeAsString(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable String value) {
+    default void setAttributeAsString(@NonNull T element, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable String value) {
     if (value == null) {
     setAttribute(element, origin, namespace, name, null);
     } else {
@@ -307,5 +307,5 @@ public interface SelectorModel<T> {
      *                  element.
      * @throws ParseException if parsing the value failed
      */
-    void setAttribute(@Nonnull T element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value) throws ParseException;
+    void setAttribute(@NonNull T element, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value) throws ParseException;
 }

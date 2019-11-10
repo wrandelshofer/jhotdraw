@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.tree.ChildIterator;
 import org.jhotdraw8.tree.PreorderSpliterator;
@@ -119,13 +119,13 @@ public class XmlUtil {
 
     }
 
-    public static Document read(Path in, boolean namespaceAware) throws IOException {
+    public static Document read(@NonNull Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.read(inputSource, namespaceAware);
     }
 
-    @Nonnull
-    public static Document readWithLocations(Path in, boolean namespaceAware) throws IOException {
+    @NonNull
+    public static Document readWithLocations(@NonNull Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.readWithLocations(inputSource, namespaceAware);
     }
@@ -137,7 +137,7 @@ public class XmlUtil {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document doc = builder.parse(inputSource);
             return doc;
-        } catch (SAXException | ParserConfigurationException ex) {
+        } catch (@NonNull SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }
@@ -156,7 +156,7 @@ public class XmlUtil {
      * @return the document
      * @throws java.io.IOException in case of failure
      */
-    @Nonnull
+    @NonNull
     public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             // Create transformer SAX source that adds current element position to
@@ -175,12 +175,13 @@ public class XmlUtil {
             transformer.transform(saxSource, domResult);
             Node root = domResult.getNode();
             return (Document) root;
-        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
+        } catch (@NonNull TransformerException | SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }
     }
 
-    public static Locator getLocator(Node node) {
+    @Nullable
+    public static Locator getLocator(@NonNull Node node) {
         final NamedNodeMap attributes = node.getAttributes();
         Node attrNode = attributes == null ? null : attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
         if (attrNode != null) {
@@ -192,11 +193,11 @@ public class XmlUtil {
         return null;
     }
 
-    public static void validate(Document doc, URI schemaUri) throws IOException {
+    public static void validate(Document doc, @NonNull URI schemaUri) throws IOException {
         XmlUtil.validate(doc, schemaUri.toURL());
     }
 
-    public static void validate(Document doc, URL schemaUrl) throws IOException {
+    public static void validate(Document doc, @NonNull URL schemaUrl) throws IOException {
         SchemaFactory factory = SchemaFactory
                 .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try (InputStream schemaStream = schemaUrl.openStream()) {
@@ -209,11 +210,11 @@ public class XmlUtil {
         }
     }
 
-    public static void validate(@Nonnull Path xmlPath, URI schemaUri) throws IOException {
+    public static void validate(@NonNull Path xmlPath, @NonNull URI schemaUri) throws IOException {
         validate(xmlPath.toUri(), schemaUri);
     }
 
-    public static void validate(@Nonnull URI xmlUri, URI schemaUri) throws IOException {
+    public static void validate(@NonNull URI xmlUri, @NonNull URI schemaUri) throws IOException {
         try {
             SchemaFactory factory = SchemaFactory
                     .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -239,11 +240,11 @@ public class XmlUtil {
         write(result, doc);
     }
 
-    public static void write(@Nonnull Path out, Document doc) throws IOException {
+    public static void write(@NonNull Path out, Document doc) throws IOException {
         write(out, doc, DEFAULT_PROPERTIES);
     }
 
-    public static void write(@Nonnull Path out, Document doc, Properties outputProperties) throws IOException {
+    public static void write(@NonNull Path out, Document doc, Properties outputProperties) throws IOException {
         StreamResult result = new StreamResult(out.toFile());
         write(result, doc, outputProperties);
     }
@@ -273,6 +274,7 @@ public class XmlUtil {
      * @param node a node
      * @return a stream
      */
+    @NonNull
     public static Stream<Node> preorderStream(Node node) {
         return StreamSupport.stream(new PreorderSpliterator<>(n -> {
             final NodeList childNodes = n.getChildNodes();

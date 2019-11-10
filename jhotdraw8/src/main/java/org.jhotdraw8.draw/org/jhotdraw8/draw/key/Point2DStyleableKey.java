@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -27,7 +27,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Point2D> cssMetaData;
 
     /**
@@ -74,7 +74,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Point2D> getCssMetaData() {
         return cssMetaData;
@@ -83,6 +83,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
 
     private final Converter<Point2D> converter = new Point2DConverter(false);
 
+    @NonNull
     @Override
     public Converter<Point2D> getConverter() {
         return converter;

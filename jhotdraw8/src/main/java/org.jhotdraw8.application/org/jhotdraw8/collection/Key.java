@@ -12,7 +12,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Map;
@@ -44,10 +44,11 @@ public interface Key<T> extends MapAccessor<T> {
     final static long serialVersionUID = 1L;
 
     @Override
-    public default boolean containsKey(@Nonnull Map<Key<?>, Object> map) {
+    public default boolean containsKey(@NonNull Map<Key<?>, Object> map) {
         return map.containsKey(this);
     }
 
+    @NonNull
     public String getFullValueType();
 
     /**
@@ -58,7 +59,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     @Nullable
-    default T get(@Nonnull Map<? super Key<?>, Object> a) {
+    default T get(@NonNull Map<? super Key<?>, Object> a) {
         @SuppressWarnings("unchecked")
         T value = (T) a.getOrDefault(this, getDefaultValue());
         //assert isAssignable(value) : value + " is not assignable to " + getValueType();
@@ -71,8 +72,8 @@ public interface Key<T> extends MapAccessor<T> {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    @Nonnull
-    default ObjectProperty<T> getValueProperty(@Nonnull Map<? super Key<?>, ObjectProperty<?>> a) {
+    @NonNull
+    default ObjectProperty<T> getValueProperty(@NonNull Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<>(getDefaultValue()));
         }
@@ -88,7 +89,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return The value of the attribute.
      */
     @Nullable
-    default T getValue(@Nonnull Map<? super Key<?>, ObjectProperty<?>> a) {
+    default T getValue(@NonNull Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<>(getDefaultValue()));
         }
@@ -107,7 +108,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Nullable
     @Override
-    default T put(@Nonnull Map<? super Key<?>, Object> a, @Nullable T value) {
+    default T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
         T oldValue;
         // Note: we must always put a value even if it is the same as our default value
         @SuppressWarnings("unchecked")
@@ -125,7 +126,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     @Nullable
-    default T remove(@Nonnull Map<? super Key<?>, Object> a) {
+    default T remove(@NonNull Map<? super Key<?>, Object> a) {
         @SuppressWarnings("unchecked")
         T oldValue = (T) a.remove(this);
         return oldValue;
@@ -140,7 +141,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return The old value.
      */
     @Nullable
-    default T putValue(@Nonnull Map<? super Key<?>, ObjectProperty<?>> a, @Nullable T value) {
+    default T putValue(@NonNull Map<? super Key<?>, ObjectProperty<?>> a, @Nullable T value) {
         if (!isAssignable(value)) {
             throw new IllegalArgumentException("Value is not assignable to key. key="
                     + this + ", value=" + value);
@@ -190,8 +191,8 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a binding for the map entry
      */
-    @Nonnull
-    default Binding<T> valueAt(@Nonnull ObservableMap<Key<?>, Object> map) {
+    @NonNull
+    default Binding<T> valueAt(@NonNull ObservableMap<Key<?>, Object> map) {
         ObjectBinding<Object> value = Bindings.valueAt(map, this);
         @SuppressWarnings("unchecked")
         Binding<T> binding = (ObjectBinding<T>) value;
@@ -204,8 +205,8 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a property for the map entry
      */
-    @Nonnull
-    default ObjectProperty<T> propertyAt(final ObservableMap<Key<?>, Object> map) {
+    @NonNull
+    default ObjectProperty<T> propertyAt(@NonNull final ObservableMap<Key<?>, Object> map) {
         return new KeyMapEntryProperty<>(map, this);
     }
 
@@ -215,12 +216,13 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a property for the map entry
      */
-    @Nonnull
-    default ReadOnlyProperty<T> readOnlyPropertyAt(@Nonnull final MapExpression<Key<?>, Object> map) {
+    @NonNull
+    default ReadOnlyProperty<T> readOnlyPropertyAt(@NonNull final MapExpression<Key<?>, Object> map) {
         ObjectBinding<Object> value = map.valueAt(this);
         return new KeyMapEntryProperty<>(map, this);
     }
 
+    @NonNull
     default T cast(Object value) {
         @SuppressWarnings("unchecked") T value1 = (T) value;
         return value1;

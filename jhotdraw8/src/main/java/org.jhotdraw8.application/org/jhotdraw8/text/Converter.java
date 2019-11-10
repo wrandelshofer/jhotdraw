@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
@@ -88,7 +88,7 @@ public interface Converter<T> {
      * @throws IOException    on IO failure
      */
     @Nullable
-    default T fromString(@Nonnull CharSequence in) throws ParseException, IOException {
+    default T fromString(@NonNull CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
@@ -184,6 +184,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @return The String.
      */
+    @NonNull
     default <TT extends T> String toString(@Nullable TT value) {
         StringBuilder out = new StringBuilder();
         try {

@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.File;
@@ -63,7 +63,7 @@ public class FileURIChooser implements URIChooser {
         return mode;
     }
 
-    @Nonnull
+    @NonNull
     public FileChooser getFileChooser() {
         return chooser;
     }

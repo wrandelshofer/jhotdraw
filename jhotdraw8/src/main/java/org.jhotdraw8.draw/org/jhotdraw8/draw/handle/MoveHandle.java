@@ -17,7 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -43,7 +43,7 @@ public class MoveHandle extends LocatorHandle {
 
     private Point2D pickLocation;
     private CssPoint2D oldPoint;
-    @Nonnull
+    @NonNull
     private final Region node;
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     @Nullable
@@ -70,9 +70,9 @@ public class MoveHandle extends LocatorHandle {
         return pressed ? Cursor.CLOSED_HAND : Cursor.HAND;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();
@@ -82,7 +82,7 @@ public class MoveHandle extends LocatorHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getBoundsInLocal();
@@ -94,12 +94,12 @@ public class MoveHandle extends LocatorHandle {
         node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
 
         // Rotate the node.
-        node.setRotate(f.getStyledNonnull(ROTATE));
-        node.setRotationAxis(f.getStyledNonnull(ROTATION_AXIS));
+        node.setRotate(f.getStyledNonNull(ROTATE));
+        node.setRotationAxis(f.getStyledNonNull(ROTATION_AXIS));
     }
 
     @Override
-    public void handleMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         pressed = true;
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
 
@@ -115,7 +115,7 @@ public class MoveHandle extends LocatorHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -158,7 +158,7 @@ public class MoveHandle extends LocatorHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(Figure f, @Nonnull Point2D oldPoint, @Nonnull Point2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(@NonNull Figure f, @NonNull Point2D oldPoint, @NonNull Point2D newPoint, @Nullable DrawingModel model) {
         Point2D delta = newPoint.subtract(oldPoint);
         if (model != null) {
             model.translateInParent(f, new CssPoint2D(delta));
@@ -176,7 +176,7 @@ public class MoveHandle extends LocatorHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(Figure f, @Nonnull CssPoint2D oldPoint, @Nonnull CssPoint2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(@NonNull Figure f, @NonNull CssPoint2D oldPoint, @NonNull CssPoint2D newPoint, @Nullable DrawingModel model) {
         CssPoint2D delta = newPoint.subtract(oldPoint);
         if (model != null) {
             model.translateInParent(f, delta);

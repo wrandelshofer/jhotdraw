@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.SpliteratorIterable;
 import org.jhotdraw8.graph.BreadthFirstSpliterator;
@@ -46,7 +46,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @Nonnull
+    @NonNull
     default Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
@@ -59,7 +59,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @Nonnull
+    @NonNull
     default Iterable<T> breadthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
@@ -87,7 +87,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param depth the indentation depth
      * @throws java.io.IOException from appendable
      */
-    default void dumpTree(@Nonnull Appendable out, int depth) throws IOException {
+    default void dumpTree(@NonNull Appendable out, int depth) throws IOException {
         for (int i = 0; i < depth; i++) {
             out.append('.');
         }
@@ -107,9 +107,9 @@ public interface TreeNode<T extends TreeNode<T>> {
      * this type is present. Returns {@code this} if this object is of type
      * {@literal <T>}.
      */
-    @Nonnull
+    @NonNull
     @Nullable
-    default <TT> TT getAncestor(@Nonnull Class<TT> ancestorType) {
+    default <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
         while (ancestor != null && !ancestorType.isInstance(ancestor)) {
@@ -157,7 +157,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the children
      */
-    List<T> getChildren();
+    @Nullable List<T> getChildren();
 
     /**
      * Gets the first child.
@@ -197,7 +197,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return path including this node
      */
-    @Nonnull
+    @NonNull
     @SuppressWarnings("unchecked")
     default List<T> getPath() {
         LinkedList<T> path = new LinkedList<>();
@@ -213,7 +213,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @Nonnull
+    @NonNull
     default Iterable<T> postorderIterable() {
         //noinspection unchecked
         return new SpliteratorIterable<>(
@@ -230,7 +230,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @Nonnull
+    @NonNull
     default Iterable<T> depthFirstIterable() {
         //noinspection unchecked
         return postorderIterable();
@@ -242,7 +242,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @Nonnull
+    @NonNull
     default Iterable<T> preorderIterable() {
         //noinspection unchecked
         return new SpliteratorIterable<>(
@@ -259,6 +259,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     static class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
+        @Nullable
         private T node;
 
         private AncestorIterator(T node) {
@@ -270,6 +271,7 @@ public interface TreeNode<T extends TreeNode<T>> {
             return node != null;
         }
 
+        @Nullable
         @Override
         public T next() {
             T next = node;

@@ -9,7 +9,7 @@ import javafx.beans.binding.StringExpression;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.text.MessageFormat;
@@ -38,8 +38,8 @@ public abstract class MessageStringFormatter extends StringBinding {
         return value;
     }
 
-    @Nonnull
-    private static Object[] extractValues(Object[] objs) {
+    @NonNull
+    private static Object[] extractValues(@NonNull Object[] objs) {
         final int n = objs.length;
         final Object[] values = new Object[n];
         for (int i = 0; i < n; i++) {
@@ -48,7 +48,8 @@ public abstract class MessageStringFormatter extends StringBinding {
         return values;
     }
 
-    private static ObservableValue<?>[] extractDependencies(Object... args) {
+    @NonNull
+    private static ObservableValue<?>[] extractDependencies(@NonNull Object... args) {
         final List<ObservableValue<?>> dependencies = new ArrayList<>();
         for (final Object obj : args) {
             if (obj instanceof ObservableValue) {
@@ -58,8 +59,8 @@ public abstract class MessageStringFormatter extends StringBinding {
         return dependencies.toArray(new ObservableValue<?>[dependencies.size()]);
     }
 
-    @Nonnull
-    public static StringExpression format(@Nullable final String format, @Nonnull final Object... args) {
+    @NonNull
+    public static StringExpression format(@Nullable final String format, @NonNull final Object... args) {
         if (format == null) {
             throw new NullPointerException("Format cannot be null.");
         }
@@ -76,12 +77,14 @@ public abstract class MessageStringFormatter extends StringBinding {
                 super.unbind(extractDependencies(args));
             }
 
+            @NonNull
             @Override
             protected String computeValue() {
                 final Object[] values = extractValues(args);
                 return MessageFormat.format(format, values);
             }
 
+            @NonNull
             @Override
             public ObservableList<ObservableValue<?>> getDependencies() {
                 return FXCollections.unmodifiableObservableList(FXCollections

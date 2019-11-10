@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,15 +17,15 @@ import java.util.List;
 public class StyleRule extends Rule {
 
     private final SelectorGroup selectorList;
-    @Nonnull
+    @NonNull
     private final List<Declaration> declarations;
 
-    public StyleRule(SelectorGroup selectorGroup, @Nonnull List<Declaration> declarations) {
+    public StyleRule(SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
         this.selectorList = selectorGroup;
         this.declarations = Collections.unmodifiableList(declarations);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder("StyleRule: ");
@@ -43,7 +43,7 @@ public class StyleRule extends Rule {
         return selectorList;
     }
 
-    @Nonnull
+    @NonNull
     public List<Declaration> getDeclarations() {
         return declarations;
     }

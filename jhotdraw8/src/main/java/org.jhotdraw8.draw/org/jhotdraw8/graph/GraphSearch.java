@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.IteratorEnumerator;
@@ -35,8 +35,8 @@ import static java.lang.Math.min;
  */
 public class GraphSearch {
 
-    @Nonnull
-    private static <V> Map<V, List<V>> createForest(Collection<V> vertices) {
+    @NonNull
+    private static <V> Map<V, List<V>> createForest(@NonNull Collection<V> vertices) {
         // Create initial forest.
         Map<V, List<V>> forest = new LinkedHashMap<>(vertices.size());
         for (V v : vertices) {
@@ -57,8 +57,8 @@ public class GraphSearch {
      * @param graph a directed graph
      * @return the disjoint sets.
      */
-    @Nonnull
-    public static <V, A> List<Set<V>> findDisjointSets(@Nonnull DirectedGraph<V, A> graph) {
+    @NonNull
+    public static <V, A> List<Set<V>> findDisjointSets(@NonNull DirectedGraph<V, A> graph) {
         return findDisjointSets(graph.getVertices(), graph::getNextVertices);
     }
 
@@ -73,8 +73,8 @@ public class GraphSearch {
      * @param getNextVertices a function that returns the next vertices given a vertex
      * @return the disjoint sets.
      */
-    @Nonnull
-    public static <V, A> List<Set<V>> findDisjointSets(@Nonnull Collection<V> vertices, @Nonnull Function<V, Iterable<V>> getNextVertices) {
+    @NonNull
+    public static <V, A> List<Set<V>> findDisjointSets(@NonNull Collection<V> vertices, @NonNull Function<V, Iterable<V>> getNextVertices) {
         // Create initial forest
         Map<V, List<V>> forest = createForest(vertices);
         // Merge sets.
@@ -122,8 +122,8 @@ public class GraphSearch {
      * @param costf the cost function
      * @return the graph builder
      */
-    @Nonnull
-    public static <V, A> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull DirectedGraph<V, A> graph, ToDoubleFunction<A> costf) {
+    @NonNull
+    public static <V, A> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleFunction<A> costf) {
         return findMinimumSpanningTreeGraph(graph, (u, v, a) -> costf.applyAsDouble(a));
 
     }
@@ -140,8 +140,8 @@ public class GraphSearch {
      * @param costf the cost function
      * @return the graph builder
      */
-    @Nonnull
-    public static <V, A> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull DirectedGraph<V, A> graph, ToDoubleTriFunction<V, V, A> costf) {
+    @NonNull
+    public static <V, A> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleTriFunction<V, V, A> costf) {
         Collection<V> vertices = graph.getVertices();
         Set<V> done = new HashSet<>();
         List<Edge<V, A>> edges = new ArrayList<>();
@@ -185,8 +185,8 @@ public class GraphSearch {
      *                       list, if it is provided.
      * @return the graph builder
      */
-    @Nonnull
-    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@Nonnull Collection<V> vertices, @Nonnull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
+    @NonNull
+    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull Collection<V> vertices, @NonNull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
         List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
@@ -217,8 +217,8 @@ public class GraphSearch {
      *                      list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
-    @Nonnull
-    public static <V, P extends Pair<V>> List<P> findMinimumSpanningTree(@Nonnull Collection<V> vertices, List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
+    @NonNull
+    public static <V, P extends Pair<V>> List<P> findMinimumSpanningTree(@NonNull Collection<V> vertices, @NonNull List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
         List<P> minimumSpanningTree = new ArrayList<>(orderedEdges.size());
         if (rejectedEdges == null) {
             rejectedEdges = new ArrayList<>(orderedEdges.size());
@@ -250,7 +250,7 @@ public class GraphSearch {
      * @param m   the graph
      * @return the sorted list of vertices
      */
-    @Nonnull
+    @NonNull
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final AttributedIntDirectedGraph<V, A> im;
@@ -273,8 +273,8 @@ public class GraphSearch {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    @Nonnull
-    public static int[] sortTopologicallyInt(IntDirectedGraph model) {
+    @NonNull
+    public static int[] sortTopologicallyInt(@NonNull IntDirectedGraph model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
@@ -334,7 +334,7 @@ public class GraphSearch {
         return result;
     }
 
-    private static <V> void union(@Nonnull List<V> uset, @Nonnull List<V> vset, @Nonnull Map<V, List<V>> forest) {
+    private static <V> void union(@NonNull List<V> uset, @NonNull List<V> vset, @NonNull Map<V, List<V>> forest) {
         if (uset != vset) {
             if (uset.size() < vset.size()) {
                 for (V uu : uset) {
@@ -377,8 +377,9 @@ public class GraphSearch {
      * @param <A>   the arrow type
      * @return set of strongly connected components (sets of vertices).
      */
+    @NonNull
     public static <V, A> List<List<V>> findStronglyConnectedComponents(
-            final DirectedGraph<V, A> graph) {
+            @NonNull final DirectedGraph<V, A> graph) {
         return findStronglyConnectedComponents(graph::getNextVertices, graph.getVertices());
     }
 
@@ -390,9 +391,10 @@ public class GraphSearch {
      * @param <V>              the vertex type
      * @return set of strongly connected components (sets of vertices).
      */
+    @NonNull
     public static <V> List<List<V>> findStronglyConnectedComponents(
-            final Function<V, Iterable<? extends V>> nextNodeFunction,
-            final Collection<? extends V> vertices
+            @NonNull final Function<V, Iterable<? extends V>> nextNodeFunction,
+            @NonNull final Collection<? extends V> vertices
     ) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
@@ -51,7 +51,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @param collection a collection of integers
      */
-    public IntArrayList(Collection<Integer> collection) {
+    public IntArrayList(@NonNull Collection<Integer> collection) {
         this.size = collection.size();
         this.items = new int[size];
 
@@ -62,7 +62,7 @@ public class IntArrayList implements Iterable<Integer> {
         }
     }
 
-    private IntArrayList(int[] items) {
+    private IntArrayList(@NonNull int[] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -96,7 +96,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @param that another list
      */
-    public void addAll(@Nonnull IntArrayList that) {
+    public void addAll(@NonNull IntArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -112,8 +112,8 @@ public class IntArrayList implements Iterable<Integer> {
      * @param out the output collection
      * @return out
      */
-    @Nonnull
-    public <T extends Collection<Integer>> T addAllInto(@Nonnull T out) {
+    @NonNull
+    public <T extends Collection<Integer>> T addAllInto(@NonNull T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -130,7 +130,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(@Nonnull int[] a, int offset) {
+    public void copyInto(@NonNull int[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -296,7 +296,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return an iterator over the elements of this list
      */
-    @Nonnull
+    @NonNull
     public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int index = 0;
@@ -323,7 +323,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return a spliterator over the elements of this list
      */
-    @Nonnull
+    @NonNull
     public Spliterator.OfInt spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -334,7 +334,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return a stream
      */
-    @Nonnull
+    @NonNull
     public IntStream stream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
@@ -344,14 +344,14 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return array
      */
-    @Nonnull
+    @NonNull
     public int[] toArray() {
         int[] result = new int[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return Arrays.toString(items);
@@ -364,7 +364,8 @@ public class IntArrayList implements Iterable<Integer> {
      *              provided array)
      * @return the new instance
      */
-    public static IntArrayList of(@Nonnull int... items) {
+    @NonNull
+    public static IntArrayList of(@NonNull int... items) {
         return new IntArrayList(items);
     }
 

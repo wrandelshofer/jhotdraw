@@ -8,7 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.SimpleWorkState;
@@ -42,7 +42,7 @@ public interface DocumentBasedActivity extends Activity {
      *
      * @return the modified property
      */
-    ReadOnlyBooleanProperty modifiedProperty();
+    @NonNull ReadOnlyBooleanProperty modifiedProperty();
 
     default boolean isModified() {
         return modifiedProperty().get();
@@ -64,7 +64,7 @@ public interface DocumentBasedActivity extends Activity {
      *
      * @return the resource
      */
-    ObjectProperty<URI> uriProperty();
+    @NonNull ObjectProperty<URI> uriProperty();
 
     @Nullable
     default URI getURI() {
@@ -85,7 +85,7 @@ public interface DocumentBasedActivity extends Activity {
      *
      * @return the resource
      */
-    ObjectProperty<DataFormat> dataFormatProperty();
+    @NonNull ObjectProperty<DataFormat> dataFormatProperty();
 
     @Nullable
     default DataFormat getDataFormat() {
@@ -172,7 +172,7 @@ public interface DocumentBasedActivity extends Activity {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    CompletionStage<Void> print(@Nonnull PrinterJob job, @Nonnull WorkState workState);
+    CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState);
 
     /**
      * Returns true if this document is empty and can be replaced by

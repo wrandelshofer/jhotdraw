@@ -10,7 +10,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
@@ -55,15 +55,15 @@ public interface StaticItemFontableFigure extends Figure {
      * @param ctx  RenderContext, can be null
      * @param text a text node
      */
-    default void applyStaticItemTextFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
-        String family = getStyledNonnull(STATIC_ITEM_FONT_FAMILY);
-        FontPosture style = getStyledNonnull(STATIC_ITEM_FONT_STYLE);
-        FontWeight weight = getStyledNonnull(STATIC_ITEM_FONT_WEIGHT);
-        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        CssSize cssSize = getStyledNonnull(STATIC_ITEM_FONT_SIZE);
+    default void applyStaticItemTextFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
+        String family = getStyledNonNull(STATIC_ITEM_FONT_FAMILY);
+        FontPosture style = getStyledNonNull(STATIC_ITEM_FONT_STYLE);
+        FontWeight weight = getStyledNonNull(STATIC_ITEM_FONT_WEIGHT);
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        CssSize cssSize = getStyledNonNull(STATIC_ITEM_FONT_SIZE);
         double size = units.convert(cssSize, UnitConverter.DEFAULT);
         CssFont f = CssFont.font(family, weight, style, size);
-        Boolean underline = getStyledNonnull(STATIC_ITEM_UNDERLINE);
+        Boolean underline = getStyledNonNull(STATIC_ITEM_UNDERLINE);
 
         text.setUnderline(underline);
         Font font = f.getFont();
@@ -71,7 +71,7 @@ public interface StaticItemFontableFigure extends Figure {
             text.setFont(font);
         }
 
-        final FontSmoothingType fst = ctx == null || ctx.getNonnull(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
+        final FontSmoothingType fst = ctx == null || ctx.getNonNull(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
                 ? FontSmoothingType.LCD : FontSmoothingType.GRAY;
         if (text.getFontSmoothingType() != fst) {
             text.setFontSmoothingType(fst);
@@ -85,9 +85,9 @@ public interface StaticItemFontableFigure extends Figure {
      * @param ctx  context
      * @param text a text node
      */
-    default void applyStaticItemTextFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
-        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        Font font = getStyledNonnull(STATIC_ITEM_FONT).getFont();
+    default void applyStaticItemTextFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Labeled text) {
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        Font font = getStyledNonNull(STATIC_ITEM_FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }

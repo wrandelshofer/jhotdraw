@@ -10,7 +10,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -52,7 +52,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -126,10 +126,10 @@ public interface StrokableFigure extends Figure {
      * <p>
      * Note: this is a non-standard composite map accessor and thus transient!
      */
-    StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style", STROKE_WIDTH,
+    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style", STROKE_WIDTH,
             STROKE, STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
-    default void applyStrokeCapAndJoinProperties(RenderContext ctx, @Nonnull Shape shape) {
+    default void applyStrokeCapAndJoinProperties(RenderContext ctx, @NonNull Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -139,18 +139,18 @@ public interface StrokableFigure extends Figure {
         if (shape.getStrokeLineJoin() != slj) {
             shape.setStrokeLineJoin(slj);
         }
-        d = getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue();
+        d = getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue();
         if (shape.getStrokeMiterLimit() != d) {
             shape.setStrokeMiterLimit(d);
         }
     }
 
-    default void applyStrokeDashProperties(RenderContext ctx, @Nonnull Shape shape) {
-        double d = getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
+    default void applyStrokeDashProperties(RenderContext ctx, @NonNull Shape shape) {
+        double d = getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<CssSize> dashArray = getStyledNonnull(STROKE_DASH_ARRAY);
+        ImmutableList<CssSize> dashArray = getStyledNonNull(STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {
@@ -162,7 +162,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeTypeProperties(RenderContext ctx, @Nonnull Shape shape) {
+    default void applyStrokeTypeProperties(RenderContext ctx, @NonNull Shape shape) {
         StrokeType st = getStyled(STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -175,7 +175,7 @@ public interface StrokableFigure extends Figure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applyStrokableFigureProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
+    default void applyStrokableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE));
         applyStrokeColorProperties(ctx, shape);
         if (p == null) {
@@ -188,28 +188,28 @@ public interface StrokableFigure extends Figure {
         applyStrokeDashProperties(ctx, shape);
     }
 
-    default void applyStrokeColorProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
+    default void applyStrokeColorProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applyStrokeWidthProperties(@Nullable RenderContext ctx, @Nonnull Shape shape) {
-        CssSize cssSize = getStyledNonnull(STROKE_WIDTH);
+    default void applyStrokeWidthProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
+        CssSize cssSize = getStyledNonNull(STROKE_WIDTH);
         double width = ctx == null ? cssSize.getConvertedValue()
-                : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
+                : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
         if (shape.getStrokeWidth() != width) {
             shape.setStrokeWidth(width);
         }
 
     }
 
-    @Nonnull
+    @NonNull
     default BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
-        CssSize cssSize = getStyledNonnull(STROKE_WIDTH);
+        CssSize cssSize = getStyledNonNull(STROKE_WIDTH);
         double width = ctx == null ? cssSize.getConvertedValue()
-                : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
+                : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
         final int basicCap;
         switch (cap) {
@@ -224,7 +224,7 @@ public interface StrokableFigure extends Figure {
                 basicCap = BasicStroke.CAP_SQUARE;
                 break;
         }
-        final ImmutableList<CssSize> dashlist = getStyledNonnull(STROKE_DASH_ARRAY);
+        final ImmutableList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
         float[] dasharray;
         if (dashlist.isEmpty()) {
             dasharray = null;
@@ -235,8 +235,8 @@ public interface StrokableFigure extends Figure {
                 dasharray[i++] = (float) sz.getConvertedValue();
             }
         }
-        final double dashoffset = getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
-        final StrokeLineJoin join = getStyledNonnull(STROKE_LINE_JOIN);
+        final double dashoffset = getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
+        final StrokeLineJoin join = getStyledNonNull(STROKE_LINE_JOIN);
         final int basicJoin;
         switch (join) {
             case BEVEL:
@@ -250,7 +250,7 @@ public interface StrokableFigure extends Figure {
                 basicJoin = BasicStroke.JOIN_ROUND;
                 break;
         }
-        final double miterlimit = getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue();
+        final double miterlimit = getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue();
 
         return new BasicStroke((float) width, basicCap, basicJoin, (float) miterlimit, dasharray, (float) dashoffset);
 

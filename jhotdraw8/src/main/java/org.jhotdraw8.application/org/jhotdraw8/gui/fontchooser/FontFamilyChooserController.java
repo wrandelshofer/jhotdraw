@@ -27,7 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.util.Resources;
@@ -92,7 +92,7 @@ public class FontFamilyChooserController {
         existing.sort(Comparator.comparing(FontFamily::getName));
     }
 
-    @Nonnull
+    @NonNull
     private FontCollection createFontCollection() {
         final Resources labels = ApplicationLabels.getGuiResources();
         return new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
@@ -207,9 +207,9 @@ public class FontFamilyChooserController {
                     return item;
                 }
 
-                @Nonnull
+                @NonNull
                 @Override
-                public String toString(@Nonnull FontCollection item) {
+                public String toString(@NonNull FontCollection item) {
                     return (item.isSmartCollection()) ? item.getName() + "•" : item.getName();
                 }
 
@@ -321,12 +321,12 @@ public class FontFamilyChooserController {
 
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<FontChooserModel> modelProperty() {
         return model;
     }
 
-    @Nonnull
+    @NonNull
     public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
     }

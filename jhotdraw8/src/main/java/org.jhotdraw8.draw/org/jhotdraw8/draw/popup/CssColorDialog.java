@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.util.Resources;
@@ -59,13 +60,15 @@ public class CssColorDialog {
 
     }
 
-    ButtonType chooseButtonType;
-    ButtonType cancelButtonType;
+    @Nullable ButtonType chooseButtonType;
+    @Nullable ButtonType cancelButtonType;
 
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
+    @Nullable
     private ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
+    @Nullable
     private ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(CssColor.TRANSPARENT);
     /*
         public CssColorDialog() {
@@ -118,6 +121,7 @@ public class CssColorDialog {
         return currentColor.get();
     }
 
+    @Nullable
     public ObjectProperty<CssColor> currentColorProperty() {
         return currentColor;
     }
@@ -130,6 +134,7 @@ public class CssColorDialog {
         return customColor.get();
     }
 
+    @Nullable
     public ObjectProperty<CssColor> customColorProperty() {
         return customColor;
     }

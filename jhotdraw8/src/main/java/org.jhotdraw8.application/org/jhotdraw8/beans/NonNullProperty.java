@@ -1,28 +1,30 @@
 /*
- * @(#)NonnullProperty.java
+ * @(#)NonNullProperty.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.beans;
 
 import javafx.beans.property.SimpleObjectProperty;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
- * A {@code NonnullProperty} throws an {@code IllegalArgumentException} when
+ * A {@code NonNullProperty} throws an {@code IllegalArgumentException} when
  * attempting to set its value to null.
  *
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class NonnullProperty<T> extends SimpleObjectProperty<T> {
+public class NonNullProperty<T> extends SimpleObjectProperty<T> {
 
     /**
      * Creates a new instance.
      *
      * @param bean         The bean which holds this property
      * @param name         The name of the property
-     * @param initialValue The initial value. Nonnull.
+     * @param initialValue The initial value. NonNull.
      */
-    public NonnullProperty(Object bean, String name, T initialValue) {
+    public NonNullProperty(Object bean, String name, T initialValue) {
         super(bean, name, initialValue);
     }
 
@@ -35,17 +37,17 @@ public class NonnullProperty<T> extends SimpleObjectProperty<T> {
      * Sets a new value if it is not null.
      */
     @Override
-    public void set(T newValue) {
+    public void set(@Nullable T newValue) {
         if (newValue != null) {
             super.set(newValue);
         }
     }
 
-    public T getNonnull() {
+    public T getNonNull() {
         return super.get();
     }
 
-    public void setNonnull(T newValue) {
+    public void setNonNull(@NonNull T newValue) {
         if (newValue == null) {
             throw new NullPointerException("newValue");
         }

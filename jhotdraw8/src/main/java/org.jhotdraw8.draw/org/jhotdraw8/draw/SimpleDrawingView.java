@@ -43,10 +43,10 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.draw.constrain.Constrainer;
@@ -114,7 +114,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * The constrainer property holds the constrainer for this drawing view
      */
-    private final NonnullProperty<Constrainer> constrainer = new NonnullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final NonNullProperty<Constrainer> constrainer = new NonNullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
     private boolean constrainerNodeValid;
     /**
      * This is the set of figures which are out of sync with their JavaFX node.
@@ -131,8 +131,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * view.
      */
     @Nullable
-    private final NonnullProperty<DrawingModel> drawingModel //
-            = new NonnullProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
+    private final NonNullProperty<DrawingModel> drawingModel //
+            = new NonNullProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
         @Nullable
         private DrawingModel oldValue = null;
 
@@ -190,7 +190,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * Margin around the drawing.
      */
-    private final ObjectProperty<Insets> margin = new NonnullProperty<>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
+    private final ObjectProperty<Insets> margin = new NonNullProperty<>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
 
     private final InvalidationListener modelInvalidationListener = o -> repaint();
 
@@ -290,7 +290,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         init();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Layer> activeLayerProperty() {
         return activeLayer;
@@ -307,9 +307,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         getSelectedFigures().clear();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public NonnullProperty<Constrainer> constrainerProperty() {
+    public NonNullProperty<Constrainer> constrainerProperty() {
         return constrainer;
     }
 
@@ -323,7 +323,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      *                  from the node
      * @return true if the node contains the point
      */
-    private boolean contains(Node node, @Nonnull Point2D point, double tolerance) {
+    private boolean contains(@NonNull Node node, @NonNull Point2D point, double tolerance) {
         double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(1, 1).magnitude();
 
         if (node instanceof Shape) {
@@ -365,7 +365,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @Nonnull
+    @NonNull
     private Image createCheckerboardImage(Color c1, Color c2, int size) {
         WritableImage img = new WritableImage(size * 2, size * 2);
         PixelWriter w = img.getPixelWriter();
@@ -385,7 +385,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      *
      * @param handles The provided list
      */
-    protected void createHandles(@Nonnull Map<Figure, List<Handle>> handles) {
+    protected void createHandles(@NonNull Map<Figure, List<Handle>> handles) {
         List<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
             if (getEditor().getAnchorHandleType() != null) {
@@ -444,7 +444,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return drawing.getReadOnlyProperty();
     }
 
-    public void dump(@Nonnull StringBuilder buf, @Nonnull Node n, int depth) {
+    public void dump(@NonNull StringBuilder buf, @NonNull Node n, int depth) {
         for (int i = 0; i < depth; i++) {
             buf.append(".");
         }
@@ -491,7 +491,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      */
     @Nullable
     @Override
-    public Figure findFigure(double vx, double vy, @Nonnull Set<Figure> figures) {
+    public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures) {
         return findFigure(vx, vy, figures, getEditor().getTolerance());
     }
 
@@ -507,7 +507,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return a figure in the specified set which contains the point, or null.
      */
     @Nullable
-    public Figure findFigure(double vx, double vy, @Nonnull Set<Figure> figures, double tolerance) {
+    public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(viewToWorld(vx, vy));
         for (Figure f : figures) {
@@ -524,7 +524,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Nullable
-    private Figure findFigureRecursive(@Nullable Parent p, @Nonnull Point2D pp, double tolerance) {
+    private Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance) {
         if (p == null) {
             return null;
         }
@@ -550,7 +550,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Figure> findFigures(double vx, double vy, boolean decompose) {
         Transform vt = getViewToWorld();
@@ -561,7 +561,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    public @Nullable Node findFigureNode(@Nonnull Figure figure, double vx, double vy) {
+    public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
 
         Node n = figureToNodeMap.get(figure);
         Transform viewToNode = null;
@@ -579,7 +579,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return findFigureNodeRecursive(figure, n, pl.getX(), pl.getY());
     }
 
-    private @Nullable Node findFigureNodeRecursive(@Nonnull Figure figure, Node n, double vx, double vy) {
+    private @Nullable Node findFigureNodeRecursive(@NonNull Figure figure, @NonNull Node n, double vx, double vy) {
         if (n.contains(vx, vy)) {
             if (n instanceof Shape) {
                 return n;
@@ -600,7 +600,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getViewToWorld();
@@ -612,7 +612,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return list;
     }
 
-    private void findFiguresInsideRecursive(Parent p, @Nonnull Bounds pp, @Nonnull List<Figure> found, boolean decompose) {
+    private void findFiguresInsideRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -644,7 +644,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getViewToWorld();
@@ -656,7 +656,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return list;
     }
 
-    private void findFiguresIntersectingRecursive(Parent p, @Nonnull Bounds pp, @Nonnull List<Figure> found, boolean decompose) {
+    private void findFiguresIntersectingRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose) {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -675,7 +675,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void findFiguresRecursive(Parent p, @Nonnull Point2D pp, @Nonnull List<Figure> found, boolean decompose) {
+    private void findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Figure> found, boolean decompose) {
         double tolerance = getEditor().getTolerance();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
@@ -739,9 +739,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     // Handles
-    @Nonnull
+    @NonNull
     @Override
-    public Set<Figure> getFiguresWithCompatibleHandle(@Nonnull Collection<Figure> figures, Handle master) {
+    public Set<Figure> getFiguresWithCompatibleHandle(@NonNull Collection<Figure> figures, Handle master) {
         validateHandles();
         Map<Figure, Figure> result = new HashMap<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
@@ -800,7 +800,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return rootPane.getStylesheets();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Transform getViewToWorld() {
         if (viewToWorldTransform == null) {
@@ -843,7 +843,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return rect;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Transform getWorldToView() {
         if (worldToViewTransform == null) {
@@ -886,14 +886,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         invalidateConstrainerNode();
     }
 
-    private void handleFigureAdded(Figure figure) {
+    private void handleFigureAdded(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             invalidateFigureNode(f);
         }
         repaint();
     }
 
-    private void handleFigureRemoved(Figure figure) {
+    private void handleFigureRemoved(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             removeNode(f);
         }
@@ -901,7 +901,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         repaint();
     }
 
-    private void handleFigureRemovedFromDrawing(Figure figure) {
+    private void handleFigureRemovedFromDrawing(@NonNull Figure figure) {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         for (Figure f : figure.preorderIterable()) {
             selectedFigures.remove(f);
@@ -937,7 +937,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         repaint();
     }
 
-    private void handleSubtreeNodesChanged(Figure figures) {
+    private void handleSubtreeNodesChanged(@NonNull Figure figures) {
         for (Figure f : figures.preorderIterable()) {
             dirtyFigureNodes.add(f);
             dirtyHandles.add(f);
@@ -951,7 +951,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         repaint();
     }
 
-    private void handleZoomFactorChanged(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    private void handleZoomFactorChanged(ObservableValue<? extends Number> observable, Number oldValue, @NonNull Number newValue) {
         final Bounds visibleRect = getViewToWorld().transform(getVisibleRect());
 
         Scale st = new Scale(newValue.doubleValue(), newValue.doubleValue());
@@ -1098,7 +1098,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @param squaredRadius The square of the radius in which the node must be
      * @return true if the node contains the point
      */
-    private boolean isInsideRadius(Node node, Point2D point, double squaredRadius) {
+    private boolean isInsideRadius(@NonNull Node node, @NonNull Point2D point, double squaredRadius) {
         Bounds b = node.getBoundsInLocal();
         double cx = b.getMinX() + b.getWidth() * 0.5;
         double cy = b.getMinY() + b.getHeight() * 0.5;
@@ -1113,14 +1113,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return The margin. The default value is:
      * {@code new Insets(20, 20, 20, 20)}.
      */
-    @Nonnull
+    @NonNull
     public ObjectProperty<Insets> marginProperty() {
         return margin;
     }
 
     @Nullable
     @Override
-    public NonnullProperty<DrawingModel> modelProperty() {
+    public NonNullProperty<DrawingModel> modelProperty() {
         return drawingModel;
     }
 
@@ -1192,7 +1192,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    public void scrollRectToVisible(@Nonnull Bounds boundsInView) {
+    public void scrollRectToVisible(@NonNull Bounds boundsInView) {
         ScrollPane sp = getScrollPane();
         if (sp == null) {
             return;
@@ -1434,7 +1434,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void updateTreeStructure(@Nonnull Figure parent) {
+    private void updateTreeStructure(@NonNull Figure parent) {
         // Since we don't know which figures have been removed from
         // the drawing, we have to get rid of them on ourselves.
         // XXX This is a really slow operation. If each figure would store a
@@ -1463,7 +1463,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public DoubleProperty zoomFactorProperty() {
         return zoomFactor;

@@ -5,7 +5,7 @@
 package org.jhotdraw8.css;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssConverterFactory;
 import org.jhotdraw8.text.PatternConverter;
@@ -23,42 +23,45 @@ public class CssColor implements Paintable {
 
     private final static PatternConverter formatter = new PatternConverter("rgba'('{0,number},{1,number},{2,number},{3,number}')'", new CssConverterFactory());
 
-    @Nonnull
+    @NonNull
     private final String name;
-    @Nonnull
+    @NonNull
     private final Color color;
 
+    @Nullable
     public final static CssColor BLACK = CssColor.valueOf("black");
+    @Nullable
     public final static CssColor WHITE = CssColor.valueOf("white");
+    @Nullable
     public final static CssColor TRANSPARENT = CssColor.valueOf("transparent");
 
-    public CssColor(@Nonnull Color color) {
+    public CssColor(@NonNull Color color) {
         this(null, color);
     }
 
-    public CssColor(@Nullable String name, @Nonnull Color color) {
+    public CssColor(@Nullable String name, @NonNull Color color) {
         this.name = name == null ? toName(color) : name;
         this.color = color;
     }
 
-    @Nonnull
+    @NonNull
     public String getName() {
         return name;
     }
 
-    @Nonnull
+    @NonNull
     public Color getColor() {
         return color;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Color getPaint() {
         return color;
     }
 
-    @Nonnull
-    public static String toName(Color c) {
+    @NonNull
+    public static String toName(@NonNull Color c) {
         if (c.getOpacity() == 1.0) {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
@@ -101,22 +104,24 @@ public class CssColor implements Paintable {
         return true;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "CColor{" + getName() + '}';
     }
 
     @Nullable
-    public static CssColor valueOf(@Nonnull String value) {
+    public static CssColor valueOf(@NonNull String value) {
         return new CssColor(value, Color.valueOf(value));
     }
 
-    public static CssColor ofColor(Color c) {
+    @Nullable
+    public static CssColor ofColor(@Nullable Color c) {
         return c == null ? null : new CssColor(c);
     }
 
-    public static Color toColor(CssColor c) {
+    @Nullable
+    public static Color toColor(@Nullable CssColor c) {
         return c == null ? null : c.getColor();
     }
 

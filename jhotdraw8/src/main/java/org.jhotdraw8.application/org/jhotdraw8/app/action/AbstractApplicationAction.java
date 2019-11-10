@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 
@@ -44,7 +44,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    @Nonnull
+    @NonNull
     protected String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
@@ -84,7 +84,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      */
     protected abstract void handleActionPerformed(ActionEvent event, Application app);
 
-    @Nonnull
+    @NonNull
     protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
         TextArea textArea = new TextArea(message);
         textArea.setEditable(false);

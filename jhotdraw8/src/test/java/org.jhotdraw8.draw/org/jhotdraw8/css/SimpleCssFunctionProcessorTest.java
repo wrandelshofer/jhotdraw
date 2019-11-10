@@ -1,5 +1,7 @@
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.junit.jupiter.api.DynamicTest;
@@ -26,7 +28,7 @@ class SimpleCssFunctionProcessorTest {
     }
 
 
-    protected void doTestProcess(String expression, String expected) throws Exception {
+    protected void doTestProcess(String expression, @Nullable String expected) throws Exception {
         Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         doc.getDocumentElement();
         Element elem = doc.createElement("Car");
@@ -66,6 +68,7 @@ class SimpleCssFunctionProcessorTest {
 
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testProcessingOfStandardFunctionsFactory() {
         return Arrays.asList(

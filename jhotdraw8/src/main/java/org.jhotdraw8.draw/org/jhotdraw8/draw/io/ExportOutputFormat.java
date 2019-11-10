@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonnullObjectKey;
+import org.jhotdraw8.collection.NonNullObjectKey;
 
 import java.util.Map;
 
@@ -16,14 +16,14 @@ import java.util.Map;
  */
 public interface ExportOutputFormat {
 
-    NonnullObjectKey<Double> EXPORT_DRAWING_DPI_KEY = new NonnullObjectKey<>("exportDrawingDpi", Double.class, 72.0);
-    NonnullObjectKey<Boolean> EXPORT_DRAWING_KEY = new NonnullObjectKey<>("exportDrawing", Boolean.class, true);
-    NonnullObjectKey<Double> EXPORT_PAGES_DPI_KEY = new NonnullObjectKey<>("exportPagesDpi", Double.class, 300.0);
-    NonnullObjectKey<Boolean> EXPORT_PAGES_KEY = new NonnullObjectKey<>("exportPages", Boolean.class, true);
-    NonnullObjectKey<Double> EXPORT_SLICES_DPI_KEY = new NonnullObjectKey<>("exportSlicesDpi", Double.class, 72.0);
-    NonnullObjectKey<Boolean> EXPORT_SLICES_KEY = new NonnullObjectKey<>("exportSlices", Boolean.class, true);
-    NonnullObjectKey<Boolean> EXPORT_SLICES_RESOLUTION_2X_KEY = new NonnullObjectKey<>("exportSlicesResolution2", Boolean.class, false);
-    NonnullObjectKey<Boolean> EXPORT_SLICES_RESOLUTION_3X_KEY = new NonnullObjectKey<>("exportSlicesResolution3", Boolean.class, false);
+    NonNullObjectKey<Double> EXPORT_DRAWING_DPI_KEY = new NonNullObjectKey<>("exportDrawingDpi", Double.class, 72.0);
+    NonNullObjectKey<Boolean> EXPORT_DRAWING_KEY = new NonNullObjectKey<>("exportDrawing", Boolean.class, true);
+    NonNullObjectKey<Double> EXPORT_PAGES_DPI_KEY = new NonNullObjectKey<>("exportPagesDpi", Double.class, 300.0);
+    NonNullObjectKey<Boolean> EXPORT_PAGES_KEY = new NonNullObjectKey<>("exportPages", Boolean.class, true);
+    NonNullObjectKey<Double> EXPORT_SLICES_DPI_KEY = new NonNullObjectKey<>("exportSlicesDpi", Double.class, 72.0);
+    NonNullObjectKey<Boolean> EXPORT_SLICES_KEY = new NonNullObjectKey<>("exportSlices", Boolean.class, true);
+    NonNullObjectKey<Boolean> EXPORT_SLICES_RESOLUTION_2X_KEY = new NonNullObjectKey<>("exportSlicesResolution2", Boolean.class, false);
+    NonNullObjectKey<Boolean> EXPORT_SLICES_RESOLUTION_3X_KEY = new NonNullObjectKey<>("exportSlicesResolution3", Boolean.class, false);
 
     /**
      * Sets output format options.

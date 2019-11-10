@@ -9,7 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.net.URI;
 
@@ -31,7 +31,7 @@ public abstract class AbstractDocumentBasedActivity extends AbstractActivity imp
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 
-    @Nonnull
+    @NonNull
     @Override
     public BooleanProperty modifiedProperty() {
         return modified;
@@ -46,13 +46,13 @@ public abstract class AbstractDocumentBasedActivity extends AbstractActivity imp
         modified.set(true);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<URI> uriProperty() {
         return uri;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<DataFormat> dataFormatProperty() {
         return dataFormat;

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
@@ -27,7 +27,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     /**
      * Holds the current options.
      */
-    @Nonnull
+    @NonNull
     private Map<? super Key<?>, Object> options = Collections.emptyMap();
 
     @Override
@@ -38,7 +38,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     public final static String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
 
     @Override
-    public void write(URI documentHome, @Nonnull OutputStream out, Drawing drawing, WorkState workState) throws IOException {
+    public void write(URI documentHome, @NonNull OutputStream out, Drawing drawing, WorkState workState) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {
            /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
             o.setPersistenceDelegate(Figure.class, delegate);

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * StringKey.
  *
@@ -13,11 +15,11 @@ public class StringKey extends ObjectKey<String> {
 
     private final static long serialVersionUID = 1L;
 
-    public StringKey(String key) {
+    public StringKey(@NonNull String key) {
         super(key, String.class);
     }
 
-    public StringKey(String key, String defaultValue) {
+    public StringKey(@NonNull String key, String defaultValue) {
         super(key, String.class, defaultValue);
     }
 }

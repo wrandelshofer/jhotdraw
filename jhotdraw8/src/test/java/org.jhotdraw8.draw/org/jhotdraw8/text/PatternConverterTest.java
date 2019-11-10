@@ -5,6 +5,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -29,7 +30,7 @@ public class PatternConverterTest {
      * Test of toString method, of class PatternConverter.
      */
     static
-    public void testToString(String pattern, Object[] value, String expectedOutput) throws IOException {
+    public void testToString(@NonNull String pattern, Object[] value, String expectedOutput) throws IOException {
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         String actualOutput = c.toString(value);
         assertEquals(actualOutput, expectedOutput);
@@ -39,7 +40,7 @@ public class PatternConverterTest {
      * Test of fromString method, of class PatternConverter.
      */
     static
-    public void testFromString(String pattern, Object[] expectedValue, String input) throws IOException, ParseException {
+    public void testFromString(@NonNull String pattern, Object[] expectedValue, @NonNull String input) throws IOException, ParseException {
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
         System.out.println("ast:" + ast);
@@ -48,6 +49,7 @@ public class PatternConverterTest {
         assertArrayEquals(actualValue, expectedValue);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testToStringFactory() {
         return Arrays.asList(
@@ -80,6 +82,7 @@ public class PatternConverterTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(

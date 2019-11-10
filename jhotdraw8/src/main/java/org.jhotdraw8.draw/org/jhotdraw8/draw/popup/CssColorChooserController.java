@@ -8,6 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
 
@@ -38,8 +39,10 @@ public class CssColorChooserController {
 
     }
 
+    @NonNull
     private ObjectProperty<CssColor> color = new SimpleObjectProperty<>(this, "color");
 
+    @NonNull
     public ObjectProperty<CssColor> colorProperty() {
         return color;
     }

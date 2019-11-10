@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,7 +20,7 @@ public class DirectedGraphValidator<V, A> {
     public DirectedGraphValidator() {
     }
 
-    public boolean validate(@Nonnull DirectedGraph<V, A> graph) {
+    public boolean validate(@NonNull DirectedGraph<V, A> graph) {
         Set<V> vertices = new LinkedHashSet<>();
         for (V v : graph.getVertices()) {
             if (!vertices.add(v)) {

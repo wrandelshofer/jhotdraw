@@ -8,10 +8,10 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,12 +28,13 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<Point2D>>
-        implements WriteableStyleableMapAccessor<ImmutableList<Point2D>>, NonnullMapAccessor<ImmutableList<Point2D>> {
+        implements WriteableStyleableMapAccessor<ImmutableList<Point2D>>, NonNullMapAccessor<ImmutableList<Point2D>> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, ImmutableList<Point2D>> cssMetaData;
+    @NonNull
     private final Converter<ImmutableList<Point2D>> converter;
 
     /**
@@ -42,7 +43,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
      *
      * @param name The name of the key.
      */
-    public Point2DListStyleableKey(String name) {
+    public Point2DListStyleableKey(@NonNull String name) {
         this(name, ImmutableLists.emptyList());
     }
 
@@ -52,7 +53,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableKey(String name, ImmutableList<Point2D> defaultValue) {
+    public Point2DListStyleableKey(@NonNull String name, ImmutableList<Point2D> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -63,7 +64,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableKey(String name, DirtyMask mask, ImmutableList<Point2D> defaultValue) {
+    public Point2DListStyleableKey(@NonNull String name, DirtyMask mask, ImmutableList<Point2D> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{Point2D.class}, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Point2D>>> function = s -> {
@@ -81,12 +82,13 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<Point2D>> getCssMetaData() {
         return cssMetaData;
     }
 
+    @NonNull
     @Override
     public Converter<ImmutableList<Point2D>> getConverter() {
         return converter;

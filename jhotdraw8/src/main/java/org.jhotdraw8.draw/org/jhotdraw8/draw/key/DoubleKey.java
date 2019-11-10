@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.key;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * DoubleKey.
  *
@@ -13,11 +15,11 @@ public class DoubleKey extends ObjectFigureKey<Double> {
 
     private final static long serialVersionUID = 1L;
 
-    public DoubleKey(String key, DirtyMask dirtyMask) {
+    public DoubleKey(@NonNull String key, DirtyMask dirtyMask) {
         this(key, dirtyMask, 0.0);
     }
 
-    public DoubleKey(String key, DirtyMask dirtyMask, Double defaultValue) {
+    public DoubleKey(@NonNull String key, DirtyMask dirtyMask, @NonNull Double defaultValue) {
         super(key, Double.class, defaultValue);
     }
 }

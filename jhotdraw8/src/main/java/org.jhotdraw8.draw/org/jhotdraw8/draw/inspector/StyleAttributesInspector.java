@@ -10,7 +10,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -40,7 +40,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         }
 
     };
-    @Nonnull
+    @NonNull
     private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {
             oldValue.removeListener(modelInvalidationHandler);
@@ -64,13 +64,15 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     }
 
+    @Nullable
     @Override
-    protected Object get(Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected Object get(@NonNull Figure f, @NonNull WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
         return getDrawingModel().get(f, finalSelectedAccessor);
     }
 
+    @Nullable
     @Override
-    protected WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, Figure f, String propertyNamespace, String propertyName) {
+    protected WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
         if (selectorModel instanceof FigureSelectorModel) {
             FigureSelectorModel m = (FigureSelectorModel) selectorModel;
             return m.getAccessor(f, propertyNamespace, propertyName);
@@ -78,8 +80,9 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return null;
     }
 
+    @Nullable
     @Override
-    protected Converter<?> getConverter(SelectorModel<Figure> selectorModel, Figure f, String namespace, String name) {
+    protected Converter<?> getConverter(SelectorModel<Figure> selectorModel, @NonNull Figure f, String namespace, String name) {
         if (selectorModel instanceof FigureSelectorModel) {
             FigureSelectorModel m = (FigureSelectorModel) selectorModel;
             return m.getConverter(f, namespace, name);
@@ -87,27 +90,32 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return null;
     }
 
+    @Nullable
     protected Drawing getDrawing() {
         DrawingView view = getSubject();
         return view == null ? null : view.getDrawing();
     }
 
+    @Nullable
     protected DrawingModel getDrawingModel() {
         DrawingView view = getSubject();
         return view == null ? null : view.getModel();
     }
 
+    @NonNull
     @Override
     protected Iterable<Figure> getEntities() {
         return getDrawing().breadthFirstIterable();
     }
 
+    @Nullable
     @Override
     protected Figure getRoot() {
         DrawingView subject = getSubject();
         return subject == null ? null : subject.getDrawing();
     }
 
+    @Nullable
     @Override
     protected StylesheetsManager<Figure> getStyleManager() {
         Drawing d = getDrawing();
@@ -136,12 +144,12 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected void remove(Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected void remove(@NonNull Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
         getDrawingModel().remove(f, finalSelectedAccessor);
     }
 
     @Override
-    protected void set(Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor, Object o) {
+    protected void set(@NonNull Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor, Object o) {
         getDrawingModel().set(f, finalSelectedAccessor, o);
     }
 
@@ -163,6 +171,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         }
     }
 
+    @NonNull
     public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }

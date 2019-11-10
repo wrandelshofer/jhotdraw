@@ -8,8 +8,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssStringOrIdentConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -26,10 +26,10 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
-        implements WriteableStyleableMapAccessor<String>, NonnullMapAccessor<String> {
+        implements WriteableStyleableMapAccessor<String>, NonNullMapAccessor<String> {
 
     final static long serialVersionUID = 1L;
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
@@ -38,7 +38,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
      *
      * @param name The name of the key.
      */
-    public StringOrIdentStyleableKey(String name) {
+    public StringOrIdentStyleableKey(@NonNull String name) {
         this(name, "");
     }
 
@@ -48,7 +48,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public StringOrIdentStyleableKey(String name, String defaultValue) {
+    public StringOrIdentStyleableKey(@NonNull String name, String defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -59,7 +59,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public StringOrIdentStyleableKey(String name, DirtyMask mask, String defaultValue) {
+    public StringOrIdentStyleableKey(@NonNull String name, DirtyMask mask, String defaultValue) {
         super(null, name, String.class, false, defaultValue);
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
@@ -76,7 +76,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, String> getCssMetaData() {
         return cssMetaData;

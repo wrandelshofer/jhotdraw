@@ -11,11 +11,16 @@ import javafx.scene.shape.Path;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -40,7 +45,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         this(0, 0, 1, 1);
     }
 
-    public AbstractStraightLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
+    public AbstractStraightLineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -49,7 +54,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -79,7 +84,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
@@ -111,10 +116,10 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     public PathIterator getPathIterator(AffineTransform tx) {
         // FIXME include markers in path
         return Shapes.awtShapeFromFX(new Line(
-                getNonnull(START_X).getConvertedValue(),
-                getNonnull(START_Y).getConvertedValue(),
-                getNonnull(END_X).getConvertedValue(),
-                getNonnull(END_Y).getConvertedValue())).getPathIterator(tx);
+                getNonNull(START_X).getConvertedValue(),
+                getNonNull(START_Y).getConvertedValue(),
+                getNonNull(END_X).getConvertedValue(),
+                getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
     public abstract double getStrokeCutEnd(RenderContext ctx);
@@ -122,9 +127,9 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     public abstract double getStrokeCutStart(RenderContext ctx);
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
+    public void layout(@NonNull RenderContext ctx) {
+        Point2D start = getNonNull(START).getConvertedValue();
+        Point2D end = getNonNull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
@@ -146,9 +151,9 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         }
     }
 
-    public void translateInLocal(CssPoint2D t) {
-        set(START, getNonnull(START).add(t));
-        set(END, getNonnull(END).add(t));
+    public void translateInLocal(@NonNull CssPoint2D t) {
+        set(START, getNonNull(START).add(t));
+        set(END, getNonNull(END).add(t));
     }
 
     /**
@@ -174,8 +179,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
-                                    @Nonnull Path markerNode,
-                                    @Nonnull Point2D start, @Nonnull Point2D end, @Nullable String svgString, double markerScaleFactor) {
+                                    @NonNull Path markerNode,
+                                    @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
             double angle = Math.atan2(start.getY() - end.getY(), start.getX() - end.getX());
@@ -190,14 +195,14 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         javafx.scene.Group g = (javafx.scene.Group) node;
         Line lineNode = (Line) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);
 
-        Point2D start = getNonnull(START).getConvertedValue();
-        Point2D end = getNonnull(END).getConvertedValue();
+        Point2D start = getNonNull(START).getConvertedValue();
+        Point2D end = getNonNull(END).getConvertedValue();
 
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);

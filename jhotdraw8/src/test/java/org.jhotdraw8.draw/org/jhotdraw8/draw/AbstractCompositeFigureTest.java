@@ -10,7 +10,7 @@ import javafx.css.Styleable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import org.jhotdraw8.draw.figure.Figure;
@@ -117,7 +117,7 @@ public class AbstractCompositeFigureTest {
 
         private static final long serialVersionUID = 1L;
 
-        @Nonnull
+        @NonNull
         @Override
         public Bounds getBoundsInLocal() {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -139,10 +139,11 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public Node createNode(RenderContext renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -164,35 +165,41 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public void updateNode(@Nonnull RenderContext renderer, @Nonnull Node node) {
+        public void updateNode(@NonNull RenderContext renderer, @NonNull Node node) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public String getId() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public ObservableList<String> getStyleClass() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public String getStyle() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public Styleable getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @NonNull
         @Override
         public ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet.");

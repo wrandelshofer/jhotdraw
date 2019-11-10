@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 
@@ -14,10 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
+    @NonNull
     private final Map<String, E> fromStringMap;
+    @NonNull
     private final Map<E, String> toStringMap;
 
-    public CaseInsensitiveMappedConverter(Map<String, E> fromStringMap) {
+    public CaseInsensitiveMappedConverter(@NonNull Map<String, E> fromStringMap) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {
@@ -48,7 +51,7 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
     }
 
     @Override
-    public <TT extends E> void toString(Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException {
+    public <TT extends E> void toString(@NonNull Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException {
         if (value == null) {
             throw new IOException("Illegal value=null.");
         }

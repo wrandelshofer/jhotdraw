@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -23,17 +23,17 @@ import java.util.function.Consumer;
  */
 public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
 
-    @Nonnull
+    @NonNull
     private final Class<E> enumClass;
-    @Nonnull
+    @NonNull
     private final String name;
     private final boolean nullable;
 
-    public CssEnumConverter(Class<E> enumClass) {
+    public CssEnumConverter(@NonNull Class<E> enumClass) {
         this(enumClass, false);
     }
 
-    public CssEnumConverter(Class<E> enumClass, boolean nullable) {
+    public CssEnumConverter(@NonNull Class<E> enumClass, boolean nullable) {
         this.enumClass = enumClass;
         this.name = enumClass.getName().substring(enumClass.getName().lastIndexOf('.') + 1);
         this.nullable = nullable;
@@ -41,7 +41,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
 
 
     @Nullable
-    public E parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public E parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException(name + ": identifier expected", tt.getStartPosition());
         }
@@ -58,7 +58,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");
@@ -82,7 +82,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
     }
 
     @Override
-    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> consumer) {
+    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + value);
@@ -100,6 +100,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
         }
     }
 
+    @NonNull
     public String toString(@Nullable E value) {
         StringBuilder out = new StringBuilder();
         produceTokens(value, null, token -> out.append(token.fromToken()));

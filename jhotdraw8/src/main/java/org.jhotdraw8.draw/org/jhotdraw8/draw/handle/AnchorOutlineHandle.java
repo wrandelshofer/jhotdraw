@@ -11,7 +11,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -54,14 +54,14 @@ public class AnchorOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         node.setStroke(Paintable.getPaint(color));
         node.setStrokeWidth(view.getEditor().getHandleStrokeWidth());
         return node;
     }
 
-    protected void initNode(@Nonnull Polygon r) {
+    protected void initNode(@NonNull Polygon r) {
         r.setFill(null);
     }
 
@@ -71,7 +71,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Transform tinv = Transforms.concat(f.getWorldToLocal(), view.getViewToWorld());

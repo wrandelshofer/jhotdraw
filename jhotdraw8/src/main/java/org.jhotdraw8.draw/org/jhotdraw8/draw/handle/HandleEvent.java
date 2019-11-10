@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.event.Event;
 
 /**
@@ -26,7 +26,7 @@ public class HandleEvent extends Event<Handle> {
 
     private final EventType eventType;
 
-    public <T> HandleEvent(Handle source, EventType type) {
+    public <T> HandleEvent(@NonNull Handle source, EventType type) {
         super(source);
         this.eventType = type;
     }
@@ -35,7 +35,7 @@ public class HandleEvent extends Event<Handle> {
         return eventType;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "HandleEvent{" + "type=" + eventType + " handle=" + getSource()

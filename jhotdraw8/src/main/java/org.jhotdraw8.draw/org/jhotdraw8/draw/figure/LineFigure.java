@@ -9,7 +9,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -45,11 +46,17 @@ public class LineFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Line";
 
+    @Nullable
     public final static CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey START_Y = new CssSizeStyleableKey("startY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey END_X = new CssSizeStyleableKey("endX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssSizeStyleableKey END_Y = new CssSizeStyleableKey("endY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    @Nullable
     public final static CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);
+    @Nullable
     public final static CssPoint2DStyleableMapAccessor END = new CssPoint2DStyleableMapAccessor("end", END_X, END_Y);
 
     public LineFigure() {
@@ -61,41 +68,41 @@ public class LineFigure extends AbstractLeafFigure
         set(END, new CssPoint2D(endX, endY));
     }
 
-    public LineFigure(Point2D start, Point2D end) {
+    public LineFigure(@NonNull Point2D start, @NonNull Point2D end) {
         set(START, new CssPoint2D(start));
         set(END, new CssPoint2D(end));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         return getCssBoundsInLocal().getConvertedBoundsValue();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        CssPoint2D start = getNonnull(START);
-        CssPoint2D end = getNonnull(END);
+        CssPoint2D start = getNonNull(START);
+        CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(start, end);
     }
 
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
-        return Shapes.awtShapeFromFX(new Line(getNonnull(START_X).getConvertedValue(),
-                getNonnull(START_Y).getConvertedValue(),
-                getNonnull(END_X).getConvertedValue(),
-                getNonnull(END_Y).getConvertedValue())).getPathIterator(tx);
+        return Shapes.awtShapeFromFX(new Line(getNonNull(START_X).getConvertedValue(),
+                getNonNull(START_Y).getConvertedValue(),
+                getNonNull(END_X).getConvertedValue(),
+                getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
-        set(START, new CssPoint2D(transform.transform(getNonnull(START).getConvertedValue())));
-        set(END, new CssPoint2D(transform.transform(getNonnull(END).getConvertedValue())));
+    public void reshapeInLocal(@NonNull Transform transform) {
+        set(START, new CssPoint2D(transform.transform(getNonNull(START).getConvertedValue())));
+        set(END, new CssPoint2D(transform.transform(getNonNull(END).getConvertedValue())));
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
     }
 
@@ -104,31 +111,31 @@ public class LineFigure extends AbstractLeafFigure
         reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Line();
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Line lineNode = (Line) node;
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, lineNode);
-        Point2D start = getStyledNonnull(START).getConvertedValue();
+        Point2D start = getStyledNonNull(START).getConvertedValue();
         lineNode.setStartX(start.getX());
         lineNode.setStartY(start.getY());
-        Point2D end = getStyledNonnull(END).getConvertedValue();
+        Point2D end = getStyledNonNull(END).getConvertedValue();
         lineNode.setEndX(end.getX());
         lineNode.setEndY(end.getY());
         lineNode.applyCss();
     }
 
     @Override
-    public void createHandles(HandleType handleType, @Nonnull List<Handle> list) {
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -148,14 +155,14 @@ public class LineFigure extends AbstractLeafFigure
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
+    public void layout(@NonNull RenderContext ctx) {
         // empty
     }
 

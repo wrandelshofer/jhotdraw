@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.event.Event;
 
 /**
@@ -27,7 +27,7 @@ public class ToolEvent extends Event<Tool> {
 
     private final EventType eventType;
 
-    public <T> ToolEvent(Tool source, EventType type) {
+    public <T> ToolEvent(@NonNull Tool source, EventType type) {
         super(source);
         this.eventType = type;
     }
@@ -36,7 +36,7 @@ public class ToolEvent extends Event<Tool> {
         return eventType;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "ToolEvent{" + "type=" + eventType + " tool=" + getSource()

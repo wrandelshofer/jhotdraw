@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
@@ -39,11 +39,11 @@ public class PageLabelFigure extends AbstractLabelFigure
         this(0, 0, "");
     }
 
-    public PageLabelFigure(Point2D position, String text) {
+    public PageLabelFigure(@NonNull Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public PageLabelFigure(double x, double y, String text, Object... keyValues) {
+    public PageLabelFigure(double x, double y, String text, @NonNull Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
@@ -74,8 +74,8 @@ public class PageLabelFigure extends AbstractLabelFigure
         return text;
     }
 
-    @Nonnull
-    private String replaceAll(String text, @Nonnull String placeholder, String replace) {
+    @NonNull
+    private String replaceAll(@NonNull String text, @NonNull String placeholder, String replace) {
         for (int p = text.indexOf(placeholder); p != -1; p = text.indexOf(placeholder)) {
             text = text.substring(0, p) + replace + text.substring(p + placeholder.length());
         }
@@ -83,7 +83,7 @@ public class PageLabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, node);
@@ -91,7 +91,7 @@ public class PageLabelFigure extends AbstractLabelFigure
         applyHideableFigureProperties(ctx, node);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

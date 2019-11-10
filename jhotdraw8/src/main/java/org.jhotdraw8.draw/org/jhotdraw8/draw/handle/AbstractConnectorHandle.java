@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.handle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -32,6 +32,7 @@ import java.util.List;
  */
 public abstract class AbstractConnectorHandle extends AbstractHandle {
 
+    @NonNull
     protected final MapAccessor<Connector> connectorKey;
     @Nullable
     protected Point2D connectorLocation;
@@ -41,14 +42,15 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     private boolean isConnected;
     private boolean isDragging;
     protected Point2D pickLocation;
-    protected final NonnullMapAccessor<CssPoint2D> pointKey;
+    protected final NonNullMapAccessor<CssPoint2D> pointKey;
+    @NonNull
     protected final MapAccessor<Figure> targetKey;
     private boolean editable = true;
 
-    public AbstractConnectorHandle(@Nonnull ConnectingFigure figure,
-                                   NonnullMapAccessor<CssPoint2D> pointKey,
-                                   MapAccessor<Connector> connectorKey,
-                                   MapAccessor<Figure> targetKey) {
+    public AbstractConnectorHandle(@NonNull ConnectingFigure figure,
+                                   NonNullMapAccessor<CssPoint2D> pointKey,
+                                   @NonNull MapAccessor<Connector> connectorKey,
+                                   @NonNull MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;
         this.connectorKey = connectorKey;
@@ -79,14 +81,14 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public ConnectingFigure getOwner() {
         return (ConnectingFigure) super.getOwner();
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (!editable) {
             return;
         }

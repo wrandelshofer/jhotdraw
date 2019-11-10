@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.model;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Figure;
@@ -21,7 +21,7 @@ import org.jhotdraw8.event.WeakListener;
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
-    @Nonnull
+    @NonNull
     private final DrawingModel model;
     @Nullable
     protected final Figure figure;
@@ -33,11 +33,11 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
     private final WeakListener<DrawingModelEvent> weakListener;
     private final boolean isDeclaredKey;
 
-    public DrawingModelFigureProperty(@Nonnull DrawingModel model, Figure figure, Key<T> key) {
+    public DrawingModelFigureProperty(@NonNull DrawingModel model, Figure figure, Key<T> key) {
         this(model, figure, key, false);
     }
 
-    public DrawingModelFigureProperty(@Nonnull DrawingModel model, @Nullable Figure figure, @Nullable Key<T> key, boolean allKeys) {
+    public DrawingModelFigureProperty(@NonNull DrawingModel model, @Nullable Figure figure, @Nullable Key<T> key, boolean allKeys) {
         this.model = model;
         this.key = key;
         this.figure = figure;

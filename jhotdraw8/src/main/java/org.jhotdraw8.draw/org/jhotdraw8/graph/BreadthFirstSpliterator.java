@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -23,11 +23,11 @@ import java.util.function.Predicate;
  */
 public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
-    @Nonnull
+    @NonNull
     private final Function<V, Iterable<V>> nextFunction;
-    @Nonnull
+    @NonNull
     private final Deque<V> deque;
-    @Nonnull
+    @NonNull
     private final Predicate<V> visited;
 
     /**
@@ -36,7 +36,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
      * @param nextFunction the nextFunction
      * @param root              the root vertex
      */
-    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextFunction, @Nonnull V root) {
+    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root) {
         this(nextFunction, root, new HashSet<>()::add);
     }
 
@@ -49,7 +49,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
      *                          if the specified vertex has been visited, and marks the specified vertex
      *                          as visited.
      */
-    public BreadthFirstSpliterator(@Nonnull Function<V, Iterable<V>> nextFunction, @Nonnull V root, @Nonnull Predicate<V> visited) {
+    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction");
         Objects.requireNonNull(root, "root");
@@ -63,7 +63,7 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
 
 
     @Override
-    public boolean tryAdvance(@Nonnull Consumer<? super V> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
         V current = deque.pollFirst();
         if (current == null) {
             return false;

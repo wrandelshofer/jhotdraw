@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -25,7 +25,7 @@ import java.util.function.Function;
  */
 public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> implements WriteableStyleableMapAccessor<Double> {
     final static long serialVersionUID = 1L;
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, Double> cssMetaData;
 
     private final Converter<Double> converter;
@@ -36,7 +36,7 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
      *
      * @param name The name of the key.
      */
-    public NullableDoubleStyleableKey(String name) {
+    public NullableDoubleStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -46,7 +46,7 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullableDoubleStyleableKey(String name, Double defaultValue) {
+    public NullableDoubleStyleableKey(@NonNull String name, Double defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -57,15 +57,15 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public NullableDoubleStyleableKey(String name, DirtyMask mask, Double defaultValue) {
+    public NullableDoubleStyleableKey(@NonNull String name, DirtyMask mask, Double defaultValue) {
         this(name, mask, defaultValue, new CssDoubleConverter(true));
     }
 
-    public NullableDoubleStyleableKey(String name, Double defaultValue, CssConverter<Double> converter) {
+    public NullableDoubleStyleableKey(@NonNull String name, Double defaultValue, CssConverter<Double> converter) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, converter);
     }
 
-    public NullableDoubleStyleableKey(String name, DirtyMask mask, Double defaultValue, CssConverter<Double> converter) {
+    public NullableDoubleStyleableKey(@NonNull String name, DirtyMask mask, Double defaultValue, CssConverter<Double> converter) {
         super(name, Double.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Double>> function = s -> {
@@ -81,14 +81,14 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, Double> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<Double> getConverter() {
         return converter;

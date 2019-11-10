@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.io.IdFactory;
@@ -33,7 +34,7 @@ public class Rectangle2DConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    public static void testFromString(CssRectangle2D expected, String string) throws Exception {
+    public static void testFromString(CssRectangle2D expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
@@ -48,6 +49,7 @@ public class Rectangle2DConverterTest {
         assertEquals(string, actualString);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * Abstract superclass for "combinator"s.
  * <p>
@@ -22,6 +24,7 @@ public abstract class Combinator extends Selector {
 
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Combinator{" + "simpleSelector=" + firstSelector + ", selector=" + secondSelector + '}';

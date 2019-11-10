@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.text.CssInsetsConverterOLD;
@@ -30,15 +30,15 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Insets> cssMetaData;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> topKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> rightKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> bottomKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> leftKey;
 
     /**
@@ -50,7 +50,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
      * @param bottomKey the insets bottom key
      * @param leftKey   the insets left key
      */
-    public InsetsStyleableMapAccessor(String name, MapAccessor<Double> topKey, MapAccessor<Double> rightKey, MapAccessor<Double> bottomKey, MapAccessor<Double> leftKey) {
+    public InsetsStyleableMapAccessor(String name, @NonNull MapAccessor<Double> topKey, @NonNull MapAccessor<Double> rightKey, @NonNull MapAccessor<Double> bottomKey, @NonNull MapAccessor<Double> leftKey) {
         super(name, Insets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new Insets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<Insets>> function = s -> {
@@ -72,7 +72,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         this.leftKey = leftKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Insets> getCssMetaData() {
         return cssMetaData;
@@ -89,9 +89,9 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Insets get(@Nonnull Map<? super Key<?>, Object> a) {
+    public Insets get(@NonNull Map<? super Key<?>, Object> a) {
         final Double top = topKey.get(a);
         final Double right = rightKey.get(a);
         final Double bottom = bottomKey.get(a);
@@ -104,9 +104,9 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         );
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Insets put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Insets value) {
+    public Insets put(@NonNull Map<? super Key<?>, Object> a, @NonNull Insets value) {
         Insets oldValue = get(a);
         topKey.put(a, value.getTop());
         rightKey.put(a, value.getRight());
@@ -115,9 +115,9 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Insets remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public Insets remove(@NonNull Map<? super Key<?>, Object> a) {
         Insets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);

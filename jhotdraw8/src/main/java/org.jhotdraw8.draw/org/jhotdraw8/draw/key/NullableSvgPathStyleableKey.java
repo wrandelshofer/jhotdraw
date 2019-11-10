@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssSvgPathConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -27,9 +27,10 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, String> cssMetaData;
 
+    @NonNull
     private final Converter<String> converter;
 
     /**
@@ -38,7 +39,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
      *
      * @param name The name of the key.
      */
-    public NullableSvgPathStyleableKey(String name) {
+    public NullableSvgPathStyleableKey(@NonNull String name) {
         this(name, DirtyMask.of(DirtyBits.NODE), null);
     }
 
@@ -48,7 +49,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullableSvgPathStyleableKey(String name, String defaultValue) {
+    public NullableSvgPathStyleableKey(@NonNull String name, String defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -61,7 +62,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
      * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public NullableSvgPathStyleableKey(String key, DirtyMask mask, String defaultValue) {
+    public NullableSvgPathStyleableKey(@NonNull String key, DirtyMask mask, String defaultValue) {
         super(key, String.class, defaultValue);
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
@@ -80,13 +81,14 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, String> getCssMetaData() {
         return cssMetaData;
 
     }
 
+    @NonNull
     @Override
     public Converter<String> getConverter() {
         return converter;

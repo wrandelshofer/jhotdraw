@@ -6,7 +6,7 @@ package org.jhotdraw8.beans;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 
 import java.util.LinkedHashMap;
@@ -23,7 +23,7 @@ public class SimplePropertyBean implements PropertyBean {
      */
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
 
-    @Nonnull
+    @NonNull
     @Override
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;

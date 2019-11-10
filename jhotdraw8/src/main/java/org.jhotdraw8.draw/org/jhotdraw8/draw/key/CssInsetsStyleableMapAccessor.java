@@ -8,10 +8,10 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssInsetsConverter;
@@ -30,20 +30,20 @@ import java.util.function.Function;
  */
 public class CssInsetsStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssInsets>
-        implements NonnullMapAccessor<CssInsets> {
+        implements NonNullMapAccessor<CssInsets> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssInsets> cssMetaData;
-    @Nonnull
-    private final NonnullMapAccessor<CssSize> topKey;
-    @Nonnull
-    private final NonnullMapAccessor<CssSize> rightKey;
-    @Nonnull
-    private final NonnullMapAccessor<CssSize> bottomKey;
-    @Nonnull
-    private final NonnullMapAccessor<CssSize> leftKey;
+    @NonNull
+    private final NonNullMapAccessor<CssSize> topKey;
+    @NonNull
+    private final NonNullMapAccessor<CssSize> rightKey;
+    @NonNull
+    private final NonNullMapAccessor<CssSize> bottomKey;
+    @NonNull
+    private final NonNullMapAccessor<CssSize> leftKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -54,8 +54,8 @@ public class CssInsetsStyleableMapAccessor
      * @param bottomKey the insets bottom key
      * @param leftKey   the insets left key
      */
-    public CssInsetsStyleableMapAccessor(String name, NonnullMapAccessor<CssSize> topKey, NonnullMapAccessor<CssSize> rightKey, NonnullMapAccessor<CssSize> bottomKey, NonnullMapAccessor<CssSize> leftKey) {
-        super(name, CssInsets.class, new NonnullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
+    public CssInsetsStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> topKey, @NonNull NonNullMapAccessor<CssSize> rightKey, @NonNull NonNullMapAccessor<CssSize> bottomKey, @NonNull NonNullMapAccessor<CssSize> leftKey) {
+        super(name, CssInsets.class, new NonNullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssInsets>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -76,7 +76,7 @@ public class CssInsetsStyleableMapAccessor
         this.leftKey = leftKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssInsets> getCssMetaData() {
         return cssMetaData;
@@ -85,6 +85,7 @@ public class CssInsetsStyleableMapAccessor
 
     private final Converter<CssInsets> converter = new CssInsetsConverter(false);
 
+    @NonNull
     @Override
     public Converter<CssInsets> getConverter() {
         return converter;
@@ -92,7 +93,7 @@ public class CssInsetsStyleableMapAccessor
 
     @Nullable
     @Override
-    public CssInsets get(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssInsets get(@NonNull Map<? super Key<?>, Object> a) {
         final CssSize top = topKey.get(a);
         final CssSize right = rightKey.get(a);
         final CssSize bottom = bottomKey.get(a);
@@ -110,7 +111,7 @@ public class CssInsetsStyleableMapAccessor
 
     @Nullable
     @Override
-    public CssInsets put(@Nonnull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
+    public CssInsets put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
         CssInsets oldValue = get(a);
         if (value == null) {
             topKey.put(a, null);
@@ -128,7 +129,7 @@ public class CssInsetsStyleableMapAccessor
 
     @Nullable
     @Override
-    public CssInsets remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssInsets remove(@NonNull Map<? super Key<?>, Object> a) {
         CssInsets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);

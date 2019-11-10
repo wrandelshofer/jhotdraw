@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Rule;
@@ -42,7 +43,7 @@ public class CssParserTest {
     /**
      * Test of parseStylesheet method, of class CssParser.
      */
-    public static void testParseStylesheet(String stylesheet, String before, String expectedValue) throws Exception {
+    public static void testParseStylesheet(@NonNull String stylesheet, @NonNull String before, String expectedValue) throws Exception {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
@@ -97,6 +98,7 @@ public class CssParserTest {
         assertEquals(expectedValue, actualValue);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testParseStylesheetFactory() {
         return Arrays.asList(
@@ -162,7 +164,7 @@ public class CssParserTest {
      * <p>
      * Takes a stylesheet and applies it to the given XML document.
      */
-    public static void testCssSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
+    public static void testCssSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
@@ -225,6 +227,7 @@ public class CssParserTest {
      *
      * @return examples
      */
+    @NonNull
     @TestFactory
     public List<DynamicTest> testCssSyntaxFactory() {
         return Arrays.asList(
@@ -342,6 +345,7 @@ public class CssParserTest {
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testAtRuleFactory() {
         return Arrays.asList(
@@ -381,7 +385,7 @@ public class CssParserTest {
     /**
      * Tests parsing of at rules.
      */
-    public static void testAtRule(boolean valid, String stylesheetStr, String before, String expectedValue) throws Exception {
+    public static void testAtRule(boolean valid, @NonNull String stylesheetStr, @NonNull String before, String expectedValue) throws Exception {
         testCssSyntax(valid, stylesheetStr, before, expectedValue);
 
         CssParser p = new CssParser();
@@ -393,6 +397,7 @@ public class CssParserTest {
     /**
      * Tests selectors.
      */
+    @NonNull
     @TestFactory
     public List<DynamicTest> testSelectorFactory() {
         return Arrays.asList(
@@ -420,7 +425,7 @@ public class CssParserTest {
     /**
      * Test of selectors.
      */
-    public static void testSelector(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
+    public static void testSelector(boolean valid, @NonNull String stylesheet, @NonNull String before, String expectedValue) throws Exception {
         testCssSyntax(valid, stylesheet, before, expectedValue);
     }
 }

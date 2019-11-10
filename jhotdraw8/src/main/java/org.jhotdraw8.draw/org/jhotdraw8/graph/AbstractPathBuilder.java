@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
@@ -17,11 +17,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class AbstractPathBuilder<V, A> {
-    @Nonnull
+    @NonNull
     private final Function<V, Iterable<V>> nextNodesFunction;
     private int maxLength = Integer.MAX_VALUE;
 
-    public AbstractPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
+    public AbstractPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
         this.nextNodesFunction = nextNodesFunction;
     }
 
@@ -41,7 +41,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull V goal) {
+    public VertexPath<V> findVertexPath(@NonNull V start, @NonNull V goal) {
         return findVertexPath(start, goal::equals);
     }
 
@@ -61,7 +61,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPath(@Nonnull V start, @Nonnull Predicate<V> goalPredicate) {
+    public VertexPath<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
         Deque<V> vertices = new ArrayDeque<>();
         BackLink<V, A> current = search(start, goalPredicate, new LinkedHashSet<>()::add);
         if (current == null) {
@@ -84,9 +84,9 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<V> findVertexPathOverWaypoints(@Nonnull Iterable<? extends V> waypoints) {
+    public VertexPath<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints) {
         try {
-            return findVertexPathOverWaypointsNonnull(waypoints);
+            return findVertexPathOverWaypointsNonNull(waypoints);
         } catch (PathBuilderException e) {
             return null;
         }
@@ -104,7 +104,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @throws PathBuilderException if the path cannot be constructed
      */
     @Nullable
-    public VertexPath<V> findVertexPathOverWaypointsNonnull(@Nonnull Iterable<? extends V> waypoints) throws PathBuilderException {
+    public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints) throws PathBuilderException {
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -129,20 +129,23 @@ public abstract class AbstractPathBuilder<V, A> {
         return new VertexPath<>(pathElements);
     }
 
+    @NonNull
     public Function<V, Iterable<V>> getNextNodesFunction() {
         return nextNodesFunction;
     }
 
-    private BackLink<V, A> search(@Nonnull V start,
-                                  @Nonnull Predicate<V> goalPredicate,
-                                  @Nonnull Predicate<V> visited) {
+    @Nullable
+    private BackLink<V, A> search(@NonNull V start,
+                                  @NonNull Predicate<V> goalPredicate,
+                                  @NonNull Predicate<V> visited) {
         return search(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
+    @Nullable
     protected abstract BackLink<V, A> search(V start,
                                              Predicate<V> goal,
                                              Function<V, Iterable<V>> nextNodesFunction,
-                                             @Nonnull Predicate<V> visited, int maxLength);
+                                             @NonNull Predicate<V> visited, int maxLength);
 
     protected static abstract class BackLink<VV, AA> {
         abstract BackLink<VV, AA> getParent();

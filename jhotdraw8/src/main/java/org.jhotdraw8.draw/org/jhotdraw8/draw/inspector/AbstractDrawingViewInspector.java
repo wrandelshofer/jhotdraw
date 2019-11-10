@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.inspector;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -24,6 +25,7 @@ public abstract class AbstractDrawingViewInspector implements Inspector<DrawingV
         subject.addListener(this::handleDrawingViewChanged);
     }
 
+    @NonNull
     public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }

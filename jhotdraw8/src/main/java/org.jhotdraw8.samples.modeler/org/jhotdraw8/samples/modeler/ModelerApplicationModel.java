@@ -5,6 +5,7 @@
 package org.jhotdraw8.samples.modeler;
 
 import javafx.scene.input.DataFormat;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.SimpleApplicationModel;
 import org.jhotdraw8.app.action.Action;
@@ -45,7 +46,7 @@ public class ModelerApplicationModel extends SimpleApplicationModel {
     }
 
     @Override
-    public HierarchicalMap<String, Action> createApplicationActionMap(Application app) {
+    public HierarchicalMap<String, Action> createApplicationActionMap(@NonNull Application app) {
         HierarchicalMap<String, Action> map = super.createApplicationActionMap(app);
         map.put(PrintFileAction.ID, new PrintFileAction(app, null));
         map.put(ExportFileAction.ID, new ExportFileAction(app, DrawingExportOptionsPane::createDialog));

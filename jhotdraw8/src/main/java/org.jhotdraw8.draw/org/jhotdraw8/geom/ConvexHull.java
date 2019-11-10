@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
@@ -28,7 +30,8 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points as a polygon object.
      */
-    public static Polygon getConvexHullPolygon(List<Point> points) {
+    @NonNull
+    public static Polygon getConvexHullPolygon(@NonNull List<Point> points) {
         Polygon convexHull = new Polygon();
         for (Point p : getConvexHull(points.toArray(new Point[points.size()]))) {
             convexHull.addPoint(p.x, p.y);
@@ -42,7 +45,8 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points as a Polygon2D object.
      */
-    public static Path2D.Double getConvexHullPath2D(List<Point2D.Double> points) {
+    @NonNull
+    public static Path2D.Double getConvexHullPath2D(@NonNull List<Point2D.Double> points) {
         Path2D.Double convexHull = new Path2D.Double();
         boolean first = true;
         for (Point p : getConvexHull(points.toArray(new Point[points.size()]))) {
@@ -63,7 +67,8 @@ public class ConvexHull {
      * @param shape an arbitrary shape
      * @return convex hull of the points as a Polygon2D object.
      */
-    public static Path2D.Double getConvexHullPath2D(Shape shape) {
+    @NonNull
+    public static Path2D.Double getConvexHullPath2D(@NonNull Shape shape) {
         List<Point2D.Double> points = new LinkedList<>();
         double[] coords = new double[6];
         for (PathIterator i = shape.getPathIterator(null); !i.isDone(); i.next()) {
@@ -106,7 +111,8 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static List<Point> getConvexHull(List<Point> points) {
+    @NonNull
+    public static List<Point> getConvexHull(@NonNull List<Point> points) {
         return Arrays.asList(getConvexHull(points.toArray(new Point[points.size()])));
     }
 
@@ -116,7 +122,8 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static List<Point2D.Double> getConvexHull2D(List<Point2D.Double> points) {
+    @NonNull
+    public static List<Point2D.Double> getConvexHull2D(@NonNull List<Point2D.Double> points) {
         return Arrays.asList(getConvexHull2D(points.toArray(new Point2D.Double[points.size()])));
     }
 
@@ -126,7 +133,7 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static Point[] getConvexHull(Point[] points) {
+    public static Point[] getConvexHull(@NonNull Point[] points) {
         // Quickly return if no work is needed
         if (points.length < 3) {
             return points.clone();
@@ -137,7 +144,7 @@ public class ConvexHull {
         Arrays.sort(sorted, new Comparator<Point>() {
 
             @Override
-            public int compare(Point o1, Point o2) {
+            public int compare(@NonNull Point o1, @NonNull Point o2) {
                 int v = o1.x - o2.x;
                 return (v == 0) ? o1.y - o2.y : v;
             }
@@ -183,7 +190,7 @@ public class ConvexHull {
      * @param p3 third point
      * @return true if right turn.
      */
-    public static boolean isRightTurn(Point p1, Point p2, Point p3) {
+    public static boolean isRightTurn(@NonNull Point p1, @NonNull Point p2, @NonNull Point p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location
             return false;
@@ -198,7 +205,7 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static Point2D.Double[] getConvexHull2D(Point2D.Double[] points) {
+    public static Point2D.Double[] getConvexHull2D(@NonNull Point2D.Double[] points) {
         // Quickly return if no work is needed
         if (points.length < 3) {
             return points.clone();
@@ -209,7 +216,7 @@ public class ConvexHull {
         Arrays.sort(sorted, new Comparator<Point2D.Double>() {
 
             @Override
-            public int compare(Point2D.Double o1, Point2D.Double o2) {
+            public int compare(@NonNull Point2D.Double o1, @NonNull Point2D.Double o2) {
                 double v = o1.x - o2.x;
                 if (v == 0) {
                     v = o1.y - o2.y;
@@ -258,7 +265,7 @@ public class ConvexHull {
      * @param p3 third point
      * @return true if right turn.
      */
-    public static boolean isRightTurn2D(Point.Double p1, Point.Double p2, Point.Double p3) {
+    public static boolean isRightTurn2D(@NonNull Point.Double p1, @NonNull Point.Double p2, @NonNull Point.Double p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location
             return false;

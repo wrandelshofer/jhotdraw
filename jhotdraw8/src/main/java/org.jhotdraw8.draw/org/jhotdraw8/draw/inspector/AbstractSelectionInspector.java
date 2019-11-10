@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -31,6 +31,7 @@ public abstract class AbstractSelectionInspector implements Inspector<DrawingVie
         subject.addListener(this::handleDrawingViewChanged);
     }
 
+    @NonNull
     public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }
@@ -59,7 +60,7 @@ public abstract class AbstractSelectionInspector implements Inspector<DrawingVie
         }
     }
 
-    @Nonnull
+    @NonNull
     protected Set<Figure> getSelectedFigures() {
         DrawingView drawingView = getSubject();
         return drawingView == null ? Collections.emptySet() : drawingView.getSelectedFigures();

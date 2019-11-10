@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -64,7 +64,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly2.setStroke(Paintable.getPaint(color));
         poly2.setStrokeWidth(view.getEditor().getHandleStrokeWidth());
@@ -77,12 +77,12 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getParentToWorld());
         if (f instanceof TransformableFigure) {
             TransformableFigure tf = (TransformableFigure) f;
-            t = Transforms.concat(t, new Translate(tf.getNonnull(TRANSLATE_X), tf.getNonnull(TRANSLATE_Y)));
+            t = Transforms.concat(t, new Translate(tf.getNonNull(TRANSLATE_X), tf.getNonNull(TRANSLATE_Y)));
         }
         t = Transforms.concat(Transform.translate(0.5, 0.5), t);
         Bounds b = f.getBoundsInLocal();

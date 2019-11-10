@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -28,23 +28,23 @@ public class CssIntegerConverter extends AbstractCssConverter<Integer> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Integer parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Integer parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return tt.currentNumberNonnull().intValue();
+                return tt.currentNumberNonNull().intValue();
             default:
                 throw new ParseException("⟨Integer⟩: integer expected.", tt.getStartPosition());
         }
     }
 
     @Override
-    public <TT extends Integer> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends Integer> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Integer⟩: ⟨integer⟩";

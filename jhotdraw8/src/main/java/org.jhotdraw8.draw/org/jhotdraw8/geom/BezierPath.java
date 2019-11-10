@@ -4,6 +4,9 @@
  */
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -59,10 +62,12 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * We cache a Path2D.Double instance to speed up Shape operations.
      */
+    @Nullable
     private transient Path2D.Double generalPath;
     /**
      * We cache a Rectangle2D.Double instance to speed up getBounds operations.
      */
+    @Nullable
     private transient Rectangle2D.Double bounds;
     /**
      * We cache the index of the outermost node to speed up method
@@ -126,18 +131,18 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         public Node() {
         }
 
-        public Node(Node that) {
+        public Node(@NonNull Node that) {
             setTo(that);
         }
 
-        public void setTo(Node that) {
+        public void setTo(@NonNull Node that) {
             this.mask = that.mask;
             this.keepColinear = that.keepColinear;
             System.arraycopy(that.x, 0, this.x, 0, 3);
             System.arraycopy(that.y, 0, this.y, 0, 3);
         }
 
-        public Node(Point2D.Double c0) {
+        public Node(@NonNull Point2D.Double c0) {
             this.mask = 0;
             x[0] = c0.x;
             y[0] = c0.y;
@@ -147,7 +152,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             y[2] = c0.y;
         }
 
-        public Node(int mask, Point2D.Double c0, Point2D.Double c1, Point2D.Double c2) {
+        public Node(int mask, @NonNull Point2D.Double c0, @NonNull Point2D.Double c1, @NonNull Point2D.Double c2) {
             this.mask = mask;
             x[0] = c0.x;
             y[0] = c0.y;
@@ -185,16 +190,17 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             mask = newValue;
         }
 
-        public void setControlPoint(int index, Point2D.Double p) {
+        public void setControlPoint(int index, @NonNull Point2D.Double p) {
             x[index] = p.x;
             y[index] = p.y;
         }
 
+        @NonNull
         public Point2D.Double getControlPoint(int index) {
             return new Point2D.Double(x[index], y[index]);
         }
 
-        public void moveTo(Point2D.Double p) {
+        public void moveTo(@NonNull Point2D.Double p) {
             moveBy(p.x - x[0], p.y - y[0]);
         }
 
@@ -209,6 +215,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
+        @NonNull
         @Override
         public Object clone() {
             try {
@@ -223,6 +230,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
+        @NonNull
         @Override
         public String toString() {
             StringBuilder buf = new StringBuilder();
@@ -287,7 +295,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @param c0 the point
      */
-    public void add(Point2D.Double c0) {
+    public void add(@NonNull Point2D.Double c0) {
         add(new Node(0, c0, c0, c0));
     }
 
@@ -315,7 +323,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param c1       The coordinates of the C1 control point.
      * @param c2       The coordinates of the C2 control point.
      */
-    public void add(int ctrlMask, Point2D.Double c0, Point2D.Double c1, Point2D.Double c2) {
+    public void add(int ctrlMask, @NonNull Point2D.Double c0, @NonNull Point2D.Double c1, @NonNull Point2D.Double c2) {
         add(new Node(ctrlMask, c0, c1, c2));
     }
 
@@ -327,7 +335,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @param points the points
      */
-    public void addPolyline(Collection<Point2D.Double> points) {
+    public void addPolyline(@NonNull Collection<Point2D.Double> points) {
         for (Point2D.Double c0 : points) {
             add(new Node(0, c0, c0, c0));
         }
@@ -340,7 +348,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param ctrlIndex Either C0_MASK, C1_MASK or C2_MASK.
      * @param p         The control point. The coordinates will be cloned.
      */
-    public void set(int nodeIndex, int ctrlIndex, Point2D.Double p) {
+    public void set(int nodeIndex, int ctrlIndex, @NonNull Point2D.Double p) {
         Node c = get(nodeIndex);
         c.x[ctrlIndex] = p.x;
         c.y[ctrlIndex] = p.y;
@@ -353,6 +361,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param ctrlIndex Either C0_MASK, C1_MASK or C2_MASK.
      * @return Returns a clone of the control point.
      */
+    @NonNull
     public Point2D.Double get(int nodeIndex, int ctrlIndex) {
         Node c = get(nodeIndex);
         return new Point2D.Double(
@@ -383,6 +392,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @return the path
      */
+    @NonNull
     public Path2D.Double toGeneralPath() {
         Path2D.Double gp = new Path2D.Double();
         gp.setWindingRule(windingRule);
@@ -463,7 +473,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     }
 
     @Override
-    public boolean contains(Point2D p) {
+    public boolean contains(@NonNull Point2D p) {
         validatePath();
         return generalPath.contains(p);
     }
@@ -478,28 +488,30 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param tolerance The tolerance for the test.
      * @return whether this path contains the point
      */
-    public boolean outlineContains(Point2D.Double p, double tolerance) {
+    public boolean outlineContains(@NonNull Point2D.Double p, double tolerance) {
         return Shapes.outlineContains(this, p, tolerance);
     }
 
     @Override
-    public boolean intersects(Rectangle2D r) {
+    public boolean intersects(@NonNull Rectangle2D r) {
         validatePath();
         return generalPath.intersects(r);
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform at) {
         return new BezierPathIterator(this, at);
     }
 
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform at, double flatness) {
         return new FlatteningPathIterator(new BezierPathIterator(this, at), flatness);
     }
 
     @Override
-    public boolean contains(Rectangle2D r) {
+    public boolean contains(@NonNull Rectangle2D r) {
         validatePath();
         return generalPath.contains(r);
     }
@@ -510,6 +522,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         return generalPath.intersects(x, y, w, h);
     }
 
+    @NonNull
     @Override
     public Rectangle2D.Double getBounds2D() {
         if (bounds == null) {
@@ -705,6 +718,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Creates a deep copy of the BezierPath.
      */
+    @NonNull
     @Override
     public BezierPath clone() {
         BezierPath that = (BezierPath) super.clone();
@@ -719,7 +733,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @param tx the transformation.
      */
-    public void transform(AffineTransform tx) {
+    public void transform(@NonNull AffineTransform tx) {
         Point2D.Double p = new Point2D.Double();
         for (Node cp : this) {
             for (int i = 0; i < 3; i++) {
@@ -739,7 +753,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @param that that path
      */
-    public void setTo(BezierPath that) {
+    public void setTo(@NonNull BezierPath that) {
         while (that.size() < size()) {
             remove(size() - 1);
         }
@@ -756,6 +770,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @return the center
      */
+    @NonNull
     public Point2D.Double getCenter() {
         double sx = 0;
         double sy = 0;
@@ -776,7 +791,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param p the point
      * @return the chopped point
      */
-    public Point2D.Double chop(Point2D.Double p) {
+    @NonNull
+    public Point2D.Double chop(@NonNull Point2D.Double p) {
         javafx.geometry.Point2D chopped = Geom.chop(this, new javafx.geometry.Point2D(p.x, p.y));
         return new Point2D.Double(chopped.getX(), chopped.getY());
     }
@@ -814,6 +830,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param flatness the flatness
      * @return the point
      */
+    @Nullable
     public Point2D.Double getPointOnPath(double relative, double flatness) {
         // This method works only for straight lines
         if (size() == 0) {
@@ -891,7 +908,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @return relative position on path, this is a number between 0 and 1.
      * Returns -1, if the point is not on the path.
      */
-    public double getRelativePositionOnPath(Point2D.Double find, double flatness) {
+    public double getRelativePositionOnPath(@NonNull Point2D.Double find, double flatness) {
         // XXX - This method works only for straight lines!
         double len = getLengthOfPath(flatness);
         double relativeLen = 0d;
@@ -951,7 +968,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param tolerance the tolerance
      * @return the index of the segment or -1 if no segment was hit.
      */
-    public int findSegment(Point2D.Double find, double tolerance) {
+    public int findSegment(@NonNull Point2D.Double find, double tolerance) {
         // XXX - This works only for straight lines!
         Node v1, v2;
         BezierPath tempPath = new BezierPath();
@@ -1002,7 +1019,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param tolerance the tolerance
      * @return the index of the joined segment or -1 if no segment was joined.
      */
-    public int joinSegments(Point2D.Double join, double tolerance) {
+    public int joinSegments(@NonNull Point2D.Double join, double tolerance) {
         for (int i = 0; i < size(); i++) {
             Node p = get(i);
             if (Geom.length(p.x[0], p.y[0], join.x, join.y) < tolerance) {
@@ -1020,7 +1037,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param tolerance the tolerance
      * @return the index of the segment or -1 if no segment was hit.
      */
-    public int splitSegment(Point2D.Double split, double tolerance) {
+    public int splitSegment(@NonNull Point2D.Double split, double tolerance) {
         int i = findSegment(split, tolerance);
         int nextI = (i + 1) % size();
         if (i != -1) {
@@ -1317,6 +1334,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @return Point array.
      */
+    @NonNull
     public Point2D.Double[] toPolygonArray() {
         Point2D.Double[] points = new Point2D.Double[size()];
         for (int i = 0, n = size(); i < n; i++) {

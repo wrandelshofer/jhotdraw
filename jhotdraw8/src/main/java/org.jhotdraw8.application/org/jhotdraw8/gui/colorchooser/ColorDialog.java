@@ -9,19 +9,23 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 public class ColorDialog extends HBox {
     private final Stage dialog = new Stage();
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
+    @NonNull
     private ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
+    @NonNull
     private ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
 
     public ColorDialog() {
     }
 
-    public ColorDialog(Window owner) {
+    public ColorDialog(@Nullable Window owner) {
         if (owner != null) {
             dialog.initOwner(owner);
         }
@@ -69,6 +73,7 @@ public class ColorDialog extends HBox {
         return currentColor.get();
     }
 
+    @NonNull
     public ObjectProperty<ColorSpaceColor> currentColorProperty() {
         return currentColor;
     }
@@ -81,6 +86,7 @@ public class ColorDialog extends HBox {
         return customColor.get();
     }
 
+    @NonNull
     public ObjectProperty<ColorSpaceColor> customColorProperty() {
         return customColor;
     }

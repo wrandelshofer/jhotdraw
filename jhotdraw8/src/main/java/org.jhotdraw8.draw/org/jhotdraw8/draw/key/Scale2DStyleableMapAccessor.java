@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.text.CssScale2DConverter;
@@ -30,11 +30,11 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Point2D> cssMetaData;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> xKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> yKey;
 
     /**
@@ -44,7 +44,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public Scale2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey) {
+    public Scale2DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<Point2D>> function = s -> {
@@ -64,7 +64,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         this.yKey = yKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Point2D> getCssMetaData() {
         return cssMetaData;
@@ -81,24 +81,24 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D get(@Nonnull Map<? super Key<?>, Object> a) {
+    public Point2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new Point2D(xKey.get(a), yKey.get(a));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull Point2D value) {
+    public Point2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Point2D value) {
         Point2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public Point2D remove(@NonNull Map<? super Key<?>, Object> a) {
         Point2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

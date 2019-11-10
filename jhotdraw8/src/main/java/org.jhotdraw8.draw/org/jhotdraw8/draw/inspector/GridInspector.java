@@ -15,7 +15,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
@@ -59,7 +59,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField majorYField;
 
-    @Nonnull
+    @NonNull
     private Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
     private Node node;
 
@@ -76,7 +76,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         this(GridInspector.class.getResource("GridInspector.fxml"));
     }
 
-    public GridInspector(@Nonnull URL fxmlUrl) {
+    public GridInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -85,7 +85,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(@Nonnull URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {
@@ -175,7 +175,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 Converter<CssColor> converter = new CssColorConverter(true);
                 try {
                     gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor", gridConstrainer.getGridColor().getName())));
-                } catch (ParseException | IOException ex) {
+                } catch (@NonNull ParseException | IOException ex) {
                     // don't set color if preferences is bogus
                 }
                 newValue.setConstrainer(gridConstrainer);

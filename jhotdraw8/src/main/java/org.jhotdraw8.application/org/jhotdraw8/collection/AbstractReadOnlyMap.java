@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Map;
 
 public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
@@ -35,7 +37,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
                     }
                 }
             }
-        } catch (ClassCastException | NullPointerException unused) {
+        } catch (@NonNull ClassCastException | NullPointerException unused) {
             return false;
         }
 

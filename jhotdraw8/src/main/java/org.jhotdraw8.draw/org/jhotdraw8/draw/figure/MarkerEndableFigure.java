@@ -20,7 +20,7 @@ public interface MarkerEndableFigure extends Figure {
     /**
      * Marker end is an SVG path that points to the right, with coordinate 0,0 at the tail of the path.
      */
-    NullableSvgPathStyleableKey MARKER_END_SHAPE = new NullableSvgPathStyleableKey("marker-end-shape", DirtyMask.of(DirtyBits.NODE), null);
+    @Nullable NullableSvgPathStyleableKey MARKER_END_SHAPE = new NullableSvgPathStyleableKey("marker-end-shape", DirtyMask.of(DirtyBits.NODE), null);
     DoubleStyleableKey MARKER_END_SCALE_FACTOR = new DoubleStyleableKey("marker-end-scale-factor", 1.0);
 
     @Nullable
@@ -29,7 +29,7 @@ public interface MarkerEndableFigure extends Figure {
     }
 
     default double getMarkerEndScaleFactor() {
-        return getStyledNonnull(MARKER_END_SCALE_FACTOR);
+        return getStyledNonNull(MARKER_END_SCALE_FACTOR);
     }
 
 }

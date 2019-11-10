@@ -8,7 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
  */
 public abstract class AbstractDrawingInspector implements Inspector<DrawingView> {
 
-    @Nonnull
+    @NonNull
     protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
     @Nullable
     protected DrawingModel drawingModel;
@@ -35,6 +35,7 @@ public abstract class AbstractDrawingInspector implements Inspector<DrawingView>
         subject.addListener(this::handleDrawingViewChanged);
     }
 
+    @NonNull
     public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }

@@ -16,11 +16,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawLabels;
@@ -42,17 +42,17 @@ import org.jhotdraw8.geom.Transforms;
 public class PolygonOutlineHandle extends AbstractHandle {
 
     private boolean editable;
-    private final NonnullMapAccessor<ImmutableList<Point2D>> key;
+    private final NonNullMapAccessor<ImmutableList<Point2D>> key;
 
     private Group node;
     private Polygon poly1;
     private Polygon poly2;
 
-    public PolygonOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key) {
+    public PolygonOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key) {
         this(figure, key, true);
     }
 
-    public PolygonOutlineHandle(Figure figure, NonnullMapAccessor<ImmutableList<Point2D>> key, boolean editable) {
+    public PolygonOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key, boolean editable) {
         super(figure);
         this.key = key;
         this.editable = editable;
@@ -76,7 +76,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
@@ -87,7 +87,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView dv) {
+    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.isSecondaryButtonDown()) {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
@@ -98,7 +98,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
         }
     }
     @Override
-    public void handleMouseClicked(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
 
         if (editable && key != null && event.getClickCount() == 2) {
 
@@ -106,7 +106,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
         }
     }
 
-    private void addPoint(@Nonnull MouseEvent event, @Nonnull DrawingView dv) {
+    private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         ImmutableList<Point2D> points = owner.get(key);
         Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
         Point2D pInLocal = owner.worldToLocal(pInDrawing);
@@ -141,7 +141,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getBoundsInLocal();

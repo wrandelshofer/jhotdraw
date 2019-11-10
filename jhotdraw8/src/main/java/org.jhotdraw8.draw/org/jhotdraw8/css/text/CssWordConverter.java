@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -21,7 +21,7 @@ import java.text.ParseException;
 public class CssWordConverter implements Converter<String> {
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull String value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
         for (char ch : value.toCharArray()) {
             if (Character.isWhitespace(ch)) {
                 break;
@@ -30,7 +30,7 @@ public class CssWordConverter implements Converter<String> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
         int pos = in.position();
@@ -45,7 +45,7 @@ public class CssWordConverter implements Converter<String> {
         return out.toString();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getDefaultValue() {
         return "";

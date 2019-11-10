@@ -19,9 +19,9 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -38,6 +38,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class PointHandle extends AbstractHandle {
+    @Nullable
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
@@ -45,13 +46,13 @@ public class PointHandle extends AbstractHandle {
     @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    @Nonnull
+    @NonNull
     private final Region node;
 
     private Point2D pickLocation;
-    private final NonnullMapAccessor<CssPoint2D> pointKey;
+    private final NonNullMapAccessor<CssPoint2D> pointKey;
 
-    public PointHandle(Figure figure, NonnullMapAccessor<CssPoint2D> pointKey) {
+    public PointHandle(Figure figure, NonNullMapAccessor<CssPoint2D> pointKey) {
         super(figure);
         this.pointKey = pointKey;
         node = new Region();
@@ -79,9 +80,9 @@ public class PointHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -97,7 +98,7 @@ public class PointHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -122,16 +123,16 @@ public class PointHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Point2D p = f.getNonnull(pointKey).getConvertedValue();
+        Point2D p = f.getNonNull(pointKey).getConvertedValue();
         pickLocation = p = t.transform(p);
         double size = node.getWidth();
         node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:
-        node.setRotate(f.getStyledNonnull(ROTATE));
-        node.setRotationAxis(f.getStyledNonnull(ROTATION_AXIS));
+        node.setRotate(f.getStyledNonNull(ROTATE));
+        node.setRotationAxis(f.getStyledNonNull(ROTATION_AXIS));
     }
 
 }

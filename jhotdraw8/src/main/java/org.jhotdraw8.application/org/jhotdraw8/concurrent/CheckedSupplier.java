@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.concurrent;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
@@ -14,7 +14,7 @@ import org.jhotdraw8.annotation.Nullable;
  * @author Werner Randelshofer
  */
 public interface CheckedSupplier<T> {
-    @Nonnull
+    @NonNull
     @Nullable
     T supply() throws Exception;
 }

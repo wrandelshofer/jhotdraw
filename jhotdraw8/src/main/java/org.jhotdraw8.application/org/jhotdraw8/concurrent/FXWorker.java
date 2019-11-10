@@ -5,7 +5,7 @@
 package org.jhotdraw8.concurrent;
 
 import javafx.application.Platform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -25,8 +25,8 @@ public class FXWorker {
      * @param runnable the runnable
      * @return the CompletableFuture
      */
-    @Nonnull
-    public static CompletableFuture<Void> run(@Nonnull CheckedRunnable runnable) {
+    @NonNull
+    public static CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
         return run(r -> new Thread(r).start(), runnable);
     }
 
@@ -38,8 +38,8 @@ public class FXWorker {
      * @param executor the executor, if null then a new thread is created
      * @return the CompletableFuture
      */
-    @Nonnull
-    public static CompletableFuture<Void> run(Executor executor, @Nonnull CheckedRunnable runnable) {
+    @NonNull
+    public static CompletableFuture<Void> run(@NonNull Executor executor, @NonNull CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -61,8 +61,8 @@ public class FXWorker {
      * @param supplier the supplier
      * @return the CompletableFuture
      */
-    @Nonnull
-    public static <T> CompletableFuture<T> supply(@Nonnull CheckedSupplier<T> supplier) {
+    @NonNull
+    public static <T> CompletableFuture<T> supply(@NonNull CheckedSupplier<T> supplier) {
         return supply(ForkJoinPool.commonPool(), supplier);
     }
 
@@ -75,8 +75,8 @@ public class FXWorker {
      * @param executor the executor
      * @return the CompletableFuture
      */
-    @Nonnull
-    public static <T> CompletableFuture<T> supply(Executor executor, @Nonnull CheckedSupplier<T> supplier) {
+    @NonNull
+    public static <T> CompletableFuture<T> supply(@NonNull Executor executor, @NonNull CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
             try {

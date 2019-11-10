@@ -8,11 +8,11 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -76,21 +76,21 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @return a list of drawing model listeners
      */
-    CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners();
+    @NonNull CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners();
 
     /**
      * List of invalidation listeners.
      *
      * @return a list of drawing model listeners
      */
-    CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
+    @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     /**
      * The root of the drawing model.
      *
      * @return the root
      */
-    ObjectProperty<Drawing> drawingProperty();
+    @Nullable ObjectProperty<Drawing> drawingProperty();
 
     /**
      * Adds a listener for {@code DrawingModelEvent}s.
@@ -145,7 +145,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure the figure.
      * @return the getChildren.
      */
-    default List<Figure> getChildren(@Nonnull Figure figure) {
+    default List<Figure> getChildren(@NonNull Figure figure) {
         return figure.getChildren();
     }
 
@@ -155,7 +155,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure the parent.
      * @return the number of getChildren
      */
-    default int getChildCount(@Nonnull Figure figure) {
+    default int getChildCount(@NonNull Figure figure) {
         return getChildren(figure).size();
     }
 
@@ -166,7 +166,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param index  the index.
      * @return the child
      */
-    default Figure getChild(@Nonnull Figure parent, int index) {
+    default Figure getChild(@NonNull Figure parent, int index) {
         return getChildren(parent).get(index);
     }
 
@@ -195,7 +195,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param child  the new child
      * @param parent the parent.
      */
-    default void addChildTo(Figure child, @Nonnull Figure parent) {
+    default void addChildTo(Figure child, @NonNull Figure parent) {
         insertChildAt(child, parent, getChildCount(parent));
     }
 
@@ -209,9 +209,9 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param newValue the new value
      * @return the old value
      */
-    @Nullable <T> T set(@Nonnull Figure figure, MapAccessor<T> key, @Nullable T newValue);
+    @Nullable <T> T set(@NonNull Figure figure, MapAccessor<T> key, @Nullable T newValue);
 
-    @Nullable <T> T remove(@Nonnull Figure figure, MapAccessor<T> key);
+    @Nullable <T> T remove(@NonNull Figure figure, MapAccessor<T> key);
 
     /**
      * Sets the specified property on the figure and fires appropriate
@@ -223,7 +223,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param newValue the new value
      * @return the old value
      */
-    @Nonnull <T> T setNonnull(@Nonnull Figure figure, @Nonnull NonnullMapAccessor<T> key, @Nonnull T newValue);
+    @NonNull <T> T setNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key, @NonNull T newValue);
 
     /**
      * Gets the specified property from the figure.
@@ -234,7 +234,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the value
      */
     @Nullable
-    default <T> T get(@Nonnull Figure figure, @Nonnull MapAccessor<T> key) {
+    default <T> T get(@NonNull Figure figure, @NonNull MapAccessor<T> key) {
         return figure.get(key);
     }
 
@@ -246,9 +246,9 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param key    the key
      * @return the value
      */
-    @Nonnull
-    default <T> T getNonnull(@Nonnull Figure figure, @Nonnull NonnullMapAccessor<T> key) {
-        return figure.getNonnull(key);
+    @NonNull
+    default <T> T getNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key) {
+        return figure.getNonNull(key);
     }
 
     /**

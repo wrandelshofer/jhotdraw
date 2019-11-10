@@ -23,7 +23,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * TransformFlattener.
@@ -32,7 +32,7 @@ import org.jhotdraw8.annotation.Nonnull;
  */
 public class TransformFlattener {
 
-    private boolean canFlattenTranslate(Node node) {
+    private boolean canFlattenTranslate(@NonNull Node node) {
         if (node.getRotate() != 0.0
                 || node.getScaleX() != 1.0
                 || node.getScaleY() != 1.0) {
@@ -47,8 +47,8 @@ public class TransformFlattener {
 
     }
 
-    @Nonnull
-    private Translate flattenTranslate(Node node) {
+    @NonNull
+    private Translate flattenTranslate(@NonNull Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
             if ((t instanceof Translate)) {
@@ -78,7 +78,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInGroup(@Nonnull Group group) {
+    private void flattenTranslatesInGroup(@NonNull Group group) {
         if (!canFlattenTranslate(group)) {
             return;
         }
@@ -98,7 +98,7 @@ public class TransformFlattener {
 
     }
 
-    private void flattenTranslatesInPath(@Nonnull Path path) {
+    private void flattenTranslatesInPath(@NonNull Path path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -140,7 +140,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInPolygon(@Nonnull Polygon path) {
+    private void flattenTranslatesInPolygon(@NonNull Polygon path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -155,7 +155,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInPolyline(@Nonnull Polyline path) {
+    private void flattenTranslatesInPolyline(@NonNull Polyline path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -170,7 +170,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInLine(@Nonnull Line path) {
+    private void flattenTranslatesInLine(@NonNull Line path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -183,7 +183,7 @@ public class TransformFlattener {
         path.setEndY(p2.getY());
     }
 
-    private void flattenTranslatesInRectangle(@Nonnull Rectangle path) {
+    private void flattenTranslatesInRectangle(@NonNull Rectangle path) {
         if (!canFlattenTranslate(path)) {
             return;
         }

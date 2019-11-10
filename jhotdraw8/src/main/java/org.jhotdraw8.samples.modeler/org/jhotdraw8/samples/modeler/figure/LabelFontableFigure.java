@@ -10,7 +10,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
@@ -50,12 +50,12 @@ public interface LabelFontableFigure extends Figure {
      * @param ctx  RenderContext, can be null
      * @param text a text node
      */
-    default void applyLabelTextFontableFigureProperties(@Nullable RenderContext ctx, @Nonnull Text text) {
-        String family = getStyledNonnull(LABEL_FONT_FAMILY);
-        FontPosture style = getStyledNonnull(LABEL_FONT_STYLE);
-        FontWeight weight = getStyledNonnull(LABEL_FONT_WEIGHT);
-        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        CssSize cssSize = getStyledNonnull(LABEL_FONT_SIZE);
+    default void applyLabelTextFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
+        String family = getStyledNonNull(LABEL_FONT_FAMILY);
+        FontPosture style = getStyledNonNull(LABEL_FONT_STYLE);
+        FontWeight weight = getStyledNonNull(LABEL_FONT_WEIGHT);
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        CssSize cssSize = getStyledNonNull(LABEL_FONT_SIZE);
         double size = units.convert(cssSize, UnitConverter.DEFAULT);
         CssFont f = CssFont.font(family, weight, style, size);
 
@@ -64,7 +64,7 @@ public interface LabelFontableFigure extends Figure {
             text.setFont(font);
         }
 
-        final FontSmoothingType fst = ctx == null || ctx.getNonnull(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
+        final FontSmoothingType fst = ctx == null || ctx.getNonNull(RenderContext.RENDERING_INTENT) == RenderingIntent.EDITOR
                 ? FontSmoothingType.LCD : FontSmoothingType.GRAY;
         if (text.getFontSmoothingType() != fst) {
             text.setFontSmoothingType(fst);
@@ -78,9 +78,9 @@ public interface LabelFontableFigure extends Figure {
      * @param ctx  context
      * @param text a text node
      */
-    default void applyLabelTextFontableFigureProperties(RenderContext ctx, @Nonnull Labeled text) {
-        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonnull(RenderContext.UNIT_CONVERTER_KEY);
-        Font font = getStyledNonnull(LABEL_FONT).getFont();
+    default void applyLabelTextFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Labeled text) {
+        UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        Font font = getStyledNonNull(LABEL_FONT).getFont();
         if (!text.getFont().equals(font)) {
             text.setFont(font);
         }

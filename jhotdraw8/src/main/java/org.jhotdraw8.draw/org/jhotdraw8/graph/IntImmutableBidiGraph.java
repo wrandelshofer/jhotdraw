@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,24 +20,24 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
     /**
      * Holds the arrow heads.
      */
-    @Nonnull
+    @NonNull
     protected final int[] nextArrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @Nonnull
+    @NonNull
     protected final int[] nextArrowOffsets;
     /**
      * Holds the arrow heads.
      */
-    @Nonnull
+    @NonNull
     protected final int[] prevArrowHeads;
 
     /**
      * Holds offsets into the nextArrowHeads table for each vertex.
      */
-    @Nonnull
+    @NonNull
     protected final int[] prevArrowOffsets;
 
     /**
@@ -45,7 +45,7 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
      *
      * @param graph a graph
      */
-    public IntImmutableBidiGraph(IntBidiGraph graph) {
+    public IntImmutableBidiGraph(@NonNull IntBidiGraph graph) {
         int nextArrowCount = 0;
         int prevArrowCount = 0;
 
@@ -78,7 +78,7 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
      * @param <A>   the arrow type
      * @param graph a graph
      */
-    public <V, A> IntImmutableBidiGraph(BidiGraph<V, A> graph) {
+    public <V, A> IntImmutableBidiGraph(@NonNull BidiGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -150,7 +150,7 @@ public class IntImmutableBidiGraph implements IntBidiGraph {
         return getNextPrevCount(vi, prevArrowOffsets, prevArrowHeads);
     }
 
-    private int getNextPrevCount(int vi, int[] arrows, @Nonnull int[] arrowHeads) {
+    private int getNextPrevCount(int vi, int[] arrows, @NonNull int[] arrowHeads) {
         final int vertexCount = getVertexCount();
         if (vi < 0 || vi >= vertexCount) {
             throw new IllegalArgumentException("vi(" + vi + ") < 0 || vi >= " + vertexCount);

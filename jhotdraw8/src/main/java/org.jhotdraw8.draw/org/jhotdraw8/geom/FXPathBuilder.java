@@ -12,7 +12,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
         // empty
     }
 
-    @Nonnull
+    @NonNull
     public Path build() {
         pathDone();
         return new Path(elements);

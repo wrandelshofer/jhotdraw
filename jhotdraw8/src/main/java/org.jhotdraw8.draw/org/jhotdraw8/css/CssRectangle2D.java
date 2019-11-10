@@ -7,6 +7,7 @@ package org.jhotdraw8.css;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -25,11 +26,11 @@ public class CssRectangle2D {
     private final CssSize y;
     private final CssSize x;
 
-    public CssRectangle2D(Bounds b) {
+    public CssRectangle2D(@NonNull Bounds b) {
         this(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-    public CssRectangle2D(CssPoint2D a, CssPoint2D b) {
+    public CssRectangle2D(@NonNull CssPoint2D a, @NonNull CssPoint2D b) {
         this(CssSize.min(a.getX(), b.getX()),
                 CssSize.min(a.getY(), b.getY()),
                 a.getX().subtract(b.getX()).abs(),
@@ -109,6 +110,7 @@ public class CssRectangle2D {
         return hash;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssRectangle2D{" +
@@ -119,24 +121,29 @@ public class CssRectangle2D {
                 '}';
     }
 
+    @NonNull
     public Rectangle2D getConvertedValue() {
         return new Rectangle2D(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
 
     }
 
+    @NonNull
     public Bounds getConvertedBoundsValue() {
         return new BoundingBox(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
 
     }
 
+    @NonNull
     public CssSize getMaxX() {
         return x.add(getWidth());
     }
 
+    @NonNull
     public CssSize getMaxY() {
         return y.add(getHeight());
     }
 
+    @NonNull
     public CssPoint2D getTopLeft() {
         return new CssPoint2D(x, y);
     }

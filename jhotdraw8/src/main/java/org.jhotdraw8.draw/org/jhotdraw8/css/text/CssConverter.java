@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
@@ -38,7 +38,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @throws IOException    on io exception
      */
     @Nullable
-    T parse(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
+    T parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
 
     /**
      * Parses from the given tokenizer and moves the tokenizer
@@ -50,8 +50,8 @@ public interface CssConverter<T> extends Converter<T> {
      * @throws ParseException on parse exception
      * @throws IOException    on io exception
      */
-    @Nonnull
-    default T parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    @NonNull
+    default T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         T value = parse(tt, idFactory);
         if (value == null) {
             throw new ParseException("Value expected.", tt.getStartPosition());
@@ -67,8 +67,9 @@ public interface CssConverter<T> extends Converter<T> {
      * @param idFactory the id factory
      * @param out       the consumer for the tokens
      */
-    <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out);
+    <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out);
 
+    @NonNull
     default <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdFactory idFactory) {
         List<CssToken> list = new ArrayList<>();
         produceTokens(value, idFactory, list::add);
@@ -82,6 +83,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @param <TT>  the value type
      * @return a String
      */
+    @NonNull
     default <TT extends T> String toString(@Nullable TT value) {
         return toString(value, null);
     }
@@ -94,6 +96,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @param <TT>      the value type
      * @return a String
      */
+    @NonNull
     default <TT extends T> String toString(@Nullable TT value, @Nullable IdFactory idFactory) {
         StringBuilder buf = new StringBuilder();
         produceTokens(value, idFactory, buf::append);
@@ -101,7 +104,7 @@ public interface CssConverter<T> extends Converter<T> {
     }
 
     @Override
-    default <TT extends T> void toString(Appendable out, IdFactory idFactory, TT value) throws IOException {
+    default <TT extends T> void toString(@NonNull Appendable out, IdFactory idFactory, TT value) throws IOException {
         Consumer<CssToken> consumer = token -> {
             try {
                 out.append(token.fromToken());
@@ -117,7 +120,7 @@ public interface CssConverter<T> extends Converter<T> {
     }
 
 
-    default T fromString(CharBuffer buf, IdFactory idFactory) throws ParseException {
+    default T fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException {
         try {
             int startPos = buf.position();
             StreamCssTokenizer tt = new StreamCssTokenizer(buf);
@@ -135,7 +138,7 @@ public interface CssConverter<T> extends Converter<T> {
      *
      * @return a help text.
      */
-    String getHelpText();
+    @Nullable String getHelpText();
 
     boolean isNullable();
 }

@@ -16,7 +16,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -61,16 +62,17 @@ public class FigureTest {
         public void removeAllLayoutSubjects() {
         }
 
+        @Nullable
         public ObjectProperty<Figure> parentProperty() {
             return null;
         }
 
-        @Nonnull
+        @NonNull
         public Bounds getBoundsInLocal() {
             return null;
         }
 
-        @Nonnull
+        @NonNull
         public CssRectangle2D getCssBoundsInLocal() {
             return new CssRectangle2D(getBoundsInLocal());
         }
@@ -79,15 +81,16 @@ public class FigureTest {
         }
 
         @Override
-        public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+        public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
             // empty
         }
 
+        @Nullable
         public Node createNode(RenderContext ctx) {
             return null;
         }
 
-        public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+        public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         }
 
         public boolean isAllowsChildren() {
@@ -110,6 +113,7 @@ public class FigureTest {
             return false;
         }
 
+        @Nullable
         public Connector findConnector(Point2D pointInLocal, Figure prototype) {
             return null;
         }
@@ -123,10 +127,12 @@ public class FigureTest {
         public void removeNotify(Drawing drawing) {
         }
 
+        @Nullable
         public ObservableList<Figure> getChildren() {
             return null;
         }
 
+        @Nullable
         public ObservableSet<Figure> getLayoutObservers() {
             return null;
         }
@@ -159,6 +165,7 @@ public class FigureTest {
             return false;
         }
 
+        @Nullable
         public CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners() {
             return null;
         }
@@ -173,55 +180,62 @@ public class FigureTest {
         }
 
         @Override
-        public <T> T getStyled(@Nonnull MapAccessor<T> key) {
+        public <T> T getStyled(@NonNull MapAccessor<T> key) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public <T> T setStyled(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key, T value) {
+        public <T> T setStyled(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key, T value) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public <T> T remove(@Nonnull StyleOrigin origin, @Nonnull MapAccessor<T> key) {
+        public <T> T remove(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void removeAll(@Nonnull StyleOrigin origin) {
+        public void removeAll(@NonNull StyleOrigin origin) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public ObservableList<String> getStyleClass() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public String getStyle() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public Styleable getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+        @NonNull
         @Override
         public ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

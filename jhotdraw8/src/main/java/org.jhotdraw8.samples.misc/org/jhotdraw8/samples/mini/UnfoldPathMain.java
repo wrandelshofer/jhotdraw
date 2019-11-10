@@ -21,7 +21,8 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurve;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
@@ -44,42 +45,42 @@ import static java.lang.Math.atan2;
  */
 public class UnfoldPathMain extends Application {
 
-    @Nonnull
+    @NonNull
     private Polyline polyline = new Polyline();
     private double width = 40;
-    @Nonnull
+    @NonNull
     private Path skeleton = new Path();
-    @Nonnull
+    @NonNull
     private Path unfoldedSkeleton = new Path();
-    @Nonnull
+    @NonNull
     private Path offsetPath = new Path();
-    @Nonnull
+    @NonNull
     private Path builtOffsetPath = new Path();
-    @Nonnull
+    @NonNull
     private Path strokedPath = new Path();
-    @Nonnull
+    @NonNull
     private Path intersections = new Path();
-    @Nonnull
+    @NonNull
     private Path intersections2 = new Path();
-    @Nonnull
+    @NonNull
     private List<Point2D> points = new ArrayList<>();
     private Point2D pressedp;
     private double tolerance = 10;
     private int selected = -1;
 
-    @Nonnull
+    @NonNull
     private QuadCurve curve3 = new QuadCurve(150, 100, 300, 700, 450, 100);
 
-    @Nonnull
+    @NonNull
     private Polyline curve3V0 = new Polyline();
-    @Nonnull
+    @NonNull
     private Polyline curve3V1 = new Polyline();
-    @Nonnull
+    @NonNull
     private Polyline curve3V0Unfold = new Polyline();
-    @Nonnull
+    @NonNull
     private Polyline curve3V1Unfold = new Polyline();
 
-    private void applyToQuadCurve(List<Point2D> list1, QuadCurve curve) {
+    private void applyToQuadCurve(@NonNull List<Point2D> list1, @NonNull QuadCurve curve) {
         curve.setStartX(list1.get(0).getX());
         curve.setStartY(list1.get(0).getY());
         curve.setControlX(list1.get(1).getX());
@@ -88,7 +89,7 @@ public class UnfoldPathMain extends Application {
         curve.setEndY(list1.get(2).getY());
     }
 
-    private List<PathElement> buildOffsetPath(List<Point2D> points, double width) {
+    private List<PathElement> buildOffsetPath(@NonNull List<Point2D> points, double width) {
         final FXPathBuilder fxPathBuilder = new FXPathBuilder();
         final OffsetPathBuilder builder = new OffsetPathBuilder(fxPathBuilder, width);
         if (!points.isEmpty()) {
@@ -101,7 +102,7 @@ public class UnfoldPathMain extends Application {
         return fxPathBuilder.getElements();
     }
 
-    private int findIndex(@Nonnull Point2D mousep) {
+    private int findIndex(@NonNull Point2D mousep) {
         int index = -1;
         for (int i = 0, n = points.size(); i < n; i++) {
             Point2D p = points.get(i);
@@ -113,7 +114,7 @@ public class UnfoldPathMain extends Application {
         return index;
     }
 
-    private void renderSkeleton(@Nonnull final ObservableList<PathElement> elements, List<Point2D> points) {
+    private void renderSkeleton(@NonNull final ObservableList<PathElement> elements, @NonNull List<Point2D> points) {
         for (int i = 0, n = points.size() - 1; i < n; i++) {
             Point2D p1 = points.get(i);
             Point2D p2 = points.get(i + 1);
@@ -126,7 +127,7 @@ public class UnfoldPathMain extends Application {
         }
     }
 
-    private void renderSkeleton(@Nonnull final ObservableList<PathElement> elements, List<Point2D> p1s, @Nonnull List<Point2D> p2s) {
+    private void renderSkeleton(@NonNull final ObservableList<PathElement> elements, @NonNull List<Point2D> p1s, @NonNull List<Point2D> p2s) {
         for (int i = 0, n = p1s.size(); i < n; i++) {
             Point2D p1 = p1s.get(i);
             Point2D p2 = p2s.get(i);
@@ -135,7 +136,7 @@ public class UnfoldPathMain extends Application {
         }
     }
 
-    private void setPoints(Path poly, List<Point2D> points) {
+    private void setPoints(@NonNull Path poly, @NonNull List<Point2D> points) {
         final List<PathElement> elems = poly.getElements();
         boolean first = true;
         for (Point2D p : points) {
@@ -148,7 +149,7 @@ public class UnfoldPathMain extends Application {
         }
     }
 
-    private void renderOffsetPath(final ObservableList<PathElement> elements) {
+    private void renderOffsetPath(@NonNull final ObservableList<PathElement> elements) {
         elements.clear();
         List<Point2D> offsetList = new ArrayList<>();
         for (int i = 0, n = points.size() - 1; i < n; i++) {
@@ -180,7 +181,7 @@ public class UnfoldPathMain extends Application {
     }
 
     @Override
-    public void start(@Nonnull Stage primaryStage) {
+    public void start(@NonNull Stage primaryStage) {
 
         Group root = new Group();
 
@@ -233,7 +234,7 @@ public class UnfoldPathMain extends Application {
         primaryStage.show();
     }
 
-    public void onMouse(@Nonnull MouseEvent evt) {
+    public void onMouse(@NonNull MouseEvent evt) {
         Point2D mousep = new Point2D(evt.getSceneX(), evt.getSceneY());
         if (evt.getEventType() == MouseEvent.MOUSE_CLICKED) {
             if (mousep.equals(pressedp)) {
@@ -317,11 +318,11 @@ public class UnfoldPathMain extends Application {
         }*/
     }
 
-    private void moveTo(List<PathElement> elements, Point2D p) {
+    private void moveTo(@NonNull List<PathElement> elements, @NonNull Point2D p) {
         elements.add(new MoveTo(p.getX(), p.getY()));
     }
 
-    private void lineTo(List<PathElement> elements, Point2D p) {
+    private void lineTo(@NonNull List<PathElement> elements, @NonNull Point2D p) {
         elements.add(new LineTo(p.getX(), p.getY()));
     }
 
@@ -333,7 +334,7 @@ public class UnfoldPathMain extends Application {
      * @param elements
      * @param p
      */
-    private void addDisc(List<PathElement> elements, Point2D p) {
+    private void addDisc(@NonNull List<PathElement> elements, @NonNull Point2D p) {
         elements.add(new MoveTo(p.getX() - r, p.getY()));
         elements.add(new ArcTo(r, r, 0, p.getX() + r, p.getY(), true, true));
         elements.add(new ArcTo(r, r, 0, p.getX() - r, p.getY(), true, true));
@@ -347,11 +348,13 @@ public class UnfoldPathMain extends Application {
         launch(args);
     }
 
-    private Point2D perp(Point2D p) {
+    @NonNull
+    private Point2D perp(@NonNull Point2D p) {
         return new Point2D(p.getY(), -p.getX());
     }
 
-    private Point2D intersection(Point2D p1, Point2D p2, Point2D p3, Point2D p4) {
+    @Nullable
+    private Point2D intersection(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D p4) {
         double x1, y1, x2, y2, x3, y3, x4, y4;
         x1 = p1.getX();
         y1 = p1.getY();
@@ -375,7 +378,8 @@ public class UnfoldPathMain extends Application {
         return null;
     }
 
-    private Point2D intersection2(Point2D p1, Point2D p2, Point2D p3, Point2D p4) {
+    @Nullable
+    private Point2D intersection2(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D p4) {
         double x1, y1, x2, y2, x3, y3, x4, y4;
         x1 = p1.getX();
         y1 = p1.getY();
@@ -399,8 +403,8 @@ public class UnfoldPathMain extends Application {
         return null;
     }
 
-    @Nonnull
-    private List<Point2D> binary(List<Point2D> lista, @Nonnull List<Point2D> listb, @Nonnull BinaryOperator<Point2D> op) {
+    @NonNull
+    private List<Point2D> binary(@NonNull List<Point2D> lista, @NonNull List<Point2D> listb, @NonNull BinaryOperator<Point2D> op) {
         int n = lista.size();
         List<Point2D> listc = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -409,8 +413,8 @@ public class UnfoldPathMain extends Application {
         return listc;
     }
 
-    @Nonnull
-    private List<Point2D> unary(List<Point2D> lista, @Nonnull UnaryOperator<Point2D> op) {
+    @NonNull
+    private List<Point2D> unary(@NonNull List<Point2D> lista, @NonNull UnaryOperator<Point2D> op) {
         int n = lista.size();
         List<Point2D> listc = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -433,7 +437,7 @@ public class UnfoldPathMain extends Application {
     private final static double m_angle_tolerance = 5 * Math.PI / 180.0;
     private final static double m_distance_tolerance_square = (0.5 / m_approximation_scale) * (0.5 / m_approximation_scale);
 
-    private void curve3RecursiveBezier(@Nonnull List<Point2D> points, double x1, double y1, double x2, double y2, double x3, double y3, int level) {
+    private void curve3RecursiveBezier(@NonNull List<Point2D> points, double x1, double y1, double x2, double y2, double x3, double y3, int level) {
         if (level > curve_recursion_limit) {
             return;
         }
@@ -507,8 +511,8 @@ public class UnfoldPathMain extends Application {
 
     }
 
-    @Nonnull
-    private List<Point2D> curve3Bezier(Point2D p1, Point2D p2, Point2D p3) {
+    @NonNull
+    private List<Point2D> curve3Bezier(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3) {
         double x1, y1, x2, y2, x3, y3;
         x1 = p1.getX();
         y1 = p1.getY();
@@ -536,7 +540,8 @@ public class UnfoldPathMain extends Application {
      * @param unfold true if unfolding is needed
      * @return two bezier curves
      */
-    private Pair<List<Point2D>, List<Point2D>> curveThicken(List<Point2D> V_, double width, boolean unfold) {
+    @NonNull
+    private Pair<List<Point2D>, List<Point2D>> curveThicken(@NonNull List<Point2D> V_, double width, boolean unfold) {
         int n = V_.size();
         if (n < 2) {
             return new Pair<>(Collections.emptyList(), Collections.emptyList());
@@ -645,7 +650,8 @@ public class UnfoldPathMain extends Application {
      * @param unfold true if unfolding is needed
      * @return two bezier curves
      */
-    private Pair<List<Point2D>, List<Point2D>> curveThickenOriginal(List<Point2D> V, double width, boolean unfold) {
+    @NonNull
+    private Pair<List<Point2D>, List<Point2D>> curveThickenOriginal(@NonNull List<Point2D> V, double width, boolean unfold) {
         int n = V.size();
 
         if (n < 2) {

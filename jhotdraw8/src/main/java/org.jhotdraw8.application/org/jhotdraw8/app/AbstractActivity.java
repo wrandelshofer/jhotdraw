@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
@@ -24,7 +24,7 @@ import org.jhotdraw8.collection.Key;
  */
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
-    @Nonnull
+    @NonNull
     protected ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
     protected final ObservableMap<Key<?>, Object> properties//
@@ -32,13 +32,13 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY);
     private final IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
 
-    @Nonnull
+    @NonNull
     @Override
     public HierarchicalMap<String, Action> getActionMap() {
         return actionMap;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public IntegerProperty disambiguationProperty() {
         return disambiguation;
@@ -48,19 +48,19 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     protected abstract void initView();
 
-    @Nonnull
+    @NonNull
     @Override
     public StringProperty titleProperty() {
         return title;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Application> applicationProperty() {
         return application;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObservableMap<Key<?>, Object> getProperties() {
         return properties;

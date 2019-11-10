@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint3D;
 import org.jhotdraw8.css.CssSize;
@@ -38,9 +38,9 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
         this.withComma = withComma;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint3D parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssPoint3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         final CssSize x, y, z;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -51,20 +51,21 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
         return new CssPoint3D(x, y, z);
     }
 
-    private CssSize parseDimension(CssTokenizer tt, String variable) throws ParseException, IOException {
+    @NonNull
+    private CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumberNonnull().doubleValue());
+                return new CssSize(tt.currentNumberNonNull().doubleValue());
             case CssTokenType.TT_DIMENSION:
-                String s = tt.currentStringNonnull();
-                return new CssSize(tt.currentNumberNonnull().doubleValue(), s == null ? UnitConverter.DEFAULT : s);
+                String s = tt.currentStringNonNull();
+                return new CssSize(tt.currentNumberNonNull().doubleValue(), s == null ? UnitConverter.DEFAULT : s);
             default:
                 throw new ParseException(" ⟨CssPoint3D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
         }
     }
 
     @Override
-    protected <TT extends CssPoint3D> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends CssPoint3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         CssSize x = value.getX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
         if (withComma) {

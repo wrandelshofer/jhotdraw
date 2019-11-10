@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -52,7 +52,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
      * @param id     the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(Application app, DocumentBasedActivity view, String id, boolean saveAs) {
+    public AbstractSaveFileAction(@NonNull Application app, DocumentBasedActivity view, String id, boolean saveAs) {
         this(app, view, id, saveAs, ApplicationLabels.getResources());
     }
 
@@ -65,13 +65,14 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
      * @param saveAs    whether to force a file dialog
      * @param resources the resources are used for setting labels and icons for the action
      */
-    public AbstractSaveFileAction(Application app, DocumentBasedActivity view, String id, boolean saveAs, Resources resources) {
+    public AbstractSaveFileAction(@NonNull Application app, DocumentBasedActivity view, String id, boolean saveAs, @NonNull Resources resources) {
         super(app, view, DocumentBasedActivity.class);
         this.saveAs = saveAs;
         resources.configureAction(this, id);
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentBasedActivity view) {
+    @Nullable
+    protected URIChooser getChooser(@NonNull DocumentBasedActivity view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -93,7 +94,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         saveFileChooseUri(activity, workState);
     }
 
-    protected void saveFileChooseUri(@Nonnull final DocumentBasedActivity v, WorkState workState) {
+    protected void saveFileChooseUri(@NonNull final DocumentBasedActivity v, WorkState workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -132,7 +133,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         }
     }
 
-    protected void saveFileChooseOptions(@Nonnull final DocumentBasedActivity v, @Nonnull URI uri, DataFormat format, WorkState workState) {
+    protected void saveFileChooseOptions(@NonNull final DocumentBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = null;
         try {
@@ -161,7 +162,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(@Nonnull final DocumentBasedActivity view, @Nonnull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    protected void saveFileToUri(@NonNull final DocumentBasedActivity view, @NonNull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);

@@ -7,7 +7,7 @@ package org.jhotdraw8.css;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Map;
@@ -26,12 +26,12 @@ public class CssFont {
     private final FontWeight weight;
     @Nullable
     private final FontPosture posture;
-    @Nonnull
+    @NonNull
     private final CssSize size;
-    @Nonnull
+    @NonNull
     private final Font font;
 
-    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @Nonnull CssSize size) {
+    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
         this.family = family;
         this.weight = weight;
         this.posture = posture;
@@ -57,31 +57,33 @@ public class CssFont {
         return posture;
     }
 
+    @NonNull
     public CssSize getSize() {
         return size;
     }
 
-    @Nonnull
+    @NonNull
     public Font getFont() {
         return font;
     }
 
     private final static Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
 
-    public static CssFont font(String family, FontWeight weight, FontPosture posture, CssSize size) {
+    public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
         return cachedFonts.computeIfAbsent(family
                 + (weight == null ? "" : weight.name())
                 + (posture == null ? "" : posture.name())
                 + Double.doubleToRawLongBits(size.getConvertedValue()), str -> new CssFont(family, weight, posture, size));
     }
 
-    public static CssFont font(String family, FontWeight weight, FontPosture posture, double size) {
+    public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, double size) {
         return cachedFonts.computeIfAbsent(family
                 + (weight == null ? "" : weight.name())
                 + (posture == null ? "" : posture.name())
                 + Double.doubleToRawLongBits(size), str -> new CssFont(family, weight, posture, new CssSize(size)));
     }
 
+    @NonNull
     public static CssFont font(String family, double size) {
         return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(size));
     }
@@ -123,6 +125,7 @@ public class CssFont {
         return true;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssFont{" +

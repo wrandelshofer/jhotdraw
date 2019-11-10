@@ -5,7 +5,7 @@
 package org.jhotdraw8.css;
 
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -80,7 +80,7 @@ public class CssInsets {
      *               insets
      * @return the converted value
      */
-    @Nonnull
+    @NonNull
     public Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
         final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
@@ -88,14 +88,14 @@ public class CssInsets {
                 heightConverter.convert(bottom, UnitConverter.DEFAULT), widthConverter.convert(left, UnitConverter.DEFAULT));
     }
 
-    @Nonnull
+    @NonNull
     public Insets getConvertedValue() {
         return new Insets(top.getConvertedValue(), right.getConvertedValue(),
                 bottom.getConvertedValue(), left.getConvertedValue());
     }
 
-    @Nonnull
-    public Insets getConvertedValue(UnitConverter converter) {
+    @NonNull
+    public Insets getConvertedValue(@NonNull UnitConverter converter) {
         return new Insets(top.getConvertedValue(converter), right.getConvertedValue(converter),
                 bottom.getConvertedValue(converter), left.getConvertedValue(converter));
     }
@@ -122,6 +122,7 @@ public class CssInsets {
         return hash;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssInsets{" +

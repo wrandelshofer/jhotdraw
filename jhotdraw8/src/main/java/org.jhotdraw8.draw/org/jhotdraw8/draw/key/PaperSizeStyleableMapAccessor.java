@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -32,11 +32,11 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
     private final static long serialVersionUID = 1L;
     private Converter<CssPoint2D> converter;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssPoint2D> cssMetaData;
-    @Nonnull
+    @NonNull
     private final MapAccessor<CssSize> xKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<CssSize> yKey;
 
     /**
@@ -46,7 +46,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public PaperSizeStyleableMapAccessor(String name, MapAccessor<CssSize> xKey, MapAccessor<CssSize> yKey) {
+    public PaperSizeStyleableMapAccessor(String name, @NonNull MapAccessor<CssSize> xKey, @NonNull MapAccessor<CssSize> yKey) {
         super(name, CssPoint2D.class, new MapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
@@ -66,9 +66,9 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
         this.yKey = yKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D get(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssPoint2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new CssPoint2D(xKey.get(a), yKey.get(a));
     }
 
@@ -81,25 +81,25 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssPoint2D> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull CssPoint2D value) {
+    public CssPoint2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull CssPoint2D value) {
         CssPoint2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssPoint2D remove(@NonNull Map<? super Key<?>, Object> a) {
         CssPoint2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

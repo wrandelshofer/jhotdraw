@@ -8,10 +8,10 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.Rectangle2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -24,25 +24,25 @@ import java.util.function.Function;
 import static java.lang.Double.max;
 
 /**
- * Rectangle2DStyleableNonnullMapAccessor.
+ * Rectangle2DStyleableMapAccessor.
  *
  * @author Werner Randelshofer
  */
 public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Rectangle2D>
-        implements NonnullMapAccessor<Rectangle2D> {
+        implements NonNullMapAccessor<Rectangle2D> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Rectangle2D> cssMetaData;
-    @Nonnull
-    private final NonnullMapAccessor<Double> xKey;
-    @Nonnull
-    private final NonnullMapAccessor<Double> yKey;
-    @Nonnull
-    private final NonnullMapAccessor<Double> widthKey;
-    @Nonnull
-    private final NonnullMapAccessor<Double> heightKey;
+    @NonNull
+    private final NonNullMapAccessor<Double> xKey;
+    @NonNull
+    private final NonNullMapAccessor<Double> yKey;
+    @NonNull
+    private final NonNullMapAccessor<Double> widthKey;
+    @NonNull
+    private final NonNullMapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -53,13 +53,13 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
      * @param widthKey  the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public Rectangle2DStyleableMapAccessor(@Nonnull String name,
-                                           @Nonnull NonnullMapAccessor<Double> xKey,
-                                           @Nonnull NonnullMapAccessor<Double> yKey,
-                                           @Nonnull NonnullMapAccessor<Double> widthKey,
-                                           @Nonnull NonnullMapAccessor<Double> heightKey) {
-        super(name, Rectangle2D.class, new NonnullMapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new Rectangle2D(xKey.getDefaultValueNonnull(), yKey.getDefaultValueNonnull(),
-                widthKey.getDefaultValueNonnull(), heightKey.getDefaultValueNonnull()));
+    public Rectangle2DStyleableMapAccessor(@NonNull String name,
+                                           @NonNull NonNullMapAccessor<Double> xKey,
+                                           @NonNull NonNullMapAccessor<Double> yKey,
+                                           @NonNull NonNullMapAccessor<Double> widthKey,
+                                           @NonNull NonNullMapAccessor<Double> heightKey) {
+        super(name, Rectangle2D.class, new NonNullMapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new Rectangle2D(xKey.getDefaultValueNonNull(), yKey.getDefaultValueNonNull(),
+                widthKey.getDefaultValueNonNull(), heightKey.getDefaultValueNonNull()));
 
         Function<Styleable, StyleableProperty<Rectangle2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -76,7 +76,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
         this.heightKey = heightKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Rectangle2D> getCssMetaData() {
         return cssMetaData;
@@ -85,20 +85,21 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
 
     private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
+    @NonNull
     @Override
     public Converter<Rectangle2D> getConverter() {
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Rectangle2D get(@Nonnull Map<? super Key<?>, Object> a) {
-        return new Rectangle2D(xKey.getNonnull(a), yKey.getNonnull(a), max(0.0, widthKey.getNonnull(a)), max(0.0, heightKey.getNonnull(a)));
+    public Rectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
+        return new Rectangle2D(xKey.getNonNull(a), yKey.getNonNull(a), max(0.0, widthKey.getNonNull(a)), max(0.0, heightKey.getNonNull(a)));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Rectangle2D put(@Nonnull Map<? super Key<?>, Object> a, @Nullable Rectangle2D value) {
+    public Rectangle2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable Rectangle2D value) {
         if (value == null) {
             throw new NullPointerException("value is null");
         }
@@ -110,9 +111,9 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Rectangle2D remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public Rectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
         Rectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

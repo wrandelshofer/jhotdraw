@@ -11,7 +11,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -58,7 +58,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nonnull Application app) {
+    protected void handleActionPerformed(ActionEvent event, @NonNull Application app) {
 
         WorkState workState = new SimpleWorkState(getLabel());
         app.addDisabler(workState);
@@ -127,7 +127,8 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected URIChooser getChooser(@Nonnull DocumentBasedActivity view) {
+    @Nullable
+    protected URIChooser getChooser(@NonNull DocumentBasedActivity view) {
         URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -268,7 +269,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveToFile(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
+    protected void saveToFile(@NonNull final URI uri, final DataFormat format, WorkState workState) {
         final DocumentBasedActivity v = unsavedView;
         v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
@@ -298,7 +299,7 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(@Nonnull final URI uri, final DataFormat format, WorkState workState) {
+    protected void saveToFileAndReviewNext(@NonNull final URI uri, final DataFormat format, WorkState workState) {
         final DocumentBasedActivity v = unsavedView;
         v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {

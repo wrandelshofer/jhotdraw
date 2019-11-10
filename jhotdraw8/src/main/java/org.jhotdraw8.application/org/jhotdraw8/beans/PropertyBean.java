@@ -8,12 +8,12 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.MapEntryProperty;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -56,9 +56,10 @@ public interface PropertyBean {
      *
      * @return the map
      */
-    ObservableMap<Key<?>, Object> getProperties();
+    @Nullable ObservableMap<Key<?>, Object> getProperties();
 
-    default <T> ObjectProperty<T> getProperty(Key<T> key) {
+    @NonNull
+    default <T> ObjectProperty<T> getProperty(@NonNull Key<T> key) {
         return new MapEntryProperty<>(getProperties(), key, key.getValueType());
     }
 
@@ -75,7 +76,7 @@ public interface PropertyBean {
      * @return the old value
      */
     @Nullable
-    default <T> T set(@Nonnull MapAccessor<T> key, @Nullable T newValue) {
+    default <T> T set(@NonNull MapAccessor<T> key, @Nullable T newValue) {
         return key.put(getProperties(), newValue);
     }
 
@@ -87,7 +88,7 @@ public interface PropertyBean {
      * @return the value
      */
     @Nullable
-    default <T> T get(@Nonnull MapAccessor<T> key) {
+    default <T> T get(@NonNull MapAccessor<T> key) {
         return key.get(getProperties());
     }
 
@@ -98,8 +99,8 @@ public interface PropertyBean {
      * @param key the key
      * @return the value
      */
-    @Nonnull
-    default <T> T getNonnull(@Nonnull NonnullMapAccessor<T> key) {
+    @NonNull
+    default <T> T getNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = key.get(getProperties());
         if (value == null) {
             throw new NullPointerException();
@@ -127,7 +128,7 @@ public interface PropertyBean {
      * @param keys the desired keys
      * @return the map
      */
-    @Nonnull
+    @NonNull
     default Map<Key<?>, Object> getAll(Key<?>... keys) {
         return getAll(Arrays.asList(keys));
     }
@@ -138,8 +139,8 @@ public interface PropertyBean {
      * @param keys the desired keys
      * @return the map
      */
-    @Nonnull
-    default Map<Key<?>, Object> getAll(@Nonnull List<Key<?>> keys) {
+    @NonNull
+    default Map<Key<?>, Object> getAll(@NonNull List<Key<?>> keys) {
         Map<Key<?>, Object> map = getProperties();
         Map<Key<?>, Object> result = new LinkedHashMap<>();
         for (Key<?> k : keys) {
@@ -148,12 +149,12 @@ public interface PropertyBean {
         return result;
     }
 
-    @Nonnull
-    default <T> ObjectProperty<T> propertyAt(@Nonnull Key<T> key) {
+    @NonNull
+    default <T> ObjectProperty<T> propertyAt(@NonNull Key<T> key) {
         return new MapEntryProperty<>(getProperties(), key, key.getValueType());
     }
 
-    @Nonnull
+    @NonNull
     @SuppressWarnings("unchecked")
     default <T> ObservableValue<T> valueAt(Key<T> key) {
         return (ObservableValue<T>) (ObservableValue<Object>) Bindings.valueAt(getProperties(), key);

@@ -5,7 +5,8 @@
 package org.jhotdraw8.draw.tool;
 
 import javafx.stage.FileChooser;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -27,8 +28,10 @@ import java.util.function.Supplier;
  */
 public class ImageCreationTool extends CreationTool {
 
+    @NonNull
     private MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
     private URIChooser uriChooser;
+    @Nullable
     private URI uri;
 
     public ImageCreationTool(String name, Resources rsrc, Supplier<Figure> supplier, Supplier<Layer> layerFactory) {
@@ -36,7 +39,7 @@ public class ImageCreationTool extends CreationTool {
     }
 
     @Override
-    public void activate(DrawingEditor editor) {
+    public void activate(@NonNull DrawingEditor editor) {
         super.activate(editor);
         uri = chooseFile();
     }
@@ -48,7 +51,7 @@ public class ImageCreationTool extends CreationTool {
         return f;
     }
 
-    @Nonnull
+    @NonNull
     protected URIChooser createURIChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
@@ -56,6 +59,7 @@ public class ImageCreationTool extends CreationTool {
         return c;
     }
 
+    @Nullable
     protected URI chooseFile() {
         if (uriChooser == null) {
             uriChooser = createURIChooser();

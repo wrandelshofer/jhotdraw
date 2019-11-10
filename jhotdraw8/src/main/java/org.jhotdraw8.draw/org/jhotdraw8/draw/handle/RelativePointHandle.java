@@ -20,7 +20,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
@@ -40,6 +40,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class RelativePointHandle extends AbstractHandle {
+    @Nullable
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
@@ -47,7 +48,7 @@ public class RelativePointHandle extends AbstractHandle {
     @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    @Nonnull
+    @NonNull
     private final Region node;
     /**
      * Relative origin.
@@ -58,7 +59,7 @@ public class RelativePointHandle extends AbstractHandle {
      * <li>1,1=bottom right</li>
      * </ul>
      */
-    @Nonnull
+    @NonNull
     private Point2D origin = new Point2D(0, 0);
     private Point2D pickLocation;
     private final MapAccessor<CssPoint2D> pointKey;
@@ -91,9 +92,9 @@ public class RelativePointHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -109,7 +110,7 @@ public class RelativePointHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -136,7 +137,7 @@ public class RelativePointHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Bounds bounds = f.getBoundsInLocal();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());

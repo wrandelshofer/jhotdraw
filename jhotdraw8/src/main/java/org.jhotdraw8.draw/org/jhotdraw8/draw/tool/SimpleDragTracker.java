@@ -8,7 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
@@ -59,7 +59,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     // Behaviors
     // ---
     @Override
-    public void setDraggedFigure(Figure anchor, @Nonnull DrawingView view) {
+    public void setDraggedFigure(Figure anchor, @NonNull DrawingView view) {
         this.anchorFigure = anchor;
 
         // Determine which figures can be reshaped together as a group.
@@ -75,13 +75,13 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
         }
     }
 
-    private boolean dependsOn(final Figure f, final Set<Figure> others) {
+    private boolean dependsOn(@NonNull final Figure f, @NonNull final Set<Figure> others) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(Figure::getLayoutSubjects, f), false)
                 .anyMatch(fg -> (fg != f) && others.contains(fg) ||
                         (fg.getParent() != null && containsAny(others, fg.getParent().getPath())));
     }
 
-    private <E> boolean containsAny(Collection<E> subject, Collection<E> c) {
+    private <E> boolean containsAny(@NonNull Collection<E> subject, @NonNull Collection<E> c) {
         for (E e : c) {
             if (subject.contains(e)) {
                 return true;
@@ -92,13 +92,13 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
 
     @Override
-    public void trackMousePressed(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void trackMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure,
                 new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
     }
 
     @Override
-    public void trackMouseReleased(MouseEvent event, DrawingView dv) {
+    public void trackMouseReleased(MouseEvent event, @NonNull DrawingView dv) {
 // FIXME fire undoable edit
         dv.recreateHandles();
         //  fireToolDone();
@@ -109,7 +109,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     }
 
     @Override
-    public void trackMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void trackMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -122,8 +122,8 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             // or whatever corner is specified in the anchor
             Bounds bounds = anchorFigure.getBoundsInLocal();
 
-            double anchorX = Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_X), 0, 1);
-            double anchorY = Geom.clamp(anchorFigure.getNonnull(AnchorableFigure.ANCHOR_Y), 0, 1);
+            double anchorX = Geom.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+            double anchorY = Geom.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
             Point2D loc = new Point2D(bounds.getMinX() + anchorX * bounds.getWidth(),
                     bounds.getMinY() + anchorY * bounds.getHeight());

@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collection;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ObservableListProxy<E> extends TransformationList<E, E> {
 
-    public ObservableListProxy(@Nonnull ObservableList<? extends E> source) {
+    public ObservableListProxy(@NonNull ObservableList<? extends E> source) {
         super(source);
 
     }
@@ -100,14 +100,14 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> col) {
+    public boolean addAll(@NonNull Collection<? extends E> col) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
         return src.addAll(col);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> col) {
+    public boolean addAll(int index, @NonNull Collection<? extends E> col) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
         return src.addAll(index, col);
@@ -121,7 +121,7 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> col) {
+    public boolean removeAll(@NonNull Collection<?> col) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
         return src.removeAll(col);
@@ -136,7 +136,7 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> col) {
+    public boolean retainAll(@NonNull Collection<?> col) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
         return src.retainAll(col);
@@ -198,7 +198,7 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
             return change.getTo();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public List<E> getRemoved() {
             @SuppressWarnings("unchecked")

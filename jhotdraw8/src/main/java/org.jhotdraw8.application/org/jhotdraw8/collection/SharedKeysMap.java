@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractCollection;
@@ -36,10 +36,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private final static Object NULL_VALUE = new Object();
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
-    @Nonnull
+    @NonNull
     private final Map<K, Integer> keyMap;
     private int size;
-    @Nonnull
+    @NonNull
     private final ArrayList<Object> values;
 
     /**
@@ -61,7 +61,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
      *               This map must be immutable or synchronized if the key map
      *               is shared between instances of SharedKeysMap on different threads.
      */
-    public SharedKeysMap(Map<K, Integer> keyMap) {
+    public SharedKeysMap(@NonNull Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
         this.values = new ArrayList<>(keyMap.size());
     }
@@ -136,7 +136,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return index;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
         return new EntrySet();
@@ -154,6 +154,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return System.identityHashCode(values);
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     private V getValue(int index, K key) {
         Object value;
@@ -172,7 +173,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return size == 0;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Set<K> keySet() {
         return new KeySet();
@@ -206,6 +207,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
     }
 
+    @Nullable
     @SuppressWarnings("unchecked")
     private V removeValue(int index, K key) {
         final int arrayIndex = index;
@@ -250,7 +252,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return size;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Collection<V> values() {
         return new ValueCollection();
@@ -274,7 +276,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
             this.wasRemoved = wasRemoved;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String toString() {
             return "ChangeEvent{" + "key=" + key + ", old=" + old + ", added=" + added + ", wasAdded=" + wasAdded + ", wasRemoved=" + wasRemoved + '}';
@@ -335,11 +337,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
                     && Objects.equals(SharedKeysMap.this.get(e.getKey()), e.getValue());
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Iterator<Entry<K, V>> iterator() {
             return new Iterator<Entry<K, V>>() {
-                @Nonnull
+                @NonNull
                 private Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
@@ -369,7 +371,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
                     return hasNext;
                 }
 
-                @Nonnull
+                @NonNull
                 @Override
                 public Entry<K, V> next() {
                     lastKey = nextKey;
@@ -387,7 +389,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
-        public boolean add(@Nonnull Entry<K, V> e) {
+        public boolean add(@NonNull Entry<K, V> e) {
             boolean added = !SharedKeysMap.this.containsKey(e.getKey())
                     || Objects.equals(SharedKeysMap.this.get(e.getKey()), e.getValue());
             if (added) {
@@ -430,11 +432,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
             return SharedKeysMap.this.containsKey(o);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Iterator<K> iterator() {
             return new Iterator<K>() {
-                @Nonnull
+                @NonNull
                 private Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
@@ -546,6 +548,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
                     ^ (getValue() == null ? 0 : getValue().hashCode());
         }
 
+        @Nullable
         @Override
         public final String toString() {
             return getKey() + "=" + getValue();
@@ -573,12 +576,12 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
             return SharedKeysMap.this.containsValue(o);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Iterator<V> iterator() {
             return new Iterator<V>() {
 
-                @Nonnull
+                @NonNull
                 private Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;

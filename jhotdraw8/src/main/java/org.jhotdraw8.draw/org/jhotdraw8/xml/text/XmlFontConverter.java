@@ -7,7 +7,7 @@ package org.jhotdraw8.xml.text;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -45,7 +45,7 @@ public class XmlFontConverter implements Converter<Font> {
     private final XmlNumberConverter doubleConverter = new XmlNumberConverter();
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nonnull Font font) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull Font font) throws IOException {
         double fontSize = font.getSize();
         String fontFamily = font.getFamily();
         FontPosture posture = FontPosture.REGULAR;

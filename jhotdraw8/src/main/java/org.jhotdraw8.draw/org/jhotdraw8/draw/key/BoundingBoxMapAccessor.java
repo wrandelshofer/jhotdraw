@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.BoundingBox;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -21,13 +21,13 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> xKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> yKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> widthKey;
-    @Nonnull
+    @NonNull
     private final MapAccessor<Double> heightKey;
 
     /**
@@ -39,7 +39,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
      * @param widthKey  the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public BoundingBoxMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
+    public BoundingBoxMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> widthKey, @NonNull MapAccessor<Double> heightKey) {
         super(name, BoundingBox.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new BoundingBox(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 
         this.xKey = xKey;
@@ -48,15 +48,15 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
         this.heightKey = heightKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public BoundingBox get(@Nonnull Map<? super Key<?>, Object> a) {
+    public BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public BoundingBox put(@Nonnull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
+    public BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -65,9 +65,9 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public BoundingBox remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

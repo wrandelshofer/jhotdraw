@@ -10,7 +10,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 
@@ -99,23 +99,24 @@ public interface Resources {
         ResourcesHelper.propertyNameModifiers.remove(name);
     }
 
-    static Resources getResources(String moduleName, String resourceBundle) {
+    @NonNull
+    static Resources getResources(String moduleName, @NonNull String resourceBundle) {
         try {
             Class<?> clazz = Class.forName("org.jhotdraw8.util.ModulepathResources");
             Method method = ((Class<?>) clazz).getMethod("getResources", String.class, String.class);
             return (Resources) method.invoke(null, moduleName, resourceBundle);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+        } catch (@NonNull IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
             return ClasspathResources.getResources(resourceBundle);
         }
     }
 
     ResourceBundle asResourceBundle();
 
-    default void configureAction(@Nonnull Action action, String argument) {
+    default void configureAction(@NonNull Action action, String argument) {
         configureAction(action, argument, getBaseClass());
     }
 
-    default void configureAction(@Nonnull Action action, String argument, @Nonnull Class<?> baseClass) {
+    default void configureAction(@NonNull Action action, String argument, @NonNull Class<?> baseClass) {
         action.set(Action.LABEL, getTextProperty(argument));
         String shortDescription = getToolTipTextProperty(argument);
         if (shortDescription != null && shortDescription.length() > 0) {
@@ -127,11 +128,11 @@ public interface Resources {
         action.set(Action.LARGE_ICON_KEY, getLargeIconProperty(argument, baseClass));
     }
 
-    default void configureButton(@Nonnull ButtonBase button, String argument) {
+    default void configureButton(@NonNull ButtonBase button, String argument) {
         configureButton(button, argument, getBaseClass());
     }
 
-    default void configureButton(@Nonnull ButtonBase button, String argument, @Nonnull Class<?> baseClass) {
+    default void configureButton(@NonNull ButtonBase button, String argument, @NonNull Class<?> baseClass) {
         button.setText(getTextProperty(argument));
         //button.setACCELERATOR_KEY, getAcceleratorProperty(argument));
         //action.putValue(Action.MNEMONIC_KEY, new Integer(getMnemonicProperty(argument)));
@@ -146,7 +147,7 @@ public interface Resources {
      * @param menu     the menu
      * @param argument the argument
      */
-    default void configureMenu(@Nonnull Menu menu, String argument) {
+    default void configureMenu(@NonNull Menu menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
@@ -160,18 +161,18 @@ public interface Resources {
      * @param menu     the menu item
      * @param argument the argument
      */
-    default void configureMenuItem(@Nonnull MenuItem menu, String argument) {
+    default void configureMenuItem(@NonNull MenuItem menu, String argument) {
         menu.setText(getTextProperty(argument));
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
         menu.setGraphic(getSmallIconProperty(argument, getBaseClass()));
     }
 
-    default void configureToolBarButton(@Nonnull ButtonBase button, String argument) {
+    default void configureToolBarButton(@NonNull ButtonBase button, String argument) {
         configureToolBarButton(button, argument, getBaseClass());
     }
 
-    default void configureToolBarButton(@Nonnull ButtonBase button, String argument, @Nonnull Class<?> baseClass) {
+    default void configureToolBarButton(@NonNull ButtonBase button, String argument, @NonNull Class<?> baseClass) {
         Node icon = getLargeIconProperty(argument, baseClass);
         if (icon != null) {
             button.setGraphic(getLargeIconProperty(argument, baseClass));
@@ -192,8 +193,8 @@ public interface Resources {
      * @param arguments the arguments
      * @return formatted String
      */
-    @Nonnull
-    default String format(@Nonnull String key, Object... arguments) {
+    @NonNull
+    default String format(@NonNull String key, Object... arguments) {
         //return String.format(resource.getLocale(), getString(key), arguments);
         return new Formatter(getLocale()).format(getString(key), arguments).toString();
     }
@@ -217,7 +218,7 @@ public interface Resources {
 
     void setBaseClass(Class<?> baseClass);
 
-    @Nonnull
+    @NonNull
     String getBaseName();
 
     /**
@@ -227,8 +228,8 @@ public interface Resources {
      * @param arguments the arguments
      * @return formatted String
      */
-    @Nonnull
-    default String getFormatted(@Nonnull String key, Object... arguments) {
+    @NonNull
+    default String getFormatted(@NonNull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
@@ -239,8 +240,8 @@ public interface Resources {
      * @param key The key of the property.
      * @return The value of the property. Returns -1 if the property is missing.
      */
-    @Nonnull
-    default Integer getInteger(@Nonnull String key) {
+    @NonNull
+    default Integer getInteger(@NonNull String key) {
         try {
             return Integer.valueOf(getString(key));
         } catch (MissingResourceException e) {
@@ -258,18 +259,18 @@ public interface Resources {
      * null if the property is missing.
      */
     @Nullable
-    default KeyCombination getKeyCombination(@Nonnull String key) {
+    default KeyCombination getKeyCombination(@NonNull String key) {
         KeyCombination ks = null;
         String s = getString(key);
         try {
             ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
-        } catch (NoSuchElementException | StringIndexOutOfBoundsException e) {
+        } catch (@NonNull NoSuchElementException | StringIndexOutOfBoundsException e) {
             throw new InternalError(key + "=" + s, e);
         }
         return ks;
     }
 
-    @Nonnull Enumeration<String> getKeys();
+    @NonNull Enumeration<String> getKeys();
 
     /**
      * Get a large image icon from the ResourceBundle for use on a
@@ -283,11 +284,11 @@ public interface Resources {
      * missing.
      */
     @Nullable
-    default Node getLargeIconProperty(String key, @Nonnull Class<?> baseClass) {
+    default Node getLargeIconProperty(String key, @NonNull Class<?> baseClass) {
         return ResourcesHelper.getIconProperty(this, key, ".largeIcon", baseClass);
     }
 
-    Locale getLocale();
+    @NonNull Locale getLocale();
 
     /**
      * Get a Mnemonic from the ResourceBundle.
@@ -297,7 +298,7 @@ public interface Resources {
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
-    default char getMnemonic(@Nonnull String key) {
+    default char getMnemonic(@NonNull String key) {
         String s = getString(key);
         return (s == null || s.length() == 0) ? '\0' : s.charAt(0);
     }
@@ -335,11 +336,11 @@ public interface Resources {
      * missing.
      */
     @Nullable
-    default Node getSmallIconProperty(String key, @Nonnull Class<?> baseClass) {
+    default Node getSmallIconProperty(String key, @NonNull Class<?> baseClass) {
         return ResourcesHelper.getIconProperty(this, key, ".smallIcon", baseClass);
     }
 
-    String getString(String s);
+    @NonNull String getString(String s);
 
     /**
      * Get a String for a JavaBeans "text" property from the ResourceBundle.
@@ -382,8 +383,8 @@ public interface Resources {
 
     ResourceBundle getWrappedBundle();
 
-    @Nonnull
-    default String substitutePlaceholders(String key, String value) throws MissingResourceException {
+    @NonNull
+    default String substitutePlaceholders(String key, @NonNull String value) throws MissingResourceException {
 
         // Substitute placeholders in the value
         for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {

@@ -8,9 +8,9 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssPoint2DConverter;
@@ -29,17 +29,17 @@ import java.util.function.Function;
  */
 public class CssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssPoint2D>
-        implements NonnullMapAccessor<CssPoint2D> {
+        implements NonNullMapAccessor<CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
     private final Converter<CssPoint2D> converter;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssPoint2D> cssMetaData;
-    @Nonnull
-    private final NonnullMapAccessor<CssSize> xKey;
-    @Nonnull
-    private final NonnullMapAccessor<CssSize> yKey;
+    @NonNull
+    private final NonNullMapAccessor<CssSize> xKey;
+    @NonNull
+    private final NonNullMapAccessor<CssSize> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -48,7 +48,7 @@ public class CssPoint2DStyleableMapAccessor
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public CssPoint2DStyleableMapAccessor(String name, NonnullMapAccessor<CssSize> xKey, NonnullMapAccessor<CssSize> yKey) {
+    public CssPoint2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey) {
         this(name, xKey, yKey, new CssPoint2DConverter(false));
     }
 
@@ -60,8 +60,8 @@ public class CssPoint2DStyleableMapAccessor
      * @param yKey      the key for the y coordinate of the point
      * @param converter String converter for the point
      */
-    public CssPoint2DStyleableMapAccessor(String name, NonnullMapAccessor<CssSize> xKey, NonnullMapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {
-        super(name, CssPoint2D.class, new NonnullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
+    public CssPoint2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {
+        super(name, CssPoint2D.class, new NonNullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
@@ -81,9 +81,9 @@ public class CssPoint2DStyleableMapAccessor
         this.yKey = yKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D get(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssPoint2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new CssPoint2D(xKey.get(a), yKey.get(a));
     }
 
@@ -93,25 +93,25 @@ public class CssPoint2DStyleableMapAccessor
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssPoint2D> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D put(@Nonnull Map<? super Key<?>, Object> a, @Nonnull CssPoint2D value) {
+    public CssPoint2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull CssPoint2D value) {
         CssPoint2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         return oldValue;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CssPoint2D remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssPoint2D remove(@NonNull Map<? super Key<?>, Object> a) {
         CssPoint2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

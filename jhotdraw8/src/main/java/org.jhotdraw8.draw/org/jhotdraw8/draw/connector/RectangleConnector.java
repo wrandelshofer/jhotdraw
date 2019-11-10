@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
@@ -36,7 +36,7 @@ public class RectangleConnector extends LocatorConnector {
 
     @Nullable
     @Override
-    public Intersection.IntersectionPoint intersect(Figure connection, @Nonnull Figure target, @Nonnull Point2D start, @Nonnull Point2D end) {
+    public Intersection.IntersectionPoint intersect(Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds bounds = target.getBoundsInLocal();
@@ -44,13 +44,13 @@ public class RectangleConnector extends LocatorConnector {
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
             double grow;
-            switch (target.getStyledNonnull(STROKE_TYPE)) {
+            switch (target.getStyledNonNull(STROKE_TYPE)) {
                 case CENTERED:
                 default:
-                    grow = target.getStyledNonnull(STROKE_WIDTH).getConvertedValue() / 2d;
+                    grow = target.getStyledNonNull(STROKE_WIDTH).getConvertedValue() / 2d;
                     break;
                 case OUTSIDE:
-                    grow = target.getStyledNonnull(STROKE_WIDTH).getConvertedValue();
+                    grow = target.getStyledNonNull(STROKE_WIDTH).getConvertedValue();
                     break;
                 case INSIDE:
                     grow = 0d;

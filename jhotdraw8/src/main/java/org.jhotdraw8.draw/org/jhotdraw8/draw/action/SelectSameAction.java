@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.action;
 
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
@@ -36,7 +36,7 @@ public class SelectSameAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public SelectSameAction(Application app, DrawingEditor editor) {
+    public SelectSameAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels = DrawLabels.getResources();
         set(Action.ID_KEY, ID);
@@ -54,7 +54,7 @@ public class SelectSameAction extends AbstractSelectedAction {
 
     }
 
-    public static void selectSame(@Nonnull DrawingView view, @Nullable Figure prototype) {
+    public static void selectSame(@NonNull DrawingView view, @Nullable Figure prototype) {
         if (prototype == null) {
             return;
         }

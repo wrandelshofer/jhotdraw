@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -26,7 +26,7 @@ public class ClassSelector extends SimpleSelector {
         this.clazz = clazz;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "Class:" + clazz;
@@ -34,7 +34,7 @@ public class ClassSelector extends SimpleSelector {
 
     @Nullable
     @Override
-    public <T> T match(@Nonnull SelectorModel<T> model, @Nullable T element) {
+    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasStyleClass(element, clazz)) //
                 ? element : null;
     }
@@ -45,7 +45,7 @@ public class ClassSelector extends SimpleSelector {
     }
 
     @Override
-    public void produceTokens(Consumer<CssToken> consumer) {
+    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_POINT));
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, clazz));
     }

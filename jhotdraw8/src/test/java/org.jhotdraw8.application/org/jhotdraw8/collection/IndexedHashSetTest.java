@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import javafx.collections.ListChangeListener;
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,7 +26,7 @@ public class IndexedHashSetTest {
     public IndexedHashSetTest() {
     }
 
-    public static void testAdd(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
+    public static void testAdd(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
         IndexedHashSet<Character> list = new IndexedHashSet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
@@ -44,6 +45,7 @@ public class IndexedHashSetTest {
         }
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> addDataFactory() {
         return Arrays.asList(
@@ -74,7 +76,7 @@ public class IndexedHashSetTest {
 
     }
 
-    public static void testSet(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
+    public static void testSet(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
         IndexedHashSet<Character> list = new IndexedHashSet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
@@ -93,6 +95,7 @@ public class IndexedHashSetTest {
         }
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> setDataFactory() {
         return Arrays.asList(
@@ -118,10 +121,11 @@ public class IndexedHashSetTest {
 
     private static class ChangeRecorder implements ListChangeListener<Character> {
 
+        @NonNull
         private StringBuilder buf = new StringBuilder();
 
         @Override
-        public void onChanged(Change<? extends Character> c) {
+        public void onChanged(@NonNull Change<? extends Character> c) {
             while (c.next()) {
                 if (c.wasPermutated()) {
                     buf.append("perm(");
@@ -150,12 +154,14 @@ public class IndexedHashSetTest {
             }
         }
 
+        @NonNull
         private String getChanges() {
             return buf.toString();
         }
     }
 
-    private static List<Character> asList(String str) {
+    @NonNull
+    private static List<Character> asList(@NonNull String str) {
         ArrayList<Character> l = new ArrayList<>();
         for (char ch : str.toCharArray()) {
             l.add(ch);

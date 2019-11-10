@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -28,17 +28,17 @@ public class CssPercentageConverter extends AbstractCssConverter<Double> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Double parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return tt.currentNumberNonnull().doubleValue();
+                return tt.currentNumberNonNull().doubleValue();
             case CssTokenType.TT_PERCENTAGE:
-                return tt.currentNumberNonnull().doubleValue() / 100.0;
+                return tt.currentNumberNonNull().doubleValue() / 100.0;
             case CssTokenType.TT_IDENT: {
                 double value;
-                switch (tt.currentStringNonnull()) {
+                switch (tt.currentStringNonNull()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;
                         break;
@@ -59,7 +59,7 @@ public class CssPercentageConverter extends AbstractCssConverter<Double> {
     }
 
     @Override
-    public <TT extends Double> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         double v = value;
         if (value.isInfinite()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, (v > 0) ? "INF" : "-INF"));
@@ -70,7 +70,7 @@ public class CssPercentageConverter extends AbstractCssConverter<Double> {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         if (isNullable()) {

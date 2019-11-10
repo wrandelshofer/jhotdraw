@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.samples.modeler.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -30,14 +30,14 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public MLCompartmentalizedData parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public MLCompartmentalizedData parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         LinkedHashMap<String, ImmutableList<String>> map = new LinkedHashMap<>();
         tt.requireNextToken(CssTokenType.TT_LEFT_CURLY_BRACKET, "Left curly bracket expected.");
         List<String> items = new ArrayList<>();
         while (tt.next() == CssTokenType.TT_STRING || tt.current() == CssTokenType.TT_IDENT) {
-            String keyword = tt.currentStringNonnull();
+            String keyword = tt.currentStringNonNull();
             tt.requireNextToken(CssTokenType.TT_COLON, "Colon expected.");
             items.clear();
             if (tt.next() == CssTokenType.TT_LEFT_SQUARE_BRACKET) {
@@ -46,7 +46,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
                     switch (tt.next()) {
                         case CssTokenType.TT_STRING:
                         case CssTokenType.TT_IDENT:
-                            items.add(tt.currentStringNonnull());
+                            items.add(tt.currentStringNonNull());
                             break;
                         case CssTokenType.TT_COMMA:
                             break;
@@ -60,7 +60,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
                 switch (tt.current()) {
                     case CssTokenType.TT_STRING:
                     case CssTokenType.TT_IDENT:
-                        items.add(tt.currentStringNonnull());
+                        items.add(tt.currentStringNonNull());
                         break;
                     default:
                         throw new ParseException("String or Identifier expected", tt.getStartPosition());
@@ -87,7 +87,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
     }
 
     @Override
-    protected <TT extends MLCompartmentalizedData> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends MLCompartmentalizedData> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_LEFT_CURLY_BRACKET));
         ReadOnlySet<Map.Entry<String, ImmutableList<String>>> entries = value.getMap().entrySet();
         if (!entries.isEmpty()) {

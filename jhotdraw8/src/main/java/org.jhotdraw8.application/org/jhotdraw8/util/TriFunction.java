@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.util;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * Represents a function that accepts 3 arguments and produces a result.
  *
@@ -22,6 +24,6 @@ public interface TriFunction<T, U, V, R> {
      * @param v the third function argument
      * @return the function result
      */
-    R apply(T t, U u, V v);
+    @NonNull R apply(T t, U u, V v);
 
 }

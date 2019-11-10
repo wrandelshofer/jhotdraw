@@ -1,5 +1,7 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 
 public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollection<E> {
@@ -13,6 +15,7 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
      *
      * @return a string representation of this collection
      */
+    @NonNull
     public String toString() {
         Iterator<E> it = iterator();
         if (!it.hasNext()) {

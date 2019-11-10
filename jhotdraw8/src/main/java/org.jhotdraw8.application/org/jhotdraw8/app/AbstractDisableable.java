@@ -9,7 +9,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * AbstractDisableable.
@@ -46,7 +46,7 @@ public class AbstractDisableable implements Disableable {
         return disabled.getReadOnlyProperty();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObservableSet<Object> disablers() {
         return disablers;

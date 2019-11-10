@@ -10,7 +10,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
@@ -40,7 +40,7 @@ public class TeddyActivityController extends AbstractDocumentBasedActivity imple
     @FXML
     private TextArea textArea;
 
-    @Nonnull
+    @NonNull
     @Override
     public CompletionStage<Void> clear() {
         textArea.setText(null);
@@ -76,14 +76,14 @@ public class TeddyActivityController extends AbstractDocumentBasedActivity imple
         textArea.textProperty().addListener((observable -> modified.set(true)));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CompletionStage<Void> print(@Nonnull PrinterJob job, @Nonnull WorkState workState) {
+    public CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
         return FXWorker.supply(() -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
@@ -103,8 +103,9 @@ public class TeddyActivityController extends AbstractDocumentBasedActivity imple
         });
     }
 
+    @NonNull
     @Override
-    public CompletionStage<Void> write(@Nonnull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         final String text = textArea.getText();
         return FXWorker.run(() -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {

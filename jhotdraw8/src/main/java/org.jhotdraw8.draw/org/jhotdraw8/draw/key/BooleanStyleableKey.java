@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBooleanConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -22,7 +22,7 @@ import org.jhotdraw8.text.Converter;
  */
 public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
         implements WriteableStyleableMapAccessor<Boolean>,
-        NonnullMapAccessor<Boolean> {
+        NonNullMapAccessor<Boolean> {
 
     final static long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Boolean> cssMetaData;

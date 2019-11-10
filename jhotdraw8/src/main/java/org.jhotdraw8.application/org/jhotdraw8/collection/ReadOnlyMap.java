@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -23,10 +23,11 @@ public interface ReadOnlyMap<K, V> {
 
     boolean containsKey(K key);
 
+    @NonNull
     default ReadOnlySet<Map.Entry<K, V>> entrySet() {
         return new ReadOnlySet<Map.Entry<K, V>>() {
 
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<Map.Entry<K, V>> iterator() {
                 return ReadOnlyMap.this.entries();
@@ -50,10 +51,11 @@ public interface ReadOnlyMap<K, V> {
         };
     }
 
+    @NonNull
     default ReadOnlySet<K> keySet() {
         return new ReadOnlySet<K>() {
 
-            @Nonnull
+            @NonNull
             @Override
             public Iterator<K> iterator() {
                 return ReadOnlyMap.this.keys();
@@ -82,6 +84,7 @@ public interface ReadOnlyMap<K, V> {
      *
      * @return the wrapped map
      */
+    @NonNull
     default Map<K, V> asMap() {
         return new MapWrapper<>(this);
     }

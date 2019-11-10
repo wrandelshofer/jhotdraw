@@ -19,7 +19,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
@@ -70,9 +71,9 @@ public class TransformHandleKit {
         WEST_SHAPE.setContent(circle + "M 4.5,0 4.5,9");
     }
 
-    @Nonnull
+    @NonNull
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nonnull
+    @NonNull
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
@@ -91,7 +92,7 @@ public class TransformHandleKit {
      * @param f       the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addCornerTransformHandles(TransformableFigure f, Collection<Handle> handles) {
+    static public void addCornerTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
         handles.add(northEast(f));
@@ -105,7 +106,7 @@ public class TransformHandleKit {
      * @param f       the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addEdgeTransformHandles(TransformableFigure f, Collection<Handle> handles) {
+    static public void addEdgeTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
         handles.add(east(f));
@@ -119,7 +120,7 @@ public class TransformHandleKit {
      * @param f       the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addTransformHandles(TransformableFigure f, @Nonnull Collection<Handle> handles) {
+    static public void addTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         addCornerTransformHandles(f, handles);
         addEdgeTransformHandles(f, handles);
     }
@@ -130,6 +131,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle south(TransformableFigure owner) {
         return new SouthHandle(owner);
     }
@@ -140,6 +142,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle southEast(TransformableFigure owner) {
         return new SouthEastHandle(owner);
     }
@@ -150,6 +153,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle southWest(TransformableFigure owner) {
         return new SouthWestHandle(owner);
     }
@@ -160,6 +164,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle north(TransformableFigure owner) {
         return new NorthHandle(owner);
     }
@@ -170,6 +175,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle northEast(TransformableFigure owner) {
         return new NorthEastHandle(owner);
     }
@@ -180,6 +186,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle northWest(TransformableFigure owner) {
         return new NorthWestHandle(owner);
     }
@@ -190,6 +197,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle east(TransformableFigure owner) {
         return new EastHandle(owner);
     }
@@ -200,25 +208,26 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle west(TransformableFigure owner) {
         return new WestHandle(owner);
     }
 
     private abstract static class AbstractTransformHandle extends AbstractResizeTransformHandle {
 
-        ImmutableList<Transform> startTransforms;
+        @Nullable ImmutableList<Transform> startTransforms;
 
         public AbstractTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
             super(owner, locator, shape, bg, border);
         }
 
         @Override
-        public void handleMousePressed(MouseEvent event, DrawingView view) {
+        public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
             super.handleMousePressed(event, view); //To change body of generated methods, choose Tools | Templates.
             startTransforms = owner.get(TRANSFORMS);
         }
 
-        protected void transform(@Nonnull DrawingModel model, Figure o, double x, double y, double width, double height) {
+        protected void transform(@NonNull DrawingModel model, Figure o, double x, double y, double width, double height) {
             if (width == 0 || height == 0) {
                 return;
             }
@@ -248,7 +257,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             // FIXME remove this method
             resize(newPoint.getConvertedValue(), owner, bounds.getConvertedBoundsValue(), model, keepAspect);
         }
@@ -267,7 +276,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = max(bounds.getMinX(), newPoint.getX());
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
@@ -298,7 +307,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newWidth = max(newPoint.getX(), bounds.getMinX()) - bounds.getMinX();
             double newHeight = bounds.getMaxY() - bounds.getMinY();
             if (keepAspect) {
@@ -322,7 +331,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = bounds.getMaxY() - newY;
@@ -346,7 +355,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newY = min(bounds.getMaxY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - newX;
@@ -376,7 +385,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = max(bounds.getMinX(), newPoint.getX());
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = newX - bounds.getMinX();
@@ -405,7 +414,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - bounds.getMinX();
             double newHeight = newY - bounds.getMinY();
@@ -428,7 +437,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newY = max(bounds.getMinY(), newPoint.getY());
             double newWidth = bounds.getMaxX() - min(bounds.getMaxX(), newX);
@@ -457,7 +466,7 @@ public class TransformHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull Point2D newPoint, Figure owner, @Nonnull Bounds bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull Point2D newPoint, Figure owner, @NonNull Bounds bounds, @NonNull DrawingModel model, boolean keepAspect) {
             double newX = min(bounds.getMaxX(), newPoint.getX());
             double newWidth = bounds.getMaxX() - newX;
             double newHeight = bounds.getHeight();

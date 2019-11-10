@@ -4,6 +4,7 @@
 
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -25,6 +26,7 @@ public class UniqueOrOneHopPathBuilderTest {
     public UniqueOrOneHopPathBuilderTest() {
     }
 
+    @NonNull
     private DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
@@ -57,6 +59,7 @@ public class UniqueOrOneHopPathBuilderTest {
         return builder;
     }
 
+    @NonNull
     private DirectedGraph<Integer, Double> createDiamondGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
@@ -101,6 +104,7 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFindUniqueVertexPath() {
         DirectedGraph<Integer, Double> graph = createGraph();
@@ -118,7 +122,7 @@ public class UniqueOrOneHopPathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void doFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, VertexPath<Integer> expPath) throws Exception {
+    public void doFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, VertexPath<Integer> expPath) throws Exception {
         System.out.println("doFindShortestVertexPath start:" + start + " goal:" + goal + " expResult:" + expPath);
 
         ToDoubleFunction<Double> costf = arg -> arg;
@@ -127,6 +131,7 @@ public class UniqueOrOneHopPathBuilderTest {
         assertEquals(expPath, result);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFindUniqueMultiGoalPath() throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
@@ -146,7 +151,7 @@ public class UniqueOrOneHopPathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void doFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, VertexPath<Integer> expResult) throws Exception {
+    public void doFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, VertexPath<Integer> expResult) throws Exception {
         System.out.println("doFindUniqueMultiGoalPath start:" + start + " goal:" + multiGoal + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueOrOneHopPathBuilder<Integer, Double> instance = new UniqueOrOneHopPathBuilder<>(graph::getNextVertices);
@@ -161,6 +166,7 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
 
+    @NonNull
     private DirectedGraph<Integer, Double> createGraph2() {
         DirectedGraphBuilder<Integer, Double> b = new DirectedGraphBuilder<>();
         b.addVertex(1);
@@ -179,6 +185,7 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFindUniqueVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
@@ -192,7 +199,7 @@ public class UniqueOrOneHopPathBuilderTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void doFindUniqueVertexPathOverWaypoints(List<Integer> waypoints, VertexPath<Integer> expResult) throws Exception {
+    private void doFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexPath<Integer> expResult) throws Exception {
         System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         UniqueOrOneHopPathBuilder<Integer, Double> instance = new UniqueOrOneHopPathBuilder<>(graph::getNextVertices);

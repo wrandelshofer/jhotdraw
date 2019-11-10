@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 public class CssStringConverter extends AbstractCssConverter<String> {
     private final String helpText;
     private final char quoteChar;
-    @Nonnull
+    @NonNull
     private final String defaultValue;
 
     public CssStringConverter() {
@@ -47,21 +47,21 @@ public class CssStringConverter extends AbstractCssConverter<String> {
         return helpText;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public String parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("Css String expected." + tt.getToken(), tt.getStartPosition());
         }
-        return tt.currentStringNonnull();
+        return tt.currentStringNonNull();
     }
 
     @Override
-    protected <TT extends String> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends String> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_STRING, value, quoteChar));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getDefaultValue() {
         return defaultValue;

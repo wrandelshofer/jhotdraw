@@ -9,7 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
@@ -34,17 +34,17 @@ import java.io.IOException;
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
-    @Nonnull
+    @NonNull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    @Nonnull
+    @NonNull
     public final static NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "M 0,0 h 1 v -1 h -1 Z");
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey X = RectangleFigure.X;
-    @Nonnull
+    @NonNull
     public final static CssSizeStyleableKey Y = RectangleFigure.Y;
 
     public final static BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
@@ -59,23 +59,23 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         reshapeInLocal(x, y, width, height);
     }
 
-    public AbstractRegionFigure(Rectangle2D rect) {
+    public AbstractRegionFigure(@NonNull Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         return new Path();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        return getNonnull(BOUNDS);
+        return getNonNull(BOUNDS);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         if (pathElements == null) {
@@ -85,12 +85,12 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout(@Nonnull RenderContext ctx) {
+    public void layout(@NonNull RenderContext ctx) {
         layoutPath();
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         set(X, width.getValue() < 0 ? x.add(width) : x);
         set(Y, height.getValue() < 0 ? y.add(height) : y);
         set(WIDTH, width.abs());
@@ -98,12 +98,12 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
 
-    protected void updatePathNode(RenderContext ctx, @Nonnull Path path) {
+    protected void updatePathNode(RenderContext ctx, @NonNull Path path) {
         path.getElements().setAll(Shapes.fxPathElementsFromAWT(pathElements.getPathIterator(null)));
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Path path = (Path) node;
         updatePathNode(ctx, path);
     }
@@ -119,12 +119,12 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
             return;
         }
 
-        double width = getStyledNonnull(WIDTH).getConvertedValue();
-        double height = getStyledNonnull(HEIGHT).getConvertedValue();
-        double x = getStyledNonnull(X).getConvertedValue();
-        double y = getStyledNonnull(Y).getConvertedValue();
+        double width = getStyledNonNull(WIDTH).getConvertedValue();
+        double height = getStyledNonNull(HEIGHT).getConvertedValue();
+        double x = getStyledNonNull(X).getConvertedValue();
+        double y = getStyledNonNull(Y).getConvertedValue();
         final Bounds b;
-        if (getStyledNonnull(SHAPE_PRESERVE_RATIO_KEY)) {
+        if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
             AWTPathBuilder awtPathBuilder = new AWTPathBuilder(pathElements);
             try {
                 Shapes.buildFromSvgString(awtPathBuilder, pathstr);

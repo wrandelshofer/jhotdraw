@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class PolynomialTest {
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testGetRootsFactory() {
         return Arrays.asList(
@@ -36,6 +38,7 @@ public class PolynomialTest {
         );
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testGetRootsInIntervalFactory() {
         return Arrays.asList(
@@ -51,7 +54,7 @@ public class PolynomialTest {
         );
     }
 
-    public static void testGetRoots(Polynomial instance, double[] expected) {
+    public static void testGetRoots(@NonNull Polynomial instance, @NonNull double[] expected) {
         System.out.println("getRoots");
         System.out.println(instance);
         Arrays.sort(expected);
@@ -65,7 +68,7 @@ public class PolynomialTest {
         }
     }
 
-    public static void testGetRootsInInterval(Polynomial instance, double from, double to, double[] expected) {
+    public static void testGetRootsInInterval(@NonNull Polynomial instance, double from, double to, @NonNull double[] expected) {
         System.out.println("getRootsInInterval");
         System.out.println(instance);
         Arrays.sort(expected);

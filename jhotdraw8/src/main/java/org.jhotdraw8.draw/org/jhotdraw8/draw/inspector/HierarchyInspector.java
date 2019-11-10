@@ -22,7 +22,7 @@ import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.collection.ImmutableList;
@@ -95,7 +95,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, Boolean> visibleColumn;
     private boolean willUpdateSelectionInTree;
 
-    @Nonnull
+    @NonNull
     private CssWordListConverter wordListConverter = new CssWordListConverter();
 
     public HierarchyInspector() {
@@ -103,7 +103,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 InspectorLabels.getResources().asResourceBundle());
     }
 
-    public HierarchyInspector(@Nonnull URL fxmlUrl, ResourceBundle resources) {
+    public HierarchyInspector(@NonNull URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
     }
 
@@ -112,7 +112,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(URL fxmlUrl, ResourceBundle resources) {
+    private void init(@NonNull URL fxmlUrl, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setResources(resources);
@@ -215,7 +215,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         setConverter(new StringConverterAdapter<>(wordListConverter));
                     }
 
-                    @Nonnull
+                    @NonNull
                     private Set<String> syntheticClasses = new HashSet<>();
 
                     @Override
@@ -226,7 +226,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void commitEdit(@Nonnull ImmutableList<String> newValue) {
+                    public void commitEdit(@NonNull ImmutableList<String> newValue) {
                         ImmutableList<String> newValueSet = ImmutableLists.removeAll(newValue, syntheticClasses);
                         super.commitEdit(newValueSet);
                     }
@@ -237,7 +237,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         figure.get(StyleableFigure.STYLE_CLASS);
                         syntheticClasses.clear();
                         syntheticClasses.addAll(figure.getStyleClass());
-                        syntheticClasses.removeAll(figure.getNonnull(StyleableFigure.STYLE_CLASS).asList());
+                        syntheticClasses.removeAll(figure.getNonNull(StyleableFigure.STYLE_CLASS).asList());
                         super.startEdit();
                     }
 
@@ -270,7 +270,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         });
         CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>(new CssPseudoClassConverter(false));
         pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableSet<PseudoClass>>>() {
-            @Nonnull
+            @NonNull
             @Override
             public TreeTableCell<Figure, ImmutableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableSet<PseudoClass>> paramTableColumn) {
                 return new TextFieldTreeTableCell<Figure, ImmutableSet<PseudoClass>>() {

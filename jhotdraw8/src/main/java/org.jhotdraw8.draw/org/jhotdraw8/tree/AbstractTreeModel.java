@@ -5,7 +5,7 @@
 package org.jhotdraw8.tree;
 
 import javafx.beans.InvalidationListener;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.event.Listener;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,13 +21,13 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E> {
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
-    @Nonnull
+    @NonNull
     @Override
     final public CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
         return treeModelListeners;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     final public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;

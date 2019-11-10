@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.util.IntIntVToDoubleTriFunction;
@@ -35,32 +35,32 @@ import java.util.function.ToDoubleFunction;
  * @author Werner Randelshofer
  */
 public class IntAnyShortestPathBuilder<V, A> {
-    @Nonnull
+    @NonNull
     private final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction;
-    @Nonnull
+    @NonNull
     private final IntIntVToDoubleTriFunction<A> costf;
     private Queue<BackLinkWithArrow<V, A>> queue;
     private Set<Integer> visitedSet;
     private final int vertexCount;
 
 
-    public IntAnyShortestPathBuilder(@Nonnull final AttributedIntDirectedGraph<V, A> graph,
-                                     @Nonnull final ToDoubleFunction<A> costf) {
+    public IntAnyShortestPathBuilder(@NonNull final AttributedIntDirectedGraph<V, A> graph,
+                                     @NonNull final ToDoubleFunction<A> costf) {
         this(graph.getVertexCount(), graph::getNextIntEntries, costf);
     }
 
-    public IntAnyShortestPathBuilder(int vertexCount, @Nonnull final AttributedIntDirectedGraph<V, A> graph,
-                                     @Nonnull final IntIntVToDoubleTriFunction<A> costf) {
+    public IntAnyShortestPathBuilder(int vertexCount, @NonNull final AttributedIntDirectedGraph<V, A> graph,
+                                     @NonNull final IntIntVToDoubleTriFunction<A> costf) {
         this(vertexCount, graph::getNextIntEntries, costf);
     }
 
-    public IntAnyShortestPathBuilder(int vertexCount, @Nonnull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
-                                     @Nonnull final ToDoubleFunction<A> costf) {
+    public IntAnyShortestPathBuilder(int vertexCount, @NonNull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
+                                     @NonNull final ToDoubleFunction<A> costf) {
         this(vertexCount, nextNodesFunction, (v1, v2, a) -> costf.applyAsDouble(a));
     }
 
-    public IntAnyShortestPathBuilder(int vertexCount, @Nonnull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
-                                     @Nonnull final IntIntVToDoubleTriFunction<A> costf) {
+    public IntAnyShortestPathBuilder(int vertexCount, @NonNull final IntFunction<Iterable<Map.Entry<Integer, A>>> nextNodesFunction,
+                                     @NonNull final IntIntVToDoubleTriFunction<A> costf) {
         this.vertexCount = vertexCount;
         this.nextNodesFunction = nextNodesFunction;
         this.costf = costf;
@@ -77,9 +77,10 @@ public class IntAnyShortestPathBuilder<V, A> {
      *                as visited.
      * @return a back link on success, null on failure
      */
+    @Nullable
     private BackLinkWithArrow<V, A> bfs(int root,
-                                        @Nonnull IntPredicate goal,
-                                        @Nonnull IntPredicate visited,
+                                        @NonNull IntPredicate goal,
+                                        @NonNull IntPredicate visited,
                                         double maxCost) {
         if (queue == null) {
             queue = new ArrayDeque<>(16);
@@ -122,7 +123,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      */
     @Nullable
     private BackLinkWithArrow<V, A> bfs(int root,
-                                        @Nonnull IntPredicate goal,
+                                        @NonNull IntPredicate goal,
                                         double maxCost) {
         if (visitedSet == null) {
             visitedSet = new HashSet<>();
@@ -136,11 +137,12 @@ public class IntAnyShortestPathBuilder<V, A> {
     /**
      * XXX Replace algorithm with the one from {@link AnyShortestPathBuilder}.
      */
+    @Nullable
     private NodeWithCost<V, A> findShortestPath(int start,
-                                                @Nonnull PriorityQueue<NodeWithCost<V, A>> frontier,
+                                                @NonNull PriorityQueue<NodeWithCost<V, A>> frontier,
                                                 NodeWithCost<V, A>[] frontierMap,
-                                                @Nonnull IntPredicate goalPredicate,
-                                                @Nonnull BitSet explored,
+                                                @NonNull IntPredicate goalPredicate,
+                                                @NonNull BitSet explored,
                                                 double maxCost) {
         NodeWithCost<V, A> node = new NodeWithCost<>(start, 0.0, null, null);
         frontier.add(node);
@@ -202,7 +204,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
-    public EdgePath<A> findEdgePath(int start, @Nonnull IntPredicate goal, double maxCost) {
+    public EdgePath<A> findEdgePath(int start, @NonNull IntPredicate goal, double maxCost) {
         Deque<A> arrows = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = bfs(start, goal, maxCost);
         if (current == null) {
@@ -231,7 +233,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @return a path if traversal is possible, null otherwise
      */
     @Nullable
-    public VertexPath<Integer> findVertexPath(int start, @Nonnull IntPredicate goal, double maxCost) {
+    public VertexPath<Integer> findVertexPath(int start, @NonNull IntPredicate goal, double maxCost) {
         Deque<Integer> vertices = new ArrayDeque<>();
         BackLinkWithArrow<V, A> current = bfs(start, goal, maxCost);
         if (current == null) {
@@ -279,7 +281,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(AttributedIntDirectedGraph<V, A> graph,
+    public Map.Entry<VertexPath<V>, Double> findShortestVertexPath(@NonNull AttributedIntDirectedGraph<V, A> graph,
                                                                    V start,
                                                                    V goal) {
         int startIdx = graph.getVertexIndex(start);
@@ -313,7 +315,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      */
     @Nullable
     public Map.Entry<VertexPath<Integer>, Double> findShortestVertexPath(int start,
-                                                                         @Nonnull IntPredicate goalPredicate, double maxCost) {
+                                                                         @NonNull IntPredicate goalPredicate, double maxCost) {
 
         NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
@@ -362,7 +364,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(int start, @Nonnull IntPredicate goalPredicate, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findShortestEdgePath(int start, @NonNull IntPredicate goalPredicate, double maxCost) {
         NodeWithCost<V, A> node = findShortestPath(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
@@ -377,15 +379,18 @@ public class IntAnyShortestPathBuilder<V, A> {
 
     // Size of priority deque and frontierMap is the expected size of the frontier.
     // We use a size that is smaller than 256 bytes (assuming 12 bytes for object header).
+    @NonNull
     private PriorityQueue<NodeWithCost<V, A>> frontier = new PriorityQueue<>(61);
+    @NonNull
     @SuppressWarnings({"unchecked", "rawtypes"})
     private NodeWithCost<V, A>[] frontierMap = new NodeWithCost[0];
     // Size of explored is the expected number of vertices that we need to explore.
+    @NonNull
     private BitSet explored = new BitSet(61);
 
     @Nullable
     private NodeWithCost<V, A> findShortestPath(int start,
-                                                @Nonnull IntPredicate goalPredicate,
+                                                @NonNull IntPredicate goalPredicate,
                                                 double maxCost) {
         frontier.clear();
         if (frontierMap.length != vertexCount) {
@@ -407,7 +412,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<VertexPath<Integer>, Double> findShortestVertexPathOverWaypoints(@Nonnull Collection<Integer> waypoints, double maxCost) {
+    public Map.Entry<VertexPath<Integer>, Double> findShortestVertexPathOverWaypoints(@NonNull Collection<Integer> waypoints, double maxCost) {
         List<Integer> combinedPath = new ArrayList<>();
         int start = -1;
         double cost = 0.0;
@@ -437,7 +442,7 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @return the shortest path
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findShortestEdgePathOverWaypoints(Collection<Integer> waypoints, double maxCost) {
+    public Map.Entry<EdgePath<A>, Double> findShortestEdgePathOverWaypoints(@NonNull Collection<Integer> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         Integer start = null;
         double cost = 0.0;
@@ -468,8 +473,9 @@ public class IntAnyShortestPathBuilder<V, A> {
      * @param maxCost the maximal cost of a path
      * @return the enumerated paths
      */
+    @NonNull
     public List<VertexPath<Integer>> findAllVertexPaths(int start,
-                                                        @Nonnull IntPredicate goal,
+                                                        @NonNull IntPredicate goal,
                                                         double maxCost) {
         List<BackLinkWithArrow<V, A>> backlinks = new ArrayList<>();
         dfsFindAllPaths(new BackLinkWithArrow<>(start, null, null, maxCost), goal, backlinks);
@@ -485,8 +491,8 @@ public class IntAnyShortestPathBuilder<V, A> {
         return vertexPaths;
     }
 
-    private void dfsFindAllPaths(BackLinkWithArrow<V, A> current, IntPredicate goal,
-                                 List<BackLinkWithArrow<V, A>> backlinks) {
+    private void dfsFindAllPaths(@NonNull BackLinkWithArrow<V, A> current, @NonNull IntPredicate goal,
+                                 @NonNull List<BackLinkWithArrow<V, A>> backlinks) {
         if (goal.test(current.vertex)) {
             backlinks.add(current);
             return;
@@ -535,7 +541,7 @@ public class IntAnyShortestPathBuilder<V, A> {
         }
 
         @Override
-        public int compareTo(NodeWithCost<VV, AA> that) {
+        public int compareTo(@NonNull NodeWithCost<VV, AA> that) {
             return Double.compare(this.cost, that.cost);
         }
 

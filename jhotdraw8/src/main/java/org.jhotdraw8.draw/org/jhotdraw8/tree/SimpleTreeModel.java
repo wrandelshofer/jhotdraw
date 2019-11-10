@@ -7,7 +7,7 @@ package org.jhotdraw8.tree;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.event.Listener;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SimpleTreeModel<E> implements TreeModel<E> {
 
-    @Nonnull
+    @NonNull
     @Override
     public E getChild(E parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -31,19 +31,19 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<E> getChildren(E node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -59,7 +59,7 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<E> rootProperty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

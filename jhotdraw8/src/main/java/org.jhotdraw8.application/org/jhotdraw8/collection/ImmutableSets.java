@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,7 +13,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ImmutableSets {
-    public static <T> ImmutableSet<T> add(Collection<T> collection, T item) {
+    @NonNull
+    public static <T> ImmutableSet<T> add(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
                 return new ImmutableHashSet<>(Collections.singleton(item));
@@ -24,7 +25,8 @@ public class ImmutableSets {
         }
     }
 
-    public static <T> ImmutableSet<T> add(ReadOnlyCollection<T> collection, T item) {
+    @NonNull
+    public static <T> ImmutableSet<T> add(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
                 return new ImmutableHashSet<>(Collections.singleton(item));
@@ -35,26 +37,26 @@ public class ImmutableSets {
         }
     }
 
-    @Nonnull
+    @NonNull
     @SuppressWarnings("unchecked")
     public static <T> ImmutableSet<T> emptySet() {
         return (ImmutableSet<T>) ImmutableHashSet.EMPTY;
     }
 
-    @Nonnull
+    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> ImmutableSet<T> of(T... items) {
+    public static <T> ImmutableSet<T> of(@NonNull T... items) {
         //noinspection unchecked
         return items.length == 0 ? emptySet() : new ImmutableHashSet<T>(items);
     }
 
-    @Nonnull
-    public static <T> ImmutableSet<T> ofCollection(Collection<T> collection) {
+    @NonNull
+    public static <T> ImmutableSet<T> ofCollection(@NonNull Collection<T> collection) {
         return collection.isEmpty() ? emptySet() : new ImmutableHashSet<>(collection);
     }
 
-    @Nonnull
+    @NonNull
     public static <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
         if (collection instanceof ImmutableSet) {
             return (ImmutableSet<T>) collection;
@@ -62,14 +64,14 @@ public class ImmutableSets {
         return collection.isEmpty() ? emptySet() : new ImmutableHashSet<>(collection);
     }
 
-    @Nonnull
+    @NonNull
     public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
         return length == 0 ? emptySet() : new ImmutableHashSet<>(a, offset, length);
     }
 
-    @Nonnull
+    @NonNull
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> ImmutableSet<T> remove(Collection<T> collection, T item) {
+    public static <T> ImmutableSet<T> remove(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
                 return (ImmutableSet<T>) emptySet();
@@ -100,9 +102,9 @@ public class ImmutableSets {
         }
     }
 
-    @Nonnull
+    @NonNull
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> ImmutableSet<T> remove(ReadOnlyCollection<T> collection, T item) {
+    public static <T> ImmutableSet<T> remove(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
             case 0:
                 return (ImmutableSet<T>) emptySet();

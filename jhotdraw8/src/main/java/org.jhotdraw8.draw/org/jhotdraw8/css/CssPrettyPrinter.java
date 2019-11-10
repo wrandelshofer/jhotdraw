@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayDeque;
@@ -14,6 +16,7 @@ public class CssPrettyPrinter implements Appendable {
         STYLESHEET, SELECTOR, DECLARATION_KEY, DECLARATION_VALUE, ROUND_BLOCK, SQUARE_BLOCK, CURLY_BLOCK
     }
 
+    @NonNull
     private Deque<Syntax> stack = new ArrayDeque<>();
     int indentation = 0;
     private String indenter = "\t";
@@ -25,6 +28,7 @@ public class CssPrettyPrinter implements Appendable {
         stack.push(Syntax.STYLESHEET);
     }
 
+    @NonNull
     public CssPrettyPrinter append(CharSequence str) {
         try {
             print(str);
@@ -34,12 +38,14 @@ public class CssPrettyPrinter implements Appendable {
         return this;
     }
 
+    @NonNull
     @Override
-    public CssPrettyPrinter append(CharSequence csq, int start, int end) {
+    public CssPrettyPrinter append(@NonNull CharSequence csq, int start, int end) {
         append(csq.subSequence(start, end));
         return this;
     }
 
+    @NonNull
     @Override
     public CssPrettyPrinter append(char c) {
         return append("" + c);
@@ -58,7 +64,7 @@ public class CssPrettyPrinter implements Appendable {
         print(tt);
     }
 
-    public void print(CssTokenizer tt) throws IOException {
+    public void print(@NonNull CssTokenizer tt) throws IOException {
 
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             CssToken token = tt.getToken();
@@ -75,7 +81,7 @@ public class CssPrettyPrinter implements Appendable {
             //
             switch (token.getType()) {
                 case CssTokenType.TT_S:
-                    if (token.getStringValueNonnull().indexOf('\n') == -1) {
+                    if (token.getStringValueNonNull().indexOf('\n') == -1) {
                         if (!mustIndent) {
                             w.append(" ");
                         }
@@ -137,7 +143,7 @@ public class CssPrettyPrinter implements Appendable {
         }
     }
 
-    private void parseToken(CssToken token) {
+    private void parseToken(@NonNull CssToken token) {
         switch (token.getType()) {
             case CssTokenType.TT_S:
                 break;

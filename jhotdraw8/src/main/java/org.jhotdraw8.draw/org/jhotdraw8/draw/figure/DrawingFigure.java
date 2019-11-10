@@ -11,9 +11,14 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.SimpleStylesheetsManager;
+import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -47,7 +52,7 @@ public class DrawingFigure extends AbstractCompositeFigure
         set(HEIGHT, height);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
@@ -58,6 +63,7 @@ public class DrawingFigure extends AbstractCompositeFigure
         return g;
     }
 
+    @NonNull
     protected StylesheetsManager<Figure> createStyleManager() {
         return new SimpleStylesheetsManager<>(new FigureSelectorModel());
     }
@@ -71,13 +77,13 @@ public class DrawingFigure extends AbstractCompositeFigure
      *
      * @return bounding box (0, 0, WIDTH, HEIGHT).
      */
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getNonnull(WIDTH), getNonnull(HEIGHT));
+        return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getNonNull(WIDTH), getNonNull(HEIGHT));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Bounds getBoundsInLocal() {
         // Note: We must override getBoundsInLocal of AbstractCompositeFigure.
@@ -104,21 +110,21 @@ public class DrawingFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         Bounds b = getBoundsInLocal();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
 
         set(WIDTH, width.abs());
         set(HEIGHT, height.abs());
     }
 
     @Override
-    public void stylesheetNotify(@Nonnull RenderContext ctx) {
+    public void stylesheetNotify(@NonNull RenderContext ctx) {
         if (styleManager != null) {
             styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS).asList());
             styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS).asList());
@@ -128,7 +134,7 @@ public class DrawingFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node n) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         Group g = (Group) n;
         //applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(ctx, n);

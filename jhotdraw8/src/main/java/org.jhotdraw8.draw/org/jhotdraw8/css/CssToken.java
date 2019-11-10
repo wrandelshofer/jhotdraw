@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
@@ -27,10 +27,12 @@ public class CssToken /*extends AST*/ {
     /**
      * The string value.
      */
+    @Nullable
     private final String stringValue;
     /**
      * The numeric value.
      */
+    @Nullable
     private final Number numericValue;
 
     private final int startPos;
@@ -42,12 +44,12 @@ public class CssToken /*extends AST*/ {
 
     private final static XmlNumberConverter NUMBER_CONVERTER = new XmlNumberConverter();
 
-    public CssToken(int ttype, String stringValue) {
+    public CssToken(int ttype, @NonNull String stringValue) {
         this(ttype, stringValue, null, 0, 0, stringValue.length());
 
     }
 
-    public CssToken(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
+    public CssToken(int ttype, @NonNull String stringValue, @Nullable Character preferredQuoteChar) {
         this(ttype, stringValue, null, preferredQuoteChar, 0, 0, stringValue.length());
 
     }
@@ -69,7 +71,7 @@ public class CssToken /*extends AST*/ {
         this(ttype, stringValue, numericValue, null, lineNumber, startPos, endPos);
     }
 
-    public CssToken(int ttype, String stringValue, Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
+    public CssToken(int ttype, @Nullable String stringValue, @Nullable Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
         switch (ttype) {
             case CssTokenType.TT_DIMENSION:
                 if (numericValue == null)
@@ -101,18 +103,21 @@ public class CssToken /*extends AST*/ {
         this.preferredQuoteChar = preferredQuoteChar;
     }
 
-    public String getStringValueNonnull() {
+    @Nullable
+    public String getStringValueNonNull() {
         if (stringValue == null) {
             throw new NullPointerException();
         }
         return stringValue;
     }
 
+    @Nullable
     @Override
     public String toString() {
         return fromToken();
     }
 
+    @Nullable
     public String fromToken() {
         if (ttype >= 0) {
             return stringValue;
@@ -169,19 +174,23 @@ public class CssToken /*extends AST*/ {
         throw new InternalError("Unsupported TTYPE:" + ttype);
     }
 
+    @NonNull
     private String fromCDC() {
         return "<!--";
     }
 
+    @NonNull
     private String fromCDO() {
         return "-->";
     }
 
+    @NonNull
     private String fromIDENT() {
         return fromIDENT(stringValue);
     }
 
-    private String fromIDENT(@Nonnull String value) {
+    @NonNull
+    private String fromIDENT(@NonNull String value) {
         StringBuilder out = new StringBuilder();
         Reader r = new StringReader(value);
         try {
@@ -250,7 +259,8 @@ public class CssToken /*extends AST*/ {
         }
     }
 
-    private String fromHASHorAT(char hashOrAt, @Nonnull String value) {
+    @NonNull
+    private String fromHASHorAT(char hashOrAt, @NonNull String value) {
         StringBuilder out = new StringBuilder();
         out.append(hashOrAt);
         Reader r = new StringReader(value);
@@ -278,11 +288,13 @@ public class CssToken /*extends AST*/ {
 
     private final static CssStringConverter cssStringConverter = new CssStringConverter();
 
+    @NonNull
     private String fromSTRING() {
         return fromSTRING(stringValue);
     }
 
-    private String fromSTRING(String value) {
+    @NonNull
+    private String fromSTRING(@NonNull String value) {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
@@ -290,11 +302,13 @@ public class CssToken /*extends AST*/ {
         return fromSTRING(value, quoteChar, quoteChar);
     }
 
+    @NonNull
     private String fromBAD_STRING() {
         return fromBAD_STRING(stringValue);
     }
 
-    private String fromBAD_STRING(String value) {
+    @NonNull
+    private String fromBAD_STRING(@NonNull String value) {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
@@ -302,7 +316,8 @@ public class CssToken /*extends AST*/ {
         return fromSTRING(value, quoteChar, '\n');
     }
 
-    private String fromSTRING(String value, final char firstQuoteChar, final char lastQuoteChar) {
+    @NonNull
+    private String fromSTRING(@NonNull String value, final char firstQuoteChar, final char lastQuoteChar) {
         StringBuilder out = new StringBuilder();
         out.append(firstQuoteChar);
         for (char ch : value.toCharArray()) {
@@ -347,14 +362,17 @@ public class CssToken /*extends AST*/ {
         return NUMBER_CONVERTER.toString(numericValue);
     }
 
+    @NonNull
     private String fromPERCENTAGE() {
         return Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + "%" : fromNUMBER();
     }
 
+    @NonNull
     private String fromDIMENSION() {
         return !stringValue.isEmpty() && Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + fromIDENT() : fromNUMBER();
     }
 
+    @NonNull
     private String fromURL() {
         StringBuilder out = new StringBuilder();
         out.append("url(");
@@ -394,38 +412,47 @@ public class CssToken /*extends AST*/ {
         return out.toString();
     }
 
+    @Nullable
     private String fromUNICODE_RANGE() {
         return stringValue;
     }
 
+    @Nullable
     private String fromS() {
         return stringValue;
     }
 
+    @NonNull
     private String fromCOMMENT() {
         return "/" + "*" + stringValue.replace("*" + '/', "* /") + '*' + '/';
     }
 
+    @Nullable
     private String fromINCLUDE_MATCH() {
         return stringValue;
     }
 
+    @Nullable
     private String fromDASH_MATCH() {
         return stringValue;
     }
 
+    @Nullable
     private String fromPREFIX_MATCH() {
         return stringValue;
     }
 
+    @Nullable
     private String fromSUFFIX_MATCH() {
         return stringValue;
     }
 
+    @Nullable
     private String fromSUBSTRING_MATCH() {
         return stringValue;
     }
 
+    @Nullable
     private String fromCOLUMN() {
         return stringValue;
     }
@@ -438,10 +465,12 @@ public class CssToken /*extends AST*/ {
         return endPos;
     }
 
+    @Nullable
     public String getStringValue() {
         return stringValue;
     }
 
+    @Nullable
     public Number getNumericValue() {
         return numericValue;
     }

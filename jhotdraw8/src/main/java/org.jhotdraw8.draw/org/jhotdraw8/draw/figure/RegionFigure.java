@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -26,18 +26,18 @@ public class RegionFigure extends AbstractRegionFigure
 
     @Nullable
     @Override
-    public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
+    public Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
         return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         super.updateNode(ctx, node);
         applyHideableFigureProperties(ctx, node);
     }
 
     @Override
-    protected void updatePathNode(RenderContext ctx, @Nonnull Path path) {
+    protected void updatePathNode(@NonNull RenderContext ctx, @NonNull Path path) {
         super.updatePathNode(ctx, path);
         applyFillableFigureProperties(ctx, path);
         applyStrokableFigureProperties(ctx, path);
@@ -45,6 +45,7 @@ public class RegionFigure extends AbstractRegionFigure
         applyTransformableFigureProperties(ctx, path);
     }
 
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;

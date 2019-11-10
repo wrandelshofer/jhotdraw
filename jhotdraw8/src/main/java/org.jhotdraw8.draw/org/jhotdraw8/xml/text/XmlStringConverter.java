@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -33,7 +33,7 @@ import java.text.ParseException;
  */
 public class XmlStringConverter implements Converter<String> {
 
-    @Nonnull
+    @NonNull
     @Override
     public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
@@ -44,11 +44,11 @@ public class XmlStringConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
+    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getDefaultValue() {
         return "null";

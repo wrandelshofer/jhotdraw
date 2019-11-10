@@ -8,7 +8,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractSet;
@@ -32,7 +32,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     private final List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
     private Set<E> backingSet;
 
-    public ModifiableObservableSet(@Nonnull Collection<E> copyMe) {
+    public ModifiableObservableSet(@NonNull Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
     }
 
@@ -51,7 +51,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
+    public boolean addAll(@NonNull Collection<? extends E> c) {
         boolean modified = false;
         for (E e : c) {
             boolean added = backingSet.add(e);
@@ -96,7 +96,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean containsAll(@Nonnull Collection<?> c) {
+    public boolean containsAll(@NonNull Collection<?> c) {
         return backingSet.containsAll(c);
     }
 
@@ -152,7 +152,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
         fireInvalidated();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
@@ -191,7 +191,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(@NonNull Collection<?> c) {
         boolean modified = false;
         for (Object o : c) {
             @SuppressWarnings("unchecked") final E e = (E) o;
@@ -218,7 +218,7 @@ public class ModifiableObservableSet<E> extends AbstractSet<E> implements Observ
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(@NonNull Collection<?> c) {
         boolean modified = false;
         Iterator<E> it = backingSet.iterator();
         while (it.hasNext()) {

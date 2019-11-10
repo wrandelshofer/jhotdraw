@@ -8,9 +8,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
@@ -76,21 +76,21 @@ public interface DrawingEditor {
      *
      * @return the property
      */
-    ReadOnlySetProperty<DrawingView> drawingViewsProperty();
+    @NonNull ReadOnlySetProperty<DrawingView> drawingViewsProperty();
 
     /**
      * The currently active drawing view.
      *
      * @return the property
      */
-    ObjectProperty<DrawingView> activeDrawingViewProperty();
+    @NonNull ObjectProperty<DrawingView> activeDrawingViewProperty();
 
     /**
      * The currently active tool.
      *
      * @return the property
      */
-    ObjectProperty<Tool> activeToolProperty();
+    @NonNull ObjectProperty<Tool> activeToolProperty();
 
     /**
      * The default tool. When the value is not null, the default tool is made
@@ -98,7 +98,7 @@ public interface DrawingEditor {
      *
      * @return the property
      */
-    ObjectProperty<Tool> defaultToolProperty();
+    @NonNull ObjectProperty<Tool> defaultToolProperty();
 
     // ---
     // convenience methods
@@ -193,7 +193,7 @@ public interface DrawingEditor {
      *
      * @return the help text property.
      */
-    @Nonnull
+    @NonNull
     ObjectProperty<String> helpTextProperty();
 
     default String getHelpText() {
@@ -231,7 +231,7 @@ public interface DrawingEditor {
      *
      * @return color of handle
      */
-    NonnullProperty<CssColor> handleColorProperty();
+    NonNullProperty<CssColor> handleColorProperty();
 
     default CssColor getHandleColor() {
         return handleColorProperty().get();
@@ -272,14 +272,14 @@ public interface DrawingEditor {
      *
      * @return the handle key
      */
-    ObjectProperty<HandleType> anchorHandleTypeProperty();
+    @NonNull ObjectProperty<HandleType> anchorHandleTypeProperty();
 
     /**
      * The handle type used for marking the lead of a selection.
      *
      * @return the handle key
      */
-    ObjectProperty<HandleType> leadHandleTypeProperty();
+    @NonNull ObjectProperty<HandleType> leadHandleTypeProperty();
 
     default void setAnchorHandleType(@Nullable HandleType newValue) {
         anchorHandleTypeProperty().set(newValue);
@@ -305,7 +305,7 @@ public interface DrawingEditor {
      *
      * @return the handle key
      */
-    NonnullProperty<HandleType> handleTypeProperty();
+    @NonNull NonNullProperty<HandleType> handleTypeProperty();
 
 
     /**
@@ -323,7 +323,7 @@ public interface DrawingEditor {
      *
      * @return the handle key
      */
-    NonnullProperty<HandleType> multiHandleTypeProperty();
+    @NonNull NonNullProperty<HandleType> multiHandleTypeProperty();
 
 
     default void setMultiHandleType(@Nullable HandleType newValue) {

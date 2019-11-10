@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssSize;
@@ -46,27 +46,27 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    @Nonnull
+    @NonNull
     public final static NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, DirtyMask.of(DirtyBits.NODE), true, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public final static String TYPE_SELECTOR = "CombinedPath";
 
-    @Nonnull
+    @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
 
         return new Path();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    private PathIterator getStyledPathIteratorInParent(PathIterableFigure f, @Nullable AffineTransform tx) {
+    private PathIterator getStyledPathIteratorInParent(@NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         if (localToParent != null) {
@@ -82,26 +82,26 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         if (f instanceof StrokableFigure) {
             Paint stroke = Paintable.getPaint(f.getStyled(STROKE));
             if (stroke != null) {
-                double strokeWidth = f.getStyledNonnull(STROKE_WIDTH).getConvertedValue();
+                double strokeWidth = f.getStyledNonNull(STROKE_WIDTH).getConvertedValue();
                 if (strokeWidth > 0.0) {
                     BasicStroke basicStroke;
-                    final ImmutableList<CssSize> dashArray = f.getStyledNonnull(STROKE_DASH_ARRAY);
+                    final ImmutableList<CssSize> dashArray = f.getStyledNonNull(STROKE_DASH_ARRAY);
                     if (!dashArray.isEmpty()) {
-                        double dashOffset = f.getStyledNonnull(STROKE_DASH_OFFSET).getConvertedValue();
+                        double dashOffset = f.getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
                         float[] dash = new float[dashArray.size()];
                         for (int i = 0, n = dashArray.size(); i < n; i++) {
                             dash[i] = (float) dashArray.get(i).getConvertedValue();
                         }
                         basicStroke = new BasicStroke((float) strokeWidth,
-                                Shapes.awtCapFromFX(f.getStyledNonnull(STROKE_LINE_CAP)),
-                                Shapes.awtJoinFromFX(f.getStyledNonnull(STROKE_LINE_JOIN)),
-                                (float) f.getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue(), dash, (float) dashOffset);
+                                Shapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
+                                Shapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
+                                (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue(), dash, (float) dashOffset);
 
                     } else {
                         basicStroke = new BasicStroke((float) strokeWidth,
-                                Shapes.awtCapFromFX(f.getStyledNonnull(STROKE_LINE_CAP)),
-                                Shapes.awtJoinFromFX(f.getStyledNonnull(STROKE_LINE_JOIN)),
-                                (float) f.getStyledNonnull(STROKE_MITER_LIMIT).getConvertedValue());
+                                Shapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
+                                Shapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
+                                (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }
                     iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTPathBuilder(), iter).build()).getPathIterator(null);
@@ -111,7 +111,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
@@ -129,8 +129,8 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
     }
 
-    @Nonnull
-    private PathIterator getPathIteratorCAG(AffineTransform tx, @Nonnull CagOperation op) {
+    @NonNull
+    private PathIterator getPathIteratorCAG(AffineTransform tx, @NonNull CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {
@@ -163,7 +163,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
@@ -190,7 +190,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         // XXX if one ofCollection the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = Transforms.createReshapeTransform(getCssBoundsInLocal(), x, y, width, height);
@@ -200,7 +200,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Path n = (Path) node;
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);

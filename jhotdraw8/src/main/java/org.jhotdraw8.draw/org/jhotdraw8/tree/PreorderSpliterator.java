@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -31,7 +31,7 @@ public class PreorderSpliterator<T> extends AbstractSpliterator<T> {
     }
 
     @Override
-    public boolean tryAdvance(@Nonnull Consumer<? super T> consumer) {
+    public boolean tryAdvance(@NonNull Consumer<? super T> consumer) {
         Iterator<T> iter = stack.peek();
         if (iter == null) {
             return false;

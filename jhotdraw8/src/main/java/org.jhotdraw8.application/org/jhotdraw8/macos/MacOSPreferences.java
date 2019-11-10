@@ -1,5 +1,7 @@
 package org.jhotdraw8.macos;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,15 +49,17 @@ public class MacOSPreferences {
     public MacOSPreferences() {
     }
 
-    public static String getString(File file, String key) {
+    @Nullable
+    public static String getString(@NonNull File file, @NonNull String key) {
         return (String) get(file, key);
     }
 
-    public static String getString(File file, String key, String defaultValue) {
+    @NonNull
+    public static String getString(@NonNull File file, String key, String defaultValue) {
         return (String) get(file, key, defaultValue);
     }
 
-    public static boolean isStringEqualTo(File file, String key, String defaultValue, String compareWithThisValue) {
+    public static boolean isStringEqualTo(@NonNull File file, String key, String defaultValue, String compareWithThisValue) {
         return ((String) get(file, key, defaultValue)).equals(compareWithThisValue);
     }
 
@@ -66,7 +70,8 @@ public class MacOSPreferences {
      * @param key  the key may contain tabulator separated entries to directly access a value in a sub-dictionary
      * @return the value associated with the key
      */
-    public static Object get(File file, String key) {
+    @Nullable
+    public static Object get(@NonNull File file, @NonNull String key) {
         ensureCached(file);
         final HashMap<String, Object> map = cachedFiles.get(file);
         final String[] split = key.split("\t");
@@ -101,7 +106,8 @@ public class MacOSPreferences {
      *
      * @return
      */
-    public static Set<String> getKeySet(File file) {
+    @NonNull
+    public static Set<String> getKeySet(@NonNull File file) {
         ensureCached(file);
         return cachedFiles.get(file).keySet();
     }
@@ -129,12 +135,12 @@ public class MacOSPreferences {
      * @param defaultValue This value is returned when the key does not exist.
      * @return Returns the preferences value.
      */
-    public static Object get(File file, String key, Object defaultValue) {
+    public static Object get(@NonNull File file, String key, Object defaultValue) {
         ensureCached(file);
         return (cachedFiles.get(file).containsKey(key)) ? cachedFiles.get(file).get(key) : defaultValue;
     }
 
-    private static void ensureCached(File file) {
+    private static void ensureCached(@NonNull File file) {
         if (cachedFiles == null) {
             cachedFiles = new HashMap<File, HashMap<String, Object>>();
         }
@@ -149,7 +155,7 @@ public class MacOSPreferences {
         return true;
     }
 
-    private static void updateCache(File file, HashMap<String, Object> cache) {
+    private static void updateCache(@NonNull File file, @NonNull HashMap<String, Object> cache) {
         cache.clear();
 
         if (isOSX()) {
@@ -165,7 +171,7 @@ public class MacOSPreferences {
         }
     }
 
-    private static Object readNode(Element node) throws IOException {
+    private static Object readNode(@NonNull Element node) throws IOException {
         String name = node.getTagName();
         Object value;
         switch (name) {
@@ -185,7 +191,8 @@ public class MacOSPreferences {
         return value;
     }
 
-    private static Iterable<Node> getChildren(final Element elem) {
+    @NonNull
+    private static Iterable<Node> getChildren(@NonNull final Element elem) {
         return () -> new Iterator<Node>() {
             int index = 0;
             final NodeList children = elem.getChildNodes();
@@ -202,12 +209,14 @@ public class MacOSPreferences {
         };
     }
 
-    private static Iterable<Element> getChildElements(final Element elem) {
+    @NonNull
+    private static Iterable<Element> getChildElements(@NonNull final Element elem) {
         return () -> StreamSupport.stream(getChildren(elem).spliterator(), false)
                 .filter(e -> e instanceof Element).map(e -> (Element) e).iterator();
     }
 
-    private static List<Object> readPList(Element plistElem) throws IOException {
+    @NonNull
+    private static List<Object> readPList(@NonNull Element plistElem) throws IOException {
         List<Object> plist = new ArrayList<>();
         for (Node child : getChildElements(plistElem)) {
             plist.add(readNode((Element) child));
@@ -215,7 +224,8 @@ public class MacOSPreferences {
         return plist;
     }
 
-    private static String getContent(Element elem) {
+    @NonNull
+    private static String getContent(@NonNull Element elem) {
         StringBuilder buf = new StringBuilder();
         for (Node child : getChildren(elem)) {
             if (child instanceof Text) {
@@ -225,7 +235,8 @@ public class MacOSPreferences {
         return buf.toString().trim();
     }
 
-    private static Map<String, Object> readDict(Element dictElem) throws IOException {
+    @NonNull
+    private static Map<String, Object> readDict(@NonNull Element dictElem) throws IOException {
         LinkedHashMap<String, Object> dict = new LinkedHashMap<>();
         for (Iterator<Element> iterator = getChildElements(dictElem).iterator(); iterator.hasNext(); ) {
             Element keyElem = iterator.next();
@@ -239,7 +250,8 @@ public class MacOSPreferences {
         return dict;
     }
 
-    private static List<Object> readArray(Element arrayElem) throws IOException {
+    @NonNull
+    private static List<Object> readArray(@NonNull Element arrayElem) throws IOException {
         List<Object> array = new ArrayList<>();
         for (Element child : getChildElements(arrayElem)) {
             array.add(readNode(child));
@@ -247,7 +259,7 @@ public class MacOSPreferences {
         return array;
     }
 
-    private static Object readValue(Element value) throws IOException {
+    private static Object readValue(@NonNull Element value) throws IOException {
         Object parsedValue;
         switch (value.getTagName()) {
             case "true":
@@ -262,7 +274,7 @@ public class MacOSPreferences {
             case "date":
                 try {
                     parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
-                } catch (IllegalArgumentException | DatatypeConfigurationException e) {
+                } catch (@NonNull IllegalArgumentException | DatatypeConfigurationException e) {
                     throw new IOException(e);
                 }
                 break;
@@ -287,7 +299,7 @@ public class MacOSPreferences {
         return parsedValue;
     }
 
-    private static Document readXmlPropertyList(File file) throws IOException {
+    private static Document readXmlPropertyList(@NonNull File file) throws IOException {
         InputSource inputSource = new InputSource(file.toString());
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -310,7 +322,7 @@ public class MacOSPreferences {
      * Reads the specified PList file and returns it as a document.
      * This method can deal with XML encoded and binary encoded PList files.
      */
-    private static Document readPList(File file) throws IOException {
+    private static Document readPList(@NonNull File file) throws IOException {
         Document doc;
         try {
             doc = readBinaryPropertyList(file);

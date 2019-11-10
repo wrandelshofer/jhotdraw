@@ -7,7 +7,7 @@ package org.jhotdraw8.css;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.w3c.dom.Element;
@@ -33,19 +33,19 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
 
     private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
 
-    @Nonnull
+    @NonNull
     public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
     }
 
     @Override
-    public String getAttributeAsString(@Nonnull Element elem, StyleOrigin origin, @Nullable String namespace, @Nonnull String name) {
+    public String getAttributeAsString(@NonNull Element elem, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         return getAttributeAsString(elem, namespace, name);
     }
 
     @Nullable
     @Override
-    public List<CssToken> getAttribute(@Nonnull Element element, @Nullable StyleOrigin origin, @Nullable String namespace, @Nonnull String name) {
+    public List<CssToken> getAttribute(@NonNull Element element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         String str = getAttributeAsString(element, origin, namespace, name);
         if (str == null) {
             return null;
@@ -58,18 +58,18 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasId(@Nonnull Element elem, @Nonnull String id) {
+    public boolean hasId(@NonNull Element elem, @NonNull String id) {
         String value = elem.getAttribute("id");
         return value != null && value.equals(id);
     }
 
     @Override
-    public String getId(@Nonnull Element elem) {
+    public String getId(@NonNull Element elem) {
         return elem.getAttribute("id");
     }
 
     @Override
-    public boolean hasType(@Nonnull Element elem, @Nullable String namespace, @Nonnull String type) {
+    public boolean hasType(@NonNull Element elem, @Nullable String namespace, @NonNull String type) {
         String value = elem.getNodeName();
         return value != null && value.equals(type);
     }
@@ -80,12 +80,12 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public String getType(@Nonnull Element elem) {
+    public String getType(@NonNull Element elem) {
         return elem.getNodeName();
     }
 
     @Override
-    public boolean hasStyleClass(@Nonnull Element elem, @Nonnull String clazz) {
+    public boolean hasStyleClass(@NonNull Element elem, @NonNull String clazz) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return false;
@@ -99,9 +99,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Set<String> getStyleClasses(@Nonnull Element elem) {
+    public Set<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return Collections.emptySet();
@@ -144,7 +144,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
      * @return true if the element has the pseudo class
      */
     @Override
-    public boolean hasPseudoClass(@Nonnull Element element, @Nonnull String pseudoClass) {
+    public boolean hasPseudoClass(@NonNull Element element, @NonNull String pseudoClass) {
         switch (pseudoClass) {
             case "root":
                 return element.getOwnerDocument() != null
@@ -168,7 +168,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         }
     }
 
-    private int getChildIndex(Element element) {
+    private int getChildIndex(@NonNull Element element) {
         if (element.getParentNode() != null) {
             NodeList list = element.getParentNode().getChildNodes();
 
@@ -184,7 +184,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return -1;
     }
 
-    private boolean isFirstChild(Element element) {
+    private boolean isFirstChild(@NonNull Element element) {
         if (element.getParentNode() != null) {
             NodeList list = element.getParentNode().getChildNodes();
 
@@ -200,7 +200,7 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
-    private boolean isLastChild(Element element) {
+    private boolean isLastChild(@NonNull Element element) {
         if (element.getParentNode() != null) {
             NodeList list = element.getParentNode().getChildNodes();
 
@@ -216,9 +216,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return false;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Element getParent(@Nonnull Element elem) {
+    public Element getParent(@NonNull Element elem) {
         Node n = elem.getParentNode();
         while (n != null && !(n instanceof Element)) {
             n = n.getParentNode();
@@ -226,9 +226,9 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return (Element) n;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Element getPreviousSibling(@Nonnull Element element) {
+    public Element getPreviousSibling(@NonNull Element element) {
         Node n = element.getPreviousSibling();
         while (n != null && !(n instanceof Element)) {
             n = n.getPreviousSibling();
@@ -237,25 +237,25 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
     }
 
     @Override
-    public boolean hasAttribute(@Nonnull Element element, @Nullable String namespace, @Nonnull String attributeName) {
+    public boolean hasAttribute(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName) {
         // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@Nonnull Element element, @Nullable String namespace, @Nonnull String attributeName, @Nonnull String substring) {
+    public boolean attributeValueStartsWith(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
         String actualValue = element.getAttribute(attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public String getAttributeAsString(@Nonnull Element element, @Nullable String namespace, @Nonnull String attributeName) {
+    public String getAttributeAsString(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName) {
         return element.getAttribute(attributeName);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Set<QualifiedName> getAttributeNames(@Nonnull Element element) {
+    public Set<QualifiedName> getAttributeNames(@NonNull Element element) {
         Set<QualifiedName> attr = new LinkedHashSet<>();
         NamedNodeMap nnm = element.getAttributes();
         for (int i = 0, n = nnm.getLength(); i < n; i++) {
@@ -265,20 +265,20 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
         return attr;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Set<QualifiedName> getComposedAttributeNames(@Nonnull Element element) {
+    public Set<QualifiedName> getComposedAttributeNames(@NonNull Element element) {
         return getAttributeNames(element);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Set<QualifiedName> getDecomposedAttributeNames(@Nonnull Element element) {
+    public Set<QualifiedName> getDecomposedAttributeNames(@NonNull Element element) {
         return getAttributeNames(element);
     }
 
     @Override
-    public void setAttribute(@Nonnull Element element, @Nonnull StyleOrigin origin, @Nullable String namespace, @Nonnull String name, @Nullable ReadOnlyList<CssToken> value) {
+    public void setAttribute(@NonNull Element element, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value) {
         StringBuilder buf = new StringBuilder();
         for (CssToken t : value) {
             buf.append(t.fromToken());

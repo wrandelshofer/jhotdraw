@@ -5,6 +5,7 @@
 package org.jhotdraw8.gui;
 
 import javafx.scene.input.Clipboard;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface ClipboardIO<T> {
      * @param clipboard The clipboard
      * @return izrmd the items
      */
-    List<T> read(Clipboard clipboard);
+    @Nullable List<T> read(Clipboard clipboard);
 
     /**
      * Returns true if data from the clibpoard can be imported

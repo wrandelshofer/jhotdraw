@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -33,20 +33,20 @@ import java.util.Collection;
 public interface XmlOutputFormatMixin extends OutputFormat {
 
 
-    default Document toDocument(URI documentHome, @Nonnull Drawing drawing) throws IOException {
+    default Document toDocument(URI documentHome, @NonNull Drawing drawing) throws IOException {
         return toDocument(documentHome, drawing, drawing.getChildren());
     }
 
     Document toDocument(URI documentHome, Drawing drawing, Collection<Figure> selection) throws IOException;
 
     @Override
-    default void write(@Nonnull Path file, @Nonnull Drawing drawing, WorkState workState) throws IOException {
+    default void write(@NonNull Path file, @NonNull Drawing drawing, WorkState workState) throws IOException {
         Document doc = toDocument(file.getParent().toUri(), drawing);
         XmlUtil.write(file, doc);
     }
 
     @Override
-    default void write(URI documentHome, OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
+    default void write(URI documentHome, OutputStream out, @NonNull Drawing drawing, WorkState workState) throws IOException {
         write(documentHome, out, drawing, drawing.getChildren());
     }
 

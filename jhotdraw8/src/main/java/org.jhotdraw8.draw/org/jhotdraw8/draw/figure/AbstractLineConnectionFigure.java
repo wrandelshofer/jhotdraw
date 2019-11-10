@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
@@ -35,7 +35,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         this(0, 0, 1, 1);
     }
 
-    public AbstractLineConnectionFigure(Point2D start, Point2D end) {
+    public AbstractLineConnectionFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -69,11 +69,11 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssRectangle2D getCssBoundsInLocal() {
-        CssPoint2D start = getNonnull(START);
-        CssPoint2D end = getNonnull(END);
+        CssPoint2D start = getNonNull(START);
+        CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(//
                 CssSize.min(start.getX(), end.getX()),//
                 CssSize.min(start.getY(), end.getY()),//
@@ -88,7 +88,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      *
      * @return an unmodifiable set of connected figures
      */
-    @Nonnull
+    @NonNull
     @Override
     public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);
@@ -111,7 +111,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public boolean isGroupReshapeableWith(@Nonnull Set<Figure> others) {
+    public boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
         for (Figure f : getLayoutSubjects()) {
             if (others.contains(f)) {
                 return false;
@@ -143,17 +143,17 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         if (get(START_TARGET) == null) {
-            set(START, new CssPoint2D(transform.transform(getNonnull(START).getConvertedValue())));
+            set(START, new CssPoint2D(transform.transform(getNonNull(START).getConvertedValue())));
         }
         if (get(END_TARGET) == null) {
-            set(END, new CssPoint2D(transform.transform(getNonnull(END).getConvertedValue())));
+            set(END, new CssPoint2D(transform.transform(getNonNull(END).getConvertedValue())));
         }
     }
 
     @Override
-    public void reshapeInLocal(@Nonnull CssSize x, @Nonnull CssSize y, @Nonnull CssSize width, @Nonnull CssSize height) {
+    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         if (get(START_TARGET) == null) {
             set(START, new CssPoint2D(x, y));
         }
@@ -177,6 +177,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
                 && get(START_TARGET) != null && get(END_CONNECTOR) != null && get(END_TARGET) != null);
     }
 
+    @NonNull
     public ReadOnlyBooleanWrapper connectedProperty() {
         return connected;
     }

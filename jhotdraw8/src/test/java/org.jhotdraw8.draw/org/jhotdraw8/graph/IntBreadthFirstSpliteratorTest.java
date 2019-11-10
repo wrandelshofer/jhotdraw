@@ -5,6 +5,7 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class IntBreadthFirstSpliteratorTest {
 
+    @NonNull
     private IntDirectedGraph createGraph() {
         IntDirectedGraphBuilder builder = new IntDirectedGraphBuilder();
         builder.addVertex();
@@ -43,6 +45,7 @@ public class IntBreadthFirstSpliteratorTest {
         return builder;
     }
 
+    @NonNull
     public Object[][] anyPathProvider() {
         IntDirectedGraph graph = createGraph();
         return new Object[][]{
@@ -81,7 +84,7 @@ public class IntBreadthFirstSpliteratorTest {
      * Test of findAnyVertexPath method, of class
      * DirectedGraphPathBuilderWithArrows.
      */
-    public void testIterate(IntDirectedGraph graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
+    public void testIterate(@NonNull IntDirectedGraph graph, Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         IntBreadthFirstSpliterator instance = new IntBreadthFirstSpliterator(graph::getNextVertices, start);

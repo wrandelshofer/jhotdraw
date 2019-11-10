@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -34,15 +34,15 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Number parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Number parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return tt.currentNumberNonnull().doubleValue();
+                return tt.currentNumberNonNull().doubleValue();
             case CssTokenType.TT_IDENT: {
                 double value;
-                switch (tt.currentStringNonnull()) {
+                switch (tt.currentStringNonNull()) {
                     case "INF":
                         value = Double.POSITIVE_INFINITY;
                         break;
@@ -63,11 +63,11 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
     }
 
     @Override
-    public <TT extends Number> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    public <TT extends Number> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getHelpText() {
         return "Format of ⟨Number⟩: ⟨number⟩";

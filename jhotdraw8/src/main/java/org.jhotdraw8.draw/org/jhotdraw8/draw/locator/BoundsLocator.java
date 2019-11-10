@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.Geom;
@@ -79,7 +79,7 @@ public class BoundsLocator extends AbstractLocator {
      * @param bounds current local bounds of a figure
      * @param p      a local coordinate on the figure
      */
-    public BoundsLocator(@Nonnull Bounds bounds, Point2D p) {
+    public BoundsLocator(@NonNull Bounds bounds, @NonNull Point2D p) {
         this(bounds, p.getX(), p.getY());
     }
 
@@ -90,7 +90,7 @@ public class BoundsLocator extends AbstractLocator {
      * @param x      a local coordinate on the figure
      * @param y      a local coordinate on the figre
      */
-    public BoundsLocator(Bounds bounds, double x, double y) {
+    public BoundsLocator(@NonNull Bounds bounds, double x, double y) {
         this(Geom.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
                 Geom.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
     }
@@ -103,9 +103,9 @@ public class BoundsLocator extends AbstractLocator {
         return relativeY;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Point2D locate(@Nonnull Figure owner) {
+    public Point2D locate(@NonNull Figure owner) {
         Bounds bounds = owner.getBoundsInLocal();
 
         Point2D location = new Point2D(

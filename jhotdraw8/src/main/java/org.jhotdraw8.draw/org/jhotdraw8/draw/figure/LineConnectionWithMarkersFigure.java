@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -32,7 +32,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
         this(0, 0, 1, 1);
     }
 
-    public LineConnectionWithMarkersFigure(Point2D start, Point2D end) {
+    public LineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -41,26 +41,26 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
         set(MARKER_FILL, new CssColor("black", Color.BLACK));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    protected void updateEndMarkerNode(RenderContext ctx, @Nonnull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, @NonNull Path node) {
         super.updateEndMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
 
     @Override
-    protected void updateLineNode(RenderContext ctx, @Nonnull Line node) {
+    protected void updateLineNode(RenderContext ctx, @NonNull Line node) {
         super.updateLineNode(ctx, node);
         applyStrokableFigureProperties(ctx, node);
     }
 
     @Override
-    public void updateNode(@Nonnull RenderContext ctx, @Nonnull Node node) {
+    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         super.updateNode(ctx, node);
 
         applyHideableFigureProperties(ctx, node);
@@ -69,14 +69,14 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    protected void updateStartMarkerNode(RenderContext ctx, @Nonnull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, @NonNull Path node) {
         super.updateStartMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
 
     @Override
     public double getMarkerEndScaleFactor() {
-        return getStyledNonnull(MarkerEndableFigure.MARKER_END_SCALE_FACTOR);
+        return getStyledNonNull(MarkerEndableFigure.MARKER_END_SCALE_FACTOR);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
 
     @Override
     public double getMarkerStartScaleFactor() {
-        return getStyledNonnull(MarkerStartableFigure.MARKER_START_SCALE_FACTOR);
+        return getStyledNonNull(MarkerStartableFigure.MARKER_START_SCALE_FACTOR);
     }
 
     @Override

@@ -4,7 +4,8 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashSet;
@@ -26,11 +27,11 @@ import java.util.function.Predicate;
  */
 public class UniqueOrOneHopPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
 
-    public UniqueOrOneHopPathBuilder(@Nonnull DirectedGraph<V, A> g) {
+    public UniqueOrOneHopPathBuilder(@NonNull DirectedGraph<V, A> g) {
         this(g::getNextVertices);
     }
 
-    public UniqueOrOneHopPathBuilder(@Nonnull Function<V, Iterable<V>> nextNodesFunction) {
+    public UniqueOrOneHopPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
         super(nextNodesFunction);
     }
 
@@ -58,10 +59,11 @@ public class UniqueOrOneHopPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
     }
 
 
-    protected BackLink<V, A> search(@Nonnull V root,
-                                    @Nonnull Predicate<V> goal,
-                                    Function<V, Iterable<V>> nextNodesFunction,
-                                    @Nonnull Predicate<V> visited,
+    @Nullable
+    protected BackLink<V, A> search(@NonNull V root,
+                                    @NonNull Predicate<V> goal,
+                                    @NonNull Function<V, Iterable<V>> nextNodesFunction,
+                                    @NonNull Predicate<V> visited,
                                     int maxLength) {
 
         Queue<MyBackLink<V, A>> queue = new ArrayDeque<>(16);

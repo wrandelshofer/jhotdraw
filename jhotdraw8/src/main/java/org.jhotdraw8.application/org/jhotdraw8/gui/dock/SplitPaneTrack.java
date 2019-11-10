@@ -8,6 +8,7 @@ import javafx.collections.ListChangeListener;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
+import org.jhotdraw8.annotation.NonNull;
 
 import static javafx.geometry.Orientation.VERTICAL;
 
@@ -28,7 +29,7 @@ public class SplitPaneTrack extends SplitPane implements Track {
         setStyle("-fx-background-color:transparent;-fx-border-width:0,0;-fx-padding:0;");
         getItems().addListener(new ListChangeListener<Node>() {
             @Override
-            public void onChanged(ListChangeListener.Change<? extends Node> c) {
+            public void onChanged(@NonNull ListChangeListener.Change<? extends Node> c) {
                 while (c.next()) {
                     for (Node remitem : c.getRemoved()) {
                         if (remitem instanceof Dock) {
@@ -51,10 +52,12 @@ public class SplitPaneTrack extends SplitPane implements Track {
         super(items);
     }
 
+    @NonNull
     public static SplitPaneTrack createVerticalTrack() {
         return new SplitPaneTrack(VERTICAL);
     }
 
+    @NonNull
     public static SplitPaneTrack createHorizontalTrack() {
         return new SplitPaneTrack(Orientation.HORIZONTAL);
     }

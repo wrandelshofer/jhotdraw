@@ -10,7 +10,7 @@ import javafx.css.StyleableProperty;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -37,27 +37,34 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, CssStroke> cssMetaData;
 
-    @Nonnull
+    @NonNull
     private final MapAccessor<CssSize> widthKey;
+    @NonNull
     private final MapAccessor<Paintable> paintKey;
+    @NonNull
     private final MapAccessor<CssSize> dashOffsetKey;
+    @NonNull
     private final MapAccessor<ImmutableList<CssSize>> dashArrayKey;
+    @NonNull
     private final MapAccessor<StrokeType> typeKey;
+    @NonNull
     private final MapAccessor<StrokeLineJoin> lineJoinKey;
+    @NonNull
     private final MapAccessor<StrokeLineCap> lineCapKey;
+    @NonNull
     private final MapAccessor<CssSize> miterLimitKey;
 
     public StrokeStyleableMapAccessor(String name,
-                                      MapAccessor<CssSize> widthKey,
-                                      MapAccessor<Paintable> paintKey,
-                                      MapAccessor<StrokeType> typeKey,
-                                      MapAccessor<StrokeLineCap> lineCapKey, MapAccessor<StrokeLineJoin> lineJoinKey,
-                                      MapAccessor<CssSize> miterLimitKey,
-                                      MapAccessor<CssSize> dashOffsetKey,
-                                      MapAccessor<ImmutableList<CssSize>> dashArrayKey
+                                      @NonNull MapAccessor<CssSize> widthKey,
+                                      @NonNull MapAccessor<Paintable> paintKey,
+                                      @NonNull MapAccessor<StrokeType> typeKey,
+                                      @NonNull MapAccessor<StrokeLineCap> lineCapKey, @NonNull MapAccessor<StrokeLineJoin> lineJoinKey,
+                                      @NonNull MapAccessor<CssSize> miterLimitKey,
+                                      @NonNull MapAccessor<CssSize> dashOffsetKey,
+                                      @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey
     ) {
         super(name, CssStroke.class, new MapAccessor<?>[]{
                         widthKey,
@@ -97,7 +104,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
         this.miterLimitKey = miterLimitKey;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, CssStroke> getCssMetaData() {
         return cssMetaData;
@@ -107,13 +114,14 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     private final Converter<CssStroke> converter = new CssStrokeStyleConverter(false);
     ;
 
+    @NonNull
     @Override
     public Converter<CssStroke> getConverter() {
         return converter;
     }
 
     @Override
-    public CssStroke get(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssStroke get(@NonNull Map<? super Key<?>, Object> a) {
         return new CssStroke(
                 widthKey.get(a), paintKey.get(a),
                 typeKey.get(a), lineCapKey.get(a), lineJoinKey.get(a),
@@ -124,7 +132,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public CssStroke put(@Nonnull Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
+    public CssStroke put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
         CssStroke oldValue = get(a);
         if (value == null) {
             widthKey.put(a, CssSize.ONE);
@@ -149,7 +157,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public CssStroke remove(@Nonnull Map<? super Key<?>, Object> a) {
+    public CssStroke remove(@NonNull Map<? super Key<?>, Object> a) {
         CssStroke oldValue = get(a);
         widthKey.remove(a);
         paintKey.remove(a);

@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.text;
 
 import javafx.css.PseudoClass;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -44,16 +44,16 @@ public class CssPseudoClassConverter extends AbstractCssConverter<PseudoClass> {
         super(nullable);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public PseudoClass parseNonnull(@Nonnull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public PseudoClass parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, " ⟨PseudoClass⟩: ⟨identifier⟩ expected");
-        return PseudoClass.getPseudoClass(tt.currentStringNonnull());
+        return PseudoClass.getPseudoClass(tt.currentStringNonNull());
     }
 
 
     @Override
-    protected <TT extends PseudoClass> void produceTokensNonnull(@Nonnull TT value, @Nullable IdFactory idFactory, @Nonnull Consumer<CssToken> out) {
+    protected <TT extends PseudoClass> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_IDENT, value.getPseudoClassName()));
     }
 

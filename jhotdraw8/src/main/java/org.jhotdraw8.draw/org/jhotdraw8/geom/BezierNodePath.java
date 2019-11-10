@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.scene.shape.FillRule;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -32,16 +32,16 @@ public class BezierNodePath implements Shape {
         this(new ArrayList<>(), false, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@Nonnull Iterable<BezierNode> nodes) {
+    public BezierNodePath(@NonNull Iterable<BezierNode> nodes) {
         this(nodes, false, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@Nonnull Iterable<BezierNode> nodes, boolean closed, FillRule windingRule) {
+    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, boolean closed, FillRule windingRule) {
         this(nodes, closed, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
 
     }
 
-    public BezierNodePath(@Nonnull Iterable<BezierNode> nodes, boolean closed, int windingRule) {
+    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, boolean closed, int windingRule) {
         this.nodes = new ArrayList<>();
         for (BezierNode n : nodes) {
             this.nodes.add(n);
@@ -56,7 +56,7 @@ public class BezierNodePath implements Shape {
     }
 
     @Override
-    public boolean contains(@Nonnull Point2D p) {
+    public boolean contains(@NonNull Point2D p) {
         return contains(p.getX(), p.getY());
     }
 
@@ -66,7 +66,7 @@ public class BezierNodePath implements Shape {
     }
 
     @Override
-    public boolean contains(@Nonnull Rectangle2D r) {
+    public boolean contains(@NonNull Rectangle2D r) {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
@@ -75,7 +75,7 @@ public class BezierNodePath implements Shape {
         return getBounds2D().getBounds();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Rectangle2D getBounds2D() {
         double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
@@ -139,13 +139,13 @@ public class BezierNodePath implements Shape {
         this.nodes = nodes;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform at) {
         return new BezierNodePathIterator(nodes, closed, windingRule, at);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public PathIterator getPathIterator(AffineTransform at, double flatness) {
         return new FlatteningPathIterator(getPathIterator(at), flatness);
@@ -157,7 +157,7 @@ public class BezierNodePath implements Shape {
     }
 
     @Override
-    public boolean intersects(@Nonnull Rectangle2D r) {
+    public boolean intersects(@NonNull Rectangle2D r) {
         return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 

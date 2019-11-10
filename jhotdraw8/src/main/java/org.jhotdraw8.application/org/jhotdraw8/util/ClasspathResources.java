@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.util;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
@@ -26,12 +26,12 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     /**
      * The base name of the resource bundle.
      */
-    @Nonnull
+    @NonNull
     private final String baseName;
     /**
      * The locale.
      */
-    @Nonnull
+    @NonNull
     private final Locale locale;
 
     /**
@@ -51,7 +51,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @param baseName the base name
      * @param locale   the locale
      */
-    public ClasspathResources(@Nonnull String baseName, @Nonnull Locale locale) {
+    public ClasspathResources(@NonNull String baseName, @NonNull Locale locale) {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
@@ -91,7 +91,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public boolean containsKey(String key) {
+    public boolean containsKey(@Nullable String key) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -117,7 +117,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public Enumeration<String> getKeys() {
         return resource.getKeys();
@@ -137,7 +137,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
 
     @Nullable
     @Override
-    protected Object handleGetObject(String key) {
+    protected Object handleGetObject(@NonNull String key) {
         Object obj = handleGetObjectRecursively(key);
         if (obj == null) {
             obj = "";
@@ -151,7 +151,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Nullable
-    protected Object handleGetObjectRecursively(@Nonnull String key) {
+    protected Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -163,14 +163,14 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return obj;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "ClasspathResources" + "[" + baseName + "]";
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public String getBaseName() {
         return baseName;
@@ -183,7 +183,8 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    static Resources getResources(@Nonnull String baseName)
+    @NonNull
+    static Resources getResources(@NonNull String baseName)
             throws MissingResourceException {
         return getResources(baseName, LocaleUtil.getDefault());
     }
@@ -196,13 +197,14 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    static Resources getResources(@Nonnull String baseName, @Nonnull Locale locale)
+    static Resources getResources(@NonNull String baseName, @NonNull Locale locale)
             throws MissingResourceException {
         Resources r;
         r = new ClasspathResources(baseName, locale);
         return r;
     }
 
+    @NonNull
     @Override
     public ResourceBundle asResourceBundle() {
         return this;

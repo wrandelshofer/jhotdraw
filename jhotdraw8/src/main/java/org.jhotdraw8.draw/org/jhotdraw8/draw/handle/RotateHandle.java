@@ -24,7 +24,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
@@ -48,6 +48,7 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
  * @author Werner Randelshofer
  */
 public class RotateHandle extends AbstractHandle {
+    @Nullable
     public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     @Nullable
@@ -67,17 +68,17 @@ public class RotateHandle extends AbstractHandle {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }
 
-    @Nonnull
+    @NonNull
     private final Group group;
 
     private Set<Figure> groupReshapeableFigures;
-    @Nonnull
+    @NonNull
     private final Line line;
     private double lineLength = 10.0;
     private Point2D pickLocation;
-    @Nonnull
+    @NonNull
     private final Region pickNode;
-    @Nonnull
+    @NonNull
     private final Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
@@ -127,9 +128,9 @@ public class RotateHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Group getNode(DrawingView view) {
+    public Group getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         lineLength = size * 1.5;
         if (pickNode.getWidth() != size) {
@@ -148,7 +149,7 @@ public class RotateHandle extends AbstractHandle {
         return group;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public TransformableFigure getOwner() {
         return (TransformableFigure) super.getOwner();
@@ -187,7 +188,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@Nonnull MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         TransformableFigure o = getOwner();
         Point2D center = Geom.center(o.getBoundsInLocal());
         Transform t = Transforms.concat(getWorldToRotate(), view.getViewToWorld());
@@ -221,7 +222,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, @Nonnull DrawingView view) {
+    public void handleMousePressed(MouseEvent event, @NonNull DrawingView view) {
         pivotNode.setVisible(true);
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -246,7 +247,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         TransformableFigure o = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), getRotateToWorld());
         Bounds b = o.getBoundsInLocal();

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.samples.modeler;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.util.Resources;
 
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ public class ModelerLabels {
         return getResources().asResourceBundle();
     }
 
+    @NonNull
     public static Resources getResources() {
         return Resources.getResources("org.jhotdraw8.samples.modeler", RESOURCE_BUNDLE);
     }
@@ -28,6 +30,7 @@ public class ModelerLabels {
         return getInspectorResources().asResourceBundle();
     }
 
+    @NonNull
     public static Resources getInspectorResources() {
         return Resources.getResources("org.jhotdraw8.samples.modeler", RESOURCE_BUNDLE);
     }

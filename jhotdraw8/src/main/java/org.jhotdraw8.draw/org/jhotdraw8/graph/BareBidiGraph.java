@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Adds methods to the API defined in {@link BareDirectedGraph}
@@ -23,8 +23,8 @@ public interface BareBidiGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return the previous vertex
      * @see #getPrevCount
      */
-    @Nonnull
-    V getPrev(@Nonnull V vertex, int index);
+    @NonNull
+    V getPrev(@NonNull V vertex, int index);
 
     /**
      * Returns the arrow associated with the specified vertex and incoming arrow
@@ -35,8 +35,8 @@ public interface BareBidiGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return the arrow
      * @see #getPrevCount
      */
-    @Nonnull
-    A getPrevArrow(@Nonnull V vertex, int index);
+    @NonNull
+    A getPrevArrow(@NonNull V vertex, int index);
 
     /**
      * Returns the number of previous vertices at the specified vertex.
@@ -47,5 +47,5 @@ public interface BareBidiGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param vertex a vertex
      * @return the number of previous vertices
      */
-    int getPrevCount(@Nonnull V vertex);
+    int getPrevCount(@NonNull V vertex);
 }

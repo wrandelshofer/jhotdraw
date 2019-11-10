@@ -5,7 +5,8 @@
 package org.jhotdraw8.text;
 
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -25,16 +26,18 @@ public class StringConverterAdapter<T> extends StringConverter<T> {
         this.converter = converter;
     }
 
+    @NonNull
     @Override
     public String toString(T object) {
         return converter.toString(object);
     }
 
+    @Nullable
     @Override
-    public T fromString(@Nonnull String string) {
+    public T fromString(@NonNull String string) {
         try {
             return converter.fromString(string);
-        } catch (ParseException | IOException ex) {
+        } catch (@NonNull ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

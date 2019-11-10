@@ -12,6 +12,7 @@ import javafx.beans.property.SetProperty;
 import javafx.collections.ObservableSet;
 import javafx.scene.Node;
 import javafx.scene.input.DataFormat;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
@@ -46,14 +47,14 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the model
      */
-    ObjectProperty<ApplicationModel> modelProperty();
+    @Nullable ObjectProperty<ApplicationModel> modelProperty();
 
     /**
      * The set of activities contains all open activities.
      *
      * @return the activities
      */
-    SetProperty<Activity> activitiesProperty();
+    @NonNull SetProperty<Activity> activitiesProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -72,7 +73,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the number of recent Uris
      */
-    IntegerProperty maxNumberOfRecentUrisProperty();
+    @NonNull IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
     default ObservableSet<Activity> activities() {

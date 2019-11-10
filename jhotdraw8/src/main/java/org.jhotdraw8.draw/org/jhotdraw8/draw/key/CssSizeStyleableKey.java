@@ -8,8 +8,8 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.collection.NonnullMapAccessor;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -26,12 +26,12 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implements WriteableStyleableMapAccessor<CssSize>,
-        NonnullMapAccessor<CssSize> {
+        NonNullMapAccessor<CssSize> {
 
     final static long serialVersionUID = 1L;
 
     private final Converter<CssSize> converter = new CssSizeConverter(false);
-    @Nonnull
+    @NonNull
     private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
 
 
@@ -41,7 +41,7 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implement
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public CssSizeStyleableKey(String name, @Nonnull CssSize defaultValue) {
+    public CssSizeStyleableKey(String name, @NonNull CssSize defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -52,7 +52,7 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implement
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public CssSizeStyleableKey(String name, DirtyMask mask, @Nonnull CssSize defaultValue) {
+    public CssSizeStyleableKey(String name, DirtyMask mask, @NonNull CssSize defaultValue) {
         super(name, CssSize.class, defaultValue);
 
         Function<Styleable, StyleableProperty<CssSize>> function = s -> {
@@ -70,13 +70,13 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implement
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public Converter<CssSize> getConverter() {
         return converter;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<? extends Styleable, CssSize> getCssMetaData() {
         return cssMetaData;

@@ -1,5 +1,6 @@
 package org.jhotdraw8.css.text;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -18,7 +19,7 @@ class CssPoint2DConverterTest {
      * Test of fromString method, of class CssPoint2DConverter.
      */
     static
-    public void doTestFromString(CssPoint2D expected, String string) throws Exception {
+    public void doTestFromString(CssPoint2D expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -46,11 +47,12 @@ class CssPoint2DConverterTest {
      * Test of fromString and toString methods, of class CssPoint2DConverter.
      */
     static
-    public void doTest(CssPoint2D value, String str) throws Exception {
+    public void doTest(CssPoint2D value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(

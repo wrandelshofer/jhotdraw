@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class Iterators {
      * @param iterable the iterable
      * @return the list
      */
-    @Nonnull
+    @NonNull
     public static <T> List<T> toList(Iterable<T> iterable) {
         if (iterable instanceof List<?>) {
             return (List<T>) iterable;

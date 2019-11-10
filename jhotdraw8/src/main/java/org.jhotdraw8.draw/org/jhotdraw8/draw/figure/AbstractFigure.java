@@ -10,7 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
@@ -36,7 +36,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
-    @Nonnull
+    @NonNull
     private static Map<Key<?>, Integer> cachedValuesKeyMap = Collections.synchronizedMap(new HashMap<>());
 
     private transient Map<Key<?>, Object> cachedValues;
@@ -54,13 +54,13 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
             super.fireValueChangedEvent();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Object getBean() {
             return AbstractFigure.this;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getName() {
             return PARENT_PROPERTY;
@@ -99,11 +99,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public <T> T getCachedValue(@Nonnull Key<T> key) {
+    public <T> T getCachedValue(@NonNull Key<T> key) {
         return (cachedValues == null) ? key.getDefaultValue() : key.get(cachedValues);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
@@ -148,7 +148,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @return a new list instance
      */
-    @Nonnull
+    @NonNull
     public Map<String, Object> getPropertyMap() {
         HashMap<String, Object> result = new HashMap<>();
         for (Map.Entry<Key<?>, Object> e : getProperties().entrySet()) {
@@ -169,7 +169,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
      *
      * @param newMap the new properties
      */
-    public void setPropertyMap(@Nonnull HashMap<String, Object> newMap) {
+    public void setPropertyMap(@NonNull HashMap<String, Object> newMap) {
         HashMap<String, Key<?>> keyst = new HashMap<>();
         Map<Key<?>, Object> m = getProperties();
         for (MapAccessor<?> ma : Figure.getDeclaredAndInheritedMapAccessors(getClass())) {
@@ -241,7 +241,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public <T> T setCachedValue(@Nonnull Key<T> key, @Nullable T value) {
+    public <T> T setCachedValue(@NonNull Key<T> key, @Nullable T value) {
         if (cachedValues == null) {
             cachedValues = new SharedKeysMap<>(cachedValuesKeyMap);
         }

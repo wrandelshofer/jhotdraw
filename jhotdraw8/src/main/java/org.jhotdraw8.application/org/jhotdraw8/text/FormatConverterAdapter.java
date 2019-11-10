@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class FormatConverterAdapter extends Format {
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final Converter<Object> converter;
 
     public FormatConverterAdapter(Converter<?> converter) {
@@ -32,16 +32,16 @@ public class FormatConverterAdapter extends Format {
         this.converter = temp;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+    public StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, FieldPosition pos) {
         toAppendTo.append(converter.toString(obj));
         return toAppendTo;
     }
 
     @Nullable
     @Override
-    public Object parseObject(@Nonnull String source, ParsePosition pos) {
+    public Object parseObject(@NonNull String source, @NonNull ParsePosition pos) {
         try {
             CharBuffer buf = CharBuffer.wrap(source);
             Object value = converter.fromString(buf, null);

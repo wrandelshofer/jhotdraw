@@ -15,8 +15,9 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.util.converter.NumberStringConverter;
-import org.jhotdraw8.annotation.Nonnull;
-import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.text.CssColorConverter;
@@ -88,13 +89,13 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 new NumberStringConverter());
     }
 
-    @Nonnull
-    private NonnullProperty<CssColor> handleColorProperty = new NonnullProperty<>(this, "handleColor", CssColor.valueOf("blue"));
+    @NonNull
+    private NonNullProperty<CssColor> handleColorProperty = new NonNullProperty<>(this, "handleColor", CssColor.valueOf("blue"));
 
-    @Nonnull
+    @NonNull
     private IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
 
-    @Nonnull
+    @NonNull
     private IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
 
     private Node node;
@@ -103,12 +104,12 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
         this(GridInspector.class.getResource("HandlesInspector.fxml"));
     }
 
-    public HandlesInspector(@Nonnull URL fxmlUrl) {
+    public HandlesInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
 
-    private void init(@Nonnull URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
@@ -130,7 +131,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) {
+    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             handleColorProperty.unbindBidirectional(oldValue.getEditor().handleColorProperty());
             handleSizeProperty.unbindBidirectional(oldValue.getEditor().handleSizeProperty());

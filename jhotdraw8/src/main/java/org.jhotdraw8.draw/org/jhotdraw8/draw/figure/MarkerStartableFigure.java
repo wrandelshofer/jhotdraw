@@ -19,7 +19,7 @@ public interface MarkerStartableFigure extends Figure {
     /**
      * Marker start is an SVG path that points to the right, with coordinate 0,0 at the head of the path.
      */
-    NullableSvgPathStyleableKey MARKER_START_SHAPE = new NullableSvgPathStyleableKey("marker-start-shape", DirtyMask.of(DirtyBits.NODE), null);
+    @Nullable NullableSvgPathStyleableKey MARKER_START_SHAPE = new NullableSvgPathStyleableKey("marker-start-shape", DirtyMask.of(DirtyBits.NODE), null);
     DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
 
     @Nullable
@@ -28,6 +28,6 @@ public interface MarkerStartableFigure extends Figure {
     }
 
     default double getMarkerStartScaleFactor() {
-        return getStyledNonnull(MarkerStartableFigure.MARKER_START_SCALE_FACTOR);
+        return getStyledNonNull(MarkerStartableFigure.MARKER_START_SCALE_FACTOR);
     }
 }

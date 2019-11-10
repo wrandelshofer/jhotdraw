@@ -5,7 +5,7 @@
 package org.jhotdraw8.css;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 
@@ -119,7 +119,7 @@ public interface StylesheetsManager<E> {
      * @param elem the element
      * @return true the element was selected
      */
-    default boolean matchesElement(@Nonnull Stylesheet s, E elem) {
+    default boolean matchesElement(@NonNull Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {

@@ -10,7 +10,8 @@ import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMapEntryProperty;
 
@@ -21,20 +22,21 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    @Nonnull
+    @NonNull
     private final WriteableStyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
+    @NonNull
     private final ObservableMap<Key<?>, Object> mapp;
     private final String name;
-    @Nonnull
+    @NonNull
     private final StyleableMap<Key<?>, Object> map;
     private final Object bean;
 
-    public KeyMapEntryStyleableProperty(@Nonnull ReadOnlyMapProperty<Key<?>, Object> mapp, @Nonnull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         this(mapp.getBean(), mapp, key, name, metaData);
     }
 
-    public KeyMapEntryStyleableProperty(Object bean, ObservableMap<Key<?>, Object> mapp, @Nonnull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(Object bean, @NonNull ObservableMap<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp;
         this.map = m;
@@ -72,6 +74,7 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
         key.put(map.getMap(origin), value);
     }
 
+    @Nullable
     @Override
     public StyleOrigin getStyleOrigin() {
         //ARGH!!! this does not work!!

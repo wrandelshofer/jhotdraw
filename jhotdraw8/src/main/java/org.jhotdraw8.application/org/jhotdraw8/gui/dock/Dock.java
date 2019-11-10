@@ -7,7 +7,7 @@ package org.jhotdraw8.gui.dock;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * A {@code Dock} contains one or more {@link DockItem}s.
@@ -16,9 +16,9 @@ import org.jhotdraw8.annotation.Nonnull;
  */
 public interface Dock {
 
-    ObservableList<DockItem> getItems();
+    @NonNull ObservableList<DockItem> getItems();
 
-    @Nonnull
+    @NonNull
     default Node getNode() {
         return (Node) this;
     }
@@ -30,7 +30,7 @@ public interface Dock {
      */
     boolean isEditable();
 
-    ObjectProperty<Track> trackProperty();
+    @NonNull ObjectProperty<Track> trackProperty();
 
     default Track getTrack() {
         return trackProperty().get();

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
@@ -33,7 +33,7 @@ public interface FigureFactory {
      * @return the name
      * @throws java.io.IOException if the factory does not support this figure
      */
-    String figureToName(Figure f) throws IOException;
+    @Nullable String figureToName(Figure f) throws IOException;
 
     /**
      * Maps an XML element name to a figure.
@@ -42,7 +42,7 @@ public interface FigureFactory {
      * @return the figure
      * @throws java.io.IOException if the factory does not support this name
      */
-    Figure nameToFigure(String name) throws IOException;
+    @Nullable Figure nameToFigure(String name) throws IOException;
 
     /**
      * Maps a key to a XML attribute name. The name used for persistent storage
@@ -65,7 +65,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the name for
      *                             the specified figure
      */
-    MapAccessor<?> nameToKey(Figure f, String name) throws IOException;
+    @Nullable MapAccessor<?> nameToKey(Figure f, String name) throws IOException;
 
     /**
      * Maps a key to a XML element name. The name used for persistent storage
@@ -106,7 +106,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      *                             the specified key
      */
-    <T> String valueToString(MapAccessor<T> key, T value) throws IOException;
+    @NonNull <T> String valueToString(MapAccessor<T> key, T value) throws IOException;
 
     /**
      * Maps a value to a XML node list.
@@ -121,7 +121,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support a mapping for
      *                             the specified key
      */
-    List<Node> valueToNodeList(MapAccessor<?> key, Object value, Document document) throws IOException;
+    @NonNull List<Node> valueToNodeList(MapAccessor<?> key, Object value, Document document) throws IOException;
 
     /**
      * Maps a XML node list to a value.
@@ -170,7 +170,7 @@ public interface FigureFactory {
      * @param value the value
      * @return true if the value is the default value
      */
-    default <T> boolean isDefaultValue(Figure f, @Nonnull MapAccessor<T> key, @Nullable T value) {
+    default <T> boolean isDefaultValue(Figure f, @NonNull MapAccessor<T> key, @Nullable T value) {
         T defaultValue = key.getDefaultValue();
         return Objects.equals(defaultValue, value);
     }
@@ -182,7 +182,7 @@ public interface FigureFactory {
      * @param f The figure
      * @return an immutable set
      */
-    Set<MapAccessor<?>> figureAttributeKeys(Figure f);
+    @NonNull Set<MapAccessor<?>> figureAttributeKeys(Figure f);
 
     /**
      * Returns all keys for the specified figure which should be converted into
@@ -191,7 +191,7 @@ public interface FigureFactory {
      * @param f The figure
      * @return an immutable set
      */
-    Set<MapAccessor<?>> figureNodeListKeys(Figure f);
+    @NonNull Set<MapAccessor<?>> figureNodeListKeys(Figure f);
 
     /**
      * Creates an external representation of the drawing.

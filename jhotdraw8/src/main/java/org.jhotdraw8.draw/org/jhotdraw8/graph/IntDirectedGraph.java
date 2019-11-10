@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayDeque;
@@ -126,6 +126,7 @@ public interface IntDirectedGraph {
      * @param vidx a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
+    @NonNull
     default Spliterator.OfInt getNextVertices(int vidx) {
         class MySpliterator extends AbstractIntSpliterator {
             int index;
@@ -138,7 +139,7 @@ public interface IntDirectedGraph {
             }
 
             @Override
-            public boolean tryAdvance(@Nonnull IntConsumer action) {
+            public boolean tryAdvance(@NonNull IntConsumer action) {
                 if (index < limit) {
                     action.accept(getNext(vidx, index++));
                     return true;

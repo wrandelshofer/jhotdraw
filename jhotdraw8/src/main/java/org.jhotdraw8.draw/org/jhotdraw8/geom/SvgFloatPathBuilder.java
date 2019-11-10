@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * DoubleSvgPathBuilder.
@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nonnull;
  */
 public class SvgFloatPathBuilder implements PathBuilder {
 
-    @Nonnull
+    @NonNull
     private StringBuilder buf = new StringBuilder();
 
     @Override
@@ -114,7 +114,7 @@ public class SvgFloatPathBuilder implements PathBuilder {
         PathBuilder.super.smoothQuadTo(x, y); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Nonnull
+    @NonNull
     public String build() {
         return buf.toString();
     }

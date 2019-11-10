@@ -14,7 +14,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
@@ -38,7 +38,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     @Nullable
     private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.DASHED, null, null));
-    @Nonnull
+    @NonNull
     private final Polyline node;
 
     private Point2D pickLocation;
@@ -71,6 +71,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         return null;
     }
 
+    @NonNull
     private Point2D getLocation() {
         return getBezierNode().getC0();
 
@@ -80,9 +81,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Polyline getNode(DrawingView view) {
+    public Polyline getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         node.setStroke(color.getColor());
         return node;
@@ -94,7 +95,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@Nonnull DrawingView view) {
+    public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);

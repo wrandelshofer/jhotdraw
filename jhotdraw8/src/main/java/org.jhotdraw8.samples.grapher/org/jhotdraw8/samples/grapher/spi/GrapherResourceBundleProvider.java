@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.samples.grapher.spi;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.spi.AbstractResourceBundleProvider;
@@ -12,7 +14,7 @@ public class GrapherResourceBundleProvider extends AbstractResourceBundleProvide
 
 
     @Override
-    public ResourceBundle getBundle(String baseName, Locale locale) {
+    public ResourceBundle getBundle(@NonNull String baseName, @NonNull Locale locale) {
         return ResourceBundle.getBundle(baseName, locale);
     }
 }

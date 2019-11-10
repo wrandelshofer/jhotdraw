@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.samples.modeler.figure;
 
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.DirtyBits;
 import org.jhotdraw8.draw.key.DirtyMask;
@@ -25,10 +26,12 @@ public class MLConstants {
     /**
      * The name of a model element.
      */
+    @Nullable
     public final static StringStyleableKey NAME = new StringStyleableKey(MODEL_NAMESPACE_PREFIX, "name", "unnamed", null);
     /**
      * The keyword of a model element.
      */
+    @Nullable
     public final static NullableStringStyleableKey KEYWORD = new NullableStringStyleableKey(MODEL_NAMESPACE_PREFIX, "keyword", null);
     /**
      * The compartment data of a compartmentable model element.
@@ -45,6 +48,7 @@ public class MLConstants {
      * <p>
      * See OMG UML 2.5.1 formal-17-12-05, chapter 11.5.4 Associations.
      */
+    @Nullable
     public final static NullableBooleanStyleableKey SOURCE_OWNED = new NullableBooleanStyleableKey(MODEL_NAMESPACE_PREFIX, "sourceOwned", null);
     /**
      * The target owned property of an association model element.
@@ -57,6 +61,7 @@ public class MLConstants {
      * <p>
      * See OMG UML 2.5.1 formal-17-12-05, chapter 11.5.4 Associations.
      */
+    @Nullable
     public final static NullableBooleanStyleableKey TARGET_OWNED = new NullableBooleanStyleableKey(MODEL_NAMESPACE_PREFIX, "targetOwned", null);
 
     /**

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Map;
@@ -30,7 +30,7 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
     }
 
     // FIXME refactor this to ReadOnlyCollection, because we do not allow writes
-    @Nonnull
+    @NonNull
     Collection<MapAccessor<?>> getSubAccessors();
 
 }

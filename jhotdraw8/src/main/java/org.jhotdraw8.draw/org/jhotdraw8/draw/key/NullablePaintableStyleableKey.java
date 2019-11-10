@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssPaintableConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,7 +27,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, Paintable> cssMetaData;
     private Converter<Paintable> converter;
 
@@ -37,7 +37,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
      *
      * @param name The name of the key.
      */
-    public NullablePaintableStyleableKey(String name) {
+    public NullablePaintableStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -47,7 +47,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullablePaintableStyleableKey(String name, Paintable defaultValue) {
+    public NullablePaintableStyleableKey(@NonNull String name, Paintable defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -60,7 +60,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
      * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public NullablePaintableStyleableKey(String key, DirtyMask mask, Paintable defaultValue) {
+    public NullablePaintableStyleableKey(@NonNull String key, DirtyMask mask, Paintable defaultValue) {
         super(key, Paintable.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Paintable>> function = s -> {
@@ -76,7 +76,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, Paintable> getCssMetaData() {
         return cssMetaData;

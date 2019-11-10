@@ -8,6 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.BlendMode;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -31,7 +32,7 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
      *
      * @param name The name of the key.
      */
-    public BlendModeStyleableKey(String name) {
+    public BlendModeStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -41,7 +42,7 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public BlendModeStyleableKey(String name, BlendMode defaultValue) {
+    public BlendModeStyleableKey(@NonNull String name, BlendMode defaultValue) {
         super(name, BlendMode.class, defaultValue);
 
         StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);

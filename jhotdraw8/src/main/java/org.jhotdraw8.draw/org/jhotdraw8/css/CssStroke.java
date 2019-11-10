@@ -7,6 +7,8 @@ package org.jhotdraw8.css;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 
@@ -78,7 +80,7 @@ public class CssStroke {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }
@@ -101,6 +103,7 @@ public class CssStroke {
         return Objects.hash(width, paint, dashOffset, dashArray, type, lineJoin, lineCap, miterLimit);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "CssStroke{" +

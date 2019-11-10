@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -29,7 +29,7 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
 
     private final static long serialVersionUID = 1L;
 
-    @Nonnull
+    @NonNull
     private final CssMetaData<?, ImmutableList<String>> cssMetaData;
 
     /**
@@ -38,7 +38,7 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
      *
      * @param name The name of the key.
      */
-    public ObservableWordListStyleableKey(String name) {
+    public ObservableWordListStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -48,7 +48,7 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public ObservableWordListStyleableKey(String name, ImmutableList<String> defaultValue) {
+    public ObservableWordListStyleableKey(@NonNull String name, ImmutableList<String> defaultValue) {
         this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
     }
 
@@ -59,7 +59,7 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
      * @param mask         The dirty mask.
      * @param defaultValue The default value.
      */
-    public ObservableWordListStyleableKey(String name, DirtyMask mask, ImmutableList<String> defaultValue) {
+    public ObservableWordListStyleableKey(@NonNull String name, DirtyMask mask, ImmutableList<String> defaultValue) {
         super(name, List.class, new Class<?>[]{Double.class}, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
@@ -90,7 +90,7 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
         cssMetaData = md;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CssMetaData<?, ImmutableList<String>> getCssMetaData() {
         return cssMetaData;

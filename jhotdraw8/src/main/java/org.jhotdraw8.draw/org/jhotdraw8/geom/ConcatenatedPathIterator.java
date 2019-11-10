@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.scene.shape.FillRule;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.awt.geom.PathIterator;
@@ -25,11 +25,11 @@ public class ConcatenatedPathIterator implements PathIterator {
     private Deque<PathIterator> iterators;
     private final int windingRule;
 
-    public ConcatenatedPathIterator(FillRule fillRule, @Nonnull List<PathIterator> iteratorList) {
+    public ConcatenatedPathIterator(FillRule fillRule, @NonNull List<PathIterator> iteratorList) {
         this(fillRule == FillRule.EVEN_ODD ? WIND_EVEN_ODD : WIND_NON_ZERO, iteratorList);
     }
 
-    public ConcatenatedPathIterator(int windingRule, @Nonnull List<PathIterator> iteratorList) {
+    public ConcatenatedPathIterator(int windingRule, @NonNull List<PathIterator> iteratorList) {
         this.windingRule = windingRule;
         this.iterators = new ArrayDeque<>(iteratorList);
         current = iteratorList.isEmpty() ? null : this.iterators.removeFirst();

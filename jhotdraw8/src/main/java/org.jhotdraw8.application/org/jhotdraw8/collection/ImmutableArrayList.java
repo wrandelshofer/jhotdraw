@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
@@ -32,11 +32,11 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
         this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
     }
 
-    ImmutableArrayList(@Nonnull Object[] array) {
+    ImmutableArrayList(@NonNull Object[] array) {
         this(array, 0, array.length);
     }
 
-    ImmutableArrayList(@Nonnull Object[] a, int offset, int length) {
+    ImmutableArrayList(@NonNull Object[] a, int offset, int length) {
         if (offset < 0) {
             throw new IndexOutOfBoundsException("offset = " + offset);
         }
@@ -52,7 +52,7 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
     }
 
 
-    public void copyInto(@Nonnull Object[] out, int offset) {
+    public void copyInto(@NonNull Object[] out, int offset) {
         System.arraycopy(array, 0, out, offset, array.length);
     }
 
@@ -66,7 +66,7 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
         return false;
     }
 
-    @Nonnull
+    @NonNull
     public E get(int index) {
         @SuppressWarnings("unchecked")
         E value = (E) array[index];
@@ -77,7 +77,8 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
         return array.length;
     }
 
-    public <T> T[] toArray(T[] a) {
+    @NonNull
+    public <T> T[] toArray(@NonNull T[] a) {
         int size = size();
         if (a.length < size) {
             @SuppressWarnings("unchecked")
@@ -92,10 +93,12 @@ public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> impleme
     }
 
 
+    @NonNull
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(array, 0, array.length, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
+    @NonNull
     @Override
     public ImmutableList<E> subList(int fromIndex, int toIndex) {
         return new ImmutableArraySubList<E>(true, this.array, fromIndex, toIndex);

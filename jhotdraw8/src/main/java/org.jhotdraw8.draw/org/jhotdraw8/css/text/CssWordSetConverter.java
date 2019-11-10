@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
@@ -51,7 +51,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
             Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public <TT extends ImmutableSet<String>> void toString(Appendable out, IdFactory idFactory, @Nonnull TT value) throws IOException {
+    public <TT extends ImmutableSet<String>> void toString(Appendable out, IdFactory idFactory, @NonNull TT value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value.asSet());
         Object[] v = new Object[tokens.size() + 1];

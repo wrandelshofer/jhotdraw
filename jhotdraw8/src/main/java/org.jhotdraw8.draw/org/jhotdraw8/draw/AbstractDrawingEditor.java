@@ -15,9 +15,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonnullProperty;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
@@ -28,8 +28,9 @@ import java.util.HashSet;
 import java.util.prefs.Preferences;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
-    @Nonnull
+    @NonNull
     private ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
+    @NonNull
     private IntegerProperty handleSize = new SimpleIntegerProperty(
             this, HANDLE_SIZE_PROPERTY,
             Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_SIZE_PROPERTY, 5)) {
@@ -40,6 +41,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
+    @NonNull
     private IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
             this, HANDLE_STROKE_WDITH_PROPERTY,
             Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_STROKE_WDITH_PROPERTY, 1)) {
@@ -50,21 +52,22 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    private NonnullProperty<CssColor> handleColor = new NonnullProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
+    @NonNull
+    private NonNullProperty<CssColor> handleColor = new NonNullProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
             CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
         @Override
-        public void set(CssColor newValue) {
+        public void set(@NonNull CssColor newValue) {
             super.set(newValue);
             Preferences.userNodeForPackage(AbstractDrawingView.class).put(HANDLE_COLOR_PROPERTY, newValue.getName());
             recreateHandles();
         }
     };
-    private final NonnullProperty<HandleType> handleType = new NonnullProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final NonNullProperty<HandleType> handleType = new NonNullProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
     private final ObjectProperty<HandleType> leadHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
     private final ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
-    private final NonnullProperty<HandleType> multiHandleType = new NonnullProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    private final NonNullProperty<HandleType> multiHandleType = new NonNullProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
 
     {
         ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> {
@@ -108,52 +111,56 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         });
     }
 
+    @NonNull
     @Override
     public ObjectProperty<String> helpTextProperty() {
         return helpText;
     }
 
+    @NonNull
     @Override
     public IntegerProperty handleSizeProperty() {
         return handleSize;
     }
 
+    @NonNull
     @Override
     public IntegerProperty handleStrokeWidthProperty() {
         return handleStrokeWidth;
     }
 
+    @NonNull
     @Override
-    public NonnullProperty<CssColor> handleColorProperty() {
+    public NonNullProperty<CssColor> handleColorProperty() {
         return handleColor;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public NonnullProperty<HandleType> handleTypeProperty() {
+    public NonNullProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<HandleType> leadHandleTypeProperty() {
         return leadHandleType;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<HandleType> anchorHandleTypeProperty() {
         return anchorHandleType;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public NonnullProperty<HandleType> multiHandleTypeProperty() {
+    public NonNullProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public SetProperty<DrawingView> drawingViewsProperty() {
         return drawingViews;
@@ -208,19 +215,19 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     };
 
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Tool> activeToolProperty() {
         return activeTool;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ObjectProperty<Tool> defaultToolProperty() {
         return defaultTool;

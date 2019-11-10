@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -22,22 +22,22 @@ import java.util.List;
 public class Declaration extends AST {
     @Nullable
     private final String propertyNamespace;
-    @Nonnull
+    @NonNull
     private final String propertyName;
-    @Nonnull
+    @NonNull
     private final ImmutableList<CssToken> terms;
     private int startPos = -1;
     private int endPos = -1;
 
-    public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, CssToken term) {
+    public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, CssToken term) {
         this(propertyNamespace, propertyName, Arrays.asList(new CssToken[]{term}));
     }
 
-    public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, @Nonnull List<CssToken> terms) {
+    public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, @NonNull List<CssToken> terms) {
         this(propertyNamespace, propertyName, terms, -1, -1);
     }
 
-    public Declaration(@Nullable String propertyNamespace, @Nonnull String propertyName, @Nonnull List<CssToken> terms, int startPos, int endPos) {
+    public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
         this.propertyNamespace = propertyNamespace;
         this.propertyName = propertyName;
         this.terms = ImmutableLists.ofCollection(terms);
@@ -50,17 +50,17 @@ public class Declaration extends AST {
         return propertyNamespace;
     }
 
-    @Nonnull
+    @NonNull
     public String getPropertyName() {
         return propertyName;
     }
 
-    @Nonnull
+    @NonNull
     public ImmutableList<CssToken> getTerms() {
         return terms;
     }
 
-    @Nonnull
+    @NonNull
     public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
@@ -70,7 +70,7 @@ public class Declaration extends AST {
         return buf.toString();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
 

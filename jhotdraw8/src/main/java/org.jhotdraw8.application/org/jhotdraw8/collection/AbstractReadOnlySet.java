@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 public abstract class AbstractReadOnlySet<E> extends AbstractReadOnlyCollection<E> implements ReadOnlySet<E> {
     @Override
     public boolean equals(Object o) {
@@ -21,7 +23,7 @@ public abstract class AbstractReadOnlySet<E> extends AbstractReadOnlyCollection<
         }
         try {
             return containsAll(c);
-        } catch (ClassCastException | NullPointerException unused) {
+        } catch (@NonNull ClassCastException | NullPointerException unused) {
             return false;
         }
     }

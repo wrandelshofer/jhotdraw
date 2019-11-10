@@ -8,7 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * ResizePane.
@@ -34,7 +34,7 @@ public class ResizePane extends BorderPane {
         userResizable.set(value);
     }
 
-    @Nonnull
+    @NonNull
     public BooleanProperty userResizableProperty() {
         return userResizable;
     }

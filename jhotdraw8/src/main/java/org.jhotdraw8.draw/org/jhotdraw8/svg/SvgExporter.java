@@ -49,7 +49,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -110,7 +110,7 @@ public class SvgExporter {
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
     private final String SVG_NS = "http://www.w3.org/2000/svg";
-    @Nonnull
+    @NonNull
     private IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
     @Nullable
@@ -137,6 +137,7 @@ public class SvgExporter {
         this.skipKey = skipKey;
     }
 
+    @Nullable
     private String createFileComment() {
         return null;
     }
@@ -150,7 +151,7 @@ public class SvgExporter {
         this.uriResolver = uriResolver;
     }
 
-    private void initIdFactoryRecursively(javafx.scene.Node node) throws IOException {
+    private void initIdFactoryRecursively(@NonNull javafx.scene.Node node) throws IOException {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
             idFactory.putId(id, node);
@@ -174,7 +175,7 @@ public class SvgExporter {
         this.skipInvisibleNodes = skipInvisibleNodes;
     }
 
-    private boolean isSkipNode(@Nonnull Node node) {
+    private boolean isSkipNode(@NonNull Node node) {
         if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return true;
         }
@@ -206,7 +207,7 @@ public class SvgExporter {
         return false;
     }
 
-    public Document toDocument(javafx.scene.Node drawingNode) throws IOException {
+    public Document toDocument(@NonNull javafx.scene.Node drawingNode) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
@@ -240,17 +241,17 @@ public class SvgExporter {
         }
     }
 
-    public void write(OutputStream out, javafx.scene.Node drawing) throws IOException {
+    public void write(OutputStream out, @NonNull javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
         XmlUtil.write(out, doc);
     }
 
-    public void write(Writer out, javafx.scene.Node drawing) throws IOException {
+    public void write(Writer out, @NonNull javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
         XmlUtil.write(out, doc);
     }
 
-    private Element writeArc(Document doc, Element parent, Arc node) {
+    private Element writeArc(@NonNull Document doc, @NonNull Element parent, @NonNull Arc node) {
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
         StringBuilder buf = new StringBuilder();
@@ -309,8 +310,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeCircle(Document doc, @Nonnull Element
-            parent, Circle node) {
+    private Element writeCircle(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Circle node) {
         Element elem = doc.createElement("circle");
         if (node.getCenterX() != 0.0) {
             elem.setAttribute("cx", nb.toString(node.getCenterX()));
@@ -325,7 +326,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeClipAttributes(@Nonnull Element elem, Node node) {
+    private void writeClipAttributes(@NonNull Element elem, @NonNull Node node) {
         Node clip = node.getClip();
         if (clip == null) {
             return;
@@ -339,8 +340,8 @@ public class SvgExporter {
         }
     }
 
-    private void writeClipPathDefs(@Nonnull Document doc, @Nonnull Element
-            defsNode, Node node) throws IOException {
+    private void writeClipPathDefs(@NonNull Document doc, @NonNull Element
+            defsNode, @NonNull Node node) throws IOException {
         // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
         Node clip = node.getClip();
         if (clip == null) {
@@ -355,7 +356,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeCompositingAttributes(@Nonnull Element elem, Node
+    private void writeCompositingAttributes(@NonNull Element elem, @NonNull Node
             node) {
         if (node.getOpacity() != 1.0) {
             elem.setAttribute("opacity", nb.toString(node.getOpacity()));
@@ -375,8 +376,8 @@ public class SvgExporter {
         }*/
     }
 
-    private Element writeCubicCurve(Document doc, Element
-            parent, CubicCurve node) {
+    private Element writeCubicCurve(@NonNull Document doc, @NonNull Element
+            parent, @NonNull CubicCurve node) {
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
         final StringBuilder buf = new StringBuilder();
@@ -401,8 +402,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeDefsRecursively(Document doc, Element
-            defsNode, javafx.scene.Node node) throws IOException {
+    private void writeDefsRecursively(@NonNull Document doc, @NonNull Element
+            defsNode, @NonNull javafx.scene.Node node) throws IOException {
         if (isSkipNode(node)) {
             return;
         }
@@ -423,15 +424,15 @@ public class SvgExporter {
         }
     }
 
-    private void writeDocumentElementAttributes(Element
+    private void writeDocumentElementAttributes(@NonNull Element
                                                         docElement, javafx.scene.Node drawingNode) throws IOException {
         docElement.setAttribute("version", "1.2");
         docElement.setAttribute("baseProfile", "tiny");
 
     }
 
-    private Element writeEllipse(Document doc, @Nonnull Element
-            parent, Ellipse node) {
+    private Element writeEllipse(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Ellipse node) {
         Element elem = doc.createElement("ellipse");
         if (node.getCenterX() != 0.0) {
             elem.setAttribute("cx", nb.toString(node.getCenterX()));
@@ -449,7 +450,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeFillAttributes(@Nonnull Element elem, Shape node) {
+    private void writeFillAttributes(@NonNull Element elem, @NonNull Shape node) {
         Paint fill = node.getFill();
         String id = idFactory.getId(fill);
         if (id != null) {
@@ -485,7 +486,7 @@ public class SvgExporter {
         }
     }
 
-    private Element writeGroup(Document doc, Element parent, @Nonnull Group
+    private Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
             node) {
         Element elem = doc.createElement("g");
         writeClipAttributes(elem, node);
@@ -493,7 +494,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeImageView(Document doc, Element parent, ImageView
+    private Element writeImageView(@NonNull Document doc, @NonNull Element parent, @NonNull ImageView
             node) throws IOException {
         Element elem = doc.createElement("image");
         parent.appendChild(elem);
@@ -524,7 +525,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeLine(Document doc, @Nonnull Element parent, Line
+    private Element writeLine(@NonNull Document doc, @NonNull Element parent, @NonNull Line
             node) {
         Element elem = doc.createElement("line");
         if (node.getStartX() != 0.0) {
@@ -543,8 +544,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeNodeRecursively(Document doc, Element
-            parent, javafx.scene.Node node) throws IOException {
+    private void writeNodeRecursively(@NonNull Document doc, @NonNull Element
+            parent, @NonNull javafx.scene.Node node) throws IOException {
         if (isSkipNode(node)) {
             return;
         }
@@ -587,7 +588,7 @@ public class SvgExporter {
 
     }
 
-    private void writePaintDefs(@Nonnull Document doc, @Nonnull Element
+    private void writePaintDefs(@NonNull Document doc, @NonNull Element
             defsNode, Paint paint) throws IOException {
         if (idFactory.getId(paint) == null) {
             if (paint instanceof LinearGradient) {
@@ -684,8 +685,9 @@ public class SvgExporter {
         }
     }
 
-    private Element writePath(@Nonnull Document doc, @Nonnull Element
-            parent, Path node) {
+    @Nullable
+    private Element writePath(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Path node) {
         if (node.getElements().isEmpty()) {
             return null;
         }
@@ -701,8 +703,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writePolygon(Document doc, @Nonnull Element
-            parent, Polygon node) {
+    private Element writePolygon(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Polygon node) {
         Element elem = doc.createElement("polygon");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
@@ -719,8 +721,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writePolyline(Document doc, @Nonnull Element
-            parent, Polyline node) {
+    private Element writePolyline(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Polyline node) {
         Element elem = doc.createElement("polyline");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
@@ -742,7 +744,7 @@ public class SvgExporter {
 // empty
     }
 
-    private Element writeQuadCurve(Document doc, Element parent, QuadCurve
+    private Element writeQuadCurve(@NonNull Document doc, @NonNull Element parent, @NonNull QuadCurve
             node) {
         Element elem = doc.createElement("path");
         parent.appendChild(elem);
@@ -764,8 +766,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeRectangle(Document doc, @Nonnull Element
-            parent, Rectangle node) {
+    private Element writeRectangle(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Rectangle node) {
         Element elem = doc.createElement("rect");
         if (node.getX() != 0.0) {
             elem.setAttribute("x", nb.toString(node.getX()));
@@ -789,7 +791,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeRegion(Document doc, Element parent, Region region) throws IOException {
+    private Element writeRegion(@NonNull Document doc, @NonNull Element parent, @NonNull Region region) throws IOException {
         Element elem = doc.createElement("g");
         parent.appendChild(elem);
 
@@ -879,8 +881,8 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeSVGPath(Document doc, @Nonnull Element
-            parent, SVGPath node) {
+    private Element writeSVGPath(@NonNull Document doc, @NonNull Element
+            parent, @NonNull SVGPath node) {
         Element elem = doc.createElement("path");
         elem.setAttribute("d", node.getContent());
         switch (node.getFillRule()) {
@@ -905,7 +907,7 @@ public class SvgExporter {
      * @throws IOException
      */
     @Nullable
-    private Element writeShape(@Nonnull Document doc, @Nonnull Element
+    private Element writeShape(@NonNull Document doc, @NonNull Element
             parent, Shape node) throws IOException {
         Element elem = null;
         if (node instanceof Arc) {
@@ -938,7 +940,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeStrokeAttributes(@Nonnull Element elem, Shape shape) {
+    private void writeStrokeAttributes(@NonNull Element elem, @NonNull Shape shape) {
         Paint stroke = shape.getStroke();
         if (stroke == null) {
             return;
@@ -995,7 +997,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeStrokeAttributes(@Nonnull Element elem, BorderStroke shape) {
+    private void writeStrokeAttributes(@NonNull Element elem, @NonNull BorderStroke shape) {
         if (shape.getTopStroke() != null) {
             elem.setAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }
@@ -1038,7 +1040,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeStyleAttributes(@Nonnull Element elem, Node node) {
+    private void writeStyleAttributes(@NonNull Element elem, @NonNull Node node) {
         String id = node.getId();
         if (id != null && !id.isEmpty()) {
             elem.setAttribute("id", id);
@@ -1061,13 +1063,14 @@ public class SvgExporter {
         }
     }
 
-    private Element writeText(Document doc, Element parent, Text node) {
+    @NonNull
+    private Element writeText(@NonNull Document doc, @NonNull Element parent, @NonNull Text node) {
         Element elem = node.getWrappingWidth() > 0 ? writeWrappedText(doc, parent, node) : writeUnwrappedText(doc, parent, node);
         writeTextAttributes(elem, node);
         return elem;
     }
 
-    private Element writeUnwrappedText(Document doc, Element parent, Text
+    private Element writeUnwrappedText(@NonNull Document doc, @NonNull Element parent, @NonNull Text
             node) {
         Element elem = doc.createElement("text");
         parent.appendChild(elem);
@@ -1102,7 +1105,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private Element writeWrappedText(Document doc, Element parent, Text
+    private Element writeWrappedText(@NonNull Document doc, @NonNull Element parent, @NonNull Text
             node) {
         Element elem = doc.createElement("text");
         parent.appendChild(elem);
@@ -1111,11 +1114,11 @@ public class SvgExporter {
         return elem;
     }
 
-    private void drawText(Document doc, Element parent, String str, Bounds
+    private void drawText(@NonNull Document doc, @NonNull Element parent, @Nullable String str, @NonNull Bounds
             textRect,
-                          Font tfont, int tabSize, boolean isUnderlined,
+                          @NonNull Font tfont, int tabSize, boolean isUnderlined,
                           boolean isStrikethrough,
-                          TextAlignment textAlignment, double lineSpacing) {
+                          @NonNull TextAlignment textAlignment, double lineSpacing) {
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
         java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
         float leftMargin = (float) textRect.getMinX();
@@ -1172,12 +1175,13 @@ public class SvgExporter {
      *                       values
      * @return Returns the actual bounds of the paragraph.
      */
-    private Rectangle2D.Double drawParagraph(Document doc, Element parent,
-                                             FontRenderContext frc, String
-                                                     paragraph, AttributedCharacterIterator styledText,
+    @NonNull
+    private Rectangle2D.Double drawParagraph(@NonNull Document doc, @NonNull Element parent,
+                                             FontRenderContext frc, @NonNull String
+                                                     paragraph, @NonNull AttributedCharacterIterator styledText,
                                              float verticalPos, float maxVerticalPos, float leftMargin,
-                                             float rightMargin, float[] tabStops, int tabCount,
-                                             TextAlignment textAlignment, double lineSpacing) {
+                                             float rightMargin, @NonNull float[] tabStops, int tabCount,
+                                             @NonNull TextAlignment textAlignment, double lineSpacing) {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,
 
@@ -1311,7 +1315,7 @@ public class SvgExporter {
         return paragraphBounds;
     }
 
-    private void writeTextAttributes(Element elem, Text node) {
+    private void writeTextAttributes(@NonNull Element elem, @NonNull Text node) {
         Font ft = node.getFont();
         elem.setAttribute("font-family", (ft.getFamily().equals(ft.getName())) ? "'" + ft.getName() + "'" : "'" + ft.getName() + "', '" + ft.getFamily() + "'");
         elem.setAttribute("font-size", nb.toString(ft.getSize()));
@@ -1330,7 +1334,7 @@ public class SvgExporter {
         }
     }
 
-    private void writeTransformAttributes(@Nonnull Element elem, Node node) {
+    private void writeTransformAttributes(@NonNull Element elem, @NonNull Node node) {
 
         // The transforms are applied before translateX, translateY, scaleX, 
         // scaleY and rotate transforms.
@@ -1349,8 +1353,8 @@ public class SvgExporter {
         writeTransformAttributes(elem, txs);
     }
 
-    private void writeTransformAttributes(@Nonnull Element
-                                                  elem, List<Transform> txs) {
+    private void writeTransformAttributes(@NonNull Element
+                                                  elem, @NonNull List<Transform> txs) {
 
         if (txs.size() > 0) {
             String value = tx.toString(ImmutableLists.ofCollection(txs));

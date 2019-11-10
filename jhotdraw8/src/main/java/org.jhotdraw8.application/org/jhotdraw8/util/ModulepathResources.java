@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.util;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
@@ -28,7 +28,8 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @return the resource bundle
      * @see ResourceBundle
      */
-    public static ModulepathResources getResources(@Nonnull String moduleName, @Nonnull String baseName)
+    @NonNull
+    public static ModulepathResources getResources(@NonNull String moduleName, @NonNull String baseName)
             throws MissingResourceException {
         return getResources(moduleName, baseName, LocaleUtil.getDefault());
     }
@@ -40,7 +41,8 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @return the resource bundle
      * @see ResourceBundle
      */
-    public static Resources getResources(@Nonnull Module module, @Nonnull String baseName)
+    @NonNull
+    public static Resources getResources(@NonNull Module module, @NonNull String baseName)
             throws MissingResourceException {
         return getResources(module, baseName, LocaleUtil.getDefault());
     }
@@ -53,7 +55,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @return the resource bundle
      * @see ResourceBundle
      */
-    static ModulepathResources getResources(@Nonnull String moduleName, @Nonnull String baseName, @Nonnull Locale locale)
+    static ModulepathResources getResources(@NonNull String moduleName, @NonNull String baseName, @NonNull Locale locale)
             throws MissingResourceException {
         ModulepathResources r;
         r = new ModulepathResources(ModuleLayer.boot().findModule(moduleName).orElseThrow(
@@ -70,7 +72,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @return the resource bundle
      * @see ResourceBundle
      */
-    public static ModulepathResources getResources(@Nonnull Module module, @Nonnull String baseName, @Nonnull Locale locale)
+    public static ModulepathResources getResources(@NonNull Module module, @NonNull String baseName, @NonNull Locale locale)
             throws MissingResourceException {
         ModulepathResources r;
         r = new ModulepathResources(module, baseName, locale);
@@ -84,12 +86,12 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     /**
      * The base name of the resource bundle.
      */
-    @Nonnull
+    @NonNull
     private final String baseName;
     /**
      * The locale.
      */
-    @Nonnull
+    @NonNull
     private final Locale locale;
 
     /**
@@ -108,7 +110,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @param baseName the base name
      * @param locale   the locale
      */
-    public ModulepathResources(@Nonnull Module module, @Nonnull String baseName, @Nonnull Locale locale) throws MissingResourceException {
+    public ModulepathResources(@NonNull Module module, @NonNull String baseName, @NonNull Locale locale) throws MissingResourceException {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = doGetBundle(module, baseName, locale);
@@ -150,7 +152,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         this.parent = potentialParent;
     }
 
-    private static ResourceBundle doGetBundle(Module module, String baseName, Locale locale) {
+    private static ResourceBundle doGetBundle(Module module, String baseName, @NonNull Locale locale) {
         for (ResourceBundleProvider provider : ServiceLoader.load(ResourceBundleProvider.class)) {
             if (provider.getClass().getModule().equals(module)) {
                 ResourceBundle bundle = provider.getBundle(baseName, locale);
@@ -163,13 +165,14 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
 
+    @NonNull
     @Override
     public ResourceBundle asResourceBundle() {
         return this;
     }
 
     @Override
-    public boolean containsKey(String key) {
+    public boolean containsKey(@Nullable String key) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -188,7 +191,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
     @Override
-    public @Nonnull String getBaseName() {
+    public @NonNull String getBaseName() {
         return baseName;
     }
 
@@ -203,13 +206,13 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @param arguments the arguments
      * @return formatted String
      */
-    @Nonnull
-    public String getFormatted(@Nonnull String key, Object... arguments) {
+    @NonNull
+    public String getFormatted(@NonNull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
 
-    @Nonnull
+    @NonNull
     @Override
     public Enumeration<String> getKeys() {
         return resource.getKeys();
@@ -227,7 +230,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
 
     @Nullable
     @Override
-    protected Object handleGetObject(String key) {
+    protected Object handleGetObject(@NonNull String key) {
         Object obj = handleGetObjectRecursively(key);
         if (obj == null) {
             obj = "";
@@ -241,7 +244,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
     @Nullable
-    protected Object handleGetObjectRecursively(@Nonnull String key) {
+    protected Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -253,7 +256,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return obj;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String toString() {
         return "ModulepathResources" + "[" + baseName + "]";

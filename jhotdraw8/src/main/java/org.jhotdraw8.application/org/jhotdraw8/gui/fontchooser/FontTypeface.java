@@ -8,7 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * FontTypeface.
@@ -45,17 +45,17 @@ public class FontTypeface {
         regular.set(value);
     }
 
-    @Nonnull
+    @NonNull
     public StringProperty nameProperty() {
         return name;
     }
 
-    @Nonnull
+    @NonNull
     public BooleanProperty regularProperty() {
         return regular;
     }
 
-    @Nonnull
+    @NonNull
     public StringProperty shortNameProperty() {
         return shortName;
     }

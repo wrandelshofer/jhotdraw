@@ -4,6 +4,9 @@
  */
 package org.jhotdraw8.util;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
 public class Exceptions {
     /**
      * Gets the most specific localized error message from the given throwable.
@@ -11,7 +14,8 @@ public class Exceptions {
      * @param t a throwable
      * @return the error message
      */
-    public static String getLocalizedMessage(Throwable t) {
+    @Nullable
+    public static String getLocalizedMessage(@NonNull Throwable t) {
         String message = null;
         for (Throwable tt = t; tt != null; tt = tt.getCause()) {
             String msg = tt.getLocalizedMessage();

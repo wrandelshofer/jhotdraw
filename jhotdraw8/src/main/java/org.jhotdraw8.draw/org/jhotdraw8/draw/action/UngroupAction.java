@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
@@ -39,7 +39,7 @@ public class UngroupAction extends AbstractSelectedAction {
      * @param app    the application
      * @param editor the drawing editor
      */
-    public UngroupAction(Application app, DrawingEditor editor) {
+    public UngroupAction(@NonNull Application app, DrawingEditor editor) {
         super(app, editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -57,7 +57,7 @@ public class UngroupAction extends AbstractSelectedAction {
 
     }
 
-    public static void ungroup(@Nonnull DrawingView view, Collection<Figure> figures) {
+    public static void ungroup(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be ungrouped");
             alert.getDialogPane().setMaxWidth(640.0);
@@ -101,7 +101,7 @@ public class UngroupAction extends AbstractSelectedAction {
         view.getSelectedFigures().addAll(newSelection);
     }
 
-    private static void ungroup(@Nonnull DrawingView view, Figure group, @Nonnull LinkedHashSet<Figure> newSelection) {
+    private static void ungroup(@NonNull DrawingView view, @NonNull Figure group, @NonNull LinkedHashSet<Figure> newSelection) {
         Figure parent = group.getParent();
         if (parent != null && (!parent.isEditable() || !parent.isDecomposable())) {
             // FIXME internationalize me

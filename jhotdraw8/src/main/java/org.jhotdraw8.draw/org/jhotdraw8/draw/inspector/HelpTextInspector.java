@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.gui.PlatformUtil;
@@ -33,11 +34,11 @@ public class HelpTextInspector extends AbstractDrawingViewInspector {
         this(HelpTextInspector.class.getResource("HelpTextInspector.fxml"));
     }
 
-    public HelpTextInspector(URL fxmlUrl) {
+    public HelpTextInspector(@NonNull URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(URL fxmlUrl) {
+    private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene. 
         PlatformUtil.invokeAndWait(() -> {

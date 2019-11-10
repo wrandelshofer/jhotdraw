@@ -12,7 +12,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -46,7 +46,7 @@ public class ResizeHandleKit {
      *  @param f          the figure which will own the handles
      * @param handles    the list to which the handles should be added
      */
-    static public void addCornerResizeHandles(Figure f, Collection<Handle> handles) {
+    static public void addCornerResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
         handles.add(northEast(f));
@@ -59,7 +59,7 @@ public class ResizeHandleKit {
      *  @param f          the figure which will own the handles
      * @param handles    the list to which the handles should be added
      */
-    static public void addEdgeResizeHandles(Figure f, Collection<Handle> handles) {
+    static public void addEdgeResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
         handles.add(east(f));
@@ -72,7 +72,7 @@ public class ResizeHandleKit {
      *  @param f          the figure which will own the handles
      * @param handles    the list to which the handles should be added
      */
-    static public void addResizeHandles(Figure f, @Nonnull Collection<Handle> handles) {
+    static public void addResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
         addCornerResizeHandles(f, handles);
         addEdgeResizeHandles(f, handles);
     }
@@ -83,6 +83,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle south(Figure owner) {
         return new SouthHandle(owner);
     }
@@ -93,6 +94,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle southEast(Figure owner) {
         return new SouthEastHandle(owner);
     }
@@ -103,6 +105,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle southWest(Figure owner) {
         return new SouthWestHandle(owner);
     }
@@ -113,6 +116,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle north(Figure owner) {
         return new NorthHandle(owner);
     }
@@ -123,6 +127,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle northEast(Figure owner) {
         return new NorthEastHandle(owner);
     }
@@ -133,6 +138,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle northWest(Figure owner) {
         return new NorthWestHandle(owner);
     }
@@ -143,6 +149,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle east(Figure owner) {
         return new EastHandle(owner);
     }
@@ -153,6 +160,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
+    @NonNull
     static public Handle west(Figure owner) {
         return new WestHandle(owner);
     }
@@ -180,7 +188,7 @@ public class ResizeHandleKit {
 
     @Nullable
     private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nonnull
+    @NonNull
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
@@ -197,7 +205,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newX = CssSize.max(newPoint.getX(), bounds.getMinX());
             CssSize newY = CssSize.min(newPoint.getY(), bounds.getMaxY());
             CssSize newWidth = newX.subtract(bounds.getMinX());
@@ -227,7 +235,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newWidth = CssSize.max(newPoint.getX(), bounds.getMinX()).subtract(bounds.getMinX());
             CssSize newHeight = bounds.getMaxY().subtract(bounds.getMinY());
             if (keepAspect) {
@@ -249,7 +257,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newY = CssSize.min(bounds.getMaxY(), newPoint.getY());
             CssSize newWidth = bounds.getMaxX().subtract(bounds.getMinX());
             CssSize newHeight = bounds.getMaxY().subtract(newY);
@@ -272,7 +280,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newX = CssSize.min(bounds.getMaxX(), newPoint.getX());
             CssSize newY = CssSize.min(bounds.getMaxY(), newPoint.getY());
             CssSize newWidth = bounds.getMaxX().subtract(newX);
@@ -302,7 +310,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newX = CssSize.max(newPoint.getX(), bounds.getMinX());
             CssSize newY = CssSize.max(newPoint.getY(), bounds.getMinY());
             CssSize newWidth = newX.subtract(bounds.getMinX());
@@ -331,7 +339,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newY = CssSize.max(bounds.getMinY(), newPoint.getY());
             CssSize newWidth = bounds.getWidth();
             CssSize newHeight = newY.subtract(bounds.getMinY());
@@ -354,7 +362,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newX = CssSize.min(newPoint.getX(), bounds.getMaxX());
             CssSize newY = CssSize.max(newPoint.getY(), bounds.getMinY());
             CssSize newWidth = bounds.getMaxX().subtract(newX);
@@ -383,7 +391,7 @@ public class ResizeHandleKit {
         }
 
         @Override
-        protected void resize(@Nonnull CssPoint2D newPoint, Figure owner, @Nonnull CssRectangle2D bounds, @Nonnull DrawingModel model, boolean keepAspect) {
+        protected void resize(@NonNull CssPoint2D newPoint, Figure owner, @NonNull CssRectangle2D bounds, @NonNull DrawingModel model, boolean keepAspect) {
             CssSize newX = CssSize.min(bounds.getMaxX(), newPoint.getX());
             CssSize newWidth = bounds.getMaxX().subtract(newX);
             CssSize newHeight = bounds.getHeight();

@@ -3,6 +3,7 @@ package org.jhotdraw8.css.text;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
@@ -32,7 +33,7 @@ class CssStrokeConverterTest {
      * Test of fromString method, of class CssStrokeStyleConverter.
      */
     static
-    public void doTestFromString(CssStroke expected, String string) throws Exception {
+    public void doTestFromString(CssStroke expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
 
         CharBuffer buf = CharBuffer.wrap(string);
@@ -61,12 +62,13 @@ class CssStrokeConverterTest {
      * Test of fromString and toString methods, of class CssStrokeStyleConverter.
      */
     static
-    public void doTest(CssStroke value, String str) throws Exception {
+    public void doTest(CssStroke value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
 
+    @NonNull
     @TestFactory
     public List<DynamicTest> testFactory() {
         return Arrays.asList(

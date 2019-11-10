@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -69,7 +70,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         this.customProperties = customProperties;
     }
 
-    public final ReadOnlyList<CssToken> process(T element, ImmutableList<CssToken> in) throws ParseException {
+    @NonNull
+    public final ReadOnlyList<CssToken> process(@NonNull T element, @NonNull ImmutableList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
@@ -107,7 +109,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 ;
     }
 
-    public final void process(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    public final void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             tt.pushBack();
             processToken(element, tt, out);
@@ -117,7 +119,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     private final static int MAX_RECURSION_DEPTH = 4;
     private int recursion;
 
-    protected final void processToken(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    protected final void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         if (++recursion > MAX_RECURSION_DEPTH) {
             recursion = 0;
             throw new ParseException("Max recursion depth exceeded", tt.getStartPosition());
@@ -129,9 +131,9 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         }
     }
 
-    protected void doProcessToken(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    protected void doProcessToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
-            switch (tt.currentStringNonnull()) {
+            switch (tt.currentStringNonNull()) {
                 case ATTR_FUNCTION_NAME:
                     tt.pushBack();
                     processAttrFunction(element, tt, out);
@@ -172,7 +174,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      * @param out the consumer
      * @throws IOException
      */
-    private void processAttrFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processAttrFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈attr〉: function attr() expected.");
         if (!ATTR_FUNCTION_NAME.equals(tt.currentString())) {
             throw new ParseException("〈attr〉: function attr() expected.", tt.getStartPosition());
@@ -211,21 +213,21 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                     while (t2.next() != CssTokenType.TT_EOF) {
                         switch (t2.current()) {
                             case CssTokenType.TT_STRING:
-                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonnull(), null, line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
                                 break;
                             case CssTokenType.TT_IDENT:
-                                if (t2.currentStringNonnull().equals(CssTokenType.IDENT_NONE)) {
+                                if (t2.currentStringNonNull().equals(CssTokenType.IDENT_NONE)) {
                                     out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
                                 } else {
-                                    out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonnull(), null, line, start, end));
+                                    out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
                                 }
                                 break;
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonnull().toString(), null, line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString(), null, line, start, end));
                                 break;
                             case CssTokenType.TT_DIMENSION:
-                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonnull().toString() + t2.currentStringNonnull(), null, line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString() + t2.currentStringNonNull(), null, line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -249,7 +251,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_IDENT:
                                 double d;
                                 try {
-                                    d = Double.parseDouble(t2.currentStringNonnull());
+                                    d = Double.parseDouble(t2.currentStringNonNull());
                                 } catch (NumberFormatException e) {
                                     break Outer; // use fallback
                                 }
@@ -258,7 +260,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_DIMENSION:
                             case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonnull(), line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonNull(), line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -278,7 +280,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_IDENT:
                                 double d;
                                 try {
-                                    d = Double.parseDouble(t2.currentStringNonnull());
+                                    d = Double.parseDouble(t2.currentStringNonNull());
                                 } catch (NumberFormatException e) {
                                     break Outer; // use fallback
                                 }
@@ -287,7 +289,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_DIMENSION:
                             case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentStringNonnull(), t2.currentNumberNonnull(), line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentStringNonNull(), t2.currentNumberNonNull(), line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -303,7 +305,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_IDENT:
                                 double d;
                                 try {
-                                    d = Double.parseDouble(t2.currentStringNonnull());
+                                    d = Double.parseDouble(t2.currentStringNonNull());
                                 } catch (NumberFormatException e) {
                                     break Outer; // use fallback
                                 }
@@ -312,7 +314,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_DIMENSION:
                             case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonnull(), line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonNull(), line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -335,7 +337,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                             case CssTokenType.TT_NUMBER:
                             case CssTokenType.TT_DIMENSION:
                             case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonnull(), line, start, end));
+                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonNull(), line, start, end));
                                 break;
                             default:
                                 break Outer; // use fallback
@@ -364,7 +366,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      * @param out the consumer
      * @throws IOException
      */
-    private void processVarFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processVarFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈var〉: function var() expected.");
         if (!VAR_FUNCTION_NAME.equals(tt.currentString())) {
             throw new ParseException("〈var〉: function var() expected.", tt.getStartPosition());
@@ -406,7 +408,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      * @throws IOException    on io failure
      * @throws ParseException on parse failure
      */
-    private void processUnknownFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processUnknownFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈func〉: function expected.");
         out.accept(tt.getToken());
         while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
@@ -419,6 +421,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
 
     }
 
+    @Nullable
     protected final CssSize parseDimensionOrDouble(String attrValue, int pos) throws IOException, ParseException {
         StreamCssTokenizer tt = new StreamCssTokenizer(attrValue);
         if (tt.next() == CssTokenType.TT_DIMENSION) {
@@ -429,7 +432,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         throw new ParseException("dimension expected, got: \"" + attrValue + "\"", pos);
     }
 
-    private QualifiedName parseAttrName(CssTokenizer tt) throws IOException, ParseException {
+    @Nullable
+    private QualifiedName parseAttrName(@NonNull CssTokenizer tt) throws IOException, ParseException {
         String name;
         if (tt.next() == CssTokenType.TT_IDENT) {
             name = tt.currentString();
@@ -457,7 +461,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      * @param out the consumer
      * @throws IOException
      */
-    private void processCalcFunction(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException {
+    private void processCalcFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
         CssSize dim = parseCalcFunction(element, tt);
@@ -465,7 +469,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         produceNumberPercentageOrDimension(out, dim, line, start, end);
     }
 
-    protected void produceNumberPercentageOrDimension(Consumer<CssToken> out, CssSize dim, int line, int start, int end) {
+    protected void produceNumberPercentageOrDimension(@NonNull Consumer<CssToken> out, @NonNull CssSize dim, int line, int start, int end) {
         if (dim.getUnits() == null) {
             out.accept(new CssToken(CssTokenType.TT_NUMBER, null, dim.getValue(), line, start, end));
         } else if ("%".equals(dim.getUnits())) {
@@ -475,9 +479,10 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         }
     }
 
-    private CssSize parseCalcFunction(T element, CssTokenizer tt) throws IOException, ParseException {
+    @Nullable
+    private CssSize parseCalcFunction(@NonNull T element, @NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + CALC_FUNCTION_NAME + "〉: " + CALC_FUNCTION_NAME + "() function expected.");
-        if (!CALC_FUNCTION_NAME.equals(tt.currentStringNonnull())) {
+        if (!CALC_FUNCTION_NAME.equals(tt.currentStringNonNull())) {
             throw new ParseException("〈" + CALC_FUNCTION_NAME + "〉: " + CALC_FUNCTION_NAME + "() function expected.", tt.getStartPosition());
         }
         CssSize dim = parseCalcSum(element, tt);
@@ -485,7 +490,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return dim;
     }
 
-    private CssSize parseCalcSum(T element, CssTokenizer tt) throws IOException, ParseException {
+    @Nullable
+    private CssSize parseCalcSum(@NonNull T element, @NonNull CssTokenizer tt) throws IOException, ParseException {
         CssSize dim = parseCalcProduct(element, tt);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
@@ -519,7 +525,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return dim;
     }
 
-    private CssSize parseCalcProduct(T element, CssTokenizer tt) throws IOException, ParseException {
+    @Nullable
+    private CssSize parseCalcProduct(@NonNull T element, @NonNull CssTokenizer tt) throws IOException, ParseException {
         CssSize dim = parseCalcValue(element, tt);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
@@ -553,14 +560,15 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return dim;
     }
 
-    protected CssSize parseCalcValue(T element, CssTokenizer tt) throws IOException, ParseException {
+    @Nullable
+    protected CssSize parseCalcValue(@NonNull T element, @NonNull CssTokenizer tt) throws IOException, ParseException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumberNonnull().doubleValue());
+                return new CssSize(tt.currentNumberNonNull().doubleValue());
             case CssTokenType.TT_PERCENTAGE:
-                return new CssSize(tt.currentNumberNonnull().doubleValue(), "%");
+                return new CssSize(tt.currentNumberNonNull().doubleValue(), "%");
             case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumberNonnull().doubleValue(), tt.currentStringNonnull());
+                return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             case '(':
                 CssSize dim = parseCalcSum(element, tt);
                 tt.requireNextToken(')', "calc-value: right bracket ')' expected.");

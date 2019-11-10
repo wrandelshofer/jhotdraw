@@ -7,7 +7,7 @@ package org.jhotdraw8.app.action.file;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.DocumentBasedActivity;
@@ -65,7 +65,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      * @param uri    the uri
      * @param format the data format that should be used to access the URI
      */
-    public OpenRecentFileAction(Application app, @Nonnull URI uri, DataFormat format) {
+    public OpenRecentFileAction(Application app, @NonNull URI uri, DataFormat format) {
         super(app);
         this.uri = uri;
         this.format = format;
@@ -73,7 +73,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @Nonnull Application app) {
+    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
         {
             // Search for an empty view
             DocumentBasedActivity emptyView;
@@ -99,11 +99,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(@Nonnull DocumentBasedActivity view, boolean disposeView) {
+    public void doIt(@NonNull DocumentBasedActivity view, boolean disposeView) {
         openViewFromURI(view, uri, format);
     }
 
-    private void handleException(final DocumentBasedActivity v, Throwable exception) throws MissingResourceException {
+    private void handleException(@NonNull final DocumentBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = ApplicationLabels.getResources();
@@ -116,7 +116,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         alert.showAndWait();
     }
 
-    protected void openViewFromURI(@Nonnull final DocumentBasedActivity v, @Nonnull final URI uri, DataFormat format) {
+    protected void openViewFromURI(@NonNull final DocumentBasedActivity v, @NonNull final URI uri, DataFormat format) {
         final Application app = getApplication();
         WorkState workState = new SimpleWorkState(getLabel());
         v.addDisabler(workState);

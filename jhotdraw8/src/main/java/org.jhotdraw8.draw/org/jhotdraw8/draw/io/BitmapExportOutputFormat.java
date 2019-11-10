@@ -13,7 +13,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssColor;
@@ -66,9 +66,9 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     public final static String JPEG_MIME_TYPE = "image/jpeg";
     public final static String PNG_MIME_TYPE = "image/png";
 
-    private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds, double dpi) {
+    private WritableImage doRenderImage(@NonNull Figure slice, @NonNull Node node, @NonNull Bounds bounds, double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();
-        double scale = dpi / RenderContext.DPI.getDefaultValueNonnull();
+        double scale = dpi / RenderContext.DPI.getDefaultValueNonNull();
         parameters.setTransform(Transforms.concat(Transform.scale(scale, scale), slice.getWorldToLocal()));
         Drawing drawing = (slice instanceof Drawing) ? (Drawing) slice : slice.getDrawing();
         final CssColor color = drawing != null ? drawing.get(Drawing.BACKGROUND) : CssColor.WHITE;
@@ -87,7 +87,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         return image;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     protected String getExtension() {
         return "png";
@@ -98,7 +98,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         return false;
     }
 
-    private WritableImage renderImage(@Nonnull Drawing drawing, @Nonnull Collection<Figure> selection, double dpi) throws IOException {
+    private WritableImage renderImage(@NonNull Drawing drawing, @NonNull Collection<Figure> selection, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
@@ -109,7 +109,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds, drawingDpi), Platform::runLater);
             try {
                 return future.get();
-            } catch (InterruptedException | ExecutionException ex) {
+            } catch (@NonNull InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
@@ -117,12 +117,12 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
-    private WritableImage renderSlice(@Nonnull Figure slice, @Nonnull Bounds bounds, @Nonnull Node node, double dpi) throws IOException {
+    private WritableImage renderSlice(@NonNull Figure slice, @NonNull Bounds bounds, @NonNull Node node, double dpi) throws IOException {
         if (!Platform.isFxApplicationThread()) {
             CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds, dpi), Platform::runLater);
             try {
                 return future.get();
-            } catch (InterruptedException | ExecutionException ex) {
+            } catch (@NonNull InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
@@ -130,7 +130,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
-    private void setDPI(IIOMetadata metadata, double dpi) throws IIOInvalidTreeException {
+    private void setDPI(@NonNull IIOMetadata metadata, double dpi) throws IIOInvalidTreeException {
         double dotsPerMilli = dpi / INCH_2_MM;
 
         IIOMetadataNode horiz = new IIOMetadataNode("HorizontalPixelSize");
@@ -150,20 +150,20 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     }
 
     @Override
-    public void write(@Nonnull Map<DataFormat, Object> out, @Nonnull Drawing drawing, @Nonnull Collection<Figure> selection) throws IOException {
+    public void write(@NonNull Map<DataFormat, Object> out, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
         WritableImage image = renderImage(drawing, selection, drawingDpi);
         out.put(DataFormat.IMAGE, image);
     }
 
     @Override
-    public void write(URI documentHome, @Nonnull OutputStream out, @Nonnull Drawing drawing, WorkState workState) throws IOException {
+    public void write(URI documentHome, @NonNull OutputStream out, @NonNull Drawing drawing, WorkState workState) throws IOException {
         WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), drawingDpi);
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
         writeImage(out, writableImage, drawingDpi);
 
     }
 
-    public void write(@Nonnull Path file, Drawing drawing, WorkState workState) throws IOException {
+    public void write(@NonNull Path file, @NonNull Drawing drawing, WorkState workState) throws IOException {
         if (isExportDrawing()) {
             OutputFormat.super.write(file, drawing, workState);
         }
@@ -180,7 +180,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
-    private void writeImage(@Nonnull OutputStream out, @Nonnull WritableImage writableImage, double dpi) throws IOException {
+    private void writeImage(@NonNull OutputStream out, @NonNull WritableImage writableImage, double dpi) throws IOException {
         BufferedImage image = SwingFXUtils.fromFXImage(writableImage, null);
 
         for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("png"); iw.hasNext(); ) {
@@ -203,7 +203,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     }
 
     @Override
-    protected void writePage(@Nonnull Path file, @Nonnull Page page, @Nonnull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(@NonNull Path file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
@@ -214,7 +214,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
-    protected boolean writeSlice(@Nonnull Path file, @Nonnull Slice slice, @Nonnull Node node, double dpi) throws IOException {
+    protected boolean writeSlice(@NonNull Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
         WritableImage image = renderSlice(slice, slice.getBoundsInLocal(), node, dpi);
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             writeImage(out, image, dpi);

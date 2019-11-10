@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
@@ -39,11 +39,11 @@ public class XmlBooleanConverter implements Converter<Boolean> {
     }
 
     @Override
-    public void toString(@Nonnull Appendable buf, IdFactory idFactory, Boolean value) throws IOException {
+    public void toString(@NonNull Appendable buf, IdFactory idFactory, Boolean value) throws IOException {
         buf.append(value ? trueString : falseString);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Boolean fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException {
         int pos = in.position();
@@ -66,7 +66,7 @@ public class XmlBooleanConverter implements Converter<Boolean> {
                 " expected instead of \"" + str + "\".", pos);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Boolean getDefaultValue() {
         return false;
