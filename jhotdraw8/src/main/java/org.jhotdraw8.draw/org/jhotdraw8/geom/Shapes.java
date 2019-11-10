@@ -971,6 +971,79 @@ public class Shapes {
         return buf.toString();
     }
 
+    /**
+     * Converts a Java Path iterator to a SVG path with double precision.
+     *
+     * @param iter AWT Path Iterator
+     * @return SVG Path
+     */
+    public static String floatRelativeSvgStringFromAWT(PathIterator iter) {
+        XmlNumberConverter nb = new XmlNumberConverter();
+        StringBuilder buf = new StringBuilder();
+        float[] coords = new float[6];
+        float x = 0, y = 0;// current point
+        float ix = 0, iy = 0;// initial point of a subpath
+        char next = 'z'; // next instruction
+        for (; !iter.isDone(); iter.next()) {
+            double px = x, py = y;// previous point
+            if (buf.length() != 0) {
+                buf.append(' ');
+            }
+            switch (iter.currentSegment(coords)) {
+                case PathIterator.SEG_MOVETO:
+                    buf.append('m');
+                    next = 'l'; // move implies line
+                    buf.append(nb.toString((ix = x = coords[0]) - px))
+                            .append(',')
+                            .append(nb.toString((iy = y = coords[1]) - py));
+                    break;
+                case PathIterator.SEG_LINETO:
+                    if (next != 'l') {
+                        buf.append(next = 'l');
+                    }
+                    buf.append(nb.toString((x = coords[0]) - px))
+                            .append(',')
+                            .append(nb.toString((y = coords[1]) - py));
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    if (next != 'q') {
+                        buf.append(next = 'q');
+                    }
+                    buf.append(nb.toString(coords[0] - px))
+                            .append(',')
+                            .append(nb.toString(coords[1] - py))
+                            .append(',')
+                            .append(nb.toString((x = coords[2]) - px))
+                            .append(',')
+                            .append(nb.toString((y = coords[3]) - py));
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    if (next != 'c') {
+                        buf.append(next = 'c');
+                    }
+                    buf.append(nb.toString(coords[0] - px))
+                            .append(',')
+                            .append(nb.toString(coords[1] - py))
+                            .append(',')
+                            .append(nb.toString(coords[2] - px))
+                            .append(',')
+                            .append(nb.toString(coords[3] - py))
+                            .append(',')
+                            .append(nb.toString((x = coords[4]) - px))
+                            .append(',')
+                            .append(nb.toString((y = coords[5]) - py));
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    if (next != 'z') {
+                        buf.append(next = 'z');
+                    }
+                    x = ix;
+                    y = iy;
+                    break;
+            }
+        }
+        return buf.toString();
+    }
 
     public static String doubleSvgStringFromElements(@Nonnull List<PathElement> elements) {
         XmlNumberConverter nb = new XmlNumberConverter();
@@ -1176,51 +1249,58 @@ public class Shapes {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
-        boolean first = true;
+        char next = 'Z'; // next instruction
         for (; !iter.isDone(); iter.next()) {
-            if (first) {
-                first = false;
-            } else {
+            if (buf.length() != 0) {
                 buf.append(' ');
             }
             switch (iter.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    buf.append('Z');
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    buf.append('C');
-                    for (int i = 0; i < 6; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
-                case PathIterator.SEG_LINETO:
-                    buf.append('L');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
-                    }
-                    break;
                 case PathIterator.SEG_MOVETO:
                     buf.append('M');
-                    for (int i = 0; i < 2; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
+                    next = 'L'; // move implies line
+                    buf.append(nb.toString(coords[0]))
+                            .append(',')
+                            .append(nb.toString(coords[1]));
+                    break;
+                case PathIterator.SEG_LINETO:
+                    if (next != 'L') {
+                        buf.append(next = 'L');
                     }
+                    buf.append(nb.toString(coords[0]))
+                            .append(',')
+                            .append(nb.toString(coords[1]));
                     break;
                 case PathIterator.SEG_QUADTO:
-                    buf.append('Q');
-                    for (int i = 0; i < 4; i++) {
-                        if (i != 0) {
-                            buf.append(',');
-                        }
-                        buf.append(nb.toString(coords[i]));
+                    if (next != 'Q') {
+                        buf.append(next = 'Q');
+                    }
+                    buf.append(nb.toString(coords[0]))
+                            .append(',')
+                            .append(nb.toString(coords[1]))
+                            .append(',')
+                            .append(nb.toString(coords[2]))
+                            .append(',')
+                            .append(nb.toString(coords[3]));
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    if (next != 'C') {
+                        buf.append(next = 'C');
+                    }
+                    buf.append(nb.toString(coords[0]))
+                            .append(',')
+                            .append(nb.toString(coords[1]))
+                            .append(',')
+                            .append(nb.toString(coords[2]))
+                            .append(',')
+                            .append(nb.toString(coords[3]))
+                            .append(',')
+                            .append(nb.toString(coords[4]))
+                            .append(',')
+                            .append(nb.toString(coords[5]));
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    if (next != 'Z') {
+                        buf.append(next = 'Z');
                     }
                     break;
             }
