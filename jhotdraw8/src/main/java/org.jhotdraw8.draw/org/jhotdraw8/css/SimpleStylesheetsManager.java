@@ -330,7 +330,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             Selector selector;
-            if (null != (selector = r.getSelectorGroup().match(selectorModel, elem))) {
+            if (null != (selector = r.getSelectorGroup().matchSelector(selectorModel, elem))) {
                 for (Declaration d : r.getDeclarations()) {
                     // Declarations without terms are ignored
                     if (d.getTerms().isEmpty()) {

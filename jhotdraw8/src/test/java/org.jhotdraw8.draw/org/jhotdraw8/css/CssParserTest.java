@@ -5,7 +5,11 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.ast.*;
+import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.Rule;
+import org.jhotdraw8.css.ast.SelectorGroup;
+import org.jhotdraw8.css.ast.StyleRule;
+import org.jhotdraw8.css.ast.Stylesheet;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -94,7 +98,7 @@ public class CssParserTest {
     }
 
     @TestFactory
-    public List<DynamicTest> stylesheetData() {
+    public List<DynamicTest> testParseStylesheetFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testParseStylesheet("#vertex4 {\n"
                         + "    -jhotdraw-fill: yellow;\n"
@@ -154,9 +158,11 @@ public class CssParserTest {
     }
 
     /**
-     * Test of parseStylesheet method, of class CssParser.
+     * Test of CSS syntax.
+     * <p>
+     * Takes a stylesheet and applies it to the given XML document.
      */
-    public static void testCssSyntax(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
+    public static void testCssSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
@@ -172,7 +178,7 @@ public class CssParserTest {
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
-        Document doc = builder.parse(new InputSource(new StringReader(before)));
+        Document doc = builder.parse(new InputSource(new StringReader(xml)));
         //---
         DocumentSelectorModel dsd = new DocumentSelectorModel();
 
@@ -315,7 +321,7 @@ public class CssParserTest {
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
 
-                // selector missing afer comma
+                // selector missing after comma
                 dynamicTest("32", () -> testCssSyntax(false, "AB, {x:y}", //
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
@@ -382,5 +388,39 @@ public class CssParserTest {
         Stylesheet stylesheet = p.parseStylesheet(stylesheetStr);
         ReadOnlyList<Rule> rules = stylesheet.getRules();
         System.out.println(rules);
+    }
+
+    /**
+     * Tests selectors.
+     */
+    @TestFactory
+    public List<DynamicTest> testSelectorFactory() {
+        return Arrays.asList(
+                dynamicTest("type selector", () -> testCssSyntax(true, "a {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml><a x=\"1\"/><b/></xml>")), //
+                dynamicTest("empty not selector", () -> testCssSyntax(true, ":not() {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml x=\"1\"><a x=\"1\"/><b x=\"1\"/></xml>")), //
+                dynamicTest("not selector 1", () -> testCssSyntax(true, ":not(a) {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml x=\"1\"><a/><b x=\"1\"/></xml>")), //
+                dynamicTest("not selector 2", () -> testCssSyntax(true, ":not(xml,a) {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml><a/><b x=\"1\"/></xml>")), //
+                dynamicTest("nested not selector", () -> testCssSyntax(true, ":not(:not(a)) {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml><a x=\"1\"/><b/></xml>")), //
+                dynamicTest("universal selector", () -> testCssSyntax(true, "* {x:1;}", //
+                        "<xml><a/><b/></xml>",//
+                        "<xml x=\"1\"><a x=\"1\"/><b x=\"1\"/></xml>")) //
+        );
+    }
+
+    /**
+     * Test of selectors.
+     */
+    public static void testSelector(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
+        testCssSyntax(valid, stylesheet, before, expectedValue);
     }
 }

@@ -34,7 +34,7 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
     @Nonnull
     @Override
     public String toString() {
-        return "FunctionPseudoClass:" + functionIdentifier;
+        return "FunctionPseudoClass:" + functionIdentifier + "(" + terms + ")";
     }
 
     @Nullable

@@ -5,6 +5,7 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
@@ -24,6 +25,7 @@ public class UniversalSelector extends SimpleSelector {
         return "Universal:*";
     }
 
+    @Nullable
     @Override
     public <T> T match(SelectorModel<T> model, T element) {
         return element;

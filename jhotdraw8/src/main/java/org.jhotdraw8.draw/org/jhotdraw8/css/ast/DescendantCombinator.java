@@ -5,6 +5,7 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nonnull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
@@ -30,6 +31,7 @@ public class DescendantCombinator extends Combinator {
         return firstSelector + ".isAncestorOf(" + secondSelector + ")";
     }
 
+    @Nullable
     @Override
     public <T> T match(@Nonnull SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);

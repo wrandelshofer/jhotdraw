@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class SelectorGroup extends AST {
+public class SelectorGroup extends Selector {
 
     @Nonnull
     private final ReadOnlyList<Selector> selectors;
@@ -51,6 +51,11 @@ public class SelectorGroup extends AST {
         return buf.toString();
     }
 
+    @Override
+    public int getSpecificity() {
+        return selectors.stream().mapToInt(Selector::getSpecificity).sum();
+    }
+
     /**
      * Returns true if the rule matches the element.
      *
@@ -64,6 +69,18 @@ public class SelectorGroup extends AST {
         return match(model, element) != null;
     }
 
+    @Nullable
+    @Override
+    protected <T> T match(SelectorModel<T> model, T element) {
+        for (Selector s : selectors) {
+            T result = s.match(model, element);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
+    }
+
     /**
      * Returns the selector which matches the specified element or null.
      *
@@ -75,7 +92,7 @@ public class SelectorGroup extends AST {
      * no selector matches
      */
     @Nullable
-    public <T> Selector match(SelectorModel<T> model, T element) {
+    public <T> Selector matchSelector(SelectorModel<T> model, T element) {
         for (Selector s : selectors) {
             T result = s.match(model, element);
             if (result != null) {

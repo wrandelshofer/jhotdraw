@@ -495,7 +495,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             WriteableStyleableMapAccessor<?> selectedAccessor = null;
             boolean multipleAccessorTypes = false;
             for (E f : getEntities()) {
-                if (null != styleRule.getSelectorGroup().match(fsm, f)) {
+                if (null != styleRule.getSelectorGroup().matchSelector(fsm, f)) {
                     WriteableStyleableMapAccessor<?> accessor = getAccessor(fsm, f, declaration.getPropertyNamespace(), declaration.getPropertyName());
                     if (selectedAccessor == null || selectedAccessor == accessor) {
                         selectedAccessor = accessor;
