@@ -24,7 +24,6 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.Nonnull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -85,8 +84,6 @@ public class PageFigure extends AbstractCompositeFigure
     private final static Object CURRENT_PAGE_PROPERTY = new Object();
 
     public PageFigure() {
-        set(FILL, new CssColor(Color.TRANSPARENT));
-        set(STROKE_TYPE, StrokeType.CENTERED);
     }
 
     private void addBounds(final List<PathElement> pbList, Bounds b) {
