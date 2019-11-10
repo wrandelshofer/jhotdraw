@@ -35,7 +35,7 @@ public class DescendantCombinator extends Combinator {
     @Override
     public <T> T match(@NonNull SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);
-        T siblingElement = result == null ? null : result;
+        T siblingElement = result;
         while (siblingElement != null) {
             siblingElement = model.getParent(siblingElement);
             result = firstSelector.match(model, siblingElement);

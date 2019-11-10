@@ -53,10 +53,7 @@ class OrderedPair<V> implements Pair<V> {
         if (!Objects.equals(this.a, other.a)) {
             return false;
         }
-        if (!Objects.equals(this.b, other.b)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.b, other.b);
     }
 
     @Override

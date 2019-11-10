@@ -54,10 +54,7 @@ public class UnorderedPair<V> implements Pair<V> {
         if (Objects.equals(this.a, other.a) && Objects.equals(this.b, other.b)) {
             return true;
         }
-        if (Objects.equals(this.b, other.a) && Objects.equals(this.a, other.b)) {
-            return true;
-        }
-        return false;
+        return Objects.equals(this.b, other.a) && Objects.equals(this.a, other.b);
     }
 
     @Override

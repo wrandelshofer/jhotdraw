@@ -146,7 +146,6 @@ public class Intersections {
         c12 = a0.add(a1.multiply(-2).add(a2));
         c11 = a0.multiply(-2).add(a1.multiply(2));
         c10 = a0;
-        ;
         c22 = b0.add(b1.multiply(-2).add(b2));
         c21 = b0.multiply(-2).add(b1.multiply(2));
         c20 = b0;
@@ -207,7 +206,7 @@ public class Intersections {
                         c12x, c11x,
                         c10x - c20x - s * c21x - s * s * c22x
                 ).getRoots();
-                double yRoots[] = new Polynomial(
+                double[] yRoots = new Polynomial(
                         c12y, c11y,
                         c10y - c20y - s * c21y - s * s * c22y
                 ).getRoots();
@@ -1807,8 +1806,6 @@ public class Intersections {
         return new Intersection(result);
     }
 
-    ;
-
     /**
      * Computes the intersection between an ellipse and a rectangle.
      *
@@ -3016,8 +3013,6 @@ public class Intersections {
 
         return new Intersection(result);
     }
-
-    ;
 
 
     /**

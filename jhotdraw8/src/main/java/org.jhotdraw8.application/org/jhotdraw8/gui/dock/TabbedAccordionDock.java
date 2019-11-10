@@ -135,7 +135,7 @@ public class TabbedAccordionDock extends Control implements Dock {
                 for (DockItem i : items) {
                     Node content = i.getContent();
                     if (content instanceof Region) {
-                        minHeight = max(minHeight, ((Region) content).minHeight(-1));
+                        minHeight = max(minHeight, content.minHeight(-1));
                     }
                     if (b.length() > 0) {
                         b.append(", ");

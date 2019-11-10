@@ -45,7 +45,7 @@ public class XmlStringConverter implements Converter<String> {
 
     @Override
     public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable String value) throws IOException {
-        out.append(value == null ? "null" : value.toString());
+        out.append(value == null ? "null" : value);
     }
 
     @NonNull

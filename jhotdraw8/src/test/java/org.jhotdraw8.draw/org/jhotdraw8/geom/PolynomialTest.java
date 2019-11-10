@@ -29,7 +29,7 @@ public class PolynomialTest {
         return Arrays.asList(
                 dynamicTest("1", () -> testGetRoots(
                         new Polynomial(1, -1.61900826446281, 0.882231404958678, -0.163453828290417), new double[]{0.635379615995478})),
-                dynamicTest("1", () -> testGetRoots(new Polynomial(false, new double[]{2330400.0, -1.49088E7, 3.76128E7, -4.6464E7, 2.3232E7}), new double[]{0.405180683762359,
+                dynamicTest("1", () -> testGetRoots(new Polynomial(false, 2330400.0, -1.49088E7, 3.76128E7, -4.6464E7, 2.3232E7), new double[]{0.405180683762359,
                         0.722769898622671})),
                 dynamicTest("1", () -> testGetRoots(new Polynomial(1, 6, -5, -10, -3), new double[]{(-7 - sqrt(37)) / 2, (-7 + sqrt(37)) / 2, (1 - sqrt(5)) / 2, (1 + sqrt(5)) / 2})),
                 dynamicTest("1", () -> testGetRoots(new Polynomial(5), new double[]{})),

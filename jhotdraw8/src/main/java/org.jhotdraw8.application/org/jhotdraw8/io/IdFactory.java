@@ -34,7 +34,7 @@ public interface IdFactory {
      * @param prefix the desired prefix for the id
      * @return the id
      */
-    public String createId(Object object, @Nullable String prefix);
+    String createId(Object object, @Nullable String prefix);
 
     /**
      * Creates an id for the specified object. If the object already has an id,
@@ -46,8 +46,7 @@ public interface IdFactory {
      * @param id     the desired id
      * @return the id
      */
-    @Nullable
-    public String createId(Object object, @Nullable String prefix, String id);
+    @Nullable String createId(Object object, @Nullable String prefix, String id);
 
     /**
      * Gets an id for the specified object. Returns null if the object has no
@@ -56,8 +55,7 @@ public interface IdFactory {
      * @param object the object
      * @return the id
      */
-    @Nullable
-    public String getId(Object object);
+    @Nullable String getId(Object object);
 
     /**
      * Gets the object for the specified id. Returns null if the id has no
@@ -66,8 +64,7 @@ public interface IdFactory {
      * @param id the id
      * @return the object
      */
-    @Nullable
-    public Object getObject(String id);
+    @Nullable Object getObject(String id);
 
     /**
      * Puts an id for the specified object. If the object already has an id, the
@@ -76,10 +73,10 @@ public interface IdFactory {
      * @param id     the id
      * @param object the object
      */
-    public void putId(String id, @Nullable Object object);
+    void putId(String id, @Nullable Object object);
 
     /**
      * Clears all ids.
      */
-    public void reset();
+    void reset();
 }

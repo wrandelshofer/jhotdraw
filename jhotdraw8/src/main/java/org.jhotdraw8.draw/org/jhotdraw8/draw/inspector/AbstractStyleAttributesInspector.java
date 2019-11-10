@@ -557,7 +557,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         if (!isApplying && textAreaValid) {
             textAreaValid = false;
             if (updateContentsCheckBox.isSelected()) {
-                Platform.runLater((Runnable) this::updateTextArea);
+                Platform.runLater(this::updateTextArea);
             }
         }
     }
@@ -613,7 +613,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
         StylesheetsManager<E> sm = getStyleManager();
         SelectorModel<E> selectorModel = sm.getSelectorModel();
         selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-        ;
         SelectorGroup selector = updateSelector(selectedOrRoot, selectorModel);
 
         for (E entity : getEntities()) {

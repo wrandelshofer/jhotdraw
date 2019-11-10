@@ -157,6 +157,6 @@ public interface PropertyBean {
     @NonNull
     @SuppressWarnings("unchecked")
     default <T> ObservableValue<T> valueAt(Key<T> key) {
-        return (ObservableValue<T>) (ObservableValue<Object>) Bindings.valueAt(getProperties(), key);
+        return (ObservableValue<T>) Bindings.valueAt(getProperties(), key);
     }
 }

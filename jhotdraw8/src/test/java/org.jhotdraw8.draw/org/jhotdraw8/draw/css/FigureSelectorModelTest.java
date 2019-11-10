@@ -48,7 +48,7 @@ public class FigureSelectorModelTest {
 
         assertNotNull(key.getDefaultValue(), "need a key with a non-null default value for this test");
 
-        assertEquals("none", instance.getAttributeAsString(figure, namespace, attrName), "no value has been set, must be 'none'");
+        assertEquals("initial", instance.getAttributeAsString(figure, namespace, attrName), "no value has been set, must be 'initial'");
 
         instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, ImmutableLists.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 

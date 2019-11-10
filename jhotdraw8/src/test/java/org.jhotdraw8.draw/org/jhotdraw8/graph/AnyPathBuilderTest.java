@@ -171,7 +171,7 @@ public class AnyPathBuilderTest {
         System.out.println("doFindAllPaths start:" + start + ", goal:" + goal + ", depth:" + maxDepth);
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
         List<VertexPath<Integer>> actual = instance.findAllVertexPaths(start,
-                a -> (int) a == goal, maxDepth);
+                a -> a == goal, maxDepth);
         assertEquals(expected, actual);
     }
 }

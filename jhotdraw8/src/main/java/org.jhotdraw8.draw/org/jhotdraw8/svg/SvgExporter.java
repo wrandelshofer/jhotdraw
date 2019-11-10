@@ -803,7 +803,7 @@ public class SvgExporter {
         if ((region.getBackground() != null && !region.getBackground().isEmpty())
                 || (region.getBorder() != null && !region.getBorder().isEmpty())) {
             // compute the shape 's' of the region
-            Shape s = (region.getShape() == null) ? null : region.getShape();
+            Shape s = region.getShape();
             Bounds sb = (s != null) ? s.getLayoutBounds() : null;
 
             // All BackgroundFills are drawn first, followed by

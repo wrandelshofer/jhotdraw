@@ -54,10 +54,7 @@ public class CssStop {
         if (!Objects.equals(this.offset, other.offset)) {
             return false;
         }
-        if (!Objects.equals(this.color, other.color)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.color, other.color);
     }
 
     @NonNull

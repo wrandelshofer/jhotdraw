@@ -44,7 +44,7 @@ public class AbstractCompositeFigureTest {
         parent.addChild(child);
 
         assertTrue(parent.getChildren().contains(child));
-        assertEquals((Object) child.getParent(), (Object) parent);
+        assertEquals(child.getParent(), parent);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class AbstractCompositeFigureTest {
 
         assertFalse(parent1.getChildren().contains(child));
         assertTrue(parent2.getChildren().contains(child));
-        assertEquals((Object) child.getParent(), (Object) parent2);
+        assertEquals(child.getParent(), parent2);
     }
 
     @Test
@@ -85,10 +85,10 @@ public class AbstractCompositeFigureTest {
 
         assertEquals(parent1.getChildren().size(), 2);
         assertTrue(parent1.getChildren().contains(child1));
-        assertEquals((Object) child1.getParent(), parent1);
-        assertEquals((Object) parent1.getChildren().get(0), child2);
-        assertEquals((Object) parent1.getChildren().get(1), child1);
-        assertEquals((Object) child1.getParent(), parent1);
+        assertEquals(child1.getParent(), parent1);
+        assertEquals(parent1.getChildren().get(0), child2);
+        assertEquals(parent1.getChildren().get(1), child1);
+        assertEquals(child1.getParent(), parent1);
     }
 
     @Test
@@ -103,10 +103,10 @@ public class AbstractCompositeFigureTest {
 
         assertEquals(parent1.getChildren().size(), 2);
         assertTrue(parent1.getChildren().contains(child1));
-        assertEquals((Object) child1.getParent(), parent1);
-        assertEquals((Object) parent1.getChildren().get(0), child1);
-        assertEquals((Object) parent1.getChildren().get(1), child2);
-        assertEquals((Object) child1.getParent(), parent1);
+        assertEquals(child1.getParent(), parent1);
+        assertEquals(parent1.getChildren().get(0), child1);
+        assertEquals(parent1.getChildren().get(1), child2);
+        assertEquals(child1.getParent(), parent1);
     }
 
 

@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public interface MapAccessor<T> extends Serializable {
 
-    final static long serialVersionUID = 1L;
+    long serialVersionUID = 1L;
 
     /**
      * Whether the map contains all keys required by this map accessor.

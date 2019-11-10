@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.samples.grapher;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -338,7 +337,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25, 5, 5));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         //
-        drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
+        drawingView.getModel().addListener(drawingModel -> {
             modified.set(true);
         });
 

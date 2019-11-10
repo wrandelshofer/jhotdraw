@@ -22,13 +22,13 @@ public interface Layer extends Figure {
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Layer";
+    String TYPE_SELECTOR = "Layer";
 
     /**
      * Layer figures always return false for isSelectable.
      */
     @Override
-    default public boolean isSelectable() {
+    default boolean isSelectable() {
         return false;
     }
 

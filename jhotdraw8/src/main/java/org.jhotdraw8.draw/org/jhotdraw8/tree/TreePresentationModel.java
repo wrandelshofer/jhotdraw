@@ -24,7 +24,7 @@ public interface TreePresentationModel<N> {
     /**
      * The name of the model property.
      */
-    public final static String MODEL_PROPERTY = "model";
+    String MODEL_PROPERTY = "model";
 
     default TreeModel<N> getTreeModel() {
         return treeModelProperty().get();

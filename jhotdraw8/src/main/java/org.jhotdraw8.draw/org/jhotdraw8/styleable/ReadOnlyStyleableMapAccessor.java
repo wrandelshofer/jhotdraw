@@ -19,7 +19,7 @@ import org.jhotdraw8.text.Converter;
  */
 public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
 
-    final static long serialVersionUID = 1L;
+    long serialVersionUID = 1L;
 
     /**
      * Returns the name string.
@@ -76,7 +76,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @return cssName string.
      */
     @NonNull
-    public static String toCssName(String camelCaseName) {
+    static String toCssName(String camelCaseName) {
         final StringBuilder b = new StringBuilder();
         final String name = camelCaseName;
         boolean insertDash = false;

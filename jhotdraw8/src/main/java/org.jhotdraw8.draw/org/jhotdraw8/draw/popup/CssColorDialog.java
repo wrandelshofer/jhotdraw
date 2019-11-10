@@ -39,7 +39,7 @@ public class CssColorDialog {
             final Parent root = loader.getRoot();
             dialogPane.setContent(root);
 
-            controller = loader.<CssColorChooserController>getController();
+            controller = loader.getController();
             currentColor.bindBidirectional(controller.colorProperty());
         } catch (IOException ex) {
             dialogPane.setContent(new Label(ex.getMessage()));

@@ -98,10 +98,7 @@ public class CssColor implements Paintable {
             return false;
         }
         final CssColor other = (CssColor) obj;
-        if (!Objects.equals(this.color, other.color)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.color, other.color);
     }
 
     @NonNull

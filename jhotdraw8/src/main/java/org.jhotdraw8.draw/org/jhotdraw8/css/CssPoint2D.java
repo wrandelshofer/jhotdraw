@@ -58,10 +58,7 @@ public class CssPoint2D {
         if (!Objects.equals(this.x, other.x)) {
             return false;
         }
-        if (!Objects.equals(this.y, other.y)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.y, other.y);
     }
 
     public CssSize getX() {

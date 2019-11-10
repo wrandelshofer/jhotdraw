@@ -103,7 +103,7 @@ public interface Resources {
     static Resources getResources(String moduleName, @NonNull String resourceBundle) {
         try {
             Class<?> clazz = Class.forName("org.jhotdraw8.util.ModulepathResources");
-            Method method = ((Class<?>) clazz).getMethod("getResources", String.class, String.class);
+            Method method = clazz.getMethod("getResources", String.class, String.class);
             return (Resources) method.invoke(null, moduleName, resourceBundle);
         } catch (@NonNull IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
             return ClasspathResources.getResources(resourceBundle);
@@ -263,7 +263,7 @@ public interface Resources {
         KeyCombination ks = null;
         String s = getString(key);
         try {
-            ks = (s == null || s.isEmpty()) ? (KeyCombination) null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
+            ks = (s == null || s.isEmpty()) ? null : KeyCombination.valueOf(translateKeyStrokeToKeyCombination(s));
         } catch (@NonNull NoSuchElementException | StringIndexOutOfBoundsException e) {
             throw new InternalError(key + "=" + s, e);
         }

@@ -105,10 +105,7 @@ public class RegexReplace {
         if (!Objects.equals(this.find, other.find)) {
             return false;
         }
-        if (!Objects.equals(this.replace, other.replace)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.replace, other.replace);
     }
 
 }

@@ -41,15 +41,14 @@ import java.util.Objects;
  */
 public interface Key<T> extends MapAccessor<T> {
 
-    final static long serialVersionUID = 1L;
+    long serialVersionUID = 1L;
 
     @Override
-    public default boolean containsKey(@NonNull Map<Key<?>, Object> map) {
+    default boolean containsKey(@NonNull Map<Key<?>, Object> map) {
         return map.containsKey(this);
     }
 
-    @NonNull
-    public String getFullValueType();
+    @NonNull String getFullValueType();
 
     /**
      * Gets the value of the attribute denoted by this Key from a Map.

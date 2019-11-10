@@ -119,10 +119,7 @@ public class CssFont {
         if (this.weight != other.weight) {
             return false;
         }
-        if (this.posture != other.posture) {
-            return false;
-        }
-        return true;
+        return this.posture == other.posture;
     }
 
     @NonNull

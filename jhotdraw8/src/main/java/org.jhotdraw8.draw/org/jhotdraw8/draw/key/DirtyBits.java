@@ -76,7 +76,7 @@ public enum DirtyBits {
 
     private int mask;
 
-    private DirtyBits() {
+    DirtyBits() {
         mask = 1 << ordinal();
     }
 

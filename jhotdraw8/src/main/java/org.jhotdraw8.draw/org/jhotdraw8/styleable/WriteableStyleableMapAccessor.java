@@ -12,7 +12,7 @@ package org.jhotdraw8.styleable;
  */
 public interface WriteableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAccessor<T> {
 
-    final static long serialVersionUID = 1L;
+    long serialVersionUID = 1L;
 
 
 }

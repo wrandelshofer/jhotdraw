@@ -30,8 +30,7 @@ public interface URIChooser {
      *               see {@code showDialog} for details
      * @return the selected URIs if a selection has been made.
      */
-    @Nullable
-    public URI showDialog(@Nullable Window parent);
+    @Nullable URI showDialog(@Nullable Window parent);
 
     /**
      * Pops up an URI chooser dialog.
@@ -41,7 +40,7 @@ public interface URIChooser {
      * @return the selected URIs or an empty list if no selection has been made.
      */
     @Nullable
-    default public URI showDialog(@Nullable Node node) {
+    default URI showDialog(@Nullable Node node) {
         Scene scene = node == null ? null : node.getScene();
         return showDialog(scene == null ? null : scene.getWindow());
     }

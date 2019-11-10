@@ -37,15 +37,14 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    public static BlendModeStyleableKey BLEND_MODE = new BlendModeStyleableKey("blendMode", BlendMode.SRC_OVER);
+    BlendModeStyleableKey BLEND_MODE = new BlendModeStyleableKey("blendMode", BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
      * <p>
      * Default value: {@code null}.
      */
-    @Nullable
-    public static EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
+    @Nullable EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -56,7 +55,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    public static NullableDoubleStyleableKey OPACITY = new NullableDoubleStyleableKey("opacity", 1.0, new CssPercentageConverter(false));
+    NullableDoubleStyleableKey OPACITY = new NullableDoubleStyleableKey("opacity", 1.0, new CssPercentageConverter(false));
 
     /**
      * Updates a figure node with all effect properties defined in this

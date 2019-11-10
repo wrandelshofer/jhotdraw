@@ -53,19 +53,19 @@ public interface DrawingEditor {
     /**
      * The name of the drawingViews property.
      */
-    public final static String DRAWING_VIEWS_PROPERTY = "drawingViews";
+    String DRAWING_VIEWS_PROPERTY = "drawingViews";
     /**
      * The name of the activeDrawingView property.
      */
-    public final static String ACTIVE_DRAWING_VIEW_PROPERTY = "activeDrawingView";
+    String ACTIVE_DRAWING_VIEW_PROPERTY = "activeDrawingView";
     /**
      * The name of the activeTool property.
      */
-    public final static String ACTIVE_TOOL_PROPERTY = "activeTool";
+    String ACTIVE_TOOL_PROPERTY = "activeTool";
     /**
      * The name of the defaultTool property.
      */
-    public final static String DEFAULT_TOOL_PROPERTY = "defaultTool";
+    String DEFAULT_TOOL_PROPERTY = "defaultTool";
 
     // ---
     // properties

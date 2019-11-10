@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -712,7 +713,7 @@ public class BinaryPListParser {
     private void parseAsciiString(@NonNull DataInputStream in, int count) throws IOException {
         byte[] buf = new byte[count];
         in.readFully(buf);
-        String str = new String(buf, "ASCII");
+        String str = new String(buf, StandardCharsets.US_ASCII);
         objectTable.add(str);
     }
 
@@ -809,8 +810,7 @@ public class BinaryPListParser {
             try {
                 datatypeFactory = DatatypeFactory.newInstance();
             } catch (DatatypeConfigurationException ex) {
-                InternalError ie = new InternalError("Can't create XML datatype factory.");
-                ie.initCause(ex);
+                InternalError ie = new InternalError("Can't create XML datatype factory.", ex);
                 throw ie;
             }
         }

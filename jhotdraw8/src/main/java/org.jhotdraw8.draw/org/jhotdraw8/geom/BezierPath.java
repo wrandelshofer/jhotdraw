@@ -224,8 +224,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 that.y = this.y.clone();
                 return that;
             } catch (CloneNotSupportedException e) {
-                InternalError error = new InternalError();
-                error.initCause(e);
+                InternalError error = new InternalError(e);
                 throw error;
             }
         }
@@ -477,8 +476,6 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         validatePath();
         return generalPath.contains(p);
     }
-
-    ;
 
     /**
      * Returns true, if the outline of this bezier path contains the specified

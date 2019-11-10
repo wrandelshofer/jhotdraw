@@ -60,7 +60,7 @@ public class MacOSPreferences {
     }
 
     public static boolean isStringEqualTo(@NonNull File file, String key, String defaultValue, String compareWithThisValue) {
-        return ((String) get(file, key, defaultValue)).equals(compareWithThisValue);
+        return get(file, key, defaultValue).equals(compareWithThisValue);
     }
 
     /**
@@ -229,7 +229,7 @@ public class MacOSPreferences {
         StringBuilder buf = new StringBuilder();
         for (Node child : getChildren(elem)) {
             if (child instanceof Text) {
-                buf.append(((Text) child).getTextContent());
+                buf.append(child.getTextContent());
             }
         }
         return buf.toString().trim();

@@ -100,7 +100,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
 
     @Override
     public long estimateSize() {
-        return (long) (size - index);
+        return size - index;
     }
 
     @Override

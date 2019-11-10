@@ -60,10 +60,7 @@ public class CssInsets {
         if (!Objects.equals(this.bottom, other.bottom)) {
             return false;
         }
-        if (!Objects.equals(this.left, other.left)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.left, other.left);
     }
 
     public CssSize getBottom() {

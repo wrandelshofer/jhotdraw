@@ -22,12 +22,12 @@ public interface EditableComponent {
      * defined in a FXML file, an editable component can be provided for a JavaFX node by
      * setting the property EDITABLE_COMPONENT.
      */
-    public final static String EDITABLE_COMPONENT = "editableComponent";
+    String EDITABLE_COMPONENT = "editableComponent";
 
     /**
      * The name of the selectionEmpty property.
      */
-    public final static String SELECTION_EMPTY = "selectionEmpty";
+    String SELECTION_EMPTY = "selectionEmpty";
 
     // ---
     // selection actions

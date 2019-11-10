@@ -248,11 +248,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private V getValue(int ordinal, int index, K key, V defaultValue) {
         Object value;
         if (ordinal == -1) {
-            value = (V) null;
+            value = null;
             if ((index + 1) * numOrigins <= values.size()) {
                 for (int i = numOrigins - 1; i >= 0; i--) {
                     final int arrayIndex = index * numOrigins + i;
-                    value = (V) values.get(arrayIndex);
+                    value = values.get(arrayIndex);
                     if (value != null) {
                         break;
                     }
@@ -680,9 +680,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             if (k1 == k2 || (k1 != null && k1.equals(k2))) {
                 Object v1 = getValue();
                 Object v2 = e.getValue();
-                if (v1 == v2 || (v1 != null && v1.equals(v2))) {
-                    return true;
-                }
+                return v1 == v2 || (v1 != null && v1.equals(v2));
             }
             return false;
         }

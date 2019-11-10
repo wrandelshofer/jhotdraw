@@ -30,7 +30,7 @@ public class Declaration extends AST {
     private int endPos = -1;
 
     public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, CssToken term) {
-        this(propertyNamespace, propertyName, Arrays.asList(new CssToken[]{term}));
+        this(propertyNamespace, propertyName, Arrays.asList(term));
     }
 
     public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, @NonNull List<CssToken> terms) {

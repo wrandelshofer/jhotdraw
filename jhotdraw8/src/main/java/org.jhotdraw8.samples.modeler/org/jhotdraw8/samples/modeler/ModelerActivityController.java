@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.samples.modeler;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -440,7 +439,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25, 5, 5));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         //
-        drawingView.getModel().addListener((InvalidationListener) drawingModel -> {
+        drawingView.getModel().addListener(drawingModel -> {
             modified.set(true);
         });
 

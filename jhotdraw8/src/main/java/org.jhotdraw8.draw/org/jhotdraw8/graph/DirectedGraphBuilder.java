@@ -284,7 +284,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     @Override
     public int getVertexIndex(V v) {
         Integer index = vertexMap.get(v);
-        return (int) index;
+        return index;
     }
 
     @SuppressWarnings("unchecked")

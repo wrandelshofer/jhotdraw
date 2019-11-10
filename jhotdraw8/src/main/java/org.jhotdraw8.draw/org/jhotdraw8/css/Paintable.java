@@ -14,11 +14,10 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public interface Paintable {
 
-    @Nullable
-    public Paint getPaint();
+    @Nullable Paint getPaint();
 
     @Nullable
-    public static Paint getPaint(@Nullable Paintable p) {
+    static Paint getPaint(@Nullable Paintable p) {
         return p == null ? null : p.getPaint();
     }
 }

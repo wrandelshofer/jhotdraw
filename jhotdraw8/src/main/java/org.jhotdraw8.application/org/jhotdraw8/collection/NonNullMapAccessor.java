@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public interface NonNullMapAccessor<T> extends MapAccessor<T> {
-    final static long serialVersionUID = 1L;
+    long serialVersionUID = 1L;
 
     /**
      * Gets the value of the attribute denoted by this accessor from a Map.

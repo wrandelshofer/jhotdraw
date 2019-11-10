@@ -154,7 +154,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private void handlePropertyChanged(@NonNull FigurePropertyChangeEvent event) {
         if (!Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
-                    (Key<Object>) event.getKey(), event.getOldValue(),
+                    event.getKey(), event.getOldValue(),
                     event.getNewValue()));
         }
     }
@@ -163,7 +163,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private <T> void handlePropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (!Objects.equals(oldValue, newValue)) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
-                    (Key<Object>) key, oldValue, newValue));
+                    key, oldValue, newValue));
 
         }
     }

@@ -50,10 +50,7 @@ public class VertexPath<V> {
             return false;
         }
         final VertexPath<?> other = (VertexPath<?>) obj;
-        if (!Objects.equals(this.vertices, other.vertices)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.vertices, other.vertices);
     }
 
     public V getSecondToLastVertex() {

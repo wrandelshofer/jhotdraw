@@ -23,13 +23,13 @@ public interface Clipping extends Figure {
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Clipping";
+    String TYPE_SELECTOR = "Clipping";
 
     /**
      * Clipping figures always return false for isSelectable.
      */
     @Override
-    default public boolean isSelectable() {
+    default boolean isSelectable() {
         return false;
     }
 

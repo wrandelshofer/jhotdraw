@@ -19,19 +19,19 @@ public class SvgDoublePathBuilder implements PathBuilder {
     @Override
     public void arcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         buf.append('A')
-                .append(Double.toString(radiusX))
+                .append(radiusX)
                 .append(',')
-                .append(Double.toString(radiusY))
+                .append(radiusY)
                 .append(' ')
-                .append(Double.toString(xAxisRotation))
+                .append(xAxisRotation)
                 .append(',')
                 .append(largeArcFlag ? '1' : '0')
                 .append(' ')
                 .append(sweepFlag ? '1' : '0')
                 .append(' ')
-                .append(Double.toString(x))
+                .append(x)
                 .append(',')
-                .append(Double.toString(y));
+                .append(y);
     }
 
     @Override
@@ -42,17 +42,17 @@ public class SvgDoublePathBuilder implements PathBuilder {
     @Override
     public void curveTo(double x1, double y1, double x2, double y2, double x, double y) {
         buf.append('C')
-                .append(Double.toString(x1))
+                .append(x1)
                 .append(',')
-                .append(Double.toString(y1))
+                .append(y1)
                 .append(' ')
-                .append(Double.toString(x2))
+                .append(x2)
                 .append(',')
-                .append(Double.toString(y2))
+                .append(y2)
                 .append(' ')
-                .append(Double.toString(x))
+                .append(x)
                 .append(',')
-                .append(Double.toString(y));
+                .append(y);
     }
 
     @Override
@@ -78,29 +78,29 @@ public class SvgDoublePathBuilder implements PathBuilder {
     @Override
     public void lineTo(double x, double y) {
         buf.append('L')
-                .append(Double.toString(x))
+                .append(x)
                 .append(',')
-                .append(Double.toString(y));
+                .append(y);
     }
 
     @Override
     public void moveTo(double x, double y) {
         buf.append('M')
-                .append(Double.toString(x))
+                .append(x)
                 .append(',')
-                .append(Double.toString(y));
+                .append(y);
     }
 
     @Override
     public void quadTo(double x1, double y1, double x, double y) {
         buf.append('Q')
-                .append(Double.toString(x1))
+                .append(x1)
                 .append(',')
-                .append(Double.toString(y1))
+                .append(y1)
                 .append(' ')
-                .append(Double.toString(x))
+                .append(x)
                 .append(',')
-                .append(Double.toString(y));
+                .append(y);
 
     }
 

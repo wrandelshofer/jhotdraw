@@ -65,7 +65,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 () -> {
                     @SuppressWarnings("unchecked")
                     T t = (T) this;
-                    return new BreadthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
+                    return new BreadthFirstSpliterator<>(TreeNode::getChildren, t, n -> true);
                 });
     }
 
@@ -219,7 +219,7 @@ public interface TreeNode<T extends TreeNode<T>> {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
-                    return new PostorderSpliterator<>(TreeNode<T>::getChildren, t);
+                    return new PostorderSpliterator<>(TreeNode::getChildren, t);
                 }
         );
     }
@@ -248,7 +248,7 @@ public interface TreeNode<T extends TreeNode<T>> {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
-                    return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
+                    return new PreorderSpliterator<>(TreeNode::getChildren, t);
                 }
         );
     }
@@ -257,7 +257,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param <T> the type of the tree nodes
      * @design.pattern TreeNode Iterator, Iterator.
      */
-    static class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
+    class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
         @Nullable
         private T node;

@@ -156,7 +156,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
      */
     public void addFigureAttributeKeys(Class<? extends Figure> f, @NonNull Collection<MapAccessor<?>> keys) {
         for (MapAccessor<?> key : keys) {
-            addKey(f, key.getName(), (MapAccessor<?>) key);
+            addKey(f, key.getName(), key);
         }
     }
 
@@ -168,14 +168,14 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         addFigure(figureName, f);
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {
-            addKey(f, key.getName(), (MapAccessor<?>) key);
+            addKey(f, key.getName(), key);
         }
     }
 
     public void addFigureKeysAndNames(Class<? extends Figure> f, @NonNull Collection<MapAccessor<?>> keys) {
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {
-            addKey(f, key.getName(), (MapAccessor<?>) key);
+            addKey(f, key.getName(), key);
         }
     }
 
@@ -399,7 +399,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
             defaultValue = key.getDefaultValue();
         }
 
-        return defaultValue == null ? value == null : (value == null ? false : defaultValue.equals(value));
+        return defaultValue == null ? value == null : (value != null && defaultValue.equals(value));
     }
 
     @Override
@@ -599,10 +599,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
             if (!Objects.equals(this.figure, other.figure)) {
                 return false;
             }
-            if (!Objects.equals(this.acc, other.acc)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.acc, other.acc);
         }
 
     }

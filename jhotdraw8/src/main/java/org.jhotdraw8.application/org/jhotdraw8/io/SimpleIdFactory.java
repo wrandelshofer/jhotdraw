@@ -64,7 +64,7 @@ public class SimpleIdFactory implements IdFactory {
             long pNextId = prefixToNextId.getOrDefault(prefix, 1L);
 
             do { // XXX linear search
-                id = (prefix == null ? "" : prefix) + Long.toString(pNextId++);
+                id = (prefix == null ? "" : prefix) + pNextId++;
             } while (idToObject.containsKey(id));
             objectToId.put(object, id);
             idToObject.put(id, object);
@@ -83,7 +83,7 @@ public class SimpleIdFactory implements IdFactory {
                 long pNextId = prefixToNextId.getOrDefault(prefix, 1L);
 
                 do { // XXX linear search
-                    existingId = (prefix == null ? "" : prefix) + Long.toString(pNextId++);
+                    existingId = (prefix == null ? "" : prefix) + pNextId++;
                 } while (idToObject.containsKey(existingId));
                 prefixToNextId.put(prefix, pNextId);
             }

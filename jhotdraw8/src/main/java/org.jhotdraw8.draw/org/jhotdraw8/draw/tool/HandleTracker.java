@@ -24,6 +24,6 @@ import java.util.Collection;
  */
 public interface HandleTracker extends Tracker {
 
-    public void setHandles(@Nullable Handle handle, Collection<Figure> compatibleFigures);
+    void setHandles(@Nullable Handle handle, Collection<Figure> compatibleFigures);
 
 }

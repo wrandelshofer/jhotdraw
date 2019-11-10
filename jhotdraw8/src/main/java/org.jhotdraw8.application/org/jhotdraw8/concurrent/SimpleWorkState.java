@@ -73,7 +73,6 @@ public class SimpleWorkState implements WorkState, Worker<Void> {
         }
     }
 
-    ;
     private final CompletionTask task = new CompletionTask();
 
     public SimpleWorkState() {

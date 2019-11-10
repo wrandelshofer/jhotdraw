@@ -80,7 +80,6 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
                 default:
                     break;
             }
-            ;
         }
         tt.pushBack();
         return colorConverter.parseNonNull(tt, idFactory);
@@ -93,7 +92,6 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
                 + "\n" + colorConverter.getHelpText()
                 + "\n" + linearGradientConverter.getHelpText()
                 + "\n" + radialGradientConverter.getHelpText()).split("\n");
-        ;
         StringBuilder buf = new StringBuilder();
         Set<String> duplicateLines = new HashSet<>();
         for (String line : lines) {

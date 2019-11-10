@@ -230,10 +230,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
                 return false;
             }
             final BackLink<?, ?> other = (BackLink<?, ?>) obj;
-            if (!Objects.equals(this.getVertex(), other.getVertex())) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.getVertex(), other.getVertex());
         }
 
         public abstract AA getArrow();

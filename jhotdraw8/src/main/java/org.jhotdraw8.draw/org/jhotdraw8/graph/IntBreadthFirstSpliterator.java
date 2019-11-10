@@ -63,7 +63,6 @@ public class IntBreadthFirstSpliterator extends AbstractIntSpliterator {
                 queue.addLast(next);
             }
         })) {
-            ;
         }
         action.accept(current);
         return true;

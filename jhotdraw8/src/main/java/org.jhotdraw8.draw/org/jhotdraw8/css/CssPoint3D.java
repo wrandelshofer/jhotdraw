@@ -59,10 +59,7 @@ public class CssPoint3D {
         if (!Objects.equals(this.y, other.y)) {
             return false;
         }
-        if (!Objects.equals(this.z, other.z)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.z, other.z);
     }
 
     public CssSize getX() {

@@ -53,7 +53,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         if (value != null && !tClazz.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException("value is not assignable " + value);
         }
-        V temp = (V) value;
+        V temp = value;
         map.put(key, temp);
 
         // Note: super must be called after "put", so that listeners

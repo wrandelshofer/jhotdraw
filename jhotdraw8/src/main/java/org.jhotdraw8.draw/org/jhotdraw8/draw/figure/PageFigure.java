@@ -202,7 +202,6 @@ public class PageFigure extends AbstractCompositeFigure
 
         double pageX = getNonNull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonNull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
-        ;
         double pageW = getStyledNonNull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageH = getStyledNonNull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverX = (overX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -250,7 +249,6 @@ public class PageFigure extends AbstractCompositeFigure
 
         double pageX = getNonNull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonNull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
-        ;
         double pageWidth = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (ox + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -292,7 +290,6 @@ public class PageFigure extends AbstractCompositeFigure
         double contentAreaFactor = computeContentAreaFactor();
         double pageX = getNonNull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonNull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
-        ;
         double pageWidth = getNonNull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = getNonNull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;
@@ -320,7 +317,6 @@ public class PageFigure extends AbstractCompositeFigure
         double contentAreaFactor = computeContentAreaFactor();
         double pageX = getNonNull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonNull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
-        ;
         double pageWidth = getNonNull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
         double pageHeight = getNonNull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (overlapX + insets.getLeft() + insets.getRight()) * contentAreaFactor;

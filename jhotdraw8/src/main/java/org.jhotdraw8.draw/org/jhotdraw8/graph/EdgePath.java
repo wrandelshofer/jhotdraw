@@ -45,10 +45,7 @@ public class EdgePath<E> {
             return false;
         }
         final EdgePath<?> other = (EdgePath<?>) obj;
-        if (!Objects.equals(this.edges, other.edges)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.edges, other.edges);
     }
 
     @Override

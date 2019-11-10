@@ -31,7 +31,7 @@ public interface OutputFormat {
      *
      * @param options a map of options
      */
-    public void setOptions(@Nullable Map<? super Key<?>, Object> options);
+    void setOptions(@Nullable Map<? super Key<?>, Object> options);
 
     /**
      * Writes a Drawing into the resource identified by the given URI.

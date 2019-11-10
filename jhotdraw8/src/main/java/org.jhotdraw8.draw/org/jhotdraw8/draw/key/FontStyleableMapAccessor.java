@@ -87,7 +87,6 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
     }
 
     private final Converter<CssFont> converter = new CssFontConverter(false);
-    ;
 
     @NonNull
     @Override

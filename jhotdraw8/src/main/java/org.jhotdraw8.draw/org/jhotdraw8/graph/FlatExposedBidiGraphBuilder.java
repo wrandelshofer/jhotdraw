@@ -217,7 +217,6 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
         start.removeNext(i);
         endData.removePrev(a);
         arrowCount--;
-        ;
     }
 
     /**

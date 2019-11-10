@@ -28,5 +28,5 @@ public interface ConverterFactory extends BiFunction<String, String, Converter<?
      */
     @NonNull
     @Override
-    public Converter<?> apply(@Nullable String type, @Nullable String style);
+    Converter<?> apply(@Nullable String type, @Nullable String style);
 }

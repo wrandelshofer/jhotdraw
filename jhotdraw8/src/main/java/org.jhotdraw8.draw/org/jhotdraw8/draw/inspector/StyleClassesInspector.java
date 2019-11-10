@@ -230,7 +230,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     protected void updateListLater() {
         if (!willUpdateList) {
             willUpdateList = true;
-            Platform.runLater((Runnable) this::updateListNow);
+            Platform.runLater(this::updateListNow);
         }
     }
 

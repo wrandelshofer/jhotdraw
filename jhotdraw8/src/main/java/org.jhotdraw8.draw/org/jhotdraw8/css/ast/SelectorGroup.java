@@ -27,7 +27,7 @@ public class SelectorGroup extends Selector {
     private final ReadOnlyList<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
-        this.selectors = ImmutableLists.of(new Selector[]{selector});
+        this.selectors = ImmutableLists.of(selector);
     }
 
     public SelectorGroup(@NonNull List<Selector> selectors) {

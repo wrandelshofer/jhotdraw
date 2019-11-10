@@ -216,7 +216,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     /**
      * Constructive Area Geometry Operation (CAG Operation.
      */
-    public static enum CagOperation {
+    public enum CagOperation {
         ADD, SUBTRACT, INTERSECT, XOR
     }
 

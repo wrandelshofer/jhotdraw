@@ -318,25 +318,25 @@ public class ExposedBidiGraphBuilder<V extends ExposedBidiGraphBuilder.Vertex<V,
     @NonNull
     @Override
     public Iterable<V> breadthFirstSearchBackward(final V start, @NonNull final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex<V, A>::getPrev, Arrow<V, A>::getStart, getVertexDataNonNull(start), visited));
+        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNonNull(start), visited));
     }
 
     @NonNull
     @Override
     public Iterable<V> breadthFirstSearch(final V start, @NonNull final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex<V, A>::getNext, Arrow<V, A>::getEnd, getVertexDataNonNull(start), visited));
+        return new SpliteratorIterable<>(() -> new BidiBreadthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNonNull(start), visited));
     }
 
     @NonNull
     @Override
     public Iterable<V> depthFirstSearchBackward(final V start, @NonNull final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex<V, A>::getPrev, Arrow<V, A>::getStart, getVertexDataNonNull(start), visited));
+        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex::getPrev, Arrow::getStart, getVertexDataNonNull(start), visited));
     }
 
     @NonNull
     @Override
     public Iterable<V> depthFirstSearch(final V start, @NonNull final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex<V, A>::getNext, Arrow<V, A>::getEnd, getVertexDataNonNull(start), visited));
+        return new SpliteratorIterable<>(() -> new BidiDepthFirstSpliterator(Vertex::getNext, Arrow::getEnd, getVertexDataNonNull(start), visited));
     }
 
     /**

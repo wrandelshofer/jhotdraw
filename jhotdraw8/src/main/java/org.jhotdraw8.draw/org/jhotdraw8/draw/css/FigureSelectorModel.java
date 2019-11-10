@@ -324,7 +324,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
             }
         }
         if (isInitialValue) {
-            return null;
+            return "initial";
         }
         StringBuilder buf = new StringBuilder();
         Converter<Object> converter = key.getConverter();

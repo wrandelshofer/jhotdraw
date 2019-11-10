@@ -41,7 +41,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private IntArrayList unread = new IntArrayList();
 
     @NonNull
-    private char buf[] = new char[20];
+    private char[] buf = new char[20];
 
     /**
      * The next character to be considered by the next method. May also be
@@ -75,7 +75,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private char[] starSlash = new char[]{'*', '/'};
 
     @NonNull
-    private byte ctype[] = new byte[256];
+    private byte[] ctype = new byte[256];
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
     private static final byte CT_ALPHA = 4;
@@ -530,7 +530,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
             pushedBack = false;
             return ttype;
         }
-        byte ct[] = ctype;
+        byte[] ct = ctype;
         sval = null;
 
         int c = peekc;
@@ -752,7 +752,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
             int i = 0;
             do {
                 if (i >= buf.length) {
-                    char nb[] = new char[buf.length * 2];
+                    char[] nb = new char[buf.length * 2];
                     System.arraycopy(buf, 0, nb, 0, buf.length);
                     buf = nb;
                 }
@@ -829,7 +829,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                     d = read();
                 }
                 if (i >= buf.length) {
-                    char nb[] = new char[buf.length * 2];
+                    char[] nb = new char[buf.length * 2];
                     System.arraycopy(buf, 0, nb, 0, buf.length);
                     buf = nb;
                 }
@@ -920,7 +920,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                 // This is the scanner code if the slashSlash token
                 // is one characters long
                 while ((c = read()) != '\n' && c != '\r' && c >= 0) {
-                    ;
                 }
                 peekc = c;
                 return nextToken();
@@ -952,7 +951,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                     return nextToken();
                 } else if (c == slashSlash[1] && slashSlashCommentsP) {
                     while ((c = read()) != '\n' && c != '\r' && c >= 0) {
-                        ;
                     }
                     peekc = c;
                     return nextToken();
@@ -960,7 +958,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                     // Now see if it is still a single line comment
                     if ((ct[slashSlash[0]] & CT_COMMENT) != 0) {
                         while ((c = read()) != '\n' && c != '\r' && c >= 0) {
-                            ;
                         }
                         peekc = c;
                         return nextToken();
@@ -976,7 +973,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
 
         if ((ctype & CT_COMMENT) != 0) {
             while ((c = read()) != '\n' && c != '\r' && c >= 0) {
-                ;
             }
             peekc = c;
             //lineno++;  removed because it counts line break twice
@@ -1159,7 +1155,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                 ret = "NOTHING";
                 break;
             default: {
-                char s[] = new char[3];
+                char[] s = new char[3];
                 s[0] = s[2] = '\'';
                 s[1] = (char) ttype;
                 ret = new String(s);

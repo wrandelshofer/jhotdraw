@@ -383,7 +383,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private void updateSelectionInTreeLater(SetChangeListener.Change<? extends Figure> change) {
         if (!willUpdateSelectionInTree && !isUpdatingSelectionInView) {
             willUpdateSelectionInTree = true;
-            Platform.runLater((Runnable) this::updateSelectionInTree);
+            Platform.runLater(this::updateSelectionInTree);
         }
     }
 

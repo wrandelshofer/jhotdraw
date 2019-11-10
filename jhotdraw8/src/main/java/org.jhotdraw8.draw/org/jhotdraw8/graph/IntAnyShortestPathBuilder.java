@@ -557,10 +557,7 @@ public class IntAnyShortestPathBuilder<V, A> {
                 return false;
             }
             final NodeWithCost<?, ?> other = (NodeWithCost<?, ?>) obj;
-            if (!Objects.equals(this.vertex, other.vertex)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.vertex, other.vertex);
         }
 
         public double getCost() {

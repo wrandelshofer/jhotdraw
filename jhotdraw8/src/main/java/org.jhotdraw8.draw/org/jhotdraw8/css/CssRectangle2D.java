@@ -78,10 +78,7 @@ public class CssRectangle2D {
         if (!Objects.equals(this.width, other.width)) {
             return false;
         }
-        if (!Objects.equals(this.height, other.height)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.height, other.height);
     }
 
     public CssSize getWidth() {

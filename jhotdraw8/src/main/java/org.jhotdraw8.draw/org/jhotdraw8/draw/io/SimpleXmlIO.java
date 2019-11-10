@@ -31,7 +31,6 @@ import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.util.Exceptions;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -387,7 +386,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             Node node = list.item(i);
             switch (node.getNodeType()) {
                 case Node.COMMENT_NODE:
-                    comments.add(((Comment) node).getTextContent());
+                    comments.add(node.getTextContent());
                     break;
                 case Node.ELEMENT_NODE:
                     Figure f = readNodesRecursively(node);

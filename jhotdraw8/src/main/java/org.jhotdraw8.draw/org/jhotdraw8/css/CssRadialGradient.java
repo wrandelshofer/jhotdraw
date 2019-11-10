@@ -76,10 +76,8 @@ public class CssRadialGradient implements Paintable {
                 if (cstop.getOffset() == null) {
                     int left = i, right = i;
                     for (; left > 0 && cstops[left].getOffset() == null; left--) {
-                        ;
                     }
                     for (; right < cstops.length - 1 && cstops[right].getOffset() == null; right++) {
-                        ;
                     }
                     double leftOffset = cstops[left].getOffset() == null ? 0.0 : cstops[left].getOffset();
                     double rightOffset = cstops[right].getOffset() == null ? 1.0 : cstops[right].getOffset();
@@ -179,10 +177,7 @@ public class CssRadialGradient implements Paintable {
         if (this.cycleMethod != other.cycleMethod) {
             return false;
         }
-        if (!Arrays.deepEquals(this.cstops, other.cstops)) {
-            return false;
-        }
-        return true;
+        return Arrays.deepEquals(this.cstops, other.cstops);
     }
 
     @NonNull

@@ -33,7 +33,7 @@ public interface InputFormat {
      *
      * @param options a map of options
      */
-    public void setOptions(@Nullable Map<? super Key<?>, Object> options);
+    void setOptions(@Nullable Map<? super Key<?>, Object> options);
 
     /**
      * Reads a figure from an URI
@@ -84,7 +84,6 @@ public interface InputFormat {
      * @return the drawing
      * @throws java.io.IOException if an IO error occurs
      */
-    @Nullable
-    public Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException;
+    @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException;
 
 }

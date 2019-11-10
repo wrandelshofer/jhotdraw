@@ -41,7 +41,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         this.model = model;
         this.key = key;
         this.figure = figure;
-        this.isDeclaredKey = figure == null ? false : Figure.getDeclaredAndInheritedMapAccessors(figure.getClass()).contains(key);
+        this.isDeclaredKey = figure != null && Figure.getDeclaredAndInheritedMapAccessors(figure.getClass()).contains(key);
 
         if (key != null) {
             this.modelListener = (event) -> {
@@ -49,7 +49,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
                         && this.figure == event.getNode()) {
                     if (this.key == event.getKey()) {
                         @SuppressWarnings("unchecked")
-                        T newValue = (T) event.getNewValue();
+                        T newValue = event.getNewValue();
                         if (super.get() != newValue) {
                             set(newValue);
                         }

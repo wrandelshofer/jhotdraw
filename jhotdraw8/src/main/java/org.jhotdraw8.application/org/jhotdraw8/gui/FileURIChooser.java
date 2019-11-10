@@ -43,8 +43,6 @@ public class FileURIChooser implements URIChooser {
         OPEN, SAVE
     }
 
-    ;
-
     private Mode mode;
 
     public FileURIChooser() {

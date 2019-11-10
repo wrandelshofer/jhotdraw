@@ -61,10 +61,7 @@ public class CssSize {
         if (Double.doubleToLongBits(this.value) != Double.doubleToLongBits(other.value)) {
             return false;
         }
-        if (!Objects.equals(this.units, other.units)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.units, other.units);
     }
 
     public double getConvertedValue() {
