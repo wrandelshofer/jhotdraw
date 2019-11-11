@@ -529,24 +529,8 @@ public class CssParser {
         }
 
         if (tt.current() == CssTokenType.TT_FUNCTION) {
-            String ident = tt.currentString();
-            List<CssToken> terms = new ArrayList<>();
-            int depth = 1;
-            while (tt.nextNoSkip() != CssTokenType.TT_EOF
-                    && depth > 0) {
-                if (tt.current() == CssTokenType.TT_FUNCTION) {
-                    depth++;
-                }
-                if (tt.current() == ')') {
-                    depth--;
-                    if (depth == 0) {
-                        break;
-                    }
-                }
-                terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
-                        tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
-            }
-            return createFunctionPseudoClassSelector(ident, terms);
+            tt.pushBack();
+            return createFunctionPseudoClassSelector(tt);
         } else {
 
             return new SimplePseudoClassSelector(tt.currentString());
@@ -554,23 +538,39 @@ public class CssParser {
     }
 
     @NonNull
-    private FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull String ident, @NonNull List<CssToken> terms) {
+    private FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
+        @NonNull final String ident = tt.currentStringNonNull();
         switch (ident) {
             case "not":
-                return new NegationPseudoClassSelector(ident, terms);
+                final SimpleSelector simpleSelector = parseSimpleSelector(tt);
+                tt.requireNextToken(')', ":not() Selector: ')' expected.");
+                return new NegationPseudoClassSelector(ident, simpleSelector);
             default:
-                return new FunctionPseudoClassSelector(ident, terms);
+                Loop:
+                while (tt.next() != CssTokenType.TT_EOF) {
+                    switch (tt.current()) {
+                        case ')':
+                            tt.pushBack();
+                            break Loop;
+                        case '{':
+                        case '}':
+                            final ParseException ex = tt.createParseException(":" + ident + "() Selector ')' expected.");
+                            tt.pushBack(); // so that we can resume parsing robustly
+                            throw ex;
+                        default:
+                            break;
+                    }
+                }
+                tt.requireNextToken(')', ":" + ident + "() Selector ')' expected.");
+                return new FunctionPseudoClassSelector(ident);
         }
     }
 
     @Nullable
     private AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
-        if (tt.nextNoSkip() != '[') {
-            throw new ParseException("AttributeSelector: '[' expected.", tt.getLineNumber());
-        }
-        if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
-            throw new ParseException("AttributeSelector: Identifier expected. Line " + tt.getLineNumber() + ".", tt.getStartPosition());
-        }
+        tt.requireNextNoSkip('[', "AttributeSelector: '[' expected.");
+        tt.requireNextNoSkip(CssTokenType.TT_IDENT, "AttributeSelector: Identifier expected.");
         String attributeName = tt.currentStringNonNull();
         String namespace = null;//FIXME parse namespace
         AbstractAttributeSelector selector;

@@ -404,15 +404,15 @@ public class CssParserTest {
                 dynamicTest("type selector", () -> testCssSyntax(true, "a {x:1;}", //
                         "<xml><a/><b/></xml>",//
                         "<xml><a x=\"1\"/><b/></xml>")), //
-                dynamicTest("empty not selector", () -> testCssSyntax(true, ":not() {x:1;}", //
+                dynamicTest("empty not selector", () -> testCssSyntax(false, ":not() {x:1;}", //
                         "<xml><a/><b/></xml>",//
-                        "<xml x=\"1\"><a x=\"1\"/><b x=\"1\"/></xml>")), //
+                        "<xml><a/><b/></xml>")), //
                 dynamicTest("not selector 1", () -> testCssSyntax(true, ":not(a) {x:1;}", //
                         "<xml><a/><b/></xml>",//
                         "<xml x=\"1\"><a/><b x=\"1\"/></xml>")), //
-                dynamicTest("not selector 2", () -> testCssSyntax(true, ":not(xml,a) {x:1;}", //
+                dynamicTest("not selector 2", () -> testCssSyntax(false, ":not(xml,a) {x:1;}", //
                         "<xml><a/><b/></xml>",//
-                        "<xml><a/><b x=\"1\"/></xml>")), //
+                        "<xml><a/><b/></xml>")), //
                 dynamicTest("nested not selector", () -> testCssSyntax(true, ":not(:not(a)) {x:1;}", //
                         "<xml><a/><b/></xml>",//
                         "<xml><a x=\"1\"/><b/></xml>")), //

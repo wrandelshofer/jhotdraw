@@ -201,10 +201,35 @@ public interface CssTokenizer {
      */
     default void requireNextToken(int ttype, String message) throws ParseException, IOException {
         if (next() != ttype) {
-            throw new ParseException(message + " Found: '" + getToken() + "'.", getStartPosition());
+            throw createParseException(message);
         }
     }
 
+    /**
+     * Creates a parse exception which contains the specified message,
+     * the token that was found, and the current position of the tokenizier.
+     *
+     * @param message the message
+     * @return a new parse exception
+     */
+    default ParseException createParseException(String message) {
+        return new ParseException(message + " Found: '" + getToken() + "'.", getStartPosition());
+    }
+
+    /**
+     * Fetches the next token and throws a parse exception if it
+     * is not of the required type.
+     *
+     * @param ttype   the required token type
+     * @param message the error message
+     * @throws ParseException if the token is not of the required type
+     * @throws IOException    on IO exception
+     */
+    default void requireNextNoSkip(int ttype, String message) throws ParseException, IOException {
+        if (nextNoSkip() != ttype) {
+            throw createParseException(message);
+        }
+    }
     /**
      * Pushes the current token back.
      */

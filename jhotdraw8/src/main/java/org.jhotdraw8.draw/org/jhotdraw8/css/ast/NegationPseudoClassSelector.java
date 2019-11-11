@@ -2,14 +2,7 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssParser;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.ListCssTokenizer;
 import org.jhotdraw8.css.SelectorModel;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
 
 /**
  * Implements the negation pseudo-class selector.
@@ -22,25 +15,21 @@ import java.util.List;
  * Note also that since pseudo-elements are not simple selectors,
  * they are not a valid argument to {@code :not()}.
  * <p>
- * FIXME This implementation takes a selector group as its argument, and thus allows
- * to nest {@code :not()} with itself.
- * <p>
  * See <a href="https://www.w3.org/TR/selectors-3/#negation">negation pseudo-class</a>.
  */
 public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
-    private final Selector selector;
+    private final SimpleSelector selector;
 
-    public NegationPseudoClassSelector(String functionIdentifier, @NonNull List<CssToken> terms) {
-        super(functionIdentifier, terms);
-        CssParser p = new CssParser();
-        Selector s;
-        try {
-            s = p.parseSelectorGroup(new ListCssTokenizer(terms));
-        } catch (@NonNull IOException | ParseException e) {
-            s = new UniversalSelector();
-        }
-        this.selector=s;
+    public NegationPseudoClassSelector(String functionIdentifier, @NonNull SimpleSelector selector) {
+        super(functionIdentifier);
+        this.selector = selector;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "FunctionPseudoClass:" + getFunctionIdentifier() + "(" + ")";
     }
 
     @Nullable
