@@ -210,6 +210,19 @@ public class Geom {
     }
 
     /**
+     * Returns true if the given bounds are finite.
+     *
+     * @param r the bounds
+     * @return true if finiite
+     */
+    public static boolean isFinite(@NonNull Bounds bounds) {
+        return Double.isFinite(bounds.getMinX())
+                && Double.isFinite(bounds.getMinY())
+                && Double.isFinite(bounds.getWidth())
+                && Double.isFinite(bounds.getHeight());
+    }
+
+    /**
      * Returns a point on the edge of the shape which crosses the line from the
      * center of the shape to the specified point. If no edge crosses of the
      * shape crosses the line, the nearest control point of the shape is
