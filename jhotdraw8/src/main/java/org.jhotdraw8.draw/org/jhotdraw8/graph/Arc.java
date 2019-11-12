@@ -10,9 +10,6 @@ package org.jhotdraw8.graph;
  * <p>
  * Provides the start and end vertex of the arrow, and the data associated
  * to the arrow.
- * <p>
- * If a vertex has no predecessor, then start is null, and
- * method {@link #isRoot} returns true.
  *
  * @param <V> the vertex type
  * @param <A> the arrow data type
@@ -38,14 +35,5 @@ public class Arc<V, A> {
 
     public V getStart() {
         return start;
-    }
-
-    /**
-     * Returns true if the vertex has no predecessor.
-     *
-     * @return true if start==null.
-     */
-    public boolean isRoot() {
-        return start == null;
     }
 }
