@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  */
 public interface CssFunctionProcessor<T> {
     /**
-     * Processes tokens.
+     * Processes all tokens.
      *
      * @param element an element of the DOM
      * @param tt      the tokenizer providing input tokens
@@ -34,6 +34,12 @@ public interface CssFunctionProcessor<T> {
      * @throws ParseException in case of a parsing failure
      */
     void process(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException;
+
+    /**
+     * Processes the next token(s).
+     */
+    void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException;
+
 
     /**
      * Convenience method for processing tokens.
@@ -67,5 +73,7 @@ public interface CssFunctionProcessor<T> {
     void setModel(SelectorModel<T> model);
 
     void setCustomProperties(Map<String, ImmutableList<CssToken>> customProperties);
+
+    Map<String, ImmutableList<CssToken>> getCustomProperties();
 
 }

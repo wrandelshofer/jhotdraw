@@ -12,6 +12,7 @@ import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.css.functions.CssFunction;
 
 import java.io.IOException;
 import java.net.URI;
@@ -65,16 +66,14 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Nullable
     private Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
     private final static Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
-    @Nullable
-    private final CssFunctionProcessor<E> functionProcessor;
 
     public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
-        this(selectorModel, new SimpleCssFunctionProcessor<>());
+        this(selectorModel, Collections.emptyList());
     }
 
-    public SimpleStylesheetsManager(SelectorModel<E> selectorModel, @Nullable CssFunctionProcessor<E> functionProcessor) {
+    public SimpleStylesheetsManager(SelectorModel<E> selectorModel, @Nullable List<CssFunction<E>> functions) {
         this.selectorModel = selectorModel;
-        this.functionProcessor = functionProcessor;
+        this.functions = functions;
     }
 
     private void doSetAttribute(@NonNull SelectorModel<E> selectorModel1, @NonNull E elem, @NonNull StyleOrigin styleOrigin,
@@ -83,9 +82,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         if (value == null) {
             selectorModel1.setAttribute(elem, styleOrigin, namespace, name, null);
         } else {
-            if (functionProcessor != null) {
-                functionProcessor.setModel(selectorModel1);
-                functionProcessor.setCustomProperties(customProperties);
+            if (!functions.isEmpty()) {
+                final CssFunctionProcessor<E> functionProcessor = createCssFunctionProcessor(selectorModel1, customProperties);
                 ImmutableList<CssToken> processed = preprocessTerms(elem, functionProcessor, value);
                 selectorModel1.setAttribute(elem, styleOrigin, namespace, name, processed);
             } else {
@@ -355,7 +353,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         SelectorModel<E> selectorModel = getSelectorModel();
         final Map<String, ImmutableList<CssToken>> customProperties = collectCustomProperties(s);
 
-        ExtendedCssFunctionProcessor<E> processor = new ExtendedCssFunctionProcessor<>(selectorModel, customProperties);
+        CssFunctionProcessor<E> processor = createCssFunctionProcessor(selectorModel, customProperties);
         final List<Map.Entry<Integer, Declaration>> applicableDeclarations = collectApplicableDeclarations(elem, s,
                 new ArrayList<>());
         if (applicableDeclarations.isEmpty()) {
@@ -379,10 +377,32 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return true;
     }
 
+    private CssFunctionProcessor<E> createCssFunctionProcessor(SelectorModel<E> selectorModel, Map<String, ImmutableList<CssToken>> customProperties) {
+        return new SimpleCssFunctionProcessor<>(functions, selectorModel, customProperties);
+    }
+
+
+    private List<CssFunction<E>> functions = new ArrayList<>();
+
+    public List<CssFunction<E>> getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(List<CssFunction<E>> functions) {
+        this.functions = functions;
+    }
+
     @NonNull
     @Override
     public String getHelpText() {
-        return functionProcessor == null ? "" : functionProcessor.getHelpText();
+        StringBuilder buf = new StringBuilder();
+        for (CssFunction<E> value : functions) {
+            if (buf.length() != 0) {
+                buf.append("\n");
+            }
+            buf.append(value.getHelpText());
+        }
+        return buf.toString();
     }
 
     @NonNull

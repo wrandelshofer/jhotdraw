@@ -2,10 +2,18 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.css.functions.AttrCssFunction;
+import org.jhotdraw8.css.functions.CalcCssFunction;
+import org.jhotdraw8.css.functions.ConcatCssFunction;
+import org.jhotdraw8.css.functions.CssFunction;
+import org.jhotdraw8.css.functions.ReplaceCssFunction;
+import org.jhotdraw8.css.functions.RoundCssFunction;
+import org.jhotdraw8.css.functions.VarCssFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Element;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +24,14 @@ class ExtendedCssFunctionProcessorTest extends SimpleCssFunctionProcessorTest {
 
     @NonNull
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
-        return new ExtendedCssFunctionProcessor<>(model, customProperties);
+        List<CssFunction<Element>> functions = new ArrayList<>();
+        functions.add(new AttrCssFunction<>());
+        functions.add(new CalcCssFunction<>());
+        functions.add(new VarCssFunction<>());
+        functions.add(new ConcatCssFunction<>());
+        functions.add(new ReplaceCssFunction<>());
+        functions.add(new RoundCssFunction<>());
+        return new SimpleCssFunctionProcessor<>(functions, model, customProperties);
     }
 
 

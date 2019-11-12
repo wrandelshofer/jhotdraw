@@ -4,6 +4,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.css.functions.AttrCssFunction;
+import org.jhotdraw8.css.functions.CalcCssFunction;
+import org.jhotdraw8.css.functions.CssFunction;
+import org.jhotdraw8.css.functions.VarCssFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -11,6 +15,7 @@ import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,7 +29,11 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 class SimpleCssFunctionProcessorTest {
 
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
-        return new SimpleCssFunctionProcessor<>(model, customProperties);
+        List<CssFunction<Element>> functions = new ArrayList<>();
+        functions.add(new AttrCssFunction<>());
+        functions.add(new CalcCssFunction<>());
+        functions.add(new VarCssFunction<>());
+        return new SimpleCssFunctionProcessor<>(functions, model, customProperties);
     }
 
 
