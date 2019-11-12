@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Converts a {@code javafx.geometry.Insets} into a {@code String} and vice
+ * Converts a {@link Insets} object into a {@code String} and vice
  * versa.
  * <p>
  * List of four sizes in the sequence top, right, bottom, left. If left is
@@ -33,8 +33,8 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssInsetsConverterOLD extends AbstractCssConverter<Insets> {
-    public CssInsetsConverterOLD(boolean nullable) {
+public class InsetsConverter extends AbstractCssConverter<Insets> {
+    public InsetsConverter(boolean nullable) {
         super(nullable);
     }
 

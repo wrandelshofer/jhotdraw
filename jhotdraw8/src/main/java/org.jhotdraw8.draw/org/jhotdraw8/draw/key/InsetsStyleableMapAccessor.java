@@ -12,7 +12,7 @@ import javafx.geometry.Insets;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.text.CssInsetsConverterOLD;
+import org.jhotdraw8.css.text.InsetsConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
@@ -84,7 +84,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     @Override
     public Converter<Insets> getConverter() {
         if (converter == null) {
-            converter = new CssInsetsConverterOLD(false);
+            converter = new InsetsConverter(false);
         }
         return converter;
     }
