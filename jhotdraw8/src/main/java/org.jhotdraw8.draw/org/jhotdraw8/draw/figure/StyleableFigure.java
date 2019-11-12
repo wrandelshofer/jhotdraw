@@ -13,8 +13,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.ObjectFigureKey;
@@ -45,7 +43,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @NonNull
-    ObservableWordListKey STYLE_CLASS = new ObservableWordListKey("class", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.STYLE), ImmutableLists.emptyList());
+    ObservableWordListKey STYLE_CLASS = new ObservableWordListKey("class", ImmutableLists.emptyList());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.

@@ -30,8 +30,6 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
@@ -55,7 +53,7 @@ public class BezierFigure extends AbstractLeafFigure
         PathIterableFigure {
 
     public final static BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
-    public final static BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
+    public final static BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */

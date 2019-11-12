@@ -41,25 +41,13 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public Point2DStyleableKey(String name, Point2D defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
-
-    /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
+     *  @param key          The name of the name. type parameters are given. Otherwise
      *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public Point2DStyleableKey(String key, DirtyMask mask, Point2D defaultValue) {
+    public Point2DStyleableKey(String key, Point2D defaultValue) {
         super(key, Point2D.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Point2D>> function = s -> {

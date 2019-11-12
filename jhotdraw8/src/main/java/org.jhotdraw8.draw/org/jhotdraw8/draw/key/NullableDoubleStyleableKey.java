@@ -42,30 +42,15 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
 
     /**
      * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
+     *  @param name         The name of the key.
      * @param defaultValue The default value.
      */
     public NullableDoubleStyleableKey(@NonNull String name, Double defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
+        this(name, defaultValue, new CssDoubleConverter(true));
     }
 
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
-     * @param defaultValue The default value.
-     */
-    public NullableDoubleStyleableKey(@NonNull String name, DirtyMask mask, Double defaultValue) {
-        this(name, mask, defaultValue, new CssDoubleConverter(true));
-    }
 
     public NullableDoubleStyleableKey(@NonNull String name, Double defaultValue, CssConverter<Double> converter) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, converter);
-    }
-
-    public NullableDoubleStyleableKey(@NonNull String name, DirtyMask mask, Double defaultValue, CssConverter<Double> converter) {
         super(name, Double.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Double>> function = s -> {

@@ -15,8 +15,6 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -33,15 +31,15 @@ public interface TextLayoutableFigure extends Figure {
     /**
      * The line spacing. Default value: {@code 0.0}
      */
-    @Nullable CssSizeStyleableKey LINE_SPACING = new CssSizeStyleableKey("lineSpacing", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey LINE_SPACING = new CssSizeStyleableKey("lineSpacing", CssSize.ZERO);
     /**
      * The text alignment. Default value: {@code left}
      */
-    EnumStyleableKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableKey<>("textAlignment", TextAlignment.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), TextAlignment.LEFT);
+    EnumStyleableKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableKey<>("textAlignment", TextAlignment.class, TextAlignment.LEFT);
     /**
      * The vertical position of the text. Default value: {@code baseline}
      */
-    EnumStyleableKey<VPos> TEXT_VPOS = new EnumStyleableKey<>("textVPos", VPos.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), VPos.BASELINE);
+    EnumStyleableKey<VPos> TEXT_VPOS = new EnumStyleableKey<>("textVPos", VPos.class, VPos.BASELINE);
     /**
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */

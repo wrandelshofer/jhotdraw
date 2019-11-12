@@ -2,7 +2,7 @@
  * @(#)DirtyMask.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.key;
+package org.jhotdraw8.draw.model;
 
 import org.jhotdraw8.annotation.NonNull;
 

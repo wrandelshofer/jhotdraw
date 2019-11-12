@@ -57,8 +57,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * need to observe changes of Figures in the tree structure.
  * @design.pattern DrawingModel Strategy, Strategy. The strategy for updating
  * the state of dependent {@link Figure} objects is implemented in
- * {@link DrawingModel}. {@code DrawingModel} uses
- * {@link org.jhotdraw8.draw.key.DirtyBits} as a hint for its strategy.
+ * {@link DrawingModel}.
  * @design.pattern DrawingModel MVC, Model. The model view controller (MVC)
  * pattern is used to decouple application code from user interface code. See {@link DrawingModel},
  * {@link org.jhotdraw8.draw.DrawingView} and

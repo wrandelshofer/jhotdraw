@@ -15,8 +15,6 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
@@ -39,7 +37,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @NonNull
     public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     @NonNull
-    public final static NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "M 0,0 h 1 v -1 h -1 Z");
+    public final static NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", "M 0,0 h 1 v -1 h -1 Z");
     @NonNull
     public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     @NonNull

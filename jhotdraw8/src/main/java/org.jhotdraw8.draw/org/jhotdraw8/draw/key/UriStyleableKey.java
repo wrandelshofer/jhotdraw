@@ -42,25 +42,13 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public UriStyleableKey(String name, URI defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
-
-    /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
+     *  @param key          The name of the name. type parameters are given. Otherwise
      *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public UriStyleableKey(String key, DirtyMask mask, URI defaultValue) {
+    public UriStyleableKey(String key, URI defaultValue) {
         super(key, URI.class, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);

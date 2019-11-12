@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.model.DirtyMask;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -36,20 +37,18 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends AbstractStyleab
      * @param mask  The mask.
      */
     public NullableEnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, DirtyMask mask) {
-        this(name, clazz, mask, true, null);
+        this(name, clazz, true, null);
     }
 
     /**
      * Creates a new instance with the specified name, enum class, mask and
      * default value.
-     *
-     * @param name         The name of the key.
+     *  @param name         The name of the key.
      * @param clazz        The enum class.
-     * @param mask         The mask.
      * @param nullable     Whether the value is nullable
      * @param defaultValue The default value.
      */
-    public NullableEnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, DirtyMask mask, boolean nullable, @Nullable T defaultValue) {
+    public NullableEnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, boolean nullable, @Nullable T defaultValue) {
         super(name, clazz, defaultValue);
 
         this.nullable = nullable;

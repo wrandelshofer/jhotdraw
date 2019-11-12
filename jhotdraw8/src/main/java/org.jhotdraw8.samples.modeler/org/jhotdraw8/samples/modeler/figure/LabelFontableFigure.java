@@ -18,8 +18,6 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
@@ -38,10 +36,10 @@ public interface LabelFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableKey LABEL_FONT_FAMILY = new StringOrIdentStyleableKey("labelFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableKey LABEL_FONT_SIZE = new CssSizeStyleableKey("labelFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableKey<FontPosture> LABEL_FONT_STYLE = new EnumStyleableKey<>("labelFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableKey<FontWeight> LABEL_FONT_WEIGHT = new EnumStyleableKey<>("labelFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey LABEL_FONT_FAMILY = new StringOrIdentStyleableKey("labelFontFamily", "Arial");
+    CssSizeStyleableKey LABEL_FONT_SIZE = new CssSizeStyleableKey("labelFontSize", new CssSize(12.0));
+    EnumStyleableKey<FontPosture> LABEL_FONT_STYLE = new EnumStyleableKey<>("labelFontStyle", FontPosture.class, FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> LABEL_FONT_WEIGHT = new EnumStyleableKey<>("labelFontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor LABEL_FONT = new FontStyleableMapAccessor("labelFont", LABEL_FONT_FAMILY, LABEL_FONT_WEIGHT, LABEL_FONT_STYLE, LABEL_FONT_SIZE);
 
     /**

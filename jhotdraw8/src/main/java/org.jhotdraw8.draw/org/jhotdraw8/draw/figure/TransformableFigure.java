@@ -21,8 +21,6 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
@@ -95,7 +93,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      * about the center ofCollection the figure.
      */
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
-    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", DirtyMask.of(DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
+    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", ImmutableLists.emptyList());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.

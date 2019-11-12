@@ -18,8 +18,6 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
@@ -38,10 +36,10 @@ public interface KindFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableKey KIND_FONT_FAMILY = new StringOrIdentStyleableKey("kindFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableKey KIND_FONT_SIZE = new CssSizeStyleableKey("kindFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableKey<FontPosture> KIND_FONT_STYLE = new EnumStyleableKey<>("kindFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableKey<FontWeight> KIND_FONT_WEIGHT = new EnumStyleableKey<>("kindFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey KIND_FONT_FAMILY = new StringOrIdentStyleableKey("kindFontFamily", "Arial");
+    CssSizeStyleableKey KIND_FONT_SIZE = new CssSizeStyleableKey("kindFontSize", new CssSize(12.0));
+    EnumStyleableKey<FontPosture> KIND_FONT_STYLE = new EnumStyleableKey<>("kindFontStyle", FontPosture.class, FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> KIND_FONT_WEIGHT = new EnumStyleableKey<>("kindFontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor KIND_FONT = new FontStyleableMapAccessor("kindFont", KIND_FONT_FAMILY, KIND_FONT_WEIGHT, KIND_FONT_STYLE, KIND_FONT_SIZE);
 
     /**

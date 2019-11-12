@@ -25,8 +25,6 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 
@@ -49,19 +47,19 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     public final static String TYPE_SELECTOR = "Slice";
 
     @Nullable
-    public final static CssSizeStyleableKey X = new CssSizeStyleableKey("x", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey Y = new CssSizeStyleableKey("y", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    public final static CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
     @Nullable
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
     @Nullable
-    public final static CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    public final static CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    public final static CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", CssSize.ZERO);
     @Nullable
     public final static CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 

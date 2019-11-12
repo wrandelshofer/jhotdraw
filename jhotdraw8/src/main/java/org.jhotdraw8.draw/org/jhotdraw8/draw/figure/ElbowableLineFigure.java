@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableCssSizeStyleableKey;
 
 /**
@@ -20,7 +18,7 @@ public interface ElbowableLineFigure extends Figure {
     /**
      * The offset of the elbow with respect of the end of the line.
      */
-    @Nullable NullableCssSizeStyleableKey ELBOW_OFFSET = new NullableCssSizeStyleableKey("elbowOffset", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), CssSize.ZERO);
+    @Nullable NullableCssSizeStyleableKey ELBOW_OFFSET = new NullableCssSizeStyleableKey("elbowOffset", CssSize.ZERO);
 
     /**
      * The offset of the elbow from the end of the line.

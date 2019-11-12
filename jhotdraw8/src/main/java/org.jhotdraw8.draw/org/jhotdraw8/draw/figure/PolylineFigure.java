@@ -22,8 +22,6 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PolyPointEditHandle;
 import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -44,7 +42,7 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public final static Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), ImmutableLists.emptyList());
+    public final static Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */

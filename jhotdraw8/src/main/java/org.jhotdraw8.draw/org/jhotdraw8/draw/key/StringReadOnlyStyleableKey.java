@@ -48,29 +48,16 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      * @param defaultValue The default value.
      */
     public StringReadOnlyStyleableKey(@NonNull String name, String defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
+        this(name, defaultValue, null);
     }
 
     /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
-     * @param defaultValue The default value.
-     */
-    public StringReadOnlyStyleableKey(@NonNull String name, DirtyMask mask, String defaultValue) {
-        this(name, mask, defaultValue, null);
-    }
-
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
+     * Creates a new instance with the specified name, and default value.
+     *  @param name         The name of the key.
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public StringReadOnlyStyleableKey(@NonNull String name, DirtyMask mask, String defaultValue, String helpText) {
+    public StringReadOnlyStyleableKey(@NonNull String name, String defaultValue, String helpText) {
         super(null, name, String.class, true, defaultValue);
         /*
          StyleablePropertyFactory factory = new StyleablePropertyFactory(null);

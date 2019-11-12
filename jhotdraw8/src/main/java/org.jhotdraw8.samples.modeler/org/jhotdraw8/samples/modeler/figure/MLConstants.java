@@ -6,8 +6,6 @@ package org.jhotdraw8.samples.modeler.figure;
 
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableBooleanStyleableKey;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.StringStyleableKey;
@@ -36,7 +34,7 @@ public class MLConstants {
     /**
      * The compartment data of a compartmentable model element.
      */
-    public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.MODEL_NAMESPACE_PREFIX, "compartments", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new MLCompartmentalizedData());
+    public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.MODEL_NAMESPACE_PREFIX, "compartments", new MLCompartmentalizedData());
     /**
      * The source owned property of an association model element.
      * <p>

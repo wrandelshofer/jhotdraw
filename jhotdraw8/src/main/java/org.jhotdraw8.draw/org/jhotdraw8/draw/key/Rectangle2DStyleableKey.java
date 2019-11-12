@@ -44,23 +44,10 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
     /**
      * Creates a new instance with the specified name and default value.
      *
-     * @param name         The name of the key.
+     * @param key         The name of the key.
      * @param defaultValue The default value.
      */
-    public Rectangle2DStyleableKey(@NonNull String name, Rectangle2D defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
-     *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
-     * @param defaultValue The default value.
-     */
-    public Rectangle2DStyleableKey(@NonNull String key, DirtyMask mask, Rectangle2D defaultValue) {
+    public Rectangle2DStyleableKey(@NonNull String key, Rectangle2D defaultValue) {
         super(key, Rectangle2D.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Rectangle2D>> function = s -> {

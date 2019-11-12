@@ -2,7 +2,7 @@
  * @(#)DirtyBits.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.key;
+package org.jhotdraw8.draw.model;
 
 /**
  * {@code DirtyBits} describes how changing a property value of a {@code Figure}

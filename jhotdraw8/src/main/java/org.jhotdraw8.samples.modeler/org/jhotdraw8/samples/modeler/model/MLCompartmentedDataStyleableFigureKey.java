@@ -13,8 +13,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.samples.modeler.text.CssUmlCompartmentalizedDataConverter;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
@@ -43,38 +41,24 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param namespace    The namespace
+     * Creates a new instance with the specified name, mask and default value.
+     *  @param namespace    The namespace
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
     public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, MLCompartmentalizedData defaultValue) {
-        this(namespace, name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
+        this(namespace, name, defaultValue, null);
     }
+
 
     /**
      * Creates a new instance with the specified name, mask and default value.
-     *
      * @param namespace    The namespace
      * @param name         The name of the key.
-     * @param mask         The dirty mask.
-     * @param defaultValue The default value.
-     */
-    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, DirtyMask mask, MLCompartmentalizedData defaultValue) {
-        this(namespace, name, DirtyMask.of(DirtyBits.NODE), defaultValue, null);
-    }
-
-
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *  @param namespace    The namespace
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, DirtyMask mask, MLCompartmentalizedData defaultValue, String helpText) {
+    public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, MLCompartmentalizedData defaultValue, String helpText) {
         super(namespace, name, MLCompartmentalizedData.class, false, defaultValue);
         converter = new CssUmlCompartmentalizedDataConverter(true);
         Function<Styleable, StyleableProperty<MLCompartmentalizedData>> function = s -> {

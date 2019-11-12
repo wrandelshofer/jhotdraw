@@ -43,25 +43,13 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public NullableCssColorStyleableKey(@NonNull String name, CssColor defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
-
-    /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
+     *  @param key          The name of the name. type parameters are given. Otherwise
      *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public NullableCssColorStyleableKey(@NonNull String key, DirtyMask mask, CssColor defaultValue) {
+    public NullableCssColorStyleableKey(@NonNull String key, CssColor defaultValue) {
         super(key, CssColor.class, defaultValue);
 
         Function<Styleable, StyleableProperty<CssColor>> function = s -> {

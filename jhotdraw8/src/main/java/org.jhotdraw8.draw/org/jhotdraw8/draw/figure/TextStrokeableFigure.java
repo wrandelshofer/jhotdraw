@@ -19,8 +19,6 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
@@ -48,7 +46,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    @Nullable CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -57,7 +55,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.BUTT);
+    EnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -67,7 +65,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
+    EnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
      * value: {@code 4.0}.
@@ -77,7 +75,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(10.0));
+    CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", new CssSize(10.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code null}.
@@ -93,7 +91,7 @@ public interface TextStrokeableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.OUTSIDE}.
      */
-    EnumStyleableKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableKey<>("text-stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.OUTSIDE);
+    EnumStyleableKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableKey<>("text-stroke-type", StrokeType.class, StrokeType.OUTSIDE);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -104,7 +102,7 @@ public interface TextStrokeableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey TEXT_STROKE_WIDTH = new CssSizeStyleableKey("text-stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
+    CssSizeStyleableKey TEXT_STROKE_WIDTH = new CssSizeStyleableKey("text-stroke-width", CssSize.ONE);
 
     /**
      * Defines the dash array used. Default value: {@code empty array}.
@@ -115,7 +113,7 @@ public interface TextStrokeableFigure extends Figure {
      * Stroke Properties</a>
      */
     ListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new ListStyleableKey<>("text-stroke-dasharray",
-            DirtyMask.of(DirtyBits.NODE), CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
+            CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**
      * Combined map accessor for all stroke style properties.

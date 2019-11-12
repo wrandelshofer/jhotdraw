@@ -39,40 +39,27 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
      * @param name The name of the key.
      */
     public RegexStyleableKey(String name) {
-        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new RegexReplace());
+        this(name, new RegexReplace());
     }
 
-    /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public RegexStyleableKey(String name, RegexReplace defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), defaultValue);
-    }
 
     /**
      * Creates a new instance with the specified name and default value. The
      * value is nullable.
-     *
-     * @param name         The name of the key.
-     * @param mask         the dirty mask
+     *  @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public RegexStyleableKey(String name, DirtyMask mask, RegexReplace defaultValue) {
-        this(name, true, mask, defaultValue);
+    public RegexStyleableKey(String name, RegexReplace defaultValue) {
+        this(name, true, defaultValue);
     }
 
     /**
      * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
+     *  @param name         The name of the key.
      * @param nullable     whether the value is nullable
-     * @param mask         the dirty mask
      * @param defaultValue The default value.
      */
-    public RegexStyleableKey(String name, boolean nullable, DirtyMask mask, RegexReplace defaultValue) {
+    public RegexStyleableKey(String name, boolean nullable, RegexReplace defaultValue) {
         super(null, name, RegexReplace.class, nullable, defaultValue);
 
         Function<Styleable, StyleableProperty<RegexReplace>> function = s -> {

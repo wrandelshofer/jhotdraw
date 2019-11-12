@@ -19,8 +19,6 @@ import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
@@ -39,10 +37,10 @@ public interface AbstractItemFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableKey ABSTRACT_ITEM_FONT_FAMILY = new StringOrIdentStyleableKey("abstractItemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableKey ABSTRACT_ITEM_FONT_SIZE = new CssSizeStyleableKey("abstractItemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableKey<FontPosture> ABSTRACT_ITEM_FONT_STYLE = new EnumStyleableKey<>("abstractItemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableKey<FontWeight> ABSTRACT_ITEM_FONT_WEIGHT = new EnumStyleableKey<>("abstractItemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey ABSTRACT_ITEM_FONT_FAMILY = new StringOrIdentStyleableKey("abstractItemFontFamily", "Arial");
+    CssSizeStyleableKey ABSTRACT_ITEM_FONT_SIZE = new CssSizeStyleableKey("abstractItemFontSize", new CssSize(12.0));
+    EnumStyleableKey<FontPosture> ABSTRACT_ITEM_FONT_STYLE = new EnumStyleableKey<>("abstractItemFontStyle", FontPosture.class, FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> ABSTRACT_ITEM_FONT_WEIGHT = new EnumStyleableKey<>("abstractItemFontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor ABSTRACT_ITEM_FONT = new FontStyleableMapAccessor("abstractItemFont", ABSTRACT_ITEM_FONT_FAMILY, ABSTRACT_ITEM_FONT_WEIGHT, ABSTRACT_ITEM_FONT_STYLE, ABSTRACT_ITEM_FONT_SIZE);
     /**
      * Whether to underline the text. Default value: {@code false}

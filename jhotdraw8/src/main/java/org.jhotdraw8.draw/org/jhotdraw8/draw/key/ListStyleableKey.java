@@ -49,27 +49,13 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<ImmutableList<T>>
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
+     * Creates a new instance with the specified name, mask and default value.
+     *  @param name         The name of the key.
      * @param clazz        the class of the type
      * @param converter    String converter for a list element
      * @param defaultValue The default value.
      */
     public ListStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), clazz, converter, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param mask         The dirty mask.
-     * @param defaultValue The default value.
-     * @param clazz        the class of the type
-     * @param converter    String converter for a list element
-     */
-    public ListStyleableKey(@NonNull String name, @NonNull DirtyMask mask, @NonNull Class<T> clazz, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{clazz}, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {

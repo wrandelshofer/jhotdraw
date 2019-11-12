@@ -15,8 +15,6 @@ import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.css.text.CssUriConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.key.NullableObjectKey;
@@ -103,7 +101,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", DirtyMask.of(DirtyBits.NODE), new CssSize(640.0));
+    CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", new CssSize(640.0));
     /**
      * Defines the canvas height.
      * <p>
@@ -112,7 +110,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", DirtyMask.of(DirtyBits.NODE), new CssSize(480.0));
+    CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", new CssSize(480.0));
     /**
      * Defines the canvas color.
      * <p>

@@ -19,8 +19,6 @@ import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
@@ -39,10 +37,10 @@ public interface StaticItemFontableFigure extends Figure {
     /**
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
-    StringOrIdentStyleableKey STATIC_ITEM_FONT_FAMILY = new StringOrIdentStyleableKey("staticItemFontFamily", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), "Arial");
-    CssSizeStyleableKey STATIC_ITEM_FONT_SIZE = new CssSizeStyleableKey("staticItemFontSize", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), new CssSize(12.0));
-    EnumStyleableKey<FontPosture> STATIC_ITEM_FONT_STYLE = new EnumStyleableKey<>("staticItemFontStyle", FontPosture.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontPosture.REGULAR);
-    EnumStyleableKey<FontWeight> STATIC_ITEM_FONT_WEIGHT = new EnumStyleableKey<>("staticItemFontWeight", FontWeight.class, DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT), FontWeight.NORMAL);
+    StringOrIdentStyleableKey STATIC_ITEM_FONT_FAMILY = new StringOrIdentStyleableKey("staticItemFontFamily", "Arial");
+    CssSizeStyleableKey STATIC_ITEM_FONT_SIZE = new CssSizeStyleableKey("staticItemFontSize", new CssSize(12.0));
+    EnumStyleableKey<FontPosture> STATIC_ITEM_FONT_STYLE = new EnumStyleableKey<>("staticItemFontStyle", FontPosture.class, FontPosture.REGULAR);
+    EnumStyleableKey<FontWeight> STATIC_ITEM_FONT_WEIGHT = new EnumStyleableKey<>("staticItemFontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor STATIC_ITEM_FONT = new FontStyleableMapAccessor("staticItemFont", STATIC_ITEM_FONT_FAMILY, STATIC_ITEM_FONT_WEIGHT, STATIC_ITEM_FONT_STYLE, STATIC_ITEM_FONT_SIZE);
     /**
      * Whether to underline the text. Default value: {@code false}

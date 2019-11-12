@@ -112,9 +112,7 @@ import static java.lang.Math.min;
  * <p>
  * <b>Update Strategy.</b> A figure does not automatically update its computed
  * property values. The update strategy is factored out into
- * {@link org.jhotdraw8.draw.model.DrawingModel}. Drawing model uses {@link
- * org.jhotdraw8.draw.key.DirtyBits} in the {@code FigureMapAccessor} to
- * determine which dependent figures need to be updated.
+ * {@link org.jhotdraw8.draw.model.DrawingModel}.
  *
  * @author Werner Randelshofer
  * @design.pattern Drawing Framework, KeyAbstraction.
@@ -1099,10 +1097,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The figure may choose to only partially change its parent bounds.
      * <p>
-     * This method typically changes property values in this figure with
-     * {@link org.jhotdraw8.draw.key.DirtyBits#NODE},
-     * {@link org.jhotdraw8.draw.key.DirtyBits#LAYOUT},
-     * {@link org.jhotdraw8.draw.key.DirtyBits#TRANSFORM}.
      * This method may also call
      * {@code reshapeInLocal} on child figures.
      *

@@ -42,25 +42,13 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
     }
 
     /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public NullablePaintableStyleableKey(@NonNull String name, Paintable defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
-
-    /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
+     *  @param key          The name of the name. type parameters are given. Otherwise
      *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public NullablePaintableStyleableKey(@NonNull String key, DirtyMask mask, Paintable defaultValue) {
+    public NullablePaintableStyleableKey(@NonNull String key, Paintable defaultValue) {
         super(key, Paintable.class, defaultValue);
 
         Function<Styleable, StyleableProperty<Paintable>> function = s -> {

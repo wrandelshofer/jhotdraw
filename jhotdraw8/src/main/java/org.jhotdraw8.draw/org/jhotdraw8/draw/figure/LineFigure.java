@@ -21,8 +21,6 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.PointHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
@@ -47,13 +45,13 @@ public class LineFigure extends AbstractLeafFigure
     public final static String TYPE_SELECTOR = "Line";
 
     @Nullable
-    public final static CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey START_Y = new CssSizeStyleableKey("startY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableKey START_Y = new CssSizeStyleableKey("startY", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey END_X = new CssSizeStyleableKey("endX", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableKey END_X = new CssSizeStyleableKey("endX", CssSize.ZERO);
     @Nullable
-    public final static CssSizeStyleableKey END_Y = new CssSizeStyleableKey("endY", DirtyMask.of(DirtyBits.NODE, DirtyBits.LAYOUT, DirtyBits.LAYOUT_OBSERVERS), CssSize.ZERO);
+    public final static CssSizeStyleableKey END_Y = new CssSizeStyleableKey("endY", CssSize.ZERO);
     @Nullable
     public final static CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);
     @Nullable

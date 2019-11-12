@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.draw.model.DirtyMask;
 
 /**
  * DoubleKey.

@@ -31,13 +31,11 @@ public class EnumStyleableKey<T extends Enum<T>> extends AbstractStyleableKey<T>
     /**
      * Creates a new instance with the specified name, enum class, mask and
      * default value.
-     *
-     * @param name         The name of the key.
+     *  @param name         The name of the key.
      * @param clazz        The enum class.
-     * @param mask         The mask.
      * @param defaultValue The default value.
      */
-    public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull DirtyMask mask, @NonNull T defaultValue) {
+    public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull T defaultValue) {
         super(name, clazz, defaultValue);
 
         Objects.requireNonNull(defaultValue, "defaultValue is null");

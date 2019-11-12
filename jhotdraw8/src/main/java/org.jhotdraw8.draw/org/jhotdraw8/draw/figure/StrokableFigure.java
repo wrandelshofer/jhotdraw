@@ -20,8 +20,6 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
@@ -52,7 +50,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    @Nullable CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", DirtyMask.of(DirtyBits.NODE), CssSize.ZERO);
+    @Nullable CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -61,7 +59,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new EnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, DirtyMask.of(DirtyBits.NODE), StrokeLineCap.BUTT);
+    EnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new EnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -71,7 +69,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, DirtyMask.of(DirtyBits.NODE), StrokeLineJoin.MITER);
+    EnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style.
      * <p>
@@ -82,7 +80,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", DirtyMask.of(DirtyBits.NODE), new CssSize(4.0));
+    CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", new CssSize(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -98,7 +96,7 @@ public interface StrokableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    EnumStyleableKey<StrokeType> STROKE_TYPE = new EnumStyleableKey<>("stroke-type", StrokeType.class, DirtyMask.of(DirtyBits.NODE), StrokeType.CENTERED);
+    EnumStyleableKey<StrokeType> STROKE_TYPE = new EnumStyleableKey<>("stroke-type", StrokeType.class, StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -109,7 +107,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", DirtyMask.of(DirtyBits.NODE), CssSize.ONE);
+    CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", CssSize.ONE);
     /**
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
@@ -118,7 +116,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray", DirtyMask.of(DirtyBits.NODE),
+    ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray",
             CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**

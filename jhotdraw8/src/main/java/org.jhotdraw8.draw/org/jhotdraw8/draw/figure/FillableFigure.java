@@ -13,8 +13,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.draw.key.DirtyBits;
-import org.jhotdraw8.draw.key.DirtyMask;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -41,7 +39,7 @@ public interface FillableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.NON_ZERO}.
      */
-    NullableEnumStyleableKey<FillRule> FILL_RULE = new NullableEnumStyleableKey<>("fill-rule", FillRule.class, DirtyMask.of(DirtyBits.NODE), false, FillRule.NON_ZERO);
+    NullableEnumStyleableKey<FillRule> FILL_RULE = new NullableEnumStyleableKey<>("fill-rule", FillRule.class, false, FillRule.NON_ZERO);
 
     /**
      * Updates a shape node.

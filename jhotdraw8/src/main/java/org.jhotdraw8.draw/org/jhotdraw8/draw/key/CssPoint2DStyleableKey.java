@@ -45,30 +45,20 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
         this(name, CssPoint2D.ZERO);
     }
 
-    /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public CssPoint2DStyleableKey(@NonNull String name, @NonNull CssPoint2D defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
+
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
+     *  @param key          The name of the name. type parameters are given. Otherwise
      *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public CssPoint2DStyleableKey(@NonNull String key, @NonNull DirtyMask mask, @NonNull CssPoint2D defaultValue) {
-        this(key, mask, defaultValue, new CssPoint2DConverter(false));
+    public CssPoint2DStyleableKey(@NonNull String key, @NonNull CssPoint2D defaultValue) {
+        this(key, defaultValue, new CssPoint2DConverter(false));
     }
 
-    public CssPoint2DStyleableKey(@NonNull String key, DirtyMask mask, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {
+    public CssPoint2DStyleableKey(@NonNull String key, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {
         super(key, CssPoint2D.class, defaultValue);
 
         Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {

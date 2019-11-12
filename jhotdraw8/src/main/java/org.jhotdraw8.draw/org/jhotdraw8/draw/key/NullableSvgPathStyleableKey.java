@@ -40,29 +40,19 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
      * @param name The name of the key.
      */
     public NullableSvgPathStyleableKey(@NonNull String name) {
-        this(name, DirtyMask.of(DirtyBits.NODE), null);
+        this(name, null);
     }
 
-    /**
-     * Creates a new instance with the specified name and default value.
-     *
-     * @param name         The name of the key.
-     * @param defaultValue The default value.
-     */
-    public NullableSvgPathStyleableKey(@NonNull String name, String defaultValue) {
-        this(name, DirtyMask.of(DirtyBits.NODE), defaultValue);
-    }
+
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
-     *
-     * @param key          The name of the name. type parameters are given. Otherwise
+     *  @param key          The name of the name. type parameters are given. Otherwise
      *                     specify them in arrow brackets.
-     * @param mask         Dirty bit mask.
      * @param defaultValue The default value.
      */
-    public NullableSvgPathStyleableKey(@NonNull String key, DirtyMask mask, String defaultValue) {
+    public NullableSvgPathStyleableKey(@NonNull String key, String defaultValue) {
         super(key, String.class, defaultValue);
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
