@@ -20,6 +20,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -99,9 +100,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     @NonNull
     @Override
     public Point2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value must be nonnull");
-        }
+        Objects.requireNonNull(value, "value is null");
         Point2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());

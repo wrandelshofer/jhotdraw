@@ -6,6 +6,8 @@ package org.jhotdraw8.beans;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 
+import java.util.Objects;
+
 /**
  * ReadOnlyNonNullWrapper.
  *
@@ -19,9 +21,7 @@ public class ReadOnlyNonNullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 
     @Override
     protected void fireValueChangedEvent() {
-        if (get() == null) {
-            throw new NullPointerException("newValue is null");
-        }
+        Objects.requireNonNull(get(), "new value is null");
         super.fireValueChangedEvent();
     }
 

@@ -48,8 +48,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
         @Override
         protected void fireValueChangedEvent() {
-            if (get() != null && !isSuitableParent(get())) {
-                throw new IllegalArgumentException(get() + " is not a suitable parent for this figure. this=" + this);
+            final Figure figure = get();
+            if (figure != null && !isSuitableParent(figure)) {
+                throw new IllegalArgumentException(figure + " is not a suitable parent for this figure. this=" + this);
             }
             super.fireValueChangedEvent();
         }

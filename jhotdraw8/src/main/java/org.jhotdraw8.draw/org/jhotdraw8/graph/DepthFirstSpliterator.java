@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -51,15 +52,9 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
      */
     public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        if (nextFunction == null) {
-            throw new IllegalArgumentException("nextFunction==null");
-        }
-        if (root == null) {
-            throw new IllegalArgumentException("root==null");
-        }
-        if (visited == null) {
-            throw new IllegalArgumentException("visited==null");
-        }
+        Objects.requireNonNull(nextFunction, "nextFunction is null");
+        Objects.requireNonNull(root, "root is null");
+        Objects.requireNonNull(visited, "visited is null");
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;

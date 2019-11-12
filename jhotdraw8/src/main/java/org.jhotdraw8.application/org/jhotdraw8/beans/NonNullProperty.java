@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.Objects;
+
 /**
  * A {@code NonNullProperty} throws an {@code IllegalArgumentException} when
  * attempting to set its value to null.
@@ -48,9 +50,7 @@ public class NonNullProperty<T> extends SimpleObjectProperty<T> {
     }
 
     public void setNonNull(@NonNull T newValue) {
-        if (newValue == null) {
-            throw new NullPointerException("newValue");
-        }
+        Objects.requireNonNull(newValue, "newValue is null");
         super.set(newValue);
     }
 

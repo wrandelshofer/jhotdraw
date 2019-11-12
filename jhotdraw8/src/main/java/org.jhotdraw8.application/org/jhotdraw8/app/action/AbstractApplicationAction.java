@@ -13,6 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -36,9 +37,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param app the application
      */
     public AbstractApplicationAction(@Nullable Application app) {
-        if (app == null) {
-            throw new IllegalArgumentException("app is null");
-        }
+        Objects.requireNonNull(app, "app is null");
         this.app = app;
         disabled.unbind();
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));

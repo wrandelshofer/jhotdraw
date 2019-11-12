@@ -20,6 +20,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -99,9 +100,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
     @NonNull
     @Override
     public BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
-        if (value == null) {
-            throw new IllegalArgumentException("value must not be null.");
-        }
+        Objects.requireNonNull(value, "value is null");
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());

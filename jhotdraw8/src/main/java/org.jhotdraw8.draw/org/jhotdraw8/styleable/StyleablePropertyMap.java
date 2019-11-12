@@ -19,6 +19,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMapEntryProperty;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * {@code StyleablePropertyMap} provides an acceleration structure for
@@ -374,9 +375,8 @@ public class StyleablePropertyMap {
             if (!key.isAssignable(value)) {
                 throw new ClassCastException("value is not assignable. key:" + key + " value:" + value);
             }
-            if (origin == null) {
-                throw new IllegalArgumentException("origin must not be null");
-            } else {
+            Objects.requireNonNull(origin, "origin is null");
+            {
                 switch (origin) {
                     case INLINE:
                         if (value == null) {

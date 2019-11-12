@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -92,9 +93,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
 
     @Override
     public boolean containsKey(@Nullable String key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(key, "key is null");
         if (resource.containsKey(key)) {
             return true;
         }

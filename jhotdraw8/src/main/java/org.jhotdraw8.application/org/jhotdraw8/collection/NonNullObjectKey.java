@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A <em>name</em> which provides typesafe access to a map entry.
@@ -88,15 +89,9 @@ public class NonNullObjectKey<T> implements NonNullKey<T> {
     }
 
     public NonNullObjectKey(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
-        if (name == null) {
-            throw new IllegalArgumentException("key is null");
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("clazz is null");
-        }
-        if (defaultValue == null) {
-            throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
-        }
+        Objects.requireNonNull(name, "name is null");
+        Objects.requireNonNull(clazz, "clazz is null");
+        Objects.requireNonNull(defaultValue, "defaultValue may not be null if isNullable==false");
 
         this.name = name;
         this.clazz = clazz;

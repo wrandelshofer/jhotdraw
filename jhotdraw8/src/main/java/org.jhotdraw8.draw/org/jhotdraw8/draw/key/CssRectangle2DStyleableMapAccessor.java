@@ -20,6 +20,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -103,9 +104,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
     @NonNull
     @Override
     public CssRectangle2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssRectangle2D value) {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(value, "value is null");
         CssRectangle2D oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());

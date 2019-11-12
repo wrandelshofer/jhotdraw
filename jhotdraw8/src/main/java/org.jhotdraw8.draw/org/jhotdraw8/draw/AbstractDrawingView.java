@@ -31,6 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * AbstractDrawingView.
@@ -110,9 +111,7 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
 
                 @Override
                 public Object put(@Nullable DataFormat key, Object value) {
-                    if (key == null) {
-                        throw new IllegalArgumentException("key == null");
-                    }
+                    Objects.requireNonNull(key, "key is null");
                     return super.put(key, value);
                 }
 

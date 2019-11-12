@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Interface for beans which support an open number of properties in a
@@ -102,10 +103,7 @@ public interface PropertyBean {
     @NonNull
     default <T> T getNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = key.get(getProperties());
-        if (value == null) {
-            throw new NullPointerException();
-        }
-        return value;
+        return Objects.requireNonNull(value);
     }
 
     /**

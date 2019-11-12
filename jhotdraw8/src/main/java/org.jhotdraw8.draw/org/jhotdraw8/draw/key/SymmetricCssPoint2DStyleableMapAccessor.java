@@ -21,6 +21,7 @@ import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -94,9 +95,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     @NonNull
     @Override
     public CssPoint2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssPoint2D value) {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        Objects.requireNonNull(value, "value is null");
         CssPoint2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());

@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
@@ -79,9 +80,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
 
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
-        if (action == null) {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(action, "action is null");
         if (index >= 0 && index < size) {
             action.accept(list.get(index++));
             return true;

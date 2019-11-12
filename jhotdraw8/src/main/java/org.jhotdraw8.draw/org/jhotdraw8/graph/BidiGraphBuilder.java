@@ -99,9 +99,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * @param arrow the arrow, can be null
      */
     public void addArrow(@NonNull V start, @NonNull V end, @Nullable A arrow) {
-        if (start == null || end == null) {
-            throw new IllegalArgumentException("start=" + start + ", end=" + end + ", arrow=" + arrow);
-        }
+        Objects.requireNonNull(start, "start is null");
+        Objects.requireNonNull(end, "end is null");
         final VertexData<V, A> startData = vertices.get(start);
         final VertexData<V, A> endData = vertices.get(end);
         if (startData == null || endData == null) {
@@ -241,9 +240,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     private VertexData<V, A> getVertexDataNonNull(V vertex) {
         VertexData<V, A> vertexData = vertices.get(vertex);
-        if (vertexData == null) {
-            throw new NullPointerException("vertex is not in graph. vertex=" + vertex);
-        }
+        Objects.requireNonNull(vertexData, "vertex is not in graph. vertex=" + vertex);
         return vertexData;
     }
 

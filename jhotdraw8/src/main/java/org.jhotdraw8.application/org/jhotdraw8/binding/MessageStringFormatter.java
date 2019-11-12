@@ -15,6 +15,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * MessageStringFormatter.
@@ -61,9 +62,7 @@ public abstract class MessageStringFormatter extends StringBinding {
 
     @NonNull
     public static StringExpression format(@Nullable final String format, @NonNull final Object... args) {
-        if (format == null) {
-            throw new NullPointerException("Format cannot be null.");
-        }
+        Objects.requireNonNull(format, "format is null");
         if (extractDependencies(args).length == 0) {
             return ConstantStringExpression.of(String.format(format, args));
         }

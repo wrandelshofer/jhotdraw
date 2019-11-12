@@ -13,6 +13,8 @@ import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 
+import java.util.Objects;
+
 /**
  * {@code StyleablePropertyBean} provides styleable properties.
  * <p>
@@ -61,10 +63,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
     @NonNull
     default <T> T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = getStyled(key);
-        if (value == null) {
-            throw new NullPointerException("key:" + key + "+value is null");
-        }
-        return value;
+        return Objects.requireNonNull(value);
     }
 
     /**

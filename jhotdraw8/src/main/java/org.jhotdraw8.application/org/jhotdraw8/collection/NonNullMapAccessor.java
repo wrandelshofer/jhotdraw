@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * NonNullMapAccessor.
@@ -46,9 +47,6 @@ public interface NonNullMapAccessor<T> extends MapAccessor<T> {
     @NonNull
     default T getDefaultValueNonNull() {
         T v = getDefaultValue();
-        if (v == null) {
-            throw new NullPointerException();
-        }
-        return v;
+        return Objects.requireNonNull(v);
     }
 }

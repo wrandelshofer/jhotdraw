@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.EventObject;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -23,9 +24,7 @@ public final class WeakListener<E extends EventObject> implements Listener<E>, j
     private Consumer<Listener<E>> removeListener;
 
     public WeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
-        if (listener == null) {
-            throw new NullPointerException("Listener must be specified.");
-        }
+        Objects.requireNonNull(listener, "listener is null");
         this.ref = new WeakReference<>(listener);
         this.removeListener = removeListener;
     }

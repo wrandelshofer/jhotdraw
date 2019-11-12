@@ -12,6 +12,7 @@ import org.jhotdraw8.xml.text.XmlNumberConverter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Objects;
 
 /**
  * CssToken.
@@ -74,19 +75,16 @@ public class CssToken /*extends AST*/ {
     public CssToken(int ttype, @Nullable String stringValue, @Nullable Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
         switch (ttype) {
             case CssTokenType.TT_DIMENSION:
-                if (numericValue == null)
-                    throw new IllegalArgumentException("numeric value must not be null for ttype=" + ttype);
-                if (stringValue == null)
-                    throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
+                Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=" + ttype);
+                Objects.requireNonNull(stringValue, "string value must not be null for ttype=" + ttype);
                 break;
             case CssTokenType.TT_NUMBER:
             case CssTokenType.TT_PERCENTAGE:
-                if (numericValue == null)
-                    throw new IllegalArgumentException("numeric value must not be null for ttype=" + ttype);
+                Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=" + ttype);
                 break;
             case CssTokenType.TT_IDENT:
                 if (stringValue == null || stringValue.isEmpty()) {
-                    throw new IllegalArgumentException("string value must not be null for ttype=" + ttype);
+                    throw new IllegalArgumentException("string value must not be null or empty for ttype=" + ttype);
                 }
                 break;
             default:
@@ -105,10 +103,7 @@ public class CssToken /*extends AST*/ {
 
     @Nullable
     public String getStringValueNonNull() {
-        if (stringValue == null) {
-            throw new NullPointerException();
-        }
-        return stringValue;
+        return Objects.requireNonNull(stringValue);
     }
 
     @Nullable

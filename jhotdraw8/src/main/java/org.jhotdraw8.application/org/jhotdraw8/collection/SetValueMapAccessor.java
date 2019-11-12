@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -19,17 +20,17 @@ import java.util.Set;
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     private final static long serialVersionUID = 1L;
+    @NonNull
     private final MapAccessor<ImmutableSet<E>> setAccessor;
     @Nullable
     private final E value;
     private boolean defaultValue;
+    @NonNull
     private final String name;
     private final boolean isTransient;
 
-    public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
-        if (value == null) {
-            throw new IllegalArgumentException("value is null");
-        }
+    public SetValueMapAccessor(@NonNull String name, boolean isTransient, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
+        Objects.requireNonNull(value, "value is null");
         this.setAccessor = setAccessor;
         this.value = value;
         this.defaultValue = defaultValue;
@@ -37,7 +38,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         this.isTransient = isTransient;
     }
 
-    public SetValueMapAccessor(String name, MapAccessor<ImmutableSet<E>> setAccessor, E value) {
+    public SetValueMapAccessor(@NonNull String name, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, E value) {
         this(name, false, setAccessor, value, false);
     }
 

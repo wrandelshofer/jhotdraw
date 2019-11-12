@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -196,12 +197,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param arrow the arrow
      */
     public void addArrow(@Nullable V va, @Nullable V vb, A arrow) {
-        if (va == null) {
-            throw new IllegalArgumentException("va=null");
-        }
-        if (vb == null) {
-            throw new IllegalArgumentException("vb=null");
-        }
+        Objects.requireNonNull(va, "va");
+        Objects.requireNonNull(vb, "vb");
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
         super.buildAddArrow(a, b);
@@ -226,9 +223,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param v vertex
      */
     public void addVertex(@Nullable V v) {
-        if (v == null) {
-            throw new IllegalArgumentException("v=null");
-        }
+        Objects.requireNonNull(v, "v is null");
         vertexMap.computeIfAbsent(v, k -> {
             vertices.add(v);
             buildAddVertex();

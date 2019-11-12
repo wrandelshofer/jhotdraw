@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -61,9 +62,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
             out.append("none");
         }
         String name = connectorToChoiceMap.get(value.getClass());
-        if (name == null) {
-            throw new IllegalArgumentException("unsupported connector:" + value);
-        }
+        Objects.requireNonNull(name, "unsupported connector:" + value);
         out.append(name);
         if (value instanceof LocatorConnector) {
             out.append(" ");

@@ -242,10 +242,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @NonNull
     public <T> T setNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key, @NonNull T newValue) {
         T v = set(figure, key, newValue);
-        if (v == null) {
-            throw new NullPointerException("return value is null");
-        }
-        return v;
+        return Objects.requireNonNull(v);
     }
 
     @Override

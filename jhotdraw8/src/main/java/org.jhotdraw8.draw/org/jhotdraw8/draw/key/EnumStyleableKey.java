@@ -14,6 +14,8 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
+import java.util.Objects;
+
 /**
  * NullableEnumStyleableKey.
  *
@@ -38,9 +40,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends AbstractStyleableKey<T>
     public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull DirtyMask mask, @NonNull T defaultValue) {
         super(name, clazz, defaultValue);
 
-        if (defaultValue == null) {
-            throw new IllegalArgumentException("defaultValue may not be null");
-        }
+        Objects.requireNonNull(defaultValue, "defaultValue is null");
 
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         converter = new CssEnumConverter<>(getValueType(), false);

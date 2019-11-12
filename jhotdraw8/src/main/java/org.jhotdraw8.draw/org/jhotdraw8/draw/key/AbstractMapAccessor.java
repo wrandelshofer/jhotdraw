@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * AbstractMapAccessor.
@@ -75,15 +76,9 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @param defaultValue   The default value.
      */
     public AbstractMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
-        if (name == null) {
-            throw new IllegalArgumentException("key is null");
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("clazz is null");
-        }
-        if (defaultValue == null) {
-            throw new IllegalArgumentException("defaultValue is null");
-        }
+        Objects.requireNonNull(name, "name is null");
+        Objects.requireNonNull(clazz, "clazz is null");
+        Objects.requireNonNull(defaultValue, "default value is null");
 
         this.name = name;
         this.clazz = clazz;

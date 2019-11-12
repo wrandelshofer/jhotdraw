@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -84,15 +85,9 @@ public abstract class AbstractStyleableMapAccessor<T>
      */
     public AbstractStyleableMapAccessor(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters,
                                         @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
-        if (name == null) {
-            throw new IllegalArgumentException("key is null");
-        }
-        if (clazz == null) {
-            throw new IllegalArgumentException("clazz is null");
-        }
-        if (defaultValue == null) {
-            throw new IllegalArgumentException("defaultValue is null");
-        }
+        Objects.requireNonNull(name, "name is null");
+        Objects.requireNonNull(clazz, "clazz is null");
+        Objects.requireNonNull(defaultValue, "defaultValue is null");
 
         this.name = name;
         this.clazz = clazz;

@@ -108,9 +108,8 @@ public class FlatExposedBidiGraphBuilder<V extends FlatExposedBidiGraphBuilder.V
      * @param arrow the arrow, can be null
      */
     public void addArrow(@NonNull V start, @NonNull V end, @Nullable A arrow) {
-        if (start == null || end == null) {
-            throw new IllegalArgumentException("start=" + start + ", end=" + end + ", arrow=" + arrow);
-        }
+        Objects.requireNonNull(start, "start is null");
+        Objects.requireNonNull(end, "end is null");
         if (arrow.getStart() != start || arrow.getEnd() != end) {
             throw new IllegalArgumentException("start=" + start + ", end=" + end + ", arrow=" + arrow);
         }
