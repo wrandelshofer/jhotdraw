@@ -1,32 +1,23 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.css.functions.AttrCssFunction;
-import org.jhotdraw8.css.functions.CalcCssFunction;
-import org.jhotdraw8.css.functions.CssFunction;
-import org.jhotdraw8.css.functions.VarCssFunction;
+import org.jhotdraw8.css.function.AttrCssFunction;
+import org.jhotdraw8.css.function.CalcCssFunction;
+import org.jhotdraw8.css.function.CssFunction;
+import org.jhotdraw8.css.function.VarCssFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class SimpleCssFunctionProcessorTest {
+class SimpleCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         List<CssFunction<Element>> functions = new ArrayList<>();
@@ -36,46 +27,6 @@ class SimpleCssFunctionProcessorTest {
         return new SimpleCssFunctionProcessor<>(functions, model, customProperties);
     }
 
-
-    protected void doTestProcess(String expression, @Nullable String expected) throws Exception {
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-        doc.getDocumentElement();
-        Element elem = doc.createElement("Car");
-        elem.setAttribute("id", "o1");
-        elem.setAttribute("doors", "5");
-        elem.setAttribute("length", "3475mm");
-        elem.setAttribute("width", "1475mm");
-        elem.setAttribute("height", "1608mm");
-        elem.setAttribute("rearBrakes", "Drum");
-        doc.appendChild(elem);
-
-        StreamCssTokenizer tt = new StreamCssTokenizer(expression);
-        StringBuilder buf = new StringBuilder();
-        Consumer<CssToken> consumer = t -> buf.append(t.fromToken());
-
-        DocumentSelectorModel model = new DocumentSelectorModel();
-        Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
-        customProperties.put("--blarg", ImmutableLists.of(new CssToken(CssTokenType.TT_STRING, "blarg")));
-        customProperties.put("--endless-recursion", ImmutableLists.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
-                new CssToken(CssTokenType.TT_IDENT, "--endless-recursion"),
-                new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
-        CssFunctionProcessor<Element> instance = createInstance(model, customProperties);
-
-        try {
-            instance.process(elem, tt, consumer);
-            if (expected == null) {
-                fail("must throw ParseException");
-            }
-            assertEquals(expected, buf.toString());
-        } catch (ParseException e) {
-            if (expected != null) {
-                e.printStackTrace();
-                fail("must not throw ParseException " + e);
-            }
-        }
-
-
-    }
 
     @NonNull
     @TestFactory

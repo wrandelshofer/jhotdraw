@@ -1,4 +1,4 @@
-package org.jhotdraw8.css.functions;
+package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssFunctionProcessor;
@@ -11,16 +11,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCssFunction<T> implements CssFunction<T> {
-    private final String name;
-
-    public AbstractCssFunction(String name) {
-        this.name = name;
+public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T> {
+    public AbstractStringCssFunction(String name) {
+        super(name);
     }
 
-    public String getName() {
-        return name;
-    }
 
     @NonNull
     protected String evalString(@NonNull T element, @NonNull CssTokenizer tt, String expressionName, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {

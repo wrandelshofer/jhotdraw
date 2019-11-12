@@ -104,7 +104,7 @@ public class CssColor implements Paintable {
     @NonNull
     @Override
     public String toString() {
-        return "CColor{" + getName() + '}';
+        return "CssColor{" + getName() + '}';
     }
 
     @Nullable

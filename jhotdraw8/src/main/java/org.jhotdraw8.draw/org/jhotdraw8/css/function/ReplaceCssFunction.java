@@ -1,4 +1,4 @@
-package org.jhotdraw8.css.functions;
+package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssFunctionProcessor;
@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * replacement = string-token ;
  * </pre>
  */
-public class ReplaceCssFunction<T> extends AbstractCssFunction<T> {
+public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */

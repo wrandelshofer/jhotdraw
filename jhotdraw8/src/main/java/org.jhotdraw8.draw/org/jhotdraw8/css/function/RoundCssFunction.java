@@ -1,4 +1,4 @@
-package org.jhotdraw8.css.functions;
+package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssFunctionProcessor;

@@ -12,7 +12,7 @@ import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.css.functions.CssFunction;
+import org.jhotdraw8.css.function.CssFunction;
 
 import java.io.IOException;
 import java.net.URI;

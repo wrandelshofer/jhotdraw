@@ -1,4 +1,4 @@
-package org.jhotdraw8.css.functions;
+package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -51,9 +51,9 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                         @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
                         @NonNull Consumer<CssToken> out) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈attr〉: function attr() expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
-            throw new ParseException("〈attr〉: function attr() expected.", tt.getStartPosition());
+            throw tt.createParseException("〈" + getName() + "〉: function " + getName() + "() expected.");
         }
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();

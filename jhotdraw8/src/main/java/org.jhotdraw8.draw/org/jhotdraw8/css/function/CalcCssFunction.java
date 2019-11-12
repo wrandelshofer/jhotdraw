@@ -1,4 +1,4 @@
-package org.jhotdraw8.css.functions;
+package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -160,7 +160,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                 return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             case '(':
                 CssSize dim = parseCalcSum(element, tt, functionProcessor);
-                tt.requireNextToken(')', "calc-value: right bracket ')' expected.");
+                tt.requireNextToken(')', "〈calc-value〉: right bracket ')' expected.");
                 return dim;
             case CssTokenType.TT_FUNCTION:
                 String name = tt.currentString();
@@ -168,7 +168,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                 List<CssToken> list = new ArrayList<>();
                 functionProcessor.processToken(element, tt, list::add);
                 if (list.size() != 1) {
-                    throw new ParseException("calc-value: function " + name + "() must return single value.", tt.getStartPosition());
+                    throw new ParseException("〈calc-value〉: function " + name + "() must return single value.", tt.getStartPosition());
                 }
                 CssToken token = list.get(0);
                 switch (token.getType()) {
@@ -179,10 +179,10 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                     case CssTokenType.TT_DIMENSION:
                         return new CssSize(token.getNumericValue().doubleValue(), token.getStringValue());
                     default:
-                        throw new ParseException("calc-value: function " + name + "() must return numeric value.", tt.getStartPosition());
+                        throw new ParseException("〈calc-value〉: function " + name + "() must return numeric value.", tt.getStartPosition());
                 }
             default:
-                throw new ParseException("calc-value: number, percentage, dimension or (sum) expected.", tt.getStartPosition());
+                throw tt.createParseException("〈calc-value〉: number, percentage, dimension or (sum) expected.");
         }
     }
 

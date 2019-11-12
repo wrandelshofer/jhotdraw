@@ -23,11 +23,15 @@ import java.util.prefs.Preferences;
 
 /**
  * Represents an item which can be added to a {@code Dock}.
+ * <p>
+ * Shows a textual icon on the tab.
+ * The textual icon is represented by a {@link Text} object
+ * with the style class {@value #DOCK_ITEM_ICON_STYLE_CLASS}.
  *
  * @author Werner Randelshofer
  */
 public class DockItem extends Tab {
-
+    public final static String DOCK_ITEM_ICON_STYLE_CLASS = "dock-item-icon";
     @Nullable
     static DockItem draggedTab;
     private final ObjectProperty<Dock> dock = new SimpleObjectProperty<>();
@@ -49,7 +53,9 @@ public class DockItem extends Tab {
         super(text, content);
         setId(id);
         graphicProperty().addListener(this::graphicChanged);
-        setGraphic(new Text("❏"));
+        final Text textualIcon = new Text("❏");
+        textualIcon.getStyleClass().add(DOCK_ITEM_ICON_STYLE_CLASS);
+        setGraphic(textualIcon);
         setClosable(false);
         getStyleClass().add("dockItem");
         selectedProperty().addListener(this::selectionChanged);

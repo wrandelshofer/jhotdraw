@@ -20,6 +20,14 @@ import java.util.function.Consumer;
  * <p>
  * This is a macro processor which takes CssTokens from a CssTokenizer and produces
  * processed tokens.
+ * <p>
+ * References:
+ * <ul>
+ * <li>CSS Values and Units Module, Functional Notations.
+ * <a href="https://www.w3.org/TR/css-values-3/#functional-notations">w3.org</a></li>
+ * <li>CSS Custom Properties for Cascading Variables Module Level 1.  Using Cascading Variables: the var() notation.
+ * <a href="https://www.w3.org/TR/css-variables-1/#using-variables">w3.org</a></li>
+ * </ul>
  *
  * @param <T> the element type
  */

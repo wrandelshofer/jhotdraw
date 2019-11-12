@@ -33,3 +33,7 @@
 
 }
 
+/** Sets the icon color in dock items. */
+.dock-item-icon {
+    -fx-fill: -fx-text-fill;
+}

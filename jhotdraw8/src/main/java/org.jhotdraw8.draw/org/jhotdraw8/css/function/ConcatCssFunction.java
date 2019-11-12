@@ -1,4 +1,4 @@
-package org.jhotdraw8.css.functions;
+package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssFunctionProcessor;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  * value               = string | number | dimension | percentage | url ;
  * </pre>
  */
-public class ConcatCssFunction<T> extends AbstractCssFunction<T> {
+public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */

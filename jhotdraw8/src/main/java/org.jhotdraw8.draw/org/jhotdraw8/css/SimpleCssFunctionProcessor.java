@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.functions.CssFunction;
+import org.jhotdraw8.css.function.CssFunction;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -20,14 +20,6 @@ import java.util.function.Consumer;
 
 /**
  * Takes a list of tokens and evaluates Css functions on them.
- *
- * References:
- * <ul>
- * <li>CSS Values and Units Module, Functional Notations.
- * <a href="https://www.w3.org/TR/css-values-3/#functional-notations">w3.org</a></li>
- * <li>CSS Custom Properties for Cascading Variables Module Level 1.  Using Cascading Variables: the var() notation.
- * <a href="https://www.w3.org/TR/css-variables-1/#using-variables">w3.org</a></li>
- * </ul>
  *
  * @param <T> the element type
  */

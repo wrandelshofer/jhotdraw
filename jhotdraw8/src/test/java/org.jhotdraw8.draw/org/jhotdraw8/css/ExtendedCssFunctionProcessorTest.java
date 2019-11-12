@@ -2,13 +2,13 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.functions.AttrCssFunction;
-import org.jhotdraw8.css.functions.CalcCssFunction;
-import org.jhotdraw8.css.functions.ConcatCssFunction;
-import org.jhotdraw8.css.functions.CssFunction;
-import org.jhotdraw8.css.functions.ReplaceCssFunction;
-import org.jhotdraw8.css.functions.RoundCssFunction;
-import org.jhotdraw8.css.functions.VarCssFunction;
+import org.jhotdraw8.css.function.AttrCssFunction;
+import org.jhotdraw8.css.function.CalcCssFunction;
+import org.jhotdraw8.css.function.ConcatCssFunction;
+import org.jhotdraw8.css.function.CssFunction;
+import org.jhotdraw8.css.function.ReplaceCssFunction;
+import org.jhotdraw8.css.function.RoundCssFunction;
+import org.jhotdraw8.css.function.VarCssFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Element;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class ExtendedCssFunctionProcessorTest extends SimpleCssFunctionProcessorTest {
+class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
     @NonNull
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
