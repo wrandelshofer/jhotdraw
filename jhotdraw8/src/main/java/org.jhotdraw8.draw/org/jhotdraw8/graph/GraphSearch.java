@@ -13,10 +13,12 @@ import org.jhotdraw8.util.ToDoubleTriFunction;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -89,7 +91,7 @@ public class GraphSearch {
         }
 
         // Create final forest.
-        Set<List<V>> visited = new HashSet<>(forest.size());
+        Set<List<V>> visited = Collections.newSetFromMap(new IdentityHashMap<List<V>, Boolean>(forest.size()));
         List<Set<V>> disjointSets = new ArrayList<>(forest.size());
         for (List<V> set : forest.values()) {
             if (visited.add(set)) {
