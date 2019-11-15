@@ -33,7 +33,7 @@ public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
     public T convert(@NonNull ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
-        } catch (@NonNull ParseException | IOException ex) {
+        } catch (ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

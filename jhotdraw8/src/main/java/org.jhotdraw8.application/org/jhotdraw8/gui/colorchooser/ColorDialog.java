@@ -40,6 +40,7 @@ public class ColorDialog extends HBox {
             case ESCAPE:
                 dialog.setScene(null);
                 dialog.close();
+                break;
             default:
                 break;
         }

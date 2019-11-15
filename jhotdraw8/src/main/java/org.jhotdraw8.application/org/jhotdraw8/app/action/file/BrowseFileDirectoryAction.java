@@ -67,7 +67,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
                 try {
                     try {
                         Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
-                    } catch (@NonNull IllegalAccessException | InvocationTargetException e) {
+                    } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 } catch (NoSuchMethodException e) {

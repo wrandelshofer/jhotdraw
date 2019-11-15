@@ -88,6 +88,7 @@ public class CssColorDialog {
         switch (e.getCode()) {
             case ESCAPE:
                 dialog.close();
+                break;
             default:
                 break;
         }

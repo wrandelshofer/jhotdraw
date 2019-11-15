@@ -37,7 +37,7 @@ public class StringConverterAdapter<T> extends StringConverter<T> {
     public T fromString(@NonNull String string) {
         try {
             return converter.fromString(string);
-        } catch (@NonNull ParseException | IOException ex) {
+        } catch (ParseException | IOException ex) {
             return converter.getDefaultValue();
         }
     }

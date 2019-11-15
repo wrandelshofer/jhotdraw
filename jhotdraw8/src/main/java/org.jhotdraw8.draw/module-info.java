@@ -23,6 +23,8 @@ module org.jhotdraw8.draw {
 
     exports org.jhotdraw8.css;
     exports org.jhotdraw8.css.ast;
+    exports org.jhotdraw8.css.text;
+    exports org.jhotdraw8.css.function;
     exports org.jhotdraw8.draw;
     exports org.jhotdraw8.draw.action;
     exports org.jhotdraw8.draw.constrain;
@@ -41,7 +43,6 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.geom;
     exports org.jhotdraw8.draw.connector;
     exports org.jhotdraw8.draw.locator;
-    exports org.jhotdraw8.css.text;
     exports org.jhotdraw8.tree;
     exports org.jhotdraw8.xml.text;
     exports org.jhotdraw8.xml;

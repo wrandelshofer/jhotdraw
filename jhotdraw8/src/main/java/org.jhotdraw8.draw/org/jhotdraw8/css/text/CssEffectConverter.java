@@ -320,7 +320,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
             } else {
                 try {
                     previous.getClass().getDeclaredMethod("setInput", Effect.class).invoke(previous, current);
-                } catch (@NonNull NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     ParseException pe = new ParseException("CSS Effect: can not combine effects", tt.getStartPosition());
                     pe.initCause(ex);
                     throw pe;

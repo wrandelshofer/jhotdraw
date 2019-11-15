@@ -80,14 +80,17 @@ public class MacOSPreferences {
             if (plist instanceof List) {
                 for (Object o : (List) plist) {
                     if (o instanceof Map) {
-                        Map m = (Map) o;
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> m = (Map<String, Object>) (Map<?, ?>) o;
                         for (int i = 0, n = split.length; i < n; i++) {
                             String subkey = split[i];
                             Object value;
                             if (m.containsKey(subkey)) {
                                 value = m.get(subkey);
                                 if (i < n - 1 && (value instanceof Map)) {
-                                    m = (Map) value;
+                                    @SuppressWarnings("unchecked")
+                                    Map<String, Object> unchecked = (Map<String, Object>) (Map<?, ?>) value;
+                                    m = unchecked;
                                 } else if (i == n - 1) {
                                     return value;
                                 }
@@ -274,7 +277,7 @@ public class MacOSPreferences {
             case "date":
                 try {
                     parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
-                } catch (@NonNull IllegalArgumentException | DatatypeConfigurationException e) {
+                } catch (IllegalArgumentException | DatatypeConfigurationException e) {
                     throw new IOException(e);
                 }
                 break;

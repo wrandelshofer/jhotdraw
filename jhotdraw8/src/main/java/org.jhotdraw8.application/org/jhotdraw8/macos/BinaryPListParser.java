@@ -175,7 +175,7 @@ public class BinaryPListParser {
      * We gradually fill in objects from the binary PList object table into
      * this list.
      */
-    private ArrayList objectTable;
+    private ArrayList<Object> objectTable;
 
     /**
      * Holder for a binary PList Uid element.
@@ -199,7 +199,7 @@ public class BinaryPListParser {
      */
     private static class BPLArray {
 
-        ArrayList objectTable;
+        ArrayList<Object> objectTable;
         int[] objref;
 
         public Object getValue(int i) {
@@ -231,7 +231,7 @@ public class BinaryPListParser {
      */
     private static class BPLDict {
 
-        ArrayList objectTable;
+        ArrayList<Object> objectTable;
         int[] keyref;
         int[] objref;
 
@@ -330,7 +330,7 @@ public class BinaryPListParser {
 
         // Parse the OBJECT TABLE
         // ----------------------
-        objectTable = new ArrayList();
+        objectTable = new ArrayList<>();
         DataInputStream in = null;
         try {
             in = new DataInputStream(
@@ -750,10 +750,10 @@ public class BinaryPListParser {
     private void parseReal(@NonNull DataInputStream in, int count) throws IOException {
         switch (count) {
             case 4:
-                objectTable.add(new Float(in.readFloat()));
+                objectTable.add(in.readFloat());
                 break;
             case 8:
-                objectTable.add(new Double(in.readDouble()));
+                objectTable.add(in.readDouble());
                 break;
             default:
                 throw new IOException("parseReal: unsupported byte count:" + count);

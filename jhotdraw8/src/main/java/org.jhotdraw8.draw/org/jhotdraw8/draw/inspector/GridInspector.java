@@ -175,7 +175,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 Converter<CssColor> converter = new CssColorConverter(true);
                 try {
                     gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor", gridConstrainer.getGridColor().getName())));
-                } catch (@NonNull ParseException | IOException ex) {
+                } catch (ParseException | IOException ex) {
                     // don't set color if preferences is bogus
                 }
                 newValue.setConstrainer(gridConstrainer);

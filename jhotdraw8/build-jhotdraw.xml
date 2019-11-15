@@ -1041,7 +1041,13 @@
   <target name="compile" depends="clean,do-compile-classes.main"
           description="compiles the java sources and copies resource files">
   </target>
+  <target name="compile-modules" depends="clean,do-compile-modules.main"
+          description="compiles the java sources and copies resource files">
+  </target>
   <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">
+  </target>
+  <target name="jar-modules" depends="compile-modules,do-jar-modules.main"
+          description="bundles the class files into a jar file">
   </target>
   <target name="javadoc" depends="clean,compile,do-docbook.compile,do-javadoc" description="generates api documentation">
   </target>

@@ -507,7 +507,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
             }
             d.layoutAll(ctx);
 
-        } catch (@NonNull final URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new RuntimeException("can't load my own resources", e);
         }
     }
