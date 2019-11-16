@@ -28,6 +28,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw;
     exports org.jhotdraw8.draw.action;
     exports org.jhotdraw8.draw.constrain;
+    exports org.jhotdraw8.draw.css;
     exports org.jhotdraw8.draw.figure;
     exports org.jhotdraw8.draw.handle;
     exports org.jhotdraw8.draw.inspector;

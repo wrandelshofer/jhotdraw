@@ -21,6 +21,7 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.app.spi;
     exports org.jhotdraw8.collection;
     exports org.jhotdraw8.concurrent;
+    exports org.jhotdraw8.net;
     exports org.jhotdraw8.util;
     exports org.jhotdraw8.util.prefs;
     exports org.jhotdraw8.util.function;

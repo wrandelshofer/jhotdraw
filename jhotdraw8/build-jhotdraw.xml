@@ -24,12 +24,18 @@
     <arg value="--always"/>
     <arg value="HEAD"/>
   </exec>
+  <exec executable="git" outputproperty="git.version" failifexecutionfails="false" errorproperty="">
+    <arg value="log"/>
+    <arg value="--max-count=1"/>
+    <arg value="--date=short"/>
+    <arg value="--pretty=format:%cd_%h"/>
+  </exec>
 
   <property name="name" value="${ant.project.name}"/>
   <property name="copyright" value="Copyright (c) 2017 The authors and contributors of JHotDraw."/>
   <property name="license.name" value="MIT License"/>
   <property name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
-  <property name="version" value="${git.describe}"/>
+  <property name="version" value="${git.version}"/>
   <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
 
   <property name="manifest.application-name" value="${ant.project.name}"/>
@@ -40,7 +46,7 @@
   <property name="build" value="build"/>
   <property name="bin" value="bin"/>
   <property name="doc" value="doc"/>
-  <property name="dist" value="dist/${version}"/>
+  <property name="dist" value="dist/${name}-${version}"/>
   <property name="build.javadoc" value="${build}/javadoc"/>
   <property name="lib" value="lib"/>
   <property name="lib.runtime" value="${lib}/runtime"/>
@@ -74,8 +80,11 @@
   <target name="init">
     <echo>app.version: ${version}</echo>
     <echo>java.home: ${java.home}</echo>
+    <echo>The following values must be configured in build.properties</echo>
     <echo>jdk : ${jdk}</echo>
     <echo>jdk.version: ${jdk.version}</echo>
+    <echo>jdk.modular : ${jdk.modular}</echo>
+    <echo>jdk.modular.version: ${jdk.modular.version}</echo>
   </target>
 
   <target name="do-clean.compile" depends="init">
@@ -93,7 +102,7 @@
     <delete dir="${dist}"/>
   </target>
 
-  <target name="do-compile-classes.main" depends="init">
+  <target name="do-compile-classes" depends="init">
     <mkdir dir="${build.main.classes}"/>
     <echo message="javac executable=${jdk}/bin/javac"/>
     <javac executable="${jdk}/bin/javac" fork="yes"
@@ -173,12 +182,12 @@
       </fileset>
     </copy>
   </target>
-  <target name="do-compile-modules.main" depends="init">
+  <target name="do-compile-modules" depends="init">
     <mkdir dir="${module.classes}"/>
     <javac executable="${jdk.modular}/bin/javac" fork="yes"
            source="${jdk.modular.version}" target="${jdk.modular.version}"
            encoding="UTF-8" destdir="${module.classes}"
-           debug="false"
+           debug="true"
            verbose="false"
            createmissingpackageinfoclass="false"
     >
@@ -880,7 +889,7 @@
       -->
     </javadoc>
   </target>
-  <target name="do-jar.main" depends="init">
+  <target name="do-jar" depends="init">
     <pathconvert property="manifest.class-path" pathsep=" ">
       <map from="${basedir}/${lib.runtime}/" to=""/>
       <fileset dir="${basedir}/${lib.runtime}">
@@ -985,7 +994,7 @@
     </sequential>
   </macrodef>
 
-  <target name="do-jar-modules.main" depends="init">
+  <target name="do-jar-modules" depends="init">
     <modular-jar module="org.jhotdraw8.application"/>
     <modular-jar module="org.jhotdraw8.draw"/>
     <modular-jar module="org.jhotdraw8.samples.grapher"/>
@@ -998,8 +1007,10 @@
   </target>
 
   <target name="do-dist" depends="init">
-    <mkdir dir="${dist}"/>
-    <copy todir="${dist}">
+    <mkdir dir="${dist}/class"/>
+    <mkdir dir="${dist}/module"/>
+    <mkdir dir="${dist}/source"/>
+    <copy todir="${dist}/class">
       <fileset dir="${build.main.jars}">
         <exclude name=".*"/>
         <include name="*.jar"/>
@@ -1009,7 +1020,17 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
-    <jar file="${dist}/${ant.project.name}-src.jar">
+    <copy todir="${dist}/module">
+      <fileset dir="${build.main.modules}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${lib.runtime}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <jar file="${dist}/source/${ant.project.name}-src.jar">
       <fileset dir="${src}/main/java">
         <exclude name=".*"/>
       </fileset>
@@ -1038,15 +1059,15 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile-classes.main"
+  <target name="compile" depends="clean,do-compile-classes"
           description="compiles the java sources and copies resource files">
   </target>
-  <target name="compile-modules" depends="clean,do-compile-modules.main"
+  <target name="compile-modules" depends="clean,do-compile-modules"
           description="compiles the java sources and copies resource files">
   </target>
-  <target name="jar" depends="compile,do-jar.main" description="bundles the class files into a jar file">
+  <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
   </target>
-  <target name="jar-modules" depends="compile-modules,do-jar-modules.main"
+  <target name="jar-modules" depends="compile-modules,do-jar-modules"
           description="bundles the class files into a jar file">
   </target>
   <target name="javadoc" depends="clean,compile,do-docbook.compile,do-javadoc" description="generates api documentation">
@@ -1054,11 +1075,12 @@
   <target name="docbook" depends="clean,javadoc,do-docbook"
           description="generates specification and user documentation">
   </target>
-  <target name="dist" depends="clean,jar,do-dist" description="creates a distributable stand-alone application">
+  <target name="dist" depends="clean,jar,jar-modules,do-dist"
+          description="creates a distributable stand-alone application">
   </target>
   <target name="run" depends="jar,do-run" description="runs the built jar files">
   </target>
-  <target name="all" depends="dist" description="Erstellt alles">
+  <target name="all" depends="dist" description="Everything">
   </target>
 </project>
 
