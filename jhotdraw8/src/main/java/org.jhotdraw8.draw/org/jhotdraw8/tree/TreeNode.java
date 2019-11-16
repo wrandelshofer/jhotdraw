@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Represents a node of a tree structure.
@@ -33,10 +34,6 @@ import java.util.List;
  *
  * @param <T> the type of the tree node
  * @author Werner Randelshofer
- * @design.pattern TreeNode Composite, Component. The composite pattern is used
- * to model a tree structure.
- * @design.pattern TreeNode Iterator, Aggregate. The iterator pattern is used to
- * provide a choice of iteration strategies over an aggregate structure.
  */
 public interface TreeNode<T extends TreeNode<T>> {
 
@@ -65,7 +62,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 () -> {
                     @SuppressWarnings("unchecked")
                     T t = (T) this;
-                    return new BreadthFirstSpliterator<>(TreeNode::getChildren, t, n -> true);
+                    return new BreadthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
                 });
     }
 
@@ -157,7 +154,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the children
      */
-    @Nullable List<T> getChildren();
+    @NonNull List<T> getChildren();
 
     /**
      * Gets the first child.
@@ -215,11 +212,10 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @NonNull
     default Iterable<T> postorderIterable() {
-        //noinspection unchecked
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
-                    return new PostorderSpliterator<>(TreeNode::getChildren, t);
+                    return new PostorderSpliterator<>(TreeNode<T>::getChildren, t);
                 }
         );
     }
@@ -232,7 +228,6 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @NonNull
     default Iterable<T> depthFirstIterable() {
-        //noinspection unchecked
         return postorderIterable();
     }
 
@@ -244,25 +239,23 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @NonNull
     default Iterable<T> preorderIterable() {
-        //noinspection unchecked
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
-                    return new PreorderSpliterator<>(TreeNode::getChildren, t);
+                    return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
                 }
         );
     }
 
     /**
      * @param <T> the type of the tree nodes
-     * @design.pattern TreeNode Iterator, Iterator.
      */
     class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
         @Nullable
         private T node;
 
-        private AncestorIterator(T node) {
+        private AncestorIterator(@Nullable T node) {
             this.node = node;
         }
 
@@ -274,6 +267,9 @@ public interface TreeNode<T extends TreeNode<T>> {
         @Nullable
         @Override
         public T next() {
+            if (node == null) {
+                throw new NoSuchElementException();
+            }
             T next = node;
             node = node.getParent();
             return next;
@@ -284,6 +280,5 @@ public interface TreeNode<T extends TreeNode<T>> {
             throw new UnsupportedOperationException("Not supported.");
         }
     }
-
 
 }

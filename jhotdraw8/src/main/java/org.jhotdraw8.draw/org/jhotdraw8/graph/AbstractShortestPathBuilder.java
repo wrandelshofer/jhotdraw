@@ -25,7 +25,6 @@ public abstract class AbstractShortestPathBuilder<V, A> {
     private Function<V, Iterable<Arc<V, A>>> nextNodesFunction;
     @NonNull
     private ToDoubleTriFunction<V, V, A> costf;
-    private double maxCost = Double.MAX_VALUE;
 
     public AbstractShortestPathBuilder() {
     }
@@ -86,7 +85,26 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      */
     @Nullable
     public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
-        BackLink<V, A> node = search(start, goalPredicate);
+        return findEdgePath(start, goalPredicate, Double.MAX_VALUE);
+    }
+
+    /**
+     * Builds an EdgePath through the graph which goes from the specified start
+     * vertex to the specified goal vertex at the lowest cost.
+     * <p>
+     * This method implements the Uniform Cost Search algorithm.
+     * <p>
+     * References:<br>
+     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     * Wikipedia</a>
+     *
+     * @param start         the start vertex
+     * @param goalPredicate the goal predicate
+     * @return a VertexPath if traversal is possible
+     */
+    @Nullable
+    public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull Predicate<V> goalPredicate, double maxCost) {
+        BackLink<V, A> node = search(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
         }
@@ -102,8 +120,8 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * Finds the shortest path via the specified waypoints.
      *
      * @param waypoints the waypoints
-     * @param maxCost   the maximal cost of a path between two waypoints
-     * @return the shortest path
+     * @param maxCost   the maximal cost of the path
+     * @return a EdgePath if traversal is possible and if the past does not exceed the max cost
      */
     @Nullable
     public Map.Entry<EdgePath<A>, Double> findEdgePathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
@@ -112,7 +130,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<EdgePath<A>, Double> pathWithCost = findEdgePath(start, via::equals);
+                Map.Entry<EdgePath<A>, Double> pathWithCost = findEdgePath(start, via::equals, maxCost - cost);
                 if (pathWithCost == null) {
                     return null;
                 }
@@ -145,9 +163,29 @@ public abstract class AbstractShortestPathBuilder<V, A> {
     @Nullable
     public Map.Entry<VertexPath<V>, Double> findVertexPath(@NonNull V start,
                                                            @NonNull Predicate<V> goalPredicate) {
+        return findVertexPath(start, goalPredicate, Double.MAX_VALUE);
+    }
 
-        BackLink<V, A> node = search(start, goalPredicate
-        );
+    /**
+     * Builds a VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex at the lowest cost.
+     * <p>
+     * This method implements the Uniform Cost Search algorithm.
+     * <p>
+     * References:<br>
+     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     * Wikipedia</a>
+     *
+     * @param start         the start vertex
+     * @param goalPredicate the goal predicate
+     * @param maxCost       the maximal cost
+     * @return a VertexPath if traversal is possible and if the past does not exceed the max cost
+     */
+    @Nullable
+    public Map.Entry<VertexPath<V>, Double> findVertexPath(@NonNull V start,
+                                                           @NonNull Predicate<V> goalPredicate, double maxCost) {
+
+        BackLink<V, A> node = search(start, goalPredicate, maxCost);
         if (node == null) {
             return null;
         }
@@ -167,12 +205,24 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      */
     @Nullable
     public Map.Entry<VertexPath<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints) {
+        return findVertexPathOverWaypoints(waypoints, Double.MAX_VALUE);
+    }
+
+    /**
+     * Finds the shortest path via the specified waypoints.
+     *
+     * @param waypoints the waypoints
+     * @param maxCost   the maximal cost of the path
+     * @return the shortest path that does not exceed maxCost
+     */
+    @Nullable
+    public Map.Entry<VertexPath<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<VertexPath<V>, Double> pathWithCost = findVertexPath(start, via::equals);
+                Map.Entry<VertexPath<V>, Double> pathWithCost = findVertexPath(start, via::equals, maxCost -cost);
                 if (pathWithCost == null) {
                     return null;
                 }
@@ -190,7 +240,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
 
     @Nullable
     private BackLink<V, A> search(@NonNull V start,
-                                  @NonNull Predicate<V> goalPredicate) {
+                                  @NonNull Predicate<V> goalPredicate, double maxCost) {
         return search(start, goalPredicate, maxCost, nextNodesFunction, costf);
     }
 
@@ -233,6 +283,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
             return Objects.equals(this.getVertex(), other.getVertex());
         }
 
+        @Nullable
         public abstract AA getArrow();
 
         public abstract double getCost();
@@ -251,6 +302,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         @Nullable
         public abstract BackLink<VV, AA> getParent();
 
+        @NonNull
         public abstract VV getVertex();
 
         @Override

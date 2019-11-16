@@ -70,7 +70,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         // Priority queue: back-links with shortest distance from start come first.
         PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
 
-        // Map with known costs from start. If an entry is missing, we assume infinity.
+        // Map with best known costs from start to a specific vertex. If an entry is missing, we assume infinity.
         Map<V, Double> costMap = new HashMap<>();
 
         // Insert start itself in priority queue and initialize its cost as 0.
@@ -84,19 +84,19 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             if (goalPredicate.test(u)) {
                 return node;
             }
-            double ucost = node.cost;
+            double costToU = node.cost;
 
             for (Arc<V, A> entry : nextf.apply(u)) {
                 V v = entry.getEnd();
                 A a = entry.getData();
-                double oldCost = costMap.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
-                double newCost = ucost + costf.applyAsDouble(u, v, a);
+                double bestKnownCost = costMap.getOrDefault(v, Double.POSITIVE_INFINITY);
+                double costThroughU = costToU + costf.applyAsDouble(u, v, a);
 
                 // If there is a shorter path to v through u.
-                if (newCost < oldCost && newCost <= maxCost) {
-                    // Update cost of v.
-                    costMap.put(v, newCost);
-                    queue.add(new MyBackLink<>(v, newCost, node, a));
+                if (costThroughU < bestKnownCost && costThroughU <= maxCost) {
+                    // Update cost to v.
+                    costMap.put(v, costThroughU);
+                    queue.add(new MyBackLink<>(v, costThroughU, node, a));
                 }
             }
         }
@@ -106,15 +106,16 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
 
 
     protected static class MyBackLink<VV, AA> extends BackLink<VV, AA> {
-
+        @NonNull
         protected final VV vertex;
         @Nullable
         protected final MyBackLink<VV, AA> parent;
+        @Nullable
         protected final AA arrow;
         protected final double cost;
         protected final int length;
 
-        public MyBackLink(VV node, double cost, @Nullable MyBackLink<VV, AA> parent, AA arrow) {
+        public MyBackLink(@NonNull VV node, double cost, @Nullable MyBackLink<VV, AA> parent, @Nullable AA arrow) {
             this.vertex = node;
             this.cost = cost;
             this.parent = parent;
@@ -132,6 +133,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             return parent;
         }
 
+        @NonNull
         public VV getVertex() {
             return vertex;
         }

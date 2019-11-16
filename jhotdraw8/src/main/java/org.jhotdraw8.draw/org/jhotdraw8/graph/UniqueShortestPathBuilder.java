@@ -53,10 +53,11 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
         // Map with numbers of paths to a vertex
         Map<V, Integer> numPathsMap = new HashMap<>();
 
-        // Map with known costs from start. If an entry is missing, we assume infinity.
+        // Map with best known costs from start to a vertex. If an entry is missing, we assume infinity.
         Map<V, Double> costMap = new HashMap<>();
 
-        // Insert start itself in priority queue and initialize its cost as 0 and numpaths with 1.
+        // Insert start itself in priority queue and initialize its cost as 0,
+        // and number of paths with 1.
         queue.add(new MyBackLink<>(start, 0.0, null, null));
         numPathsMap.put(start, 1);
         costMap.put(start, 0.0);
@@ -74,23 +75,21 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
                     return null;
                 }
             }
-            double ucost = node.cost;
+            double costToU = node.cost;
 
             for (Arc<V, A> entry : nextf.apply(u)) {
                 V v = entry.getEnd();
                 A a = entry.getData();
-                double oldCost = costMap.computeIfAbsent(v, k -> Double.POSITIVE_INFINITY);
-                double newCost = ucost + costf.applyAsDouble(u, v, a);
+                double bestKnownCost = costMap.getOrDefault(v, Double.POSITIVE_INFINITY);
+                double costThroughU = costToU + costf.applyAsDouble(u, v, a);
 
                 // If there is a shorter path to v through u.
-                if (newCost < oldCost && newCost <= maxCost) {
-                    // Update cost of v.
-                    costMap.put(v, newCost);
-                    MyBackLink<V, A> e = new MyBackLink<>(v, newCost, node, a);
-                    queue.add(e);
-                    // Update num paths to v
-                    numPathsMap.computeIfAbsent(v, k -> numPathsMap.get(u));
-                } else if (newCost == oldCost) {
+                if (costThroughU < bestKnownCost && costThroughU <= maxCost) {
+                    // Update cost to v, and number of paths to v.
+                    costMap.put(v, costThroughU);
+                    queue.add(new MyBackLink<>(v, costThroughU, node, a));
+                    numPathsMap.put(v, numPathsMap.get(u));
+                } else if (costThroughU == bestKnownCost) {
                     // Path to v is not unique
                     numPathsMap.merge(v, 1, Integer::sum);
                 }

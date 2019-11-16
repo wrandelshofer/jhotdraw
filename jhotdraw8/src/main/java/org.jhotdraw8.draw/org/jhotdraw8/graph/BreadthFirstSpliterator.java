@@ -51,9 +51,9 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
      */
     public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        Objects.requireNonNull(nextFunction, "nextFunction");
-        Objects.requireNonNull(root, "root");
-        Objects.requireNonNull(visited, "vistied");
+        Objects.requireNonNull(nextFunction, "nextFunction is null");
+        Objects.requireNonNull(root, "root is null");
+        Objects.requireNonNull(visited, "visited is null");
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
