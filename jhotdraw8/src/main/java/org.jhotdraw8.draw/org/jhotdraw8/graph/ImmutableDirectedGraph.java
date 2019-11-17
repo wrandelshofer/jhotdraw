@@ -129,14 +129,6 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         }
     }
 
-    @SuppressWarnings("unchecked")
-    protected ImmutableDirectedGraph(int vertexCount, int arrowCount) {
-        this.arrowHeads = new int[arrowCount];
-        this.vertices = new int[vertexCount];
-        this.arrows = (A[]) new Object[arrowCount];
-        this.vertexObjects = (V[]) new Object[vertexCount];
-        this.vertexToIndexMap = new HashMap<>(vertexCount);
-    }
 
     @NonNull
     @Override

@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.util.TriFunction;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -172,19 +173,36 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param graph a graph
      */
     public DirectedGraphBuilder(@NonNull DirectedGraph<V, A> graph) {
+        this(graph, Function.identity(), (v1, v2, a) -> a);
+    }
+
+    /**
+     * Creates a new instance which contains a copy of the specified graph.
+     *
+     * @param graph        a graph
+     * @param vertexMapper a mapping function for the vertices
+     * @param arrowMapper  a mapping function for the arrows
+     * @param <VV>         the vertex type of the graph
+     * @param <AA>         the arrow type of the graph
+     */
+    public <VV, AA> DirectedGraphBuilder(@NonNull DirectedGraph<VV, AA> graph,
+                                         Function<VV, V> vertexMapper,
+                                         TriFunction<VV, VV, AA, A> arrowMapper) {
         super(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);
         this.vertices = new ArrayList<>(vcount);
         this.arrows = new ArrayList<>(graph.getArrowCount());
-        final int ecount = graph.getArrowCount();
 
-        for (V v : graph.getVertices()) {
-            addVertex(v);
+        for (VV vv : graph.getVertices()) {
+            addVertex(vertexMapper.apply(vv));
         }
-        for (V v : graph.getVertices()) {
-            for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
-                addArrow(v, graph.getNext(v, j), graph.getNextArrow(v, j));
+        for (VV vv : graph.getVertices()) {
+            for (int j = 0, n = graph.getNextCount(vv); j < n; j++) {
+                @NonNull VV next = graph.getNext(vv, j);
+                addArrow(vertexMapper.apply(vv),
+                        vertexMapper.apply(next),
+                        arrowMapper.apply(vv, next, graph.getNextArrow(vv, j)));
             }
         }
     }
