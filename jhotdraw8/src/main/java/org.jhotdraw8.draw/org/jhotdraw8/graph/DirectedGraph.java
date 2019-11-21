@@ -6,20 +6,13 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.SpliteratorIterable;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
@@ -248,85 +241,5 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return findIndexOfNext(a, b) != -1;
     }
 
-    /**
-     * Returns true if b is reachable from a.
-     *
-     * @param a a vertex
-     * @param b another vertex
-     * @return true if b is reachable from a.
-     */
-    default boolean isReachable(@NonNull V a, V b) {
-        return StreamSupport.stream(breadthFirstSearch(a).spliterator(), false).anyMatch(v -> Objects.equals(v, b));
-    }
 
-    /**
-     * Returns true if b is reachable from a.
-     *
-     * @param a       a vertex
-     * @param b       another vertex
-     * @param visited a predicate with side effect. The predicate returns true
-     *                if the specified vertex has been visited, and marks the specified vertex
-     *                as visited.
-     * @return true if b is reachable from a.
-     */
-    default boolean isReachable(@NonNull V a, V b, @NonNull Predicate<V> visited) {
-        return StreamSupport.stream(breadthFirstSearch(a, visited).spliterator(), false).anyMatch(v -> Objects.equals(v, b));
-    }
-
-    /**
-     * Returns a {@link Iterable} which performs a breadth first search
-     * starting at the given vertex.
-     *
-     * @param start   the start vertex
-     * @param visited a predicate with side effect. The predicate returns true
-     *                if the specified vertex has been visited, and marks the specified vertex
-     *                as visited.
-     * @return breadth first search
-     */
-    @NonNull
-    default Iterable<V> breadthFirstSearch(@NonNull V start, @NonNull Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new BreadthFirstSpliterator<>(this::getNextVertices, start, visited));
-    }
-
-
-    /**
-     * Returns a {@link Stream} which performs a depth first search
-     * starting at the given vertex.
-     *
-     * @param start   the start vertex
-     * @param visited a predicate with side effect. The predicate returns true
-     *                if the specified vertex has been visited, and marks the specified vertex
-     *                as visited.
-     * @return breadth first search
-     */
-    @NonNull
-    default Iterable<V> depthFirstSearch(final V start, final Predicate<V> visited) {
-        return new SpliteratorIterable<>(() -> new DepthFirstSpliterator<>(this::getNextVertices, start, visited));
-    }
-
-    /**
-     * Returns an {@link Iterable} which performs a breadth first search
-     * starting at the given vertex.
-     *
-     * @param start the start vertex
-     * @return breadth first search
-     */
-    @NonNull
-    default Iterable<V> breadthFirstSearch(@NonNull V start) {
-        Set<V> visited = new HashSet<>();
-        return breadthFirstSearch(start, visited::add);
-    }
-
-    /**
-     * Returns an {@link Iterable} which performs a depth first search
-     * starting at the given vertex.
-     *
-     * @param start the start vertex
-     * @return breadth first search
-     */
-    @NonNull
-    default Iterable<V> depthFirstSearch(V start) {
-        Set<V> visited = new HashSet<>();
-        return depthFirstSearch(start, visited::add);
-    }
 }

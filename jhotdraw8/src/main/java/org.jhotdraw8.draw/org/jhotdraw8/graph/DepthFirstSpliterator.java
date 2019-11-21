@@ -6,13 +6,12 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Spliterators.AbstractSpliterator;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -22,7 +21,7 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @author Werner Randelshofer
  */
-public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
+public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
     @NonNull
     private final Function<V, Iterable<V>> nextFunction;
@@ -30,6 +29,7 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
     private final Deque<V> deque;
     @NonNull
     private final Predicate<V> visited;
+    private V current;
 
     /**
      * Creates a new instance.
@@ -45,10 +45,10 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
      * Creates a new instance.
      *
      * @param nextFunction the function that returns the next vertices of a given vertex
-     * @param root              the root vertex
-     * @param visited           a predicate with side effect. The predicate returns true
-     *                          if the specified vertex has been visited, and marks the specified vertex
-     *                          as visited.
+     * @param root         the root vertex
+     * @param visited      a predicate with side effect. The predicate returns true
+     *                     if the specified vertex has been visited, and marks the specified vertex
+     *                     as visited.
      */
     public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
@@ -62,10 +62,9 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
         visited.test(root);
     }
 
-
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
-        V current = deque.pollLast();
+    public boolean moveNext() {
+        current = deque.pollLast();
         if (current == null) {
             return false;
         }
@@ -74,7 +73,6 @@ public class DepthFirstSpliterator<V> extends AbstractSpliterator<V> {
                 deque.addLast(next);
             }
         }
-        action.accept(current);
         return true;
     }
 }

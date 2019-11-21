@@ -5,13 +5,12 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Spliterators.AbstractSpliterator;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -21,7 +20,7 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @author Werner Randelshofer
  */
-public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
+public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
     @NonNull
     private final Function<V, Iterable<V>> nextFunction;
@@ -29,12 +28,13 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
     private final Deque<V> deque;
     @NonNull
     private final Predicate<V> visited;
+    private V current;
 
     /**
      * Creates a new instance.
      *
      * @param nextFunction the nextFunction
-     * @param root              the root vertex
+     * @param root         the root vertex
      */
     public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root) {
         this(nextFunction, root, new HashSet<>()::add);
@@ -44,10 +44,10 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
      * Creates a new instance.
      *
      * @param nextFunction the nextFunction
-     * @param root              the root vertex
-     * @param visited           a predicate with side effect. The predicate returns true
-     *                          if the specified vertex has been visited, and marks the specified vertex
-     *                          as visited.
+     * @param root         the root vertex
+     * @param visited      a predicate with side effect. The predicate returns true
+     *                     if the specified vertex has been visited, and marks the specified vertex
+     *                     as visited.
      */
     public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
@@ -61,10 +61,9 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
         visited.test(root);
     }
 
-
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super V> action) {
-        V current = deque.pollFirst();
+    public boolean moveNext() {
+        current = deque.pollFirst();
         if (current == null) {
             return false;
         }
@@ -73,9 +72,6 @@ public class BreadthFirstSpliterator<V> extends AbstractSpliterator<V> {
                 deque.addLast(next);
             }
         }
-        action.accept(current);
         return true;
     }
-
-
 }
