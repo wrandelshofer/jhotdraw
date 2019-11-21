@@ -103,6 +103,7 @@ public interface IntDirectedGraph {
      */
     default boolean isReachable(int vidxa, int vidxb) {
         Deque<Integer> stack = new ArrayDeque<>(16);
+        stack.push(vidxb);
         BitSet vset = new BitSet(getVertexCount());
         while (!stack.isEmpty()) {
             int current = stack.pop();

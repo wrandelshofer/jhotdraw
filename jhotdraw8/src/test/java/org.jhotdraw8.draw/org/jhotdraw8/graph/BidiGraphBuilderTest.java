@@ -6,9 +6,6 @@ package org.jhotdraw8.graph;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -243,55 +240,5 @@ public class BidiGraphBuilderTest {
         instance.removeVertex(c);
         assertEquals(4, instance.getVertexCount(), "vertex count");
         assertEquals(1, instance.getArrowCount(), "arrow count");
-    }
-
-    @Test
-    public void testBreadthFirstSearch() {
-        System.out.println("BreadthFirstSearch");
-        String a = "a";
-        String b = "b";
-        String c = "c";
-        String d = "d";
-        String e = "e";
-        BidiGraphBuilder<String, Double> instance = new BidiGraphBuilder<>();
-        instance.addVertex(a);
-        instance.addVertex(b);
-        instance.addVertex(c);
-        instance.addVertex(d);
-        instance.addVertex(e);
-        instance.addArrow(a, c, 1.0);
-        instance.addArrow(a, e, 1.0);
-        instance.addArrow(b, c, 1.0);
-        instance.addArrow(c, d, 1.0);
-        instance.addArrow(c, e, 1.0);
-
-        assertEquals("aced",
-                StreamSupport.stream(instance.breadthFirstSearch(a).spliterator(), false)
-                        .collect(Collectors.joining("")));
-    }
-
-    @Test
-    public void testBreadthFirstBackwardSearch() {
-        System.out.println("BreadthFirstBackwardSearch");
-        String a = "a";
-        String b = "b";
-        String c = "c";
-        String d = "d";
-        String e = "e";
-        BidiGraphBuilder<String, Double> instance = new BidiGraphBuilder<>();
-        instance.addVertex(a);
-        instance.addVertex(b);
-        instance.addVertex(c);
-        instance.addVertex(d);
-        instance.addVertex(e);
-        instance.addArrow(a, c, 1.0);
-        instance.addArrow(a, e, 1.0);
-        instance.addArrow(b, c, 1.0);
-        instance.addArrow(c, d, 1.0);
-        instance.addArrow(c, e, 1.0);
-
-        assertEquals("eacb",
-                StreamSupport.stream(instance.breadthFirstSearchBackward(e).spliterator(), false).
-                        collect(Collectors.joining("")));
     }
 }
