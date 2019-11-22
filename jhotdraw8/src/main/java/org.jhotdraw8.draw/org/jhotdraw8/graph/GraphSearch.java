@@ -257,19 +257,18 @@ public class GraphSearch {
     @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> model) {
         final int n = model.getVertexCount();
-        List<V> vertices = new ArrayList<>(model.getVertices());
 
         // Step 1: compute number of incoming arrows for each vertex
         final Map<V, Integer> deg = new HashMap<>(n); // deg is the number of unprocessed incoming arrows on vertex
         for (V v : model.getVertices()) {
             deg.put(v, 0);
             for (V u : model.getNextVertices(v)) {
-                deg.merge(u, 1, (a, b) -> a + b);
+                deg.merge(u, 1, Integer::sum);
             }
         }
 
-        // Step 2: put all vertices with degree zero into deque
-        final Queue<V> queue = new ArrayDeque<>(n); // todo deque
+        // Step 2: put all vertices with degree zero into queue
+        final Queue<V> queue = new ArrayDeque<>(n);
         for (Map.Entry<V, Integer> entry : deg.entrySet()) {
             if (entry.getValue() == 0) {
                 queue.add(entry.getKey());
@@ -280,6 +279,7 @@ public class GraphSearch {
         final List<V> result = new ArrayList<>(n);// result array
         int done = 0;
         Random random = null;
+        List<V> vertices = null;
         while (done < n) {
             for (; done < n; done++) {
                 if (queue.isEmpty()) {
@@ -299,6 +299,7 @@ public class GraphSearch {
             if (done < n) {
                 // Break loop in graph by removing an arbitrary arrow.
                 if (random == null) {
+                    vertices = new ArrayList<>(model.getVertices());
                     random = new Random(0);
                 }
                 int i;
