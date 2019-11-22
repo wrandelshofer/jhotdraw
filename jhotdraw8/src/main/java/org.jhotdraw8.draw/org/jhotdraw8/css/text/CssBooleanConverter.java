@@ -48,7 +48,7 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
 
     @Override
     public <TT extends Boolean> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_IDENT, value ? trueString : falseString));
+        out.accept(new CssToken(CssTokenType.TT_IDENT, value.booleanValue() ? trueString : falseString));
     }
 
     @NonNull
