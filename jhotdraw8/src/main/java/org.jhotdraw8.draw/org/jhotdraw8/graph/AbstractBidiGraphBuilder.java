@@ -10,7 +10,7 @@ package org.jhotdraw8.graph;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder {
+public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder implements IntBidiGraph {
 
     /**
      * Table of arrow heads.
@@ -53,11 +53,13 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder {
         return getArrowIndex(vi, i, prevLastArrow, prevArrowHeads);
     }
 
+    @Override
     public int getPrev(int vi, int i) {
         int arrowId = getPrevArrowIndex(vi, i);
         return prevArrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
     }
 
+    @Override
     public int getPrevCount(int vi) {
         return prevLastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
     }

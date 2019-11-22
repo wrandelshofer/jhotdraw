@@ -250,12 +250,105 @@ public class GraphSearch {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
+     * @param m   the graph
+     * @return the sorted list of vertices
+     */
+    @NonNull
+    @SuppressWarnings("unchecked")
+    public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
+        final AttributedIntDirectedGraph<V, A> im;
+        if (!(m instanceof AttributedIntDirectedGraph)) {
+            return sortTopologicallyObject(m);
+        } else {
+            im = (AttributedIntDirectedGraph<V, A>) m;
+        }
+        int[] a = sortTopologicallyInt(im);
+        List<V> result = new ArrayList<>(a.length);
+        for (int i = 0; i < a.length; i++) {
+            result.add(im.getVertex(a[i]));
+        }
+        return result;
+    }
+
+
+    /**
+     * Sorts the specified directed graph topologically.
+     *
+     * @param model the graph
+     * @return the sorted list of vertices
+     */
+    @NonNull
+    public static int[] sortTopologicallyInt(@NonNull IntDirectedGraph model) {
+        final int n = model.getVertexCount();
+
+        // Step 1: compute number of incoming arrows for each vertex
+        final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
+        for (int i = 0; i < n; i++) {
+            final int m = model.getNextCount(i);
+            for (int j = 0; j < m; j++) {
+                int v = model.getNext(i, j);
+                deg[v]++;
+            }
+        }
+
+        // Step 2: put all vertices with degree zero into deque
+        final int[] queue = new int[n]; // todo deque
+        int first = 0, last = 0; // first and last indices in deque
+        for (int i = 0; i < n; i++) {
+            if (deg[i] == 0) {
+                queue[last++] = i;
+            }
+        }
+
+        // Step 3: Repeat until all vertices have been processed or a loop has been detected
+        final int[] result = new int[n];// result array
+        int done = 0;
+        Random random = null;
+        while (done < n) {
+            for (; done < n; done++) {
+                if (first == last) {
+                    // => the graph has a loop!
+                    break;
+                }
+                int v = queue[first++];
+                final int m = model.getNextCount(v);
+                for (int j = 0; j < m; j++) {
+                    int u = model.getNext(v, j);
+                    if (--deg[u] == 0) {
+                        queue[last++] = u;
+                    }
+                }
+                result[done] = v;
+            }
+
+            if (done < n) {
+                // Break loop in graph by removing an arbitrary arrow.
+                if (random == null) {
+                    random = new Random(0);
+                }
+                int i;
+                do {
+                    i = random.nextInt(n);
+                } while (deg[i] <= 0);
+                deg[i] = 0;// this can actually remove more than one arrow
+                queue[last++] = i;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Sorts the specified directed graph topologically.
+     *
+     * @param <V> the vertex type
+     * @param <A> the arrow type
      * @param model   the graph
      * @return the sorted list of vertices
      */
     @NonNull
     @SuppressWarnings("unchecked")
-    public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> model) {
+    public static <V, A> List<V> sortTopologicallyObject(DirectedGraph<V, A> model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
@@ -313,6 +406,7 @@ public class GraphSearch {
 
         return result;
     }
+
 
     private static <V> void union(@NonNull List<V> uset, @NonNull List<V> vset, @NonNull Map<V, List<V>> forest) {
         if (uset != vset) {

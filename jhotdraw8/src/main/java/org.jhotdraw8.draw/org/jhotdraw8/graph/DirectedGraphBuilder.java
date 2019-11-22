@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @author Werner Randelshofer
  */
 public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
-        implements DirectedGraph<V, A> {
+        implements DirectedGraph<V, A>, AttributedIntDirectedGraph<V, A> {
 
     /**
      * Creates a builder which contains a copy of the specified graph with all arrows inverted.
@@ -256,7 +256,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      */
     @NonNull
     public ImmutableDirectedGraph<V, A> build() {
-        final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>(this);
+        final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>((AttributedIntDirectedGraph<V, A>) this);
         return graph;
     }
 
@@ -286,6 +286,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return getNextCount(getVertexIndex(v));
     }
 
+    @Override
     public V getVertex(int vi) {
         if (vertices.get(vi) == null) {
             System.err.println("DIrectedGraphBuilder is broken");
@@ -293,6 +294,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return vertices.get(vi);
     }
 
+    @Override
     public int getVertexIndex(V v) {
         Integer index = vertexMap.get(v);
         return index;
@@ -303,6 +305,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return arrows.get(index);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public A getNextArrow(int vi, int i) {
         int arrowId = getNextArrowIndex(vi, i);
