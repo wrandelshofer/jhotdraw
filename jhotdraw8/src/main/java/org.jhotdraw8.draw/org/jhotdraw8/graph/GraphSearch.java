@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
@@ -249,74 +250,50 @@ public class GraphSearch {
      *
      * @param <V> the vertex type
      * @param <A> the arrow type
-     * @param m   the graph
+     * @param model   the graph
      * @return the sorted list of vertices
      */
     @NonNull
     @SuppressWarnings("unchecked")
-    public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
-        final AttributedIntDirectedGraph<V, A> im;
-        if (!(m instanceof AttributedIntDirectedGraph)) {
-            im = new DirectedGraphBuilder<>(m);
-        } else {
-            im = (AttributedIntDirectedGraph<V, A>) m;
-        }
-        int[] a = sortTopologicallyInt(im);
-        List<V> result = new ArrayList<>(a.length);
-        for (int i = 0; i < a.length; i++) {
-            result.add(im.getVertex(a[i]));
-        }
-        return result;
-    }
-
-    /**
-     * Sorts the specified directed graph topologically.
-     *
-     * @param model the graph
-     * @return the sorted list of vertices
-     */
-    @NonNull
-    public static int[] sortTopologicallyInt(@NonNull IntDirectedGraph model) {
+    public static <V, A> List<V> sortTopologically(DirectedGraph<V, A> model) {
         final int n = model.getVertexCount();
+        List<V> vertices = new ArrayList<>(model.getVertices());
 
         // Step 1: compute number of incoming arrows for each vertex
-        final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
-        for (int i = 0; i < n; i++) {
-            final int m = model.getNextCount(i);
-            for (int j = 0; j < m; j++) {
-                int v = model.getNext(i, j);
-                deg[v]++;
+        final Map<V, Integer> deg = new HashMap<>(n); // deg is the number of unprocessed incoming arrows on vertex
+        for (V v : model.getVertices()) {
+            deg.put(v, 0);
+            for (V u : model.getNextVertices(v)) {
+                deg.merge(u, 1, (a, b) -> a + b);
             }
         }
 
         // Step 2: put all vertices with degree zero into deque
-        final int[] queue = new int[n]; // todo deque
-        int first = 0, last = 0; // first and last indices in deque
-        for (int i = 0; i < n; i++) {
-            if (deg[i] == 0) {
-                queue[last++] = i;
+        final Queue<V> queue = new ArrayDeque<>(n); // todo deque
+        for (Map.Entry<V, Integer> entry : deg.entrySet()) {
+            if (entry.getValue() == 0) {
+                queue.add(entry.getKey());
             }
         }
 
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
-        final int[] result = new int[n];// result array
+        final List<V> result = new ArrayList<>(n);// result array
         int done = 0;
         Random random = null;
         while (done < n) {
             for (; done < n; done++) {
-                if (first == last) {
+                if (queue.isEmpty()) {
                     // => the graph has a loop!
                     break;
                 }
-                int v = queue[first++];
+                V v = queue.remove();
                 final int m = model.getNextCount(v);
-                for (int j = 0; j < m; j++) {
-                    int u = model.getNext(v, j);
-                    if (--deg[u] == 0) {
-                        queue[last++] = u;
+                for (V u : model.getNextVertices(v)) {
+                    if (deg.merge(u, -1, (a, b) -> a + b) == 0) {
+                        queue.add(u);
                     }
                 }
-                result[done] = v;
+                result.add(v);
             }
 
             if (done < n) {
@@ -327,9 +304,9 @@ public class GraphSearch {
                 int i;
                 do {
                     i = random.nextInt(n);
-                } while (deg[i] <= 0);
-                deg[i] = 0;// this can actually remove more than one arrow
-                queue[last++] = i;
+                } while (deg.get(vertices.get(i)) == 0);
+                deg.put(vertices.get(i), 0);// this can actually remove more than one arrow
+                queue.add(vertices.get(i));
             }
         }
 

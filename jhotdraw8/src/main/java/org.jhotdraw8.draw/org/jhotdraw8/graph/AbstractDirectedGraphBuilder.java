@@ -48,7 +48,7 @@ import java.util.Arrays;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
+public abstract class AbstractDirectedGraphBuilder {
 
     protected final static int ARROWS_NEXT_FIELD = 1;
     protected final static int ARROWS_NUM_FIELDS = 2;
@@ -151,7 +151,6 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         }
     }
 
-    @Override
     public int getArrowCount() {
         return arrowCount;
     }
@@ -265,18 +264,15 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         return arrowId;
     }
 
-    @Override
     public int getNext(int vi, int i) {
         int arrowId = getNextArrowIndex(vi, i);
         return nextArrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
     }
 
-    @Override
     public int getNextCount(int vi) {
         return nextLastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
     }
 
-    @Override
     public int getVertexCount() {
         return vertexCount;
     }

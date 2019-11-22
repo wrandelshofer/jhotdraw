@@ -29,7 +29,6 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
     private final Deque<V> deque;
     @NonNull
     private final Predicate<V> visited;
-    private V current;
 
     /**
      * Creates a new instance.
