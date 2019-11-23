@@ -29,8 +29,6 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     /**
      * Holds the properties.
      */
-    // protected StyleablePropertyMap styleableProperties = new StyleablePropertyMap();
-    //protected final StyleableMap<Key<?>, Object> properties = new OldStyleableMap<Key<?>, Object>() {
     protected final StyleableMap<Key<?>, Object> properties = new SimpleStyleableMap<Key<?>, Object>(
             keyMaps.computeIfAbsent(getClass(), k -> Collections.synchronizedMap(new HashMap<>()))
     ) {
@@ -148,4 +146,8 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
 
     }
 
+    @Override
+    public void resetStyledValues() {
+        properties.resetStyledValues();
+    }
 }

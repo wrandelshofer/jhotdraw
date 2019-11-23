@@ -12,7 +12,6 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
@@ -501,14 +500,6 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public void reset(@NonNull Figure elem) {
-        for (MapAccessor<?> acc : Figure.getDeclaredAndInheritedMapAccessors(elem.getClass())) {
-            if (acc instanceof Key<?>) {
-                Key<?> key = (Key<?>) acc;
-                elem.remove(StyleOrigin.USER_AGENT, key);
-                elem.remove(StyleOrigin.AUTHOR, key);
-                elem.remove(StyleOrigin.INLINE, key);
-            }
-        }
-
+        elem.resetStyledValues();
     }
 }

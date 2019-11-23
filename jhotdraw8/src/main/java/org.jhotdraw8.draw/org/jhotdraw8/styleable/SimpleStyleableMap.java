@@ -163,7 +163,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         if (value == null) {
             value = NULL_VALUE;
         }
-        for (int i = originOrdinal, n = values.size(); i < n; i += numOrigins) {
+        for (int i = origin.ordinal(), n = values.size(); i < n; i += numOrigins) {
             if (Objects.equals(values.get(i), value)) {
                 return true;
             }
@@ -182,6 +182,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             values.add(null);
         }
         return index;
+    }
+
+    private int indexIfPresent(K key) {
+        Integer index = keyMap.get(key);
+        return index == null ? -1 : index;
     }
 
     @NonNull
@@ -310,8 +315,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @Override
     @SuppressWarnings("unchecked")
     public V remove(Object key) {
-        int index = ensureCapacity((K) key);
-        return removeValue(originOrdinal, index, (K) key);
+        int index = indexIfPresent((K) key);
+        return index == -1 ? null : removeValue(originOrdinal, index, (K) key);
     }
 
     public void removeAll(@NonNull StyleOrigin origin) {
@@ -321,6 +326,16 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             Integer index = e.getValue();
             if (index < values.size()) {
                 removeValue(ordinal, index, e.getKey());
+            }
+        }
+    }
+
+    @Override
+    public void resetStyledValues() {
+        final int userOrdinal = StyleOrigin.USER.ordinal();
+        for (int i = 0, n = values.size(); i < n; i++) {
+            if (i % numOrigins != userOrdinal) {
+                values.set(i, null);
             }
         }
     }

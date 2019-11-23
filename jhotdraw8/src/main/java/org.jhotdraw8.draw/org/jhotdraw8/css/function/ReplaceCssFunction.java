@@ -46,15 +46,13 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
         int start = tt.getStartPosition();
 
         String str = evalString(element, tt, getName(), functionProcessor);
-        if (tt.next() == CssTokenType.TT_COMMA) {
-            tt.next();
+        if (tt.next() != CssTokenType.TT_COMMA) {
+            tt.pushBack();
         }
-        tt.pushBack();
         String regex = evalString(element, tt, getName(), functionProcessor);
-        if (tt.next() == CssTokenType.TT_COMMA) {
-            tt.next();
+        if (tt.next() != CssTokenType.TT_COMMA) {
+            tt.pushBack();
         }
-        tt.pushBack();
         String repl = evalString(element, tt, getName(), functionProcessor);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
             throw new ParseException("〈replace〉: right bracket ')' expected.", tt.getStartPosition());

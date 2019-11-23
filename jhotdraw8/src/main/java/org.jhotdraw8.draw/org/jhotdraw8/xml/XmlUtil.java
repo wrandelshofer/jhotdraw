@@ -30,6 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -193,18 +194,22 @@ public class XmlUtil {
         return null;
     }
 
-    public static void validate(Document doc, @NonNull URI schemaUri) throws IOException {
+    public static void validate(@NonNull Document doc, @NonNull URI schemaUri) throws IOException {
         XmlUtil.validate(doc, schemaUri.toURL());
     }
 
-    public static void validate(Document doc, @NonNull URL schemaUrl) throws IOException {
-        SchemaFactory factory = SchemaFactory
-                .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    public static void validate(@NonNull Document doc, @NonNull URL schemaUrl) throws IOException {
         try (InputStream schemaStream = schemaUrl.openStream()) {
-            Schema schema
-                    = factory.newSchema(new StreamSource(schemaStream));
+            validate(new DOMSource(doc), new StreamSource(schemaStream));
+        }
+    }
+
+    public static void validate(@NonNull Source docSource, @NonNull Source schemaSource) throws IOException {
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            Schema schema = factory.newSchema(schemaSource);
             Validator validator = schema.newValidator();
-            validator.validate(new DOMSource(doc));
+            validator.validate(docSource);
         } catch (SAXException e) {
             throw new IOException("The document is invalid.\n" + e.getMessage(), e);
         }

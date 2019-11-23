@@ -43,4 +43,5 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
 
     void removeAll(StyleOrigin origin);
 
+    void resetStyledValues();
 }

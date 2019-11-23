@@ -117,8 +117,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 tt.pushBack();
                 function.process(element, tt, model, this, out);
             } else {
-                    tt.pushBack();
-                    processUnknownFunction(element, tt, out);
+                tt.pushBack();
+                processUnknownFunction(element, tt, out);
             }
         } else {
             out.accept(tt.getToken());

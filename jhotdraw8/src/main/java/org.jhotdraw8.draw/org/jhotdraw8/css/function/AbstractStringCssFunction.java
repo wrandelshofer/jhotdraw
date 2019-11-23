@@ -21,7 +21,7 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
     protected String evalString(@NonNull T element, @NonNull CssTokenizer tt, String expressionName, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         StringBuilder buf = new StringBuilder();
         List<CssToken> temp = new ArrayList<>();
-        temp.clear();
+
         functionProcessor.processToken(element, tt, temp::add);
         for (CssToken t : temp) {
             switch (t.getType()) {
@@ -33,6 +33,10 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
                 case CssTokenType.TT_DIMENSION:
                 case CssTokenType.TT_PERCENTAGE:
                     buf.append(t.fromToken());
+                    break;
+                case CssTokenType.TT_S:
+                case CssTokenType.TT_IDENT:
+                    // skip
                     break;
                 default:
                     throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
