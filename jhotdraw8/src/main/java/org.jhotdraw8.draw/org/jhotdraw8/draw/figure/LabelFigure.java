@@ -17,7 +17,8 @@ import org.jhotdraw8.draw.render.RenderContext;
  * @author Werner Randelshofer
  */
 public class LabelFigure extends AbstractLabelFigure
-        implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure,
+        implements HideableFigure, TextFontableFigure, TextLayoutableFigure,
+        TextableFigure, StyleableFigure, LockableFigure, TransformableFigure,
         CompositableFigure, TextEditableFigure {
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.

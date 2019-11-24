@@ -193,7 +193,7 @@ public class ModelerActivityController extends AbstractDocumentBasedActivity imp
             d.updateStyleManager();
             SimpleRenderContext ctx = new SimpleRenderContext();
             for (Figure f : d.preorderIterable()) {
-                f.updateCss();
+                f.updateCss(ctx);
             }
             d.layoutAll(ctx);
 

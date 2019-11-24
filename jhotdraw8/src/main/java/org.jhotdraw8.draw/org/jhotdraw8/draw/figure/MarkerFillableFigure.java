@@ -47,7 +47,7 @@ public interface MarkerFillableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyMarkerFillableFigureProperties(RenderContext ctx, @NonNull Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(MARKER_FILL));
+        Paint p = Paintable.getPaint(getStyled(MARKER_FILL), ctx);
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);
         }

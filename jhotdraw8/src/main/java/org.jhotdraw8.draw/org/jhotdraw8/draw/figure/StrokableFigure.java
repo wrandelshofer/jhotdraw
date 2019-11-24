@@ -187,7 +187,7 @@ public interface StrokableFigure extends Figure {
     }
 
     default void applyStrokeColorProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(STROKE));
+        Paint p = Paintable.getPaint(getStyled(STROKE), ctx);
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }

@@ -12,7 +12,9 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.NonNullKey;
 import org.jhotdraw8.collection.NonNullObjectKey;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.css.DefaultSystemColorConverter;
 import org.jhotdraw8.css.DefaultUnitConverter;
+import org.jhotdraw8.css.SystemColorConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -23,13 +25,6 @@ import java.time.Instant;
  * RenderContext.
  *
  * @author Werner Randelshofer
- * @design.pattern RenderContext Builder, Client. The builder pattern is used
- * for the creation of a JavaFX scene graph from a Figure. The creation of the
- * scene graph is delegated to the methods Figure.createNode and
- * Figure.updateNode. Typically each concrete Figure class will generate a
- * different scene graph. The same Figure object may also create different scene
- * graphs depending on property values of the RenderContext. For example a
- * PageFigure will render the current page number of the PrintRenderContext.
  */
 public interface RenderContext extends PropertyBean {
 
@@ -58,7 +53,9 @@ public interface RenderContext extends PropertyBean {
     Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);
     Key<Integer> RENDER_PAGE_INTERNAL_NUMBER = new ObjectKey<>("renderPageInternalNumber", Integer.class, 0);
     Key<Instant> RENDER_TIMESTAMP = new ObjectKey<>("renderTimestamp", Instant.class, Instant.now());
+
     NonNullObjectKey<UnitConverter> UNIT_CONVERTER_KEY = new NonNullObjectKey<>("unitConverter", UnitConverter.class, new DefaultUnitConverter());
+    NonNullObjectKey<SystemColorConverter> SYSTEM_COLOR_CONVERTER_KEY = new NonNullObjectKey<>("colorConverter", SystemColorConverter.class, new DefaultSystemColorConverter());
     // ---
     // behavior
     // ---

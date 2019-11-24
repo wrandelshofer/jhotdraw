@@ -18,7 +18,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.Attributes2Impl;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -50,7 +49,6 @@ import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -216,23 +214,11 @@ public class XmlUtil {
     }
 
     public static void validate(@NonNull Path xmlPath, @NonNull URI schemaUri) throws IOException {
-        validate(xmlPath.toUri(), schemaUri);
+        validate(new StreamSource(xmlPath.toUri().toString()), new StreamSource(schemaUri.toString()));
     }
 
     public static void validate(@NonNull URI xmlUri, @NonNull URI schemaUri) throws IOException {
-        try {
-            SchemaFactory factory = SchemaFactory
-                    .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema
-                    = factory.newSchema(schemaUri.toURL());
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Paths.get(xmlUri).toFile()));
-        } catch (SAXParseException e) {
-            throw new IOException("Invalid XML file: " + e.getSystemId() + "\nError in line: " + e.getLineNumber() + ", column: " + e.getColumnNumber() + ".\n" + e.getMessage(), e);
-        } catch (SAXException e) {
-
-            throw new IOException("Invalid XML file: " + xmlUri, e);
-        }
+        validate(new StreamSource(xmlUri.toString()), new StreamSource(schemaUri.toString()));
     }
 
     public static void write(OutputStream out, Document doc) throws IOException {

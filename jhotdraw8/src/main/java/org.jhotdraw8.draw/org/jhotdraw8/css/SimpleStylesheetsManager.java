@@ -222,12 +222,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         // Clear stylesheet values
         selectorModel.reset(elem);
 
+        // Compute custom properties
+        Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
+        customProperties.putAll(getUserAgentCustomProperties());
+        customProperties.putAll(getAuthorCustomProperties());
+        customProperties.putAll(getInlineCustomProperties());
+
         // The stylesheet is a user-agent stylesheet
         Collection<StylesheetEntry> uaStylesheets = getUserAgentStylesheets();
-        Map<String, ImmutableList<CssToken>> uaCustomProperties = getUserAgentCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, uaStylesheets)) {
             try {
-                doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), uaCustomProperties);
+                doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), customProperties);
             } catch (ParseException e) {
                 LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
             }
@@ -236,20 +241,18 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         // The value of a property was set by the user through a call to a set method with StyleOrigin.USER
         // ... nothing to do!
         // The stylesheet is an external file
-        Map<String, ImmutableList<CssToken>> authorCustomProperties = getAuthorCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
             try {
-                doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), authorCustomProperties);
+                doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), customProperties);
             } catch (ParseException e) {
                 LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
             }
         }
 
         // The stylesheet is an internal file
-        Map<String, ImmutableList<CssToken>> inlineCustomProperties = getInlineCustomProperties();
         for (Declaration d : collectApplicableDeclarations(elem, getInlineStylesheets())) {
             try {
-                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), inlineCustomProperties);
+                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getPropertyNamespace(), d.getPropertyName(), d.getTerms(), customProperties);
             } catch (ParseException e) {
                 LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
             }
@@ -284,7 +287,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    @Nullable
+    @NonNull
     private Map<String, ImmutableList<CssToken>> getInlineCustomProperties() {
         if (cachedInlineCustomProperties == null) {
             cachedInlineCustomProperties = collectCustomProperties(getInlineStylesheets());
@@ -292,7 +295,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return cachedInlineCustomProperties;
     }
 
-    @Nullable
+    @NonNull
     private Map<String, ImmutableList<CssToken>> getAuthorCustomProperties() {
         if (cachedAuthorCustomProperties == null) {
             cachedAuthorCustomProperties = collectCustomProperties(getAuthorStylesheets());
@@ -300,7 +303,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return cachedAuthorCustomProperties;
     }
 
-    @Nullable
+    @NonNull
     private Map<String, ImmutableList<CssToken>> getUserAgentCustomProperties() {
         if (cachedUserAgentCustomProperties == null) {
             cachedUserAgentCustomProperties = collectCustomProperties(getUserAgentStylesheets());

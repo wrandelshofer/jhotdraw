@@ -85,7 +85,7 @@ public interface StylesheetsManager<E> {
     <T> void setStylesheets(StyleOrigin origin, URI documentHome, List<T> stylesheets);
 
     /**
-     * Applies all managaed stylesheets to the specified element.
+     * Applies all managed stylesheets to the specified element.
      *
      * @param e The element
      */

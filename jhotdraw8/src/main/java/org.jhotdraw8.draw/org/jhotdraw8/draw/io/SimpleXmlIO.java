@@ -26,6 +26,8 @@ import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.util.Exceptions;
@@ -357,7 +359,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         if (external != null) {
             Drawing internal = figureFactory.fromExternalDrawing(external);
             internal.preorderIterable().forEach(figure -> figure.addNotify(internal));
-            internal.preorderIterable().forEach(Figure::updateCss);
+            final RenderContext ctx = new SimpleRenderContext();
+            internal.preorderIterable().forEach(figure -> figure.updateCss(ctx));
             return internal;
         } else {
             return clipping;
@@ -431,7 +434,8 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
             Drawing internal = figureFactory.fromExternalDrawing(external);
             if (doAddNotifyAndUpdateCss) {
                 internal.preorderIterable().forEach(figure -> figure.addNotify(internal));
-                internal.preorderIterable().forEach(Figure::updateCss);
+                final RenderContext ctx = new SimpleRenderContext();
+                internal.preorderIterable().forEach(figure -> figure.updateCss(ctx));
             }
             return internal;
         } else {
@@ -745,7 +749,11 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
         Object value = figure.get(key);
 
         if (value instanceof URI) {
-            value = uriResolver.apply((URI) value);
+            try {
+                value = uriResolver.apply((URI) value);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
 
         if (!key.isTransient() /*&& figure.containsKey(StyleOrigin.USER, key)*/ && !figureFactory.isDefaultValue(figure, key, value)) {

@@ -3,3 +3,26 @@
  * User-Agent stylesheet for grapher drawings.
  */
 
+Drawing {
+    background: canvas;
+}
+Label {
+    text-fill: canvastext;
+}
+TextArea {
+    fill: canvas;
+    text-fill: canvastext;
+    stroke: canvastext;
+}
+Rectangle,
+Ellipse,
+Polygon,
+Bezier {
+    fill: canvas;
+    stroke: canvastext;
+}
+Line,
+Polyline,
+LineConnectionWithMarkers {
+    stroke: canvastext;
+}

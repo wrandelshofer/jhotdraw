@@ -168,7 +168,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         CssParser parser = new CssParser();
         TextArea textArea = getTextArea();
         try {
-            Stylesheet s = parser.parseStylesheet(textArea.getText());
+            Stylesheet stylesheet = parser.parseStylesheet(textArea.getText());
             if (!parser.getParseExceptions().isEmpty()) {
                 System.out.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
             }
@@ -178,9 +178,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
             StylesheetsManager<E> sm = getStyleManager();
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-            for (E f : getEntities()) {
-                if (sm.applyStylesheetTo(StyleOrigin.USER, s, f, false)) {
-                    fireInvalidated(f);
+            for (E entity : getEntities()) {
+                if (sm.applyStylesheetTo(StyleOrigin.USER, stylesheet, entity, false)) {
+                    fireInvalidated(entity);
                 }
             }
         } catch (IOException ex) {

@@ -253,9 +253,11 @@ public class NumberConverter implements Converter<Number> {
                 int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
                 if (!usesScientificNotation || exponent > minNegativeExponent
                         && exponent < minPositiveExponent) {
-                    str = doubleDecimalFormat.format(v);
+                    str = big.toPlainString();
+                    //str = doubleDecimalFormat.format(v);
                 } else {
-                    str = scientificFormat.format(v);
+                    //str = scientificFormat.format(v);
+                    str = big.toEngineeringString();
                 }
                 buf.append(str);
             }

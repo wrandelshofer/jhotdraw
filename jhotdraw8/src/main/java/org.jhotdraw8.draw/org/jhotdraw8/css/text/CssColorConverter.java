@@ -112,7 +112,9 @@ public class CssColorConverter implements CssConverter<CssColor> {
             case CssTokenType.TT_IDENT:
                 String ident = tt.currentStringNonNull();
                 try {
-                    color = ident.startsWith("0x") ? parseColorHexDigits(ident.substring(2), tt.getStartPosition()) : new CssColor(ident, Color.web(ident));
+                    color = ident.startsWith("0x")
+                            ? parseColorHexDigits(ident.substring(2), tt.getStartPosition())
+                            : new CssColor(ident);
                 } catch (IllegalArgumentException e) {
                     throw new ParseException(e.getMessage() + " value:" + ident, tt.getStartPosition());
                 }

@@ -34,7 +34,7 @@ public interface TextFillableFigure extends Figure {
      * @param text a text node
      */
     default void applyTextFillableFigureProperties(@NonNull RenderContext ctx, @NonNull Text text) {
-        text.setFill(Paintable.getPaint(getStyled(TEXT_FILL)));
+        text.setFill(Paintable.getPaint(getStyled(TEXT_FILL), ctx));
     }
 
     /**
@@ -44,6 +44,6 @@ public interface TextFillableFigure extends Figure {
      * @param text a text node
      */
     default void applyTextFillableFigureProperties(@NonNull RenderContext ctx, @NonNull Labeled text) {
-        text.setTextFill(Paintable.getPaint(getStyled(TEXT_FILL)));
+        text.setTextFill(Paintable.getPaint(getStyled(TEXT_FILL), ctx));
     }
 }

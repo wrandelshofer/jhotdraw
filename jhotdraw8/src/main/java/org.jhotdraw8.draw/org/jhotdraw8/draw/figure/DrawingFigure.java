@@ -118,7 +118,6 @@ public class DrawingFigure extends AbstractCompositeFigure
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-
         set(WIDTH, width.abs());
         set(HEIGHT, height.abs());
     }
@@ -146,7 +145,7 @@ public class DrawingFigure extends AbstractCompositeFigure
         page.setWidth(bounds.getWidth());
         page.setHeight(bounds.getHeight());
         CssColor cclr = getStyled(BACKGROUND);
-        page.setFill(Paintable.getPaint(cclr));
+        page.setFill(Paintable.getPaint(cclr, ctx));
         if (g.getClip() == null || !g.getClip().getBoundsInLocal().equals(bounds)) {
             g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
         }

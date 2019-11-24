@@ -49,6 +49,7 @@ import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
+import org.jhotdraw8.css.MacOSSystemColorConverter;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.constrain.NullConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -1035,6 +1036,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
         // install/deiinstall listeners to scrollpane
         node.sceneProperty().addListener(this::updateScrollPaneListeners);
+
+        set(SYSTEM_COLOR_CONVERTER_KEY, new MacOSSystemColorConverter());
     }
 
     private void invalidateConstrainerNode() {

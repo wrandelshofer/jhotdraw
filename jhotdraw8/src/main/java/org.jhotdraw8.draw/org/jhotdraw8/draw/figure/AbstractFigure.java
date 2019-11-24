@@ -16,6 +16,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.SharedKeysMap;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
@@ -250,7 +251,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     }
 
     @Override
-    public void updateCss() {
+    public void updateCss(RenderContext ctx) {
         getStyleableMap().clearAuthorAndInlineValues();
         Drawing d = getDrawing();
         if (d != null) {

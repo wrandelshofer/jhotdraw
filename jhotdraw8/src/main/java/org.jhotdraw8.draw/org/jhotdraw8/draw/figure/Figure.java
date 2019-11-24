@@ -1141,7 +1141,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param ctx the render context (optional)
      */
     default void stylesheetNotify(@NonNull RenderContext ctx) {
-        updateCss();
+        updateCss(ctx);
         layout(ctx);
     }
 
@@ -1183,8 +1183,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This figure does not keep track of changes that require CSS updates. Use
      * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
+     * @param ctx
      */
-    void updateCss();
+    void updateCss(RenderContext ctx);
 
     /**
      * This method is invoked by a {@code RenderContext}, when it needs to

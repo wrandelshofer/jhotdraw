@@ -146,7 +146,7 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
  *
  * @author Werner Randelshofer
  */
-public class GrapherActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
+public class GrapherActivity extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
@@ -189,6 +189,9 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         LayerFigure layer = new LayerFigure();
         layer.set(StyleableFigure.ID, "layer1");
         d.addChild(layer);
+        for (final Figure f : d.preorderIterable()) {
+            f.addNotify(d);
+        }
         applyUserAgentStylesheet(d);
         drawingView.setDrawing(d);
         return CompletableFuture.completedFuture(null);
@@ -462,7 +465,7 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                 GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
         );
 
-        Preferences prefs = Preferences.userNodeForPackage(GrapherActivityController.class);
+        Preferences prefs = Preferences.userNodeForPackage(GrapherActivity.class);
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
@@ -482,8 +485,8 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
                 io.write(uri, drawing, workState);
             } else {
-                FigureFactory factory = new DefaultFigureFactory();
-                IdFactory idFactory = new SimpleFigureIdFactory();
+                DefaultFigureFactory factory = new DefaultFigureFactory();
+                IdFactory idFactory = factory.getIdFactory();
                 SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
                 io.write(uri, drawing, workState);
             }
@@ -499,13 +502,13 @@ public class GrapherActivityController extends AbstractDocumentBasedActivity imp
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
                     ImmutableLists.of(
-                            GrapherActivityController.class.getResource("user-agent.css").toURI()));
+                            GrapherActivity.class.getResource("user-agent.css").toURI()));
             d.updateStyleManager();
             final SimpleRenderContext ctx = new SimpleRenderContext();
             for (final Figure f : d.preorderIterable()) {
-                f.updateCss();
+                f.updateCss(ctx);
             }
-            d.layoutAll(ctx);
+            // d.layoutAll(ctx);
 
         } catch (final URISyntaxException e) {
             throw new RuntimeException("can't load my own resources", e);

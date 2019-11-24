@@ -118,7 +118,7 @@ public class FigureTest {
             return null;
         }
 
-        public void updateCss() {
+        public void updateCss(RenderContext ctx) {
         }
 
         public void addNotify(Drawing drawing) {

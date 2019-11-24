@@ -5,9 +5,11 @@
 package org.jhotdraw8.css;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssConverterFactory;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.text.PatternConverter;
 
 import java.util.Objects;
@@ -39,6 +41,19 @@ public class CssColor implements Paintable {
         this(null, color);
     }
 
+    public CssColor(@Nullable String name) {
+        this.name = name;
+        Color computedColor = DefaultSystemColorConverter.LIGHT_SYSTEM_COLORS.get(name);
+        if (computedColor == null) {
+            try {
+                computedColor = Color.web(name);
+            } catch (IllegalArgumentException e) {
+                computedColor = Color.BLACK;
+            }
+        }
+        this.color = computedColor;
+    }
+
     public CssColor(@Nullable String name, @NonNull Color color) {
         this.name = name == null ? toName(color) : name;
         this.color = color;
@@ -50,6 +65,11 @@ public class CssColor implements Paintable {
     }
 
     @NonNull
+    public Color getColor(SystemColorConverter converter) {
+        return converter.convert(this);
+    }
+
+    @NonNull
     public Color getColor() {
         return color;
     }
@@ -58,6 +78,12 @@ public class CssColor implements Paintable {
     @Override
     public Color getPaint() {
         return color;
+    }
+
+    @Override
+    public @Nullable Paint getPaint(RenderContext ctx) {
+        return ctx.getNonNull(RenderContext.SYSTEM_COLOR_CONVERTER_KEY)
+                .convert(this);
     }
 
     @NonNull
@@ -109,7 +135,7 @@ public class CssColor implements Paintable {
 
     @Nullable
     public static CssColor valueOf(@NonNull String value) {
-        return new CssColor(value, Color.valueOf(value));
+        return new CssColor(value);
     }
 
     @Nullable

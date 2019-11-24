@@ -26,6 +26,7 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
@@ -103,7 +104,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @NonNull
     public Bounds getLayoutBounds() {
         Text textNode = new Text();
-        updateTextNode(null, textNode);
+        updateTextNode(new SimpleRenderContext(), textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = getStyledNonNull(PADDING).getConvertedValue();
 

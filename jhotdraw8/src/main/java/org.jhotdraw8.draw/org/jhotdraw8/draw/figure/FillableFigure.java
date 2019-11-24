@@ -48,7 +48,7 @@ public interface FillableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyFillableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
-        Paint p = Paintable.getPaint(getStyled(FILL));
+        Paint p = Paintable.getPaint(getStyled(FILL), ctx);
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);
         }

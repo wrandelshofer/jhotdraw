@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawingEditor;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -65,13 +64,13 @@ public class ImageCreationTool extends CreationTool {
             uriChooser = createURIChooser();
         }
         URI uri = uriChooser.showDialog(node);
-        if (uri != null) {
+        /*if (uri != null) {
             Drawing drawing = getDrawingView().getDrawing();
             URI documentHome = drawing.get(Drawing.DOCUMENT_HOME);
             if (documentHome != null) {
                 uri = documentHome.relativize(uri);
             }
-        }
+        }*/
         return uri;
     }
 }
