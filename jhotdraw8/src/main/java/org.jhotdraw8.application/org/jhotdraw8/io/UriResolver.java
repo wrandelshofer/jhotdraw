@@ -53,12 +53,18 @@ public class UriResolver implements Function<URI, URI> {
             // Paths is better at relativizing URIs than URI.relativize().
             if ("file".equals(external.getScheme()) &&
                     ("file".equals(resolved.getScheme()) || resolved.getScheme() == null)) {
-                Path resolvedPath = Paths.get(external).relativize(Paths.get(resolved.getPath()));
-                if (resolvedPath.isAbsolute()) {
-                    resolved = resolvedPath.toUri();
+                Path other = Paths.get(resolved.getPath());
+                Path relativizedPath;
+                if (other.isAbsolute()) {
+                    relativizedPath = Paths.get(external).relativize(other);
+                } else {
+                    relativizedPath = other;
+                }
+                if (relativizedPath.isAbsolute()) {
+                    resolved = relativizedPath.toUri();
                 } else {
                     try {
-                        resolved = new URI(null, null, resolvedPath.toString()
+                        resolved = new URI(null, null, relativizedPath.toString()
                                 , null, null);
                     } catch (URISyntaxException e) {
                         resolved = uri;// we tried hard, but we failed
