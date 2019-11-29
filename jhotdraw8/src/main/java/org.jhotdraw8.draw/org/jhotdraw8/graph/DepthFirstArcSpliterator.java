@@ -21,23 +21,23 @@ import java.util.function.Predicate;
  * @param <V> the vertex type
  * @author Werner Randelshofer
  */
-public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
+public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterator<Arc<V, A>> {
 
     @NonNull
-    private final Function<V, Iterable<V>> nextFunction;
+    private final Function<V, Iterable<Arc<V, A>>> nextFunction;
     @NonNull
-    private final Deque<V> deque;
+    private final Deque<Arc<V, A>> deque;
     @NonNull
-    private final Predicate<V> visited;
+    private final Predicate<Arc<V, A>> visited;
 
     /**
      * Creates a new instance.
      *
-     * @param nextNodesFunction the nextFunction
-     * @param root               the root vertex
+     * @param nextArcsFunction the nextFunction
+     * @param root             the root vertex
      */
-    public DepthFirstSpliterator(Function<V, Iterable<V>> nextNodesFunction, V root) {
-        this(nextNodesFunction, root, new HashSet<>()::add);
+    public DepthFirstArcSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root) {
+        this(nextArcsFunction, root, new HashSet<>()::add);
     }
 
     /**
@@ -49,7 +49,7 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
      *                     if the specified vertex has been visited, and marks the specified vertex
      *                     as visited.
      */
-    public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable Predicate<V> visited) {
+    public DepthFirstArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable Predicate<Arc<V, A>> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction is null");
         Objects.requireNonNull(root, "root is null");
@@ -57,8 +57,9 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
-        deque.push(root);
-        visited.test(root);
+        Arc<V, A> rootArc = new Arc<>(null, root, null);
+        deque.push(rootArc);
+        visited.test(rootArc);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
         if (current == null) {
             return false;
         }
-        for (V next : nextFunction.apply(current)) {
+        for (Arc<V, A> next : nextFunction.apply(current.getEnd())) {
             if (visited.test(next)) {
                 deque.addLast(next);
             }

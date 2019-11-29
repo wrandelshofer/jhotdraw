@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.Objects;
+
 /**
  * Data record for an arrow with associated data in a directed graph
  * ("arrow record" is abbreviated to "arc").
@@ -35,5 +37,33 @@ public class Arc<V, A> {
 
     public V getStart() {
         return start;
+    }
+
+    @Override
+    public String toString() {
+        return "Arc{" +
+                "" + start +
+                "->" + end +
+                ", " + data +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Arc)) {
+            return false;
+        }
+        Arc<?, ?> arc = (Arc<?, ?>) o;
+        return Objects.equals(start, arc.start) &&
+                end.equals(arc.end) &&
+                Objects.equals(data, arc.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end, data);
     }
 }
