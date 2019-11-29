@@ -477,9 +477,27 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                     value = uriResolver.apply((URI) value);
                 }
 
-                figure.set(key, value);
+                figure.set(key, deduplicate(value));
             }
         }
+    }
+
+    private Map<Object, Object> deduplicationMap = new HashMap<>();
+
+    /**
+     * Most values that are set from style sheet will be the same.
+     * So we deduplicate multiple instances.
+     *
+     * @param value a value
+     * @return the deduplicated value
+     */
+    private Object deduplicate(Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        Object prevValue = deduplicationMap.putIfAbsent(value, value);
+        return prevValue == null ? value : prevValue;
     }
 
     private IOException createIOException(@NonNull Element elem, IOException ex) {

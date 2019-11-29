@@ -58,7 +58,7 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
         }
         Object obj = idFactory.getObject(str);
         if (obj == null) {
-            LOGGER.warning("Could not find an object with this id. id=\"" + str + "\".");
+            LOGGER.fine("Could not find an object with this id. id=\"" + str + "\".");
         }
 
         @SuppressWarnings("unchecked")

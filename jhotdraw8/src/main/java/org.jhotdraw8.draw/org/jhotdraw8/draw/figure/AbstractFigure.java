@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ObjectPropertyBase;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -14,6 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ModifiableObservableSet;
 import org.jhotdraw8.collection.SharedKeysMap;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -24,7 +24,6 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -129,7 +128,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     @Override
     public final ObservableSet<Figure> getLayoutObservers() {
         if (dependentFigures == null) {
-            dependentFigures = FXCollections.observableSet(new LinkedHashSet<>());
+            dependentFigures = new ModifiableObservableSet<>();
         }
         return dependentFigures;
     }

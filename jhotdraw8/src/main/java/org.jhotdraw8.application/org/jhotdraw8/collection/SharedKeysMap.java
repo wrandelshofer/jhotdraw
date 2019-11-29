@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -40,7 +40,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private final Map<K, Integer> keyMap;
     private int size;
     @NonNull
-    private final ArrayList<Object> values;
+    private Object[] values;
 
     /**
      * Creates a new instance with a synchronized linked hash map for its
@@ -58,12 +58,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
      *               the keyMap if necessary, and assign {@code keyMap.size()} to each new
      *               key. Keys may be added to this map, but may never be removed.
      *               <p>
-     *               This map must be immutable or synchronized if the key map
-     *               is shared between instances of SharedKeysMap on different threads.
+     *               This map must be immutable.
      */
     public SharedKeysMap(@NonNull Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
-        this.values = new ArrayList<>(keyMap.size());
+        this.values = new Object[keyMap.size()];
     }
 
     @Override
@@ -100,7 +99,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     public void clear() {
-        values.clear();
+        Arrays.fill(values, null);
         size = 0;
     }
 
@@ -109,15 +108,15 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         Integer index = keyMap.get(key);
 
         boolean result = index != null
-                && index < values.size()
-                && values.get(index) != null;
+                && index < values.length
+                && values[index] != null;
         return result;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        for (int i = 0, n = values.size(); i < n; i++) {
-            if (Objects.equals(values.get(i), value)) {
+        for (int i = 0, n = values.length; i < n; i++) {
+            if (Objects.equals(values[i], value)) {
                 return true;
             }
         }
@@ -130,8 +129,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
             index = keyMap.size();
             keyMap.put(key, index);
         }
-        for (int i = values.size(), n = (1 + index); i < n; i++) {
-            values.add(null);
+        if (values.length < keyMap.size()) {
+            Object[] temp = new Object[keyMap.size()];
+            System.arraycopy(values, 0, temp, 0, values.length);
+            values = temp;
         }
         return index;
     }
@@ -150,22 +151,18 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return index == null ? null : getValue(index, (K) key);
     }
 
-    public int getIdentityHash() {
-        return System.identityHashCode(values);
-    }
-
     @Nullable
     @SuppressWarnings("unchecked")
     private V getValue(int index, K key) {
         Object value;
         final int arrayIndex = index;
-        value = arrayIndex < values.size() ? values.get(arrayIndex) : null;
+        value = arrayIndex < values.length ? values[arrayIndex] : null;
         return value == NULL_VALUE ? null : (V) value;
     }
 
     private boolean hasValue(int index) {
         final int arrayIndex = index;
-        return arrayIndex < values.size() && values.get(arrayIndex) != null;
+        return arrayIndex < values.length && values[arrayIndex] != null;
     }
 
     @Override
@@ -212,11 +209,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private V removeValue(int index, K key) {
         final int arrayIndex = index;
 
-        Object oldValue = arrayIndex < values.size() ? values.get(arrayIndex) : null;
+        Object oldValue = arrayIndex < values.length ? values[arrayIndex] : null;
         if (oldValue == null) {
             return null;
         } else {
-            values.set(index, null);
+            values[index] = null;
             size--;
             V returnValue = (V) (oldValue == NULL_VALUE ? null : oldValue);
             if (hasObservers()) {
@@ -232,11 +229,11 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     @Nullable
     @SuppressWarnings("unchecked")
     private V setValue(int index, K key, V newValue) {
-        V oldValue = (V) values.get(index);
+        V oldValue = (V) values[index];
         if (oldValue == null) {
             size++;
         }
-        values.set(index, newValue);
+        values[index] = newValue;
 
         V returnValue = oldValue == NULL_VALUE ? null : oldValue;
         if (hasObservers() && (oldValue == null || !Objects.equals(oldValue, newValue))) {
