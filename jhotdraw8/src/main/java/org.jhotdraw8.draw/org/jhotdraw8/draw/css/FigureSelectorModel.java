@@ -459,31 +459,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
                         } else {
                             convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                         }
-                        elem.setStyled(origin, k, deduplicate(convertedValue));
+                        elem.setStyled(origin, k, convertedValue);
                     } catch (IOException ex) {
                         LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
                     }
                 }
             }
         }
-    }
-
-    private Map<Object, Object> deduplicationMap = new HashMap<>();
-
-    /**
-     * Most values that are set from style sheet will be the same.
-     * So we deduplicate multiple instances.
-     *
-     * @param value a value
-     * @return the deduplicated value
-     */
-    private Object deduplicate(Object value) {
-        if (value == null) {
-            return null;
-        }
-
-        Object prevValue = deduplicationMap.putIfAbsent(value, value);
-        return prevValue == null ? value : prevValue;
     }
 
     /**

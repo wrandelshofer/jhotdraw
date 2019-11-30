@@ -45,12 +45,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Math.max;
@@ -194,7 +194,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * FIXME should be private!
      */
-    Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = new HashMap<>();
+    Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = new ConcurrentHashMap<>();
 
     static void getDeclaredMapAccessors(@NonNull Class<?> clazz, @NonNull Collection<MapAccessor<?>> keys) {
         try {

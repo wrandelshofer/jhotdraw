@@ -251,7 +251,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public void updateCss(RenderContext ctx) {
-        getStyleableMap().clearAuthorAndInlineValues();
         Drawing d = getDrawing();
         if (d != null) {
             StylesheetsManager<Figure> styleManager = d.getStyleManager();

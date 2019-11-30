@@ -158,6 +158,15 @@ public interface Drawing extends Figure {
         }
     }
 
+    default void updateAllStylesheets(@NonNull RenderContext ctx) {
+        StylesheetsManager<Figure> styleManager = getStyleManager();
+        styleManager.applyStylesheetsTo(preorderIterable());
+        for (Figure f : preorderIterable()) {
+            f.invalidateTransforms();
+        }
+
+    }
+
     /**
      * Returns all figures in topological order according to their layout dependencies.
      * Independent figures come first.

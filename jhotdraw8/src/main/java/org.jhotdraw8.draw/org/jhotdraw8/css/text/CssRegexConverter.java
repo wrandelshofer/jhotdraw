@@ -6,148 +6,70 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.RegexReplace;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * CssRegexConverter.
  * <p>
  * Parses the following EBNF:
  * <pre>
- * RegexReplace := "none" | "regex(" Find  ","   [ Replace ] ")" ;
+ * RegexReplace := "none" | "replace(" Find  ","   [ Replace ] ")" ;
  * Find := TT_STRING;
  * Replace := TT_STRING;
  * </pre>
  *
  * @author Werner Randelshofer
  */
-public class CssRegexConverter implements Converter<RegexReplace> {
-
-    private final CssStringConverter stringConverter = new CssStringConverter();
-    private final boolean nullable;
-
-    /**
-     * Creates a new instance.
-     *
-     * @param nullable Whether the regular expression is nullable.
-     */
-    public CssRegexConverter(boolean nullable) {
-        this.nullable = nullable;
+public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
+    public CssRegexConverter(final boolean nullable) {
+        super(nullable);
     }
 
     @NonNull
     @Override
-    public String getHelpText() {
-        return "Format of ⟨RegReplace⟩: none | replace(⟨Match⟩, ⟨Replace⟩)"
+    public RegexReplace parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨replace⟩: function expected.");
+        if (!"replace".equals(tt.currentStringNonNull())) {
+            throw tt.createParseException("⟨replace⟩: replace() function expected.");
+        }
+        tt.requireNextToken(CssTokenType.TT_STRING, "⟨replace⟩: find string expected.");
+        String find = tt.currentStringNonNull();
+        String replace;
+        if (tt.next() != CssTokenType.TT_COMMA) {
+            tt.pushBack();
+        }
+        if (tt.next() == CssTokenType.TT_STRING) {
+            replace = tt.currentStringNonNull();
+        } else {
+            tt.pushBack();
+            replace = null;
+        }
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨replace⟩: right bracket expected.");
+        return new RegexReplace(find, replace);
+    }
+
+    @Override
+    public @Nullable String getHelpText() {
+        return "Format of ⟨replace⟩: none | replace(⟨Match⟩, ⟨Replace⟩)"
                 + "\nFormat of ⟨Match⟩: \"match\""
                 + "\nFormat of ⟨Replace⟩: \"replacement\"";
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable RegexReplace value) throws IOException {
-        if (value == null) {
-            if (nullable) {
-                out.append(CssTokenType.IDENT_NONE);
-                return;
-            } else {
-                throw new IllegalArgumentException("value is null");
-            }
-        }
-        String find = value.getFind();
-        if (find == null) {
-            out.append(CssTokenType.IDENT_NONE);
-            return;
-        }
-        out.append("replace(");
-
-        stringConverter.toString(out, find);
-
-        String replace = value.getReplace();
-        if (replace != null) {
-            out.append(", ");
-            stringConverter.toString(out, replace);
-        }
-        out.append(')');
-    }
-
-    @Nullable
-    @Override
-    public RegexReplace fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
-        CssTokenizer tt = new StreamCssTokenizer(new StringReader(in == null ? "" : in.toString()));
-        String find = null;
-        String replace = null;
-
-        String msg = nullable ? "\"replace(\" or \"none\" expected" : "\"replace(\" expected";
-
-        switch (tt.next()) {
-            case CssTokenType.TT_FUNCTION:
-                if ("replace".equals(tt.currentString())) {
-                } else {
-                    throw new ParseException(msg, tt.getStartPosition());
-                }
-                break;
-            case CssTokenType.TT_IDENT:
-                if ("none".equals(tt.currentString())) {
-                    in.position(tt.getNextPosition());
-                    if (nullable) {
-                        return null;
-                    }
-                    throw new ParseException(msg, tt.getStartPosition());
-                } else {
-                    throw new ParseException(msg, tt.getStartPosition());
-                }
-            default:
-                throw new ParseException(msg, tt.getStartPosition());
-        }
-        switch (tt.next()) {
-            case CssTokenType.TT_STRING:
-                find = tt.currentString();
-                break;
-            default:
-                throw new ParseException("find string expected", tt.getStartPosition());
-        }
-
-        switch (tt.next()) {
-            case ',':
-                break;
-            default:
-                tt.pushBack();
-                break;
-        }
-
-        switch (tt.next()) {
-            case CssTokenType.TT_STRING:
-                replace = tt.currentString();
-                break;
-            case CssTokenType.TT_EOF:
-                break;
-            default:
-                replace = null;
-                tt.pushBack();
-        }
-        switch (tt.next()) {
-            case ')':
-                break;
-            default:
-                throw new ParseException("closing bracket \")\" expected", tt.getStartPosition());
-        }
-        in.position(tt.getNextPosition());
-        return new RegexReplace(find, replace);
-    }
-
-    @Nullable
-    @Override
-    public RegexReplace getDefaultValue() {
-        return null;
+    protected <TT extends RegexReplace> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_FUNCTION, "replace"));
+        out.accept(new CssToken(CssTokenType.TT_STRING, value.getFind()));
+        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        out.accept(new CssToken(CssTokenType.TT_STRING, value.getReplace()));
+        out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
     }
 
 }

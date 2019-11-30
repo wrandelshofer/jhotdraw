@@ -56,6 +56,12 @@ public interface StylesheetsManager<E> {
      */
     void addStylesheet(StyleOrigin origin, String stylesheet);
 
+    default void applyStylesheetsTo(@NonNull Iterable<E> iterable) {
+        for (E e : iterable) {
+            applyStylesheetsTo(e);
+        }
+    }
+
     /**
      * Removes all stylesheets with the specified origin.
      *
