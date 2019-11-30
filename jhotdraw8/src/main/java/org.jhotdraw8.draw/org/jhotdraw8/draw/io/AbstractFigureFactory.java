@@ -15,6 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
@@ -134,10 +135,16 @@ public abstract class AbstractFigureFactory implements FigureFactory {
      *                    new figure and for determining the name of a figure.
      */
     public void addFigure(String name, @NonNull Class<? extends Figure> figureClass) {
+        final Constructor<? extends Figure> declaredConstructor;
+        try {
+            declaredConstructor = figureClass.getDeclaredConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("no no-args constructor in " + figureClass, e);
+        }
         nameToFigure.put(name, () -> {
             try {
-                return figureClass.getDeclaredConstructor().newInstance();
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                return declaredConstructor.newInstance();
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new InternalError("Couldn't instantiate " + figureClass, e);
             }
         });
