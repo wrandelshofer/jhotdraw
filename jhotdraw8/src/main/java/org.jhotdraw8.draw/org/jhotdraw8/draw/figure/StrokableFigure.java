@@ -90,7 +90,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("black", Color.BLACK));
+    NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("canvastext", Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>

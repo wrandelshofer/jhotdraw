@@ -33,7 +33,7 @@ public interface FillableFigure extends Figure {
      * <p>
      * Default value: {@code Color.WHITE}.
      */
-    NullablePaintableStyleableKey FILL = new NullablePaintableStyleableKey("fill", new CssColor("white", Color.WHITE));
+    NullablePaintableStyleableKey FILL = new NullablePaintableStyleableKey("fill", new CssColor("canvas", Color.WHITE));
     /**
      * Defines the fill-rule used for filling the interior of the figure..
      * <p>

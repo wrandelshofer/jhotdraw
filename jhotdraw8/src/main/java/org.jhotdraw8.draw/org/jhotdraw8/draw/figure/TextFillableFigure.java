@@ -25,7 +25,7 @@ public interface TextFillableFigure extends Figure {
      * Defines the paint used for filling the interior of the text. Default
      * value: {@code Color.BLACK}.
      */
-    NullablePaintableStyleableKey TEXT_FILL = new NullablePaintableStyleableKey("textFill", new CssColor("black", Color.BLACK));
+    NullablePaintableStyleableKey TEXT_FILL = new NullablePaintableStyleableKey("textFill", new CssColor("canvastext", Color.BLACK));
 
     /**
      * Updates a text node with label properties.
