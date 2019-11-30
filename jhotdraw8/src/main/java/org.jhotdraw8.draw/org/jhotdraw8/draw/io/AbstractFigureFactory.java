@@ -521,9 +521,10 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     public <T> T stringToValue(@NonNull MapAccessor<T> key, @NonNull String string) throws IOException {
         try {
             Converter<T> converter;
-            if (keyValueFromXML.containsKey(key)) {
+            final Converter<?> converterFromKey = keyValueFromXML.get(key);
+            if (converterFromKey != null) {
                 @SuppressWarnings("unchecked")
-                Converter<T> suppress = converter = (Converter<T>) keyValueFromXML.get(key);
+                Converter<T> suppress = converter = (Converter<T>) converterFromKey;
             } else {
                 @SuppressWarnings("unchecked")
                 Converter<T> suppress = converter = (Converter<T>) valueFromXML.get(key.getFullValueType());
