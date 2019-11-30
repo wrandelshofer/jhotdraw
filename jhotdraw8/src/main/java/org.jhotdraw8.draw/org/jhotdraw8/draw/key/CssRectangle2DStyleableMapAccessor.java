@@ -101,16 +101,13 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
                 heightKey.get(a));
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssRectangle2D value) {
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssRectangle2D value) {
         Objects.requireNonNull(value, "value is null");
-        CssRectangle2D oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
         widthKey.put(a, value.getWidth());
         heightKey.put(a, value.getHeight());
-        return oldValue;
     }
 
     @NonNull

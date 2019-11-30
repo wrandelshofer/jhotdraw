@@ -97,16 +97,13 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
-    @NonNull
     @Override
-    public BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         Objects.requireNonNull(value, "value is null");
-        BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
         widthKey.put(a, value.getWidth());
         heightKey.put(a, value.getHeight());
-        return oldValue;
     }
 
     @NonNull

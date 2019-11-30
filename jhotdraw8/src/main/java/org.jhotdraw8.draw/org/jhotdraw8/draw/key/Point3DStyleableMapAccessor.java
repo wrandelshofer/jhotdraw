@@ -90,14 +90,11 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return new Point3D(xKey.get(a), yKey.get(a), zKey.get(a));
     }
 
-    @NonNull
     @Override
-    public Point3D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Point3D value) {
-        Point3D oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull Point3D value) {
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
         zKey.put(a, value.getZ());
-        return oldValue;
     }
 
     @NonNull

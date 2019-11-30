@@ -101,8 +101,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
     }
 
     @Override
-    public CssFont put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssFont value) {
-        CssFont oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssFont value) {
         if (value == null) {
             familyKey.put(a, null);
             weightKey.put(a, null);
@@ -114,7 +113,6 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
             postureKey.put(a, value.getPosture());
             sizeKey.put(a, value.getSize());
         }
-        return oldValue;
     }
 
     @Override

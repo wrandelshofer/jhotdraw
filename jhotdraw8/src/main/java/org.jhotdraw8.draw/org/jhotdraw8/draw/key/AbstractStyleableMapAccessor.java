@@ -165,6 +165,15 @@ public abstract class AbstractStyleableMapAccessor<T>
         return defaultValue;
     }
 
+    @Nullable
+    @Override
+    public final T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
+        T oldValue = get(a);
+        set(a, value);
+        return oldValue;
+    }
+
+
     /**
      * Returns the name string.
      */

@@ -104,15 +104,12 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         );
     }
 
-    @NonNull
     @Override
-    public Insets put(@NonNull Map<? super Key<?>, Object> a, @NonNull Insets value) {
-        Insets oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull Insets value) {
         topKey.put(a, value.getTop());
         rightKey.put(a, value.getRight());
         bottomKey.put(a, value.getBottom());
         leftKey.put(a, value.getLeft());
-        return oldValue;
     }
 
     @NonNull

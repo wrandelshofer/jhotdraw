@@ -246,7 +246,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> T set(@NonNull Figure figure, @NonNull MapAccessor<T> key, @Nullable T newValue) {
         if (key instanceof Key<?>) {
-            T oldValue = figure.set(key, newValue);
+            T oldValue = figure.put(key, newValue);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
             @SuppressWarnings("unchecked")
             Key<Object> keyObject = (Key<Object>) key;

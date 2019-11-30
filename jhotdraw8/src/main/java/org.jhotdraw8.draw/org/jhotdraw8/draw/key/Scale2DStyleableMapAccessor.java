@@ -87,13 +87,10 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return new Point2D(xKey.get(a), yKey.get(a));
     }
 
-    @NonNull
     @Override
-    public Point2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Point2D value) {
-        Point2D oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull Point2D value) {
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
-        return oldValue;
     }
 
     @NonNull

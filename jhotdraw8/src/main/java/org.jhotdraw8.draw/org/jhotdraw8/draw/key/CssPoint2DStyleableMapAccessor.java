@@ -100,13 +100,10 @@ public class CssPoint2DStyleableMapAccessor
 
     }
 
-    @NonNull
     @Override
-    public CssPoint2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull CssPoint2D value) {
-        CssPoint2D oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull CssPoint2D value) {
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
-        return oldValue;
     }
 
     @NonNull

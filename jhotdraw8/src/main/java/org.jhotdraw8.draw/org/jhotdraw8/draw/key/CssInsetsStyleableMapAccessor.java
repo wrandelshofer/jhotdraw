@@ -109,10 +109,9 @@ public class CssInsetsStyleableMapAccessor
         );
     }
 
-    @Nullable
+
     @Override
-    public CssInsets put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
-        CssInsets oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
         if (value == null) {
             topKey.put(a, null);
             rightKey.put(a, null);
@@ -124,7 +123,6 @@ public class CssInsetsStyleableMapAccessor
             bottomKey.put(a, value.getBottom());
             leftKey.put(a, value.getLeft());
         }
-        return oldValue;
     }
 
     @Nullable

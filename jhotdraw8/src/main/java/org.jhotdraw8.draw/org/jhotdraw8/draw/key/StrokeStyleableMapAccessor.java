@@ -131,8 +131,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public CssStroke put(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
-        CssStroke oldValue = get(a);
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStroke value) {
         if (value == null) {
             widthKey.put(a, CssSize.ONE);
             paintKey.put(a, null);
@@ -152,7 +151,6 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
             lineCapKey.put(a, value.getLineCap());
             miterLimitKey.put(a, value.getMiterLimit());
         }
-        return oldValue;
     }
 
     @Override

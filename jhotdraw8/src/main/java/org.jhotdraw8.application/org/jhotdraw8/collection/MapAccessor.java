@@ -61,6 +61,16 @@ public interface MapAccessor<T> extends Serializable {
     T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value);
 
     /**
+     * Sets the value of the attribute denoted by this accessor from a Map.
+     *
+     * @param a     A map.
+     * @param value The new value. Subclasses may require that the value is non-null.
+     */
+    default void set(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
+        put(a, value);
+    }
+
+    /**
      * Removes the value of the attribute denoted by this accessor from a Map.
      *
      * @param a A map.

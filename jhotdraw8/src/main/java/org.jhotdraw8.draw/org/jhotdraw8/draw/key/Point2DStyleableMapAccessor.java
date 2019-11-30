@@ -97,14 +97,11 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return new Point2D(xKey.getNonNull(a), yKey.getNonNull(a));
     }
 
-    @NonNull
     @Override
-    public Point2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
         Objects.requireNonNull(value, "value is null");
-        Point2D oldValue = get(a);
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
-        return oldValue;
     }
 
     @NonNull
