@@ -1263,17 +1263,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Provides an alternative class name for styling.
-     *
-     * @return an alternative class name for styling - null if unused
-     */
-    @Nullable
-    default String getAlternativeStyleClass() {
-        String name = getClass().getName();
-        return name.substring(name.lastIndexOf('.') + 1);
-    }
-
-    /**
      * Returns true if this figure should be deleted if its last layout
      * subject is deleted.
      *
