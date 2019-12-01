@@ -10,7 +10,6 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;
@@ -77,7 +76,7 @@ public class ListCssTokenizer implements CssTokenizer {
     }
 
     @Override
-    public int next() throws IOException {
+    public int next() {
         skipWhitespace();
         while (skipComment()) {
             skipWhitespace();
@@ -86,7 +85,7 @@ public class ListCssTokenizer implements CssTokenizer {
     }
 
     @Override
-    public int nextNoSkip() throws IOException {
+    public int nextNoSkip() {
         if (pushBack) {
             pushBack = false;
         } else {
@@ -108,7 +107,7 @@ public class ListCssTokenizer implements CssTokenizer {
     }
 
 
-    private void skipWhitespace() throws IOException {
+    private void skipWhitespace() {
         while (nextNoSkip() == TT_S//
                 || current.getType() == TT_CDC//
                 || current.getType() == TT_CDO) {
@@ -116,7 +115,7 @@ public class ListCssTokenizer implements CssTokenizer {
         pushBack();
     }
 
-    private boolean skipComment() throws IOException {
+    private boolean skipComment() {
         boolean didSkip = false;
         while (nextNoSkip() == TT_COMMENT//
                 || current.getType() == TT_BAD_COMMENT) {

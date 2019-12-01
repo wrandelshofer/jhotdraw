@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css;
 
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.SimpleMapProperty;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -21,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -29,14 +28,7 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-public class DocumentSelectorModel implements SelectorModel<Element> {
-
-    private final MapProperty<String, Set<Element>> additionalPseudoClassStates = new SimpleMapProperty<>();
-
-    @NonNull
-    public MapProperty<String, Set<Element>> additionalPseudoClassStatesProperty() {
-        return additionalPseudoClassStates;
-    }
+public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     @Override
     public String getAttributeAsString(@NonNull Element elem, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
@@ -70,7 +62,10 @@ public class DocumentSelectorModel implements SelectorModel<Element> {
 
     @Override
     public boolean hasType(@NonNull Element elem, @Nullable String namespace, @NonNull String type) {
-        String value = elem.getNodeName();
+        String value = elem.getLocalName();
+        if (namespace != null && !Objects.equals(namespace, elem.getNamespaceURI())) {
+            return false;
+        }
         return value != null && value.equals(type);
     }
 

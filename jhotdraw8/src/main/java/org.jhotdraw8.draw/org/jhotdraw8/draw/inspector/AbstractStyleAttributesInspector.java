@@ -356,7 +356,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         Declaration d = entry == null ? null : entry.declaration;
         String helpText = null;
         if (d != null) {
-            helpText = helpTexts.get(new QualifiedName(d.getPropertyNamespace(), d.getPropertyName()));
+            helpText = helpTexts.get(new QualifiedName(d.getNamespace(), d.getPropertyName()));
         }
 
         StylesheetsManager<E> sm = getStyleManager();
@@ -507,7 +507,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             boolean multipleAccessorTypes = false;
             for (E f : getEntities()) {
                 if (null != styleRule.getSelectorGroup().matchSelector(fsm, f)) {
-                    WriteableStyleableMapAccessor<?> accessor = getAccessor(fsm, f, declaration.getPropertyNamespace(), declaration.getPropertyName());
+                    WriteableStyleableMapAccessor<?> accessor = getAccessor(fsm, f, declaration.getNamespace(), declaration.getPropertyName());
                     if (selectedAccessor == null || selectedAccessor == accessor) {
                         selectedAccessor = accessor;
                         selectedF.add(f);

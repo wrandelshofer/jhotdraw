@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class Declaration extends AST {
     @Nullable
-    private final String propertyNamespace;
+    private final String namespace;
     @NonNull
     private final String propertyName;
     @NonNull
@@ -29,16 +29,16 @@ public class Declaration extends AST {
     private int startPos = -1;
     private int endPos = -1;
 
-    public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, CssToken term) {
-        this(propertyNamespace, propertyName, Arrays.asList(term));
+    public Declaration(@Nullable String namespace, @NonNull String propertyName, CssToken term) {
+        this(namespace, propertyName, Arrays.asList(term));
     }
 
-    public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, @NonNull List<CssToken> terms) {
-        this(propertyNamespace, propertyName, terms, -1, -1);
+    public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms) {
+        this(namespace, propertyName, terms, -1, -1);
     }
 
-    public Declaration(@Nullable String propertyNamespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
-        this.propertyNamespace = propertyNamespace;
+    public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
+        this.namespace = namespace;
         this.propertyName = propertyName;
         this.terms = ImmutableLists.ofCollection(terms);
         this.startPos = startPos;
@@ -46,8 +46,8 @@ public class Declaration extends AST {
     }
 
     @Nullable
-    public String getPropertyNamespace() {
-        return propertyNamespace;
+    public String getNamespace() {
+        return namespace;
     }
 
     @NonNull

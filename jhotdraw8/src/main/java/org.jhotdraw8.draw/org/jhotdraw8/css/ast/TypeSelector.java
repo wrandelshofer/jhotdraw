@@ -32,7 +32,9 @@ public class TypeSelector extends SimpleSelector {
     @NonNull
     @Override
     public String toString() {
-        return "Type:" + type;
+        return "Type:"
+                + (namespace == null ? "" : namespace + "|")
+                + type;
     }
 
     @Nullable

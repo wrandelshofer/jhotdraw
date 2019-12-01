@@ -58,6 +58,7 @@ public class CssParserTest {
         }
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(before)));
         //---
@@ -179,6 +180,7 @@ public class CssParserTest {
         }
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
         Document doc = builder.parse(new InputSource(new StringReader(xml)));
         //---
@@ -357,6 +359,9 @@ public class CssParserTest {
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
                 dynamicTest("3", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); AB {x:y}", //
+                        "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><AB/></xml>",//
+                        "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><AB x=\"y\"/></xml>")),
+                dynamicTest("3 with any NS", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); *|AB {x:y}", //
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
                 dynamicTest("4", () -> testAtRule(true, "@namespace svg url(http://www.w3.org/2000/svg); AB {x:y}", //
@@ -428,4 +433,40 @@ public class CssParserTest {
     public static void testSelector(boolean valid, @NonNull String stylesheet, @NonNull String before, String expectedValue) throws Exception {
         testCssSyntax(valid, stylesheet, before, expectedValue);
     }
+
+    /**
+     * Test selectors with name space.
+     */
+    @NonNull
+    @TestFactory
+    public List<DynamicTest> testSelectorNSFactory() {
+        return Arrays.asList(
+                dynamicTest("type selector not ns aware", () -> testSelectorNS(true, "a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector in all ns", () -> testSelectorNS(true, "*|a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with ns prefix as string", () -> testSelectorNS(true, "@namespace ns \"http://n1.com\"; ns|a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with ns prefix as url", () -> testSelectorNS(true, "@namespace ns url(http://n1.com); ns|a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with default ns as string", () -> testSelectorNS(true, "@namespace \"http://n1.com\"; a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector with default ns as url", () -> testSelectorNS(true, "@namespace url(http://n1.com); a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>"))
+        );
+    }
+
+    /**
+     * Test of selectors with namespace.
+     */
+    public static void testSelectorNS(boolean valid, @NonNull String stylesheet, @NonNull String before, String expectedValue) throws Exception {
+        testCssSyntax(valid, stylesheet, before, expectedValue);
+    }
+
 }

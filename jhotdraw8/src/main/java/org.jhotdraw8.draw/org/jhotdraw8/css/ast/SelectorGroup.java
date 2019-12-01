@@ -92,7 +92,7 @@ public class SelectorGroup extends Selector {
      * no selector matches
      */
     @Nullable
-    public <T> Selector matchSelector(SelectorModel<T> model, T element) {
+    public <T> Selector matchSelector(@NonNull SelectorModel<T> model, @NonNull T element) {
         for (Selector s : selectors) {
             T result = s.match(model, element);
             if (result != null) {

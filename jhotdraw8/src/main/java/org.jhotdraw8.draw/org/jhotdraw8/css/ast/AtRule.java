@@ -38,6 +38,7 @@ public class AtRule extends Rule {
         StringBuilder buf = new StringBuilder("AtRule: ");
         buf.append(atKeyword);
         if (!header.isEmpty()) {
+            buf.append(" ");
             for (CssToken t : header) {
                 buf.append(t.fromToken());
             }

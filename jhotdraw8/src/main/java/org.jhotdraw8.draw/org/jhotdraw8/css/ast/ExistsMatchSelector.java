@@ -20,32 +20,32 @@ import java.util.function.Consumer;
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
     @Nullable
-    private final String attributeNamespace;
+    private final String namespace;
     @NonNull
     private final String attributeName;
 
-    public ExistsMatchSelector(@Nullable String attributeNamespace, @NonNull String attributeName) {
-        this.attributeNamespace = attributeNamespace;
+    public ExistsMatchSelector(@Nullable String namespace, @NonNull String attributeName) {
+        this.namespace = namespace;
         this.attributeName = attributeName;
     }
 
     @Nullable
     @Override
     protected <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
-        return model.hasAttribute(element, attributeNamespace, attributeName) ? element : null;
+        return model.hasAttribute(element, namespace, attributeName) ? element : null;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "[" + attributeNamespace + ":" + attributeName + ']';
+        return "[" + namespace + ":" + attributeName + ']';
     }
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
-        if (attributeNamespace != null) {
-            consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeNamespace));
+        if (namespace != null) {
+            consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeName));

@@ -4,9 +4,6 @@
  */
 package org.jhotdraw8.draw.css;
 
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.SimpleMapProperty;
-import javafx.collections.FXCollections;
 import javafx.css.PseudoClass;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
@@ -14,12 +11,12 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.css.AbstractSelectorModel;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.ListCssTokenizer;
 import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
@@ -48,10 +45,10 @@ import java.util.stream.Collectors;
  *
  * @author Werner Randelshofer
  */
-public class FigureSelectorModel implements SelectorModel<Figure> {
+public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
+    public final static String JAVA_CLASS_NAMESPACE = "http://java.net";
 
     private final static Logger LOGGER = Logger.getLogger(FigureSelectorModel.class.getName());
-    private final MapProperty<String, Set<Figure>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
     @NonNull
     private HashSet<Class<?>> mappedFigureClasses = new HashSet<>();
     /**
@@ -69,10 +66,6 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     @NonNull
     private Map<Class<? extends Figure>, Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>>> figureToMetaMap = new HashMap<>();
 
-    @NonNull
-    public MapProperty<String, Set<Figure>> additionalPseudoClassStatesProperty() {
-        return additionalPseudoClassStates;
-    }
 
     @Override
     public boolean hasId(@NonNull Figure element, @NonNull String id) {
@@ -86,7 +79,13 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean hasType(@NonNull Figure element, @Nullable String namespace, @NonNull String type) {
-        return type.equals(element.getTypeSelector());
+        if (namespace == null) {
+            return type.equals(element.getTypeSelector());
+        }
+        if (JAVA_CLASS_NAMESPACE.equals(namespace)) {
+            return element.getClass().getSimpleName().equals(type);
+        }
+        return false;
     }
 
     @Override
@@ -224,7 +223,7 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
 
     @Override
     public boolean hasPseudoClass(@NonNull Figure element, @NonNull String pseudoClass) {
-        Set<Figure> fs = additionalPseudoClassStates.get(pseudoClass);
+        Set<Figure> fs = additionalPseudoClassStatesProperty().get(pseudoClass);
         if (fs != null && fs.contains(element)) {
             return true;
         }
@@ -501,4 +500,5 @@ public class FigureSelectorModel implements SelectorModel<Figure> {
     public void reset(@NonNull Figure elem) {
         elem.resetStyledValues();
     }
+
 }

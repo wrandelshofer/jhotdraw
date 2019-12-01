@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.styleable;
 
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.SimpleMapProperty;
 import javafx.css.CssMetaData;
 import javafx.css.ParsedValue;
 import javafx.css.PseudoClass;
@@ -16,9 +14,9 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.css.AbstractSelectorModel;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StreamCssTokenizer;
 
 import java.io.IOException;
@@ -34,14 +32,8 @@ import java.util.stream.Collectors;
  *
  * @author Werner Randelshofer
  */
-public class StyleableSelectorModel implements SelectorModel<Styleable> {
+public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
-    private final MapProperty<String, Set<Styleable>> additionalPseudoClassStates = new SimpleMapProperty<>();
-
-    @NonNull
-    public MapProperty<String, Set<Styleable>> additionalPseudoClassStatesProperty() {
-        return additionalPseudoClassStates;
-    }
 
     @Nullable
     @Override

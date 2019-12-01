@@ -22,6 +22,11 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public interface SelectorModel<T> {
+    /**
+     * FIXME SelectorModel most not have any state so that becomes thread safe.
+     *
+     * @return a map
+     */
     @NonNull
     MapProperty<String, Set<T>> additionalPseudoClassStatesProperty();
 
@@ -223,7 +228,7 @@ public interface SelectorModel<T> {
      * Returns true if the element has the specified attribute.
      *
      * @param element       An element of the document
-     * @param namespace     an optional namespace (null means any namespace)
+     * @param namespace     an optional namespace (null means default namespace, "*" means any namespace)
      * @param attributeName an attribute name
      * @return true if the element has an attribute with the specified name
      */
@@ -260,7 +265,7 @@ public interface SelectorModel<T> {
      * Returns true if the element has the specified type.
      *
      * @param element   An element of the document
-     * @param namespace an optional namespace (null means any namespace)
+     * @param namespace an optional namespace (null means any namespaces)
      * @param type      an id
      * @return true if the element has the id
      */
@@ -308,4 +313,6 @@ public interface SelectorModel<T> {
      * @throws ParseException if parsing the value failed
      */
     void setAttribute(@NonNull T element, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value) throws ParseException;
+
+
 }

@@ -7,12 +7,14 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
+
 /**
  * A "selector" is a tree of "combinator"s.
  *
  * @author Werner Randelshofer
  */
 public abstract class Selector extends AST {
+
 
     /**
      * Returns the specificity of this selector.
@@ -71,4 +73,6 @@ public abstract class Selector extends AST {
      */
     @Nullable
     protected abstract <T> T match(SelectorModel<T> model, T element);
+
+
 }
