@@ -12,6 +12,8 @@ import org.jhotdraw8.css.ast.Stylesheet;
 import java.net.URI;
 import java.text.ParseException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * StylesheetsManager.
@@ -57,9 +59,10 @@ public interface StylesheetsManager<E> {
     void addStylesheet(StyleOrigin origin, String stylesheet);
 
     default void applyStylesheetsTo(@NonNull Iterable<E> iterable) {
-        for (E e : iterable) {
-            applyStylesheetsTo(e);
-        }
+        StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
+                .stream()
+                .parallel()
+                .forEach(this::applyStylesheetsTo);
     }
 
     /**

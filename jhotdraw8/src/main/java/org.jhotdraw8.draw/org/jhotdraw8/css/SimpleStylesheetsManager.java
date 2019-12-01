@@ -31,6 +31,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * SimpleStylesheetsManager.
@@ -227,7 +228,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         // Compute custom properties
         Map<String, ImmutableList<CssToken>> customProperties = computeCustomProperties();
 
-        for (E elem : iterable) {
+        StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
+                .stream()
+                .parallel()
+                .forEach(elem -> {
             // Clear stylesheet values
             selectorModel.reset(elem);
 
@@ -287,7 +291,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 }
                 inlineDeclarations.clear();
             }
-        }
+                });
     }
 
     @org.jhotdraw8.annotation.NonNull
