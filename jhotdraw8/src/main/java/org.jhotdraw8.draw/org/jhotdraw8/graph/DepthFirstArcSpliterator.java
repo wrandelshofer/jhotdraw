@@ -40,14 +40,13 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
         this(nextArcsFunction, root, new HashSet<>()::add);
     }
 
+
     /**
      * Creates a new instance.
-     *
      * @param nextFunction the function that returns the next vertices of a given vertex
      * @param root         the root vertex
      * @param visited      a predicate with side effect. The predicate returns true
      *                     if the specified vertex has been visited, and marks the specified vertex
-     *                     as visited.
      */
     public DepthFirstArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable Predicate<Arc<V, A>> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
@@ -57,9 +56,11 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
-        Arc<V, A> rootArc = new Arc<>(null, root, null);
-        deque.push(rootArc);
-        visited.test(rootArc);
+        for (Arc<V, A> next : nextFunction.apply(root)) {
+            if (visited.test(next)) {
+                deque.addLast(next);
+            }
+        }
     }
 
     @Override
