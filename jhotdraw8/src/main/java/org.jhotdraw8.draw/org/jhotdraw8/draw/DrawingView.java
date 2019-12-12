@@ -4,11 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -151,12 +147,10 @@ public interface DrawingView extends RenderContext {
     @NonNull ObjectProperty<Layer> activeLayerProperty();
 
     default void scrollSelectedFiguresToVisible() {
-        System.err.println("DO  " + getVisibleRect());
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         if (!selectedFigures.isEmpty()) {
             scrollRectToVisible(worldToView(Figures.getBoundsInWorld(selectedFigures)));
         }
-        System.err.println("visibleRect " + getVisibleRect());
     }
 
     /**
