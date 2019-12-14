@@ -44,7 +44,7 @@ public interface BareDirectedGraph<V, A> {
      *
      * @param vertex a vertex
      * @param index  index of outgoing arrow
-     * @return the arrow
+     * @return the next arrow data
      * @see #getNextCount
      */
     @NonNull
