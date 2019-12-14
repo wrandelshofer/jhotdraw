@@ -39,6 +39,11 @@ public class Intersection {
          */
         final Point2D tangent2;
 
+        /**
+         * The index of the segment.
+         */
+        private int segment;
+
         public IntersectionPoint(Point2D point, double t1) {
             this(point, t1, new Point2D(1, 0), 0, new Point2D(0, -1));
         }
@@ -49,6 +54,17 @@ public class Intersection {
             this.tangent1 = tangent1;
             this.t2 = t2;
             this.tangent2 = tangent2;
+        }
+
+        public int getSegment() {
+            return segment;
+        }
+
+        /**
+         * package private
+         */
+        void setSegment(int segment) {
+            this.segment = segment;
         }
 
         public double getT1() {

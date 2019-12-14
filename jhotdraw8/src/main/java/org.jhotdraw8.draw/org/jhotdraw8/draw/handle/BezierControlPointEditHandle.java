@@ -7,6 +7,9 @@ package org.jhotdraw8.draw.handle;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -34,9 +37,11 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
@@ -199,11 +204,37 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         Point2D p = f.worldToLocal(newPoint);
 
         if (!bn.isColinear()) {
-            // move control point independently
-            BezierNode newBezierNode = bn.setC(controlPointMask, p);
-            view.getModel().set(f, pointKey,
-                    ImmutableLists.set(list, pointIndex, newBezierNode));
+            if (!bn.isEquidistant()) {
+                // move control point independently
+                BezierNode newBezierNode = bn.setC(controlPointMask, p);
+                view.getModel().set(f, pointKey,
+                        ImmutableLists.set(list, pointIndex, newBezierNode));
+            } else {
+                // move control point and opposite control point to same distance
+                BezierNode newBezierNode = bn.setC(controlPointMask, p);
+                Point2D c0 = bn.getC0();
+                double r = p.distance(c0);
+                if (controlPointMask == BezierNode.C1_MASK) {
+                    Point2D p2 = bn.getC2();
+                    Point2D dir = p2.subtract(c0).normalize();
+                    if (dir.magnitude() == 0) {
+                        dir = new Point2D(0, 1);// point down
+                    }
+                    p2 = c0.add(dir.multiply(r));
+                    newBezierNode = newBezierNode.setC2(p2);
+                } else {
+                    Point2D p2 = bn.getC1();
+                    Point2D dir = p2.subtract(c0).normalize();
+                    if (dir.magnitude() == 0) {
+                        dir = new Point2D(0, 1);// point down
+                    }
+                    p2 = c0.add(dir.multiply(r));
+                    newBezierNode = newBezierNode.setC1(p2);
+                }
 
+                view.getModel().set(f, pointKey,
+                        ImmutableLists.set(list, pointIndex, newBezierNode));
+            }
         } else {
             Point2D c0 = bn.getC0();
 
@@ -243,11 +274,68 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        if (event.isPopupTrigger()) {
+            handlePopupTriggered(event, view);
+        }
+    }
+
+    private void handlePopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        ContextMenu contextMenu = new ContextMenu();
+
+        Menu constraints = new Menu(DrawLabels.getResources().getString("handle.bezierControlPoint.constraints.text"));
+        RadioMenuItem noneRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.noConstraints.text"));
+        RadioMenuItem colinearRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.colinearConstraint.text"));
+        RadioMenuItem equidistantRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.equidistantConstraint.text"));
+        RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.colinearAndEquidistantConstraint.text"));
+
+        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+        BezierNode bnode = path.getNodes().get(pointIndex);
+        if (bnode.isEquidistant() && bnode.isColinear()) {
+            bothRadio.setSelected(true);
+        } else if (bnode.isEquidistant()) {
+            equidistantRadio.setSelected(true);
+        } else if (bnode.isColinear()) {
+            colinearRadio.setSelected(true);
+        } else {
+            noneRadio.setSelected(true);
+        }
+        noneRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setColinear(false).setEquidistant(false);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+        colinearRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setColinear(true).setEquidistant(false);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+        equidistantRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setColinear(false).setEquidistant(true);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+        bothRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setColinear(true).setEquidistant(true);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+
+        constraints.getItems().addAll(noneRadio, colinearRadio, equidistantRadio, bothRadio);
+        contextMenu.getItems().add(constraints);
+        contextMenu.show(node, event.getX(), event.getScreenY());
+        event.consume();
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void handleMouseReleased(MouseEvent event, DrawingView view) {
+        if (event.isPopupTrigger()) {
+            handlePopupTriggered(event, view);
+        }
     }
 
     @Override

@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
-import org.jhotdraw8.draw.handle.BezierPathOutlineHandle;
+import org.jhotdraw8.draw.handle.BezierPathEditHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
@@ -68,7 +68,7 @@ public class BezierFigure extends AbstractLeafFigure
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.POINT) {
-            list.add(new BezierPathOutlineHandle(this, PATH));
+            list.add(new BezierPathEditHandle(this, PATH));
             ImmutableList<BezierNode> nodes = get(PATH);
             for (int i = 0, n = nodes.size(); i < n; i++) {
                 list.add(new BezierNodeTangentHandle(this, PATH, i));

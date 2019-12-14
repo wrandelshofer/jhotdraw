@@ -2786,12 +2786,14 @@ public class Intersections {
             if (inter != null) {
                 for (Intersection.IntersectionPoint entry : inter.getIntersections()) {
                     final double dd = Geom.squaredDistance(entry.getPoint(), px, py);
+                    Intersection.IntersectionPoint newPoint = new Intersection.IntersectionPoint(entry.getPoint(), entry.getT1() + i);
+                    newPoint.setSegment(i);
                     if (abs(dd - closestDistance) < EPSILON) {
-                        result.add(new Intersection.IntersectionPoint(entry.getPoint(), entry.getT1() + i));
+                        result.add(newPoint);
                     } else if (dd < closestDistance) {
                         result.clear();
                         closestDistance = dd;
-                        result.add(new Intersection.IntersectionPoint(entry.getPoint(), entry.getT1() + i));
+                        result.add(newPoint);
                     }
                 }
             }

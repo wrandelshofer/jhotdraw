@@ -166,6 +166,11 @@ public class BezierNodePath implements Shape {
         return !isect.isEmpty();
     }
 
+    public Intersection pathIntersection(double x, double y, double tolerance) {
+        Intersection isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+        return isect;
+    }
+
     public boolean split(double x, double y, double tolerance) {
         Intersection isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         if (isect.size() == 1) {

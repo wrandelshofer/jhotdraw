@@ -8,7 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -42,6 +44,10 @@ import org.jhotdraw8.geom.Transforms;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import static org.jhotdraw8.geom.BezierNode.C0C1C2_MASK;
+import static org.jhotdraw8.geom.BezierNode.C0C1_MASK;
+import static org.jhotdraw8.geom.BezierNode.C0C2_MASK;
+import static org.jhotdraw8.geom.BezierNode.C0_MASK;
 
 /**
  * Handle for the point ofCollection a figure.
@@ -148,18 +154,18 @@ public class BezierNodeEditHandle extends AbstractHandle {
                     BezierNodePath path = new BezierNodePath(owner.get(pointKey));
                     BezierNode node = path.getNodes().get(pointIndex);
                     switch (node.getMask()) {
-                        case BezierNode.C0_MASK:
-                            node = node.setMask(BezierNode.C0C1_MASK);
+                        case C0_MASK:
+                            node = node.setMask(C0C1_MASK);
                             break;
-                        case BezierNode.C0C1_MASK:
-                            node = node.setMask(BezierNode.C0C2_MASK);
+                        case C0C1_MASK:
+                            node = node.setMask(C0C2_MASK);
                             break;
-                        case BezierNode.C0C2_MASK:
-                            node = node.setMask(BezierNode.C0C1C2_MASK);
+                        case C0C2_MASK:
+                            node = node.setMask(C0C1C2_MASK);
                             break;
-                        case BezierNode.C0C1C2_MASK:
+                        case C0C1C2_MASK:
                         default:
-                            node = node.setMask(BezierNode.C0_MASK);
+                            node = node.setMask(C0_MASK);
                             break;
                         case BezierNode.MOVE_MASK:
                             break;
@@ -205,18 +211,76 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Override
     public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
-        if (event.isSecondaryButtonDown()) {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
-            addPoint.setOnAction(actionEvent -> removePoint(view));
-            contextMenu.getItems().add(addPoint);
-            contextMenu.show(node, event.getX(), event.getScreenY());
-            event.consume();
+        if (event.isPopupTrigger()) {
+            handlePopupTriggered(event, view);
         }
     }
 
+    private void handlePopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
+        addPoint.setOnAction(actionEvent -> removePoint(view));
+        contextMenu.getItems().add(addPoint);
+
+        Menu tangents = new Menu(DrawLabels.getResources().getString("handle.bezierNode.tangents.text"));
+        RadioMenuItem noneRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.noTangents.text"));
+        RadioMenuItem inRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.incomingTangent.text"));
+        RadioMenuItem outRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.outgoingTangent.text"));
+        RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.incomingAndOutgoingTangent.text"));
+
+        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+        BezierNode bnode = path.getNodes().get(pointIndex);
+        switch (bnode.getMask()) {
+            case C0_MASK:
+            default:
+                noneRadio.setSelected(true);
+                break;
+            case C0C1_MASK:
+                inRadio.setSelected(true);
+                break;
+            case C0C2_MASK:
+                outRadio.setSelected(true);
+                break;
+            case C0C1C2_MASK:
+                bothRadio.setSelected(true);
+                break;
+        }
+        noneRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setMask(C0_MASK);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+        inRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setMask(C0C1_MASK);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+        outRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setMask(C0C2_MASK);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+        bothRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setMask(C0C1C2_MASK);
+            path.getNodes().set(pointIndex, changedNode);
+            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.recreateHandles();
+        });
+
+        tangents.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
+        contextMenu.getItems().add(tangents);
+        contextMenu.show(node, event.getX(), event.getScreenY());
+        event.consume();
+    }
+
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void handleMouseReleased(MouseEvent event, DrawingView view) {
+        if (event.isPopupTrigger()) {
+            handlePopupTriggered(event, view);
+        }
     }
 
     @Override
@@ -238,7 +302,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         double size = node.getWidth();
         node.relocate(c0.getX() - size * 0.5, c0.getY() - size * 0.5);
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
+        node.setRotate(f.getStyledNonNull(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
