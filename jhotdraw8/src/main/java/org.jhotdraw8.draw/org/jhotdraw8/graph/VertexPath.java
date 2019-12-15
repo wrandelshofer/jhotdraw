@@ -25,7 +25,7 @@ public class VertexPath<V> {
     @NonNull
     private final ImmutableList<V> vertices;
 
-    public VertexPath(@NonNull Collection<V> elements) {
+    public VertexPath(@NonNull Collection<? extends V> elements) {
         this.vertices = ImmutableLists.ofCollection(elements);
     }
 

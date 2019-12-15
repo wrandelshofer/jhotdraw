@@ -123,6 +123,11 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             return cost;
         }
 
+        @Override
+        public long getCostLong() {
+            return (long) cost;
+        }
+
         public void setCost(double cost) {
             this.cost = cost;
         }

@@ -105,13 +105,19 @@ public abstract class AbstractShortestPathBuilder<V, A> {
     @Nullable
     public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull Predicate<V> goalPredicate, double maxCost) {
         BackLink<V, A> node = search(start, goalPredicate, maxCost);
+        return toEdgePath(node);
+    }
+
+    public static <V, A> Map.@Nullable Entry<EdgePath<A>, Double> toEdgePath(BackLink<V, A> node) {
         if (node == null) {
             return null;
         }
         //
         ArrayDeque<A> edges = new ArrayDeque<>();
-        for (BackLink<V, A> parent = node; parent.getArrow() != null; parent = parent.getParent()) {
-            edges.addFirst(parent.getArrow());
+        for (BackLink<V, A> parent = node; parent.getParent() != null; parent = parent.getParent()) {
+            A arrow = parent.getArrow();
+            assert arrow != null;
+            edges.addFirst(arrow);
         }
         return new AbstractMap.SimpleEntry<>(new EdgePath<>(edges), node.getCost());
     }
@@ -186,6 +192,10 @@ public abstract class AbstractShortestPathBuilder<V, A> {
                                                            @NonNull Predicate<V> goalPredicate, double maxCost) {
 
         BackLink<V, A> node = search(start, goalPredicate, maxCost);
+        return toVertexPath(node);
+    }
+
+    public static <V, A> Map.@Nullable Entry<VertexPath<V>, Double> toVertexPath(BackLink<V, A> node) {
         if (node == null) {
             return null;
         }
@@ -195,6 +205,18 @@ public abstract class AbstractShortestPathBuilder<V, A> {
             vertices.addFirst(parent.getVertex());
         }
         return new AbstractMap.SimpleEntry<>(new VertexPath<>(vertices), node.getCost());
+    }
+
+    public static <V, A> Map.@Nullable Entry<VertexPath<V>, Long> toVertexPathLong(BackLink<V, A> node) {
+        if (node == null) {
+            return null;
+        }
+        //
+        ArrayDeque<V> vertices = new ArrayDeque<>();
+        for (BackLink<V, A> parent = node; parent != null; parent = parent.getParent()) {
+            vertices.addFirst(parent.getVertex());
+        }
+        return new AbstractMap.SimpleEntry<>(new VertexPath<>(vertices), node.getCostLong());
     }
 
     /**
@@ -287,6 +309,8 @@ public abstract class AbstractShortestPathBuilder<V, A> {
         public abstract AA getArrow();
 
         public abstract double getCost();
+
+        public abstract long getCostLong();
 
         /**
          * Return the path length up to this back link.
