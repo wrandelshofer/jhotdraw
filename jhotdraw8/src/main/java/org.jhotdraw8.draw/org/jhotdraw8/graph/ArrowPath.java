@@ -1,5 +1,5 @@
 /*
- * @(#)EdgePath.java
+ * @(#)ArrowPath.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -14,23 +14,23 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Represents an edge path through a graph.
+ * Represents an arrow path through a graph.
  * <p>
- * Path elements are directed edges (edges) or undirected edges (arcs).
+ * Path elements are directed edges (arrows).
  *
  * @author Werner Randelshofer
  */
-public class EdgePath<E> {
+public class ArrowPath<E> {
 
     @NonNull
-    private final ImmutableList<E> edges;
+    private final ImmutableList<E> arrows;
 
-    public EdgePath(@NonNull ReadOnlyCollection<? extends E> elements) {
-        this.edges = ImmutableLists.ofCollection(elements);
+    public ArrowPath(@NonNull ReadOnlyCollection<? extends E> elements) {
+        this.arrows = ImmutableLists.ofCollection(elements);
     }
 
-    public EdgePath(@NonNull Collection<? extends E> elements) {
-        this.edges = ImmutableLists.ofCollection(elements);
+    public ArrowPath(@NonNull Collection<? extends E> elements) {
+        this.arrows = ImmutableLists.ofCollection(elements);
     }
 
     @Override
@@ -44,38 +44,38 @@ public class EdgePath<E> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final EdgePath<?> other = (EdgePath<?>) obj;
-        return Objects.equals(this.edges, other.edges);
+        final ArrowPath<?> other = (ArrowPath<?>) obj;
+        return Objects.equals(this.arrows, other.arrows);
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.edges);
+        hash = 53 * hash + Objects.hashCode(this.arrows);
         return hash;
     }
 
     @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <VV> EdgePath<VV> of(VV... vertices) {
-        return new EdgePath<>(ImmutableLists.of(vertices));
+    public static <VV> ArrowPath<VV> of(VV... vertices) {
+        return new ArrowPath<>(ImmutableLists.of(vertices));
     }
 
     @NonNull
-    public ImmutableList<E> getEdges() {
-        return edges;
+    public ImmutableList<E> getArrows() {
+        return arrows;
     }
 
     public int size() {
-        return edges.size();
+        return arrows.size();
     }
 
 
     @NonNull
     @Override
     public String toString() {
-        return "EdgePath{" + edges + '}';
+        return "ArrowPath{" + arrows + '}';
     }
 
 

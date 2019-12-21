@@ -51,7 +51,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
     }
 
     /**
-     * Builds an EdgePath through the graph which goes from the specified start
+     * Builds an ArrowPath through the graph which goes from the specified start
      * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
@@ -65,12 +65,12 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull V goal) {
-        return findEdgePath(start, goal::equals);
+    public Map.Entry<ArrowPath<A>, Double> findArrowPath(@NonNull V start, @NonNull V goal) {
+        return findArrowPath(start, goal::equals);
     }
 
     /**
-     * Builds an EdgePath through the graph which goes from the specified start
+     * Builds an ArrowPath through the graph which goes from the specified start
      * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
@@ -84,12 +84,12 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
-        return findEdgePath(start, goalPredicate, Double.MAX_VALUE);
+    public Map.Entry<ArrowPath<A>, Double> findArrowPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
+        return findArrowPath(start, goalPredicate, Double.MAX_VALUE);
     }
 
     /**
-     * Builds an EdgePath through the graph which goes from the specified start
+     * Builds an ArrowPath through the graph which goes from the specified start
      * vertex to the specified goal vertex at the lowest cost.
      * <p>
      * This method implements the Uniform Cost Search algorithm.
@@ -103,12 +103,12 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePath(@NonNull V start, @NonNull Predicate<V> goalPredicate, double maxCost) {
+    public Map.Entry<ArrowPath<A>, Double> findArrowPath(@NonNull V start, @NonNull Predicate<V> goalPredicate, double maxCost) {
         BackLink<V, A> node = search(start, goalPredicate, maxCost);
-        return toEdgePath(node);
+        return toArrowPath(node);
     }
 
-    public static <V, A> Map.@Nullable Entry<EdgePath<A>, Double> toEdgePath(BackLink<V, A> node) {
+    public static <V, A> Map.@Nullable Entry<ArrowPath<A>, Double> toArrowPath(BackLink<V, A> node) {
         if (node == null) {
             return null;
         }
@@ -119,7 +119,7 @@ public abstract class AbstractShortestPathBuilder<V, A> {
             assert arrow != null;
             edges.addFirst(arrow);
         }
-        return new AbstractMap.SimpleEntry<>(new EdgePath<>(edges), node.getCost());
+        return new AbstractMap.SimpleEntry<>(new ArrowPath<>(edges), node.getCost());
     }
 
     /**
@@ -127,29 +127,29 @@ public abstract class AbstractShortestPathBuilder<V, A> {
      *
      * @param waypoints the waypoints
      * @param maxCost   the maximal cost of the path
-     * @return a EdgePath if traversal is possible and if the past does not exceed the max cost
+     * @return a ArrowPath if traversal is possible and if the past does not exceed the max cost
      */
     @Nullable
-    public Map.Entry<EdgePath<A>, Double> findEdgePathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
+    public Map.Entry<ArrowPath<A>, Double> findArrowPathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<EdgePath<A>, Double> pathWithCost = findEdgePath(start, via::equals, maxCost - cost);
+                Map.Entry<ArrowPath<A>, Double> pathWithCost = findArrowPath(start, via::equals, maxCost - cost);
                 if (pathWithCost == null) {
                     return null;
                 }
-                EdgePath<A> path = pathWithCost.getKey();
+                ArrowPath<A> path = pathWithCost.getKey();
                 cost += pathWithCost.getValue();
-                ImmutableList<A> edges = path.getEdges();
+                ImmutableList<A> edges = path.getArrows();
                 for (int i = 0, n = edges.size(); i < n; i++) {
                     combinedPath.add(edges.get(i));
                 }
             }
             start = via;
         }
-        return new AbstractMap.SimpleEntry<>(new EdgePath<>(combinedPath), cost);
+        return new AbstractMap.SimpleEntry<>(new ArrowPath<>(combinedPath), cost);
     }
 
     /**
