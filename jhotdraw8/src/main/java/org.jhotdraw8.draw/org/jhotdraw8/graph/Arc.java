@@ -10,11 +10,11 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * Data record for an arrow with associated data in a directed graph
- * ("arrow record" is abbreviated to "arc").
+ * Data record for an arrow with associated data in a directed graph.
  * <p>
- * Provides the start and end vertex of the arrow, and the data associated
- * to the arrow.
+ * "Arc" is used as a synonym for arrow in some definitions for directed
+ * graphs. In this design, "Arc" explicitly mans a data object that contains
+ * the start and end vertices of and arrow and an associated data object.
  *
  * @param <V> the vertex type
  * @param <A> the arrow data type

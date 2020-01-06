@@ -14,22 +14,23 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Represents an arrow path through a graph.
+ * Represents an arrow data path through a graph.
  * <p>
- * Path elements are directed edges (arrows).
+ * Path elements are data elements of directed edges (arrows).
  *
+ * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ArrowPath<E> {
+public class ArrowPath<A> {
 
     @NonNull
-    private final ImmutableList<E> arrows;
+    private final ImmutableList<A> arrows;
 
-    public ArrowPath(@NonNull ReadOnlyCollection<? extends E> elements) {
+    public ArrowPath(@NonNull ReadOnlyCollection<? extends A> elements) {
         this.arrows = ImmutableLists.ofCollection(elements);
     }
 
-    public ArrowPath(@NonNull Collection<? extends E> elements) {
+    public ArrowPath(@NonNull Collection<? extends A> elements) {
         this.arrows = ImmutableLists.ofCollection(elements);
     }
 
@@ -63,7 +64,7 @@ public class ArrowPath<E> {
     }
 
     @NonNull
-    public ImmutableList<E> getArrows() {
+    public ImmutableList<A> getArrows() {
         return arrows;
     }
 
