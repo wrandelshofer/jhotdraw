@@ -4,12 +4,18 @@
  */
 package org.jhotdraw8.svg.io;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.Shapes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Imports a JavaFX scene graph to SVG Tiny 1.2.
@@ -65,5 +71,45 @@ public class SvgTinySceneGraphExporter extends AbstractSvgSceneGraphExporter {
         // do not write compositing attributes
     }
 
+    protected Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
+            node) {
+        if (isSuppressGroups() && node.getTransforms().isEmpty()) {
+            return parent;
+        } else {
+            return super.writeGroup(doc, parent, node);
+        }
+
+    }
+
+    private boolean isSuppressGroups() {
+        return true;
+    }
+
+    @Nullable
+    protected Element writePath(@NonNull Document doc, @NonNull Element
+            parent, @NonNull Path node) {
+        if (node.getElements().isEmpty()) {
+            return null;
+        }
+        Element elem = doc.createElement("path");
+        parent.appendChild(elem);
+        String d;
+        if (isRelativizePaths()) {
+            d = Shapes.floatRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements()).getPathIterator(null));
+        } else {
+            d = Shapes.floatSvgStringFromElements(node.getElements());
+        }
+        elem.setAttribute("d", d);
+        return elem;
+    }
+
+    @Override
+    protected List<String> getAdditionalNodeClasses(@NonNull Element elem, @NonNull Node node) {
+        return Collections.emptyList();
+    }
+
+    protected void writeIdAttribute(@NonNull Element elem, @NonNull Node node) {
+        // suppress id attribute
+    }
 
 }

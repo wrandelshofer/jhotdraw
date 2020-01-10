@@ -6,10 +6,13 @@ package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Exports a JavaFX scene graph to SVG 1.1 Full.
@@ -98,6 +101,15 @@ public class SvgFullSceneGraphExporter extends AbstractSvgSceneGraphExporter {
         // ignore
         }
         }*/
+    }
+
+    @Override
+    protected List<String> getAdditionalNodeClasses(@NonNull Element elem, @NonNull Node node) {
+        String typeSelector = (String) node.getProperties().get(StyleableFigure.TYPE_SELECTOR_NODE_KEY);
+        if (typeSelector != null) {
+            return Collections.singletonList(typeSelector);
+        }
+        return Collections.emptyList();
     }
 
 }

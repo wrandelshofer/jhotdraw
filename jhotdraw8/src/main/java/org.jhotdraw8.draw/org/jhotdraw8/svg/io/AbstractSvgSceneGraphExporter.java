@@ -174,8 +174,9 @@ public abstract class AbstractSvgSceneGraphExporter {
             }
             if (node instanceof Shape) {
                 Shape s = (Shape) node;
-                if ((s.getFill() == null || Objects.equals(s.getFill(), Color.TRANSPARENT))
-                        && (s.getStroke() == null || Objects.equals(s.getStroke(), Color.TRANSPARENT))) {
+                if ((s.getFill() == null || ((s.getFill() instanceof Color) && ((Color) s.getFill()).getOpacity() == 0))
+                        && (s.getStroke() == null || ((s.getStroke() instanceof Color) && ((Color) s.getStroke()).getOpacity() == 0))
+                ) {
                     return true;
                 }
                 if (node instanceof Path) {
@@ -428,7 +429,16 @@ public abstract class AbstractSvgSceneGraphExporter {
         }
     }
 
-    private Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
+    /**
+     * Writes a group.
+     * If the group is suppressed but its children shall be written, returns parent.
+     *
+     * @param doc
+     * @param parent
+     * @param node
+     * @return the element created for the group or the parent element
+     */
+    protected Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
             node) {
         Element elem = doc.createElement("g");
         writeClipAttributes(elem, node);
@@ -514,7 +524,7 @@ public abstract class AbstractSvgSceneGraphExporter {
             throw new UnsupportedOperationException("not yet implemented for " + node);
         }
 
-        if (elem != null) {
+        if (elem != null && elem != parent) {
             writeStyleAttributes(elem, node);
             writeTransformAttributes(elem, node);
             writeCompositingAttributes(elem, node);
@@ -628,7 +638,7 @@ public abstract class AbstractSvgSceneGraphExporter {
     }
 
     @Nullable
-    private Element writePath(@NonNull Document doc, @NonNull Element
+    protected Element writePath(@NonNull Document doc, @NonNull Element
             parent, @NonNull Path node) {
         if (node.getElements().isEmpty()) {
             return null;
@@ -982,12 +992,25 @@ public abstract class AbstractSvgSceneGraphExporter {
         }
     }
 
-    private void writeStyleAttributes(@NonNull Element elem, @NonNull Node node) {
-        String id = node.getId();
-        if (id != null && !id.isEmpty()) {
-            elem.setAttribute("id", id);
+    protected abstract List<String> getAdditionalNodeClasses(@NonNull Element elem, @NonNull Node node);
+
+    protected void writeStyleAttributes(@NonNull Element elem, @NonNull Node node) {
+        writeIdAttribute(elem, node);
+        writeClassAttribute(elem, node);
+        writeVisibleAttribute(elem, node);
+    }
+
+    private void writeVisibleAttribute(@NonNull Element elem, @NonNull Node node) {
+        if (!node.isVisible()) {
+            //elem.setAttribute("visibility", "hidden");
+            elem.setAttribute("display", "none");
         }
-        List<String> styleClass = node.getStyleClass();
+    }
+
+    private void writeClassAttribute(@NonNull Element elem, @NonNull Node node) {
+        List<String> styleClass = new ArrayList<>(node.getStyleClass());
+        styleClass.addAll(getAdditionalNodeClasses(elem, node));
+
         if (!styleClass.isEmpty()) {
             StringBuffer buf = new StringBuffer();
             for (String clazz : styleClass) {
@@ -998,10 +1021,12 @@ public abstract class AbstractSvgSceneGraphExporter {
             }
             elem.setAttribute("class", buf.toString());
         }
+    }
 
-        if (!node.isVisible()) {
-            //elem.setAttribute("visibility", "hidden");
-            elem.setAttribute("display", "none");
+    protected void writeIdAttribute(@NonNull Element elem, @NonNull Node node) {
+        String id = node.getId();
+        if (id != null && !id.isEmpty()) {
+            elem.setAttribute("id", id);
         }
     }
 

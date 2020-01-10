@@ -3,7 +3,6 @@
   ~ @(#)JHotDrawIcons.xml
   ~ Copyright © The authors and contributors of JHotDraw. MIT License.
   -->
-
 <Drawing background="rgba(255,255,255,0)" height="88" id="drawing1" width="164"
          xmlns="http://jhotdraw.org/samples/grapher">
   <Layer id="content">
@@ -80,9 +79,7 @@
                 path="M94,41 C92,39,89,26,92,25 95.55756236768944,23.814145877436857,98,35,99,35 100.34709693002728,35,103.15395010584848,25.05131670194949,106,26 109,27,104.7426782909871,39.062578371337935,104,41"
                 stroke-width="2"/>
     <Rectangle bounds="92 4 14 14" id="rectangle13" stroke-type="inside" stroke-width="2"/>
-    <Label fill="none" font="11 Futura Medium" id="label3" origin="95 15.15" stroke="none" stroke-linecap="square"
-           stroke-miterlimit="10">A
-    </Label>
+    <Label fill="none" font="11 Futura Medium" id="label3" origin="95 15.15" stroke="none">A</Label>
     <Label fill="none" font="19 Futura Medium" id="label4" origin="113 63" stroke="none" stroke-linecap="square"
            stroke-miterlimit="10" textFill="grey">A
     </Label>

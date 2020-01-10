@@ -63,6 +63,17 @@ public interface StyleableFigure extends Figure {
     NullableObjectKey<String> STYLE = new NullableObjectKey<>("style", String.class, null);
 
     /**
+     * We store the type selector of the figure on the node that is used
+     * to render the figure. This allows to pass this information through
+     * to classes that export a rendered scene graph.
+     * <p>
+     * This key is a String, because it is set as a property
+     * on the JavaFX node that is used to render the figure.
+     * The value type of the property is a String.
+     */
+    String TYPE_SELECTOR_NODE_KEY = "figureTypeSelector";
+
+    /**
      * Updates a figure node with all style and effect properties defined in
      * this interface.
      * <p>
@@ -78,7 +89,7 @@ public interface StyleableFigure extends Figure {
             String styleId = getId();
             node.setId(styleId == null ? "" : styleId);
             node.getStyleClass().setAll(getStyleClass());
-            node.getStyleClass().add(getTypeSelector());
+            node.getProperties().put(TYPE_SELECTOR_NODE_KEY, getTypeSelector());
         }
     }
 

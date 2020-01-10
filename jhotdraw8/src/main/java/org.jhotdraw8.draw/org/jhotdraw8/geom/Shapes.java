@@ -1057,7 +1057,19 @@ public class Shapes {
     @NonNull
     public static String doubleSvgStringFromElements(@NonNull List<PathElement> elements) {
         XmlNumberConverter nb = new XmlNumberConverter();
+        return svgStringFromElements(elements, nb);
+    }
 
+    @NonNull
+    public static String floatSvgStringFromElements(@NonNull List<PathElement> elements) {
+        XmlNumberConverter nb = new XmlNumberConverter();
+        nb.setMaximumFractionDigits(7);
+        return svgStringFromElements(elements, nb);
+    }
+
+
+    @NonNull
+    public static String svgStringFromElements(@NonNull List<PathElement> elements, XmlNumberConverter nb) {
         StringBuilder buf = new StringBuilder();
         char next = 'Z'; // next instruction
         double x = 0, y = 0;// current point
