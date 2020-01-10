@@ -1,8 +1,4 @@
-/*
- * @(#)SvgExporter.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
- */
-package org.jhotdraw8.svg;
+package org.jhotdraw8.svg.io;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
@@ -96,26 +92,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * Exports a JavaFX scene graph to SVG.
- *
- * @author Werner Randelshofer
- */
-public class SvgExporter {
-
+public abstract class AbstractSvgSceneGraphExporter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";
-
-    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
-    private final static String XLINK_Q = "xlink";
-    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
-
-    private final String SVG_NS = "http://www.w3.org/2000/svg";
+    public final static String SVG_NS = "http://www.w3.org/2000/svg";
+    protected final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+    protected final static String XLINK_NS = "http://www.w3.org/1999/xlink";
+    protected final static String XLINK_Q = "xlink";
     @NonNull
-    private IdFactory idFactory = new SimpleIdFactory();
+    protected IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
     @Nullable
     private final String namespaceQualifier = null;
-    private final XmlNumberConverter nb = new XmlNumberConverter();
+    protected final XmlNumberConverter nb = new XmlNumberConverter();
     private final Converter<ImmutableList<Number>> nbList = new CssListConverter<>(new CssNumberConverter(false));
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
@@ -128,11 +116,12 @@ public class SvgExporter {
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
-     *                    ImageView
+     *                    ImageView. If an ImageView does not have an URL,
+     *                    then the exporter includes the image with a data URL.
      * @param skipKey     this property is used to retrieve a Boolean from a Node.
      *                    If the Boolean is true, then the node is skipped.
      */
-    public SvgExporter(Object imageUriKey, Object skipKey) {
+    public AbstractSvgSceneGraphExporter(Object imageUriKey, Object skipKey) {
         this.imageUriKey = imageUriKey;
         this.skipKey = skipKey;
     }
@@ -217,7 +206,6 @@ public class SvgExporter {
             doc = domImpl.createDocument(SVG_NS, namespaceQualifier == null ? "svg" : namespaceQualifier + ":" + "svg", null);
 
             Element docElement = doc.getDocumentElement();
-            docElement.setAttributeNS(XMLNS_NS, "xmlns:" + XLINK_Q, XLINK_NS);
 
             writeProcessingInstructions(doc, drawingNode);
             String commentText = createFileComment();
@@ -326,55 +314,13 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeClipAttributes(@NonNull Element elem, @NonNull Node node) {
-        Node clip = node.getClip();
-        if (clip == null) {
-            return;
-        }
+    protected abstract void writeClipAttributes(@NonNull Element elem, @NonNull Node node);
 
-        String id = idFactory.getId(clip);
-        if (id != null) {
-            elem.setAttribute("clip-path", "url(#" + id + ")");
-        } else {
-            System.err.println("WARNING SvgExporter does not supported recursive clips!");
-        }
-    }
+    protected abstract void writeClipPathDefs(@NonNull Document doc, @NonNull Element
+            defsNode, @NonNull Node node) throws IOException;
 
-    private void writeClipPathDefs(@NonNull Document doc, @NonNull Element
-            defsNode, @NonNull Node node) throws IOException {
-        // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
-        Node clip = node.getClip();
-        if (clip == null) {
-            return;
-        }
-        if (idFactory.getId(clip) == null) {
-            String id = idFactory.createId(clip, "clipPath");
-            Element elem = doc.createElement("clipPath");
-            writeNodeRecursively(doc, elem, clip);
-            elem.setAttribute("id", id);
-            defsNode.appendChild(elem);
-        }
-    }
-
-    private void writeCompositingAttributes(@NonNull Element elem, @NonNull Node
-            node) {
-        if (node.getOpacity() != 1.0) {
-            elem.setAttribute("opacity", nb.toString(node.getOpacity()));
-        }
-        /*
-        if (node.getBlendMode() != null && node.getBlendMode() != BlendMode.SRC_OVER) {
-        switch (node.getBlendMode()) {
-        case MULTIPLY:
-        case SCREEN:
-        case DARKEN:
-        case LIGHTEN:
-        elem.setAttribute("mode", node.getBlendMode().toString().toLowerCase());
-        break;
-        default:
-        // ignore
-        }
-        }*/
-    }
+    protected abstract void writeCompositingAttributes(@NonNull Element elem, @NonNull Node
+            node);
 
     private Element writeCubicCurve(@NonNull Document doc, @NonNull Element
             parent, @NonNull CubicCurve node) {
@@ -424,12 +370,8 @@ public class SvgExporter {
         }
     }
 
-    private void writeDocumentElementAttributes(@NonNull Element
-                                                        docElement, javafx.scene.Node drawingNode) throws IOException {
-        docElement.setAttribute("version", "1.2");
-        docElement.setAttribute("baseProfile", "tiny");
-
-    }
+    protected abstract void writeDocumentElementAttributes(@NonNull Element
+                                                                   docElement, javafx.scene.Node drawingNode);
 
     private Element writeEllipse(@NonNull Document doc, @NonNull Element
             parent, @NonNull Ellipse node) {
@@ -544,7 +486,7 @@ public class SvgExporter {
         return elem;
     }
 
-    private void writeNodeRecursively(@NonNull Document doc, @NonNull Element
+    protected void writeNodeRecursively(@NonNull Document doc, @NonNull Element
             parent, @NonNull javafx.scene.Node node) throws IOException {
         if (isSkipNode(node)) {
             return;
@@ -979,7 +921,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
         }
         if (shape.getStrokeType() != StrokeType.CENTERED) {
-            // XXX this is currentl only a proposal for SVG 2 
+            // XXX this is currentl only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (shape.getStrokeType()) {
                 case INSIDE:
@@ -1022,7 +964,7 @@ public class SvgExporter {
             elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
         }
         if (style.getType() != StrokeType.CENTERED) {
-            // XXX this is currently only a proposal for SVG 2 
+            // XXX this is currently only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (style.getType()) {
                 case INSIDE:
@@ -1336,7 +1278,7 @@ public class SvgExporter {
 
     private void writeTransformAttributes(@NonNull Element elem, @NonNull Node node) {
 
-        // The transforms are applied before translateX, translateY, scaleX, 
+        // The transforms are applied before translateX, translateY, scaleX,
         // scaleY and rotate transforms.
         List<Transform> txs = new ArrayList<>();
         Point2D pivot = Geom.center(node.getBoundsInLocal());
@@ -1371,4 +1313,9 @@ public class SvgExporter {
     public void setRelativizePaths(boolean relativizePaths) {
         this.relativizePaths = relativizePaths;
     }
+
+    protected abstract String getSvgVersion();
+
+    protected abstract String getSvgBaseProfile();
+
 }

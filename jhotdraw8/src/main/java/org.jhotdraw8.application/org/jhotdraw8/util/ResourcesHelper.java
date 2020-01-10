@@ -10,8 +10,8 @@ import javafx.scene.image.ImageView;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,13 +97,16 @@ class ResourcesHelper {
 
             if (r.getModule() != null) {
                 try {
-                    InputStream resourceAsStream = r.getModule().getResourceAsStream(rsrcName);
+                    Object module = r.getModule();
+
+                    InputStream resourceAsStream = (InputStream) module.getClass().getMethod("getRsourcesAsStream", String.class)
+                            .invoke(module, rsrcName);
                     if (resourceAsStream != null) {
                         return new ImageView(new Image(resourceAsStream));
                     }
-                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + r.getModule().getName());
-                } catch (IOException e) {
-                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + r.getModule().getName() + " " + e.getMessage());
+                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + module);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + r.getModule());
                 }
             }
 

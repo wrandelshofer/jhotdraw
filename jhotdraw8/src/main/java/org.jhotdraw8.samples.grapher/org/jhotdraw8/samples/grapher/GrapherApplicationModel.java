@@ -19,7 +19,8 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.macos.MacOSPreferences;
-import org.jhotdraw8.svg.SvgExporter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
+import org.jhotdraw8.svg.io.SvgTinySceneGraphExporter;
 
 import java.util.ResourceBundle;
 
@@ -45,7 +46,8 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
         super("Grapher", GrapherActivity::new,
                 GrapherApplication.class.getResource("GrapherMenuBar.fxml"),
                 "Grapher Files", GRAPHER_FORMAT, "*.xml");
-        getExportExtensionFilters().add(new URIExtensionFilter("SVG", registerDataFormat(SvgExporter.SVG_MIME_TYPE), "*.svg"));
+        getExportExtensionFilters().add(new URIExtensionFilter("SVG Full", registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
+        getExportExtensionFilters().add(new URIExtensionFilter("SVG Tiny", registerDataFormat(SvgTinySceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
         getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
     }

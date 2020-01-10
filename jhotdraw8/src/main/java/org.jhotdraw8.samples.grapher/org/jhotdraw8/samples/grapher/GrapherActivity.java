@@ -122,7 +122,8 @@ import org.jhotdraw8.gui.dock.SingleItemDock;
 import org.jhotdraw8.gui.dock.SplitPaneTrack;
 import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.svg.SvgExporter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
+import org.jhotdraw8.svg.io.SvgTinySceneGraphExporter;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
@@ -473,7 +474,14 @@ public class GrapherActivity extends AbstractDocumentBasedActivity implements Do
     public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
-            if (registerDataFormat(SvgExporter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
+            if (registerDataFormat(SvgTinySceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
+                SvgExportOutputFormat io = new SvgExportOutputFormat();
+                io.setExporterFactory(SvgTinySceneGraphExporter::new);
+                io.setOptions(options);
+                io.write(uri, drawing, workState);
+            } else if (registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE).equals(format)
+                    || registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION).equals(format)
+                    || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.setOptions(options);
                 io.write(uri, drawing, workState);

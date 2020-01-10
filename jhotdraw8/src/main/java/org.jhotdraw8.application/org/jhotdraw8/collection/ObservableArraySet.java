@@ -7,6 +7,7 @@ import javafx.collections.SetChangeListener;
 import java.util.ArrayList;
 
 public class ObservableArraySet<E> extends ArrayList<E> implements ObservableSet<E> {
+    private final static long serialVersionUID = 1L;
     @Override
     public void addListener(SetChangeListener<? super E> listener) {
         throw new UnsupportedOperationException();

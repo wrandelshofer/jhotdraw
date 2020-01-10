@@ -116,7 +116,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public Module getModule() {
+    public Object getModule() {
         return null;
     }
 

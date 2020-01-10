@@ -218,7 +218,13 @@ public interface Resources {
 
     void setBaseClass(Class<?> baseClass);
 
-    Module getModule();
+    /**
+     * Returns a java.lang.Module if the resources have been created
+     * with named Java module on a Java VM that supports modules.
+     *
+     * @return java.lang.Module
+     */
+    Object getModule();
 
     @NonNull
     String getBaseName();

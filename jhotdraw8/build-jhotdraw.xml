@@ -113,6 +113,7 @@
     >
       <src path="${src.main.java}/org.jhotdraw8.application"/>
       <src path="${src.main.java}/org.jhotdraw8.draw"/>
+      <!-- samples are only available for modular JVMs
       <src path="${src.main.java}/org.jhotdraw8.samples.grapher"/>
       <src path="${src.main.java}/org.jhotdraw8.samples.misc"/>
       <src path="${src.main.java}/org.jhotdraw8.samples.modeler"/>
@@ -120,6 +121,7 @@
       <src path="${src.main.java}/org.jhotdraw8.samples.pert"/>
       <src path="${src.main.java}/org.jhotdraw8.samples.svg"/>
       <src path="${src.main.java}/org.jhotdraw8.samples.teddy"/>
+      -->
       <compilerarg value="-Xlint"/>
       <exclude name="**/*DepsMain.java"/>
       <exclude name="module-info.java"/>
@@ -889,7 +891,7 @@
       -->
     </javadoc>
   </target>
-  <target name="do-jar" depends="init">
+  <target name="do-jar-classes" depends="init">
     <pathconvert property="manifest.class-path" pathsep=" ">
       <map from="${basedir}/${lib.runtime}/" to=""/>
       <fileset dir="${basedir}/${lib.runtime}">
@@ -1059,26 +1061,28 @@
 
   <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
   </target>
-  <target name="compile" depends="clean,do-compile-classes"
+  <target name="compile-classes" depends="clean,do-compile-classes"
           description="compiles the java sources and copies resource files">
   </target>
   <target name="compile-modules" depends="clean,do-compile-modules"
           description="compiles the java sources and copies resource files">
   </target>
-  <target name="jar" depends="compile,do-jar" description="bundles the class files into a jar file">
+  <target name="jar-classes" depends="compile-classes,do-jar-classes"
+          description="bundles the class files into a jar file">
   </target>
   <target name="jar-modules" depends="compile-modules,do-jar-modules"
           description="bundles the class files into a jar file">
   </target>
-  <target name="javadoc" depends="clean,compile,do-docbook.compile,do-javadoc" description="generates api documentation">
+  <target name="javadoc" depends="clean,compile-classes,do-docbook.compile,do-javadoc"
+          description="generates api documentation">
   </target>
   <target name="docbook" depends="clean,javadoc,do-docbook"
           description="generates specification and user documentation">
   </target>
-  <target name="dist" depends="clean,jar,jar-modules,do-dist"
+  <target name="dist" depends="clean,jar-classes,jar-modules,do-dist"
           description="creates a distributable stand-alone application">
   </target>
-  <target name="run" depends="jar,do-run" description="runs the built jar files">
+  <target name="run" depends="jar-classes,do-run" description="runs the built jar files">
   </target>
   <target name="all" depends="dist" description="Everything">
   </target>

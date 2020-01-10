@@ -32,8 +32,9 @@ import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
-import org.jhotdraw8.svg.SvgExporter;
 import org.jhotdraw8.svg.TransformFlattener;
+import org.jhotdraw8.svg.io.AbstractSvgSceneGraphExporter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
@@ -55,6 +56,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
 
@@ -63,7 +65,8 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  *
  * @author Werner Randelshofer
  */
-public class SvgExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
+public class SvgExportOutputFormat extends AbstractExportOutputFormat
+        implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
 
     public final static DataFormat SVG_FORMAT;
     private final static String SKIP_KEY = "skip";
@@ -91,10 +94,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
     @NonNull
     private IdFactory idFactory = new SimpleIdFactory();
     private boolean skipInvisibleNodes = true;
+    private BiFunction<Object, Object, AbstractSvgSceneGraphExporter> exporterFactory = SvgFullSceneGraphExporter::new;
+
+    public void setExporterFactory(BiFunction<Object, Object, AbstractSvgSceneGraphExporter> exporterFactory) {
+        this.exporterFactory = exporterFactory;
+    }
 
     @NonNull
-    private SvgExporter createExporter() {
-        SvgExporter exporter = new SvgExporter(ImageFigure.IMAGE_URI, SKIP_KEY);
+    private AbstractSvgSceneGraphExporter createExporter() {
+        AbstractSvgSceneGraphExporter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setUriResolver(getUriResolver());
         return exporter;
     }
@@ -141,7 +149,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
-        final SvgExporter exporter = createExporter();
+        final AbstractSvgSceneGraphExporter exporter = createExporter();
         exporter.setSkipInvisibleNodes(skipInvisibleNodes);
         exporter.setRelativizePaths(true);
         Document doc = exporter.toDocument(drawingNode);
@@ -192,7 +200,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
-        final SvgExporter exporter = createExporter();
+        final AbstractSvgSceneGraphExporter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
@@ -219,7 +227,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat implements
             node.getTransforms().setAll(worldToLocal);
         }
         new TransformFlattener().flattenTranslates(node);
-        final SvgExporter exporter = createExporter();
+        final AbstractSvgSceneGraphExporter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();

@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.URIExtensionFilter;
-import org.jhotdraw8.svg.SvgExporter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
 
 import java.util.ResourceBundle;
 
@@ -40,7 +40,7 @@ public class ModelerApplicationModel extends SimpleApplicationModel {
         super("Modeler", ModelerActivityController::new,
                 ModelerApplication.class.getResource("ModelerMenuBar.fxml"),
                 "Modeler Files", GRAPHER_FORMAT, "*.xml");
-        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgExporter.SVG_MIME_TYPE, "*.svg"));
+        getExportExtensionFilters().add(new URIExtensionFilter("SVG", SvgFullSceneGraphExporter.SVG_MIME_TYPE, "*.svg"));
         getExportExtensionFilters().add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_MIME_TYPE, "*.png"));
         getExportExtensionFilters().add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE, "*.ser.xml"));
     }

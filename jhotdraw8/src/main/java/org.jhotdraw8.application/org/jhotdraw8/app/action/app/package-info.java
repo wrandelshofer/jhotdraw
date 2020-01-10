@@ -3,7 +3,7 @@
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 /**
- * Provides actions which act on the application.
+ * Provides actions which act on an application.
  *
  * @author Werner Randelshofer
  */
