@@ -218,6 +218,8 @@ public interface Resources {
 
     void setBaseClass(Class<?> baseClass);
 
+    Module getModule();
+
     @NonNull
     String getBaseName();
 
@@ -376,7 +378,7 @@ public interface Resources {
             String value = getString(key + ".toolTipText");
             return value;
         } catch (MissingResourceException e) {
-            ResourcesHelper.LOG.warning("Warning ClasspathResources[" + getBaseName() + "] \"" + key + ".toolTipText\" not found.");
+            ResourcesHelper.LOG.warning("Resources[" + getBaseName() + "] \"" + key + ".toolTipText\" not found.");
             return null;
         }
     }

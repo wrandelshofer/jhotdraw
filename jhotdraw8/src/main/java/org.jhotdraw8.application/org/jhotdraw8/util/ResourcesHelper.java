@@ -5,10 +5,13 @@
 package org.jhotdraw8.util;
 
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,13 +95,25 @@ class ResourcesHelper {
                 }
             }
 
+            if (r.getModule() != null) {
+                try {
+                    InputStream resourceAsStream = r.getModule().getResourceAsStream(rsrcName);
+                    if (resourceAsStream != null) {
+                        return new ImageView(new Image(resourceAsStream));
+                    }
+                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + r.getModule().getName());
+                } catch (IOException e) {
+                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + r.getModule().getName() + " " + e.getMessage());
+                }
+            }
+
             URL url = baseClass.getResource(rsrcName);
             if (url == null) {
-                ResourcesHelper.LOG.warning("ClasspathResources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
+                ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
             }
             return (url == null) ? null : new ImageView(url.toString());
         } catch (MissingResourceException e) {
-            ResourcesHelper.LOG.warning("ClasspathResources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" not found.");
+            ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" not found.");
             return null;
         }
     }

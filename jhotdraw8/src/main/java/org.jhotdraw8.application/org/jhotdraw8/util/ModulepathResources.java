@@ -104,6 +104,11 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * The wrapped resource bundle.
      */
     private transient ResourceBundle resource;
+    /**
+     * The module from which the resource bundle was instantiated
+     * and which we use to load resources (i.e. images) from.
+     */
+    private final Module module;
 
     /**
      * Creates a new object which wraps the provided resource bundle.
@@ -115,6 +120,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         this.locale = locale;
         this.baseName = baseName;
         this.resource = doGetBundle(module, baseName, locale);
+        this.module = module;
 
         ModulepathResources potentialParent = null;
         String moduleAndParentBaseName = null;
@@ -259,6 +265,10 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     @Override
     public String toString() {
         return "ModulepathResources" + "[" + baseName + "]";
+    }
+
+    public Module getModule() {
+        return module;
     }
 
 
