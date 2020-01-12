@@ -17,6 +17,8 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.app;
     exports org.jhotdraw8.annotation;
     exports org.jhotdraw8.app.action;
+    exports org.jhotdraw8.app.action.edit;
+    exports org.jhotdraw8.app.action.file;
     exports org.jhotdraw8.app.action.view;
     exports org.jhotdraw8.app.spi;
     exports org.jhotdraw8.collection;
@@ -30,7 +32,6 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.binding;
     exports org.jhotdraw8.gui;
     exports org.jhotdraw8.event;
-    exports org.jhotdraw8.app.action.file;
     exports org.jhotdraw8.gui.dock;
     exports org.jhotdraw8.gui.fontchooser;
     exports org.jhotdraw8.text;
@@ -39,4 +40,5 @@ module org.jhotdraw8.application {
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
     exports org.jhotdraw8.macos;
+    exports org.jhotdraw8.app.action.app;
 }

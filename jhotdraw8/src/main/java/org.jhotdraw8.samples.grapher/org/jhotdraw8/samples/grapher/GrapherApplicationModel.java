@@ -19,6 +19,7 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.macos.MacOSPreferences;
+import org.jhotdraw8.samples.grapher.action.GrapherAboutAction;
 import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
 import org.jhotdraw8.svg.io.SvgTinySceneGraphExporter;
 
@@ -57,6 +58,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
         HierarchicalMap<String, Action> map = super.createApplicationActionMap(app);
         map.put(PrintFileAction.ID, new PrintFileAction(app, null));
         map.put(ExportFileAction.ID, new ExportFileAction(app, DrawingExportOptionsPane::createDialog));
+        map.put(GrapherAboutAction.ID, new GrapherAboutAction(app));
         return map;
     }
 
