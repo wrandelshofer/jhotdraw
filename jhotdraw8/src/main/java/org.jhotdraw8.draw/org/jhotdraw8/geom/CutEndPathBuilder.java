@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.PathIterator;
 
@@ -21,7 +21,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     private double cx;
     private double cy;
 
-    @Nullable
+    @NonNull
     private PathIteratorPathBuilder path;
 
     public CutEndPathBuilder(PathBuilder out, double radius) {
@@ -42,76 +42,74 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doPathDone() {
-        if (path != null) {
-            Point2D currentPoint = getLastPoint();
-            cx = currentPoint.getX();
-            cy = currentPoint.getY();
-            double[] seg = new double[6];
-            double x = 0, y = 0;
-            Loop:
-            for (PathIterator i = path.build(); !i.isDone(); i.next()) {
-                switch (i.currentSegment(seg)) {
-                    case PathIterator.SEG_CLOSE:
-                        out.closePath();
-                        break;
-                    case PathIterator.SEG_CUBICTO: {
-                        Intersection isect = Intersections.intersectCubicCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
-                        if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            // break Loop;
-                        } else if (isect.isEmpty()) {
-                            out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
-                        } else {
-                            Beziers.splitCubicCurve(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastT(),
-                                    out::curveTo, null);
-                            //  break Loop;
-                        }
-                        x = seg[4];
-                        y = seg[5];
-                        break;
-                    }
-                    case PathIterator.SEG_LINETO: {
-                        Intersection isect = Intersections.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
-                        if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            //         break Loop;
-                        } else if (isect.isEmpty()) {
-                            out.lineTo(seg[0], seg[1]);
-                        } else {
-                            Geom.splitLine(x, y, seg[0], seg[1], isect.getLastT(),
-                                    out::lineTo, null);
-                            //   break Loop;
-                        }
-                        x = seg[0];
-                        y = seg[1];
-                        break;
-                    }
-                    case PathIterator.SEG_MOVETO: {
-                        out.moveTo(seg[0], seg[1]);
-                        x = seg[0];
-                        y = seg[1];
-                        break;
-                    }
-                    case PathIterator.SEG_QUADTO: {
-                        Intersection isect = Intersections.intersectQuadraticCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
-                        if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
-                            //               break Loop;
-                        } else if (isect.isEmpty()) {
-                            out.quadTo(seg[0], seg[1], seg[2], seg[3]);
-                        } else {
-                            Beziers.splitQuadCurve(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastT(),
-                                    out::quadTo, null);
-                            //   break Loop;
-                        }
-                        x = seg[2];
-                        y = seg[3];
-                        break;
-                    }
-                    default:
-                        throw new IllegalArgumentException("illegal path command:" + i.currentSegment(seg));
+        Point2D currentPoint = getLastPoint();
+        cx = currentPoint.getX();
+        cy = currentPoint.getY();
+        double[] seg = new double[6];
+        double x = 0, y = 0;
+        Loop:
+        for (PathIterator i = path.build(); !i.isDone(); i.next()) {
+            switch (i.currentSegment(seg)) {
+            case PathIterator.SEG_CLOSE:
+                out.closePath();
+                break;
+            case PathIterator.SEG_CUBICTO: {
+                Intersection isect = Intersections.intersectCubicCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
+                if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
+                    // break Loop;
+                } else if (isect.isEmpty()) {
+                    out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
+                } else {
+                    Beziers.splitCubicCurve(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastT(),
+                            out::curveTo, null);
+                    //  break Loop;
                 }
+                x = seg[4];
+                y = seg[5];
+                break;
             }
-
-            path = null;
+            case PathIterator.SEG_LINETO: {
+                Intersection isect = Intersections.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
+                if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
+                    //         break Loop;
+                } else if (isect.isEmpty()) {
+                    out.lineTo(seg[0], seg[1]);
+                } else {
+                    Geom.splitLine(x, y, seg[0], seg[1], isect.getLastT(),
+                            out::lineTo, null);
+                    //   break Loop;
+                }
+                x = seg[0];
+                y = seg[1];
+                break;
+            }
+            case PathIterator.SEG_MOVETO: {
+                out.moveTo(seg[0], seg[1]);
+                x = seg[0];
+                y = seg[1];
+                break;
+            }
+            case PathIterator.SEG_QUADTO: {
+                Intersection isect = Intersections.intersectQuadraticCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
+                if (isect.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
+                    //               break Loop;
+                } else if (isect.isEmpty()) {
+                    out.quadTo(seg[0], seg[1], seg[2], seg[3]);
+                } else {
+                    Beziers.splitQuadCurve(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastT(),
+                            out::quadTo, null);
+                    //   break Loop;
+                }
+                x = seg[2];
+                y = seg[3];
+                break;
+            }
+            default:
+                throw new IllegalArgumentException("illegal path command:" + i.currentSegment(seg));
+            }
         }
+
+
         out.pathDone();
     }
 
