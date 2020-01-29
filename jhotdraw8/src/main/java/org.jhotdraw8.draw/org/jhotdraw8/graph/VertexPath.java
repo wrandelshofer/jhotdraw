@@ -34,6 +34,7 @@ public class VertexPath<V> {
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public VertexPath(@NonNull V... elements) {
         this.vertices = ImmutableLists.of(elements);
     }
