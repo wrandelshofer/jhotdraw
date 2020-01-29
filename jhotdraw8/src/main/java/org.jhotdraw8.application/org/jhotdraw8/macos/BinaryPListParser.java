@@ -11,6 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
@@ -19,11 +20,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -350,6 +347,8 @@ public class BinaryPListParser {
         } catch (ParserConfigurationException e) {
             throw new IOException("Cannot create document builder", e);
         }
+        // We do not want that the reader creates a socket connection!
+        builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
         Document doc = builder.newDocument();
 
         Element root = doc.createElement("plist");

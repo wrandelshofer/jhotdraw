@@ -6,11 +6,7 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.ast.Declaration;
-import org.jhotdraw8.css.ast.Rule;
-import org.jhotdraw8.css.ast.SelectorGroup;
-import org.jhotdraw8.css.ast.StyleRule;
-import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.css.ast.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -48,7 +44,7 @@ public class CssParserTest {
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet);
-        // 
+        //
         System.out.println("AST: " + ast);
         if (!p.getParseExceptions().isEmpty()) {
             System.out.println("Errors: ");
@@ -60,6 +56,8 @@ public class CssParserTest {
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
+        // We do not want that the reader creates a socket connection!
+        builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
         Document doc = builder.parse(new InputSource(new StringReader(before)));
         //---
         DocumentSelectorModel dsd = new DocumentSelectorModel();
@@ -170,7 +168,7 @@ public class CssParserTest {
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet);
-        // 
+        //
         System.out.println("AST: " + ast);
         if (!p.getParseExceptions().isEmpty()) {
             System.out.println("Errors: ");
@@ -182,6 +180,8 @@ public class CssParserTest {
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
+        // We do not want that the reader creates a socket connection!
+        builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
         Document doc = builder.parse(new InputSource(new StringReader(xml)));
         //---
         DocumentSelectorModel dsd = new DocumentSelectorModel();

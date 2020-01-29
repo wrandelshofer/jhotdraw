@@ -5,8 +5,11 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,7 +24,10 @@ abstract class AbstractCssFunctionProcessorTest {
 
 
     protected void doTestProcess(String expression, @Nullable String expected) throws Exception {
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        // We do not want that the reader creates a socket connection!
+        builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
+        Document doc = builder.newDocument();
         doc.getDocumentElement();
         Element elem = doc.createElement("Car");
         elem.setAttribute("id", "o1");

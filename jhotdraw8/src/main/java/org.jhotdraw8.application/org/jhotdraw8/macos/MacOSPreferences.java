@@ -2,11 +2,7 @@ package org.jhotdraw8.macos;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -18,15 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.io.StringReader;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 public class MacOSPreferences {
@@ -309,6 +298,8 @@ public class MacOSPreferences {
         DocumentBuilder builder;
         try {
             builder = builderFactory.newDocumentBuilder();
+            // We do not want that the reader creates a socket connection!
+            builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
             return builder.parse(inputSource);
         } catch (ParserConfigurationException e) {
             throw new IOException("Cannot create document builder for file: " + file, e);
