@@ -118,7 +118,7 @@ public class Transforms {
             // tx the X coordinate translation element of the 3x4 matrix
             // ty the Y coordinate translation element of the 3x4 matrix
             //      [ xx xy tx ]    [ a b tx ]
-            //      [ yx yy ty  ] =[ c d ty ] 
+            //      [ yx yy ty  ] =[ c d ty ]
             //       [  0  0  1  ]  [ 0 0 1 ]
             double a = transform.getMxx();
             double b = transform.getMxy();
@@ -204,7 +204,20 @@ public class Transforms {
     @NonNull
     public static Transform rotate(@NonNull Point2D tangent, @NonNull Point2D pivot) {
         double theta = Math.atan2(tangent.getY(), tangent.getX());
-        return Transform.rotate(theta * 180.0 / Math.PI, pivot.getX(), pivot.getY());
+        return rotateRadians(theta, pivot.getX(), pivot.getY());
+    }
+
+    /**
+     * Creates a transform from an angle given in radians and the pivot point
+     * of the rotation.
+     *
+     * @param theta  the angle of the rotation in radians
+     * @param pivotX the X coordinate of the rotation pivot point
+     * @param pivotY the Y coordinate of the rotation pivot point
+     * @return a rotation matrix
+     */
+    private static Transform rotateRadians(double theta, double pivotX, double pivotY) {
+        return new PreciseRotate(theta * 180.0 / Math.PI, pivotX, pivotY);
     }
 
     /**
@@ -222,7 +235,7 @@ public class Transforms {
     @NonNull
     public static Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
         double theta = Math.atan2(tangentY, tangentX);
-        return Transform.rotate(theta * 180.0 / Math.PI, pivotX, pivotY);
+        return rotateRadians(theta, pivotX, pivotY);
     }
 
     /**

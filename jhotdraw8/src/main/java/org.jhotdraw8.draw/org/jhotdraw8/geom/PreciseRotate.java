@@ -10,7 +10,7 @@ import javafx.scene.transform.Rotate;
 
 /**
  * Same as class {@link Rotate} but treats 180 degree angles
- * specially for better numeric stability.
+ * specially for better numeric precision.
  */
 public class PreciseRotate extends Rotate {
     public PreciseRotate(double r, double x, double y) {
