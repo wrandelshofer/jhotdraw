@@ -229,7 +229,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
                 }
             }
-            if (newRoot == root) {
+            if (newRoot == getRoot()) {
                 for (Figure f : child.preorderIterable()) {
                     fireTreeModelEvent(TreeModelEvent.nodeAddedToTree(this, newRoot, f));
                 }
