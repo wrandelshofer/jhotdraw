@@ -40,19 +40,19 @@ import java.security.AccessControlException;
  * @version $Name: RELEASE_2_2_1 $, $Revision: 1.3 $
  */
 public class XMLParserFactory {
-    
+
     /**
      * The class name of the default XML parser.
      */
-    public static final String DEFAULT_CLASS = "StdXMLParser";
-    
-    
+    public static final String DEFAULT_CLASS = "net.n3.nanoxml.StdXMLParser";
+
+
     /**
      * The Java properties key of the XML parser class name.
      */
     public static final String CLASS_KEY = "net.n3.nanoxml.XMLParser";
-    
-    
+
+
     /**
      * Creates a default parser.
      *
@@ -84,8 +84,8 @@ public class XMLParserFactory {
         return XMLParserFactory.createXMLParser(className,
                 new StdXMLBuilder());
     }
-    
-    
+
+
     /**
      * Creates a default parser.
      *
@@ -118,8 +118,8 @@ public class XMLParserFactory {
         // END PATCH W. Randelshofer catch AccessControlException
         return XMLParserFactory.createXMLParser(className, builder);
     }
-    
-    
+
+
     /**
      * Creates a parser.
      *
@@ -146,5 +146,5 @@ public class XMLParserFactory {
         parser.setValidator(new NonValidator());
         return parser;
     }
-    
+
 }
