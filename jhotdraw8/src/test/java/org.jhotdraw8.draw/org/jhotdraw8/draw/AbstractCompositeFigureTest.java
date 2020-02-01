@@ -221,6 +221,16 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
+        public boolean isSuitableChild(@NonNull Figure newChild) {
+            return false;
+        }
+
+        @Override
+        public boolean isSuitableParent(@NonNull Figure newChild) {
+            return false;
+        }
+
+        @Override
         public boolean invalidateTransforms() {
             throw new UnsupportedOperationException("Not supported yet.");
         }

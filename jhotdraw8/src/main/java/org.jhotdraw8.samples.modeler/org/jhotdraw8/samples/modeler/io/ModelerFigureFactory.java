@@ -51,11 +51,11 @@ import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.css.text.InsetsConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.ClippingFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.DrawingFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.GroupFigure;
@@ -137,12 +137,12 @@ public class ModelerFigureFactory extends AbstractFigureFactory {
         addFigureKeysAndNames("MLDiagram", MLDiagramFigure.class);
 
         {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(DrawingFigure.class));
+            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(AbstractDrawing.class));
             keys.remove(Drawing.USER_AGENT_STYLESHEETS);
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);
             keys.remove(Drawing.DOCUMENT_HOME);
-            addFigureKeysAndNames("Drawing", DrawingFigure.class, keys);
+            addFigureKeysAndNames("Drawing", AbstractDrawing.class, keys);
         }
 
         {

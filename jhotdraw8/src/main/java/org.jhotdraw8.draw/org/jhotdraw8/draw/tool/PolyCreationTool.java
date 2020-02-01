@@ -75,10 +75,10 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
             points = new ArrayList<>();
             points.add(c);
             points.add(c);
-            Layer layer = getOrCreateLayer(view, createdFigure);
-            view.setActiveLayer(layer);
+            Figure parent = getOrCreateParent(view, createdFigure);
+            view.setActiveParent(parent);
 
-            dm.addChildTo(createdFigure, layer);
+            dm.addChildTo(createdFigure, parent);
         } else {
             points.add(c);
         }

@@ -210,6 +210,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void insertChildAt(@NonNull Figure child, @NonNull Figure parent, int index) {
+        if (!parent.isSuitableChild(child) || !child.isSuitableParent(parent)) {
+            return;
+        }
         Figure oldRoot = child.getRoot();
         Figure oldParent = child.getParent();
         if (oldParent != null) {
@@ -226,7 +229,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
                 }
             }
-            if (newRoot != null) {
+            if (newRoot == root) {
                 for (Figure f : child.preorderIterable()) {
                     fireTreeModelEvent(TreeModelEvent.nodeAddedToTree(this, newRoot, f));
                 }
@@ -556,41 +559,41 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-            case TRANSFORM_CHANGED:
-                markDirty(figure, DirtyBits.TRANSFORM);
+        case TRANSFORM_CHANGED:
+            markDirty(figure, DirtyBits.TRANSFORM);
+            invalidate();
+            break;
+        case PROPERTY_VALUE_CHANGED: {
+            Key<Object> key = event.getKey();
+            Object oldValue = event.getOldValue();
+            Object newValue = event.getNewValue();
+            figure.propertyChangedNotify(key, oldValue, newValue);
+
+            //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
+            final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
+                    DirtyBits.LAYOUT, DirtyBits.NODE, DirtyBits.TRANSFORM,
+                    DirtyBits.LAYOUT_OBSERVERS
+            );
+            if (!dm.isEmpty()) {
+                markDirty(figure, dm);
                 invalidate();
-                break;
-            case PROPERTY_VALUE_CHANGED: {
-                Key<Object> key = event.getKey();
-                Object oldValue = event.getOldValue();
-                Object newValue = event.getNewValue();
-                figure.propertyChangedNotify(key, oldValue, newValue);
-
-                //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
-                final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
-                        DirtyBits.LAYOUT, DirtyBits.NODE, DirtyBits.TRANSFORM,
-                        DirtyBits.LAYOUT_OBSERVERS
-                );
-                    if (!dm.isEmpty()) {
-                        markDirty(figure, dm);
-                        invalidate();
-                    }
-
-                break;
             }
-            case LAYOUT_CHANGED:
-                // A layout change also changes the transform of the figure, because its center may have moved
-                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.TRANSFORM);
-                invalidate();
-                break;
-            case STYLE_CHANGED:
-                markDirty(figure, DirtyBits.STYLE);
-                invalidate();
-                break;
 
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
+            break;
+        }
+        case LAYOUT_CHANGED:
+            // A layout change also changes the transform of the figure, because its center may have moved
+            markDirty(figure, DirtyBits.LAYOUT, DirtyBits.TRANSFORM);
+            invalidate();
+            break;
+        case STYLE_CHANGED:
+            markDirty(figure, DirtyBits.STYLE);
+            invalidate();
+            break;
+
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + "not supported");
         }
     }
 
@@ -602,36 +605,36 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-            case NODE_ADDED_TO_PARENT:
-                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
-                invalidate();
-                break;
-            case NODE_ADDED_TO_TREE:
-                if (event.getRoot() instanceof Drawing) {
-                    figure.addNotify((Drawing) event.getRoot());
-                }
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                if (event.getRoot() instanceof Drawing) {
-                    figure.removeNotify((Drawing) event.getRoot());
-                }
-                removeDirty(figure);
-                break;
-            case NODE_REMOVED_FROM_PARENT:
-                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
-                invalidate();
-                break;
-            case NODE_CHANGED:
-                break;
-            case ROOT_CHANGED:
-                dirties.clear();
-                valid = true;
-                break;
-            case SUBTREE_NODES_CHANGED:
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
+        case NODE_ADDED_TO_PARENT:
+            markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
+            invalidate();
+            break;
+        case NODE_ADDED_TO_TREE:
+            if (event.getRoot() instanceof Drawing) {
+                figure.addNotify((Drawing) event.getRoot());
+            }
+            break;
+        case NODE_REMOVED_FROM_TREE:
+            if (event.getRoot() instanceof Drawing) {
+                figure.removeNotify((Drawing) event.getRoot());
+            }
+            removeDirty(figure);
+            break;
+        case NODE_REMOVED_FROM_PARENT:
+            markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
+            invalidate();
+            break;
+        case NODE_CHANGED:
+            break;
+        case ROOT_CHANGED:
+            dirties.clear();
+            valid = true;
+            break;
+        case SUBTREE_NODES_CHANGED:
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + "not supported");
         }
     }
 }

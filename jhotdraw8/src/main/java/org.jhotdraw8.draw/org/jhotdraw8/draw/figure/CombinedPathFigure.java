@@ -218,4 +218,20 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         ADD, SUBTRACT, INTERSECT, XOR
     }
 
+
+    @Override
+    public boolean isSuitableParent(@NonNull Figure newParent) {
+        return true;
+    }
+
+    /**
+     * This method returns true for instances of PathIterableFigure.
+     *
+     * @param newChild The new child figure.
+     * @return true if instanceof PathIterableFigure.
+     */
+    @Override
+    public boolean isSuitableChild(@NonNull Figure newChild) {
+        return newChild instanceof PathIterableFigure;
+    }
 }

@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 import java.io.IOException;
@@ -50,7 +49,7 @@ public class MultiClipboardInputFormat implements ClipboardInputFormat {
 
 
     @Override
-    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Layer layer) throws IOException {
+    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, Figure layer) throws IOException {
         createFormats();
 
 

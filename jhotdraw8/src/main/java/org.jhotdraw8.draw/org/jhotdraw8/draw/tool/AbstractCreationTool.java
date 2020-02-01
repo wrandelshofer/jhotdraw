@@ -55,20 +55,24 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      *
      * @param dv        the drawing view
      * @param newFigure the figure
-     * @return a suitable layer for the figure
+     * @return a suitable parent for the figure
      */
     @Nullable
-    protected Layer getOrCreateLayer(@NonNull DrawingView dv, Figure newFigure) {
+    protected Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
         // try to use the active layer
-        Layer activeLayer = dv.getActiveLayer();
-        if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {
-            return activeLayer;
+        Figure activeParent = dv.getActiveParent();
+        if (activeParent != null && activeParent.isEditable() && activeParent.isAllowsChildren()
+                && activeParent.isSuitableChild(newFigure)
+                && newFigure.isSuitableParent(activeParent)) {
+            return activeParent;
         }
-        // search for a suitable layer front to back
-        Layer layer = null;
+        // search for a suitable parent front to back
+        Figure layer = null;
         for (Figure candidate : new ReversedList<>(dv.getDrawing().getChildren())) {
-            if (candidate.isEditable() && candidate.isAllowsChildren()) {
-                layer = (Layer) candidate;
+            if (candidate.isEditable() && candidate.isAllowsChildren()
+                    && newFigure.isSuitableParent(candidate)
+                    && candidate.isSuitableChild(newFigure)) {
+                layer = candidate;
                 break;
             }
         }
@@ -76,6 +80,10 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
         if (layer == null) {
             layer = layerFactory.get();
             dv.getModel().addChildTo(layer, dv.getDrawing());
+            if (layer.getParent() != dv.getDrawing()) {
+                // the drawing does not accept the layer!
+                return dv.getDrawing();
+            }
         }
         return layer;
     }

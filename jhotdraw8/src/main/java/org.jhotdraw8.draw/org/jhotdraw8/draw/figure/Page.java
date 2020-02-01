@@ -131,7 +131,7 @@ public interface Page extends Figure {
     }
 
     @Override
-    default boolean isSuitableParent(Figure newParent) {
+    default boolean isSuitableParent(@NonNull Figure newParent) {
         return (newParent instanceof Layer) || (newParent instanceof Clipping);
     }
 

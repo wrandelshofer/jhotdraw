@@ -129,16 +129,16 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
     }
 
     public void paste() {
-        // Only paste if there is an editable layer.
-        Layer layer = getActiveLayer();
-        if (layer == null || !layer.isEditable()) {
-            layer = null;
+        // Only paste if there is an editable parent.
+        Figure parent = getActiveParent();
+        if (parent == null || !parent.isEditable()) {
+            parent = null;
             for (Figure f : getDrawing().getChildren()) {
                 if (f.isEditable() && (f instanceof Layer)) {
-                    layer = (Layer) f;
+                    parent = (Layer) f;
                 }
             }
-            if (layer == null) {
+            if (parent == null) {
                 return;// FIXME should create a layer with the editor
             }
         }
@@ -146,7 +146,7 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         ClipboardInputFormat in = getClipboardInputFormat();
         if (in != null) {
             try {
-                in.read(cb, getModel(), getDrawing(), layer);
+                in.read(cb, getModel(), getDrawing(), parent);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

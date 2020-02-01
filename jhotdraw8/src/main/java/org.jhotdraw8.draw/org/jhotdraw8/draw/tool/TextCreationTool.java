@@ -136,10 +136,10 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();
 
-        Layer layer = getOrCreateLayer(view, createdFigure);
-        view.setActiveLayer(layer);
+        Figure parent = getOrCreateParent(view, createdFigure);
+        view.setActiveParent(parent);
 
-        dm.addChildTo(createdFigure, layer);
+        dm.addChildTo(createdFigure, parent);
     }
 
 

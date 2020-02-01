@@ -53,9 +53,9 @@ import org.jhotdraw8.css.MacOSSystemColorConverter;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.constrain.NullConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.DrawingFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -109,7 +109,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * The id of the tool pane for CSS styling.
      */
     public static final String TOOL_PANE_ID = "toolPane";
-    private final ObjectProperty<Layer> activeLayer = new SimpleObjectProperty<>(this, ACTIVE_LAYER_PROPERTY);
+    private final ObjectProperty<Figure> activeParent = new SimpleObjectProperty<>(this, ACTIVE_PARENT_PROPERTY);
 
     private Rectangle canvasPane;
     /**
@@ -293,8 +293,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     @NonNull
     @Override
-    public ObjectProperty<Layer> activeLayerProperty() {
-        return activeLayer;
+    public ObjectProperty<Figure> activeParentProperty() {
+        return activeParent;
     }
 
     private void clearNodes() {
@@ -865,7 +865,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         clearNodes();
         clearSelection();
         drawingPane.getChildren().clear();
-        activeLayer.set(null);
+        activeParent.set(null);
         Drawing d = getModel().getDrawing();
         drawing.set(d);
         if (d != null) {
@@ -878,7 +878,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
                 Layer layer = (Layer) d.getChild(i);
                 if (!layer.isEditable() && layer.isShowing()) {
-                    activeLayer.set(layer);
+                    activeParent.set(layer);
                     break;
                 }
 
@@ -1024,7 +1024,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // different from the old value!
         drawingPane.layoutBoundsProperty().addListener(observer -> updateLayout());
 
-        drawingModel.get().setRoot(new DrawingFigure());
+        drawingModel.get().setRoot(new SimpleDrawing());
         handleNewDrawingModel(null, drawingModel.get());
 
         // Set stylesheet

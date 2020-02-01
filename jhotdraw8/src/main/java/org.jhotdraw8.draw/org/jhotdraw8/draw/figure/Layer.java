@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.
@@ -43,7 +43,7 @@ public interface Layer extends Figure {
     }
 
     @Override
-    default boolean isSuitableParent(@Nullable Figure newParent) {
-        return newParent == null || (newParent instanceof Drawing) || (newParent instanceof Clipping);
+    default boolean isSuitableParent(@NonNull Figure newParent) {
+        return (newParent instanceof LayeredDrawing) || (newParent instanceof Clipping);
     }
 }

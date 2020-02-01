@@ -122,20 +122,6 @@ public class LayerFigure extends AbstractCompositeFigure
         return false;
     }
 
-    /**
-     * This method whether the provided figure is a suitable parent for this
-     * figure.
-     * <p>
-     * This implementation returns true if {@code newParent} is a
-     * {@link Drawing}.
-     *
-     * @param newParent The new parent figure.
-     * @return true if {@code newParent} is an acceptable parent
-     */
-    @Override
-    public boolean isSuitableParent(Figure newParent) {
-        return (newParent instanceof Drawing);
-    }
 
     /**
      * Layers never create handles.
@@ -145,4 +131,8 @@ public class LayerFigure extends AbstractCompositeFigure
         // empty
     }
 
+    @Override
+    public boolean isSuitableChild(@NonNull Figure newChild) {
+        return true;
+    }
 }

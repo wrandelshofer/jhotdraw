@@ -269,7 +269,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
 
     @NonNull
     @Override
-    public Set<Figure> read(@NonNull Clipboard clipboard, @NonNull DrawingModel model, @NonNull Drawing drawing, @Nullable Layer layer) throws IOException {
+    public Set<Figure> read(@NonNull Clipboard clipboard, @NonNull DrawingModel model, @NonNull Drawing drawing, @Nullable Figure layer) throws IOException {
         setUriResolver(new UriResolver(null, drawing.get(Drawing.DOCUMENT_HOME)));
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {

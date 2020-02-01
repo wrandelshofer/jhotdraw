@@ -144,7 +144,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public boolean isSuitableParent(Figure newParent) {
+    public boolean isSuitableParent(@NonNull Figure newParent) {
         return Slice.super.isSuitableParent(newParent);
     }
 

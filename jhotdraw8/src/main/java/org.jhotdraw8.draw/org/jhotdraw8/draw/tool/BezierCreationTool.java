@@ -167,10 +167,12 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             createdFigure = createFigure();
             points = new ArrayList<>();
             points.add(new BezierNode(c.getConvertedValue()));
-            Layer layer = getOrCreateLayer(view, createdFigure);
-            view.setActiveLayer(layer);
+            Figure parent = getOrCreateParent(view, createdFigure);
+            if (parent instanceof Layer) {
+                view.setActiveParent((Layer) parent);
+            }
 
-            dm.addChildTo(createdFigure, layer);
+            dm.addChildTo(createdFigure, parent);
         } else {
             points.add(new BezierNode(c.getConvertedValue()));
         }

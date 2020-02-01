@@ -82,9 +82,9 @@ public class LayersInspector extends AbstractDrawingInspector {
     private HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
     @Nullable
-    private ChangeListener<Layer> selectedLayerHandler = new ChangeListener<Layer>() {
+    private ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
         @Override
-        public void changed(ObservableValue<? extends Layer> observable, Layer oldValue, @Nullable Layer newValue) {
+        public void changed(ObservableValue<? extends Figure> observable, Figure oldValue, @Nullable Figure newValue) {
             if (newValue != null) {
                 listView.getSelectionModel().select(newValue);
             }
@@ -223,7 +223,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene. 
+        // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
 
             FXMLLoader loader = new FXMLLoader();
@@ -260,7 +260,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Figure>) c -> {
                 Layer selected = (Layer) listView.getSelectionModel().getSelectedItem();
                 if (selected != null) {
-                    getSubject().setActiveLayer(selected);
+                    getSubject().setActiveParent(selected);
                 }
 
             });
@@ -314,11 +314,11 @@ public class LayersInspector extends AbstractDrawingInspector {
     protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         super.handleDrawingViewChanged(observable, oldValue, newValue);
         if (oldValue != null) {
-            oldValue.activeLayerProperty().removeListener(selectedLayerHandler);
+            oldValue.activeParentProperty().removeListener(selectedLayerHandler);
             oldValue.selectedFiguresProperty().removeListener(selectionInvalidationListener);
         }
         if (newValue != null) {
-            newValue.activeLayerProperty().addListener(selectedLayerHandler);
+            newValue.activeParentProperty().addListener(selectedLayerHandler);
             newValue.selectedFiguresProperty().addListener(selectionInvalidationListener);
         }
 

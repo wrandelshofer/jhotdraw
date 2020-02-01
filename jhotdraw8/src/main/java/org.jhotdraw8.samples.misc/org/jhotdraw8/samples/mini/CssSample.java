@@ -18,12 +18,12 @@ import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.DrawingFigure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -42,7 +42,7 @@ public class CssSample extends Application {
 
     @Override
     public void start(@NonNull Stage primaryStage) throws Exception {
-        Drawing drawing = new DrawingFigure();
+        Drawing drawing = new SimpleDrawing();
 
         RectangleFigure vertex1 = new RectangleFigure(10, 10, 30, 20);
         RectangleFigure vertex2 = new RectangleFigure(50, 40, 30, 20);

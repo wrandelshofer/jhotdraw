@@ -81,4 +81,15 @@ public class GroupFigure extends AbstractCompositeFigure
             group.setAll(nodes);
         }
     }
+
+    @Override
+    public boolean isSuitableParent(@NonNull Figure newParent) {
+        return true;
+    }
+
+
+    @Override
+    public boolean isSuitableChild(@NonNull Figure newChild) {
+        return true;
+    }
 }

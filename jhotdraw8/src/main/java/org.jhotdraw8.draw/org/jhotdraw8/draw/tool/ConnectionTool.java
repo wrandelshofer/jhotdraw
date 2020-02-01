@@ -82,16 +82,19 @@ public class ConnectionTool extends AbstractTool {
      * @return a suitable layer for the figure
      */
     @Nullable
-    protected Layer getOrCreateLayer(@NonNull DrawingView dv, Figure newFigure) {
+    protected Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
         // try to use the active layer
-        Layer activeLayer = dv.getActiveLayer();
-        if (activeLayer != null && activeLayer.isEditable() && activeLayer.isAllowsChildren()) {
-            return activeLayer;
+        Figure activeParent = dv.getActiveParent();
+        if (activeParent != null && activeParent.isEditable() && activeParent.isAllowsChildren()) {
+            return activeParent;
         }
         // search for a suitable layer front to back
         Layer layer = null;
         for (Figure candidate : new ReversedList<>(dv.getDrawing().getChildren())) {
-            if (candidate.isEditable() && candidate.isAllowsChildren()) {
+            if (candidate.isEditable() && candidate.isAllowsChildren()
+                    && candidate.isSuitableChild(newFigure)
+                    && newFigure.isSuitableParent(candidate)
+            ) {
                 layer = (Layer) candidate;
                 break;
             }
@@ -166,8 +169,8 @@ public class ConnectionTool extends AbstractTool {
         DrawingModel dm = view.getModel();
         Drawing drawing = dm.getDrawing();
 
-        Layer layer = getOrCreateLayer(view, figure);
-        view.setActiveLayer(layer);
+        Figure parent = getOrCreateParent(view, figure);
+        view.setActiveParent(parent);
 
         Connector newConnector = null;
         Figure newConnectedFigure = null;
@@ -194,7 +197,7 @@ public class ConnectionTool extends AbstractTool {
         figure.set(LineConnectionFigure.START_CONNECTOR, newConnector);
         figure.set(LineConnectionFigure.START_TARGET, newConnectedFigure);
 
-        dm.addChildTo(figure, layer);
+        dm.addChildTo(figure, parent);
         event.consume();
     }
 

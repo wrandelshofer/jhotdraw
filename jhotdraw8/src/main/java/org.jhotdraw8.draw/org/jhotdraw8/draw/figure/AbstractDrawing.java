@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class DrawingFigure extends AbstractCompositeFigure
+public abstract class AbstractDrawing extends AbstractCompositeFigure
         implements Drawing, StyleableFigure, LockableFigure, NonTransformableFigure {
 
     /**
@@ -39,15 +39,15 @@ public class DrawingFigure extends AbstractCompositeFigure
     @Nullable
     private StylesheetsManager<Figure> styleManager = null;
 
-    public DrawingFigure() {
+    public AbstractDrawing() {
     }
 
-    public DrawingFigure(double width, double height) {
+    public AbstractDrawing(double width, double height) {
         this(new CssSize(width), new CssSize(height));
 
     }
 
-    public DrawingFigure(CssSize width, CssSize height) {
+    public AbstractDrawing(CssSize width, CssSize height) {
         set(WIDTH, width);
         set(HEIGHT, height);
     }
@@ -160,5 +160,11 @@ public class DrawingFigure extends AbstractCompositeFigure
             group.setAll(nodes);
         }
     }
+
+    @Override
+    public boolean isSuitableParent(@NonNull Figure newParent) {
+        return true;
+    }
+
 
 }

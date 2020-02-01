@@ -312,12 +312,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     // ----
 
     /**
-     * Adds a new child to the figure.
+     * Adds a new child to the figure if it is a suitable child and this
+     * figure is a suitable parent.
      *
      * @param newChild the new child
+     * @return whether the child was added
      */
-    default void addChild(Figure newChild) {
-        getChildren().add(newChild);
+    default boolean addChild(Figure newChild) {
+        return getChildren().add(newChild);
     }
 
     /**
@@ -873,13 +875,22 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     boolean isSelectable();
 
     /**
-     * This method whether the provided figure is a suitable parent for this
+     * This method returns whether the provided figure is a suitable parent for this
      * figure.
      *
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
      */
-    boolean isSuitableParent(Figure newParent);
+    boolean isSuitableParent(@NonNull Figure newParent);
+
+    /**
+     * This method returns whether the provided figure is a suitable child for this
+     * figure.
+     *
+     * @param newChild The new child figure.
+     * @return true if {@code newParent} is an acceptable child
+     */
+    boolean isSuitableChild(@NonNull Figure newChild);
 
     /**
      * Returns true if the specified key is supported by this figure.

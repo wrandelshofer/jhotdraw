@@ -4,7 +4,11 @@
  */
 package org.jhotdraw8.draw;
 
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -18,7 +22,6 @@ import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Figures;
-import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
@@ -94,7 +97,7 @@ public interface DrawingView extends RenderContext {
     /**
      * The name of the active layer property.
      */
-    String ACTIVE_LAYER_PROPERTY = "activeLayer";
+    String ACTIVE_PARENT_PROPERTY = "activeLayer";
     /**
      * The name of the clipboardInputFormat property.
      */
@@ -138,13 +141,14 @@ public interface DrawingView extends RenderContext {
      * @return the editor property
      */
     ObjectProperty<DrawingEditor> editorProperty();
+
     /**
      * The active layer of the drawing.
      *
      * @return the active layer of the drawing. Returns null if the drawing has
      * no layers or no layer has been activated.
      */
-    @NonNull ObjectProperty<Layer> activeLayerProperty();
+    @NonNull ObjectProperty<Figure> activeParentProperty();
 
     default void scrollSelectedFiguresToVisible() {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
@@ -476,13 +480,13 @@ public interface DrawingView extends RenderContext {
     }
 
 
-    default void setActiveLayer(@Nullable Layer newValue) {
-        activeLayerProperty().set(newValue);
+    default void setActiveParent(@Nullable Figure newValue) {
+        activeParentProperty().set(newValue);
     }
 
     @Nullable
-    default Layer getActiveLayer() {
-        return activeLayerProperty().get();
+    default Figure getActiveParent() {
+        return activeParentProperty().get();
     }
 
     default void setZoomFactor(double newValue) {

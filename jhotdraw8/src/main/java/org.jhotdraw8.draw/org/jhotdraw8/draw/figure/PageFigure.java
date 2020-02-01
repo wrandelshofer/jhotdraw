@@ -337,6 +337,11 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
+    public boolean isSuitableChild(@NonNull Figure newChild) {
+        return true;
+    }
+
+    @Override
     public void layout(@NonNull RenderContext ctx) {
         int currentPage = 0;
         final Transform pageTransform = getPageTransform(currentPage);

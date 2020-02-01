@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Defines a slice of a drawing.
@@ -20,7 +20,7 @@ import org.jhotdraw8.annotation.Nullable;
 public interface Slice extends Figure {
 
     @Override
-    default boolean isSuitableParent(@Nullable Figure newParent) {
+    default boolean isSuitableParent(@NonNull Figure newParent) {
         return newParent == null || (newParent instanceof Layer) || (newParent instanceof Clipping);
     }
 

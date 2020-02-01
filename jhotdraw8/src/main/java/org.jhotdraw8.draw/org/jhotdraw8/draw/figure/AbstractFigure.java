@@ -192,22 +192,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return propertyChangeListeners != null && !propertyChangeListeners.isEmpty();
     }
 
-    /**
-     * This method whether the provided figure is a suitable parent for this
-     * figure.
-     * <p>
-     * This implementation returns false if {@code newParent} is a
-     * {@link Drawing}. Because only {@link org.jhotdraw8.draw.figure.Layer}s
-     * may have {@code org.jhotdraw8.draw.Drawing} as a parent.
-     *
-     * @param newParent The new parent figure.
-     * @return true if {@code newParent} is an acceptable parent
-     */
-    @Override
-    public boolean isSuitableParent(@Nullable Figure newParent) {
-        return newParent != null && !(newParent instanceof Drawing);
-    }
-
     @Nullable
     @Override
     public ObjectProperty<Figure> parentProperty() {

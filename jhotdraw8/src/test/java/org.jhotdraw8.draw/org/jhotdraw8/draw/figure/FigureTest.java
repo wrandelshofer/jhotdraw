@@ -97,7 +97,12 @@ public class FigureTest {
             return false;
         }
 
-        public boolean isSuitableParent(Figure newParent) {
+        public boolean isSuitableParent(@NonNull Figure newParent) {
+            return false;
+        }
+
+        @Override
+        public boolean isSuitableChild(@NonNull Figure newChild) {
             return false;
         }
 

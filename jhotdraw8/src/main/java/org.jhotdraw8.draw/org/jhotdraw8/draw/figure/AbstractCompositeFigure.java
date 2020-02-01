@@ -58,11 +58,16 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
         @Override
         protected boolean doAdd(int index, @NonNull Figure element, boolean checkForDuplicates) {
-            Figure oldParent = element.getParent();
-            if (oldParent != AbstractCompositeFigure.this) {
-                return super.doAdd(index, element, false);
+            if (AbstractCompositeFigure.this.isSuitableChild(element) &&
+                    element.isSuitableParent(AbstractCompositeFigure.this)) {
+                Figure oldParent = element.getParent();
+                if (oldParent != AbstractCompositeFigure.this) {
+                    return super.doAdd(index, element, false);
+                } else {
+                    return super.doAdd(index, element, true);// linear search!
+                }
             } else {
-                return super.doAdd(index, element, true);// linear search!
+                return false;
             }
         }
 

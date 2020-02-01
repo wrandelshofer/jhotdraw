@@ -56,10 +56,10 @@ import org.jhotdraw8.draw.action.SendBackwardAction;
 import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
+import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.BezierFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.DrawingFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FillableFigure;
@@ -75,6 +75,7 @@ import org.jhotdraw8.draw.figure.PageLabelFigure;
 import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
+import org.jhotdraw8.draw.figure.SimpleLayeredDrawing;
 import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -185,7 +186,7 @@ public class GrapherActivity extends AbstractDocumentBasedActivity implements Do
     @NonNull
     @Override
     public CompletionStage<Void> clear() {
-        Drawing d = new DrawingFigure();
+        Drawing d = new SimpleLayeredDrawing();
         d.set(StyleableFigure.ID, "drawing1");
         LayerFigure layer = new LayerFigure();
         layer.set(StyleableFigure.ID, "layer1");
@@ -449,7 +450,7 @@ public class GrapherActivity extends AbstractDocumentBasedActivity implements Do
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
             SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-            DrawingFigure drawing = (DrawingFigure) io.read(uri, null, workState);
+            AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             applyUserAgentStylesheet(drawing);
             return drawing;

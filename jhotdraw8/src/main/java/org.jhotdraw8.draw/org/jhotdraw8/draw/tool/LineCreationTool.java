@@ -63,10 +63,10 @@ public class LineCreationTool extends CreationTool {
         createdFigure.set(p2, c);
         Drawing drawing = dm.getDrawing();
 
-        Layer layer = getOrCreateLayer(view, createdFigure);
-        view.setActiveLayer(layer);
+        Figure parent = getOrCreateParent(view, createdFigure);
+        view.setActiveParent(parent);
 
-        dm.addChildTo(createdFigure, layer);
+        dm.addChildTo(createdFigure, parent);
         event.consume();
     }
 

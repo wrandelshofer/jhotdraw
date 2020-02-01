@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -78,18 +77,25 @@ public class ClippingFigure extends AbstractCompositeFigure
     }
 
     /**
-     * This method whether the provided figure is a suitable parent for this
-     * figure.
-     * <p>
-     * This implementation returns true if {@code newParent} is a
-     * {@link Drawing}.
+     * This method returns false for all new parents.
      *
      * @param newParent The new parent figure.
-     * @return true if {@code newParent} is an acceptable parent
+     * @return false
      */
     @Override
-    public boolean isSuitableParent(@Nullable Figure newParent) {
-        return newParent == null;
+    public boolean isSuitableParent(@NonNull Figure newParent) {
+        return false;
+    }
+
+    /**
+     * This method returns true for all children.
+     *
+     * @param newChild The new child figure.
+     * @return true
+     */
+    @Override
+    public boolean isSuitableChild(@NonNull Figure newChild) {
+        return true;
     }
 
     /**
