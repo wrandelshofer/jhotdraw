@@ -51,8 +51,8 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
     }
 
     @Override
-    public <TT extends ImmutableSet<T>> void produceTokens(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
-        if (value.isEmpty()) {
+    public <TT extends ImmutableSet<T>> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+        if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             boolean first = true;

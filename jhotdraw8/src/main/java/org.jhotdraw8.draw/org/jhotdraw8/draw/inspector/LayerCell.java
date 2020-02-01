@@ -167,7 +167,7 @@ public class LayerCell extends ListCell<Figure> {
      */
     @Nullable
     public final StringConverter<Figure> getConverter() {
-        return null;//converterProperty().get(); 
+        return null;//converterProperty().get();
     }
 
     @Override

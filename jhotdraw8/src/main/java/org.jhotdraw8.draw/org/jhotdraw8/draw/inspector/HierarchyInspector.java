@@ -124,23 +124,23 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
         model = new SimpleTreePresentationModel<>();
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
-                cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
+                cell.getValue() == null ? null : cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
         );
 
         idColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), StyleableFigure.ID));
+                        cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.ID));
 
         visibleColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), HideableFigure.VISIBLE)
+                        cell.getValue() == null ? null : cell.getValue().getValue(), HideableFigure.VISIBLE)
         );
         lockedColumn.setCellValueFactory(
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), LockableFigure.LOCKED)
+                        cell.getValue() == null ? null : cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
+                        cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Nullable
                     @Override
                     public ImmutableList<String> getValue() {
@@ -149,7 +149,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 }
         );
         pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
-                        cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
+                        cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
                     @Nullable
                     @Override
                     public ImmutableSet<PseudoClass> getValue() {
