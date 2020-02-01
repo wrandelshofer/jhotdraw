@@ -1636,6 +1636,7 @@ public class SVGOutputFormat implements OutputFormat {
 
         // Write XML content
         XMLWriter xmlWriter = new XMLWriter(writer);
+        xmlWriter.setIndentation("  ");
         xmlWriter.write(document, isPrettyPrint);
 
         // Flush writer

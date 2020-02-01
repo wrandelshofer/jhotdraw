@@ -213,7 +213,9 @@ public class SVGDrawingPanel extends JPanel implements Disposable {
         inputFormats.add(new TextInputFormat(new SVGTextFigure()));
         drawing.setInputFormats(inputFormats);
         LinkedList<OutputFormat> outputFormats = new LinkedList<OutputFormat>();
-        outputFormats.add(new SVGOutputFormat());
+        SVGOutputFormat svgOutputFormat = new SVGOutputFormat();
+        svgOutputFormat.setPrettyPrint(true);
+        outputFormats.add(svgOutputFormat);
         outputFormats.add(new SVGZOutputFormat());
         outputFormats.add(new ImageOutputFormat());
         outputFormats.add(new ImageOutputFormat("JPG", "Joint Photographics Experts Group (JPEG)", "jpg", BufferedImage.TYPE_INT_RGB));

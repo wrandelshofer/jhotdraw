@@ -53,6 +53,7 @@ public class XMLWriter
     * Where to write the output to.
     */
    private PrintWriter writer;
+   private String indentation="    ";
 
 
    /**
@@ -124,7 +125,7 @@ public class XMLWriter
        this.write(xml, prettyPrint, indent, true);
    }
 
-   
+
    /**
     * Writes an XML element.
     *
@@ -141,7 +142,7 @@ public class XMLWriter
    {
       if (prettyPrint) {
          for (int i = 0; i < indent; i++) {
-            this.writer.print(' ');
+            this.writer.print(indentation);
          }
       }
 
@@ -213,13 +214,13 @@ public class XMLWriter
             }
 
             for (IXMLElement child : xml.iterableChildren()) {
-               this.write(child, prettyPrint, indent + 4,
+               this.write(child, prettyPrint, indent + 1,
                           collapseEmptyElements);
             }
 
             if (prettyPrint) {
                for (int i = 0; i < indent; i++) {
-                  this.writer.print(' ');
+                  this.writer.print(indentation);
                }
             }
 
@@ -288,4 +289,11 @@ public class XMLWriter
       }
    }
 
+   public String getIndentation() {
+      return indentation;
+   }
+
+   public void setIndentation(String indentation) {
+      this.indentation = indentation;
+   }
 }

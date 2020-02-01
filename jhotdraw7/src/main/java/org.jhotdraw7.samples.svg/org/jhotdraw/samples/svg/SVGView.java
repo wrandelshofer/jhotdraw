@@ -140,7 +140,9 @@ public class SVGView extends AbstractView {
         if (selectedFormat != null) {
             selectedFormat.write(uri, svgPanel.getDrawing());
         } else {
-            new SVGOutputFormat().write(new File(uri), svgPanel.getDrawing());
+            SVGOutputFormat svgOutputFormat = new SVGOutputFormat();
+            svgOutputFormat.setPrettyPrint(true);
+            svgOutputFormat.write(new File(uri), svgPanel.getDrawing());
         }
     }
 
