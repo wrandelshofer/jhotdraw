@@ -169,7 +169,7 @@ public class SVGApplicationModel extends DefaultApplicationModel {
 
     /**
      * Overriden to create no toolbars.
-     * 
+     *
      * @param app
      * @param p
      * @return An empty list.
@@ -257,7 +257,7 @@ public class SVGApplicationModel extends DefaultApplicationModel {
         final HashMap<FileFilter, OutputFormat> fileFilterOutputFormatMap =
                 new HashMap<FileFilter, OutputFormat>();
 
-        c.putClientProperty("ffOutputFormatMap", fileFilterOutputFormatMap);
+        c.putClientProperty(OUTPUT_FORMAT_MAP_CLIENT_PROPERTY, fileFilterOutputFormatMap);
 
         if (v == null) {
             v = new SVGView();
