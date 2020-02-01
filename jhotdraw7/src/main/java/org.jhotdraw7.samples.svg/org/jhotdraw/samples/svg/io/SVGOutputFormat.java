@@ -18,6 +18,7 @@ import org.jhotdraw.io.Base64;
 import org.jhotdraw.samples.svg.Gradient;
 import org.jhotdraw.samples.svg.LinearGradient;
 import org.jhotdraw.samples.svg.RadialGradient;
+import org.jhotdraw.samples.svg.SVGAttributeKeys;
 import org.jhotdraw.samples.svg.figures.SVGEllipseFigure;
 import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
 import org.jhotdraw.samples.svg.figures.SVGImageFigure;
@@ -27,14 +28,22 @@ import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
 import org.jhotdraw.samples.svg.figures.SVGTextFigure;
 
 import org.jhotdraw.annotation.Nullable;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import javax.swing.JComponent;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.StyledDocument;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.TextAttribute;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -47,7 +56,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -123,6 +135,7 @@ public class SVGOutputFormat implements OutputFormat {
         strokeLinejoinMap.put(BasicStroke.JOIN_ROUND, "round");
         strokeLinejoinMap.put(BasicStroke.JOIN_BEVEL, "bevel");
     }
+
     private static final HashMap<Integer, String> strokeLinecapMap;
 
     static {
@@ -131,6 +144,7 @@ public class SVGOutputFormat implements OutputFormat {
         strokeLinecapMap.put(BasicStroke.CAP_ROUND, "round");
         strokeLinecapMap.put(BasicStroke.CAP_SQUARE, "square");
     }
+
     /**
      * Set this variable to true if values should be written with float precision
      * instead with double precision.
@@ -139,7 +153,9 @@ public class SVGOutputFormat implements OutputFormat {
      */
     private static final boolean isFloatPrecision = true;
 
-    /** Creates a new instance. */
+    /**
+     * Creates a new instance.
+     */
     public SVGOutputFormat() {
     }
 
@@ -224,16 +240,16 @@ public class SVGOutputFormat implements OutputFormat {
     protected void writeCircleElement(IXMLElement parent, SVGEllipseFigure f) throws IOException {
         parent.addChild(
                 createCircle(
-                document,
-                f.getX() + f.getWidth() / 2d,
-                f.getY() + f.getHeight() / 2d,
-                f.getWidth() / 2d,
-                f.getAttributes()));
+                        document,
+                        f.getX() + f.getWidth() / 2d,
+                        f.getY() + f.getHeight() / 2d,
+                        f.getWidth() / 2d,
+                        f.getAttributes()));
     }
 
     protected IXMLElement createCircle(IXMLElement doc,
-            double cx, double cy, double r,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                       double cx, double cy, double r,
+                                       Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("circle");
         writeAttribute(elem, "cx", cx, 0d);
         writeAttribute(elem, "cy", cy, 0d);
@@ -245,17 +261,17 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createG(IXMLElement doc,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                  Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("g");
         writeOpacityAttribute(elem, attributes);
         return elem;
     }
 
     protected IXMLElement createLinearGradient(IXMLElement doc,
-            double x1, double y1, double x2, double y2,
-            double[] stopOffsets, Color[] stopColors, double[] stopOpacities,
-            boolean isRelativeToFigureBounds,
-            AffineTransform transform) throws IOException {
+                                               double x1, double y1, double x2, double y2,
+                                               double[] stopOffsets, Color[] stopColors, double[] stopOpacities,
+                                               boolean isRelativeToFigureBounds,
+                                               AffineTransform transform) throws IOException {
         IXMLElement elem = doc.createElement("linearGradient");
 
         writeAttribute(elem, "x1", toNumber(x1), "0");
@@ -279,10 +295,10 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createRadialGradient(IXMLElement doc,
-            double cx, double cy, double fx, double fy, double r,
-            double[] stopOffsets, Color[] stopColors, double[] stopOpacities,
-            boolean isRelativeToFigureBounds,
-            AffineTransform transform) throws IOException {
+                                               double cx, double cy, double fx, double fy, double r,
+                                               double[] stopOffsets, Color[] stopColors, double[] stopOpacities,
+                                               boolean isRelativeToFigureBounds,
+                                               AffineTransform transform) throws IOException {
         IXMLElement elem = doc.createElement("radialGradient");
 
         writeAttribute(elem, "cx", toNumber(cx), "0.5");
@@ -317,8 +333,8 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createEllipse(IXMLElement doc,
-            double cx, double cy, double rx, double ry,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                        double cx, double cy, double rx, double ry,
+                                        Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("ellipse");
         writeAttribute(elem, "cx", cx, 0d);
         writeAttribute(elem, "cy", cy, 0d);
@@ -341,18 +357,18 @@ public class SVGOutputFormat implements OutputFormat {
     protected void writeImageElement(IXMLElement parent, SVGImageFigure f) throws IOException {
         parent.addChild(
                 createImage(document,
-                f.getX(),
-                f.getY(),
-                f.getWidth(),
-                f.getHeight(),
-                f.getImageData(),
-                f.getAttributes()));
+                        f.getX(),
+                        f.getY(),
+                        f.getWidth(),
+                        f.getHeight(),
+                        f.getImageData(),
+                        f.getAttributes()));
     }
 
     protected IXMLElement createImage(IXMLElement doc,
-            double x, double y, double w, double h,
-            byte[] imageData,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                      double x, double y, double w, double h,
+                                      byte[] imageData,
+                                      Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("image");
         writeAttribute(elem, "x", x, 0d);
         writeAttribute(elem, "y", y, 0d);
@@ -376,8 +392,8 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createPath(IXMLElement doc,
-            BezierPath[] beziers,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                     BezierPath[] beziers,
+                                     Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("path");
         writeShapeAttributes(elem, attributes);
         writeOpacityAttribute(elem, attributes);
@@ -402,8 +418,8 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createPolygon(IXMLElement doc,
-            Point2D.Double[] points,
-            Map<AttributeKey<?>, Object> attributes)
+                                        Point2D.Double[] points,
+                                        Map<AttributeKey<?>, Object> attributes)
             throws IOException {
         IXMLElement elem = doc.createElement("polygon");
         writeAttribute(elem, "points", toPoints(points), null);
@@ -429,8 +445,8 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createPolyline(IXMLElement doc,
-            Point2D.Double[] points,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                         Point2D.Double[] points,
+                                         Map<AttributeKey<?>, Object> attributes) throws IOException {
 
         IXMLElement elem = doc.createElement("polyline");
         writeAttribute(elem, "points", toPoints(points), null);
@@ -453,8 +469,8 @@ public class SVGOutputFormat implements OutputFormat {
     }
 
     protected IXMLElement createLine(IXMLElement doc,
-            double x1, double y1, double x2, double y2,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                     double x1, double y1, double x2, double y2,
+                                     Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("line");
         writeAttribute(elem, "x1", x1, 0d);
         writeAttribute(elem, "y1", y1, 0d);
@@ -469,20 +485,20 @@ public class SVGOutputFormat implements OutputFormat {
     protected void writeRectElement(IXMLElement parent, SVGRectFigure f) throws IOException {
         parent.addChild(
                 createRect(
-                document,
-                f.getX(),
-                f.getY(),
-                f.getWidth(),
-                f.getHeight(),
-                f.getArcWidth(),
-                f.getArcHeight(),
-                f.getAttributes()));
+                        document,
+                        f.getX(),
+                        f.getY(),
+                        f.getWidth(),
+                        f.getHeight(),
+                        f.getArcWidth(),
+                        f.getArcHeight(),
+                        f.getAttributes()));
     }
 
     protected IXMLElement createRect(IXMLElement doc,
-            double x, double y, double width, double height,
-            double rx, double ry,
-            Map<AttributeKey<?>, Object> attributes)
+                                     double x, double y, double width, double height,
+                                     double rx, double ry,
+                                     Map<AttributeKey<?>, Object> attributes)
             throws IOException {
         IXMLElement elem = doc.createElement("rect");
         writeAttribute(elem, "x", x, 0d);
@@ -508,17 +524,17 @@ public class SVGOutputFormat implements OutputFormat {
         }
         parent.addChild(
                 createText(
-                document,
-                f.getCoordinates(),
-                f.getRotates(),
-                styledDoc,
-                f.getAttributes()));
+                        document,
+                        f.getCoordinates(),
+                        f.getRotates(),
+                        styledDoc,
+                        f.getAttributes()));
     }
 
     protected IXMLElement createText(IXMLElement doc,
-            Point2D.Double[] coordinates, double[] rotate,
-            StyledDocument text,
-            Map<AttributeKey<?>, Object> attributes) throws IOException {
+                                     Point2D.Double[] coordinates, double[] rotate,
+                                     StyledDocument text,
+                                     Map<AttributeKey<?>, Object> attributes) throws IOException {
         IXMLElement elem = doc.createElement("text");
         StringBuilder bufX = new StringBuilder();
         StringBuilder bufY = new StringBuilder();
@@ -575,16 +591,28 @@ public class SVGOutputFormat implements OutputFormat {
 
         parent.addChild(
                 createTextArea(
-                document,
-                bounds.x, bounds.y, bounds.width, bounds.height,
-                styledDoc,
-                f.getAttributes()));
+                        document,
+                        bounds.x, bounds.y, bounds.width, bounds.height,
+                        styledDoc,
+                        f.getAttributes()));
     }
 
     protected IXMLElement createTextArea(IXMLElement doc,
-            double x, double y, double w, double h,
-            StyledDocument text,
-            Map<AttributeKey<?>, Object> attributes)
+                                         double x, double y, double w, double h,
+                                         StyledDocument text,
+                                         Map<AttributeKey<?>, Object> attributes)
+            throws IOException {
+        if (true) {
+            return createTextAreaWithSvgTextAreaElement(doc, x, y, w, h, text, attributes);
+        } else {
+            return createTextAreaWithSvgTextElement(doc, x, y, w, h, text, attributes);
+        }
+    }
+
+    protected IXMLElement createTextAreaWithSvgTextAreaElement(IXMLElement doc,
+                                                               double x, double y, double w, double h,
+                                                               StyledDocument text,
+                                                               Map<AttributeKey<?>, Object> attributes)
             throws IOException {
         IXMLElement elem = doc.createElement("textArea");
         writeAttribute(elem, "x", toNumber(x), "0");
@@ -615,6 +643,231 @@ public class SVGOutputFormat implements OutputFormat {
         writeOpacityAttribute(elem, attributes);
         writeFontAttributes(elem, attributes);
         return elem;
+    }
+
+    protected IXMLElement createTextAreaWithSvgTextElement(IXMLElement doc,
+                                                           double x, double y, double w, double h,
+                                                           StyledDocument text,
+                                                           Map<AttributeKey<?>, Object> a)
+            throws IOException {
+        IXMLElement elem = doc.createElement("text");
+        writeAttribute(elem, "x", toNumber(x), "0");
+        writeAttribute(elem, "y", toNumber(y), "0");
+        String str;
+        try {
+            str = text.getText(0, text.getLength());
+        } catch (BadLocationException e) {
+            InternalError error = new InternalError(e.getMessage());
+            error.initCause(e);
+            throw error;
+        }
+
+        drawText(doc, elem, str, x, y, w, h, FONT_FACE.get(a),
+                8,
+                FONT_UNDERLINE.get(a), false, SVGAttributeKeys.TextAlign.START, 1.0);
+        writeShapeAttributes(elem, a);
+        writeTransformAttribute(elem, a);
+        writeOpacityAttribute(elem, a);
+        writeFontAttributes(elem, a);
+        return elem;
+
+    }
+
+    private void drawText(IXMLElement doc, IXMLElement parent, String str, double x, double y, double w, double h,
+                          Font tfont, int tabSize, boolean isUnderlined,
+                          boolean isStrikethrough,
+                          SVGAttributeKeys.TextAlign textAlignment, double lineSpacing) {
+        FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
+        java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
+        float leftMargin = (float) x;
+        float rightMargin = (float) Math.max(leftMargin + 1, x + w + 1);
+        float verticalPos = (float) y;
+        float maxVerticalPos = (float) (y + h);
+        if (leftMargin < rightMargin) {
+            //float tabWidth = (float) (getTabSize() * g.getFontMetrics(font).charWidth('m'));
+            float tabWidth = (float) (tabSize * font.getStringBounds("m", frc).getWidth());
+            float[] tabStops = new float[(int) (w / tabWidth)];
+            for (int i = 0; i < tabStops.length; i++) {
+                tabStops[i] = (float) (x + (int) (tabWidth * (i + 1)));
+            }
+
+            if (str != null) {
+                String[] paragraphs = str.split("\n");
+
+                for (int i = 0; i < paragraphs.length; i++) {
+                    if (paragraphs[i].length() == 0) {
+                        paragraphs[i] = " ";
+                    }
+                    AttributedString as = new AttributedString(paragraphs[i]);
+                    as.addAttribute(TextAttribute.FONT, font);
+                    if (isUnderlined) {
+                        as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+                    }
+                    if (isStrikethrough) {
+                        as.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+                    }
+                    int tabCount = paragraphs[i].split("\t").length - 1;
+                    Rectangle2D.Double paragraphBounds = drawParagraph(doc, parent, frc,
+                            paragraphs[i], as.getIterator(), verticalPos, maxVerticalPos, leftMargin, rightMargin, tabStops, tabCount,
+                            textAlignment,
+                            lineSpacing);
+                    verticalPos = (float) (paragraphBounds.y + paragraphBounds.height + lineSpacing);
+                    if (verticalPos > maxVerticalPos) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Draws or measures a paragraph of text at the specified y location and
+     * the bounds of the paragraph.
+     *
+     * @param styledText     the text of the paragraph.
+     * @param verticalPos    the top bound of the paragraph
+     * @param maxVerticalPos the bottom bound of the paragraph
+     * @param leftMargin     the left bound of the paragraph
+     * @param rightMargin    the right bound of the paragraph
+     * @param tabStops       an array with tab stops
+     * @param tabCount       the number of entries in tabStops which contain actual
+     *                       values
+     * @return Returns the actual bounds of the paragraph.
+     */
+    private Rectangle2D.Double drawParagraph(IXMLElement doc, IXMLElement parent,
+                                             FontRenderContext frc, String
+                                                     paragraph, AttributedCharacterIterator styledText,
+                                             float verticalPos, float maxVerticalPos, float leftMargin,
+                                             float rightMargin, float[] tabStops, int tabCount,
+                                             SVGAttributeKeys.TextAlign textAlignment, double lineSpacing) {
+        // This method is based on the code sample given
+        // in the class comment of java.awt.font.LineBreakMeasurer,
+
+        // assume styledText is an AttributedCharacterIterator, and the number
+        // of tabs in styledText is tabCount
+
+        Rectangle2D.Double paragraphBounds = new Rectangle2D.Double(leftMargin, verticalPos, 0, 0);
+
+        int[] tabLocations = new int[tabCount + 1];
+
+        int i = 0;
+        for (char c = styledText.first(); c != AttributedCharacterIterator.DONE; c = styledText.next()) {
+            if (c == '\t') {
+                tabLocations[i++] = styledText.getIndex();
+            }
+        }
+        tabLocations[tabCount] = styledText.getEndIndex() - 1;
+
+        // Now tabLocations has an entry for every tab's offset in
+        // the text.  For convenience, the last entry is tabLocations
+        // is the offset of the last character in the text.
+
+        LineBreakMeasurer measurer = new LineBreakMeasurer(styledText, frc);
+        int currentTab = 0;
+
+        int textIndex = 0;
+        while (measurer.getPosition() < styledText.getEndIndex() && verticalPos <= maxVerticalPos) {
+
+            // Lay out and draw each line.  All segments on a line
+            // must be computed before any drawing can occur, since
+            // we must know the largest ascent on the line.
+            // TextLayouts are computed and stored in a List;
+            // their horizontal positions are stored in a parallel
+            // List.
+
+            // lineContainsText is true after first segment is drawn
+            boolean lineContainsText = false;
+            boolean lineComplete = false;
+            float maxAscent = 0, maxDescent = 0;
+            float horizontalPos = leftMargin;
+            LinkedList<TextLayout> layouts = new LinkedList<>();
+            LinkedList<Float> penPositions = new LinkedList<>();
+
+            int first = layouts.size();
+
+            while (!lineComplete && verticalPos <= maxVerticalPos) {
+                float wrappingWidth = rightMargin - horizontalPos;
+                TextLayout layout = null;
+                layout = measurer.nextLayout(wrappingWidth,
+                        tabLocations[currentTab] + 1,
+                        lineContainsText);
+
+                // layout can be null if lineContainsText is true
+                if (layout != null) {
+                    layouts.add(layout);
+                    penPositions.add(horizontalPos);
+                    horizontalPos += layout.getAdvance();
+                    maxAscent = Math.max(maxAscent, layout.getAscent());
+                    maxDescent = Math.max(maxDescent,
+                            layout.getDescent() + layout.getLeading());
+                } else {
+                    lineComplete = true;
+                }
+
+                lineContainsText = true;
+
+                if (measurer.getPosition() == tabLocations[currentTab] + 1) {
+                    currentTab++;
+                }
+
+                if (measurer.getPosition() == styledText.getEndIndex()) {
+                    lineComplete = true;
+                } else if (tabStops.length == 0 || horizontalPos >= tabStops[tabStops.length - 1]) {
+                    lineComplete = true;
+                }
+                if (!lineComplete) {
+                    // move to next tab stop
+                    int j = 0;
+                    while (horizontalPos >= tabStops[j]) {
+                        j++;
+                    }
+                    horizontalPos = tabStops[j];
+                }
+            }
+            // If there is only one layout element on the line, and we are
+            // drawing, then honor alignment
+            if (first == layouts.size() - 1) {
+                switch (textAlignment) {
+                case END:
+                    penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
+                    break;
+                case CENTER:
+                    penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                    break;
+                case START:
+                default:
+                    break;
+                }
+            }
+
+            verticalPos += maxAscent;
+            Iterator<Float> positionEnum = penPositions.iterator();
+
+            // now iterate through layouts and draw them
+            styledText.first();
+            for (TextLayout nextLayout : layouts) {
+                float nextPosition = positionEnum.next();
+
+                IXMLElement tspan = doc.createElement("tspan");
+                int characterCount = nextLayout.getCharacterCount();
+                tspan.setContent((paragraph.substring(textIndex, textIndex + characterCount)));
+                tspan.setAttribute("x", toNumber(nextPosition));
+                tspan.setAttribute("y", toNumber(verticalPos));
+                parent.addChild(tspan);
+
+                Rectangle2D layoutBounds = nextLayout.getBounds();
+                paragraphBounds.add(new Rectangle2D.Double(layoutBounds.getX() + nextPosition,
+                        layoutBounds.getY() + verticalPos,
+                        layoutBounds.getWidth(),
+                        layoutBounds.getHeight()));
+
+                textIndex += characterCount;
+            }
+
+            verticalPos += maxDescent + lineSpacing;
+        }
+
+        return paragraphBounds;
     }
 
     // ------------
@@ -1035,7 +1288,8 @@ public class SVGOutputFormat implements OutputFormat {
         }
     }
 
-    /** Returns a value as a SVG Path attribute.
+    /**
+     * Returns a value as a SVG Path attribute.
      * as specified in http://www.w3.org/TR/SVGMobile12/paths.html#PathDataBNF
      */
     public static String toPath(BezierPath[] paths) {
@@ -1241,20 +1495,20 @@ public class SVGOutputFormat implements OutputFormat {
     public static String toTransform(AffineTransform t) throws IOException {
         StringBuilder buf = new StringBuilder();
         switch (t.getType()) {
-            case AffineTransform.TYPE_IDENTITY:
-                buf.append("none");
-                break;
-            case AffineTransform.TYPE_TRANSLATION:
-                // translate(<tx> [<ty>]), specifies a translation by tx and ty.
-                // If <ty> is not provided, it is assumed to be zero.
-                buf.append("translate(");
-                buf.append(toNumber(t.getTranslateX()));
-                if (t.getTranslateY() != 0d) {
-                    buf.append(' ');
-                    buf.append(toNumber(t.getTranslateY()));
-                }
-                buf.append(')');
-                break;
+        case AffineTransform.TYPE_IDENTITY:
+            buf.append("none");
+            break;
+        case AffineTransform.TYPE_TRANSLATION:
+            // translate(<tx> [<ty>]), specifies a translation by tx and ty.
+            // If <ty> is not provided, it is assumed to be zero.
+            buf.append("translate(");
+            buf.append(toNumber(t.getTranslateX()));
+            if (t.getTranslateY() != 0d) {
+                buf.append(' ');
+                buf.append(toNumber(t.getTranslateY()));
+            }
+            buf.append(')');
+            break;
             /*
             case AffineTransform.TYPE_GENERAL_ROTATION :
             case AffineTransform.TYPE_QUADRANT_ROTATION :
@@ -1274,41 +1528,41 @@ public class SVGOutputFormat implements OutputFormat {
             buf.append(toNumber(t.getScaleX()));
             buf.append(')');
             break;*/
-            case AffineTransform.TYPE_UNIFORM_SCALE:
-                // scale(<sx> [<sy>]), specifies a scale operation by sx
-                // and sy. If <sy> is not provided, it is assumed to be equal
-                // to <sx>.
-                buf.append("scale(");
-                buf.append(toNumber(t.getScaleX()));
-                buf.append(')');
-                break;
-            case AffineTransform.TYPE_GENERAL_SCALE:
-            case AffineTransform.TYPE_MASK_SCALE:
-                // scale(<sx> [<sy>]), specifies a scale operation by sx
-                // and sy. If <sy> is not provided, it is assumed to be equal
-                // to <sx>.
-                buf.append("scale(");
-                buf.append(toNumber(t.getScaleX()));
-                buf.append(' ');
-                buf.append(toNumber(t.getScaleY()));
-                buf.append(')');
-                break;
-            default:
-                // matrix(<a> <b> <c> <d> <e> <f>), specifies a transformation
-                // in the form of a transformation matrix of six values.
-                // matrix(a,b,c,d,e,f) is equivalent to applying the
-                // transformation matrix [a b c d e f].
-                buf.append("matrix(");
-                double[] matrix = new double[6];
-                t.getMatrix(matrix);
-                for (int i = 0; i < matrix.length; i++) {
-                    if (i != 0) {
-                        buf.append(' ');
-                    }
-                    buf.append(toNumber(matrix[i]));
+        case AffineTransform.TYPE_UNIFORM_SCALE:
+            // scale(<sx> [<sy>]), specifies a scale operation by sx
+            // and sy. If <sy> is not provided, it is assumed to be equal
+            // to <sx>.
+            buf.append("scale(");
+            buf.append(toNumber(t.getScaleX()));
+            buf.append(')');
+            break;
+        case AffineTransform.TYPE_GENERAL_SCALE:
+        case AffineTransform.TYPE_MASK_SCALE:
+            // scale(<sx> [<sy>]), specifies a scale operation by sx
+            // and sy. If <sy> is not provided, it is assumed to be equal
+            // to <sx>.
+            buf.append("scale(");
+            buf.append(toNumber(t.getScaleX()));
+            buf.append(' ');
+            buf.append(toNumber(t.getScaleY()));
+            buf.append(')');
+            break;
+        default:
+            // matrix(<a> <b> <c> <d> <e> <f>), specifies a transformation
+            // in the form of a transformation matrix of six values.
+            // matrix(a,b,c,d,e,f) is equivalent to applying the
+            // transformation matrix [a b c d e f].
+            buf.append("matrix(");
+            double[] matrix = new double[6];
+            t.getMatrix(matrix);
+            for (int i = 0; i < matrix.length; i++) {
+                if (i != 0) {
+                    buf.append(' ');
                 }
-                buf.append(')');
-                break;
+                buf.append(toNumber(matrix[i]));
+            }
+            buf.append(')');
+            break;
         }
 
         return buf.toString();

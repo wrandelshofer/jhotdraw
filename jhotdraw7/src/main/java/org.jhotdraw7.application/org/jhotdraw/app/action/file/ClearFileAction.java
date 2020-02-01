@@ -35,14 +35,14 @@ import org.jhotdraw.annotation.Nullable;
 public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.clear";
-    
+
     /** Creates a new instance. */
     public ClearFileAction(Application app, @Nullable View view) {
         super(app, view);
         ResourceBundleUtil labels = ApplicationLabels.getLabels();
-        labels.configureAction(this, "file.clear");
+        labels.configureAction(this, ID);
     }
-    
+
     @Override public void doIt(final View view) {
         view.setEnabled(false);
         view.execute(new BackgroundTask() {

@@ -13,6 +13,7 @@ import org.jhotdraw.app.action.edit.ClearSelectionAction;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.app.action.file.ExportFileAction;
+import org.jhotdraw.app.action.file.RevertFileAction;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
@@ -128,6 +129,7 @@ public class SVGApplicationModel extends DefaultApplicationModel {
         m.put(SplitAction.ID,new SplitAction(editor));
         m.put(BringToFrontAction.ID,new BringToFrontAction(editor));
         m.put(SendToBackAction.ID,new SendToBackAction(editor));
+        m.put(RevertFileAction.ID,new RevertFileAction(a,v));
 
         return m;
     }
@@ -136,6 +138,12 @@ public class SVGApplicationModel extends DefaultApplicationModel {
     @Override
     protected MenuBuilder createMenuBuilder() {
         return new DefaultMenuBuilder() {
+            @Override
+            public void addOpenFileItems(JMenu m, Application app, @Nullable View v) {
+                super.addOpenFileItems(m, app, v);
+                ActionMap am = app.getActionMap(v);
+                m.add(am.get(RevertFileAction.ID));
+            }
 
             @Override
             public void addSelectionItems(JMenu m, Application app, @Nullable View v) {

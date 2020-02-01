@@ -32,7 +32,7 @@ import java.net.URI;
 import java.util.HashMap;
 
 /**
- * Provides a view on a SVG drawing.
+ * Provides the SVG drawing activity.
  * <p>
  * See {@link View} interface on how this view interacts with an application.
  *
@@ -186,6 +186,7 @@ public class SVGView extends AbstractView {
                             break;
                         } catch (Exception e) {
                             // try with the next input format
+                            e.printStackTrace();
                         }
                     }
                 }

@@ -1013,7 +1013,6 @@ public abstract class AbstractSvgSceneGraphExporter {
 
         String x = nb.toString(node.getX());
 
-        VPos vpos = node.getTextOrigin();
         final double y = node.getLayoutBounds().getMinY() + node.getBaselineOffset();
         elem.setAttribute("x", x);
         elem.setAttribute("y", nb.toString(y));
