@@ -104,9 +104,8 @@ class ResourcesHelper {
                     if (resourceAsStream != null) {
                         return new ImageView(new Image(resourceAsStream));
                     }
-                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + module);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found from module " + r.getModule());
+                    // we retry with baseClass
                 }
             }
 
