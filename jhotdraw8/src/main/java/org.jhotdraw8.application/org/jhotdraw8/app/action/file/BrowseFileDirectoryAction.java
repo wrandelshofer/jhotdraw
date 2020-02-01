@@ -48,7 +48,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
         if (isDisabled()) {
             return;
         }

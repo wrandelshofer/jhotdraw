@@ -46,7 +46,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
@@ -71,7 +71,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();

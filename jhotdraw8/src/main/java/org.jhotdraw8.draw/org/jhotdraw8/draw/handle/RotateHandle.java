@@ -188,7 +188,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         TransformableFigure o = getOwner();
         Point2D center = Geom.center(o.getBoundsInLocal());
         Transform t = Transforms.concat(getWorldToRotate(), view.getViewToWorld());
@@ -222,7 +222,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, @NonNull DrawingView view) {
         pivotNode.setVisible(true);
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -236,7 +236,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         pivotNode.setVisible(false);
         // FIXME fireDrawingModelEvent undoable edit event
     }

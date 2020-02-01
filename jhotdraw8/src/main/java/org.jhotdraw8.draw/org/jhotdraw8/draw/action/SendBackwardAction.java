@@ -42,7 +42,7 @@ public class SendBackwardAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity activity) {
+    protected void onActionPerformed(ActionEvent e, Activity activity) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

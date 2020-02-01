@@ -87,7 +87,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
 
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene. 
+        // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(InspectorLabels.getResources().asResourceBundle());
@@ -119,7 +119,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Preferences prefs = Preferences.userNodeForPackage(GridInspector.class);
         ChangeListener<CssSize> prefsGridX = (o, oldv, newv) -> {
             prefs.putDouble("gridX", newv.getValue());

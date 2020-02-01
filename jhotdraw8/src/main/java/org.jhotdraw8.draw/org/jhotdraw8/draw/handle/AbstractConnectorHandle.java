@@ -88,7 +88,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (!editable) {
             return;
         }
@@ -141,11 +141,11 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         isDragging = false;
     }
 

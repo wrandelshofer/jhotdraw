@@ -73,7 +73,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent evt, @NonNull Application app) {
         {
             // Search for an empty view
             DocumentBasedActivity emptyView;
@@ -103,7 +103,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         openViewFromURI(view, uri, format);
     }
 
-    private void handleException(@NonNull final DocumentBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
+    private void onException(@NonNull final DocumentBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = ApplicationLabels.getResources();
@@ -128,7 +128,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
                     v.removeDisabler(workState);
                 } else if (exception != null) {
                     v.removeDisabler(workState);
-                    handleException(v, exception);
+                    onException(v, exception);
                 } else {
                     v.setURI(uri);
                     v.setDataFormat(actualFormat);
@@ -139,7 +139,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
             });
         } catch (Throwable t) {
             v.removeDisabler(workState);
-            handleException(v, t);
+            onException(v, t);
         }
     }
 }

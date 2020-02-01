@@ -131,7 +131,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             handleColorProperty.unbindBidirectional(oldValue.getEditor().handleColorProperty());
             handleSizeProperty.unbindBidirectional(oldValue.getEditor().handleSizeProperty());

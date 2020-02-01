@@ -359,7 +359,7 @@ public class DockRoot extends Control {
         }
     }
 
-    private void handleDragDrop(@NonNull DragEvent e) {
+    private void onDragDrop(@NonNull DragEvent e) {
         dropRect.setVisible(false);
         getChildren().remove(dropRect);
 
@@ -391,11 +391,11 @@ public class DockRoot extends Control {
         }
     }
 
-    private void handleDragExit(DragEvent e) {
+    private void onDragExit(DragEvent e) {
         dropRect.setVisible(false);
     }
 
-    private void handleDragOver(@NonNull DragEvent e) {
+    private void onDragOver(@NonNull DragEvent e) {
         if (!isAcceptable(e)) {
             return;
         }
@@ -443,9 +443,9 @@ public class DockRoot extends Control {
         dropRect.setManaged(false);
         dropRect.setMouseTransparent(true);
         dropRect.setVisible(false);
-        setOnDragOver(this::handleDragOver);
-        setOnDragExited(this::handleDragExit);
-        setOnDragDropped(this::handleDragDrop);
+        setOnDragOver(this::onDragOver);
+        setOnDragExited(this::onDragExit);
+        setOnDragDropped(this::onDragDrop);
         stackPane = new StackPane();
         getChildren().add(stackPane);
     }

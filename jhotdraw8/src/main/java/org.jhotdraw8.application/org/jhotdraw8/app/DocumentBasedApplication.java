@@ -117,10 +117,10 @@ public class DocumentBasedApplication extends AbstractApplication {
     {
         activeView.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                handleViewDeactivated((DocumentBasedActivity) oldv);
+                onViewDeactivated((DocumentBasedActivity) oldv);
             }
             if (newv != null) {
-                handleViewActivated((DocumentBasedActivity) newv);
+                onViewActivated((DocumentBasedActivity) newv);
             }
         });
     }
@@ -128,9 +128,9 @@ public class DocumentBasedApplication extends AbstractApplication {
     {
         views.addListener((SetChangeListener.Change<? extends Activity> change) -> {
             if (change.wasAdded()) {
-                handleViewAdded((DocumentBasedActivity) change.getElementAdded());
+                onViewAdded((DocumentBasedActivity) change.getElementAdded());
             } else {
-                handleViewRemoved((DocumentBasedActivity) change.getElementRemoved());
+                onViewRemoved((DocumentBasedActivity) change.getElementRemoved());
             }
         });
     }
@@ -276,7 +276,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewActivated(@NonNull DocumentBasedActivity view) {
+    protected void onViewActivated(@NonNull DocumentBasedActivity view) {
 
     }
 
@@ -286,7 +286,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewAdded(@NonNull DocumentBasedActivity view) {
+    protected void onViewAdded(@NonNull DocumentBasedActivity view) {
         if (view.getApplication() != this) {
             view.setApplication(this);
             view.init();
@@ -323,7 +323,7 @@ public class DocumentBasedApplication extends AbstractApplication {
         });
         stage.titleProperty().bind(CustomBinding.formatted(getLabels().getString("frame.title"),
                 view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
-        view.titleProperty().addListener(this::handleTitleChanged);
+        view.titleProperty().addListener(this::onTitleChanged);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue == true) {
                 activeView.set(view);
@@ -397,7 +397,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewDeactivated(@NonNull DocumentBasedActivity view) {
+    protected void onViewDeactivated(@NonNull DocumentBasedActivity view) {
 
     }
 
@@ -407,7 +407,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void handleViewRemoved(@NonNull DocumentBasedActivity view) {
+    protected void onViewRemoved(@NonNull DocumentBasedActivity view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -429,7 +429,7 @@ public class DocumentBasedApplication extends AbstractApplication {
         }
     }
 
-    protected void handleTitleChanged(Observable obs) {
+    protected void onTitleChanged(Observable obs) {
         disambiguateViews();
     }
 

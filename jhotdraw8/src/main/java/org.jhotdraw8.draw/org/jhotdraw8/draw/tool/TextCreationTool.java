@@ -109,7 +109,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         event.consume();
         if (editorData != null) {
             stopEditing();
@@ -158,7 +158,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         event.consume();
         if (editorData != null) {
             return;
@@ -191,7 +191,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (editorData != null) {
             return;
         }
@@ -221,7 +221,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
 

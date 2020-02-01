@@ -73,19 +73,19 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent evt, DocumentBasedActivity activity) {
+    protected final void onActionPerformed(ActionEvent evt, DocumentBasedActivity activity) {
         Application app = getApplication();
         if (activity instanceof DocumentBasedActivity) {
-            handleActionOnViewPerformed(activity);
+            onActionOnViewPerformed(activity);
         } else if (isMayCreateActivity()) {
             app.createActivity().thenAccept(v -> {
                 app.add(v);
-                handleActionOnViewPerformed((DocumentBasedActivity) v);//FIXME class cast exception
+                onActionOnViewPerformed((DocumentBasedActivity) v);//FIXME class cast exception
             });
         }
     }
 
-    public void handleActionOnViewPerformed(@NonNull DocumentBasedActivity v) {
+    public void onActionOnViewPerformed(@NonNull DocumentBasedActivity v) {
         if (!v.isDisabled()) {
             final Resources labels = ApplicationLabels.getResources();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */

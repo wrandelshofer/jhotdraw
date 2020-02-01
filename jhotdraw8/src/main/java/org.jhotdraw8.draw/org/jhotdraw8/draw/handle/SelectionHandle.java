@@ -102,18 +102,18 @@ public class SelectionHandle extends LocatorHandle {
     }
 
     @Override
-    public void handleMousePressed(MouseEvent event, DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
 
     }
 
     @Override
-    public void handleMouseDragged(MouseEvent event, DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
 
     }
 
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
 
     }
 

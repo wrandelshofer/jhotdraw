@@ -77,7 +77,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene. 
+        // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
 
             FXMLLoader loader = new FXMLLoader();
@@ -162,7 +162,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private int isReplacingDrawing;
 
     @Override
-    protected void handleDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         isReplacingDrawing++;
         if (oldValue != null) {
             listView.getItems().clear();

@@ -51,7 +51,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     };
 
     {
-        subject.addListener(this::handleDrawingViewChanged);
+        subject.addListener(this::onDrawingViewChanged);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
      * @param oldValue   the old drawing view
      * @param newValue   the new drawing view
      */
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.modelProperty().removeListener(modelChangeHandler);
             modelChangeHandler.changed(oldValue.modelProperty(), oldValue.getModel(), null);

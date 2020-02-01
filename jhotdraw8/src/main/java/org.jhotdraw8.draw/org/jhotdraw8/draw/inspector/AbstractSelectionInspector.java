@@ -28,7 +28,7 @@ public abstract class AbstractSelectionInspector implements Inspector<DrawingVie
     final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
 
     {
-        subject.addListener(this::handleDrawingViewChanged);
+        subject.addListener(this::onDrawingViewChanged);
     }
 
     @NonNull
@@ -47,11 +47,11 @@ public abstract class AbstractSelectionInspector implements Inspector<DrawingVie
 
     private final SetChangeListener<Figure> selectionListener = change -> {
         DrawingView drawingView = getSubject();
-        handleSelectionChanged(drawingView == null ? FXCollections.emptyObservableSet() : drawingView.getSelectedFigures());
+        onSelectionChanged(drawingView == null ? FXCollections.emptyObservableSet() : drawingView.getSelectedFigures());
     };
 
 
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.selectedFiguresProperty().removeListener(selectionListener);
         }
@@ -71,5 +71,5 @@ public abstract class AbstractSelectionInspector implements Inspector<DrawingVie
      *
      * @param newValue the new selection
      */
-    protected abstract void handleSelectionChanged(Set<Figure> newValue);
+    protected abstract void onSelectionChanged(Set<Figure> newValue);
 }

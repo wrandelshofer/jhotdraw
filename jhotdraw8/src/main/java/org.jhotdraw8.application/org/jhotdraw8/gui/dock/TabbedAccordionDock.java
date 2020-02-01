@@ -59,20 +59,16 @@ public class TabbedAccordionDock extends Control implements Dock {
         titlePane.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
         accordion.setMinWidth(100.0);
 
-        getItems().addListener(new ListChangeListener<DockItem>() {
-            @Override
-            public void onChanged(@NonNull ListChangeListener.Change<? extends DockItem> c) {
-                while (c.next()) {
-                    for (DockItem remitem : c.getRemoved()) {
-                        remitem.setDock(null);
-                    }
-                    for (DockItem additem : c.getAddedSubList()) {
-                        additem.setDock(TabbedAccordionDock.this);
-                    }
+        getItems().addListener((ListChangeListener<DockItem>) c -> {
+            while (c.next()) {
+                for (DockItem remitem : c.getRemoved()) {
+                    remitem.setDock(null);
                 }
-                updateView();
+                for (DockItem additem : c.getAddedSubList()) {
+                    additem.setDock(TabbedAccordionDock.this);
+                }
             }
-
+            updateView();
         });
 
         trackProperty().addListener((o, oldv, newv) -> {

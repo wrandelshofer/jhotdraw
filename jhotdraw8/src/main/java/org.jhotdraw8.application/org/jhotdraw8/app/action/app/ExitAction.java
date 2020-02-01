@@ -58,7 +58,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent event, @NonNull Application app) {
 
         WorkState workState = new SimpleWorkState(getLabel());
         app.addDisabler(workState);

@@ -46,7 +46,7 @@ public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivi
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
         if (isDisabled()) {
             return;
         }

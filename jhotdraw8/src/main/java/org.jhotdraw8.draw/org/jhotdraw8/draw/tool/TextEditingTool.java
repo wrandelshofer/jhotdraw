@@ -93,7 +93,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         event.consume();
         if (editorData != null) {
             stopEditing();
@@ -132,14 +132,14 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (editorData != null) {
             return;
         }
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         event.consume();
         if (editorData != null) {
             return;
@@ -147,7 +147,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (editorData != null) {
             return;
         }
@@ -165,7 +165,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
 

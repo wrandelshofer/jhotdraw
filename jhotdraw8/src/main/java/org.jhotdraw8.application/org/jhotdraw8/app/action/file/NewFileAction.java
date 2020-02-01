@@ -37,7 +37,7 @@ public class NewFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent evt, @NonNull Application app) {
         app.createActivity().thenAccept(newView -> {
             DocumentBasedActivity newDOView = (DocumentBasedActivity) newView;
             app.add(newDOView);

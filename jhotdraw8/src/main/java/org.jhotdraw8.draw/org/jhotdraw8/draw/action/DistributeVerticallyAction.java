@@ -42,7 +42,7 @@ public class DistributeVerticallyAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Activity activity) {
+    protected void onActionPerformed(ActionEvent event, Activity activity) {
         final DrawingView drawingView = getView();
         if (drawingView == null) {
             return;

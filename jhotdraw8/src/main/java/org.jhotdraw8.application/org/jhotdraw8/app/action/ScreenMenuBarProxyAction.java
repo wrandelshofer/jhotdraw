@@ -50,7 +50,7 @@ public class ScreenMenuBarProxyAction extends AbstractAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event) {
+    protected void onActionPerformed(ActionEvent event) {
         if (currentAction != null) {
             currentAction.handle(event);
         }

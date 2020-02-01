@@ -79,7 +79,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
@@ -106,7 +106,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
                 CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
@@ -133,7 +133,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
@@ -160,7 +160,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
 

@@ -32,7 +32,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
         protected void fireValueChangedEvent() {
             TreeModel<N> newValue = get();
             super.fireValueChangedEvent();
-            handleTreeModelChanged(oldValue, newValue);
+            onTreeModelChanged(oldValue, newValue);
             oldValue = newValue;
         }
     };
@@ -43,5 +43,5 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     }
 
 
-    protected abstract void handleTreeModelChanged(TreeModel<N> oldValue, TreeModel<N> newValue);
+    protected abstract void onTreeModelChanged(TreeModel<N> oldValue, TreeModel<N> newValue);
 }

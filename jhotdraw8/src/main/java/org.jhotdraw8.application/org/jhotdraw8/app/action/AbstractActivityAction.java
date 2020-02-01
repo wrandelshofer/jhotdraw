@@ -74,18 +74,18 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent event, Application app) {
-        handleActionPerformed(event, getActivity());
+    protected final void onActionPerformed(ActionEvent event, Application app) {
+        onActionPerformed(event, getActivity());
     }
 
     /**
      * This method is invoked when the action is not disabled and the event is
      * not consumed.
      *
-     * @param event the action event
-     * @param activity  the activity
+     * @param event    the action event
+     * @param activity the activity
      */
-    protected abstract void handleActionPerformed(ActionEvent event, A activity);
+    protected abstract void onActionPerformed(ActionEvent event, A activity);
 
     /**
      * Returns to true if the action may create a new activity if none exists

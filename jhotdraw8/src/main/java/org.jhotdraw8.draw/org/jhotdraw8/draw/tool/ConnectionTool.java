@@ -108,11 +108,11 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
     }
 
     @Override
-    protected void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (figure != null) {
             Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
             Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
@@ -156,7 +156,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         requestFocus();
         figure = figureFactory.get();
         if (handleType != null) {
@@ -202,9 +202,9 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (figure != null) {
-            handleMouseDragged(event, view);
+            onMouseDragged(event, view);
             view.getSelectedFigures().clear();
             view.getSelectedFigures().add(figure);
             figure = null;

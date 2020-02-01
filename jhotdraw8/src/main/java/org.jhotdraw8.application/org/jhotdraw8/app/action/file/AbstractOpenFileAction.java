@@ -44,7 +44,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     protected abstract boolean isReuseEmptyViews();
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent evt, @NonNull Application app) {
         {
             WorkState workState = new SimpleWorkState(getLabel());
             app.addDisabler(workState);

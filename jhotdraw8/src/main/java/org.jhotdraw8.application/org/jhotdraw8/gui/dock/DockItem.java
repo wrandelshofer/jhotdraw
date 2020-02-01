@@ -85,16 +85,16 @@ public class DockItem extends Tab {
             oldv.setOnDragDone(null);
         }
         if (newv != null) {
-            newv.setOnDragDetected(this::handleDragDetected);
-            newv.setOnDragDone(this::handleDragDone);
+            newv.setOnDragDetected(this::onDragDetected);
+            newv.setOnDragDone(this::onDragDone);
         }
     }
 
-    public void handleDragDone(DragEvent e) {
+    public void onDragDone(DragEvent e) {
         draggedTab = null;
     }
 
-    public void handleDragDetected(@NonNull MouseEvent e) {
+    public void onDragDetected(@NonNull MouseEvent e) {
         Node graphic = getGraphic();
         draggedTab = this;
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);

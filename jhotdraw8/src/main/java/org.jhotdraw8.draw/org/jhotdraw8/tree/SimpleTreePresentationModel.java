@@ -34,22 +34,22 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
                 N f = event.getNode();
                 switch (event.getEventType()) {
                     case NODE_ADDED_TO_PARENT:
-                        handleNodeAdded(f, event.getParent(), event.getIndex());
+                        onNodeAdded(f, event.getParent(), event.getIndex());
                         break;
                     case NODE_REMOVED_FROM_PARENT:
-                        handleNodeRemoved(f, event.getParent(), event.getIndex());
+                        onNodeRemoved(f, event.getParent(), event.getIndex());
                         break;
                     case NODE_ADDED_TO_TREE:
-                        handleNodeAddedToTree(f, event.getParent(), event.getIndex());
+                        onNodeAddedToTree(f, event.getParent(), event.getIndex());
                         break;
                     case NODE_REMOVED_FROM_TREE:
-                        handleNodeRemovedFromTree(f);
+                        onNodeRemovedFromTree(f);
                         break;
                     case NODE_CHANGED:
-                        handleNodeInvalidated(f);
+                        onNodeInvalidated(f);
                         break;
                     case ROOT_CHANGED:
-                        handleRootChanged();
+                        onRootChanged();
                         break;
                     case SUBTREE_NODES_CHANGED:
                         break;
@@ -83,7 +83,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         return item.getValue();
     }
 
-    protected void handleNodeAdded(N f, N parentE, int index) {
+    protected void onNodeAdded(N f, N parentE, int index) {
         TreeItem<N> item = items.get(f);
         TreeItem<N> newParent = items.get(parentE);
         if (reversed) {
@@ -93,7 +93,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         }
     }
 
-    protected void handleNodeAddedToTree(N f, N parent, int index) {
+    protected void onNodeAddedToTree(N f, N parent, int index) {
         TreeModel<N> m = getTreeModel();
         TreeItem<N> item = new TreeItem<>(f);
         item.setExpanded(false);
@@ -101,20 +101,20 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         int childIndex = 0;
         for (int i = 0, n = m.getChildCount(f); i < n; i++) {
             N child = m.getChild(f, i);
-            handleNodeAddedToTree(child, f, childIndex);
-            handleNodeAdded(child, f, childIndex);
+            onNodeAddedToTree(child, f, childIndex);
+            onNodeAdded(child, f, childIndex);
             childIndex++;
         }
     }
 
-    protected void handleNodeInvalidated(N f) {
+    protected void onNodeInvalidated(N f) {
         TreeItem<N> node = items.get(f);
         if (node != null) {
             node.setValue(f);
         }
     }
 
-    protected void handleNodeRemoved(N f, N parentE, int index) {
+    protected void onNodeRemoved(N f, N parentE, int index) {
         TreeItem<N> parent = items.get(parentE);
         if (reversed) {
             parent.getChildren().remove(parent.getChildren().size() - 1 - index);
@@ -123,11 +123,11 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         }
     }
 
-    protected void handleNodeRemovedFromTree(N f) {
+    protected void onNodeRemovedFromTree(N f) {
         items.remove(f);
     }
 
-    protected void handleRootChanged() {
+    protected void onRootChanged() {
         TreeModel<N> m = getTreeModel();
         N drawing = m.getRoot();
         root.setValue(drawing);
@@ -138,20 +138,20 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         if (drawing != null) {
             for (int i = 0, n = m.getChildCount(drawing); i < n; i++) {
                 N child = m.getChild(drawing, i);
-                handleNodeAddedToTree(child, drawing, childIndex);
-                handleNodeAdded(child, drawing, childIndex);
+                onNodeAddedToTree(child, drawing, childIndex);
+                onNodeAdded(child, drawing, childIndex);
                 childIndex++;
             }
         }
     }
 
     @Override
-    protected void handleTreeModelChanged(@Nullable TreeModel<N> oldValue, @NonNull TreeModel<N> newValue) {
+    protected void onTreeModelChanged(@Nullable TreeModel<N> oldValue, @NonNull TreeModel<N> newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(modelHandler);
         }
         newValue.addTreeModelListener(modelHandler);
-        handleRootChanged();
+        onRootChanged();
     }
 
     @Override

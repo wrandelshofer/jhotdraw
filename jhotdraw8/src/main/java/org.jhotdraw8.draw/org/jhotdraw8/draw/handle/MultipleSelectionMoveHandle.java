@@ -91,7 +91,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -131,14 +131,14 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(getOwner(),
                 new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fireDrawingModelEvent undoable edit
     }
 

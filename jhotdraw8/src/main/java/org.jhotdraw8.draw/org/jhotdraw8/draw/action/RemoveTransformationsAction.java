@@ -44,7 +44,7 @@ public class RemoveTransformationsAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent e, Activity activity) {
+    protected void onActionPerformed(ActionEvent e, Activity activity) {
         final DrawingView dview = getView();
         if (dview == null) {
             return;

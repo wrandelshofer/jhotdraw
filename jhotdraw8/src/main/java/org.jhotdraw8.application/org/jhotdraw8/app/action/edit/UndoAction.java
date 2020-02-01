@@ -108,7 +108,7 @@ public class UndoAction extends AbstractActivityAction<Activity> {
     }*/
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Activity activity) {
+    protected void onActionPerformed(ActionEvent event, Activity activity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

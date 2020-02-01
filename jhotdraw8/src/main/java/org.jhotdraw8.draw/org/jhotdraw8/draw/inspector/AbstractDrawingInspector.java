@@ -28,11 +28,11 @@ public abstract class AbstractDrawingInspector implements Inspector<DrawingView>
     @Nullable
     protected Drawing drawing;
 
-    private final ChangeListener<Drawing> drawingListener = this::handleDrawingChanged;
-    private final ChangeListener<DrawingModel> modelListener = this::handleDrawingModelChanged;
+    private final ChangeListener<Drawing> drawingListener = this::onDrawingChanged;
+    private final ChangeListener<DrawingModel> modelListener = this::onDrawingModelChanged;
 
     {
-        subject.addListener(this::handleDrawingViewChanged);
+        subject.addListener(this::onDrawingViewChanged);
     }
 
     @NonNull
@@ -41,7 +41,7 @@ public abstract class AbstractDrawingInspector implements Inspector<DrawingView>
     }
 
 
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Drawing oldDrawing = drawing;
         DrawingModel oldModel = drawingModel;
         if (oldValue != null) {
@@ -56,8 +56,8 @@ public abstract class AbstractDrawingInspector implements Inspector<DrawingView>
             newDrawing = newValue.getDrawing();
             drawingModel = newValue.getModel();
         }
-        handleDrawingModelChanged(null, oldModel, drawingModel);
-        handleDrawingChanged(null, oldDrawing, newDrawing);
+        onDrawingModelChanged(null, oldModel, drawingModel);
+        onDrawingChanged(null, oldDrawing, newDrawing);
     }
 
     protected DrawingModel getDrawingModel() {
@@ -77,20 +77,20 @@ public abstract class AbstractDrawingInspector implements Inspector<DrawingView>
      * Must be implemented by subclasses.
      *
      * @param observable
-     * @param oldValue the old drawing
-     * @param newValue the new drawing
+     * @param oldValue   the old drawing
+     * @param newValue   the new drawing
      */
-    protected abstract void handleDrawingChanged(ObservableValue<? extends Drawing> observable, Drawing oldValue, Drawing newValue);
+    protected abstract void onDrawingChanged(ObservableValue<? extends Drawing> observable, Drawing oldValue, Drawing newValue);
 
     /**
      * Can be overriden by subclasses.
      * This implementation is empty.
      *
      * @param observable
-     * @param oldValue the old drawing model
-     * @param newValue the new drawing model
+     * @param oldValue   the old drawing model
+     * @param newValue   the new drawing model
      */
-    protected void handleDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) {
+    protected void onDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) {
 
     }
 }

@@ -147,17 +147,17 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
                     BezierNodePath path = new BezierNodePath(owner.get(pointKey));
                     BezierNode node = path.getNodes().get(pointIndex);
                     switch (node.getMask()) {
-                        case C0_MASK:
-                            node = node.setMask(C0C1_MASK);
-                            break;
-                        case C0C1_MASK:
+                    case C0_MASK:
+                        node = node.setMask(C0C1_MASK);
+                        break;
+                    case C0C1_MASK:
                             node = node.setMask(C0C2_MASK);
                             break;
                         case C0C2_MASK:
@@ -192,7 +192,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -210,13 +210,13 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isPopupTrigger()) {
-            handlePopupTriggered(event, view);
+            onPopupTriggered(event, view);
         }
     }
 
-    private void handlePopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
         addPoint.setOnAction(actionEvent -> removePoint(view));
@@ -277,9 +277,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
-            handlePopupTriggered(event, view);
+            onPopupTriggered(event, view);
         }
     }
 

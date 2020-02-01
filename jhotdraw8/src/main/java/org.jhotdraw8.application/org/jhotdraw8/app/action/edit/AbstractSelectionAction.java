@@ -91,14 +91,14 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent event, Application app) {
+    protected final void onActionPerformed(ActionEvent event, Application app) {
         EditableComponent ec = getEditableComponent();
         if (ec != null) {
-            handleActionPerformed(event, ec);
+            onActionPerformed(event, ec);
         }
     }
 
-    protected abstract void handleActionPerformed(ActionEvent event, EditableComponent ec);
+    protected abstract void onActionPerformed(ActionEvent event, EditableComponent ec);
 
     private static class TextInputControlAdapter implements EditableComponent {
 

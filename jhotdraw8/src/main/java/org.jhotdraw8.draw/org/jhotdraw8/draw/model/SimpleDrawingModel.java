@@ -94,7 +94,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         @SuppressWarnings("unchecked")
         public Object put(Key<?> key, Object newValue) {
             Object oldValue = target.put(key, newValue);
-            handlePropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+            onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
             return oldValue;
         }
 
@@ -107,7 +107,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private boolean valid = true;
     @NonNull
     private Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
-    private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::handlePropertyChanged;
+    private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
     @Nullable
     private final ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
@@ -149,7 +149,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private Set<Figure> layoutSubjectChange = new HashSet<>();
 
     @SuppressWarnings("unchecked")
-    private void handlePropertyChanged(@NonNull FigurePropertyChangeEvent event) {
+    private void onPropertyChanged(@NonNull FigurePropertyChangeEvent event) {
         if (!Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     event.getKey(), event.getOldValue(),
@@ -158,7 +158,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void handlePropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    private <T> void onPropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (!Objects.equals(oldValue, newValue)) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                     key, oldValue, newValue));
@@ -253,7 +253,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
             @SuppressWarnings("unchecked")
             Key<Object> keyObject = (Key<Object>) key;
-            handlePropertyChanged(figure, keyObject, oldValue, newValue);
+            onPropertyChanged(figure, keyObject, oldValue, newValue);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);
@@ -274,7 +274,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
             @SuppressWarnings("unchecked")
             Key<Object> keyObject = (Key<Object>) key;
-            handlePropertyChanged(figure, keyObject, oldValue, null);
+            onPropertyChanged(figure, keyObject, oldValue, null);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);
@@ -292,7 +292,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     public <T> T remove(@NonNull Figure figure, @NonNull Key<T> key) {
         T oldValue = figure.remove(key);
         // event will be fired by method handlePropertyChanged
-        handlePropertyChanged(figure, key, oldValue, key.getDefaultValue());
+        onPropertyChanged(figure, key, oldValue, key.getDefaultValue());
         return oldValue;
     }
 
@@ -542,16 +542,16 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public void fireDrawingModelEvent(@NonNull DrawingModelEvent event) {
         super.fireDrawingModelEvent(event);
-        handleDrawingModelEvent(event);
+        onDrawingModelEvent(event);
     }
 
     @Override
     public void fireTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
         super.fireTreeModelEvent(event);
-        handleTreeModelEvent(event);
+        onTreeModelEvent(event);
     }
 
-    protected void handleDrawingModelEvent(@NonNull DrawingModelEvent event) {
+    protected void onDrawingModelEvent(@NonNull DrawingModelEvent event) {
         if (isValidating) {
             return;
         }
@@ -597,7 +597,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
     }
 
-    protected void handleTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    protected void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
         if (isValidating) {
             return;
         }

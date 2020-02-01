@@ -53,7 +53,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     }
 
     /**
-     * Invokes {@link #handleActionPerformed} if the action is not disabled and the
+     * Invokes {@link #onActionPerformed} if the action is not disabled and the
      * event is not consumed. Consumes the event after invoking {@code
      * handleActionPerformed}.
      *
@@ -62,7 +62,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     @Override
     public final void handle(@NonNull ActionEvent event) {
         if (!isDisabled() && !event.isConsumed()) {
-            handleActionPerformed(event);
+            onActionPerformed(event);
             event.consume();
         }
     }
@@ -73,7 +73,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      *
      * @param event the action event
      */
-    protected abstract void handleActionPerformed(ActionEvent event);
+    protected abstract void onActionPerformed(ActionEvent event);
 
     @NonNull
     @Override

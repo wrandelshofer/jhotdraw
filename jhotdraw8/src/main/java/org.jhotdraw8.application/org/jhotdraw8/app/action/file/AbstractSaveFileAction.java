@@ -84,7 +84,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
     protected abstract URIChooser createChooser(DocumentBasedActivity view);
 
     @Override
-    protected void handleActionPerformed(ActionEvent evt, @Nullable DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent evt, @Nullable DocumentBasedActivity activity) {
         if (activity == null) {
             return;
         }
@@ -182,7 +182,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
                     oldFocusOwner.requestFocus();
                 }
             } else {
-                handleSaveSucceeded(view, uri, format);
+                onSaveSucceeded(view, uri, format);
                 view.removeDisabler(workState);
                 if (oldFocusOwner != null) {
                     oldFocusOwner.requestFocus();
@@ -197,5 +197,5 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         return null;
     }
 
-    protected abstract void handleSaveSucceeded(DocumentBasedActivity v, URI uri, DataFormat format);
+    protected abstract void onSaveSucceeded(DocumentBasedActivity v, URI uri, DataFormat format);
 }

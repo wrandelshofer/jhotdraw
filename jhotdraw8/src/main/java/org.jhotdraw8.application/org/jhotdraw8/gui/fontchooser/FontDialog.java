@@ -53,7 +53,7 @@ public class FontDialog extends Dialog<FontFamilySize> {
         ButtonType cancelButtonType = new ButtonType(labels.getTextProperty("FontChooser.cancel"), ButtonData.CANCEL_CLOSE);
         dialogPane.getButtonTypes().setAll(chooseButtonType, cancelButtonType);
 
-        setResultConverter(this::handleButton);
+        setResultConverter(this::onButton);
         controller.setOnAction(evt -> dialogPane.lookupButton(chooseButtonType).executeAccessibleAction(AccessibleAction.FIRE));
 
         controller.setModel(getModel());
@@ -75,7 +75,7 @@ public class FontDialog extends Dialog<FontFamilySize> {
     }
 
     @Nullable
-    private FontFamilySize handleButton(@Nullable ButtonType buttonType) {
+    private FontFamilySize onButton(@Nullable ButtonType buttonType) {
         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
             String selectedFontName = controller.getSelectedFontName();

@@ -133,7 +133,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         requestFocus();
         mouseDragged = false;
         Bounds b = getNode().getBoundsInParent();
@@ -242,7 +242,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         mouseDragged = true;
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
@@ -250,23 +250,23 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseReleased(event, dv);
         }
-//        setTracker(null);
+        //        setTracker(null);
     }
 
     @Override
-    protected void handleMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseClicked(event, dv);
         }
-//        setTracker(null);
+        //        setTracker(null);
     }
 
     @Override
-    protected void handleMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
         double vx = event.getX();
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
@@ -281,19 +281,19 @@ public class SelectionTool extends AbstractTool {
         }
     }
 
-    protected void handleKeyPressed(KeyEvent event, DrawingView view) {
+    protected void onKeyPressed(KeyEvent event, DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyPressed(event, view);
         }
     }
 
-    protected void handleKeyReleased(KeyEvent event, DrawingView view) {
+    protected void onKeyReleased(KeyEvent event, DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyReleased(event, view);
         }
     }
 
-    protected void handleKeyTyped(KeyEvent event, DrawingView view) {
+    protected void onKeyTyped(KeyEvent event, DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyTyped(event, view);
         }
@@ -408,15 +408,15 @@ public class SelectionTool extends AbstractTool {
 
     double zoomFactor = 1.0;
 
-    protected void handleZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
         dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
     }
 
-    protected void handleZoomStarted(ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoomStarted(ZoomEvent event, @NonNull DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
     }
 
-    protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
+    protected void onZoomFinished(ZoomEvent event, DrawingView dv) {
     }
 
     @NonNull

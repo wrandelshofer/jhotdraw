@@ -74,7 +74,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void handleSaveSucceeded(@NonNull DocumentBasedActivity v, @NonNull URI uri, DataFormat format) {
+    protected void onSaveSucceeded(@NonNull DocumentBasedActivity v, @NonNull URI uri, DataFormat format) {
         v.setURI(uri);
         v.clearModified();
         v.setTitle(UriUtil.getName(uri));

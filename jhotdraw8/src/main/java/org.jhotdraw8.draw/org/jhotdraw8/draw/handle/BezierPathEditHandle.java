@@ -28,13 +28,13 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isPopupTrigger()) {
-            handlePopupTriggered(event, view);
+            onPopupTriggered(event, view);
         }
     }
 
-    private void handlePopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
 
@@ -59,9 +59,9 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
-            handlePopupTriggered(event, view);
+            onPopupTriggered(event, view);
         }
     }
 

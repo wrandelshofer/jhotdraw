@@ -141,7 +141,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         protected void fireValueChangedEvent() {
             DrawingModel newValue = get();
             super.fireValueChangedEvent();
-            handleNewDrawingModel(oldValue, newValue);
+            onNewDrawingModel(oldValue, newValue);
             oldValue = newValue;
         }
     };
@@ -234,13 +234,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Figure f = event.getNode();
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT:
-                handleFigureAdded(f);
+                onFigureAdded(f);
                 break;
             case NODE_REMOVED_FROM_PARENT:
-                handleFigureRemoved(f);
+                onFigureRemoved(f);
                 break;
             case NODE_ADDED_TO_TREE:
-                handleFigureRemovedFromDrawing(f);
+                onFigureRemovedFromDrawing(f);
                 break;
             case NODE_REMOVED_FROM_TREE:
                 for (Figure d : f.preorderIterable()) {
@@ -249,15 +249,15 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 repaint();
                 break;
             case NODE_CHANGED:
-                handleNodeChanged(f);
+                onNodeChanged(f);
                 break;
             case ROOT_CHANGED:
-                handleDrawingChanged();
+                onDrawingChanged();
                 updateLayout();
                 repaint();
                 break;
             case SUBTREE_NODES_CHANGED:
-                handleSubtreeNodesChanged(f);
+                onSubtreeNodesChanged(f);
                 repaint();
                 break;
             default:
@@ -267,7 +267,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     };
     @Nullable
     private Transform viewToWorldTransform = null;
-    private final InvalidationListener visibleRectChangedHandler = this::handleVisibleRectChanged;
+    private final InvalidationListener visibleRectChangedHandler = this::onVisibleRectChanged;
     @Nullable
     private Transform worldToViewTransform = null;
     /**
@@ -276,7 +276,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, ZOOM_FACTOR_PROPERTY, 1.0);
 
     {
-        zoomFactor.addListener(this::handleZoomFactorChanged);
+        zoomFactor.addListener(this::onZoomFactorChanged);
     }
 
     {
@@ -856,12 +856,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return worldToViewTransform;
     }
 
-    private void handleConstrainerInvalidated(Observable o) {
+    private void onConstrainerInvalidated(Observable o) {
         invalidateConstrainerNode();
         repaint();
     }
 
-    private void handleDrawingChanged() {
+    private void onDrawingChanged() {
         clearNodes();
         clearSelection();
         drawingPane.getChildren().clear();
@@ -887,14 +887,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         invalidateConstrainerNode();
     }
 
-    private void handleFigureAdded(@NonNull Figure figure) {
+    private void onFigureAdded(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             invalidateFigureNode(f);
         }
         repaint();
     }
 
-    private void handleFigureRemoved(@NonNull Figure figure) {
+    private void onFigureRemoved(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             removeNode(f);
         }
@@ -902,14 +902,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         repaint();
     }
 
-    private void handleFigureRemovedFromDrawing(@NonNull Figure figure) {
+    private void onFigureRemovedFromDrawing(@NonNull Figure figure) {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
         for (Figure f : figure.preorderIterable()) {
             selectedFigures.remove(f);
         }
     }
 
-    private void handleNewDrawingModel(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    private void onNewDrawingModel(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             clearSelection();
             oldValue.removeTreeModelListener(treeModelHandler);
@@ -921,38 +921,38 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             newValue.addDrawingModelListener(drawingModelHandler);
             newValue.addTreeModelListener(treeModelHandler);
             newValue.addListener(modelInvalidationListener);
-            handleDrawingChanged();
+            onDrawingChanged();
             updateLayout();
             repaint();
         }
     }
 
-    private void handleNodeChanged(Figure f) {
+    private void onNodeChanged(Figure f) {
         invalidateFigureNode(f);
         if (f == getDrawing()) {
             updateLayout();
             if (constrainer.get() != null) {
-                handleConstrainerInvalidated(constrainer.get());
+                onConstrainerInvalidated(constrainer.get());
             }
         }
         repaint();
     }
 
-    private void handleSubtreeNodesChanged(@NonNull Figure figures) {
+    private void onSubtreeNodesChanged(@NonNull Figure figures) {
         for (Figure f : figures.preorderIterable()) {
             dirtyFigureNodes.add(f);
             dirtyHandles.add(f);
         }
     }
 
-    private void handleVisibleRectChanged(Observable o) {
+    private void onVisibleRectChanged(Observable o) {
         invalidateConstrainerNode();
         invalidateLayerNodes();
         invalidateHandles();
         repaint();
     }
 
-    private void handleZoomFactorChanged(ObservableValue<? extends Number> observable, Number oldValue, @NonNull Number newValue) {
+    private void onZoomFactorChanged(ObservableValue<? extends Number> observable, Number oldValue, @NonNull Number newValue) {
         final Bounds visibleRect = getViewToWorld().transform(getVisibleRect());
 
         Scale st = new Scale(newValue.doubleValue(), newValue.doubleValue());
@@ -1025,7 +1025,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         drawingPane.layoutBoundsProperty().addListener(observer -> updateLayout());
 
         drawingModel.get().setRoot(new SimpleDrawing());
-        handleNewDrawingModel(null, drawingModel.get());
+        onNewDrawingModel(null, drawingModel.get());
 
         // Set stylesheet
         rootPane.getStylesheets().add(SimpleDrawingView.class.getResource("SimpleDrawingView.css").toString());
@@ -1243,13 +1243,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void updateConstrainer(@Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
         if (oldValue != null) {
             gridPane.getChildren().remove(oldValue.getNode());
-            oldValue.removeListener(this::handleConstrainerInvalidated);
+            oldValue.removeListener(this::onConstrainerInvalidated);
         }
         if (newValue != null) {
             gridPane.getChildren().add(newValue.getNode());
             newValue.getNode().applyCss();
             newValue.updateNode(this);
-            newValue.addListener(this::handleConstrainerInvalidated);
+            newValue.addListener(this::onConstrainerInvalidated);
             invalidateConstrainerNode();
             repaint();
         }
@@ -1448,7 +1448,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 removeNode(f);
             }
         }
-        handleSubtreeNodesChanged(parent);
+        onSubtreeNodesChanged(parent);
     }
 
     /**

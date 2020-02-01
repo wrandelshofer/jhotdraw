@@ -159,19 +159,19 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                 if (dv != null) {
                     EventType<? extends MouseEvent> type = event.getEventType();
                     if (type == MouseEvent.MOUSE_MOVED) {
-                        handleMouseMoved(event, dv);
+                        onMouseMoved(event, dv);
                     } else if (type == MouseEvent.MOUSE_DRAGGED) {
-                        handleMouseDragged(event, dv);
+                        onMouseDragged(event, dv);
                     } else if (type == MouseEvent.MOUSE_EXITED) {
-                        handleMouseExited(event, dv);
+                        onMouseExited(event, dv);
                     } else if (type == MouseEvent.MOUSE_ENTERED) {
-                        handleMouseEntered(event, dv);
+                        onMouseEntered(event, dv);
                     } else if (type == MouseEvent.MOUSE_RELEASED) {
-                        handleMouseReleased(event, dv);
+                        onMouseReleased(event, dv);
                     } else if (type == MouseEvent.MOUSE_PRESSED) {
-                        handleMousePressed(event, dv);
+                        onMousePressed(event, dv);
                     } else if (type == MouseEvent.MOUSE_CLICKED) {
-                        handleMouseClicked(event, dv);
+                        onMouseClicked(event, dv);
                     }
                     event.consume();
                 }
@@ -184,11 +184,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             if (dv != null) {
                 EventType<? extends KeyEvent> type = event.getEventType();
                 if (type == KeyEvent.KEY_PRESSED) {
-                    handleKeyPressed(event, dv);
+                    onKeyPressed(event, dv);
                 } else if (type == KeyEvent.KEY_RELEASED) {
-                    handleKeyReleased(event, dv);
+                    onKeyReleased(event, dv);
                 } else if (type == KeyEvent.KEY_TYPED) {
-                    handleKeyTyped(event, dv);
+                    onKeyTyped(event, dv);
                 }
                 event.consume();
             }
@@ -198,11 +198,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             if (dv != null) {
                 EventType<? extends ZoomEvent> type = event.getEventType();
                 if (type == ZoomEvent.ZOOM) {
-                    handleZoom(event, dv);
+                    onZoom(event, dv);
                 } else if (type == ZoomEvent.ZOOM_STARTED) {
-                    handleZoomStarted(event, dv);
+                    onZoomStarted(event, dv);
                 } else if (type == ZoomEvent.ZOOM_FINISHED) {
-                    handleZoomFinished(event, dv);
+                    onZoomFinished(event, dv);
                 }
                 event.consume();
 
@@ -333,28 +333,28 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Event handlers
     // ----
-    protected void handleMouseMoved(MouseEvent event, DrawingView view) {
+    protected void onMouseMoved(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleMouseDragged(MouseEvent event, DrawingView view) {
+    protected void onMouseDragged(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleMouseExited(MouseEvent event, DrawingView view) {
+    protected void onMouseExited(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleMouseEntered(MouseEvent event, DrawingView view) {
+    protected void onMouseEntered(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleMouseReleased(MouseEvent event, DrawingView view) {
+    protected void onMouseReleased(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleMousePressed(MouseEvent event, DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleMouseClicked(MouseEvent event, DrawingView view) {
+    protected void onMouseClicked(MouseEvent event, DrawingView view) {
     }
 
-    protected void handleKeyPressed(@NonNull KeyEvent event, DrawingView view) {
+    protected void onKeyPressed(@NonNull KeyEvent event, DrawingView view) {
         if (event.getCode() == KeyCode.ESCAPE) {
             fireToolDone();
         } else if (event.getCode() == KeyCode.ENTER) {
@@ -362,10 +362,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         }
     }
 
-    protected void handleKeyReleased(KeyEvent event, DrawingView view) {
+    protected void onKeyReleased(KeyEvent event, DrawingView view) {
     }
 
-    protected void handleKeyTyped(KeyEvent event, DrawingView view) {
+    protected void onKeyTyped(KeyEvent event, DrawingView view) {
     }
 
     /**
@@ -402,13 +402,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         }
     }
 
-    protected void handleZoom(ZoomEvent event, DrawingView dv) {
+    protected void onZoom(ZoomEvent event, DrawingView dv) {
     }
 
-    protected void handleZoomStarted(ZoomEvent event, DrawingView dv) {
+    protected void onZoomStarted(ZoomEvent event, DrawingView dv) {
     }
 
-    protected void handleZoomFinished(ZoomEvent event, DrawingView dv) {
+    protected void onZoomFinished(ZoomEvent event, DrawingView dv) {
     }
 
     protected void fireToolStarted() {

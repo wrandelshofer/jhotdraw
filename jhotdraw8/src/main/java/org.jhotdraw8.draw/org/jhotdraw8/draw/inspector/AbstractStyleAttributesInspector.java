@@ -351,7 +351,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return textArea;
     }
 
-    protected void handleCaretPositionChanged(Observable o, Number oldv, @NonNull Number newv) {
+    protected void onCaretPositionChanged(Observable o, Number oldv, @NonNull Number newv) {
         LookupEntry entry = getLookupEntryAt(newv.intValue());
         Declaration d = entry == null ? null : entry.declaration;
         String helpText = null;
@@ -372,7 +372,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         setHelpText(helpText);
     }
 
-    private void handleTextAreaClicked(@NonNull MouseEvent mouseEvent) {
+    private void onTextAreaClicked(@NonNull MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2 && mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
             mouseEvent.consume();
             int caretPosition = getTextArea().getCaretPosition();
@@ -411,7 +411,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         node.visibleProperty().addListener(this::textAreaInvalidated);
 
         textArea.textProperty().addListener(this::updateLookupTable);
-        textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
+        textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
         EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(@NonNull KeyEvent event) {
@@ -435,17 +435,17 @@ public abstract class AbstractStyleAttributesInspector<E> {
             case "userAgent":
                 showUserAgentValues.setSelected(true);
                 break;
-            case "styled":
-            default:
-                showAppliedValues.setSelected(true);
-                break;
+        case "styled":
+        default:
+            showAppliedValues.setSelected(true);
+            break;
         }
 
         shownValues.selectedToggleProperty().addListener(this::updateShownValues);
         TextArea textArea = getTextArea();
         textArea.textProperty().addListener(this::updateLookupTable);
-        textArea.caretPositionProperty().addListener(this::handleCaretPositionChanged);
-        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleTextAreaClicked);
+        textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
+        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
     }
 
     protected abstract void remove(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor);

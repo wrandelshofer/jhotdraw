@@ -70,8 +70,8 @@ public abstract class AbstractApplicationAction extends AbstractAction {
     }
 
     @Override
-    protected final void handleActionPerformed(ActionEvent event) {
-        handleActionPerformed(event, app);
+    protected final void onActionPerformed(ActionEvent event) {
+        onActionPerformed(event, app);
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param event the action event
      * @param app   the applicatoin
      */
-    protected abstract void handleActionPerformed(ActionEvent event, Application app);
+    protected abstract void onActionPerformed(ActionEvent event, Application app);
 
     @NonNull
     protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {

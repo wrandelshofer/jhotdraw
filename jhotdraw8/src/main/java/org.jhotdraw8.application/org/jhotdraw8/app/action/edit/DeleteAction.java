@@ -35,7 +35,7 @@ public class DeleteAction extends AbstractSelectionAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
+    protected void onActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
         c.deleteSelection();
     }
 

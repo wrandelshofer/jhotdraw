@@ -81,7 +81,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
 
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene. 
+        // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(InspectorLabels.getResources().asResourceBundle());
@@ -109,7 +109,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void handleDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (widthProperty != null) {
             widthField.textProperty().unbindBidirectional(widthProperty);
             widthProperty.removeListener(commitHandler);

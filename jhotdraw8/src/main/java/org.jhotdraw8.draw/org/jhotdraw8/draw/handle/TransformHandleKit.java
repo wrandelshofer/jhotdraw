@@ -222,8 +222,8 @@ public class TransformHandleKit {
         }
 
         @Override
-        public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
-            super.handleMousePressed(event, view); //To change body of generated methods, choose Tools | Templates.
+        public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+            super.onMousePressed(event, view); //To change body of generated methods, choose Tools | Templates.
             startTransforms = owner.get(TRANSFORMS);
         }
 

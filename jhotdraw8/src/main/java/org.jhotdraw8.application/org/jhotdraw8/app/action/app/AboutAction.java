@@ -36,7 +36,7 @@ public class AboutAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @Nullable Application app) {
+    protected void onActionPerformed(ActionEvent event, @Nullable Application app) {
         if (app == null) {
             return;
         }

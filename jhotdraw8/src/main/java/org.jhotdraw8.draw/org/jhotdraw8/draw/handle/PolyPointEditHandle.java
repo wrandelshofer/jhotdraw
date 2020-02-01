@@ -102,7 +102,7 @@ public class PolyPointEditHandle extends AbstractHandle {
 
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
                 removePoint(dv);
@@ -116,7 +116,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -129,7 +129,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.isSecondaryButtonDown()) {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
@@ -139,8 +139,9 @@ public class PolyPointEditHandle extends AbstractHandle {
             event.consume();
         }
     }
+
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
     }
 
     @Override

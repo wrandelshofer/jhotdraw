@@ -22,7 +22,7 @@ public abstract class AbstractDrawingViewInspector implements Inspector<DrawingV
     final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
 
     {
-        subject.addListener(this::handleDrawingViewChanged);
+        subject.addListener(this::onDrawingViewChanged);
     }
 
     @NonNull
@@ -41,7 +41,7 @@ public abstract class AbstractDrawingViewInspector implements Inspector<DrawingV
      * @param oldValue   the old drawing view
      * @param newValue   the new drawing view
      */
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
     }
 }

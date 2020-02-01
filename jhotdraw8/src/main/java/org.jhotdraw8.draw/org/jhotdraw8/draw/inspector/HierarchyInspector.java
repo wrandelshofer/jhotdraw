@@ -159,7 +159,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         );
 
         // This cell factory ensures that only styleable figures support editing of ids.
-        // And it ensures, that the users sees the computed id, and not the one that he entered. 
+        // And it ensures, that the users sees the computed id, and not the one that he entered.
         idColumn.setCellFactory(
                 new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
 
@@ -203,7 +203,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                 });
         // This cell factory ensures that only styleable figures support editing of style classes.
-        // And it ensures, that the users sees the computed style classes, and not the ones that he entered. 
+        // And it ensures, that the users sees the computed style classes, and not the ones that he entered.
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
 
@@ -252,7 +252,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             if (figure != null && figure.isSupportedKey(StyleableFigure.STYLE_CLASS)) {
                                 isEditable = true;
                             }
-                            // show the computed  classes! 
+                            // show the computed  classes!
                             if (figure != null) {
                                 setText(wordListConverter.toString(ImmutableLists.ofCollection(figure.getStyleClass())));
                             }
@@ -307,7 +307,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     }
 
     @Override
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, null);
@@ -343,7 +343,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         if (!isUpdatingSelectionInView) {
             isUpdatingSelectionInView = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
-            // Performance: collecting all indices and then setting them all at once is 
+            // Performance: collecting all indices and then setting them all at once is
             // much faster than invoking selectionModel.select(Object) for each item.
             Set<Figure> selection = drawingView.getSelectedFigures();
             switch (selection.size()) {

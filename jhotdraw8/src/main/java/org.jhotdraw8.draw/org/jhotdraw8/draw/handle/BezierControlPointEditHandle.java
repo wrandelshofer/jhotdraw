@@ -162,7 +162,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
@@ -187,7 +187,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         final Figure f = getOwner();
 
@@ -274,13 +274,13 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isPopupTrigger()) {
-            handlePopupTriggered(event, view);
+            onPopupTriggered(event, view);
         }
     }
 
-    private void handlePopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
 
         Menu constraints = new Menu(DrawLabels.getResources().getString("handle.bezierControlPoint.constraints.text"));
@@ -332,9 +332,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMouseReleased(MouseEvent event, DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
-            handlePopupTriggered(event, view);
+            onPopupTriggered(event, view);
         }
     }
 

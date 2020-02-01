@@ -53,7 +53,7 @@ public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivit
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
         WorkState workState = new SimpleWorkState();
         activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();

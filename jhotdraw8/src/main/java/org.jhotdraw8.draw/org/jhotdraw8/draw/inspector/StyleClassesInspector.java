@@ -119,8 +119,8 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     }
 
     @Override
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
-        super.handleDrawingViewChanged(observable, oldValue, newValue);
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+        super.onDrawingViewChanged(observable, oldValue, newValue);
         if (oldValue != null) {
             oldValue.modelProperty().removeListener(modelListener);
             modelListener.changed(oldValue.modelProperty(), oldValue.getModel(), null);
@@ -137,13 +137,13 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     }
 
     @Override
-    protected void handleSelectionChanged(Set<Figure> newValue) {
+    protected void onSelectionChanged(Set<Figure> newValue) {
         updateListLater();
     }
 
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene. 
+        // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(InspectorLabels.getResources().asResourceBundle());

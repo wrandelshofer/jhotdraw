@@ -311,8 +311,8 @@ public class LayersInspector extends AbstractDrawingInspector {
         return new LayerCell(getModel(), this);
     }
 
-    protected void handleDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
-        super.handleDrawingViewChanged(observable, oldValue, newValue);
+    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+        super.onDrawingViewChanged(observable, oldValue, newValue);
         if (oldValue != null) {
             oldValue.activeParentProperty().removeListener(selectedLayerHandler);
             oldValue.selectedFiguresProperty().removeListener(selectionInvalidationListener);
@@ -325,7 +325,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void handleDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (oldValue != null) {
             listView.setItems(FXCollections.observableArrayList());
             if (layers != null) {
@@ -341,7 +341,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void handleDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    protected void onDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(listInvalidationListener);
         }

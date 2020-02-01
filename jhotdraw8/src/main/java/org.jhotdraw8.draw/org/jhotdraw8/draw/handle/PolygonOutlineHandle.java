@@ -87,7 +87,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void handleMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.isSecondaryButtonDown()) {
             ContextMenu contextMenu = new ContextMenu();
             MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
@@ -97,8 +97,9 @@ public class PolygonOutlineHandle extends AbstractHandle {
             event.consume();
         }
     }
+
     @Override
-    public void handleMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
 
         if (editable && key != null && event.getClickCount() == 2) {
 

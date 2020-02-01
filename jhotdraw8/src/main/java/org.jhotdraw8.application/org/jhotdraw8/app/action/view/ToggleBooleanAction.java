@@ -31,7 +31,7 @@ public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
     }
 
     @Override
-    protected void handleActionPerformed(ActionEvent event, Activity activity) {
+    protected void onActionPerformed(ActionEvent event, Activity activity) {
         value.set(!value.get());
     }
 }
