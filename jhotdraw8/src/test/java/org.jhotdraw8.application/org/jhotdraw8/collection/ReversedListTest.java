@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class ReversedListTest {
 
     public static void testAdd(@NonNull String initialList, int index, Character value, @NonNull String expectedList, String expectedChanges) throws Exception {
-        ReversedList<Character> list = new ReversedList<Character>(asList(initialList));
+        ReversedObservableList<Character> list = new ReversedObservableList<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
@@ -55,7 +55,7 @@ public class ReversedListTest {
     }
 
     public static void testSet(@NonNull String initialList, int index, Character value, @NonNull String expectedList, String expectedChanges) throws Exception {
-        ReversedList<Character> list = new ReversedList<Character>(asList(initialList));
+        ReversedObservableList<Character> list = new ReversedObservableList<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
@@ -82,7 +82,7 @@ public class ReversedListTest {
     }
 
     public static void testRemove(@NonNull String initialList, int index, Character value, @NonNull String expectedList, String expectedChanges) throws Exception {
-        ReversedList<Character> list = new ReversedList<Character>(asList(initialList));
+        ReversedObservableList<Character> list = new ReversedObservableList<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);

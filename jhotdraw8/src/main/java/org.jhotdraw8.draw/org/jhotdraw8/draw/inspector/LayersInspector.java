@@ -32,7 +32,7 @@ import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ReversedList;
+import org.jhotdraw8.collection.ReversedObservableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -72,7 +72,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     private Button removeButton;
 
     @Nullable
-    private ReversedList<Figure> layers;
+    private ReversedObservableList<Figure> layers;
 
     private Supplier<Layer> layerFactory;
 
@@ -334,7 +334,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             }
         }
         if (newValue != null) {
-            layers = new ReversedList<>(newValue.getRoot().getChildren());
+            layers = new ReversedObservableList<>(newValue.getRoot().getChildren());
             layers.addListener(listChangeListener);
             listView.setItems(layers);
         }

@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -21,7 +22,6 @@ import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.util.ReversedList;
 
 import java.util.List;
 import java.util.function.Supplier;

@@ -47,6 +47,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.MacOSSystemColorConverter;
@@ -69,7 +70,6 @@ import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.graph.BreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
-import org.jhotdraw8.util.ReversedList;
 
 import java.io.IOException;
 import java.util.ArrayList;

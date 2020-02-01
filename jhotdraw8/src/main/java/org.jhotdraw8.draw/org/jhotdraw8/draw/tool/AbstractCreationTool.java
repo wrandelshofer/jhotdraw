@@ -7,11 +7,11 @@ package org.jhotdraw8.draw.tool;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.util.Resources;
-import org.jhotdraw8.util.ReversedList;
 
 import java.util.function.Supplier;
 

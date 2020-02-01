@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
+import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 
@@ -163,4 +164,35 @@ public class CustomBinding {
     public static StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }
+
+    /**
+     * Binds list dest to list source.
+     * The binding can be removed by calling {@link #unbindContent};
+     *
+     * @param dest   list dest
+     * @param src    list source
+     * @param toDest mapping function to dest
+     * @param <D>    the type of list dest
+     * @param <S>    the type of list source
+     */
+    public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
+        TransformContentBinding<D, S> binding = new TransformContentBinding<>(dest, src, toDest);
+        dest.clear();
+        src.removeListener(binding);
+        src.addListener(binding);
+    }
+
+    /**
+     * Unbinds the specified content binding.
+     *
+     * @param dest list dest
+     * @param src  list source
+     * @param <D>  the type of list dest
+     * @param <S>  the type of list source
+     */
+    public static <D, S> void unbindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
+        TransformContentBinding<D, S> binding = new TransformContentBinding<>(dest, src, (a) -> null);
+        src.removeListener(binding);
+    }
+
 }
