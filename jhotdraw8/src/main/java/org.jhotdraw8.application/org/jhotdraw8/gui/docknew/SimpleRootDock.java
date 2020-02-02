@@ -144,30 +144,20 @@ public class SimpleRootDock
     private void onDragDrop(@NonNull DragEvent e) {
         dropRect.setVisible(false);
         getChildren().remove(dropRect);
-
-        if (isAcceptable(e)) {
-            DockItem droppedTab = DockItem.getDraggedItem();
-
-            DropZone zone = null;
-            Dock pickedDock = getPickedDock(e);
-            if (pickedDock == this && getChildComponents().isEmpty()) {
-                zone = DropZone.CENTER;
-            } else if (pickedDock != null) {
-                Insets insets = dockDropZoneInsets;
-                Bounds bounds = sceneToLocal(pickedDock.getContent().localToScene(pickedDock.getContent().getBoundsInLocal()));
-                zone = getZone(e.getX(), e.getY(), bounds, insets);
-                if (!pickedDock.isEditable() ||
-                        zone == DropZone.CENTER && pickedDock.getAxis() != DockAxis.Z) {
-                    zone = null;
-                }
-            }
-            if (zone != null) {
-                e.acceptTransferModes(TransferMode.MOVE);
-                onDockLeafDropped(pickedDock, droppedTab, zone);
-
-            }
-            e.consume();
+        if (!isAcceptable(e)) {
+            return;
         }
+
+        DockItem droppedTab = DockItem.getDraggedItem();
+
+
+        DragData dragData = computeDragData(e);
+        if (dragData.zone != null) {
+            e.acceptTransferModes(TransferMode.MOVE);
+            onDockLeafDropped(dragData.pickedDock, droppedTab, dragData.zone);
+
+        }
+        e.consume();
     }
 
 
@@ -175,15 +165,38 @@ public class SimpleRootDock
         dropRect.setVisible(false);
     }
 
-    private void onDragOver(@NonNull DragEvent e) {
-        if (!isAcceptable(e)) {
-            return;
+    private static class DragData {
+        final Dock pickedDock;
+        final DropZone zone;
+        final Bounds bounds;
+        final Insets insets;
+
+        public DragData(Dock pickedDock, DropZone zone, Bounds bounds, Insets insets) {
+            this.pickedDock = pickedDock;
+            this.zone = zone;
+            this.bounds = bounds;
+            this.insets = insets;
+        }
+    }
+
+    private DragData computeDragData(@NonNull DragEvent e) {
+        Bounds bounds = getBoundsInLocal();
+
+        Dock pickedDock;
+        if (subtractInsets(bounds, rootDropZoneInsets).contains(e.getX(), e.getY())) {
+            PickResult pick = e.getPickResult();
+            Node pickedNode = pick.getIntersectedNode();
+            while (pickedNode != this && pickedNode != null
+                    && !(pickedNode instanceof Dock)) {
+                pickedNode = pickedNode.getParent();
+            }
+            pickedDock = (pickedNode instanceof Dock) ? (Dock) pickedNode : null;
+        } else {
+            pickedDock = this;
         }
 
         DropZone zone = null;
-        Bounds bounds = getBoundsInLocal();
         Insets insets = rootDrawnDropZoneInsets;
-        Dock pickedDock = getPickedDock(e);
         if (pickedDock == this) {
             if (getChildComponents().isEmpty()) {
                 zone = DropZone.CENTER;
@@ -201,13 +214,21 @@ public class SimpleRootDock
                     || pickedDock.getAxis() != DockAxis.Z)) {
                 zone = null;
             }
+        } else {
+            insets = null;
         }
-        /*else if (zone != null && getChildren().size() == 1) {
-            zone = DropZone.CENTER;
-        }*/
-        updateDropRect(zone, bounds, insets);
+        return new DragData(pickedDock, zone, bounds, insets);
+    }
 
-        if (zone != null) {
+    private void onDragOver(@NonNull DragEvent e) {
+        if (!isAcceptable(e)) {
+            return;
+        }
+
+        DragData dragData = computeDragData(e);
+        updateDropRect(dragData.zone, dragData.bounds, dragData.insets);
+
+        if (dragData.zone != null) {
             e.acceptTransferModes(TransferMode.MOVE);
             e.consume();
         }
@@ -302,31 +323,22 @@ public class SimpleRootDock
         }
     }
 
-    @Nullable
-    private Dock getPickedDock(@NonNull DragEvent e) {
-        PickResult pick = e.getPickResult();
-        Node pickedNode = pick.getIntersectedNode();
-        while (pickedNode != this && pickedNode != null
-                && !(pickedNode instanceof Dock)) {
-            pickedNode = pickedNode.getParent();
-        }
-        return (pickedNode instanceof Dock) ? (Dock) pickedNode : null;
-    }
-
     private void onDockLeafDropped(@Nullable Dock dropTarget, @NonNull DockItem leaf, @NonNull DropZone zone) {
         Dock dragSource = leaf.getParentComponent();
         if (dragSource == null) {
             return; // can't do dnd
         }
-        dragSource.getChildComponents().remove(leaf);
-
-        addLeafToParent(leaf, dropTarget, zone);
-        removeUnusedComposites(dragSource);
-        dumpTree(this, 0);
-        RootDock sourceRoot = dragSource.getRoot();
-        if (sourceRoot != null) {
-            dumpTree(sourceRoot, 0);
+        int index = dragSource.getChildComponents().indexOf(leaf);
+        dragSource.getChildComponents().remove(index);
+        if (!addLeafToParent(leaf, dropTarget, zone)) {
+            // failed to add revert to previous state
+            dragSource.getChildComponents().add(index, leaf);
+        } else {
+            removeUnusedComposites(dragSource);
+            dumpTree(this, 0);
+            RootDock sourceRoot = dragSource.getRoot();
         }
+        dumpTree(this, 0);
     }
 
     private void dumpTree(DockComponent node, int indent) {
@@ -397,86 +409,70 @@ public class SimpleRootDock
         }
     }
 
-    private void addLeafToParent(@NonNull DockItem leaf, @NonNull Dock parent, @NonNull DropZone zone) {
+    private boolean addLeafToParent(@NonNull DockItem leaf, @NonNull Dock parent, @NonNull DropZone zone) {
         DockAxis zoneAxis = getZoneAxis(zone);
 
-        // case Z: => add item to existing dock or make new first child of root
-        if (zoneAxis == DockAxis.Z) {
-            if (parent != this) {
-                parent.getChildComponents().add(leaf);
-            } else {
-                Dock newComposite = zSupplier.get();
-                newComposite.getChildComponents().add(leaf);
-                setOnlyChild(newComposite);
+        // The parent is either the root, or a non-root
+        if (parent == this) {
+            if (this.getChildComponents().isEmpty()) {
+                Dock newLeafDock = zSupplier.get();
+                newLeafDock.getChildComponents().add(leaf);
+                this.getChildComponents().add(newLeafDock);
+                return true;
             }
-            return;
-        }
-
-        int insertionIndex = -1;
-
-
-        // otherwise => add item to new zComposite
-        Dock zComposite = zSupplier.get();
-        zComposite.getChildComponents().add(leaf);
-
-        // new zComposite must be added to a parent with proper orientation
-        if (parent.getAxis() == zoneAxis) {
-            // okay
+            DockComponent oldChild = this.getOnlyChild();
+            switch (zoneAxis) {
+            case X:
+                this.setOnlyChild(rootXSupplier.get());
+                break;
+            case Y:
+                this.setOnlyChild(rootYSupplier.get());
+                break;
+            case Z:
+            default:
+                return false;
+            }
+            DockComponent movedChildDock;
+            if ((oldChild instanceof DockItem) && ((DockItem) oldChild).getText() != null) {
+                movedChildDock = zSupplier.get();
+                ((Dock) movedChildDock).getChildComponents().add(oldChild);
+            } else {
+                movedChildDock = oldChild;
+            }
+            Dock newParent = (Dock) getOnlyChild();
+            addToParentInZone(movedChildDock, newParent, zone);
+            Dock newLeafDock = zSupplier.get();
+            newLeafDock.getChildComponents().add(leaf);
+            addToParentInZone(newLeafDock, newParent, zone);
+            return true;
         } else {
-            Dock grandParent = parent.getParentComponent();
-            if (grandParent != null && grandParent.getAxis() == zoneAxis) {
-                insertionIndex = grandParent.getChildComponents().indexOf(parent);
-                parent = grandParent;
-
-            } else {
-                Dock newParent;
-                if (grandParent == null || grandParent == this) {
-                    switch (zoneAxis) {
-                    case X:
-                        newParent = rootXSupplier.get();
-                        break;
-                    case Y:
-                    default:
-                        newParent = rootYSupplier.get();
-                        break;
-                    }
-                    if (grandParent != null) {
-                        grandParent.getChildComponents().remove(parent);
-                        addToParentInZone(newParent, grandParent, zone, -1);
-                    } else {
-                        DockComponent onlyChild = getOnlyChild();
-                        if (onlyChild != null) {
-                            getChildComponents().remove(onlyChild);
-                            getChildComponents().add(newParent);
-                            newParent.getChildComponents().add(onlyChild);
-                        } else {
-                            getChildComponents().add(newParent);
-                        }
-                    }
-                    parent = newParent;
-                } else if (grandParent.getAxis() != zoneAxis) {
-                    switch (zoneAxis) {
-                    case X:
-                        newParent = subXSupplier.get();
-                        break;
-                    case Y:
-                    default:
-                        newParent = subYSupplier.get();
-                        break;
-                    }
-                    addToParentInZone(newParent, grandParent, zone, -1);
-                    grandParent.getChildComponents().remove(parent);
-                    newParent.getChildComponents().add(parent);
-                    parent = newParent;
-                } else {
-                    parent = grandParent;
-                }
+            if (zoneAxis == DockAxis.Z && parent.getAxis() == DockAxis.Z) {
+                parent.getChildComponents().add(leaf);
+                return true;
             }
+            Dock grandParent;
+            switch (zoneAxis) {
+            case X:
+                grandParent = subXSupplier.get();
+                break;
+            case Y:
+                grandParent = subYSupplier.get();
+                break;
+            case Z:
+            default:
+                return false;
+            }
+            parent.getParentComponent().getChildComponents().set(parent.getParentComponent().getChildComponents().indexOf(parent), grandParent);
+            grandParent.getChildComponents().add(parent);
+            Dock newLeafDock = zSupplier.get();
+            newLeafDock.getChildComponents().add(leaf);
+            addToParentInZone(newLeafDock, grandParent, zone);
+            return true;
+
         }
-        addToParentInZone(zComposite, parent, zone, insertionIndex);
     }
 
-    private void addToParentInZone(Dock child, @NonNull Dock parent, @NonNull DropZone zone, int insertionIndex) {
+    private void addToParentInZone(DockComponent child, @NonNull Dock parent, @NonNull DropZone zone) {
         Dock oldParent = getParentComposite(child);
         if (oldParent != null) {
             oldParent.getChildComponents().remove(child);
@@ -485,18 +481,12 @@ public class SimpleRootDock
         switch (zone) {
         case TOP:
         case LEFT:
-            parent.getChildComponents().add(
-                    insertionIndex == -1
-                            ? 0
-                            : insertionIndex, child);
+            parent.getChildComponents().add(0, child);
             break;
         case RIGHT:
         case BOTTOM:
         default:
-            parent.getChildComponents().add(
-                    insertionIndex == -1 || insertionIndex >= parent.getChildComponents().size()
-                            ? parent.getChildComponents().size()
-                            : insertionIndex + 1, child);
+            parent.getChildComponents().add(child);
         }
     }
 
@@ -518,6 +508,16 @@ public class SimpleRootDock
             }
         }
         return null;
+    }
+
+    @NonNull
+    static Bounds subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
+        return new BoundingBox(
+                b.getMinX() + i.getLeft(),
+                b.getMinY() + i.getTop(),
+                b.getWidth() - i.getLeft() - i.getRight(),
+                b.getHeight() - i.getTop() - i.getBottom()
+        );
     }
 
 }

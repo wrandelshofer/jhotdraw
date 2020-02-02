@@ -49,6 +49,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.styleable;
     exports org.jhotdraw8.draw.gui;
     exports org.jhotdraw8.svg.io;
+    exports org.jhotdraw8.tree;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
 }

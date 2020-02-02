@@ -4,8 +4,6 @@ import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
@@ -23,11 +21,6 @@ import org.jhotdraw8.collection.ReadOnlyList;
 import java.util.prefs.Preferences;
 
 public class SimpleDockItem extends Tab implements DockItem {
-    //    private final ReadOnlyObjectWrapper<Node> contentProperty = new ReadOnlyObjectWrapper<>();
-    private final ObjectProperty<Node> graphicProperty = new SimpleObjectProperty<>();
-    private final StringProperty textProperty = new SimpleStringProperty();
-    private final StringProperty idProperty = new SimpleStringProperty();
-
     public SimpleDockItem(Node content) {
         this(null, null, content);
     }
@@ -55,26 +48,6 @@ public class SimpleDockItem extends Tab implements DockItem {
     public @NonNull ReadOnlyObjectProperty<Node> contentReadOnlyProperty() {
         return contentProperty();
     }
-/*
-    @Override
-    public @NonNull ObjectProperty<Node> contentProperty() {
-       return contentProperty;
-    }
-
-    @Override
-    public @NonNull ObjectProperty<Node> graphicProperty() {
-       return graphicProperty;
-    }
-
-    @Override
-    public @NonNull StringProperty textProperty() {
-       return textProperty;
-    }
-
-    @Override
-    public @NonNull StringProperty idProperty() {
-        return idProperty;
-    }*/
 
     private void onSelectionChanged(Observable o, boolean oldv, boolean newv) {
         Preferences prefs = Preferences.userNodeForPackage(SimpleDockItem.class);

@@ -42,5 +42,4 @@ module org.jhotdraw8.application {
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
     exports org.jhotdraw8.macos;
     exports org.jhotdraw8.app.action.app;
-    exports org.jhotdraw8.tree;
 }
