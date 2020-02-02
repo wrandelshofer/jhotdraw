@@ -34,7 +34,7 @@ public class SimpleRootDock
         implements RootDock {
 
     private final SetProperty<DockItem> droppableLeafs = new SimpleSetProperty<>(this, "droppableLeafs", null);
-    private final ObjectProperty<DockComponent> root = new SimpleObjectProperty<>();
+    private final ObjectProperty<DockComponent> onlyChild = new SimpleObjectProperty<>();
     private final Rectangle dropRect = new Rectangle(0, 0, 0, 0);
     @Nullable
     RectangleTransition transition;
@@ -59,7 +59,7 @@ public class SimpleRootDock
         setSkin(new CustomSkin<>(this));
         stackPane.getChildren().add(contentPane);
         getChildren().add(stackPane);
-        root.addListener(this::onRootChanged);
+        onlyChild.addListener(this::onRootChanged);
         dropRect.setOpacity(0.4);
         dropRect.setManaged(false);
         dropRect.setMouseTransparent(true);
@@ -75,34 +75,14 @@ public class SimpleRootDock
 
     }
 
-    @NonNull
+
     private void onChildrenChanged(ListChangeListener.Change<? extends DockComponent> c) {
         if (c.getList().size() > 1) {
             throw new IllegalArgumentException("RootDock can only have one child");
         }
-        root.set(c.getList().isEmpty() ? null : c.getList().get(0));
-
-        while (c.next()) {
-            if (c.wasRemoved()) {
-                for (DockComponent removed : c.getRemoved()) {
-                    if (removed.getParentComponent() == this) {
-                        removed.setParentComponent(null);
-                    }
-                }
-
-            }
-            if (c.wasAdded()) {
-                for (DockComponent n : c.getAddedSubList()) {
-                    n.setParentComponent(this);
-                }
-            }
-        }
+        onlyChild.set(c.getList().isEmpty() ? null : c.getList().get(0));
     }
 
-    @Override
-    public boolean isEditable() {
-        return true;
-    }
 
     @Override
     public @NonNull DockAxis getAxis() {
@@ -114,12 +94,8 @@ public class SimpleRootDock
         if (oldValue != null) {
             contentPane.centerProperty().unbind();
             contentPane.centerProperty().set(null);
-            if (oldValue.parentComponentProperty().get() == this) {
-                oldValue.parentComponentProperty().set(null);
-            }
         }
         if (newValue != null) {
-            newValue.parentComponentProperty().set(null);
             contentPane.centerProperty().bind(newValue.contentReadOnlyProperty());
         }
     }
@@ -330,15 +306,16 @@ public class SimpleRootDock
         }
         int index = dragSource.getChildComponents().indexOf(leaf);
         dragSource.getChildComponents().remove(index);
+        System.out.println("---adding---");
+        dumpTree(this, 0);
         if (!addLeafToParent(leaf, dropTarget, zone)) {
             // failed to add revert to previous state
             dragSource.getChildComponents().add(index, leaf);
         } else {
+            System.out.println("---removing--- dragSource = " + dragSource);
             removeUnusedComposites(dragSource);
             dumpTree(this, 0);
-            RootDock sourceRoot = dragSource.getRoot();
         }
-        dumpTree(this, 0);
     }
 
     private void dumpTree(DockComponent node, int indent) {

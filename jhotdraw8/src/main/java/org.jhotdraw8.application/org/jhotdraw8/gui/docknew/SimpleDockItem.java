@@ -4,7 +4,6 @@ import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.input.ClipboardContent;
@@ -17,8 +16,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
-
-import java.util.prefs.Preferences;
 
 public class SimpleDockItem extends Tab implements DockItem {
     public SimpleDockItem(Node content) {
@@ -49,10 +46,6 @@ public class SimpleDockItem extends Tab implements DockItem {
         return contentProperty();
     }
 
-    private void onSelectionChanged(Observable o, boolean oldv, boolean newv) {
-        Preferences prefs = Preferences.userNodeForPackage(SimpleDockItem.class);
-        prefs.putBoolean(getId() + ".selected", newv);
-    }
 
     private void onGraphicChanged(Observable o, @Nullable Node oldv, @Nullable Node newv) {
         if (oldv != null) {
@@ -86,15 +79,7 @@ public class SimpleDockItem extends Tab implements DockItem {
 
     protected final ObjectProperty<Dock> parentComponent = new SimpleObjectProperty<>();
 
-    {
-        ChangeListener<Object> changeListener = (o, oldv, newv) -> {
-            System.out.println(this + " parentC " + oldv + " -> " + newv);
-        };
-        parentComponent.addListener(changeListener);
-    }
-
-
-    @Override
+     @Override
     public @NonNull ObjectProperty<Dock> parentComponentProperty() {
         return parentComponent;
     }
