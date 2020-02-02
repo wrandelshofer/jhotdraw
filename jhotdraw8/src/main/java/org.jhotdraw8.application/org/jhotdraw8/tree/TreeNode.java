@@ -7,7 +7,6 @@ package org.jhotdraw8.tree;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.SpliteratorIterable;
-import org.jhotdraw8.graph.BreadthFirstSpliterator;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -62,7 +61,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 () -> {
                     @SuppressWarnings("unchecked")
                     T t = (T) this;
-                    return new BreadthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
+                    return new TreeBreadthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
                 });
     }
 
@@ -222,13 +221,18 @@ public interface TreeNode<T extends TreeNode<T>> {
 
     /**
      * Returns an iterable which can iterate through this figure and all its
-     * descendants in postorder sequence.
+     * descendants in depth first sequence.
      *
      * @return the iterable
      */
     @NonNull
     default Iterable<T> depthFirstIterable() {
-        return postorderIterable();
+        return new SpliteratorIterable<>(
+                () -> {
+                    @SuppressWarnings("unchecked")
+                    T t = (T) this;
+                    return new TreeDepthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
+                });
     }
 
     /**

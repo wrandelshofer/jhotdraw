@@ -27,7 +27,7 @@ class TransformContentBinding<D, S> implements ListChangeListener<S> {
             List<? extends S> s = change.getList();
             if (change.wasPermutated()) {
                 dest.remove(from, to);
-                List<D> d = new ArrayList<>(from - to);
+                List<D> d = new ArrayList<>(to - from);
                 for (int i = from; i < to; i++) {
                     d.add(toDest.apply(s.get(i)));
                 }
@@ -37,7 +37,7 @@ class TransformContentBinding<D, S> implements ListChangeListener<S> {
                     dest.remove(from, from + change.getRemovedSize());
                 }
                 if (change.wasAdded()) {
-                    List<D> d = new ArrayList<>(from - to);
+                    List<D> d = new ArrayList<>(to - from);
                     for (int i = from; i < to; i++) {
                         d.add(toDest.apply(s.get(i)));
                     }

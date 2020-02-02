@@ -44,7 +44,6 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.geom;
     exports org.jhotdraw8.draw.connector;
     exports org.jhotdraw8.draw.locator;
-    exports org.jhotdraw8.tree;
     exports org.jhotdraw8.xml.text;
     exports org.jhotdraw8.xml;
     exports org.jhotdraw8.styleable;

@@ -4,6 +4,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -87,7 +88,7 @@ public class BreadthFirstSpliteratorTest {
 
     static void testIterate(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
+        TreeBreadthFirstSpliterator<Integer> instance = new TreeBreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         Iterator<Integer> iter = Spliterators.iterator(instance);
         while (iter.hasNext()) {
@@ -110,7 +111,7 @@ public class BreadthFirstSpliteratorTest {
 
     public void testTryAdvance(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
+        TreeBreadthFirstSpliterator<Integer> instance = new TreeBreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size() - 1).equals(goal)) {
@@ -134,7 +135,7 @@ public class BreadthFirstSpliteratorTest {
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
-        splits.add(new BreadthFirstSpliterator<>(graph::getNextVertices, start));
+        splits.add(new TreeBreadthFirstSpliterator<>(graph::getNextVertices, start));
         List<Integer> result = new ArrayList<>();
         while (!splits.isEmpty()) {
             Spliterator<Integer> instance = splits.remove();
@@ -168,7 +169,7 @@ public class BreadthFirstSpliteratorTest {
         System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
-        final BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
+        final TreeBreadthFirstSpliterator<Integer> instance = new TreeBreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
         result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));

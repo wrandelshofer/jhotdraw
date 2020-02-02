@@ -24,20 +24,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
-      <change afterPath="$PROJECT_DIR$/../jhotdraw8/nbproject/jfx-impl_backup_18.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/gui/dock/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/.idea/libraries/org_openjfx_javafx_controls_12_0_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/.idea/libraries/org_openjfx_javafx_controls_13_ea_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/build-jhotdraw.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/build-jhotdraw.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/nbproject/UPDATED.TXT" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/nbproject/UPDATED.TXT" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/nbproject/jfx-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/nbproject/jfx-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/org.jhotdraw8.documentation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/org.jhotdraw8.documentation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/SvgExporter.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -57,86 +49,38 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>ResourceBundleUtil(.getBundle\(&quot;[^&quot;]+&quot;)\)</find>
-      <find>(\(ResourceBundle.getBundle\(&quot;org.jhotdraw.app.Labels&quot;\));</find>
-      <find>(\(ResourceBundle.getBundle\(&quot;[^&quot;]+&quot;\));</find>
-      <find>setViewFacot</find>
-      <find>Copyright \(c\) \d+(-\d+)?</find>
-      <find>Copyright © \d+(-\d+)?</find>
-      <find>Copyright ©</find>
-      <find>th</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.app.Labels&quot;))</find>
-      <find>ResourceBundleUtil</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.svg.Labels&quot;))</find>
-      <find>org.jhotdraw.draw.Labels</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.draw.Labels&quot;))</find>
-      <find>attribute.color</find>
-      <find>attribute.color.*Components</find>
-      <find>Labels</find>
-      <find>SVG</find>
-      <find>Undo</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.teddy.Labels&quot;))</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.teddy.GuiLabels&quot;))</find>
-      <find>GuiLabels</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.pert.GuiLabels&quot;))</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.odg.GuiLabels&quot;))</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.samples.net.GuiLabels&quot;))</find>
-      <find>new ResourceBundleUtil(ResourceBundle.getBundle(&quot;org.jhotdraw.gui.GuiLabels&quot;))</find>
-      <find>GuiLabels&quot;))</find>
-      <find>module=&quot;jhotdraw</find>
-      <find>${jdk}</find>
-      <find>${build}</find>
-      <find>${classes}</find>
-    </findStrings>
-    <replaceStrings>
-      <replace />
-      <replace>org.checkerframework.checker.nullness.qual</replace>
-      <replace>javax.annotation</replace>
-      <replace>Nonnull</replace>
-      <replace>new ResourceBundle(ResourceBundle.getBundle</replace>
-      <replace>new ResourceBundleUtil(ResourceBundle$1)</replace>
-      <replace>$1\);</replace>
-      <replace>The authors and contributors of JHotDraw. MIT License.</replace>
-      <replace>Copyright ©</replace>
-      <replace>Labels.getLabels()</replace>
-      <replace>ODG</replace>
-      <replace>Net</replace>
-      <replace>Undo</replace>
-      <replace>Teddy</replace>
-      <replace>TeddyLabels.getLabels()</replace>
-      <replace>PertLabels.getLabels()</replace>
-      <replace>ODGLabels.getLabels()</replace>
-      <replace>NetLabels.getLabels()</replace>
-      <replace>GuiLabels.getLabels()</replace>
-      <replace>module=&quot;org.jhotdraw7</replace>
-      <replace>${build}/classes</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>$PROJECT_DIR$/src/main</dir>
-      <dir>$PROJECT_DIR$/src/main/java/org</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.app</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.draw</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.draw/classes/org/jhotdraw/draw/action</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.samples.svg/classes</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.samples.pert/classes</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.samples.odg/classes</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.samples.misc/classes</dir>
-      <dir>$PROJECT_DIR$/src/jhotdraw.samples.draw/classes</dir>
-      <dir>$PROJECT_DIR$</dir>
-      <dir>$PROJECT_DIR$/src</dir>
-      <dir>$PROJECT_DIR$/src/main/java/jhotdraw.samples.svg/org/jhotdraw/samples/svg</dir>
-      <dir>$PROJECT_DIR$/src/main/java/jhotdraw.samples.teddy</dir>
-      <dir>$PROJECT_DIR$/src/main/java</dir>
-    </dirStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/.idea/workspace.xml">
+      <ranges>
+        <range start1="26" end1="28" start2="26" end2="26" changelist="6c3f85af-290e-4ea4-a299-932234f5731b" />
+        <range start1="29" end1="38" start2="27" end2="30" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="39" end1="40" start2="31" end2="31" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="59" end1="133" start2="50" end2="50" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="135" end1="135" start2="52" end2="71" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="139" end1="139" start2="75" end2="82" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="155" end1="155" start2="98" end2="104" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="157" end1="157" start2="106" end2="109" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="163" end1="169" start2="115" end2="115" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="170" end1="183" start2="116" end2="117" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="270" end1="270" start2="204" end2="205" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="444" end1="445" start2="379" end2="401" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+        <range start1="509" end1="510" start2="465" end2="548" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
+      </ranges>
+    </file>
   </component>
   <component name="ProjectId" id="1P5xXk2Vep19FNKYPiO4Br88WBb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="flattenModules" value="true" />
+    <option name="flattenPackages" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="Downloaded.Files.Path.Enabled" value="true" />
@@ -153,34 +97,25 @@
     <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.jhotdraw.nanoxml" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/images" />
-      <recent name="$PROJECT_DIR$/src/jhotdraw.util/classes" />
-      <recent name="$PROJECT_DIR$/src/app/java" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/jhotdraw.samples.teddy/classes/org/jhotdraw/samples/teddy" />
       <recent name="$PROJECT_DIR$/src/jhotdraw.samples.teddy/resources/org/jhotdraw/samples/teddy" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/jhotdraw7.samples.svg/src/org/jhotdraw/samples/svg" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.jhotdraw.nanoxml" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.jhotdraw.app.action.file" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/images" />
+      <recent name="$PROJECT_DIR$/src/jhotdraw.util/classes" />
+      <recent name="$PROJECT_DIR$/src/app/java" />
+    </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Application.ODG">
+  <component name="RunManager" selected="Application.Draw">
     <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
       <module name="org.jhotdraw7.nanoxml" />
       <option name="VM_PARAMETERS" />
@@ -268,6 +203,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="" />
+      <changelist id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
       <created>1537522895444</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -442,7 +378,28 @@
       <option name="project" value="LOCAL" />
       <updated>1551355096497</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Fixes instantiation of XMLParserFactory.">
+      <created>1580543662807</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1580543662807</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Adds &quot;Revert&quot; action.">
+      <created>1580557906890</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1580557906890</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Pretty prints SVG when saving.">
+      <created>1580558516154</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1580558516154</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -507,7 +464,97 @@
     <MESSAGE value="Fixes Intellij modules.&#10;Adds &quot;bundle&quot; target to build-jhotdraw.xml" />
     <MESSAGE value="Excludes dist directory." />
     <MESSAGE value="Updates build scripts." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updates build scripts." />
+    <MESSAGE value="Fixes instantiation of XMLParserFactory." />
+    <MESSAGE value="Adds &quot;Revert&quot; action." />
+    <MESSAGE value="Pretty prints SVG when saving." />
+    <option name="LAST_COMMIT_MESSAGE" value="Pretty prints SVG when saving." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="785" y="200" key="#com.intellij.ide.util.MemberChooser" timestamp="1580558312770">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state x="785" y="200" key="#com.intellij.ide.util.MemberChooser/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580558312770" />
+    <state x="371" y="86" key="CommitChangelistDialog2" timestamp="1580558515835">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state x="371" y="86" key="CommitChangelistDialog2/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580557906597" />
+    <state x="371" y="86" key="CommitChangelistDialog2/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580558515835" />
+    <state width="1023" height="196" key="GridCell.Tab.0.bottom" timestamp="1580563413970">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="766" height="292" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475361" />
+    <state width="1023" height="196" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341972" />
+    <state width="1023" height="196" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
+    <state width="1023" height="196" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412153" />
+    <state width="1023" height="196" key="GridCell.Tab.0.center" timestamp="1580563413970">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="766" height="292" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475360" />
+    <state width="1023" height="196" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341972" />
+    <state width="1023" height="196" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
+    <state width="1023" height="196" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412152" />
+    <state width="1023" height="196" key="GridCell.Tab.0.left" timestamp="1580563413969">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="766" height="292" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475359" />
+    <state width="1023" height="196" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341971" />
+    <state width="1023" height="196" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413969" />
+    <state width="1023" height="196" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412151" />
+    <state width="1023" height="196" key="GridCell.Tab.0.right" timestamp="1580563413970">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="766" height="292" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475360" />
+    <state width="1023" height="196" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341972" />
+    <state width="1023" height="196" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
+    <state width="1023" height="196" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412153" />
+    <state width="1023" height="196" key="GridCell.Tab.1.bottom" timestamp="1580563413971">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="1023" height="196" key="GridCell.Tab.1.bottom/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341845" />
+    <state width="1023" height="196" key="GridCell.Tab.1.bottom/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413971" />
+    <state width="1023" height="196" key="GridCell.Tab.1.bottom/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412155" />
+    <state width="1023" height="196" key="GridCell.Tab.1.center" timestamp="1580563413971">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="1023" height="196" key="GridCell.Tab.1.center/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341844" />
+    <state width="1023" height="196" key="GridCell.Tab.1.center/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413971" />
+    <state width="1023" height="196" key="GridCell.Tab.1.center/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412154" />
+    <state width="1023" height="196" key="GridCell.Tab.1.left" timestamp="1580563413970">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="1023" height="196" key="GridCell.Tab.1.left/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341843" />
+    <state width="1023" height="196" key="GridCell.Tab.1.left/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
+    <state width="1023" height="196" key="GridCell.Tab.1.left/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412154" />
+    <state width="1023" height="196" key="GridCell.Tab.1.right" timestamp="1580563413971">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state width="1023" height="196" key="GridCell.Tab.1.right/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341845" />
+    <state width="1023" height="196" key="GridCell.Tab.1.right/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413971" />
+    <state width="1023" height="196" key="GridCell.Tab.1.right/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412154" />
+    <state x="823" y="406" key="VCS.ChangelistChooser" timestamp="1580557888448">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state x="823" y="406" key="VCS.ChangelistChooser/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580557888448" />
+    <state x="572" y="224" key="Vcs.Push.Dialog.v2" timestamp="1580558521990">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state x="572" y="224" key="Vcs.Push.Dialog.v2/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580558521990" />
+    <state x="637" y="224" width="670" height="676" key="search.everywhere.popup" timestamp="1580557229380">
+      <screen x="0" y="23" width="1680" height="922" />
+    </state>
+    <state x="637" y="224" width="670" height="676" key="search.everywhere.popup/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580543726562" />
+    <state x="637" y="224" width="670" height="676" key="search.everywhere.popup/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580557229380" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/SVGView.java</url>
+          <line>135</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="breakpointCondition">

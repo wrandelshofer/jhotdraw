@@ -31,8 +31,9 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.io;
     exports org.jhotdraw8.binding;
     exports org.jhotdraw8.gui;
-    exports org.jhotdraw8.event;
     exports org.jhotdraw8.gui.dock;
+    exports org.jhotdraw8.gui.docknew;
+    exports org.jhotdraw8.event;
     exports org.jhotdraw8.gui.fontchooser;
     exports org.jhotdraw8.text;
 
@@ -41,4 +42,5 @@ module org.jhotdraw8.application {
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
     exports org.jhotdraw8.macos;
     exports org.jhotdraw8.app.action.app;
+    exports org.jhotdraw8.tree;
 }

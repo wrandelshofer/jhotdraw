@@ -68,7 +68,7 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
-import org.jhotdraw8.graph.BreadthFirstSpliterator;
+import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.io.IOException;
@@ -421,7 +421,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Set<Figure> cascade = new LinkedHashSet<>(figures);
         for (Figure f : figures) {
             for (Figure ff : f.preorderIterable()) {
-                StreamSupport.stream(new BreadthFirstSpliterator<Figure>(
+                StreamSupport.stream(new TreeBreadthFirstSpliterator<Figure>(
                                 figure -> () ->
                                         figure.getLayoutObservers().stream()
                                                 .filter(x -> x.getLayoutSubjects().size() == 1).iterator()

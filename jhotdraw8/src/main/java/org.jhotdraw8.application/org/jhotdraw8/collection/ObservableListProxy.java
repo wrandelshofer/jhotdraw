@@ -10,24 +10,30 @@ import javafx.collections.transformation.TransformationList;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * ObservableListProxy.
  *
  * @author Werner Randelshofer
  */
-public class ObservableListProxy<E> extends TransformationList<E, E> {
+public class ObservableListProxy<A, B> extends TransformationList<A, B> {
 
-    public ObservableListProxy(@NonNull ObservableList<? extends E> source) {
+    private final Function<A, B> toB;
+    private final Function<B, A> toA;
+
+    public ObservableListProxy(@NonNull ObservableList<B> source,
+                               Function<A, B> toB, Function<B, A> toA) {
         super(source);
-
+        this.toB = toB;
+        this.toA = toA;
     }
 
     @Override
-    protected void sourceChanged(ListChangeListener.Change<? extends E> c) {
-        fireChange(new ChangeProxy<>(this, c));
+    protected void sourceChanged(ListChangeListener.Change<? extends B> c) {
+        fireChange(new ChangeProxy<>(this, c, toA));
 
     }
 
@@ -43,8 +49,8 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     }
 
     @Override
-    public E get(int index) {
-        return getSource().get(index);
+    public A get(int index) {
+        return toA.apply(getSource().get(index));
     }
 
     @Override
@@ -53,133 +59,54 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
     }
 
     @Override
-    public E remove(int index) {
-        return getSource().remove(index);
+    public A remove(int index) {
+        return toA.apply(getSource().remove(index));
     }
 
     @Override
     public boolean remove(Object o) {
-        return getSource().remove(o);
+        return getSource().remove(toB.apply((A) o));
     }
 
     @Override
-    public void add(int index, E e) {
+    public void add(int index, A e) {
         @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        src.add(index, e);
+        ObservableList<B> source = (ObservableList<B>) getSource();
+        source.add(index, toB.apply(e));
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(A e) {
         @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.add(e);
+        ObservableList<B> src = (ObservableList<B>) getSource();
+        return src.add(toB.apply(e));
     }
 
     @Override
-    public E set(int index, E e) {
+    public A set(int index, A e) {
         @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.set(index, e);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean addAll(E... elements) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.addAll(elements);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean setAll(E... elements) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.setAll(elements);
-    }
-
-    @Override
-    public boolean addAll(@NonNull Collection<? extends E> col) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.addAll(col);
-    }
-
-    @Override
-    public boolean addAll(int index, @NonNull Collection<? extends E> col) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.addAll(index, col);
-    }
-
-    @Override
-    public boolean setAll(Collection<? extends E> col) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.setAll(col);
-    }
-
-    @Override
-    public boolean removeAll(@NonNull Collection<?> col) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.removeAll(col);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean removeAll(E... elements) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.removeAll(elements);
-    }
-
-    @Override
-    public boolean retainAll(@NonNull Collection<?> col) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.retainAll(col);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean retainAll(E... elements) {
-        @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
-        return src.retainAll(elements);
+        ObservableList<B> src = (ObservableList<B>) getSource();
+        return toA.apply(src.set(index, toB.apply(e)));
     }
 
     @Override
     public void remove(int from, int to) {
         @SuppressWarnings("unchecked")
-        ObservableList<E> src = (ObservableList<E>) getSource();
+        ObservableList<B> src = (ObservableList<B>) getSource();
         src.remove(from, to);
     }
 
-    /**
-     * Notifies all listeners of a change
-     *
-     * @param from start of range
-     * @param to   end of range + 1
-     */
-    public void fireUpdated(int from, int to) {
-        beginChange();
-        for (int i = from; i < to; i++) {
-            nextUpdate(i);
-        }
-        endChange();
-    }
+    static class ChangeProxy<A, B> extends ListChangeListener.Change<A> {
 
-    static class ChangeProxy<E> extends ListChangeListener.Change<E> {
-
-        private final ListChangeListener.Change<? extends E> change;
+        private final ListChangeListener.Change<? extends B> change;
+        private final Function<B, A> toA;
         @Nullable
         private int[] perm;
 
-        public ChangeProxy(ObservableList<E> list, ListChangeListener.Change<? extends E> change) {
+        public ChangeProxy(ObservableList<A> list, ListChangeListener.Change<? extends B> change, Function<B, A> toA) {
             super(list);
             this.change = change;
+            this.toA = toA;
         }
 
         @Override
@@ -200,10 +127,14 @@ public class ObservableListProxy<E> extends TransformationList<E, E> {
 
         @NonNull
         @Override
-        public List<E> getRemoved() {
+        public List<A> getRemoved() {
             @SuppressWarnings("unchecked")
-            List<E> temp = (List<E>) change.getRemoved();
-            return temp;
+            List<B> temp = (List<B>) change.getRemoved();
+            ArrayList<A> list = new ArrayList<>(temp.size());
+            for (B b : temp) {
+                list.add(toA.apply(b));
+            }
+            return list;
         }
 
         @Override
