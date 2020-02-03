@@ -1,13 +1,11 @@
 package org.jhotdraw8.gui.docknew;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableSet;
+import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -23,18 +21,17 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.gui.CustomSkin;
 import org.jhotdraw8.gui.RectangleTransition;
 
 import java.util.ArrayDeque;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class SimpleRootDock
+public class SimpleDockPane
         extends AbstractDock
-        implements RootDock {
+        implements DockPane {
 
-    private final SetProperty<DockItem> droppableLeafs = new SimpleSetProperty<>(this, "droppableLeafs", null);
-    private final ObjectProperty<DockComponent> onlyChild = new SimpleObjectProperty<>();
+    private final ObjectProperty<DockNode> onlyChild = new SimpleObjectProperty<>();
     private final Rectangle dropRect = new Rectangle(0, 0, 0, 0);
     @Nullable
     RectangleTransition transition;
@@ -52,11 +49,11 @@ public class SimpleRootDock
     private Supplier<Dock> rootXSupplier = () -> new SplitPaneDock(Orientation.HORIZONTAL);
     private Supplier<Dock> rootYSupplier = () -> new SplitPaneDock(Orientation.VERTICAL);
     private Supplier<Dock> subXSupplier = () -> new SplitPaneDock(Orientation.HORIZONTAL);
-    private Supplier<Dock> subYSupplier = () -> new SplitPaneDock(Orientation.VERTICAL);
+    private Supplier<Dock> subYSupplier = VBoxDock::new;
     private Supplier<Dock> zSupplier = TabPaneDock::new;
+    private final ObjectProperty<Predicate<Dockable>> dockableFilter = new SimpleObjectProperty<>(o -> true);
 
-    public SimpleRootDock() {
-        setSkin(new CustomSkin<>(this));
+    public SimpleDockPane() {
         stackPane.getChildren().add(contentPane);
         getChildren().add(stackPane);
         onlyChild.addListener(this::onRootChanged);
@@ -67,16 +64,16 @@ public class SimpleRootDock
         setOnDragOver(this::onDragOver);
         setOnDragExited(this::onDragExit);
         setOnDragDropped(this::onDragDrop);
-        getChildComponents().addListener(this::onChildrenChanged);
-        ChangeListener<DockComponent> changeListener = (o, oldv, newv) -> {
+        getDockChildren().addListener(this::onChildrenChanged);
+        ChangeListener<DockNode> changeListener = (o, oldv, newv) -> {
             throw new AssertionError("root cannot be added to any other node");
         };
-        parentComponent.addListener(changeListener);
+        dockParent.addListener(changeListener);
 
     }
 
 
-    private void onChildrenChanged(ListChangeListener.Change<? extends DockComponent> c) {
+    private void onChildrenChanged(ListChangeListener.Change<? extends DockNode> c) {
         if (c.getList().size() > 1) {
             throw new IllegalArgumentException("RootDock can only have one child");
         }
@@ -90,24 +87,26 @@ public class SimpleRootDock
     }
 
     @NonNull
-    protected void onRootChanged(ObservableValue<? extends DockComponent> observable, DockComponent oldValue, DockComponent newValue) {
+    protected void onRootChanged(ObservableValue<? extends DockNode> observable, DockNode oldValue, DockNode newValue) {
         if (oldValue != null) {
             contentPane.centerProperty().unbind();
             contentPane.centerProperty().set(null);
         }
         if (newValue != null) {
-            contentPane.centerProperty().bind(newValue.contentReadOnlyProperty());
+            contentPane.centerProperty().bind(newValue.nodeProperty());
         }
     }
 
+    @NonNull
     @Override
     public Parent getNode() {
         return this;
     }
 
+    @NonNull
     @Override
-    public ObservableSet<DockItem> droppableLeafs() {
-        return droppableLeafs;
+    public ObjectProperty<Predicate<Dockable>> dockablePredicateProperty() {
+        return dockableFilter;
     }
 
 
@@ -124,7 +123,7 @@ public class SimpleRootDock
             return;
         }
 
-        DockItem droppedTab = DockItem.getDraggedItem();
+        Dockable droppedTab = DockPane.getDraggedDockable();
 
 
         DragData dragData = computeDragData(e);
@@ -174,7 +173,7 @@ public class SimpleRootDock
         DropZone zone = null;
         Insets insets = rootDrawnDropZoneInsets;
         if (pickedDock == this) {
-            if (getChildComponents().isEmpty()) {
+            if (getDockChildren().isEmpty()) {
                 zone = DropZone.CENTER;
             } else {
                 zone = getZone(e.getX(), e.getY(), getBoundsInLocal(), rootDropZoneInsets);
@@ -184,7 +183,7 @@ public class SimpleRootDock
             }
         } else if (pickedDock != null) {
             insets = dockDrawnDropZoneInsets;
-            bounds = sceneToLocal(pickedDock.getContent().localToScene(pickedDock.getContent().getBoundsInLocal()));
+            bounds = sceneToLocal(pickedDock.getNode().localToScene(pickedDock.getNode().getBoundsInLocal()));
             zone = getZone(e.getX(), e.getY(), bounds, dockDropZoneInsets);
             if (zone == DropZone.CENTER && (!pickedDock.isEditable()
                     || pickedDock.getAxis() != DockAxis.Z)) {
@@ -277,11 +276,11 @@ public class SimpleRootDock
     }
 
     private boolean isAcceptable(@NonNull DragEvent e) {
-        DockItem draggedItem = DockItem.getDraggedItem();
-        return e.getDragboard().getContentTypes().contains(DockItem.DRAGGED_LEAF_DATA_FORMAT)
+        Dockable draggedItem = DockPane.getDraggedDockable();
+        return e.getDragboard().getContentTypes().contains(DockPane.DOCKABLE_DATA_FORMAT)
                 //    && e.getGestureSource() != null
                 && draggedItem != null
-                && (droppableLeafs.get() == null || droppableLeafs.contains(draggedItem));
+                && (getDockablePredicate().test(draggedItem));
     }
 
     @Nullable
@@ -299,18 +298,18 @@ public class SimpleRootDock
         }
     }
 
-    private void onDockLeafDropped(@Nullable Dock dropTarget, @NonNull DockItem leaf, @NonNull DropZone zone) {
-        Dock dragSource = leaf.getParentComponent();
+    private void onDockLeafDropped(@Nullable Dock dropTarget, @NonNull Dockable leaf, @NonNull DropZone zone) {
+        Dock dragSource = leaf.getDockParent();
         if (dragSource == null) {
             return; // can't do dnd
         }
-        int index = dragSource.getChildComponents().indexOf(leaf);
-        dragSource.getChildComponents().remove(index);
+        int index = dragSource.getDockChildren().indexOf(leaf);
+        dragSource.getDockChildren().remove(index);
         System.out.println("---adding---");
         dumpTree(this, 0);
         if (!addLeafToParent(leaf, dropTarget, zone)) {
             // failed to add revert to previous state
-            dragSource.getChildComponents().add(index, leaf);
+            dragSource.getDockChildren().add(index, leaf);
         } else {
             System.out.println("---removing--- dragSource = " + dragSource);
             removeUnusedComposites(dragSource);
@@ -318,13 +317,13 @@ public class SimpleRootDock
         }
     }
 
-    private void dumpTree(DockComponent node, int indent) {
+    private void dumpTree(DockNode node, int indent) {
         if (node != null) {
             for (int i = 0; i < indent; i++) {
                 System.out.print('.');
             }
             System.out.println(node);
-            for (DockComponent child : node.getChildComponentsReadOnly()) {
+            for (DockNode child : node.getDockChildrenReadOnly()) {
                 dumpTree(child, indent + 1);
             }
 
@@ -333,7 +332,7 @@ public class SimpleRootDock
     }
 
     private void removeUnusedComposites(Dock node) {
-        RootDock root = node.getRoot();
+        DockPane root = node.getRoot();
         if (root == null) {
             return;
         }
@@ -343,30 +342,30 @@ public class SimpleRootDock
 
         while (!todo.isEmpty()) {
             Dock composite = todo.remove();
-            Dock parent = composite.getParentComponent();
-            if (composite.getChildComponents().isEmpty()) {
+            Dock parent = composite.getDockParent();
+            if (composite.getDockChildren().isEmpty()) {
                 // Remove composite if it has zero children
                 if (parent != null) {
-                    parent.getChildComponents().remove(composite);
+                    parent.getDockChildren().remove(composite);
                     todo.add(parent);
                 }
-            } else if (composite.getAxis() != DockAxis.Z && composite.getChildComponents().size() == 1) {
+            } else if (composite.getAxis() != DockAxis.Z && composite.getDockChildren().size() == 1) {
                 // Replace xy composite with its child if xy composite has one child
-                DockComponent onlyChild = composite.getChildComponents().get(0);
-                parent.getChildComponents().set(parent.getChildComponents().indexOf(composite), onlyChild);
+                DockNode onlyChild = composite.getDockChildren().get(0);
+                parent.getDockChildren().set(parent.getDockChildren().indexOf(composite), onlyChild);
                 todo.add(parent);
             }
         }
     }
 
-    private DockComponent getOnlyChild() {
-        return getChildComponents().isEmpty() ? null : getChildComponents().get(0);
+    private DockNode getDocked() {
+        return getDockChildren().isEmpty() ? null : getDockChildren().get(0);
     }
 
-    private void setOnlyChild(@Nullable DockComponent o) {
-        getChildComponents().clear();
+    private void setOnlyChild(@Nullable DockNode o) {
+        getDockChildren().clear();
         if (o != null) {
-            getChildComponents().add(o);
+            getDockChildren().add(o);
         }
 
     }
@@ -386,18 +385,18 @@ public class SimpleRootDock
         }
     }
 
-    private boolean addLeafToParent(@NonNull DockItem leaf, @NonNull Dock parent, @NonNull DropZone zone) {
+    private boolean addLeafToParent(@NonNull Dockable leaf, @NonNull Dock parent, @NonNull DropZone zone) {
         DockAxis zoneAxis = getZoneAxis(zone);
 
         // The parent is either the root, or a non-root
         if (parent == this) {
-            if (this.getChildComponents().isEmpty()) {
+            if (this.getDockChildren().isEmpty()) {
                 Dock newLeafDock = zSupplier.get();
-                newLeafDock.getChildComponents().add(leaf);
-                this.getChildComponents().add(newLeafDock);
+                newLeafDock.getDockChildren().add(leaf);
+                this.getDockChildren().add(newLeafDock);
                 return true;
             }
-            DockComponent oldChild = this.getOnlyChild();
+            DockNode oldChild = this.getDocked();
             switch (zoneAxis) {
             case X:
                 this.setOnlyChild(rootXSupplier.get());
@@ -409,67 +408,73 @@ public class SimpleRootDock
             default:
                 return false;
             }
-            DockComponent movedChildDock;
-            if ((oldChild instanceof DockItem) && ((DockItem) oldChild).getText() != null) {
+            DockNode movedChildDock;
+            if ((oldChild instanceof Dockable) && ((Dockable) oldChild).getText() != null) {
                 movedChildDock = zSupplier.get();
-                ((Dock) movedChildDock).getChildComponents().add(oldChild);
+                ((Dock) movedChildDock).getDockChildren().add(oldChild);
             } else {
                 movedChildDock = oldChild;
             }
-            Dock newParent = (Dock) getOnlyChild();
-            addToParentInZone(movedChildDock, newParent, zone);
+            Dock newParent = (Dock) getDocked();
+            addToParentInZone(movedChildDock, newParent, zone, -1);
             Dock newLeafDock = zSupplier.get();
-            newLeafDock.getChildComponents().add(leaf);
-            addToParentInZone(newLeafDock, newParent, zone);
+            newLeafDock.getDockChildren().add(leaf);
+            addToParentInZone(newLeafDock, newParent, zone, -1);
             return true;
         } else {
             if (zoneAxis == DockAxis.Z && parent.getAxis() == DockAxis.Z) {
-                parent.getChildComponents().add(leaf);
+                parent.getDockChildren().add(leaf);
                 return true;
             }
-            Dock grandParent;
-            switch (zoneAxis) {
-            case X:
-                grandParent = subXSupplier.get();
-                break;
-            case Y:
-                grandParent = subYSupplier.get();
-                break;
-            case Z:
-            default:
-                return false;
-            }
-            parent.getParentComponent().getChildComponents().set(parent.getParentComponent().getChildComponents().indexOf(parent), grandParent);
-            grandParent.getChildComponents().add(parent);
+            Dock grandParent = parent.getDockParent();
             Dock newLeafDock = zSupplier.get();
-            newLeafDock.getChildComponents().add(leaf);
-            addToParentInZone(newLeafDock, grandParent, zone);
+            newLeafDock.getDockChildren().add(leaf);
+            if (grandParent == null || grandParent.getAxis() != zoneAxis) {
+                switch (zoneAxis) {
+                case X:
+                    grandParent = subXSupplier.get();
+                    break;
+                case Y:
+                    grandParent = subYSupplier.get();
+                    break;
+                case Z:
+                default:
+                    return false;
+                }
+                parent.getDockParent().getDockChildren().set(parent.getDockParent().getDockChildren().indexOf(parent), grandParent);
+                grandParent.getDockChildren().add(parent);
+                addToParentInZone(newLeafDock, grandParent, zone, -1);
+            } else {
+                addToParentInZone(newLeafDock, grandParent, zone,
+                        grandParent.getDockChildren().indexOf(parent));
+            }
             return true;
 
         }
     }
 
-    private void addToParentInZone(DockComponent child, @NonNull Dock parent, @NonNull DropZone zone) {
+    private void addToParentInZone(DockNode child, @NonNull Dock parent, @NonNull DropZone zone, int insertionIndex) {
         Dock oldParent = getParentComposite(child);
         if (oldParent != null) {
-            oldParent.getChildComponents().remove(child);
+            oldParent.getDockChildren().remove(child);
         }
 
+        ObservableList<DockNode> children = parent.getDockChildren();
         switch (zone) {
         case TOP:
         case LEFT:
-            parent.getChildComponents().add(0, child);
+            children.add(insertionIndex == -1 ? 0 : insertionIndex, child);
             break;
         case RIGHT:
         case BOTTOM:
         default:
-            parent.getChildComponents().add(child);
+            children.add(insertionIndex == -1 ? children.size() : insertionIndex + 1, child);
         }
     }
 
     @Nullable
-    private Dock getParentComposite(@NonNull DockComponent c) {
-        for (Node node = c == null ? null : c.getContent().getParent(); node != null; node = node.getParent()) {
+    private Dock getParentComposite(@NonNull DockNode c) {
+        for (Node node = c == null ? null : c.getNode().getParent(); node != null; node = node.getParent()) {
             if (node instanceof Dock) {
                 return (Dock) node;
             }
@@ -478,10 +483,10 @@ public class SimpleRootDock
     }
 
     @Nullable
-    private RootDock getDock(@NonNull DockComponent c) {
-        for (Node node = c.getContent().getParent(); node != null; node = node.getParent()) {
-            if (node instanceof RootDock) {
-                return (RootDock) node;
+    private DockPane getDock(@NonNull DockNode c) {
+        for (Node node = c.getNode().getParent(); node != null; node = node.getParent()) {
+            if (node instanceof DockPane) {
+                return (DockPane) node;
             }
         }
         return null;

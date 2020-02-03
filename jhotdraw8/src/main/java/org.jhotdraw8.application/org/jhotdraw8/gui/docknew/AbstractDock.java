@@ -10,55 +10,67 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.gui.CustomSkin;
 
 public abstract class AbstractDock
         extends Control
         implements Dock {
-    protected final ObjectProperty<Dock> parentComponent = new SimpleObjectProperty<>();
-    protected final ObservableList<DockComponent> children = FXCollections.observableArrayList();
-    private final ReadOnlyObjectProperty<Node> content = new ReadOnlyObjectWrapper<>((Node) this).getReadOnlyProperty();
+    protected final ObjectProperty<Dock> dockParent = new SimpleObjectProperty<>();
+    protected final ObservableList<DockNode> dockChildren = FXCollections.observableArrayList();
+    private final ReadOnlyObjectProperty<Node> node = new ReadOnlyObjectWrapper<>((Node) this).getReadOnlyProperty();
+    private final DockableDragHandler dragHandler = new DockableDragHandler();
 
     public AbstractDock() {
-        children.addListener(this::onChildrenChanged);
-        parentComponent.addListener((o, oldv, newv) -> {
-            System.out.println(this + " parent " + oldv + " -> " + newv);
-        });
+        setSkin(new CustomSkin<>(this));
+        dockChildren.addListener(this::onChildrenChanged);
+        setMinHeight(10);
+        setMinWidth(10);
+        setMaxHeight(Double.MAX_VALUE);
+        setMaxWidth(Double.MAX_VALUE);
     }
 
     @Override
-    public @NonNull ReadOnlyObjectProperty<Node> contentReadOnlyProperty() {
-        return content;
-    }
-
-    @NonNull
-    @Override
-    public ObservableList<DockComponent> getChildComponents() {
-        return children;
+    public @NonNull ObjectProperty<Dock> dockParentProperty() {
+        return dockParent;
     }
 
 
     @Override
-    public Node getContent() {
-        return content.get();
+    public @NonNull ObservableList<DockNode> getDockChildren() {
+        return dockChildren;
     }
 
 
-    private void onChildrenChanged(ListChangeListener.Change<? extends DockComponent> change) {
+    @Override
+    public @NonNull ReadOnlyObjectProperty<Node> nodeProperty() {
+        return node;
+    }
+
+    private void onChildrenChanged(ListChangeListener.Change<? extends DockNode> change) {
         while (change.next()) {
-            for (DockComponent removed : change.getRemoved()) {
-                if (removed.getParentComponent() == this) {
-                    removed.setParentComponent(null);
+            for (DockNode removed : change.getRemoved()) {
+                if (removed.getDockParent() == this) {
+                    removed.setDockParent(null);
+                    if (removed instanceof Dockable) {
+                        dragHandler.remove((Dockable) removed);
+                    }
                 }
             }
-            for (DockComponent added : change.getAddedSubList()) {
-                added.setParentComponent(this);
+            for (DockNode added : change.getAddedSubList()) {
+                added.setDockParent(this);
+                if (added instanceof Dockable) {
+                    dragHandler.add((Dockable) added);
+                }
             }
 
         }
     }
 
     @Override
-    public @NonNull ObjectProperty<Dock> parentComponentProperty() {
-        return parentComponent;
+    protected void layoutChildren() {
+        for (Node child : getChildren()) {
+            child.resizeRelocate(0, 0, getWidth(), getHeight());
+        }
+
     }
 }

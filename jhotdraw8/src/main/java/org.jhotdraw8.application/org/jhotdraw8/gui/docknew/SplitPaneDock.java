@@ -1,26 +1,19 @@
 package org.jhotdraw8.gui.docknew;
 
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.Border;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
-import org.jhotdraw8.gui.CustomSkin;
 
 
 public class SplitPaneDock
         extends AbstractDock {
     private final SplitPane splitPane = new SplitPane();
-    @NonNull
-    private ScrollPane scrollPane = new ScrollPane(splitPane);
 
     public SplitPaneDock(Orientation orientation) {
-        setSkin(new CustomSkin<>(this));
-        setMaxWidth(Double.MAX_VALUE);
-        setMaxHeight(Double.MAX_VALUE);
         splitPane.setOrientation(orientation);
+        getChildren().add(splitPane);
+        /*
         getChildren().add(scrollPane);
         switch (orientation) {
         case HORIZONTAL:
@@ -34,8 +27,10 @@ public class SplitPaneDock
         scrollPane.setFitToWidth(true);
         scrollPane.setBorder(Border.EMPTY);
         scrollPane.setStyle("-fx-background-color:transparent;-fx-border-width:0,0;-fx-padding:0;");
-        CustomBinding.bindContent(splitPane.getItems(), getChildComponents(),
-                k -> (Node) k);
+
+         */
+        CustomBinding.bindContent(splitPane.getItems(), getDockChildren(),
+                DockNode::getNode);
     }
 
 
@@ -46,9 +41,4 @@ public class SplitPaneDock
     }
 
 
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-        scrollPane.resizeRelocate(0, 0, getWidth(), getHeight());
-    }
 }

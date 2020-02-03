@@ -6,17 +6,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.gui.docknew.RootDock;
-import org.jhotdraw8.gui.docknew.SimpleDockItem;
-import org.jhotdraw8.gui.docknew.SimpleRootDock;
+import org.jhotdraw8.gui.docknew.DockPane;
+import org.jhotdraw8.gui.docknew.SimpleDockPane;
+import org.jhotdraw8.gui.docknew.SimpleDockable;
 import org.jhotdraw8.gui.docknew.TabPaneDock;
 
 public class NewDockingFrameworkSampleMain extends Application {
 
     @NonNull
-    public RootDock initStage(String title,
+    public DockPane initStage(String title,
                               @NonNull Stage primaryStage) {
-        RootDock root = new SimpleRootDock();
+        DockPane root = new SimpleDockPane();
         Scene scene = new Scene(root.getNode(), 300, 250);
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
@@ -30,28 +30,28 @@ public class NewDockingFrameworkSampleMain extends Application {
 
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> e.printStackTrace());
 
-        RootDock dock = initStage("DockRoot initially empty", primaryStage);
+        DockPane dock = initStage("DockRoot initially empty", primaryStage);
 
         dock = initStage("DockRoot initially 3 tabs", new Stage());
         TabPaneDock zComp = new TabPaneDock();
-        zComp.getChildComponents().add(new SimpleDockItem("Label 1", new Label("The quick brown fox 1")));
-        zComp.getChildComponents().add(new SimpleDockItem("Label 2", new Label("The quick brown fox 2")));
-        zComp.getChildComponents().add(new SimpleDockItem("Label 3", new Label("The quick brown fox 3")));
-        dock.getChildComponents().add(zComp);
+        zComp.getDockChildren().add(new SimpleDockable("Label 1", new Label("The quick brown fox 1")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 2", new Label("The quick brown fox 2")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 3", new Label("The quick brown fox 3")));
+        dock.getDockChildren().add(zComp);
 
         dock = initStage("DockRoot initially 3 tabs", new Stage());
         zComp = new TabPaneDock();
-        zComp.getChildComponents().add(new SimpleDockItem("Label 4", new Label("The quick brown fox 4")));
-        zComp.getChildComponents().add(new SimpleDockItem("Label 5", new Label("The quick brown fox 5")));
-        zComp.getChildComponents().add(new SimpleDockItem("Label 6", new Label("The quick brown fox 6")));
-        dock.getChildComponents().add(zComp);
+        zComp.getDockChildren().add(new SimpleDockable("Label 4", new Label("The quick brown fox 4")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 5", new Label("The quick brown fox 5")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 6", new Label("The quick brown fox 6")));
+        dock.getDockChildren().add(zComp);
 
 
         dock = initStage("DockRoot initially central view", new Stage());
         final TextArea textArea = new TextArea();
         textArea.setText("This is a text area\nin a dock leaf directly added to the Dock.");
-        SimpleDockItem leaf = new SimpleDockItem(textArea);
-        dock.getChildComponents().add(leaf);
+        SimpleDockable leaf = new SimpleDockable(textArea);
+        dock.getDockChildren().add(leaf);
         //dp.getVerticalTrackFactoryMap().put(SingleItemDock.class, () -> new SplitPaneTrack(Orientation.VERTICAL));
     }
 
