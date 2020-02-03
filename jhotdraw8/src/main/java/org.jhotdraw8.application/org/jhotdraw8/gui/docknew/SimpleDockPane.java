@@ -48,7 +48,7 @@ public class SimpleDockPane
     private final BorderPane contentPane = new BorderPane();
     private Supplier<Dock> rootXSupplier = () -> new SplitPaneDock(Orientation.HORIZONTAL);
     private Supplier<Dock> rootYSupplier = () -> new SplitPaneDock(Orientation.VERTICAL);
-    private Supplier<Dock> subXSupplier = () -> new SplitPaneDock(Orientation.HORIZONTAL);
+    private Supplier<Dock> subXSupplier = HBoxDock::new;
     private Supplier<Dock> subYSupplier = VBoxDock::new;
     private Supplier<Dock> zSupplier = TabPaneDock::new;
     private final ObjectProperty<Predicate<Dockable>> dockableFilter = new SimpleObjectProperty<>(o -> true);
@@ -216,7 +216,7 @@ public class SimpleDockPane
             return;
         }
         if (dropRect.getParent() == null) {
-            getChildren().add(dropRect);
+            stackPane.getChildren().add(dropRect);
         }
         BoundingBox rect;
         switch (zone) {
@@ -299,21 +299,22 @@ public class SimpleDockPane
     }
 
     private void onDockLeafDropped(@Nullable Dock dropTarget, @NonNull Dockable leaf, @NonNull DropZone zone) {
+        DockPane leafRoot = leaf.getRoot();
         Dock dragSource = leaf.getDockParent();
         if (dragSource == null) {
             return; // can't do dnd
         }
         int index = dragSource.getDockChildren().indexOf(leaf);
         dragSource.getDockChildren().remove(index);
-        System.out.println("---adding---");
-        dumpTree(this, 0);
         if (!addLeafToParent(leaf, dropTarget, zone)) {
             // failed to add revert to previous state
             dragSource.getDockChildren().add(index, leaf);
         } else {
-            System.out.println("---removing--- dragSource = " + dragSource);
             removeUnusedComposites(dragSource);
             dumpTree(this, 0);
+            if (leafRoot != this) {
+                dumpTree(leafRoot, 0);
+            }
         }
     }
 

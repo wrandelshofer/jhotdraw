@@ -27,8 +27,8 @@ public class ResizeButton extends Region {
         setOnMousePressed(this::mousePressed);
         setOnMouseDragged(this::mouseDragged);
         setCursor(Cursor.V_RESIZE);
-        setMinHeight(2);
-        setMinWidth(2);
+        setMinHeight(1);
+        setMinWidth(1);
     }
 
     public Region getTarget() {

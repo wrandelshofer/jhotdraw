@@ -68,8 +68,11 @@ public abstract class AbstractDock
 
     @Override
     protected void layoutChildren() {
+        super.layoutChildren();
         for (Node child : getChildren()) {
-            child.resizeRelocate(0, 0, getWidth(), getHeight());
+            if (child.isManaged()) {
+                child.resizeRelocate(0, 0, getWidth(), getHeight());
+            }
         }
 
     }

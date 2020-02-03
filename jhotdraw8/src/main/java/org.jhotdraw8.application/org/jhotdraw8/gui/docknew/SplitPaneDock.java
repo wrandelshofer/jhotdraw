@@ -13,22 +13,6 @@ public class SplitPaneDock
     public SplitPaneDock(Orientation orientation) {
         splitPane.setOrientation(orientation);
         getChildren().add(splitPane);
-        /*
-        getChildren().add(scrollPane);
-        switch (orientation) {
-        case HORIZONTAL:
-            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            break;
-        case VERTICAL:
-            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            break;
-        }
-        scrollPane.setFitToHeight(true);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setBorder(Border.EMPTY);
-        scrollPane.setStyle("-fx-background-color:transparent;-fx-border-width:0,0;-fx-padding:0;");
-
-         */
         CustomBinding.bindContent(splitPane.getItems(), getDockChildren(),
                 DockNode::getNode);
     }

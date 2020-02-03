@@ -27,6 +27,7 @@ public class TabPaneDock
                 k -> tabMap.computeIfAbsent(k, this::makeTab));
         dockParentProperty().addListener((o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesItems());
+            resizePane.setResizeAxis(newv == null ? DockAxis.Y : newv.getAxis());
         });
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.NEVER);
@@ -55,21 +56,4 @@ public class TabPaneDock
     public DockAxis getAxis() {
         return DockAxis.Z;
     }
-
-
-    @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-        tabPane.resizeRelocate(0, 0, getWidth(), getHeight());
-    }
-/*
-    @Override
-    protected double computePrefHeight(double width) {
-        return tabPane.prefHeight(width);
-    }
-
-    @Override
-    protected double computePrefWidth(double height) {
-        return tabPane.prefWidth(height);
-    }*/
 }
