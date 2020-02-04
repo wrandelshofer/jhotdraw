@@ -6,8 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.gui.docknew.CardDockPane;
 import org.jhotdraw8.gui.docknew.DockPane;
-import org.jhotdraw8.gui.docknew.SimpleDockPane;
 import org.jhotdraw8.gui.docknew.SimpleDockable;
 import org.jhotdraw8.gui.docknew.TabPaneDock;
 
@@ -16,7 +16,7 @@ public class NewDockingFrameworkSampleMain extends Application {
     @NonNull
     public DockPane initStage(String title,
                               @NonNull Stage primaryStage) {
-        DockPane root = new SimpleDockPane();
+        DockPane root = new CardDockPane();
         Scene scene = new Scene(root.getNode(), 300, 250);
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);

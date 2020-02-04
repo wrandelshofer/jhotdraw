@@ -27,7 +27,13 @@ import java.util.ArrayDeque;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class SimpleDockPane
+/**
+ * A card dock pane manages {@link DockNode}s.
+ * <p>
+ * The card dock pane is a dock node on {@link DockAxis#Z}.
+ * It only shows the first card.
+ */
+public class CardDockPane
         extends AbstractDock
         implements DockPane {
 
@@ -53,7 +59,7 @@ public class SimpleDockPane
     private Supplier<Dock> zSupplier = TabPaneDock::new;
     private final ObjectProperty<Predicate<Dockable>> dockableFilter = new SimpleObjectProperty<>(o -> true);
 
-    public SimpleDockPane() {
+    public CardDockPane() {
         stackPane.getChildren().add(contentPane);
         getChildren().add(stackPane);
         onlyChild.addListener(this::onRootChanged);

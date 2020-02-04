@@ -9545,9 +9545,9 @@
 														"$ref": "AAAAAAFwC8vA0/uzL9I="
 													},
 													"font": "Arial;13;0",
-													"left": 56.6181640625,
+													"left": 52.27001953125,
 													"top": 13,
-													"width": 180.92431640625,
+													"width": 163.83642578125,
 													"height": 13,
 													"text": "Docking System design pattern"
 												},
@@ -9560,7 +9560,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 13,
-													"width": 30.6181640625,
+													"width": 26.27001953125,
 													"height": 13,
 													"text": "class"
 												}
@@ -9947,6 +9947,23 @@
 															"height": 13,
 															"text": "+dockParent: ObjectProperty<Dock>",
 															"horizontalAlignment": 0
+														},
+														{
+															"_type": "UMLAttributeView",
+															"_id": "AAAAAAFwDs0tka48Sfc=",
+															"_parent": {
+																"$ref": "AAAAAAFwC8vA0/vXaGM="
+															},
+															"model": {
+																"$ref": "AAAAAAFwDDS6i3PF7JM="
+															},
+															"font": "Arial;13;0",
+															"left": 381,
+															"top": 249,
+															"width": 337.81591796875,
+															"height": 13,
+															"text": "+node: ReadOnlyProperty<Node>",
+															"horizontalAlignment": 0
 														}
 													],
 													"visible": false,
@@ -9954,7 +9971,7 @@
 													"left": 376,
 													"top": 214,
 													"width": 347.81591796875,
-													"height": 38
+													"height": 53
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -9977,7 +9994,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 381,
-															"top": 244,
+															"top": 229,
 															"width": 337.81591796875,
 															"height": 13,
 															"text": "+getRoot(): DockPane",
@@ -9989,7 +10006,7 @@
 													"left": 376,
 													"top": 224,
 													"width": 347.81591796875,
-													"height": 38
+													"height": 23
 												},
 												{
 													"_type": "UMLReceptionCompartmentView",
@@ -10583,7 +10600,7 @@
 														"$ref": "AAAAAAFwC8vA1PwANLU="
 													},
 													"edgePosition": 2,
-													"text": "+dockedChildrenReadOnly"
+													"text": "+dockChildrenReadOnly"
 												},
 												{
 													"_type": "EdgeLabelView",
@@ -13059,7 +13076,7 @@
 															"top": 247,
 															"width": 105.4853515625,
 															"height": 13,
-															"text": "SimpleDockPane"
+															"text": "CardDockPane"
 														},
 														{
 															"_type": "LabelView",
@@ -16486,7 +16503,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFwAgtzaijW/Eg="
 									},
-									"name": "SimpleDockPane",
+									"name": "CardDockPane",
 									"ownedElements": [
 										{
 											"_type": "UMLInterfaceRealization",
