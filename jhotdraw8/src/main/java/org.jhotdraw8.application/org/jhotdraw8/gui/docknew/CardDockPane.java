@@ -31,13 +31,13 @@ import java.util.function.Supplier;
  * A card dock pane manages {@link DockNode}s.
  * <p>
  * The card dock pane is a dock node on {@link DockAxis#Z}.
- * It only shows the first card.
+ * It only shows the selected card.
  */
 public class CardDockPane
         extends AbstractDock
         implements DockPane {
 
-    private final ObjectProperty<DockNode> onlyChild = new SimpleObjectProperty<>();
+    private final ObjectProperty<DockNode> selectedCard = new SimpleObjectProperty<>();
     private final Rectangle dropRect = new Rectangle(0, 0, 0, 0);
     @Nullable
     RectangleTransition transition;
@@ -62,7 +62,7 @@ public class CardDockPane
     public CardDockPane() {
         stackPane.getChildren().add(contentPane);
         getChildren().add(stackPane);
-        onlyChild.addListener(this::onRootChanged);
+        selectedCard.addListener(this::onRootChanged);
         dropRect.setOpacity(0.4);
         dropRect.setManaged(false);
         dropRect.setMouseTransparent(true);
@@ -70,7 +70,7 @@ public class CardDockPane
         setOnDragOver(this::onDragOver);
         setOnDragExited(this::onDragExit);
         setOnDragDropped(this::onDragDrop);
-        getDockChildren().addListener(this::onChildrenChanged);
+        getDockChildren().addListener(this::onDockChildrenChanged);
         ChangeListener<DockNode> changeListener = (o, oldv, newv) -> {
             throw new AssertionError("root cannot be added to any other node");
         };
@@ -79,11 +79,8 @@ public class CardDockPane
     }
 
 
-    private void onChildrenChanged(ListChangeListener.Change<? extends DockNode> c) {
-        if (c.getList().size() > 1) {
-            throw new IllegalArgumentException("RootDock can only have one child");
-        }
-        onlyChild.set(c.getList().isEmpty() ? null : c.getList().get(0));
+    private void onDockChildrenChanged(ListChangeListener.Change<? extends DockNode> c) {
+        setSelectedCard(c.getList().isEmpty() ? null : c.getList().get(0));
     }
 
 
@@ -369,12 +366,8 @@ public class CardDockPane
         return getDockChildren().isEmpty() ? null : getDockChildren().get(0);
     }
 
-    private void setOnlyChild(@Nullable DockNode o) {
-        getDockChildren().clear();
-        if (o != null) {
-            getDockChildren().add(o);
-        }
-
+    private void setSelectedCard(@Nullable DockNode o) {
+        selectedCard.set(o);
     }
 
     private DockAxis getZoneAxis(DropZone zone) {
@@ -406,10 +399,10 @@ public class CardDockPane
             DockNode oldChild = this.getDocked();
             switch (zoneAxis) {
             case X:
-                this.setOnlyChild(rootXSupplier.get());
+                this.setSelectedCard(rootXSupplier.get());
                 break;
             case Y:
-                this.setOnlyChild(rootYSupplier.get());
+                this.setSelectedCard(rootYSupplier.get());
                 break;
             case Z:
             default:
@@ -509,4 +502,11 @@ public class CardDockPane
         );
     }
 
+    public DockNode getSelectedCard() {
+        return selectedCard.get();
+    }
+
+    public ObjectProperty<DockNode> selectedCardProperty() {
+        return selectedCard;
+    }
 }
