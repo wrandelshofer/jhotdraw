@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
@@ -18,11 +19,26 @@ public abstract class AbstractDock
     protected final ObjectProperty<Dock> dockParent = new SimpleObjectProperty<>();
     protected final ObservableList<DockNode> dockChildren = FXCollections.observableArrayList();
     private final ReadOnlyObjectProperty<Node> node = new ReadOnlyObjectWrapper<>((Node) this).getReadOnlyProperty();
-    private final DockableDragHandler dragHandler = new DockableDragHandler();
 
     public AbstractDock() {
         setSkin(new CustomSkin<>(this));
-        dockChildren.addListener(this::onChildrenChanged);
+        //CustomBinding.bindElements(dockChildren,DockNode::setDockParent,this);
+        dockChildren.addListener((ListChangeListener.Change<? extends DockNode> change) -> {
+            while (change.next()) {
+                for (DockNode removed : change.getRemoved()) {
+                    removed.setDockParent(null);
+                }
+                for (DockNode added : change.getAddedSubList()) {
+                    if (added.getDockParent() != null) {
+                        throw new IllegalStateException("Added still has parent " + added);
+                    }
+                    if (added instanceof DockPane) {
+                        throw new IllegalStateException("Added DockPane cannot have parent " + added);
+                    }
+                    added.setDockParent(this);
+                }
+            }
+        });
         setMinHeight(10);
         setMinWidth(10);
         setMaxHeight(Double.MAX_VALUE);
@@ -46,25 +62,6 @@ public abstract class AbstractDock
         return node;
     }
 
-    private void onChildrenChanged(ListChangeListener.Change<? extends DockNode> change) {
-        while (change.next()) {
-            for (DockNode removed : change.getRemoved()) {
-                if (removed.getDockParent() == this) {
-                    removed.setDockParent(null);
-                    if (removed instanceof Dockable) {
-                        dragHandler.remove((Dockable) removed);
-                    }
-                }
-            }
-            for (DockNode added : change.getAddedSubList()) {
-                added.setDockParent(this);
-                if (added instanceof Dockable) {
-                    dragHandler.add((Dockable) added);
-                }
-            }
-
-        }
-    }
 
     @Override
     protected void layoutChildren() {
@@ -74,6 +71,13 @@ public abstract class AbstractDock
                 child.resizeRelocate(0, 0, getWidth(), getHeight());
             }
         }
-
     }
+
+
+    @NonNull
+    @Override
+    public Parent getNode() {
+        return this;
+    }
+
 }

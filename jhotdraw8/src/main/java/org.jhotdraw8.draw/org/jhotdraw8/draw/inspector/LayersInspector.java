@@ -259,8 +259,9 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             listView.getSelectionModel().getSelectedItems().addListener((ListChangeListener<? super Figure>) c -> {
                 Layer selected = (Layer) listView.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    getSubject().setActiveParent(selected);
+                DrawingView subject = getSubject();
+                if (selected != null && subject != null) {
+                    subject.setActiveParent(selected);
                 }
 
             });

@@ -25,11 +25,11 @@ public class VBoxDock extends AbstractDock {
     }
 
     @Override
-    public @NonNull DockAxis getAxis() {
+    public @NonNull DockAxis getDockAxis() {
         return DockAxis.Y;
     }
 
-    public boolean isResizesItems() {
+    public boolean isResizesDockChildren() {
         return false;
     }
 }

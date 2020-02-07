@@ -109,7 +109,9 @@ public class GrapherAboutAction extends AbstractApplicationAction {
 
                             return version == null ? m.getName() : m.getName() + "@" + version;
                         })
-                        .filter(str -> !str.startsWith("java.") && !str.startsWith("javafx.") && !str.startsWith("jdk."))
+                        .filter(str -> !str.startsWith("java.")
+                                //&& !str.startsWith("javafx.")
+                                && !str.startsWith("jdk."))
                         .sorted()
                         .collect(Collectors.joining("\n  ", "  ", ""));
     }

@@ -27,6 +27,7 @@ public class SimpleDockable extends Tab implements Dockable {
         final Text textualIcon = new Text("❏");
         textualIcon.getStyleClass().add(DOCKABLE_ICON_STYLE_CLASS);
         setGraphic(textualIcon);
+        new DockableDragHandler(this);
     }
 
     @Override

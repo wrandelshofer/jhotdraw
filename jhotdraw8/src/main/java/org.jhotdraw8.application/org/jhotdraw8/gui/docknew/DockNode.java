@@ -12,17 +12,23 @@ public interface DockNode {
     ObjectProperty<Dock> dockParentProperty();
 
     @NonNull
-    ReadOnlyObjectProperty<Node> nodeProperty();
-
-    @NonNull
-    ReadOnlyList<? extends DockNode> getDockChildrenReadOnly();
+    ReadOnlyList<DockNode> getDockChildrenReadOnly();
 
     @Nullable
-    default Dock getDockParent() {
+    default DockPane getDockPane() {
+        for (DockNode node = this; node != null; node = node.getDockParent()) {
+            if (node instanceof DockPane) {
+                return (DockPane) node;
+            }
+        }
+        return null;
+    }
+
+    default @Nullable Dock getDockParent() {
         return dockParentProperty().get();
     }
 
-    default void setDockParent(@Nullable Dock value) {
+    default void setDockParent(Dock value) {
         dockParentProperty().set(value);
     }
 
@@ -31,14 +37,7 @@ public interface DockNode {
         return nodeProperty().get();
     }
 
-    @Nullable
-    default DockPane getRoot() {
-        for (DockNode node = this; node != null; node = node.getDockParent()) {
-            if (node instanceof DockPane) {
-                return (DockPane) node;
-            }
-        }
-        return null;
-    }
+    @NonNull
+    ReadOnlyObjectProperty<Node> nodeProperty();
 
 }

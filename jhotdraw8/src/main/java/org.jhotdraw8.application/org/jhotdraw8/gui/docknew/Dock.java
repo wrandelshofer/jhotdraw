@@ -7,21 +7,15 @@ import org.jhotdraw8.collection.ReadOnlyListWrapper;
 
 public interface Dock extends DockNode {
     @NonNull
-    DockAxis getAxis();
+    DockAxis getDockAxis();
 
     @NonNull
     ObservableList<DockNode> getDockChildren();
 
-    @NonNull
     @Override
-    default ReadOnlyList<DockNode> getDockChildrenReadOnly() {
+    default @NonNull ReadOnlyList<DockNode> getDockChildrenReadOnly() {
         return new ReadOnlyListWrapper<>(getDockChildren());
     }
-
-    default boolean isEditable() {
-        return true;
-    }
-
 
     /**
      * Returns true if this track resizes the items. If this method returns
@@ -29,7 +23,11 @@ public interface Dock extends DockNode {
      *
      * @return true if the track resizes items.
      */
-    default boolean isResizesItems() {
+    boolean isResizesDockChildren();
+
+    default boolean isEditable() {
         return true;
     }
+
+
 }

@@ -37,6 +37,7 @@ public interface DockPane extends Dock {
         draggedDockable.set(value);
     }
 
+
     /**
      * Only {@link Dockable}s accepted by this filter can be docked.
      *

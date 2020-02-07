@@ -20,11 +20,11 @@ public class HBoxDock extends AbstractDock {
     }
 
     @Override
-    public @NonNull DockAxis getAxis() {
+    public @NonNull DockAxis getDockAxis() {
         return DockAxis.X;
     }
 
-    public boolean isResizesItems() {
+    public boolean isResizesDockChildren() {
         return false;
     }
 }

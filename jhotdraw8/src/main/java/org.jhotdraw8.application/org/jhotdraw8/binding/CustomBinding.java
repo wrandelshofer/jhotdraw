@@ -10,10 +10,12 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -195,4 +197,68 @@ public class CustomBinding {
         src.removeListener(binding);
     }
 
+    /**
+     * Binds the specified property of all list elements to the given property.
+     * <p>
+     * If an element is added, its property is bound.
+     * <p>
+     * If an element is removed, its property is unbound and the property value
+     * is set to null.
+     *
+     * @param list     the list
+     * @param getter   the getter for the element property
+     * @param property the property to which the element properties shall be bound
+     * @param <E>      the element type
+     * @param <T>      the property type
+     */
+    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property) {
+        for (E elem : list) {
+            Property<T> p = getter.apply(elem);
+            p.unbind();
+            p.bind(property);
+        }
+        list.addListener((ListChangeListener.Change<? extends E> change) -> {
+            while (change.next()) {
+                for (E removed : change.getRemoved()) {
+                    Property<T> p = getter.apply(removed);
+                    p.unbind();
+                    p.setValue(null);
+                }
+                for (E added : change.getAddedSubList()) {
+                    Property<T> p = getter.apply(added);
+                    p.unbind();
+                    p.bind(property);
+                }
+            }
+        });
+    }
+
+    /**
+     * Sets the specified value to all elements of the list.
+     * <p>
+     * If an element is added, the specified value is set.
+     * <p>
+     * If an element is removed, the null value is set.
+     *
+     * @param list   the list
+     * @param setter the setter for the value on the element
+     * @param value  the value
+     * @param <E>    the element type
+     * @param <T>    the value type
+     */
+    public static <E, T> void bindElements(ObservableList<E> list, BiConsumer<E, T> setter, T value) {
+        for (E elem : list) {
+            setter.accept(elem, value);
+        }
+        list.addListener((ListChangeListener.Change<? extends E> change) -> {
+            while (change.next()) {
+                for (E removed : change.getRemoved()) {
+                    setter.accept(removed, null);
+                }
+                for (E added : change.getAddedSubList()) {
+                    setter.accept(added, value);
+                }
+            }
+        });
+    }
 }

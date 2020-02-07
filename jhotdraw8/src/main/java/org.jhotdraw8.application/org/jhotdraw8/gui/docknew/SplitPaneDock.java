@@ -20,9 +20,13 @@ public class SplitPaneDock
 
     @NonNull
     @Override
-    public DockAxis getAxis() {
+    public DockAxis getDockAxis() {
         return splitPane.getOrientation() == Orientation.HORIZONTAL ? DockAxis.X : DockAxis.Y;
     }
 
 
+    @Override
+    public boolean isResizesDockChildren() {
+        return true;
+    }
 }
