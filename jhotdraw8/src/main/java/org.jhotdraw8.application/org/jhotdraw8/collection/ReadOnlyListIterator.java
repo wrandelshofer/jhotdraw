@@ -15,14 +15,15 @@ import java.util.function.Consumer;
 
 public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Spliterator<E> {
     private final ReadOnlyList<E> list;
-    int index = 0;
-    final int size;
+    private int index;
+    @Nullable
+    final Integer size;
 
     public ReadOnlyListIterator(@NonNull ReadOnlyList<E> list) {
-        this(list, 0, list.size());
+        this(list, 0, null);
     }
 
-    public ReadOnlyListIterator(ReadOnlyList<E> list, int index, int size) {
+    public ReadOnlyListIterator(ReadOnlyList<E> list, int index, @Nullable Integer size) {
         this.list = list;
         this.size = size;
         this.index = index;
@@ -30,7 +31,11 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
 
     @Override
     public boolean hasNext() {
-        return index < size;
+        return index < getSize();
+    }
+
+    private int getSize() {
+        return size == null ? list.size() : size;
     }
 
     @Override
@@ -81,7 +86,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
         Objects.requireNonNull(action, "action is null");
-        if (index >= 0 && index < size) {
+        if (index >= 0 && index < getSize()) {
             action.accept(list.get(index++));
             return true;
         }
@@ -91,7 +96,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
     @Nullable
     @Override
     public Spliterator<E> trySplit() {
-        int lo = index, mid = (lo + size) >>> 1;
+        int lo = index, mid = (lo + getSize()) >>> 1;
         return (lo >= mid)
                 ? null
                 : new ReadOnlyListIterator<>(list, lo, index = mid);
@@ -99,7 +104,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
 
     @Override
     public long estimateSize() {
-        return size - index;
+        return getSize() - index;
     }
 
     @Override
