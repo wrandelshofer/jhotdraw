@@ -5,7 +5,8 @@
 package org.jhotdraw8.collection;
 
 /**
- * Classes with this interface guarantee that the content of the collection is immutable.
+ * Provides query methods to a collection. The state of the
+ * collection does not change.
  *
  * @param <E> the element type
  */

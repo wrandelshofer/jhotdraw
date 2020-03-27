@@ -5,7 +5,8 @@
 package org.jhotdraw8.collection;
 
 /**
- * Classes with this interface guarantee that the content of the set is immutable.
+ * Provides query methods to a set. The state of the set
+ * does not change.
  *
  * @param <E> the element type
  */

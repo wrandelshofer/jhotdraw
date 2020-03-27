@@ -7,7 +7,8 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Classes with this interface guarantee that the content of the list is immutable.
+ * Provides query methods to a list. The state of the list
+ * does not change.
  *
  * @param <E> the element type
  */

@@ -10,7 +10,8 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Set;
 
 /**
- * Provides a read-only API for a set collection.
+ * Provides query methods to a set. The state of the set may
+ * change.
  * <p>
  * Note: a ReadOnlySet is not equal to a non-readable {@link Set}.
  * To compare a ReadOnlySet to a Set, you have to wrap the Set into a {@link ReadOnlySetWrapper}.

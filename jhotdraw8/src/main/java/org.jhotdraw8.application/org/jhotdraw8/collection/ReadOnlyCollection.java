@@ -14,7 +14,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Provides a read-only API for a collection.
+ * Provides query methods to a collection. The state
+ * of the collection may change.
  *
  * @param <E> the element type
  */
