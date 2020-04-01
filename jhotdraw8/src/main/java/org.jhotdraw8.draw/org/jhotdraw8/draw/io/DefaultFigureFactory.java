@@ -73,6 +73,7 @@ import org.jhotdraw8.draw.figure.PolygonFigure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
 import org.jhotdraw8.draw.figure.RegionFigure;
+import org.jhotdraw8.draw.figure.SimpleLayeredDrawing;
 import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -130,7 +131,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);
             keys.remove(Drawing.DOCUMENT_HOME);
-            addFigureKeysAndNames("Drawing", AbstractDrawing.class, keys);
+            addFigureKeysAndNames("Drawing", SimpleLayeredDrawing.class, keys);
         }
 
         {

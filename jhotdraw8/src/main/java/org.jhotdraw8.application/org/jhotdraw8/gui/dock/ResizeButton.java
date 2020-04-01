@@ -9,11 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
@@ -28,10 +24,11 @@ public class ResizeButton extends Region {
     private final ObjectProperty<Region> target = new SimpleObjectProperty<>();
 
     public ResizeButton() {
-        setBorder(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, null, null)));
         setOnMousePressed(this::mousePressed);
         setOnMouseDragged(this::mouseDragged);
         setCursor(Cursor.V_RESIZE);
+        setMinHeight(1);
+        setMinWidth(1);
     }
 
     public Region getTarget() {

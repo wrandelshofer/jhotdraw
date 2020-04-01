@@ -6,17 +6,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.gui.docknew.DockPane;
-import org.jhotdraw8.gui.docknew.SimpleDockPane;
-import org.jhotdraw8.gui.docknew.SimpleDockable;
-import org.jhotdraw8.gui.docknew.TabPaneDock;
+import org.jhotdraw8.gui.dock.DockPane;
+import org.jhotdraw8.gui.dock.SimpleDockPane;
+import org.jhotdraw8.gui.dock.SimpleDockable;
+import org.jhotdraw8.gui.dock.TabPaneDock;
+import org.jhotdraw8.gui.dock.TabbedAccordionDock;
 
-public class NewDockingFrameworkSampleMain extends Application {
+public class DockingFrameworkSampleMain extends Application {
 
     @NonNull
     public DockPane initStage(String title,
                               @NonNull Stage primaryStage) {
-        DockPane root = new SimpleDockPane();
+        SimpleDockPane root = new SimpleDockPane();
+        root.setZSupplier(TabbedAccordionDock::new);
         Scene scene = new Scene(root.getNode(), 300, 250);
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
@@ -34,6 +36,7 @@ public class NewDockingFrameworkSampleMain extends Application {
 
         dock = initStage("DockRoot initially 3 tabs", new Stage());
         TabPaneDock zComp = new TabPaneDock();
+
         zComp.getDockChildren().add(new SimpleDockable("Label 1", new Label("The quick brown fox 1")));
         zComp.getDockChildren().add(new SimpleDockable("Label 2", new Label("The quick brown fox 2")));
         zComp.getDockChildren().add(new SimpleDockable("Label 3", new Label("The quick brown fox 3")));

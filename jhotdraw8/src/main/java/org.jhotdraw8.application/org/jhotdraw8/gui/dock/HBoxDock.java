@@ -1,4 +1,4 @@
-package org.jhotdraw8.gui.docknew;
+package org.jhotdraw8.gui.dock;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;

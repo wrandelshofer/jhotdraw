@@ -1,4 +1,4 @@
-package org.jhotdraw8.gui.docknew;
+package org.jhotdraw8.gui.dock;
 
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;

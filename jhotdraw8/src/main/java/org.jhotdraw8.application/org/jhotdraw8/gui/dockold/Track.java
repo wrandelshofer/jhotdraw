@@ -2,7 +2,7 @@
  * @(#)Track.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.gui.dock;
+package org.jhotdraw8.gui.dockold;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;

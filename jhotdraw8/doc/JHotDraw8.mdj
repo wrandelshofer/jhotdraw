@@ -10876,7 +10876,7 @@
 													"left": 9,
 													"top": 22,
 													"width": 357.95947265625,
-													"height": 53
+													"height": 38
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -11065,7 +11065,7 @@
 															"top": 21,
 															"width": 318.322265625,
 															"height": 13,
-															"text": "+dockChildren: ObservableList<DockNode> {readOnly}",
+															"text": "+dockChildren: ObservableList<DockNode>",
 															"horizontalAlignment": 0
 														}
 													],
@@ -12876,8 +12876,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 320,
-													"top": 437,
+													"left": 303,
+													"top": 434,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 15,
@@ -12897,8 +12897,8 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 311,
-													"top": 425,
+													"left": 293,
+													"top": 423,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 30,
@@ -12918,8 +12918,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 337,
-													"top": 462,
+													"left": 324,
+													"top": 457,
 													"height": 13,
 													"alpha": -1.5707963267948966,
 													"distance": 15,
@@ -12937,7 +12937,7 @@
 												"$ref": "AAAAAAFwDAekT24i6R0="
 											},
 											"lineStyle": 1,
-											"points": "310:471;349:442",
+											"points": "295:471;334:434",
 											"showVisibility": true,
 											"nameLabel": {
 												"$ref": "AAAAAAFwDAfwiG5jmvQ="
@@ -12977,7 +12977,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 269,
-															"top": 333,
+															"top": 325,
 															"width": 253.27783203125,
 															"height": 13,
 															"text": "«interface»"
@@ -12990,7 +12990,7 @@
 															},
 															"font": "Arial;13;1",
 															"left": 269,
-															"top": 348,
+															"top": 340,
 															"width": 253.27783203125,
 															"height": 13,
 															"text": "Dock"
@@ -13004,7 +13004,7 @@
 															"visible": false,
 															"font": "Arial;13;0",
 															"left": -592,
-															"top": 224,
+															"top": 208,
 															"width": 132.18994140625,
 															"height": 13,
 															"text": "(from Docking System)"
@@ -13018,14 +13018,14 @@
 															"visible": false,
 															"font": "Arial;13;0",
 															"left": -592,
-															"top": 224,
+															"top": 208,
 															"height": 13,
 															"horizontalAlignment": 1
 														}
 													],
 													"font": "Arial;13;0",
 													"left": 264,
-													"top": 328,
+													"top": 320,
 													"width": 263.27783203125,
 													"height": 38,
 													"stereotypeLabel": {
@@ -13062,7 +13062,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 269,
-															"top": 371,
+															"top": 363,
 															"width": 253.27783203125,
 															"height": 13,
 															"autoResize": true,
@@ -13072,7 +13072,7 @@
 													],
 													"font": "Arial;13;0",
 													"left": 264,
-													"top": 366,
+													"top": 358,
 													"width": 263.27783203125,
 													"height": 23
 												},
@@ -13097,7 +13097,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 269,
-															"top": 394,
+															"top": 386,
 															"width": 253.27783203125,
 															"height": 13,
 															"text": "+isResizesDockChildren(): boolean",
@@ -13114,7 +13114,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 269,
-															"top": 409,
+															"top": 401,
 															"width": 253.27783203125,
 															"height": 13,
 															"text": "+getDockAxis(): DockAxis",
@@ -13131,7 +13131,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 269,
-															"top": 424,
+															"top": 416,
 															"width": 253.27783203125,
 															"height": 13,
 															"text": "+isEditable(): boolean",
@@ -13140,7 +13140,7 @@
 													],
 													"font": "Arial;13;0",
 													"left": 264,
-													"top": 389,
+													"top": 381,
 													"width": 263.27783203125,
 													"height": 53
 												},
@@ -13156,7 +13156,7 @@
 													"visible": false,
 													"font": "Arial;13;0",
 													"left": -296,
-													"top": 112,
+													"top": 104,
 													"width": 10,
 													"height": 10
 												},
@@ -13172,7 +13172,7 @@
 													"visible": false,
 													"font": "Arial;13;0",
 													"left": -296,
-													"top": 112,
+													"top": 104,
 													"width": 10,
 													"height": 10
 												}
@@ -13180,7 +13180,7 @@
 											"font": "Arial;13;0",
 											"containerChangeable": true,
 											"left": 264,
-											"top": 328,
+											"top": 320,
 											"width": 263.27783203125,
 											"height": 114,
 											"autoResize": true,
@@ -13221,8 +13221,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 487,
-													"top": 291,
+													"left": 472,
+													"top": 286,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 15,
@@ -13242,8 +13242,8 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 476,
-													"top": 280,
+													"left": 463,
+													"top": 274,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 30,
@@ -13263,8 +13263,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 508,
-													"top": 312,
+													"left": 491,
+													"top": 309,
 													"height": 13,
 													"alpha": -1.5707963267948966,
 													"distance": 15,
@@ -13282,7 +13282,7 @@
 												"$ref": "AAAAAAFwHsQOg7YG3fg="
 											},
 											"lineStyle": 1,
-											"points": "461:327;504:290",
+											"points": "465:319;500:290",
 											"showVisibility": true,
 											"nameLabel": {
 												"$ref": "AAAAAAFwHtqucr4c7Hs="
@@ -15835,7 +15835,7 @@
 													"left": -167,
 													"top": -96,
 													"width": 357.95947265625,
-													"height": 53
+													"height": 38
 												},
 												{
 													"_type": "UMLOperationCompartmentView",

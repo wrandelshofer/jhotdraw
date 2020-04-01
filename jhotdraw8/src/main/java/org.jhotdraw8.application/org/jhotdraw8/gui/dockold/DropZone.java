@@ -2,7 +2,7 @@
  * @(#)DropZone.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.gui.docknew;
+package org.jhotdraw8.gui.dockold;
 
 /**
  * Defines a drop zone for the drag and drop operation of a DockItem.

@@ -1,4 +1,4 @@
-package org.jhotdraw8.gui.docknew;
+package org.jhotdraw8.gui.dock;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -424,5 +424,13 @@ public class SimpleDockPane
             this.bounds = bounds;
             this.insets = insets;
         }
+    }
+
+    public Supplier<Dock> getZSupplier() {
+        return zSupplier;
+    }
+
+    public void setZSupplier(Supplier<Dock> zSupplier) {
+        this.zSupplier = zSupplier;
     }
 }

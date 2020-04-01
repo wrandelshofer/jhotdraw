@@ -1,4 +1,4 @@
-package org.jhotdraw8.gui.docknew;
+package org.jhotdraw8.gui.dock;
 
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
@@ -11,7 +11,7 @@ import javafx.scene.input.TransferMode;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import static org.jhotdraw8.gui.docknew.DockPane.DOCKABLE_DATA_FORMAT;
+import static org.jhotdraw8.gui.dock.DockPane.DOCKABLE_DATA_FORMAT;
 
 public class DockableDragHandler {
 

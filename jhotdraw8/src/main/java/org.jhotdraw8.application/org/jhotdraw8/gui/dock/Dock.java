@@ -1,42 +1,33 @@
-/*
- * @(#)Dock.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
- */
 package org.jhotdraw8.gui.dock;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.ReadOnlyListWrapper;
 
-/**
- * A {@code Dock} contains one or more {@link DockItem}s.
- *
- * @author Werner Randelshofer
- */
-public interface Dock {
-
-    @NonNull ObservableList<DockItem> getItems();
+public interface Dock extends DockNode {
+    @NonNull
+    DockAxis getDockAxis();
 
     @NonNull
-    default Node getNode() {
-        return (Node) this;
+    ObservableList<DockNode> getDockChildren();
+
+    @Override
+    default @NonNull ReadOnlyList<DockNode> getDockChildrenReadOnly() {
+        return new ReadOnlyListWrapper<>(getDockChildren());
     }
 
     /**
-     * Returns true if the user may add and remove items.
+     * Returns true if this track resizes the items. If this method returns
+     * true, an item of the track should not provide resize controls.
      *
-     * @return true if editable by user
+     * @return true if the track resizes items.
      */
-    boolean isEditable();
+    boolean isResizesDockChildren();
 
-    @NonNull ObjectProperty<Track> trackProperty();
-
-    default Track getTrack() {
-        return trackProperty().get();
+    default boolean isEditable() {
+        return true;
     }
 
-    default void setTrack(Track value) {
-        trackProperty().set(value);
-    }
+
 }

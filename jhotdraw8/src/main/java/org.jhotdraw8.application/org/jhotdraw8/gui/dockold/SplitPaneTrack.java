@@ -2,7 +2,7 @@
  * @(#)SplitPaneTrack.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.gui.dock;
+package org.jhotdraw8.gui.dockold;
 
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Orientation;

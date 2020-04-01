@@ -5,4 +5,4 @@
 /**
  * Provides a docking framework.
  */
-package org.jhotdraw8.gui.dock;
+package org.jhotdraw8.gui.dockold;

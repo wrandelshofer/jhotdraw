@@ -1,8 +1,8 @@
 /*
- * @(#)ScrollableVBoxTrack.java
+ * @(#)ScrollableSplitPaneTrack.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.gui.dock;
+package org.jhotdraw8.gui.dockold;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,7 +12,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Border;
-import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 
@@ -21,13 +20,13 @@ import org.jhotdraw8.gui.CustomSkin;
  *
  * @author Werner Randelshofer
  */
-public class ScrollableVBoxTrack extends Control implements Track {
+public class ScrollableSplitPaneTrack extends Control implements Track {
 
-    private final VBox vbox = new VBox();
+    private final SplitPane splitPane = new SplitPane();
     @NonNull
-    private ScrollPane scrollPane = new ScrollPane(vbox);
+    private ScrollPane scrollPane = new ScrollPane(splitPane);
 
-    public ScrollableVBoxTrack() {
+    public ScrollableSplitPaneTrack() {
         setSkin(new CustomSkin<>(this));
         getStyleClass().add("track");
         getChildren().add(scrollPane);
@@ -36,7 +35,7 @@ public class ScrollableVBoxTrack extends Control implements Track {
         setMaxWidth(Double.MAX_VALUE);
         setMaxHeight(Double.MAX_VALUE);
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
-
+        splitPane.setOrientation(Orientation.VERTICAL);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setFitToHeight(false);
         scrollPane.setFitToWidth(true);
@@ -56,48 +55,15 @@ public class ScrollableVBoxTrack extends Control implements Track {
                     for (Node additem : c.getAddedSubList()) {
                         if (additem instanceof Dock) {
                             Dock d = (Dock) additem;
-                            d.setTrack(ScrollableVBoxTrack.this);
+                            d.setTrack(ScrollableSplitPaneTrack.this);
                         }
                     }
                 }
-
                 updateResizableWithParent();
             }
 
         });
-    }
 
-    @Override
-    protected double computePrefHeight(double width) {
-        return scrollPane.prefHeight(width);
-    }
-
-    @Override
-    protected double computePrefWidth(double height) {
-        return scrollPane.prefWidth(height);
-    }
-
-    @Override
-    public ObservableList<Node> getItems() {
-        return vbox.getChildren();
-    }
-
-    @NonNull
-    @Override
-    public Orientation getOrientation() {
-        return Orientation.VERTICAL;
-    }
-
-    @Override
-    protected void layoutChildren() {
-        for (Node child : getChildren()) {
-            child.resizeRelocate(0, 0, getWidth(), getHeight());
-        }
-    }
-
-    @Override
-    public boolean resizesItems() {
-        return false;
     }
 
     private void updateResizableWithParent() {
@@ -108,7 +74,34 @@ public class ScrollableVBoxTrack extends Control implements Track {
                 break;
             }
         }
-        SplitPane.setResizableWithParent(ScrollableVBoxTrack.this, resizeableWithParent);
+        SplitPane.setResizableWithParent(ScrollableSplitPaneTrack.this, resizeableWithParent);
+    }
+
+    @Override
+    public ObservableList<Node> getItems() {
+        return splitPane.getItems();
+    }
+
+    @NonNull
+    @Override
+    public Orientation getOrientation() {
+        return Orientation.VERTICAL;
+    }
+
+    @Override
+    protected void layoutChildren() {
+        super.layoutChildren();
+        scrollPane.resizeRelocate(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
+    protected double computePrefHeight(double width) {
+        return scrollPane.prefHeight(width);
+    }
+
+    @Override
+    protected double computePrefWidth(double height) {
+        return scrollPane.prefWidth(height);
     }
 
 }

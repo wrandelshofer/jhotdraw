@@ -11,16 +11,16 @@ import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.gui.dock.Dock;
-import org.jhotdraw8.gui.dock.DockItem;
-import org.jhotdraw8.gui.dock.DockRoot;
-import org.jhotdraw8.gui.dock.ScrollableSplitPaneTrack;
-import org.jhotdraw8.gui.dock.ScrollableVBoxTrack;
-import org.jhotdraw8.gui.dock.SingleItemDock;
-import org.jhotdraw8.gui.dock.SplitPaneTrack;
-import org.jhotdraw8.gui.dock.TabPaneDock;
-import org.jhotdraw8.gui.dock.TabbedAccordionDock;
-import org.jhotdraw8.gui.dock.Track;
+import org.jhotdraw8.gui.dockold.Dock;
+import org.jhotdraw8.gui.dockold.DockItem;
+import org.jhotdraw8.gui.dockold.DockRoot;
+import org.jhotdraw8.gui.dockold.ScrollableSplitPaneTrack;
+import org.jhotdraw8.gui.dockold.ScrollableVBoxTrack;
+import org.jhotdraw8.gui.dockold.SingleItemDock;
+import org.jhotdraw8.gui.dockold.SplitPaneTrack;
+import org.jhotdraw8.gui.dockold.TabPaneDock;
+import org.jhotdraw8.gui.dockold.TabbedAccordionDock;
+import org.jhotdraw8.gui.dockold.Track;
 
 import java.util.function.Supplier;
 
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  *
  * @author Werner Randelshofer
  */
-public class DockingFrameworkSample extends Application {
+public class OldDockingFrameworkSample extends Application {
 
     private int counter;
 

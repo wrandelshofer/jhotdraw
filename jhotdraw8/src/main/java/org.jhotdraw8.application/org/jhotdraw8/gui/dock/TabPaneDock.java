@@ -1,69 +1,69 @@
-/*
- * @(#)TabPaneDock.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
- */
 package org.jhotdraw8.gui.dock;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ListChangeListener;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Control;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.gui.CustomSkin;
+import org.jhotdraw8.binding.CustomBinding;
 
-/**
- * A TabPaneDock.
- *
- * @author Werner Randelshofer
- */
-public class TabPaneDock extends Control implements Dock {
+import java.util.Map;
+import java.util.WeakHashMap;
 
+public class TabPaneDock extends AbstractDock {
+
+    private final Map<DockNode, Tab> tabMap = new WeakHashMap<>();
+    private final TabPane tabPane = new TabPane();
     @NonNull
-    private TabPane tabPane = new TabPane();
+    private ResizePane resizePane = new ResizePane();
 
     public TabPaneDock() {
-        setSkin(new CustomSkin<>(this));
-        getChildren().add(tabPane);
+        getChildren().add(resizePane);
+        resizePane.setContent(tabPane);
+        CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
+                k -> tabMap.computeIfAbsent(k, this::makeTab));
+        dockParentProperty().addListener(onParentChanged());
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
-
-        setMinWidth(10);
-        setMinHeight(10);
-        setMaxWidth(Double.MAX_VALUE);
-        setMaxHeight(Double.MAX_VALUE);
-
-        getItems().addListener(new ListChangeListener<DockItem>() {
-            @Override
-            public void onChanged(@NonNull ListChangeListener.Change<? extends DockItem> c) {
-                while (c.next()) {
-                    for (DockItem remitem : c.getRemoved()) {
-                        remitem.setDock(null);
-                    }
-                    for (DockItem additem : c.getAddedSubList()) {
-                        additem.setDock(TabPaneDock.this);
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    protected double computePrefHeight(double width) {
-        return tabPane.prefHeight(width);
-    }
-
-    @Override
-    protected double computePrefWidth(double height) {
-        return tabPane.prefWidth(height);
+        VBox.setVgrow(this, Priority.NEVER);
+        HBox.setHgrow(this, Priority.NEVER);
     }
 
     @NonNull
-    @Override
-    @SuppressWarnings("unchecked")
-    public ObservableList<DockItem> getItems() {
-        return (ObservableList<DockItem>) (ObservableList<?>) tabPane.getTabs();
+    protected ChangeListener<Dock> onParentChanged() {
+        return (o, oldv, newv) -> {
+            resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
+            resizePane.setResizeAxis(newv == null ? DockAxis.Y : newv.getDockAxis());
+            boolean hasRootPane = newv != null && newv.getDockPane() != null;
+            ObservableList<DockNode> dockChildren = getDockChildren();
+            for (int i = 0, n = dockChildren.size(); i < n; i++) {
+                Tab tab = tabPane.getTabs().get(i);
+                tab.graphicProperty().unbind();
+                DockNode dockNode = dockChildren.get(i);
+                if (hasRootPane && (dockNode instanceof Dockable)) {
+                    tab.graphicProperty().bind(((Dockable) dockNode).graphicProperty());
+                } else {
+                    tab.setGraphic(null);
+                }
+            }
+        };
+    }
+
+    @NonNull
+    private Tab makeTab(DockNode c) {
+        if (c instanceof Dockable) {
+            Dockable k = (Dockable) c;
+            Tab tab = new Tab(k.getText(), k.getNode());
+            if (getDockPane() != null) {
+                tab.graphicProperty().bind(k.graphicProperty());
+            }
+            return tab;
+        } else {
+            return new Tab("-", c.getNode());
+        }
     }
 
     @Override
@@ -71,19 +71,15 @@ public class TabPaneDock extends Control implements Dock {
         return true;
     }
 
+    @NonNull
     @Override
-    protected void layoutChildren() {
-        super.layoutChildren();
-        tabPane.resizeRelocate(0, 0, getWidth(), getHeight());
+    public DockAxis getDockAxis() {
+        return DockAxis.Z;
     }
 
-    @NonNull
-    private ObjectProperty<Track> track = new SimpleObjectProperty<>();
-
-    @NonNull
     @Override
-    public ObjectProperty<Track> trackProperty() {
-        return track;
+    public boolean isResizesDockChildren() {
+        return true;
     }
 
 }
