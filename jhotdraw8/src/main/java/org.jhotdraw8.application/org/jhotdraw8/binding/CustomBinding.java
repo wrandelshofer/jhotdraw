@@ -179,7 +179,6 @@ public class CustomBinding {
      */
     public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
         TransformContentBinding<D, S> binding = new TransformContentBinding<>(dest, src, toDest);
-        dest.clear();
         src.removeListener(binding);
         src.addListener(binding);
     }

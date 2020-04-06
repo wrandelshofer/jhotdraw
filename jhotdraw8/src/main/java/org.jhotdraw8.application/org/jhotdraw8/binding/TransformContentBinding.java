@@ -17,6 +17,8 @@ class TransformContentBinding<D, S> implements ListChangeListener<S> {
         this.dest = dest;
         this.source = source;
         this.toDest = toDest;
+        dest.clear();
+        source.stream().map(toDest).forEach(dest::add);
     }
 
     @Override
