@@ -6,22 +6,18 @@ package org.jhotdraw8.app;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleSetProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.SetChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -39,7 +35,6 @@ import org.jhotdraw8.app.action.file.ClearRecentFilesMenuAction;
 import org.jhotdraw8.app.action.file.CloseFileAction;
 import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
-import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -53,15 +48,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -85,9 +72,12 @@ import static java.lang.Math.min;
  */
 public class DocumentBasedApplication extends AbstractApplication {
 
-    @Nullable
+    @NonNull
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
-    private final static BooleanKey QUIT_APPLICATION = new BooleanKey("quitApplication", false);
+    @NonNull
+    private final static Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
+    @NonNull
+    public static final String WINDOW_MENU_ID = "window";
     private Logger LOGGER = Logger.getLogger(DocumentBasedApplication.class.getName());
 
     /**
@@ -109,7 +99,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     });
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
-    private final SetProperty<Activity> views = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final ListProperty<Activity> activities = new SimpleListProperty<>(FXCollections.observableArrayList());
     @NonNull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
@@ -126,11 +116,22 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     {
-        views.addListener((SetChangeListener.Change<? extends Activity> change) -> {
-            if (change.wasAdded()) {
-                onViewAdded((DocumentBasedActivity) change.getElementAdded());
-            } else {
-                onViewRemoved((DocumentBasedActivity) change.getElementRemoved());
+        activities.addListener((ListChangeListener.Change<? extends Activity> c) -> {
+            while (c.next()) {
+                if (c.wasPermutated()) {
+                    for (int i = c.getFrom(); i < c.getTo(); ++i) {
+                        //permutate
+                    }
+                } else if (c.wasUpdated()) {
+                    //update item
+                } else {
+                    for (Activity remitem : c.getRemoved()) {
+                        onActivityRemoved((DocumentBasedActivity) remitem);
+                    }
+                    for (Activity additem : c.getAddedSubList()) {
+                        onActivityAdded((DocumentBasedActivity) additem);
+                    }
+                }
             }
         });
     }
@@ -152,12 +153,30 @@ public class DocumentBasedApplication extends AbstractApplication {
      * @return the menu bar
      */
     @Nullable
-    protected MenuBar createMenuBar(@Nullable Stage stage, @NonNull HierarchicalMap<String, Action> actions) {
+    protected MenuBar createMenuBar(@Nullable Activity activity, @Nullable Stage stage, @NonNull HierarchicalMap<String, Action> actions) {
         MenuBar mb = model.createMenuBar();
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
         final List<KeyCombination> accelerators = new ArrayList<>();
         while (!todo.isEmpty()) {
-            for (MenuItem mi : todo.remove().getItems()) {
+            final Menu menu = todo.remove();
+            if (WINDOW_MENU_ID.equals(menu.getId())) {
+                Map<Activity, CheckMenuItem> menuItemMap = new WeakHashMap<>();
+                CustomBinding.bindContent(menu.getItems(), activities,
+                        v -> menuItemMap.computeIfAbsent(v, k -> {
+                            final CheckMenuItem menuItem = new CheckMenuItem();
+                            menuItem.textProperty().bind(v.titleProperty());
+                            menuItem.setOnAction(evt -> {
+                                final Stage s = v.get(STAGE_KEY);
+                                if (s != null) s.requestFocus();
+                                menuItem.setSelected(v == activity);
+                            });
+                            menuItem.setSelected(v == activity);
+                            return menuItem;
+                        })
+                );
+                continue;
+            }
+            for (MenuItem mi : menu.getItems()) {
                 if (mi instanceof Menu) {
                     todo.add((Menu) mi);
                 } else {
@@ -212,7 +231,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     private void disambiguateViews() {
         HashMap<String, ArrayList<Activity>> titles = new HashMap<>();
-        for (Activity v : views) {
+        for (Activity v : activities) {
             String t = v.getTitle();
             titles.computeIfAbsent(t, k -> new ArrayList<>()).add(v);
         }
@@ -284,52 +303,45 @@ public class DocumentBasedApplication extends AbstractApplication {
      * Called immediately after a view has been added to the views
      * property.
      *
-     * @param view the view
+     * @param activity the activity
      */
-    protected void onViewAdded(@NonNull DocumentBasedActivity view) {
-        if (view.getApplication() != this) {
-            view.setApplication(this);
-            view.init();
+    protected void onActivityAdded(@NonNull DocumentBasedActivity activity) {
+        if (activity.getApplication() != this) {
+            activity.setApplication(this);
+            activity.init();
 
         }
 
-        view.getActionMap().setParent(getActionMap());
-        view.setApplication(DocumentBasedApplication.this);
-        view.setTitle(getLabels().getString("unnamedFile"));
-        HierarchicalMap<String, Action> map = view.getActionMap();
-        map.put(CloseFileAction.ID, new CloseFileAction(DocumentBasedApplication.this, view));
+        activity.getActionMap().setParent(getActionMap());
+        activity.setApplication(DocumentBasedApplication.this);
+        activity.setTitle(getLabels().getString("unnamedFile"));
+        HierarchicalMap<String, Action> map = activity.getActionMap();
+        map.put(CloseFileAction.ID, new CloseFileAction(DocumentBasedApplication.this, activity));
 
-        Stage stage = createStage(view);
+        Stage stage = createStage(activity);
+        activity.put(STAGE_KEY, stage);
 
         PreferencesUtil.installStagePrefsHandler(model.getPreferences(), "stage", stage);
 
         stage.setOnCloseRequest(event -> {
             event.consume();
-
-            for (StackTraceElement element : new Throwable().getStackTrace()) {
-                if (element.getMethodName().contains("Quit")) {
-                    view.set(QUIT_APPLICATION, true);
-                    break;
-                }
-            }
-
-            view.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
+            activity.getActionMap().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
 
         stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
             if (newValue) {
-                activeView.set(view);
+                activeView.set(activity);
             }
         });
         stage.titleProperty().bind(CustomBinding.formatted(getLabels().getString("frame.title"),
-                view.titleProperty(), getModel().getName(), view.disambiguationProperty(), view.modifiedProperty()));
-        view.titleProperty().addListener(this::onTitleChanged);
+                activity.titleProperty(), getModel().getName(), activity.disambiguationProperty(), activity.modifiedProperty()));
+        activity.titleProperty().addListener(this::onTitleChanged);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (newValue == true) {
-                activeView.set(view);
+            if (newValue) {
+                activeView.set(activity);
             }
         };
-        view.set(FOCUS_LISTENER_KEY, focusListener);
+        activity.set(FOCUS_LISTENER_KEY, focusListener);
         stage.focusedProperty().addListener(focusListener);
         disambiguateViews();
 
@@ -353,9 +365,9 @@ public class DocumentBasedApplication extends AbstractApplication {
             }
 
             Outer:
-            for (int retries = views.getSize(); retries > 0; retries--) {
-                for (Activity v : views) {
-                    if (v != view) {
+            for (int retries = activities.getSize(); retries > 0; retries--) {
+                for (Activity v : activities) {
+                    if (v != activity) {
                         Window w = v.getNode().getScene().getWindow();
                         if (Math.abs(w.getX() - stage.getX()) < 10
                                 || Math.abs(w.getY() - stage.getY()) < 10) {
@@ -371,17 +383,17 @@ public class DocumentBasedApplication extends AbstractApplication {
             }
         }
         stage.show();
-        Platform.runLater(view::start);
+        Platform.runLater(activity::start);
     }
 
     @NonNull
-    protected Stage createStage(@NonNull DocumentBasedActivity view) {
+    protected Stage createStage(@NonNull DocumentBasedActivity activity) {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNIFIED);
         BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(view.getNode());
+        borderPane.setCenter(activity.getNode());
         if (!isSystemMenuSupported) {
-            MenuBar mb = createMenuBar(stage, view.getActionMap());
+            MenuBar mb = createMenuBar(activity, stage, activity.getActionMap());
             mb.setUseSystemMenuBar(true);
             borderPane.setTop(mb);
         }
@@ -407,7 +419,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void onViewRemoved(@NonNull DocumentBasedActivity view) {
+    protected void onActivityRemoved(@NonNull DocumentBasedActivity view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -424,7 +436,7 @@ public class DocumentBasedApplication extends AbstractApplication {
         }
 
         // Auto close feature
-        if (views.isEmpty() && !isSystemMenuSupported) {
+        if (activities.isEmpty() && !isSystemMenuSupported) {
             exit();
         }
     }
@@ -435,8 +447,8 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     @NonNull
     @Override
-    public SetProperty<Activity> activitiesProperty() {
-        return views;
+    public ListProperty<Activity> activitiesProperty() {
+        return activities;
     }
 
     @Override
@@ -617,6 +629,6 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     public static URL getDocumentOrientedMenu() {
-        return DocumentBasedApplication.class.getResource("DocumentOrientedMenu.fxml");
+        return DocumentBasedApplication.class.getResource("DocumentBasedMenu.fxml");
     }
 }
