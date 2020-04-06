@@ -10,12 +10,7 @@ import javafx.event.EventType;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -111,7 +106,9 @@ public class ListViewUtil {
 
                     if (reorderingOnly) {
                         // FIXME only supports single item drag
-                        int to = min(listViewItems.size(), droppedCellIndex);
+                        int to = draggedCellIndex < droppedCellIndex ?
+                                min(listViewItems.size(), droppedCellIndex - 1)
+                                : min(listViewItems.size(), droppedCellIndex);
                         if (to < 0) {
                             success = false;
                         } else {
@@ -119,7 +116,6 @@ public class ListViewUtil {
                             listViewItems.add(to, item);
                             success = true;
                         }
-
                     } else {
                         List<T> items = io.read(event.getDragboard());
                         success = items != null;

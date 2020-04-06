@@ -23,23 +23,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReversedObservableList;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelFigureChildrenObservableList;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
@@ -49,11 +41,7 @@ import org.jhotdraw8.tree.TreeModelEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -127,43 +115,6 @@ public class LayersInspector extends AbstractDrawingInspector {
     };
 
 
-    /**
-     * The list change listener notifies the drawing model when it must update itself.
-     * <p>
-     * FIXME we should call model.insertChildAt(figure,layer,index) to reorder a layer
-     */
-    @NonNull ListChangeListener<? super Figure> listChangeListener = c -> {
-        boolean addedOrRemoved = false;
-        while (c.next()) {
-            if (c.wasPermutated()) {
-                for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                    //permutate
-                }
-            } else if (c.wasUpdated()) {
-                //update item
-            } else {
-                int index = c.getFrom();
-                addedOrRemoved = true;
-                /*
-                for (Figure remitem : c.getRemoved()) {
-                    getDrawingModel().fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(
-                            getDrawingModel(), remitem, getDrawing(), index++)
-                    );
-                }
-                for (Figure additem : c.getAddedSubList()) {
-                    getDrawingModel().fireTreeModelEvent(TreeModelEvent.nodeAddedToParent(
-                            getDrawingModel(), additem, getDrawing(), index++)
-                    );
-                }*/
-                // removed or added
-                break;
-            }
-        }
-        if (addedOrRemoved) {
-            getDrawingModel().fireNodeInvalidated(getDrawing());
-        }
-    };
-
     @NonNull
     private InvalidationListener selectionInvalidationListener = new InvalidationListener() {
         @Override
@@ -218,7 +169,8 @@ public class LayersInspector extends AbstractDrawingInspector {
         for (int i = 0, n = children.size(); i < n; i++) {
             selectionCount.put((Layer) children.get(i), count[i]);
         }
-        layers.fireUpdated(0, layers.size());
+        if (layers != null)
+            layers.fireUpdated(0, layers.size());
     }
 
     private void init(@NonNull URL fxmlUrl) {
@@ -330,13 +282,12 @@ public class LayersInspector extends AbstractDrawingInspector {
         if (oldValue != null) {
             listView.setItems(FXCollections.observableArrayList());
             if (layers != null) {
-                layers.removeListener(listChangeListener);
                 layers = null;
             }
         }
-        if (newValue != null) {
-            layers = new ReversedObservableList<>(newValue.getRoot().getChildren());
-            layers.addListener(listChangeListener);
+        if (newValue != null && newValue.getRoot() != null && drawingModel != null) {
+            layers = new ReversedObservableList<Figure>(
+                    new DrawingModelFigureChildrenObservableList(drawingModel, newValue));
             listView.setItems(layers);
         }
     }
@@ -351,7 +302,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
     }
 
-    @Nullable
+    @NonNull
     private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(
             @NonNull ListView<Figure> listView, @NonNull Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
     ) {

@@ -62,22 +62,22 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         this.eventType = eventType;
     }
 
-    @Nullable
+    @NonNull
     public static <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
 
-    @Nullable
+    @NonNull
     public static <T> DrawingModelEvent transformChanged(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    @Nullable
+    @NonNull
     public static <T> DrawingModelEvent layoutChanged(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    @Nullable
+    @NonNull
     public static <T> DrawingModelEvent styleInvalidated(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null);
     }

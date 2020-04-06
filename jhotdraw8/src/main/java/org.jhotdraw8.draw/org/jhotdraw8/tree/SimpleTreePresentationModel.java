@@ -30,7 +30,6 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         public void handle(@NonNull TreeModelEvent<N> event) {
             updating++;
             try {
-
                 N f = event.getNode();
                 switch (event.getEventType()) {
                     case NODE_ADDED_TO_PARENT:

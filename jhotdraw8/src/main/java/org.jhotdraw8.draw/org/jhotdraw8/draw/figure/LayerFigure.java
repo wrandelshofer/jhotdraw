@@ -135,4 +135,9 @@ public class LayerFigure extends AbstractCompositeFigure
     public boolean isSuitableChild(@NonNull Figure newChild) {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "LayerFigure@" + Integer.toHexString(System.identityHashCode(this)) + "{" + getId() + "}";
+    }
 }

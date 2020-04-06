@@ -12,8 +12,6 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.lang.Math.min;
-
 /**
  * Reversed list provides a view on an underlying list with items ordered in
  * reverse.
@@ -106,7 +104,7 @@ public class ReversedObservableList<E> extends TransformationList<E, E> {
     public void add(int index, E element) {
         @SuppressWarnings("unchecked")
         ObservableList<E> src = (ObservableList<E>) getSource();
-        src.add(size - min(size, index), element);
+        src.add(getSourceIndex(index), element);
     }
 
     /**

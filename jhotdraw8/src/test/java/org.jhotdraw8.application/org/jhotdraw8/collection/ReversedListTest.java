@@ -43,7 +43,7 @@ public class ReversedListTest {
 
     @NonNull
     @TestFactory
-    public List<DynamicTest> testDataFactory() {
+    public List<DynamicTest> testAddDataFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testAdd("", 0, 'a', "a", "add(0,[a])")),
                 dynamicTest("2", () -> testAdd("a", 0, 'b', "ba", "add(0,[b])")),
@@ -73,7 +73,7 @@ public class ReversedListTest {
 
     @NonNull
     @TestFactory
-    public List<DynamicTest> setDataFactory() {
+    public List<DynamicTest> testSetDataFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSet("a", 0, 'b', "b", "rep([a]->[b])")),
                 dynamicTest("2", () -> testSet("ab", 0, 'c', "ca", "rep([b]->[c])")),

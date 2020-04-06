@@ -25,16 +25,7 @@ import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /**
@@ -69,7 +60,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         @Override
         public Set<Entry<Key<?>, Object>> entrySet() {
             // FIXME should listen on changes of the entry set!
-            return target.entrySet();
+            return target == null ? Collections.emptySet() : target.entrySet();
         }
 
         @Nullable
@@ -77,7 +68,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             return figure;
         }
 
-        public void setFigure(Figure figure) {
+        public void setFigure(@Nullable Figure figure) {
             this.figure = figure;
         }
 
@@ -86,16 +77,20 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             return target;
         }
 
-        public void setTarget(Map<Key<?>, Object> target) {
+        public void setTarget(@Nullable Map<Key<?>, Object> target) {
             this.target = target;
         }
 
         @Override
         @SuppressWarnings("unchecked")
         public Object put(Key<?> key, Object newValue) {
-            Object oldValue = target.put(key, newValue);
-            onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
-            return oldValue;
+            if (target != null) {
+                Object oldValue = target.put(key, newValue);
+                onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+                return oldValue;
+            } else {
+                return newValue;
+            }
         }
 
     }
@@ -206,6 +201,19 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
             }
         }
+    }
+
+    @Override
+    public Figure removeFromParent(@NonNull Figure parent, int index) {
+        Figure child = parent.getChild(index);
+        final Figure oldRoot = child.getRoot();
+        for (Figure f : child.preorderIterable()) {
+            fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
+        }
+        parent.getChildren().remove(index);
+        fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, parent, index));
+        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
+        return child;
     }
 
     @Override

@@ -178,6 +178,15 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
     void removeFromParent(Figure child);
 
     /**
+     * Removes the specified child from its parent and fires appropriate
+     * {@code DrawingModelEvent}s.
+     *
+     * @param parent the parent figure
+     * @param index  the index
+     */
+    Figure removeFromParent(Figure parent, int index);
+
+    /**
      * Adds the specified child to a parent and fires appropriate
      * {@code DrawingModelEvent}s.
      *

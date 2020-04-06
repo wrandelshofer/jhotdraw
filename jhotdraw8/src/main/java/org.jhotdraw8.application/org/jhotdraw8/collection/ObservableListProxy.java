@@ -96,7 +96,7 @@ public class ObservableListProxy<A, B> extends TransformationList<A, B> {
         src.remove(from, to);
     }
 
-    static class ChangeProxy<A, B> extends ListChangeListener.Change<A> {
+    public static class ChangeProxy<A, B> extends ListChangeListener.Change<A> {
 
         private final ListChangeListener.Change<? extends B> change;
         private final Function<B, A> toA;

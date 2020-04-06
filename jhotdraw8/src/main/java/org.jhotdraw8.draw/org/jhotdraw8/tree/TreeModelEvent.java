@@ -6,7 +6,6 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.event.Event;
 
 /**
@@ -76,37 +75,37 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         this.eventType = eventType;
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> subtreeNodesInvalidated(@NonNull TreeModel<E> source, E subtreeRot) {
         return new TreeModelEvent<>(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1);
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> nodeAddedToParent(@NonNull TreeModel<E> source, E child, E parent, int index) {
         return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_PARENT, child, parent, null, index);
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> nodeRemovedFromParent(@NonNull TreeModel<E> source, E child, E parent, int index) {
         return new TreeModelEvent<>(source, EventType.NODE_REMOVED_FROM_PARENT, child, parent, null, index);
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> nodeAddedToTree(@NonNull TreeModel<E> source, E root, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_TREE, node, null, root, -1);
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> nodeRemovedFromTree(@NonNull TreeModel<E> source, E root, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_REMOVED_FROM_TREE, node, null, root, -1);
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> nodeInvalidated(@NonNull TreeModel<E> source, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_CHANGED, node, null, null, -1);
     }
 
-    @Nullable
+    @NonNull
     public static <E> TreeModelEvent<E> rootChanged(@NonNull TreeModel<E> source, E root) {
         return new TreeModelEvent<>(source, EventType.ROOT_CHANGED, root, null, null, -1);
     }
