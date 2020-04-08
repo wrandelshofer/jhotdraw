@@ -62,7 +62,7 @@ public class TreeDepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<
 
     @Override
     public boolean moveNext() {
-        current = deque.pollFirst();
+        current = deque.pollLast();
         if (current == null) {
             return false;
         }

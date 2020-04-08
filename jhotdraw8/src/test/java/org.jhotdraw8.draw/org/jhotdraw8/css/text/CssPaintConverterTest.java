@@ -1,14 +1,16 @@
-/* @(#)CssColorConverterTest.java
+/* @(#)CssPaintConverterTest.java
  * Copyright (c) 2016 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.text;
+
+package org.jhotdraw8.css.text;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.text.CssColorConverter;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -21,37 +23,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * CssColorConverterTest.
+ * CssPaintConverterTest.
  *
  * @author Werner Randelshofer
  */
-public class CssColorConverterTest {
+public class CssPaintConverterTest {
 
-    public CssColorConverterTest() {
+    public CssPaintConverterTest() {
     }
 
     /**
-     * Test of fromString method, of class CssColorConverter.
+     * Test of fromString method, of class CssPaintConverter.
      */
-    static void testFromString(@NonNull CssColor expected, @NonNull String string) throws Exception {
+    static
+    public void testFromString(@Nullable Paintable expected, @NonNull String string) throws Exception {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        Converter<CssColor> instance = new CssColorConverter(true);
-        CssColor actual = instance.fromString(buf, idFactory);
+        CssPaintConverter instance = new CssPaintConverter(true);
+        Paint actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
-        assertEquals(actual, expected);
-        if (actual != null) {
-            assertEquals(actual.getName(), expected.getName());
-        }
+        assertEquals(actual, expected == null ? null : expected.getPaint());
+
     }
 
     @NonNull
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> testFromString(null, CssTokenType.IDENT_NONE)),
+                dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),
                 dynamicTest("3", () -> testFromString(new CssColor("#abc", Color.web("#abc")), "#abc")),
                 dynamicTest("4", () -> testFromString(new CssColor("#abcdef", Color.web("#abcdef")), "#abcdef")),
@@ -67,4 +68,5 @@ public class CssColorConverterTest {
         );
 
     }
+
 }

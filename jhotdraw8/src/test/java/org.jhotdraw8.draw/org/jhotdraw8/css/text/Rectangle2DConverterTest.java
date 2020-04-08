@@ -3,12 +3,10 @@
  * You may only use this file in compliance with the accompanying license terms.
  */
 
-package org.jhotdraw8.text;
+package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -26,9 +24,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class CssRectangle2DConverterTest {
+public class Rectangle2DConverterTest {
 
-    public CssRectangle2DConverterTest() {
+    public Rectangle2DConverterTest() {
     }
 
 
@@ -54,11 +52,7 @@ public class CssRectangle2DConverterTest {
     @TestFactory
     public List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
-                dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44")),
-                dynamicTest("1", () -> testFromString(new CssRectangle2D(new CssSize(11, "cm"),
-                        new CssSize(22, "cm"),
-                        new CssSize(33, "cm"),
-                        new CssSize(44, "cm")), "11cm 22cm 33cm 44cm"))
+                dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44"))
         );
     }
 }

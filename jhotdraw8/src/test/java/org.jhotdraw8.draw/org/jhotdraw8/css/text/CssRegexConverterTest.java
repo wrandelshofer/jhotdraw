@@ -2,10 +2,10 @@
  * Copyright (c) 2015 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.text;
+package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.text.CssRegexConverter;
+import org.jhotdraw8.text.RegexReplace;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -13,10 +13,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**

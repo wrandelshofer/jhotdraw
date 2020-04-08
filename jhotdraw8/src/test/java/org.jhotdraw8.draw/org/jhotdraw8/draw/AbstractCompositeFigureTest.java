@@ -18,10 +18,7 @@ import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author werni
@@ -41,7 +38,8 @@ public class AbstractCompositeFigureTest {
         Figure parent = new AbstractCompositeFigureImpl();
         Figure child = new AbstractCompositeFigureImpl();
 
-        parent.addChild(child);
+        boolean added = parent.addChild(child);
+        assertTrue(added);
 
         assertTrue(parent.getChildren().contains(child));
         assertEquals(child.getParent(), parent);
@@ -83,12 +81,12 @@ public class AbstractCompositeFigureTest {
         parent1.addChild(child2);
         parent1.addChild(child1);
 
-        assertEquals(parent1.getChildren().size(), 2);
+        assertEquals(2, parent1.getChildren().size());
         assertTrue(parent1.getChildren().contains(child1));
-        assertEquals(child1.getParent(), parent1);
-        assertEquals(parent1.getChildren().get(0), child2);
-        assertEquals(parent1.getChildren().get(1), child1);
-        assertEquals(child1.getParent(), parent1);
+        assertEquals(parent1, child1.getParent());
+        assertEquals(child2, parent1.getChildren().get(0));
+        assertEquals(child1, parent1.getChildren().get(1));
+        assertEquals(parent1, child1.getParent());
     }
 
     @Test
@@ -222,12 +220,12 @@ public class AbstractCompositeFigureTest {
 
         @Override
         public boolean isSuitableChild(@NonNull Figure newChild) {
-            return false;
+            return true;
         }
 
         @Override
         public boolean isSuitableParent(@NonNull Figure newChild) {
-            return false;
+            return true;
         }
 
         @Override

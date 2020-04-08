@@ -3,15 +3,12 @@
  * You may only use this file in compliance with the accompanying license terms.
  */
 
-package org.jhotdraw8.text;
+package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.css.text.CssDoubleConverter;
-import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

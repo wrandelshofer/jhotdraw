@@ -41,7 +41,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.graph;
     exports org.jhotdraw8.draw.key;
     exports org.jhotdraw8.draw.render;
-    exports org.jhotdraw8.geom;
+    opens org.jhotdraw8.geom; // must be opened so that JUnit can access it
     exports org.jhotdraw8.draw.connector;
     exports org.jhotdraw8.draw.locator;
     exports org.jhotdraw8.xml.text;

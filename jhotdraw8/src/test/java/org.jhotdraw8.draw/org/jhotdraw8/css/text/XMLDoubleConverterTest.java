@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jhotdraw8.text;
+package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.xml.text.XmlNumberConverter;

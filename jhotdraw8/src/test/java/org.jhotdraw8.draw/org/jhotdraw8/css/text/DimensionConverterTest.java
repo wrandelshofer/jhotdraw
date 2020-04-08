@@ -2,14 +2,13 @@
  * Copyright (c) 2016 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.text;
+package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.junit.jupiter.api.DynamicTest;
