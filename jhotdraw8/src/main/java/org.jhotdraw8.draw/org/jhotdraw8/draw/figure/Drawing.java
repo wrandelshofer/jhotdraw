@@ -9,13 +9,11 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ListKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.StylesheetsManager;
-import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.css.text.CssUriConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -70,7 +68,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListStyleableKey<URI>("authorStylesheets", URI.class, new CssUriConverter(false));
+    Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListKey<URI>("authorStylesheets", URI.class);
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -82,14 +80,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListStyleableKey<URI>("userAgentStylesheets", URI.class, new CssUriConverter(false));
+    Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListKey<URI>("userAgentStylesheets", URI.class);
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListStyleableKey<String>("inlineStylesheets", String.class, new CssStringConverter(false));
+    Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListKey<String>("inlineStylesheets", String.class);
     /**
      * Defines the canvas width.
      * <p>
