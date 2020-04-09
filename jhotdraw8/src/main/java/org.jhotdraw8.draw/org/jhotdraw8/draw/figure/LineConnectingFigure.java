@@ -62,11 +62,11 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The start position of the line.
      */
-    @Nullable CssSizeStyleableKey START_X = LineFigure.START_X;
+    @NonNull CssSizeStyleableKey START_X = LineFigure.START_X;
     /**
      * The start position of the line.
      */
-    @Nullable CssSizeStyleableKey START_Y = LineFigure.START_Y;
+    @NonNull CssSizeStyleableKey START_Y = LineFigure.START_Y;
 
     default boolean isStartConnected() {
         return get(START_CONNECTOR) != null && get(START_TARGET) != null;
