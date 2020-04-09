@@ -76,7 +76,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     public Connector fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
         Connector c;
         CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
-        c = parseConnector(tt);
+        c = parseConnector(tt, idFactory);
 
         if (!buf.toString().trim().isEmpty()) {
             throw new ParseException("Locator: End expected, found:" + buf.toString(), buf.position());
@@ -99,7 +99,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
      * @throws IOException    if IO fails
      */
     @Nullable
-    public Connector parseConnector(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    public Connector parseConnector(@NonNull CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
         Locator locator = null;
         Function<Locator, Connector> supplier;
 
@@ -119,7 +119,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
                 throw new ParseException("Connector: identifier expected, found:" + tt.currentValue(), tt.getStartPosition());
         }
 
-        locator = locatorConverter.parseLocator(tt);
+        locator = locatorConverter.parseNonNull(tt, idFactory);
 
         return supplier.apply(locator);
     }

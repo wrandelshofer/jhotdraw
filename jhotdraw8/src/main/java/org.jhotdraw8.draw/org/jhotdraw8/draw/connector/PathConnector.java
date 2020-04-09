@@ -38,7 +38,7 @@ public class PathConnector extends LocatorConnector {
 
     @Nullable
     @Override
-    public Intersection.IntersectionPoint intersect(Figure connection, Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    public Intersection.IntersectionPoint intersect(Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
             return super.intersect(connection, target, start, end);
         }

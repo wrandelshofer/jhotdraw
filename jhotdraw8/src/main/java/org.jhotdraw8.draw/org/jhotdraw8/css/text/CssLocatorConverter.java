@@ -6,75 +6,42 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * CssLocatorConverter.
  * <p>
  * Currently converts relative locators only.
- * <p>
- * FIXME should implement CssConverter instead of Converter
  *
  * @author Werner Randelshofer
  */
-public class CssLocatorConverter implements Converter<Locator> {
-
-    private static final XmlNumberConverter numberConverter = new XmlNumberConverter();
+public class CssLocatorConverter extends AbstractCssConverter<Locator> {
+    public static final String RELATIVE_FUNCTION = "relative";
 
     public CssLocatorConverter() {
+        this(false);
     }
 
-    @Override
-    public Locator fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        Locator c;
-        CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
-        c = parseLocator(tt);
 
-        if (!buf.toString().trim().isEmpty()) {
-            throw new ParseException("Locator: End expected, found:" + buf.toString(), buf.position());
-        }
-        return c;
-    }
-
-    @Nullable
-    @Override
-    public Locator getDefaultValue() {
-        return null;
+    public CssLocatorConverter(boolean nullable) {
+        super(nullable);
     }
 
     @NonNull
     @Override
-    public String getHelpText() {
-        return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
-    }
-
-    /**
-     * Parses a Locator.
-     *
-     * @param tt the tokenizer
-     * @return the parsed color
-     * @throws ParseException if parsing fails
-     * @throws IOException    if IO fails
-     */
-    @NonNull
-    public Locator parseLocator(@NonNull CssTokenizer tt) throws ParseException, IOException {
-        Locator color = null;
-
+    public Locator parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         switch (tt.next()) {
             case CssTokenType.TT_FUNCTION:
-                if (!"relative".equals(tt.currentString())) {
+                if (!RELATIVE_FUNCTION.equals(tt.currentString())) {
                     throw new ParseException("Locator: function 'relative(' expected, found:" + tt.currentValue(), tt.getStartPosition());
                 }
                 break;
@@ -117,16 +84,21 @@ public class CssLocatorConverter implements Converter<Locator> {
         return new BoundsLocator(x, y);
     }
 
+    @NonNull
+    @Override
+    public String getHelpText() {
+        return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
+    }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, Locator value) throws IOException {
+    protected <TT extends Locator> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value instanceof BoundsLocator) {
             BoundsLocator rl = (BoundsLocator) value;
-            out.append("relative(");
-            out.append(numberConverter.toString(rl.getRelativeX() * 100));
-            out.append("%,");
-            out.append(numberConverter.toString(rl.getRelativeY() * 100));
-            out.append("%)");
+            out.accept(new CssToken(CssTokenType.TT_FUNCTION, RELATIVE_FUNCTION));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, rl.getRelativeX() * 100));
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, rl.getRelativeY() * 100));
+            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         } else {
             throw new UnsupportedOperationException("only BoundsLocator supported, value:" + value);
         }
