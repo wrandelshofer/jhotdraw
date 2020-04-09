@@ -79,30 +79,30 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Nullable
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
-        return boundsInLocal == null ? getLayoutBounds() : boundsInLocal;
+        return boundsInLocal == null ? computeLayoutBounds() : boundsInLocal;
     }
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(getBoundsInLocal());
+    public CssRectangle2D getCssLayoutBounds() {
+        return new CssRectangle2D(getLayoutBounds());
     }
 
     /**
-     * Returns the bounds of the node for layout calculations. These bounds
+     * Computes the bounds of the node for layout calculations. These bounds
      * include the text of the node and the padding.
      *
      * @return the layout bounds
      */
     @NonNull
-    public Bounds getLayoutBounds() {
+    public Bounds computeLayoutBounds() {
         Text textNode = new Text();
         updateTextNode(new SimpleRenderContext(), textNode);
         Bounds b = textNode.getLayoutBounds();
@@ -148,13 +148,13 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     @Override
     public void layout(@NonNull RenderContext ctx) {
-        Bounds b = getLayoutBounds();
+        Bounds b = computeLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, b);
     }
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        Bounds lb = getLayoutBounds();
+        Bounds lb = computeLayoutBounds();
         Insets i = getStyledNonNull(PADDING).getConvertedValue();
         set(ORIGIN, new CssPoint2D(x.getConvertedValue() + i.getLeft(), y.getConvertedValue() + lb.getHeight() - i.getBottom()));
     }

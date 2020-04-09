@@ -75,7 +75,7 @@ public class DistributeVerticallyAction extends AbstractSelectedAction {
                     continue Outer;
                 }
             }
-            Bounds b = f.getBoundsInWorld();
+            Bounds b = f.getLayoutBoundsInWorld();
             double cy = b.getMinY() + b.getHeight() * 0.5;
             list.add(new AbstractMap.SimpleEntry<>(cy, f));
             maxX = Math.max(maxX, cy);
@@ -93,7 +93,7 @@ public class DistributeVerticallyAction extends AbstractSelectedAction {
         double index = 0;
         for (Map.Entry<Double, Figure> e : list) {
             Figure f = e.getValue();
-            Bounds b = f.getBoundsInWorld();
+            Bounds b = f.getLayoutBoundsInWorld();
             double oldcy = b.getMinY() + b.getHeight() * 0.5;
             double newcy = minX + extent * index / (count - 1);
             double dy = newcy - oldcy;

@@ -106,7 +106,7 @@ public class BoundsLocator extends AbstractLocator {
     @NonNull
     @Override
     public Point2D locate(@NonNull Figure owner) {
-        Bounds bounds = owner.getBoundsInLocal();
+        Bounds bounds = owner.getLayoutBounds();
 
         Point2D location = new Point2D(
                 bounds.getMinX() + bounds.getWidth() * relativeX,

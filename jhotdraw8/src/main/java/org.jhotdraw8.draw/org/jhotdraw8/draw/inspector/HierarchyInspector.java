@@ -31,7 +31,6 @@ import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.css.text.CssPseudoClassConverter;
 import org.jhotdraw8.css.text.CssSetConverter;
-import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -47,6 +46,7 @@ import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.tree.TreePresentationModel;
+import org.jhotdraw8.xml.text.XmlWordListConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,7 +96,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private boolean willUpdateSelectionInTree;
 
     @NonNull
-    private CssWordListConverter wordListConverter = new CssWordListConverter();
+    private XmlWordListConverter wordListConverter = new XmlWordListConverter();
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),

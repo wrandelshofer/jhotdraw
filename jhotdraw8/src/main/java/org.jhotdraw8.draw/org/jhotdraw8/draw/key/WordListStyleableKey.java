@@ -10,12 +10,12 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.text.CssWordListConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.xml.text.XmlWordListConverter;
 
 import java.util.function.Function;
 
@@ -56,7 +56,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, ImmutableList<String>> converter
-                = new StyleConverterAdapter<>(new CssWordListConverter());
+                = new StyleConverterAdapter<>(new XmlWordListConverter());
         CssMetaData<Styleable, ImmutableList<String>> md
                 = new SimpleCssMetaData<>(property, function,
                 converter, defaultValue, inherits);
@@ -74,7 +74,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
     @Override
     public Converter<ImmutableList<String>> getConverter() {
         if (converter == null) {
-            converter = new CssWordListConverter();
+            converter = new XmlWordListConverter();
         }
         return converter;
     }

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
@@ -25,6 +26,7 @@ import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.Geom;
 
 import java.awt.BasicStroke;
 import java.util.ArrayList;
@@ -211,16 +213,16 @@ public interface StrokableFigure extends Figure {
         final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
         final int basicCap;
         switch (cap) {
-            case BUTT:
-            default:
-                basicCap = BasicStroke.CAP_BUTT;
-                break;
-            case ROUND:
-                basicCap = BasicStroke.CAP_ROUND;
-                break;
-            case SQUARE:
-                basicCap = BasicStroke.CAP_SQUARE;
-                break;
+        case BUTT:
+        default:
+            basicCap = BasicStroke.CAP_BUTT;
+            break;
+        case ROUND:
+            basicCap = BasicStroke.CAP_ROUND;
+            break;
+        case SQUARE:
+            basicCap = BasicStroke.CAP_SQUARE;
+            break;
         }
         final ImmutableList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
         float[] dasharray;
@@ -237,20 +239,44 @@ public interface StrokableFigure extends Figure {
         final StrokeLineJoin join = getStyledNonNull(STROKE_LINE_JOIN);
         final int basicJoin;
         switch (join) {
-            case BEVEL:
-            default:
-                basicJoin = BasicStroke.JOIN_BEVEL;
-                break;
-            case MITER:
-                basicJoin = BasicStroke.JOIN_MITER;
-                break;
-            case ROUND:
-                basicJoin = BasicStroke.JOIN_ROUND;
-                break;
+        case BEVEL:
+        default:
+            basicJoin = BasicStroke.JOIN_BEVEL;
+            break;
+        case MITER:
+            basicJoin = BasicStroke.JOIN_MITER;
+            break;
+        case ROUND:
+            basicJoin = BasicStroke.JOIN_ROUND;
+            break;
         }
         final double miterlimit = getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue();
 
         return new BasicStroke((float) width, basicCap, basicJoin, (float) miterlimit, dasharray, (float) dashoffset);
 
+    }
+
+    @Override
+    @NonNull
+    default Bounds getBoundsInLocal() {
+        Bounds layoutBounds = getLayoutBounds();
+        Paintable paintable = get(STROKE);
+        if (paintable == null) {
+            return layoutBounds;
+        }
+        double strokeWidth = getNonNull(STROKE_WIDTH).getConvertedValue();
+        if (strokeWidth == 0.0) {
+            return layoutBounds;
+        }
+        StrokeType strokeType = getNonNull(STROKE_TYPE);
+        switch (strokeType) {
+        case INSIDE:
+        default:
+            return layoutBounds;
+        case OUTSIDE:
+            return Geom.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
+        case CENTERED:
+            return Geom.grow(layoutBounds, strokeWidth, strokeWidth);
+        }
     }
 }

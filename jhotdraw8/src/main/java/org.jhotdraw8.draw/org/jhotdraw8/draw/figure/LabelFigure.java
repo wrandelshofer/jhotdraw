@@ -47,7 +47,7 @@ public class LabelFigure extends AbstractLabelFigure
     @NonNull
     @Override
     public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
-        return new TextEditorData(this, getBoundsInLocal(), TEXT);
+        return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
     @Override

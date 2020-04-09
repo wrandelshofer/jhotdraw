@@ -71,7 +71,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getParentToWorld());
 
-        Bounds b = f.getBoundsInParent();
+        Bounds b = f.getLayoutBoundsInParent();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
         points[2] = b.getMaxX();

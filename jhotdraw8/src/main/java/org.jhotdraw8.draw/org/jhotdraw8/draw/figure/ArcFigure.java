@@ -60,7 +60,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         double rx = getNonNull(RADIUS_X).getConvertedValue();
         double ry = getNonNull(RADIUS_Y).getConvertedValue();
         double cx = getNonNull(CENTER_X).getConvertedValue();
@@ -70,7 +70,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssSize rx = getNonNull(RADIUS_X);
         CssSize ry = getNonNull(RADIUS_Y);
         CssSize cx = getNonNull(CENTER_X);
@@ -80,7 +80,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        Bounds r = getBoundsInLocal();
+        Bounds r = getLayoutBounds();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());

@@ -47,7 +47,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
 
     @Override
     default void reshapeInLocal(@NonNull Transform transform) {
-        Bounds b = getBoundsInLocal();
+        Bounds b = getLayoutBounds();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }

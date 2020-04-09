@@ -85,7 +85,7 @@ public class MoveHandle extends LocatorHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = f.getBoundsInLocal();
+        Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         pickLocation = p = t.transform(p);
 

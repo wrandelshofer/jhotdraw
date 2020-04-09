@@ -55,7 +55,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     private CssPoint2D oldPoint;
     private CssPoint2D anchor;
 
-    // --- 
+    // ---
     // Behaviors
     // ---
     @Override
@@ -120,7 +120,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
         if (event.isMetaDown()) {
             // meta snaps the top left corner of the anchor figure to the grid
             // or whatever corner is specified in the anchor
-            Bounds bounds = anchorFigure.getBoundsInLocal();
+            Bounds bounds = anchorFigure.getLayoutBounds();
 
             double anchorX = Geom.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
             double anchorY = Geom.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);

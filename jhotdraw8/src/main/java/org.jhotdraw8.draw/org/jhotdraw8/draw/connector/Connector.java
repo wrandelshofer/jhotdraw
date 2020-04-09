@@ -165,7 +165,7 @@ public interface Connector {
     default Intersection.IntersectionPoint intersect(Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
-        Bounds b = target.getBoundsInLocal();
+        Bounds b = target.getLayoutBounds();
         Intersection i = Intersections.intersectLineRectangle(s, e, b);
         return i.getLastIntersectionPoint();
     }

@@ -60,7 +60,7 @@ public class TextFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         // FIXME the text node should be computed during layout
         if (textNode == null) {
             layout(new SimpleRenderContext());
@@ -73,7 +73,7 @@ public class TextFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
-        return new TextEditorData(this, getBoundsInLocal(), TEXT);
+        return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
     @Override
@@ -85,8 +85,8 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @NonNull
-    public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(getBoundsInLocal());
+    public CssRectangle2D getCssLayoutBounds() {
+        return new CssRectangle2D(getLayoutBounds());
     }
 
     @Override
@@ -129,7 +129,7 @@ public class TextFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @NonNull

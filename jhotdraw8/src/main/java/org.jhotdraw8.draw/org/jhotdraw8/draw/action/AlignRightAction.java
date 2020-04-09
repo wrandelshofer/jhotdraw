@@ -53,12 +53,12 @@ public class AlignRightAction extends AbstractSelectedAction {
 
     private void alignRight(@NonNull DrawingView view, @NonNull Set<Figure> figures, @NonNull Figure lead) {
         DrawingModel model = view.getModel();
-        double xInWorld = lead.getBoundsInWorld().getMaxX();
+        double xInWorld = lead.getLayoutBoundsInWorld().getMaxX();
         Point2D xPointInWorld = new Point2D(xInWorld, 0);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
                 double desiredX = Transforms.transform(f.getWorldToParent(), xPointInWorld).getX();
-                double actualX = f.getBoundsInParent().getMaxX();
+                double actualX = f.getLayoutBoundsInParent().getMaxX();
                 double dx = desiredX - actualX;
                 Translate tx = new Translate(dx, 0);
                 model.transformInParent(f, tx);

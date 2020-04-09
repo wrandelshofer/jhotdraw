@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -26,6 +27,8 @@ import java.util.List;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.abs;
 import static java.lang.Math.atan;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.Math.sqrt;
 
 /**
@@ -310,4 +313,41 @@ public class Transforms {
     public static boolean isIdentityOrNull(@Nullable Transform t) {
         return t == null || t.isIdentity();
     }
+
+    /**
+     * Computes the bounding box in parent coordinates
+     *
+     * @param b a box in local coordinates
+     * @return bounding box in parent coordinates
+     */
+    public static Bounds transformedBoundingBox(@Nullable Transform t, Bounds b) {
+        if (t == null) {
+            return b;
+        }
+
+        double[] points = new double[8];
+        points[0] = b.getMinX();
+        points[1] = b.getMinY();
+        points[2] = b.getMaxX();
+        points[3] = b.getMinY();
+        points[4] = b.getMaxX();
+        points[5] = b.getMaxY();
+        points[6] = b.getMinX();
+        points[7] = b.getMaxY();
+
+        t.transform2DPoints(points, 0, points, 0, 4);
+
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < points.length; i += 2) {
+            minX = min(minX, points[i]);
+            maxX = max(maxX, points[i]);
+            minY = min(minY, points[i + 1]);
+            maxY = max(maxY, points[i + 1]);
+        }
+        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
+
 }

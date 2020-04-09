@@ -54,13 +54,13 @@ public class AlignVerticalAction extends AbstractSelectedAction {
             return;
         }
         DrawingModel model = view.getModel();
-        Bounds leadBounds = lead.getBoundsInWorld();
+        Bounds leadBounds = lead.getLayoutBoundsInWorld();
         double xInWorld = leadBounds.getMinX() + leadBounds.getWidth() * 0.5;
         Point2D xPointInWorld = new Point2D(xInWorld, 0);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
                 double desiredX = Transforms.transform(f.getWorldToParent(), xPointInWorld).getX();
-                Bounds bounds = f.getBoundsInParent();
+                Bounds bounds = f.getLayoutBoundsInParent();
                 double actualX = bounds.getMinX() + bounds.getWidth() * 0.5;
                 double dx = desiredX - actualX;
                 Translate tx = new Translate(dx, 0);

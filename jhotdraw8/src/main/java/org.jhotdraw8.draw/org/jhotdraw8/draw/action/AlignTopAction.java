@@ -53,12 +53,12 @@ public class AlignTopAction extends AbstractSelectedAction {
             return;
         }
         DrawingModel model = view.getModel();
-        double yInWorld = lead.getBoundsInWorld().getMinY();
+        double yInWorld = lead.getLayoutBoundsInWorld().getMinY();
         Point2D yPointInWorld = new Point2D(0, yInWorld);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
                 double desiredY = Transforms.transform(f.getWorldToParent(), yPointInWorld).getY();
-                double actualY = f.getBoundsInParent().getMinY();
+                double actualY = f.getLayoutBoundsInParent().getMinY();
                 double dy = desiredY - actualY;
                 Translate tx = new Translate(0, dy);
                 model.transformInParent(f, tx);

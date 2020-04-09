@@ -168,13 +168,13 @@ public class PageFigure extends AbstractCompositeFigure
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
-        return getCssBoundsInLocal().getConvertedBoundsValue();
+    public Bounds getLayoutBounds() {
+        return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getNonNull(X),
                 getNonNull(Y),
                 getNonNull(WIDTH),
@@ -257,7 +257,7 @@ public class PageFigure extends AbstractCompositeFigure
         double y = pageY + (pageHeight - pageOverlapY) * py;
 
 
-        Bounds b = Geom.intersection(getBoundsInLocal(),
+        Bounds b = Geom.intersection(getLayoutBounds(),
                 new BoundingBox(x + insets.getLeft() * contentAreaFactor, y + insets.getTop() * contentAreaFactor,
                         pageWidth - (insets.getLeft() + insets.getRight()) * contentAreaFactor,
                         pageHeight - (insets.getTop() + insets.getBottom()) * contentAreaFactor));
@@ -362,7 +362,7 @@ public class PageFigure extends AbstractCompositeFigure
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        Bounds newBounds = transform.transform(getBoundsInLocal());
+        Bounds newBounds = transform.transform(getLayoutBounds());
         set(X, new CssSize(newBounds.getMinX()));
         set(Y, new CssSize(newBounds.getMinY()));
         set(WIDTH, new CssSize(newBounds.getWidth()));

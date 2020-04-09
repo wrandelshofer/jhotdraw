@@ -95,7 +95,7 @@ public class RectangleFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @NonNull

@@ -136,7 +136,7 @@ public class ConnectionTool extends AbstractTool {
                         if (figure != ff && (ff instanceof ConnectableFigure)) {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
-                            if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                            if (ff.getLayoutBounds().contains(pointInLocal)) {
                                 newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
                                 if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                     newConnectionTarget = ff;
@@ -183,7 +183,7 @@ public class ConnectionTool extends AbstractTool {
                     if (figure != ff && (ff instanceof ConnectableFigure)) {
                         ConnectableFigure cff = (ConnectableFigure) ff;
                         Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
-                        if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                        if (ff.getLayoutBounds().contains(pointInLocal)) {
                             newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
                             if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                 newConnectedFigure = ff;

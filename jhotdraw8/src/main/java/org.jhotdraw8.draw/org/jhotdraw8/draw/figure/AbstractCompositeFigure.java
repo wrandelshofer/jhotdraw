@@ -130,6 +130,24 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
     @NonNull
     @Override
+    public Bounds getLayoutBounds() {
+        double minX = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+
+        for (Figure child : getChildren()) {
+            Bounds b = child.getLayoutBoundsInParent();
+            minX = min(minX, b.getMinX());
+            maxX = max(maxX, b.getMaxX());
+            minY = min(minY, b.getMinY());
+            maxY = max(maxY, b.getMaxY());
+        }
+        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    }
+
+    @NonNull
+    @Override
     public Bounds getBoundsInLocal() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -148,13 +166,13 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(getBoundsInLocal());
+    public CssRectangle2D getCssLayoutBounds() {
+        return new CssRectangle2D(getLayoutBounds());
     }
 
     @NonNull
     @Override
-    public Bounds getBoundsInParent() {
+    public Bounds getLayoutBoundsInParent() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -163,7 +181,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         Transform t = getLocalToParent();
 
         for (Figure child : getChildren()) {
-            Bounds b = t.transform(child.getBoundsInParent());
+            Bounds b = t.transform(child.getLayoutBoundsInParent());
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());
             minY = min(minY, b.getMinY());

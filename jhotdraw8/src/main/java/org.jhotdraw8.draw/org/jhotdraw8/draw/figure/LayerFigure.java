@@ -61,7 +61,7 @@ public class LayerFigure extends AbstractCompositeFigure
                 && clipBounds != null /* && getChildren().size() > maxNodesPerLayer*/) {
 
             for (Figure child : getChildren()) {
-                if (child.getBoundsInWorld().intersects(clipBounds)) {
+                if (child.getLayoutBoundsInWorld().intersects(clipBounds)) {
                     Node childNode = ctx.getNode(child);
                     childNodes.add(childNode);
                 }

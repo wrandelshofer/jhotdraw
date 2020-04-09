@@ -37,7 +37,7 @@ public interface Slice extends Figure {
      * @return origin of coordinate system
      */
     default Point2D getSliceOrigin() {
-        final Bounds b = getBoundsInLocal();
+        final Bounds b = getLayoutBounds();
         return new Point2D(b.getMinX(), b.getMinY());
     }
 }

@@ -151,7 +151,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         Bounds b = null;
         for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
-            Bounds fb = l2w.transform(f.getBoundsInLocal());
+            Bounds fb = l2w.transform(f.getLayoutBounds());
             if (b == null) {
                 b = fb;
             } else {

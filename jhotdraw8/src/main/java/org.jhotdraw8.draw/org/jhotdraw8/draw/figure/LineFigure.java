@@ -73,13 +73,13 @@ public class LineFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
-        return getCssBoundsInLocal().getConvertedBoundsValue();
+    public Bounds getLayoutBounds() {
+        return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssPoint2D start = getNonNull(START);
         CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(start, end);
@@ -106,7 +106,7 @@ public class LineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
+        reshapeInLocal(Transforms.createReshapeTransform(getLayoutBounds(), x, y, width, height));
     }
 
     @NonNull

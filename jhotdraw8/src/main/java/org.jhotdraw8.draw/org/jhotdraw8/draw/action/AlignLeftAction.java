@@ -53,12 +53,12 @@ public class AlignLeftAction extends AbstractSelectedAction {
             return;
         }
         DrawingModel model = view.getModel();
-        double xInWorld = lead.getBoundsInWorld().getMinX();
+        double xInWorld = lead.getLayoutBoundsInWorld().getMinX();
         Point2D xPointInWorld = new Point2D(xInWorld, 0);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
                 double desiredX = Transforms.transform(f.getWorldToParent(), xPointInWorld).getX();
-                double actualX = f.getBoundsInParent().getMinX();
+                double actualX = f.getLayoutBoundsInParent().getMinX();
                 double dx = desiredX - actualX;
                 Translate tx = new Translate(dx, 0);
                 model.transformInParent(f, tx);

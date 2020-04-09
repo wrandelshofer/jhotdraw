@@ -53,9 +53,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 /**
  * A <em>figure</em> is a graphical (figurative) element of a {@link Drawing}.
  * <p>
@@ -170,7 +167,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         double maxy = Double.NEGATIVE_INFINITY;
 
         for (Figure f : selection) {
-            Bounds fb = Transforms.transform(f.getLocalToWorld(), f.getBoundsInLocal());
+            Bounds fb = Transforms.transform(f.getLocalToWorld(), f.getLayoutBounds());
             double v = fb.getMaxX();
             if (v > maxx) {
                 maxx = v;
@@ -269,7 +266,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         for (Figure f : selection) {
             Bounds fb;
             if (f instanceof Drawing) {
-                fb = (f.getLocalToWorld() == null) ? f.getBoundsInLocal() : f.getLocalToWorld().transform(f.getBoundsInLocal());
+                fb = (f.getLocalToWorld() == null) ? f.getLayoutBounds() : f.getLocalToWorld().transform(f.getLayoutBounds());
                 if (b == null) {
                     b = fb;
                 } else {
@@ -277,7 +274,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 }
             } else {
                 for (Figure ff : f.preorderIterable()) {
-                    fb = ff.getBoundsInLocal();
+                    fb = ff.getLayoutBounds();
                     double grow = 0.0;
                     if (ff.get(StrokableFigure.STROKE) != null) {
                         switch (ff.getNonNull(StrokableFigure.STROKE_TYPE)) {
@@ -500,15 +497,24 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the local bounds
      */
     @NonNull
-    default Bounds getBoundsInLocal() {
-        return getCssBoundsInLocal().getConvertedBoundsValue();
+    default Bounds getLayoutBounds() {
+        return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
+    /**
+     * The bounds of this figure in local coordinates,
+     * including space required for a non-zero stroke.
+     *
+     * @return the local bounds
+     */
     @NonNull
-    CssRectangle2D getCssBoundsInLocal();
+    Bounds getBoundsInLocal();
+
+    @NonNull
+    CssRectangle2D getCssLayoutBounds();
 
     /**
-     * The bounds that should be used for layout calculations for this figure.
+     * The layout bounds of this figure in parent coordinates.
      * <p>
      * The bounds are given in the coordinate space of the parent figure.
      * <p>
@@ -519,44 +525,53 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the local bounds
      */
     @NonNull
-    default Bounds getBoundsInParent() {
-        Bounds b = getBoundsInLocal();
-        double[] points = new double[8];
-        points[0] = b.getMinX();
-        points[1] = b.getMinY();
-        points[2] = b.getMaxX();
-        points[3] = b.getMinY();
-        points[4] = b.getMaxX();
-        points[5] = b.getMaxY();
-        points[6] = b.getMinX();
-        points[7] = b.getMaxY();
-
-        Transform t = getLocalToParent();
-        if (t != null) {
-            t.transform2DPoints(points, 0, points, 0, 4);
-        }
-
-        double minX = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-        for (int i = 0; i < points.length; i += 2) {
-            minX = min(minX, points[i]);
-            maxX = max(maxX, points[i]);
-            minY = min(minY, points[i + 1]);
-            maxY = max(maxY, points[i + 1]);
-        }
-        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+    default Bounds getLayoutBoundsInParent() {
+        return Transforms.transformedBoundingBox(getLocalToParent(), getLayoutBounds());
     }
 
     /**
-     * Returns the bounds of the figure in world coordinates.
+     * The bounds of this figure in parent coordinates including space
+     * required for a non-zero stroke.
+     * <p>
+     * The bounds are given in the coordinate space of the parent figure.
+     * <p>
+     * This method may use caching and return incorrect results if the caches
+     * are stale. Invoke {@link #invalidateTransforms} and {@link #layout} if
+     * you are not sure that the cache is valid.
+     *
+     * @return the bounds in parent coordinates
+     */
+    @NonNull
+    default Bounds getBoundsInParent() {
+        return Transforms.transformedBoundingBox(getLocalToParent(), getBoundsInLocal());
+    }
+
+    /**
+     * The bounds of this figure in world coordinates including space
+     * required for a non-zero stroke.
+     * <p>
+     * The bounds are given in the coordinate space of the world.
+     * <p>
+     * This method may use caching and return incorrect results if the caches
+     * are stale. Invoke {@link #invalidateTransforms} and {@link #layout} if
+     * you are not sure that the cache is valid.
      *
      * @return the bounds in world coordinates
      */
     @NonNull
     default Bounds getBoundsInWorld() {
-        return Transforms.transform(getLocalToWorld(), getBoundsInLocal());
+        return Transforms.transformedBoundingBox(getLocalToWorld(), getBoundsInLocal());
+    }
+
+    /**
+     * Returns the bounds of the figure in world coordinates, including
+     * space required for non-zero strokkes.
+     *
+     * @return the bounds in world coordinates
+     */
+    @NonNull
+    default Bounds getLayoutBoundsInWorld() {
+        return Transforms.transformedBoundingBox(getLocalToWorld(), getLayoutBounds());
     }
 
 
@@ -567,7 +582,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @NonNull
     default Point2D getCenterInLocal() {
-        Bounds b = getBoundsInLocal();
+        Bounds b = getLayoutBounds();
         return Geom.center(b);
     }
 
@@ -578,7 +593,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @NonNull
     default Point2D getCenterInParent() {
-        Bounds b = getBoundsInParent();
+        Bounds b = getLayoutBoundsInParent();
         return Geom.center(b);
     }
 
@@ -699,7 +714,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the preferred aspect ratio of the figure.
      */
     default double getPreferredAspectRatio() {
-        Bounds bounds = getBoundsInLocal();
+        Bounds bounds = getLayoutBounds();
         return (bounds.getHeight() == 0 || bounds.getWidth() == 0) ? 1 : bounds.getHeight() / bounds.getWidth();
     }
 
@@ -976,6 +991,22 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
+     * Transforms the specified bounds from local coordinates into parent
+     * coordinates.
+     * <p>
+     * This method may use caching and return incorrect results if the cache is
+     * stale.
+     *
+     * @param p bounds in local coordinates
+     * @return bounds in parent coordinates
+     */
+    @NonNull
+    default Bounds localToParent(@NonNull Bounds p) {
+        final Transform ltw = getLocalToParent();
+        return ltw == null ? p : ltw.transform(p);
+    }
+
+    /**
      * Transforms the specified bounds from local coordinates into world
      * coordinates.
      * <p>
@@ -1135,7 +1166,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param t the translation in x and in y direction
      */
     default void translateInLocal(@NonNull CssPoint2D t) {
-        CssRectangle2D b = getCssBoundsInLocal();
+        CssRectangle2D b = getCssLayoutBounds();
         reshapeInLocal(b.getMinX().add(t.getX()),
                 b.getMinY().add(t.getY()),
                 b.getWidth(), b.getHeight());

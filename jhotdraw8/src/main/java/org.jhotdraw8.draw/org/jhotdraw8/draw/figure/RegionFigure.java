@@ -27,7 +27,7 @@ public class RegionFigure extends AbstractRegionFigure
     @Nullable
     @Override
     public Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
-        return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
+        return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
     @Override

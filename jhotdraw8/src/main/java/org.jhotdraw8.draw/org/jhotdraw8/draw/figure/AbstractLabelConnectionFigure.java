@@ -254,7 +254,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             }
         }
 
-        Bounds bconnected = getLayoutBounds();
+        Bounds bconnected = computeLayoutBounds();
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
         invalidateTransforms();
     }
@@ -285,7 +285,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             set(LABELED_LOCATION, getNonNull(ORIGIN));
             set(LABEL_TRANSLATE, new CssPoint2D(0, 0));
         } else {
-            CssRectangle2D bounds = getCssBoundsInLocal();
+            CssRectangle2D bounds = getCssLayoutBounds();
             CssSize newX, newY;
             newX = width.getValue() > 0 ? x.add(width) : x;
             newY = height.getValue() > 0 ? y.add(height) : y;

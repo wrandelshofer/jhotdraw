@@ -37,7 +37,7 @@ public interface RectangularFigure extends Figure {
 
     @NonNull
     @Override
-    default CssRectangle2D getCssBoundsInLocal() {
+    default CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 }

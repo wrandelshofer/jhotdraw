@@ -89,7 +89,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         // XXX should be cached
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -105,8 +105,8 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @NonNull
-    public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(getBoundsInLocal());
+    public CssRectangle2D getCssLayoutBounds() {
+        return new CssRectangle2D(getLayoutBounds());
     }
 
     @NonNull
@@ -173,7 +173,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
+        reshapeInLocal(Transforms.createReshapeTransform(getLayoutBounds(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }
 }

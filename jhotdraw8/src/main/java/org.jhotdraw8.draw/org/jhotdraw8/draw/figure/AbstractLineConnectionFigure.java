@@ -71,7 +71,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssPoint2D start = getNonNull(START);
         CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(//

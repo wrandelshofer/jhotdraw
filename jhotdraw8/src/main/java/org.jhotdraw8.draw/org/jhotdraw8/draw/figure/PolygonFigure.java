@@ -64,7 +64,7 @@ public class PolygonFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -79,8 +79,8 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @NonNull
-    public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(getBoundsInLocal());
+    public CssRectangle2D getCssLayoutBounds() {
+        return new CssRectangle2D(getLayoutBounds());
     }
 
     @NonNull
@@ -137,7 +137,7 @@ public class PolygonFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new PathConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @Override
@@ -161,7 +161,7 @@ public class PolygonFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
+        reshapeInLocal(Transforms.createReshapeTransform(getLayoutBounds(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }
 

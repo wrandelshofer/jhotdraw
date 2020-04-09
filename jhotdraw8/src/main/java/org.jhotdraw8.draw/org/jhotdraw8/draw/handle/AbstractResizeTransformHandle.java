@@ -114,7 +114,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     @Override
     public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
-        startBounds = owner.getCssBoundsInLocal();
+        startBounds = owner.getCssLayoutBounds();
         startWorldToLocal = owner.getWorldToLocal();
         preferredAspectRatio = owner.getPreferredAspectRatio();
     }
@@ -152,7 +152,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = f.getBoundsInLocal();
+        Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         pickLocation = p = t == null ? p : t.transform(p);
 

@@ -54,13 +54,13 @@ public class AlignHorizontalAction extends AbstractSelectedAction {
             return;
         }
         DrawingModel model = view.getModel();
-        Bounds leadBounds = lead.getBoundsInWorld();
+        Bounds leadBounds = lead.getLayoutBoundsInWorld();
         double yInWorld = leadBounds.getMinY() + leadBounds.getHeight() * 0.5;
         Point2D yPointInWorld = new Point2D(0, yInWorld);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
                 double desiredY = Transforms.transform(f.getWorldToParent(), yPointInWorld).getY();
-                Bounds bounds = f.getBoundsInParent();
+                Bounds bounds = f.getLayoutBoundsInParent();
                 double actualY = bounds.getMinY() + bounds.getHeight() * 0.5;
                 double dy = desiredY - actualY;
                 Translate tx = new Translate(0, dy);

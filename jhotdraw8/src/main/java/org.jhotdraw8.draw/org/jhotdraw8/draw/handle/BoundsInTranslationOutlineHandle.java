@@ -85,7 +85,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
             t = Transforms.concat(t, new Translate(tf.getNonNull(TRANSLATE_X), tf.getNonNull(TRANSLATE_Y)));
         }
         t = Transforms.concat(Transform.translate(0.5, 0.5), t);
-        Bounds b = f.getBoundsInLocal();
+        Bounds b = f.getLayoutBounds();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
         points[2] = b.getMaxX();

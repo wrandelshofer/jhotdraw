@@ -77,7 +77,7 @@ public class ImageFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 
@@ -126,7 +126,7 @@ public class ImageFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new RectangleConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @NonNull
@@ -161,5 +161,10 @@ public class ImageFigure extends AbstractLeafFigure
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public @NonNull Bounds getBoundsInLocal() {
+        return getLayoutBounds();
     }
 }

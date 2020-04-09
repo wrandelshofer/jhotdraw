@@ -145,7 +145,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = getOwner().getBoundsInLocal();
+        Bounds b = getOwner().getLayoutBounds();
         double[] points = PolylineFigure.toPointArray(f, key);
         if (t != null) {
             t.transform2DPoints(points, 0, points, 0, points.length / 2);

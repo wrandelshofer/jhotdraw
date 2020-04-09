@@ -79,15 +79,15 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
      */
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getNonNull(WIDTH), getNonNull(HEIGHT));
     }
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         // Note: We must override getBoundsInLocal of AbstractCompositeFigure.
-        return getCssBoundsInLocal().getConvertedBoundsValue();
+        return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @Nullable
@@ -111,7 +111,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        Bounds b = getBoundsInLocal();
+        Bounds b = getLayoutBounds();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
@@ -138,7 +138,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         //applyTransformableFigureProperties(n);
         applyStyleableFigureProperties(ctx, n);
 
-        Bounds bounds = getBoundsInLocal();
+        Bounds bounds = getLayoutBounds();
         Rectangle page = (Rectangle) g.getProperties().get("background");
         page.setX(bounds.getMinX());
         page.setY(bounds.getMinY());

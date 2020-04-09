@@ -88,19 +88,19 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         return new BoundingBox(get(X).getConvertedValue(), get(Y).getConvertedValue(), get(WIDTH).getConvertedValue(), get(HEIGHT).getConvertedValue());
     }
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(get(X), get(Y), get(WIDTH), get(HEIGHT));
     }
 
     @Override
     public Point2D getSliceOrigin() {
-        Bounds b = getBoundsInLocal();
+        Bounds b = getLayoutBounds();
         Point2D p = getNonNull(SLICE_ORIGIN).getConvertedValue();
         return p.add(b.getMinX(), b.getMinY());
     }
@@ -148,4 +148,8 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
         return Slice.super.isSuitableParent(newParent);
     }
 
+    @Override
+    public @NonNull Bounds getBoundsInLocal() {
+        return getLayoutBounds();
+    }
 }

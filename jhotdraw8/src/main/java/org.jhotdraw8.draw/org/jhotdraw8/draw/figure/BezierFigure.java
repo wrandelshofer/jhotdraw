@@ -94,12 +94,12 @@ public class BezierFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new PathConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         // XXX should be cached
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -115,8 +115,8 @@ public class BezierFigure extends AbstractLeafFigure
     }
 
     @NonNull
-    public CssRectangle2D getCssBoundsInLocal() {
-        return new CssRectangle2D(getBoundsInLocal());
+    public CssRectangle2D getCssLayoutBounds() {
+        return new CssRectangle2D(getLayoutBounds());
     }
 
     public int getNodeCount() {
@@ -152,7 +152,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getBoundsInLocal(), x, y, width, height));
+        reshapeInLocal(Transforms.createReshapeTransform(getLayoutBounds(), x, y, width, height));
     }
 
     @Override

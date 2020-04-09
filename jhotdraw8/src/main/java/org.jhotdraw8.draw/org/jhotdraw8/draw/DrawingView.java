@@ -612,7 +612,7 @@ public interface DrawingView extends RenderContext {
      * @param f A figure in the drawing of this DrawingView.
      */
     default void scrollFigureToVisible(@NonNull Figure f) {
-        Bounds boundsInView = worldToView(f.localToWorld(f.getBoundsInLocal()));
+        Bounds boundsInView = worldToView(f.getLayoutBoundsInWorld());
         scrollRectToVisible(boundsInView);
     }
 

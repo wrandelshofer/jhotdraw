@@ -76,7 +76,7 @@ public class DistributeHorizontallyAction extends AbstractSelectedAction {
                 }
             }
 
-            Bounds b = f.getBoundsInWorld();
+            Bounds b = f.getLayoutBoundsInWorld();
             double cx = b.getMinX() + b.getWidth() * 0.5;
             list.add(new AbstractMap.SimpleEntry<>(cx, f));
             maxX = Math.max(maxX, cx);
@@ -94,7 +94,7 @@ public class DistributeHorizontallyAction extends AbstractSelectedAction {
         double index = 0;
         for (Map.Entry<Double, Figure> e : list) {
             Figure f = e.getValue();
-            Bounds b = f.getBoundsInWorld();
+            Bounds b = f.getLayoutBoundsInWorld();
             double oldcx = b.getMinX() + b.getWidth() * 0.5;
             double newcx = minX + extent * index / (count - 1);
             double dx = newcx - oldcx;

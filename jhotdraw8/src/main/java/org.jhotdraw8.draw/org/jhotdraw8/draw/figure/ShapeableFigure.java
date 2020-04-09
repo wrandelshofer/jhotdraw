@@ -60,7 +60,7 @@ public interface ShapeableFigure extends Figure {
     String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
 
     default void applyShapeableProperties(RenderContext ctx, @NonNull Path node) {
-        applyShapeableProperties(ctx, node, getBoundsInLocal());
+        applyShapeableProperties(ctx, node, getLayoutBounds());
     }
 
     default void applyShapeableProperties(RenderContext ctx, @NonNull Path node, @NonNull Bounds b) {

@@ -77,7 +77,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         t = Transforms.concat(Transform.translate(0.5, 0.5), t);
-        Bounds b = f.getBoundsInLocal();
+        Bounds b = f.getLayoutBounds();
         points[0] = b.getMinX();
         points[1] = b.getMinY();
         points[2] = b.getMaxX();

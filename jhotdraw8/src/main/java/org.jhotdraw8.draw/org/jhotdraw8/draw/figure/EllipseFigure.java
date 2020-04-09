@@ -69,12 +69,12 @@ public class EllipseFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Connector findConnector(@NonNull Point2D p, Figure prototype) {
-        return new EllipseConnector(new BoundsLocator(getBoundsInLocal(), p));
+        return new EllipseConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public Bounds getLayoutBounds() {
         double rx = getNonNull(RADIUS_X).getConvertedValue();
         double ry = getNonNull(RADIUS_Y).getConvertedValue();
         double cx = getNonNull(CENTER_X).getConvertedValue();
@@ -84,7 +84,7 @@ public class EllipseFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssSize rx = getNonNull(RADIUS_X);
         CssSize ry = getNonNull(RADIUS_Y);
         return new CssRectangle2D(getNonNull(CENTER_X).subtract(rx), getNonNull(CENTER_Y).subtract(ry), rx.multiply(2.0), ry.multiply(2.0));

@@ -39,7 +39,7 @@ public class EllipseConnector extends LocatorConnector {
     public Intersection.IntersectionPoint intersect(Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
-        Bounds bounds = target.getBoundsInLocal();
+        Bounds bounds = target.getLayoutBounds();
 
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {

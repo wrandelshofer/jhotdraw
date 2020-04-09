@@ -2,20 +2,21 @@
  * @(#)CssWordListConverter.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.css.text;
+package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.PatternConverter;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.TreeSet;
 
 /**
  * WordListConverter converts an ImmutableObservableList of Strings into a
@@ -39,9 +40,7 @@ import java.util.Comparator;
  *
  * @author Werner Randelshofer
  */
-public class CssWordListConverter implements Converter<ImmutableList<String>> {
-
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
+public class XmlWordListConverter implements Converter<ImmutableList<String>> {
 
     public final static Comparator<String> NFD_COMPARATOR
             = (o1, o2) -> Normalizer.normalize(o1, Normalizer.Form.NFD).compareTo(
@@ -52,17 +51,28 @@ public class CssWordListConverter implements Converter<ImmutableList<String>> {
         if (value == null) {
             return;
         }
-        Object[] v = new Object[value.size() + 1];
-        v[0] = value.size();
-        value.copyInto(v, 1);
-        formatter.toString(out, v);
+        final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
+        tree.addAll(value.asList());
+        boolean isFirst = true;
+        for (String s : tree) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                out.append(" ");
+            }
+            out.append(s);
+        }
+
     }
 
     @Override
     public ImmutableList<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
-        Object[] v = formatter.fromString(buf);
-        ImmutableList<String> l = ImmutableLists.ofArray(v, 1, (int) v[0]);
-        return l;
+        if (buf == null) {
+            return ImmutableLists.emptyList();
+        }
+        final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
+        tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
+        return ImmutableLists.ofCollection(tree);
     }
 
     @Override

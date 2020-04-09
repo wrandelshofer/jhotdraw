@@ -75,8 +75,18 @@ public interface PropertyBean {
      * @param key      the key
      * @param newValue the value
      */
-    @Nullable
     default <T> void set(@NonNull MapAccessor<T> key, @Nullable T newValue) {
+        key.set(getProperties(), newValue);
+    }
+
+    /**
+     * Sets a non-null property value.
+     *
+     * @param <T>      the value type
+     * @param key      the key
+     * @param newValue the value
+     */
+    default <T> void setNonNull(@NonNull NonNullMapAccessor<T> key, @NonNull T newValue) {
         key.set(getProperties(), newValue);
     }
 

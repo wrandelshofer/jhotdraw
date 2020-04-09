@@ -34,18 +34,19 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
 
     @NonNull
     protected final MapAccessor<Connector> connectorKey;
+    protected final NonNullMapAccessor<CssPoint2D> pointKey;
+    @NonNull
+    protected final MapAccessor<Figure> targetKey;
     @Nullable
     protected Point2D connectorLocation;
-
+    protected Point2D pickLocation;
     // private final Region connectorNode;
     // private final javafx.scene.Group groupNode;
     private boolean isConnected;
     private boolean isDragging;
-    protected Point2D pickLocation;
-    protected final NonNullMapAccessor<CssPoint2D> pointKey;
-    @NonNull
-    protected final MapAccessor<Figure> targetKey;
     private boolean editable = true;
+    @Nullable
+    private Figure prevTarget;
 
     public AbstractConnectorHandle(@NonNull ConnectingFigure figure,
                                    NonNullMapAccessor<CssPoint2D> pointKey,
@@ -80,11 +81,23 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         return pickLocation;
     }
 
-
     @NonNull
     @Override
     public ConnectingFigure getOwner() {
         return (ConnectingFigure) super.getOwner();
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    @Override
+    public boolean isSelectable() {
+        return true;
     }
 
     @Override
@@ -113,21 +126,35 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         model.set(o, targetKey, null);
         // Meta prevents connection
         if (!event.isMetaDown()) {
-            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+            // Shift prevents search for another target figure
+            if (event.isShiftDown()) {
+                newConnectedFigure = prevTarget;
+                ConnectableFigure cff = (ConnectableFigure) prevTarget;
+                Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
+                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
+                if (newConnector != null && o.canConnect(cff, newConnector)) {
+                    newConnectedFigure = cff;
+                    constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, cff));
+                    isConnected = true;
+                }
+            } else {
+                List<Figure> list;
+                list = view.findFigures(pointInViewCoordinates, true);
 
-            SearchLoop:
-            for (Figure f1 : list) {
-                for (Figure ff : f1.breadthFirstIterable()) {
-                    if (this.owner != ff && (ff instanceof ConnectableFigure)) {
-                        ConnectableFigure cff = (ConnectableFigure) ff;
-                        Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
-                        if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
-                            if (newConnector != null && o.canConnect(ff, newConnector)) {
-                                newConnectedFigure = ff;
-                                constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, ff));
-                                isConnected = true;
-                                break SearchLoop;
+                SearchLoop:
+                for (Figure f1 : list) {
+                    for (Figure ff : f1.breadthFirstIterable()) {
+                        if (this.owner != ff && (ff instanceof ConnectableFigure)) {
+                            ConnectableFigure cff = (ConnectableFigure) ff;
+                            Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
+                            if (ff.getBoundsInLocal().contains(pointInLocal)) {
+                                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
+                                if (newConnector != null && o.canConnect(ff, newConnector)) {
+                                    newConnectedFigure = ff;
+                                    constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, ff));
+                                    isConnected = true;
+                                    break SearchLoop;
+                                }
                             }
                         }
                     }
@@ -142,24 +169,12 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
+        prevTarget = owner.get(targetKey);
     }
 
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
         isDragging = false;
-    }
-
-    public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
-
-    @Override
-    public boolean isSelectable() {
-        return true;
     }
 
 }

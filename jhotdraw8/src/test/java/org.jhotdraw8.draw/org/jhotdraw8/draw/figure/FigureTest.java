@@ -68,13 +68,13 @@ public class FigureTest {
         }
 
         @NonNull
-        public Bounds getBoundsInLocal() {
+        public Bounds getLayoutBounds() {
             return null;
         }
 
         @NonNull
-        public CssRectangle2D getCssBoundsInLocal() {
-            return new CssRectangle2D(getBoundsInLocal());
+        public CssRectangle2D getCssLayoutBounds() {
+            return new CssRectangle2D(getLayoutBounds());
         }
 
         public void reshapeInLocal(Transform transform) {
@@ -144,6 +144,11 @@ public class FigureTest {
 
         public Transform getParentToLocal() {
             return null;
+        }
+
+        @Override
+        public @NonNull Bounds getBoundsInLocal() {
+            return getLayoutBounds();
         }
 
         public Transform getLocalToParent() {

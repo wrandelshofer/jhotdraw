@@ -118,7 +118,7 @@ public class RelativePointHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), newPoint);
         }
         final CssPoint2D localPoint = getOwner().worldToLocal(newPoint);
-        CssRectangle2D bounds = getOwner().getCssBoundsInLocal();
+        CssRectangle2D bounds = getOwner().getCssLayoutBounds();
 
         view.getModel().set(getOwner(), pointKey, localPoint.subtract(bounds.getTopLeft()));
     }
@@ -139,7 +139,7 @@ public class RelativePointHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Bounds bounds = f.getBoundsInLocal();
+        Bounds bounds = f.getLayoutBounds();
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.get(pointKey).getConvertedValue().add(bounds.getMinX(), bounds.getMinY());
         pickLocation = p = t == null ? p : t.transform(p);

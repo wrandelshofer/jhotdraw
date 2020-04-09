@@ -161,7 +161,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
         UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         Insets padding = getStyledNonNull(PADDING).getConvertedValue(converter);
         double size = diagramKindText.getFont().getSize();
-        Bounds bounds = getBoundsInLocal();
+        Bounds bounds = getLayoutBounds();
 
         double y = bounds.getMinY() + padding.getTop();
 
@@ -191,7 +191,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
     private void addFramePath(@NonNull List<PathElement> pathElements) {
-        Bounds b = getBoundsInLocal();
+        Bounds b = getLayoutBounds();
         pathElements.add(new MoveTo(b.getMinX(), b.getMinY()));
         pathElements.add(new LineTo(b.getMaxX(), b.getMinY()));
         pathElements.add(new LineTo(b.getMaxX(), b.getMaxY()));
@@ -211,14 +211,14 @@ public class MLDiagramFigure extends AbstractLeafFigure
         if (path == null) {
             path = new Path();
         }
-        Bounds boundsInLocal = getBoundsInLocal();
+        Bounds boundsInLocal = getLayoutBounds();
         path.getElements().clear();
         addFramePath(path.getElements());
     }
 
     @Override
     public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
-        return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
+        return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
     @NonNull

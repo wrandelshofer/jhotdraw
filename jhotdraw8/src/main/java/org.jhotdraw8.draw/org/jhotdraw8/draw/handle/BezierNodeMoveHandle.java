@@ -186,7 +186,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Bounds b = f.getBoundsInLocal();
+        Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
         pickLocation = p = t == null ? p : t.transform(p);

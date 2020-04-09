@@ -160,7 +160,7 @@ public class RotateHandle extends AbstractHandle {
         TransformableFigure o = getOwner();
         Transform t = o.getParentToWorld();
 
-        Point2D center = Geom.center(o.getBoundsInLocal());
+        Point2D center = Geom.center(o.getLayoutBounds());
         Transform translate = Transform.translate(o.getStyled(TransformableFigure.TRANSLATE_X), o.getStyled(TransformableFigure.TRANSLATE_Y));
         Transform scale = Transform.scale(o.getStyled(TransformableFigure.SCALE_X), o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
         Transform rotate = Transform.rotate(o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
@@ -175,7 +175,7 @@ public class RotateHandle extends AbstractHandle {
     private Transform getWorldToRotate() {
         TransformableFigure o = getOwner();
         Transform t = o.getWorldToParent();
-        Point2D center = Geom.center(o.getBoundsInLocal());
+        Point2D center = Geom.center(o.getLayoutBounds());
 
         Transform translate = Transform.translate(-o.getStyled(TransformableFigure.TRANSLATE_X), -o.getStyled(TransformableFigure.TRANSLATE_Y));
         Transform scale = Transform.scale(1.0 / o.getStyled(TransformableFigure.SCALE_X), 1.0 / o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
@@ -190,7 +190,7 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         TransformableFigure o = getOwner();
-        Point2D center = Geom.center(o.getBoundsInLocal());
+        Point2D center = Geom.center(o.getLayoutBounds());
         Transform t = Transforms.concat(getWorldToRotate(), view.getViewToWorld());
         Point2D newPoint = (t == null) ? new Point2D(event.getX(), event.getY()) : t.transform(new Point2D(event.getX(), event.getY()));
         double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
@@ -250,7 +250,7 @@ public class RotateHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         TransformableFigure o = getOwner();
         Transform t = Transforms.concat(view.getWorldToView(), getRotateToWorld());
-        Bounds b = o.getBoundsInLocal();
+        Bounds b = o.getLayoutBounds();
         Point2D centerInLocal = Geom.center(b);
         double scaleY = o.getStyled(SCALE_Y);
 

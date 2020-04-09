@@ -76,7 +76,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Transform tinv = Transforms.concat(f.getWorldToLocal(), view.getViewToWorld());
         t = Transforms.concat(Transform.translate(0.5, 0.5), t);
-        Bounds b = f.getBoundsInLocal();
+        Bounds b = f.getLayoutBounds();
         // FIXME we should perform the grow in view coordinates on the transformed shape
         //            instead of growing in local
         double growInLocal = tinv.deltaTransform(new Point2D(growInView * invsqrt2, growInView * invsqrt2)).magnitude();

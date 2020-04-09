@@ -22,7 +22,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 import java.util.function.Function;
 
 /**
- * NullableCssPoint2DStyleableFigureKey.
+ * Non-null CssPoint2DStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */

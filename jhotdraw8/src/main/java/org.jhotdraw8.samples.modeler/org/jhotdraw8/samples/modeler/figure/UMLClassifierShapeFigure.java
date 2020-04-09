@@ -199,7 +199,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double lineSpacing = converter.convert(getStyledNonNull(LINE_SPACING), UnitConverter.DEFAULT);
         Insets padding = getStyledNonNull(PADDING).getConvertedValue(converter);
-        Bounds bounds = getBoundsInLocal();
+        Bounds bounds = getLayoutBounds();
         String name = get(NAME);
         updateTextNodes(ctx, textNodes,
                 p.getElements(),
@@ -429,7 +429,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
 
     @Override
     public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
-        return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
+        return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
     @NonNull

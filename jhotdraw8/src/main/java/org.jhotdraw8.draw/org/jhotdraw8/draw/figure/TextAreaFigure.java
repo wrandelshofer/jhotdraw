@@ -49,7 +49,7 @@ public class TextAreaFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, Node node) {
-        return new TextEditorData(this, getBoundsInLocal(), TEXT);
+        return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class TextAreaFigure extends AbstractLeafFigure
         UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         Insets padding = getStyledNonNull(PADDING).getConvertedValue(converter);
         double size = text.getFont().getSize();
-        Bounds bounds = getBoundsInLocal();
+        Bounds bounds = getLayoutBounds();
 
         double y;
         switch (text.getTextOrigin()) {
@@ -111,7 +111,7 @@ public class TextAreaFigure extends AbstractLeafFigure
 
     @Override
     public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
-        return new PathConnector(new BoundsLocator(getBoundsInLocal(), pointInLocal));
+        return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
     @NonNull

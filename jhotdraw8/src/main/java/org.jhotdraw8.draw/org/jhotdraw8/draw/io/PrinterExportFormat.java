@@ -154,7 +154,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     }
 
     protected boolean writeSlice(Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
-        printSlice(null, slice, slice.getBoundsInLocal(), node, dpi);
+        printSlice(null, slice, slice.getLayoutBounds(), node, dpi);
         return false;
     }
 

@@ -452,7 +452,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         buf.append(n).append(" lb: ").append(Geom.toString(n.getLayoutBounds())).append('\n');
         Figure f = nodeToFigureMap.get(n);
         if (f != null) {
-            buf.append(" flb: ").append(Geom.toString(f.getBoundsInParent())).append('\n');
+            buf.append(" flb: ").append(Geom.toString(f.getLayoutBoundsInParent())).append('\n');
         } else {
             buf.append('\n');
         }

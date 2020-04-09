@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
@@ -106,4 +107,8 @@ public class ClippingFigure extends AbstractCompositeFigure
         // empty
     }
 
+    @Override
+    public @NonNull Bounds getBoundsInLocal() {
+        return getLayoutBounds();
+    }
 }

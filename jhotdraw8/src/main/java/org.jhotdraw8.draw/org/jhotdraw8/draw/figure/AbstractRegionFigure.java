@@ -69,7 +69,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public CssRectangle2D getCssBoundsInLocal() {
+    public CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 
