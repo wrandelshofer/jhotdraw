@@ -16,14 +16,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.atan2;
-import static java.lang.Math.ceil;
 import static java.lang.Math.cos;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -376,8 +375,25 @@ public class Geom {
      * @return true if inside
      */
     public static boolean contains(@NonNull Bounds r, double x, double y, double tolerance) {
-        return r.getMinX() - tolerance <= x && x <= r.getMaxX() + tolerance
-                && r.getMinY() - tolerance <= y && y <= r.getMaxY() + tolerance;
+        return contains(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight(), x, y, tolerance);
+    }
+
+    /**
+     * Returns true if the bounds contain the specified point within the given
+     * tolerance.
+     *
+     * @param rx        the bounds x-coordinate
+     * @param ry        the bounds y-coordinate
+     * @param rw        the bounds width
+     * @param rh        the bounds height
+     * @param x         the x-coordinate of the point
+     * @param y         the y-coordinate of the point
+     * @param tolerance the tolerance
+     * @return true if inside
+     */
+    public static boolean contains(@NonNull double rx, double ry, double rw, double rh, double x, double y, double tolerance) {
+        return rx - tolerance <= x && x <= (rx + rw) + tolerance
+                && ry - tolerance <= y && y <= (ry + rh) + tolerance;
     }
 
     /**
@@ -943,14 +959,7 @@ public class Geom {
     public static boolean lineContainsPoint(double x1, double y1,
                                             double x2, double y2,
                                             double px, double py, double tolerance) {
-        Rectangle2D r = new Rectangle2D(x1, y1, 0, 0);
-        r = Geom.add(r, x2, y2);
-        double grow = max(2, (int) ceil(tolerance));
-        r = new Rectangle2D(r.getMinX() - grow,
-                r.getMinY() - grow,
-                r.getWidth() + grow * 2,
-                r.getHeight() + grow * 2);
-        if (!r.contains(px, py)) {
+        if (!contains(min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1), px, py, tolerance)) {
             return false;
         }
 
@@ -1071,7 +1080,7 @@ public class Geom {
     }
 
     /**
-     * Gets the angle of a point relative to a rectangle.
+     * Gets the angle of a point relative to the center of a rectangle.
      *
      * @param r the rectangle
      * @param p the point
