@@ -44,7 +44,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     @Nullable
     private Drawing drawing;
     @Nullable
-    private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
+    private final ObjectProperty<Figure> parent = new ObjectPropertyBase<>() {
 
         @Override
         protected void fireValueChangedEvent() {

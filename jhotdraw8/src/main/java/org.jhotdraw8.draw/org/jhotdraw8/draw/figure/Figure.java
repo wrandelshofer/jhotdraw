@@ -950,10 +950,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * Updates the layout of this figure, based on the layout of its children
      * and the layout of observed layout subjects.
      * <p>
-     * This figure does not keep track of changes that require layout updates.
-     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
+     * If the layout of this figure depends on the layout of other figures, then
+     * calling layout on this figure will only result in the correct result,
+     * if layout of the other figures has been performed first.
+     * <p>
+     * A figure does not keep track of changes that require layout updates.
+     * Use {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
      * <p>
      * The default implementation is empty.
+     * <p>
+     * To layout a drawing use {@link Drawing#layoutAll(RenderContext)}.
      *
      * @param ctx the render context (optional)
      */

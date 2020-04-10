@@ -10,11 +10,19 @@ import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.util.List;
 
 /**
  * A figure which draws a line connection between two figures.
@@ -40,6 +48,37 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
 
     public LineConnectionFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
+    }
+
+    @Override
+    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+        if (handleType == HandleType.SELECT) {
+            list.add(new LineOutlineHandle(this));
+        } else if (handleType == HandleType.MOVE) {
+            list.add(new LineOutlineHandle(this));
+            if (get(START_CONNECTOR) == null) {
+                list.add(new MoveHandle(this, new PointLocator(START)));
+            } else {
+                list.add(new SelectionHandle(this, new PointLocator(START)));
+            }
+            if (get(END_CONNECTOR) == null) {
+                list.add(new MoveHandle(this, new PointLocator(END)));
+            } else {
+                list.add(new SelectionHandle(this, new PointLocator(END)));
+            }
+        } else if (handleType == HandleType.RESIZE) {
+            list.add(new LineOutlineHandle(this));
+            list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
+        } else if (handleType == HandleType.POINT) {
+            list.add(new LineOutlineHandle(this));
+            list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
+            list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
+        } else if (handleType == HandleType.TRANSFORM) {
+            list.add(new LineOutlineHandle(this));
+        } else {
+            super.createHandles(handleType, list);
+        }
     }
 
     @NonNull

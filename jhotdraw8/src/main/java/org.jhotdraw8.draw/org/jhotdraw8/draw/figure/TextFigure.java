@@ -66,7 +66,7 @@ public class TextFigure extends AbstractLeafFigure
             layout(new SimpleRenderContext());
         }
 
-        Bounds b = textNode.getBoundsInLocal();
+        Bounds b = textNode.getLayoutBounds();
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
@@ -98,7 +98,8 @@ public class TextFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        set(ORIGIN, new CssPoint2D(x, y));
+        Bounds b = getLayoutBounds();
+        reshapeInLocal(Transform.translate(x.getConvertedValue() - b.getMinX(), y.getConvertedValue() - b.getMinY()));
     }
 
     @NonNull

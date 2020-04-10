@@ -12,20 +12,20 @@
 }
 
 #vertex1 {
-  fill-color: red;
+  fill: red;
 }
 
 #vertex2 {
-  fill-color: green;
+  fill: green;
 }
 
 #vertex3 {
   stroke-width: 0.0;
-  fill-color: blue;
+  fill: blue;
   font: 24.0 "Andale Mono";
   rotate: 20;
 }
 
 #vertex4 {
-  fill-color: yellow;
+  fill: yellow;
 }

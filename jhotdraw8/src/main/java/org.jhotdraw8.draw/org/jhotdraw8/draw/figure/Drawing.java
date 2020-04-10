@@ -147,6 +147,11 @@ public interface Drawing extends Figure {
 
     /**
      * Performs one layout pass over the entire drawing.
+     * <p>
+     * This method lays out figures that do not depend on the layout
+     * of other figures first, and then lays out figures that depend
+     * on them, until all figures are laid out once.
+     * Circular dependencies are broken up deterministically.
      *
      * @param ctx the render context
      */
@@ -156,13 +161,14 @@ public interface Drawing extends Figure {
         }
     }
 
-    default void updateAllStylesheets(@NonNull RenderContext ctx) {
+    default void updateAllCss(@NonNull RenderContext ctx) {
         StylesheetsManager<Figure> styleManager = getStyleManager();
-        styleManager.applyStylesheetsTo(preorderIterable());
-        for (Figure f : preorderIterable()) {
-            f.invalidateTransforms();
+        if (styleManager != null) {
+            styleManager.applyStylesheetsTo(preorderIterable());
+            for (Figure f : preorderIterable()) {
+                f.invalidateTransforms();
+            }
         }
-
     }
 
     /**

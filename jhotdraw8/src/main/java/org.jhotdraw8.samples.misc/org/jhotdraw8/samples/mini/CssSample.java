@@ -18,8 +18,6 @@ import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.figure.RectangleFigure;
@@ -68,19 +66,16 @@ public class CssSample extends Application {
         line1.set(LineFigure.START, new CssPoint2D(50, 150));
         line1.set(LineFigure.END, new CssPoint2D(100, 150));
 
-        Layer layer = new LayerFigure();
-        drawing.addChild(layer);
+        drawing.addChild(vertex1);
+        drawing.addChild(vertex2);
+        drawing.addChild(vertex3);
+        drawing.addChild(vertex4);
 
-        layer.addChild(vertex1);
-        layer.addChild(vertex2);
-        layer.addChild(vertex3);
-        layer.addChild(vertex4);
-
-        layer.addChild(edge12);
-        layer.addChild(edge23);
-        layer.addChild(edge3Null);
-        layer.addChild(edgeNullNull);
-        layer.addChild(line1);
+        drawing.addChild(edge12);
+        drawing.addChild(edge23);
+        drawing.addChild(edge3Null);
+        drawing.addChild(edgeNullNull);
+        drawing.addChild(line1);
 
         vertex1.set(StyleableFigure.ID, "vertex1");
         vertex2.set(StyleableFigure.ID, "vertex2");
@@ -92,8 +87,8 @@ public class CssSample extends Application {
         drawing.set(Drawing.USER_AGENT_STYLESHEETS, ImmutableLists.ofCollection(stylesheets));
 
         SimpleRenderContext ctx = new SimpleRenderContext();
-        drawing.updateCss(ctx);
-        drawing.layout(ctx);
+        drawing.updateAllCss(ctx);
+        drawing.layoutAll(ctx);
 
         DrawingView drawingView = new SimpleDrawingView();
 
