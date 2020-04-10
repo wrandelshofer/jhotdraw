@@ -253,28 +253,26 @@ public class BezierNodePath implements Shape {
         boolean mc1 = middle.isC1();
         boolean nc1 = next.isC1();
         if (!pc2 && mc1 && nc1) {
-            javafx.geometry.Point2D p = Beziers.mergeQuadCurve(
+            double[] p = Beziers.mergeQuadCurve(
                     prev.getX0(), prev.getY0(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
                     next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
             if (p != null) {
-                nodes.set(nextSegment, next.setX1(p.getX()).setY1(p.getY()));
+                nodes.set(nextSegment, next.setX1(p[2]).setY1(p[3]));
             }
         } else if (pc2 && mc2 && !nc1) {
-            javafx.geometry.Point2D p = Beziers.mergeQuadCurve(
+            double[] p = Beziers.mergeQuadCurve(
                     prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX0(), middle.getY0(),
                     middle.getX2(), middle.getY2(), next.getX0(), next.getY0(), tolerance);
             if (p != null) {
-                nodes.set(prevSegment, prev.setX2(p.getX()).setY2(p.getY()));
+                nodes.set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
             }
         } else if (pc2 && mc1 && mc2 && nc1) {
-            javafx.geometry.Point2D[] p = Beziers.mergeCubicCurve(
+            double[] p = Beziers.mergeCubicCurve(
                     prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
                     middle.getX2(), middle.getY2(), next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
             if (p != null) {
-                javafx.geometry.Point2D p1 = p[0];
-                javafx.geometry.Point2D p2 = p[1];
-                nodes.set(prevSegment, prev.setX2(p1.getX()).setY2(p1.getY()));
-                nodes.set(nextSegment, next.setX1(p2.getX()).setY1(p2.getY()));
+                nodes.set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
+                nodes.set(nextSegment, next.setX1(p[4]).setY1(p[5]));
             }
         }
         nodes.remove(segment);

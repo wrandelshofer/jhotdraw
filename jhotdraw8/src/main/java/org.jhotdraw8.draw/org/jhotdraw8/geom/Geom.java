@@ -16,7 +16,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
@@ -251,14 +251,14 @@ public class Geom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_MOVETO:
-                    moveToX = coords[0];
-                    moveToY = coords[1];
-                    break;
-                case PathIterator.SEG_CLOSE:
-                    coords[0] = moveToX;
-                    coords[1] = moveToY;
-                    break;
+            case PathIterator.SEG_MOVETO:
+                moveToX = coords[0];
+                moveToY = coords[1];
+                break;
+            case PathIterator.SEG_CLOSE:
+                coords[0] = moveToX;
+                coords[1] = moveToY;
+                break;
             }
             Point2D chop = Geom.intersect(
                     prevX, prevY,
@@ -1170,13 +1170,13 @@ public class Geom {
 
     public static double squaredDistance(double x1, double y1, double x2, double y2) {
         double Δx = x1 - x2;
-        double Δy = x2 - y2;
+        double Δy = y1 - y2;
         return Δx * Δx + Δy * Δy;
     }
 
     public static double distance(double x1, double y1, double x2, double y2) {
         double Δx = x1 - x2;
-        double Δy = x2 - y2;
+        double Δy = y1 - y2;
         return sqrt(Δx * Δx + Δy * Δy);
     }
 
@@ -1314,5 +1314,6 @@ public class Geom {
         double y = p.getY();
         return x * x + y * y;
     }
+
 
 }

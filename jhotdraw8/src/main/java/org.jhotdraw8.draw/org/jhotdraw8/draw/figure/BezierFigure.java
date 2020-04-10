@@ -182,10 +182,12 @@ public class BezierFigure extends AbstractLeafFigure
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, pathNode);
         pathNode.setFillRule(getStyled(FILL_RULE));
-        final List<PathElement> elements = Shapes.fxPathElementsFromAWT(new BezierNodePath(getStyled(PATH), getStyled(CLOSED), getStyled(FILL_RULE)).getPathIterator(null));
-        /*        if (getStyled(CLOSED)) {
-            elements.addChild(new ClosePath());
-        }*/
+        final List<PathElement> elements =
+                Shapes.fxPathElementsFromAWT(
+                        new BezierNodePath(getStyledNonNull(PATH),
+                                getStyledNonNull(CLOSED),
+                                getStyledNonNull(FILL_RULE)).getPathIterator(null));
+
         if (!pathNode.getElements().equals(elements)) {
             pathNode.getElements().setAll(elements);
         }

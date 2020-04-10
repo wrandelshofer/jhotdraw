@@ -36,7 +36,11 @@ public class BezierNodePathIterator implements PathIterator {
             }
         }
         if (closed && !nodes.isEmpty()) {
-            this.nodes.add(nodes.get(0));
+            BezierNode n0 = nodes.get(0);
+            if ((n0.getMask() & BezierNode.MOVE_MASK) != 0) {
+                n0 = n0.setMask(n0.getMask() ^ BezierNode.MOVE_MASK);
+            }
+            this.nodes.add(n0);
             this.nodes.add(CLOSE_PATH);
         }
         size = this.nodes.size();
@@ -141,7 +145,6 @@ public class BezierNodePathIterator implements PathIterator {
             if (current == CLOSE_PATH) {
                 type = SEG_CLOSE;
             } else {
-
                 if (current.isMoveTo()) {
                     numCoords = 1;
                     type = SEG_MOVETO;

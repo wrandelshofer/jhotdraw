@@ -405,7 +405,8 @@ public class IntersectionSampleMain extends Application {
                 CubicCurve l1 = (CubicCurve) shape1;
                 isect = Intersections.intersectCubicCurveCubicCurve(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
-                        l1.getStartX(), l1.getStartY(), l1.getControlX1(), l1.getControlY1(), l1.getControlX2(), l1.getControlY2(), l1.getEndX(), l1.getEndY());
+                        l1.getStartX(), l1.getStartY(), l1.getControlX1(), l1.getControlY1(), l1.getControlX2(), l1.getControlY2(), l1.getEndX(), l1.getEndY()
+                );
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Ellipse.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Ellipse l1 = (Ellipse) shape1;
@@ -434,7 +435,7 @@ public class IntersectionSampleMain extends Application {
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
-                    Point2D[] newControlPoint = Beziers.mergeCubicCurve(
+                    double[] newControlPoint = Beziers.mergeCubicCurve(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], left[4], left[5], right[0], right[1], right[2], right[3], right[4], right[5], 1.0);
                     System.out.println("  new ctrlPoint:" + Arrays.toString(newControlPoint));
                 }
@@ -524,9 +525,9 @@ public class IntersectionSampleMain extends Application {
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
-                    Point2D newControlPoint = Beziers.mergeQuadCurve(
+                    double[] newControlPoint = Beziers.mergeQuadCurve(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], right[0], right[1], right[2], right[3], 1.0);
-                    System.out.println("  new ctrlPoint:" + newControlPoint);
+                    System.out.println("  new ctrlPoints:" + newControlPoint);
                 }
 
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Line.class) {
