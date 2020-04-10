@@ -322,14 +322,14 @@ public class GraphSearch {
             }
 
             if (done < n) {
-                // Break loop in graph by removing an arbitrary arrow.
-                if (random == null) {
-                    random = new Random(0);
-                }
-                int i;
+                // Break loop in graph by removing all arrows on a node.
+                int i = 0;
                 do {
-                    i = random.nextInt(n);
-                } while (deg[i] <= 0);
+                    i++;
+                } while (i < n && deg[i] <= 0);
+                if (i == n) {
+                    throw new AssertionError("bug in loop-breaking algorithm i==" + n);
+                }
                 deg[i] = 0;// this can actually remove more than one arrow
                 queue[last++] = i;
             }
@@ -341,9 +341,9 @@ public class GraphSearch {
     /**
      * Sorts the specified directed graph topologically.
      *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
-     * @param model   the graph
+     * @param <V>   the vertex type
+     * @param <A>   the arrow type
+     * @param model the graph
      * @return the sorted list of vertices
      */
     @NonNull
