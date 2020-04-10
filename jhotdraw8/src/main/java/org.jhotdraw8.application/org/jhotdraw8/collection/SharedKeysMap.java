@@ -124,7 +124,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     private int ensureCapacity(K key) {
-        int index = keyMap.computeIfAbsent(key, k -> keyMap.size());
+        // Method computeIfAbsent is not available in UnmodifiableMap,
+        // so we have to try a get() first.
+        Integer indexNullable = keyMap.get(key);
+        int index = indexNullable == null ? keyMap.computeIfAbsent(key, k -> keyMap.size()) : indexNullable;
         if (values.length <= index) {
             Object[] temp = new Object[index + 1];
             System.arraycopy(values, 0, temp, 0, values.length);

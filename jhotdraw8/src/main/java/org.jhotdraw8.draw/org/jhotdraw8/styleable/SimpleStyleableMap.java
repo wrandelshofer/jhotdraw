@@ -172,7 +172,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     private int ensureCapacity(K key) {
-        int index = keyMap.computeIfAbsent(key, k -> keyMap.size());
+        // Method computeIfAbsent is not available in UnmodifiableMap,
+        // so we have to try a get() first.
+        Integer indexNullable = keyMap.get(key);
+        int index = indexNullable == null ? keyMap.computeIfAbsent(key, k -> keyMap.size()) : indexNullable;
         int n = n = (1 + index) * numOrigins;
         values.ensureCapacity(n);
         for (int i = values.size(); i < n; i++) {
