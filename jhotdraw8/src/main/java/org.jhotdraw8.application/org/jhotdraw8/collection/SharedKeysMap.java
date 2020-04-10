@@ -124,13 +124,9 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     private int ensureCapacity(K key) {
-        Integer index = keyMap.get(key);
-        if (index == null) {
-            index = keyMap.size();
-            keyMap.put(key, index);
-        }
-        if (values.length < keyMap.size()) {
-            Object[] temp = new Object[keyMap.size()];
+        int index = keyMap.computeIfAbsent(key, k -> keyMap.size());
+        if (values.length <= index) {
+            Object[] temp = new Object[index + 1];
             System.arraycopy(values, 0, temp, 0, values.length);
             values = temp;
         }

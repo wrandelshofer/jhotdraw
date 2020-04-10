@@ -171,11 +171,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     private int ensureCapacity(K key) {
-        final int indexIfAbsent = keyMap.size();
-        Integer indexIfPresent = keyMap.putIfAbsent(key, indexIfAbsent);
-        int index = indexIfPresent == null ? indexIfAbsent : indexIfPresent;
+        int index = keyMap.computeIfAbsent(key, k -> keyMap.size());
         int n = n = (1 + index) * numOrigins;
         values.ensureCapacity(n);
         for (int i = values.size(); i < n; i++) {
