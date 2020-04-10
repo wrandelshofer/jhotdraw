@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Shapes;
 
@@ -78,4 +80,29 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
                 getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
+    @Override
+    public void layout(@NonNull RenderContext ctx) {
+        Point2D start = getNonNull(START).getConvertedValue();
+        Point2D end = getNonNull(END).getConvertedValue();
+        Connector startConnector = get(START_CONNECTOR);
+        Connector endConnector = get(END_CONNECTOR);
+        Figure startTarget = get(START_TARGET);
+        Figure endTarget = get(END_TARGET);
+        if (startConnector != null && startTarget != null) {
+            start = startConnector.getPositionInWorld(this, startTarget);
+        }
+        if (endConnector != null && endTarget != null) {
+            end = endConnector.getPositionInWorld(this, endTarget);
+        }
+
+        if (startConnector != null && startTarget != null) {
+            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end).getPoint());
+            set(START, new CssPoint2D(p));
+        }
+        if (endConnector != null && endTarget != null) {
+            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end).getPoint());
+            set(END, new CssPoint2D(p));
+        }
+
+    }
 }

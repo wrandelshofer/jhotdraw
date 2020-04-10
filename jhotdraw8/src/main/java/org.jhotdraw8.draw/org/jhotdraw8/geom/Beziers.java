@@ -231,6 +231,24 @@ public class Beziers {
         }
     }
 
+    /**
+     * Splits the provided bezier curve into two parts.
+     * <p>
+     * Reference:
+     * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
+     *
+     * @param x0    point P0 of the curve
+     * @param y0    point P0 of the curve
+     * @param x1    point P1 of the curve
+     * @param y1    point P1 of the curve
+     * @param x2    point P2 of the curve
+     * @param y2    point P2 of the curve
+     * @param x3    point P3 of the curve
+     * @param y3    point P3 of the curve
+     * @param t     where to split
+     * @param left  if not null, accepts the curve from x1,y1 to t
+     * @param right if not null, accepts the curve from t to x4,y4
+     */
     public static void splitCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3, double t,
                                        double[] left,
                                        double[] right) {

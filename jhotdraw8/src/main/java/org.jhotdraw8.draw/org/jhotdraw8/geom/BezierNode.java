@@ -16,6 +16,7 @@ import org.jhotdraw8.annotation.Nullable;
  * <li>C1 controls the tangent of the curve going towards C0.</li>
  * <li>C2 controls the tangent of the curve going away from C0.</li>
  * </ul>
+ * A bit mask specifies which control points are in use.
  *
  * @author Werner Randelshofer
  */

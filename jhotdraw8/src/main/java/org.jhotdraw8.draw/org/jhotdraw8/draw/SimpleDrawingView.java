@@ -876,10 +876,15 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             repaint();
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
-                Layer layer = (Layer) d.getChild(i);
-                if (!layer.isEditable() && layer.isShowing()) {
-                    activeParent.set(layer);
-                    break;
+                Figure child = d.getChild(i);
+                if (child instanceof Layer) {
+                    Layer layer = (Layer) child;
+                    if (!layer.isEditable() && layer.isShowing()) {
+                        activeParent.set(layer);
+                        break;
+                    }
+                } else {
+                    activeParent.set(d);
                 }
 
             }
@@ -1368,18 +1373,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void updateNodes() {
         if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
-            Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[dirtyFigureNodes.size()]);
+            Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
             dirtyFigureNodes.clear();
             for (Figure f : copyOfDirtyFigureNodes) {
                 if (!f.isShowing() && !hasNode(f)) {
                     continue;
                 }
-                f.updateNode(this, getNode(f));
+                Node node = getNode(f);
+                if (node != null) {
+                    f.updateNode(this, node);
+                }
             }
         }
 
         if (!recreateHandles) {
-            Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[dirtyHandles.size()]);
+            Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[0]);
             dirtyHandles.clear();
             for (Figure f : copyOfDirtyHandles) {
                 List<Handle> hh = handles.get(f);

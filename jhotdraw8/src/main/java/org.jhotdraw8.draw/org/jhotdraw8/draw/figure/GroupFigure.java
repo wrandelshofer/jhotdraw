@@ -45,21 +45,16 @@ public class GroupFigure extends AbstractCompositeFigure
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
-        Transform localTransform = transform;
-        //Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
-            child.reshapeInParent(localTransform);
+            child.reshapeInParent(transform);
         }
     }
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        // XXX if one of the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = Transforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
-        //Transform localTransform = transform.createConcatenation(getParentToLocal());
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);
         }
