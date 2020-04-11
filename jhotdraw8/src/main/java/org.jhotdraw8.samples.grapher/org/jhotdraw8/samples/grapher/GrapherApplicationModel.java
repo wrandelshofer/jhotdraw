@@ -74,7 +74,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
         if ("Dark".equals(value)) {
             return ImmutableLists.of(getClass().getResource("dark-theme.css").toString());
         } else {
-            return ImmutableLists.emptyList();
+            return ImmutableLists.of(getClass().getResource("light-theme.css").toString());
         }
     }
 }
