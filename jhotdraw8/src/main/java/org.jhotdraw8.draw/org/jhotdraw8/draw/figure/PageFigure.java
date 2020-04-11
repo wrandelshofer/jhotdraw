@@ -54,28 +54,35 @@ public class PageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
         FillableFigure, StrokableFigure {
 
+    @NonNull
     public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    @NonNull
     public final static DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
+    @NonNull
     public final static DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
+    @NonNull
     public final static Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey PAGE_INSETS_BOTTOM = new CssSizeStyleableKey("page-insets-bottom", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey PAGE_INSETS_LEFT = new CssSizeStyleableKey("page-insets-left", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey PAGE_INSETS_RIGHT = new CssSizeStyleableKey("page-insets-right", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey PAGE_INSETS_TOP = new CssSizeStyleableKey("page-insets-top", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssInsetsStyleableMapAccessor PAGE_INSETS = new CssInsetsStyleableMapAccessor("page-insets", PAGE_INSETS_TOP, PAGE_INSETS_RIGHT, PAGE_INSETS_BOTTOM, PAGE_INSETS_LEFT);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey PAGE_OVERLAP_X = new CssSizeStyleableKey("page-overlap-x", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey PAGE_OVERLAP_Y = new CssSizeStyleableKey("page-overlap-y", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssPoint2DStyleableMapAccessor PAGE_OVERLAP = new CssPoint2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
+    @NonNull
     public final static CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", new CssSize(297.0, "mm"));
+    @NonNull
     public final static CssSizeStyleableKey PAPER_WIDTH = new CssSizeStyleableKey("paper-size-width", new CssSize(210.0, "mm"));
+    @NonNull
     public final static PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -105,9 +112,6 @@ public class PageFigure extends AbstractCompositeFigure
         pbList.add(new ClosePath());
     }
 
-    /**
-     * @return
-     */
     private double computeContentAreaFactor() {
         double contentWidth = getNonNull(WIDTH).getConvertedValue();
         double contentHeight = getNonNull(HEIGHT).getConvertedValue();
@@ -196,7 +200,7 @@ public class PageFigure extends AbstractCompositeFigure
         CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
+        int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
 
         double pageX = getNonNull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonNull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
@@ -218,12 +222,12 @@ public class PageFigure extends AbstractCompositeFigure
         CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
         double overX = overlap.getX().getConvertedValue();
         double overY = overlap.getY().getConvertedValue();
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
+        int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
 
         double pageX = getNonNull(X).getConvertedValue();
         double pageY = getNonNull(Y).getConvertedValue();
-        double pageW = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
-        double pageH = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
+        double pageW = getNonNull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
+        double pageH = getNonNull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double marginH = insets.getLeft() + insets.getRight();
         double marginV = insets.getTop() + insets.getBottom();
         double pageOverX = (overX + marginH) * contentAreaFactor;
@@ -239,16 +243,16 @@ public class PageFigure extends AbstractCompositeFigure
     @Override
     public Shape getPageClip(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
-        Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
-        CssPoint2D overlap = getStyled(PAGE_OVERLAP);
+        Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
+        CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
         double ox = overlap.getX().getConvertedValue();
         double oy = overlap.getY().getConvertedValue();
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
+        int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
 
         double pageX = getNonNull(X).getConvertedValue() - insets.getLeft() * contentAreaFactor;
         double pageY = getNonNull(Y).getConvertedValue() - insets.getTop() * contentAreaFactor;
-        double pageWidth = get(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
-        double pageHeight = get(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
+        double pageWidth = getNonNull(PAPER_WIDTH).getConvertedValue() * contentAreaFactor;
+        double pageHeight = getNonNull(PAPER_HEIGHT).getConvertedValue() * contentAreaFactor;
         double pageOverlapX = (ox + insets.getLeft() + insets.getRight()) * contentAreaFactor;
         double pageOverlapY = (oy + insets.getTop() + insets.getBottom()) * contentAreaFactor;
         int px = internalPageNumber % numPagesX;
@@ -274,15 +278,15 @@ public class PageFigure extends AbstractCompositeFigure
     @NonNull
     @Override
     public Transform getPageTransform(int internalPageNumber) {
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
-        int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
+        int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
+        int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
 
         internalPageNumber = Math.max(0, Math.min(internalPageNumber, numPagesX * numPagesY));
 
         int px = internalPageNumber % numPagesX;
         int py = internalPageNumber / numPagesX;
-        Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
-        CssPoint2D overlap = getStyled(PAGE_OVERLAP);
+        Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
+        CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
         double overlapX = overlap.getX().getConvertedValue();
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
@@ -295,21 +299,20 @@ public class PageFigure extends AbstractCompositeFigure
         double x = pageX + (pageWidth - pageOverlapX) * px;
         double y = pageY + (pageHeight - pageOverlapY) * py;
 
-        Transform pageTransform = Transforms.concat(new Translate(x, y), new Scale(contentAreaFactor, contentAreaFactor));
-        return pageTransform;
+        return Transforms.concat(new Translate(x, y), new Scale(contentAreaFactor, contentAreaFactor));
     }
 
     @NonNull
     private Translate getPageTranslate(int internalPageNumber) {
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
-        int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
+        int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
+        int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
 
         internalPageNumber = Math.max(0, Math.min(internalPageNumber, numPagesX * numPagesY));
 
         int px = internalPageNumber % numPagesX;
         int py = internalPageNumber / numPagesX;
-        Insets insets = getStyled(PAGE_INSETS).getConvertedValue();
-        CssPoint2D overlap = getStyled(PAGE_OVERLAP);
+        Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
+        CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
         double overlapX = overlap.getX().getConvertedValue();
         double overlapY = overlap.getY().getConvertedValue();
         double contentAreaFactor = computeContentAreaFactor();
@@ -404,8 +407,8 @@ public class PageFigure extends AbstractCompositeFigure
         contentBoundsNode.setWidth(contentWidth);
         contentBoundsNode.setHeight(contentHeight);
 
-        int numPagesX = Math.max(1, getStyled(NUM_PAGES_X).intValue());
-        int numPagesY = Math.max(1, getStyled(NUM_PAGES_Y).intValue());
+        int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
+        int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
         final int n = numPagesX * numPagesY;
         final List<PathElement> pbList = new ArrayList<>(n * 4);
         final List<PathElement> pmList = new ArrayList<>(n * 4);
@@ -416,8 +419,8 @@ public class PageFigure extends AbstractCompositeFigure
         pageBoundsNode.getElements().setAll(pbList);
         pageInsetsNode.getElements().setAll(pmList);
 
-        int currentPage = ctx.get(RenderContext.RENDER_PAGE_INTERNAL_NUMBER);
-        currentPageNode.getTransforms().setAll(getPageTranslate(currentPage));
+        Integer currentPage = ctx.get(RenderContext.RENDER_PAGE_INTERNAL_NUMBER);
+        currentPageNode.getTransforms().setAll(getPageTranslate(currentPage == null ? 0 : currentPage));
 
         List<Node> currentPageChildren = new ArrayList<>(getChildren().size() + 2);
         for (Figure child : getChildren()) {

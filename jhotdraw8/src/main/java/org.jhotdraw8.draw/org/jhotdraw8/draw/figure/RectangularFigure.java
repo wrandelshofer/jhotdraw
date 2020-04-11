@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -16,11 +15,11 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
  * Defines properties and default methods for figures which have a rectangular shape.
  */
 public interface RectangularFigure extends Figure {
-    @Nullable CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
-    @Nullable CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
-    @Nullable CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
-    @Nullable CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
-    @Nullable CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
+    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
+    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
+    @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
 
     default void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         set(X, width.getValue() < 0 ? x.add(width) : x);
