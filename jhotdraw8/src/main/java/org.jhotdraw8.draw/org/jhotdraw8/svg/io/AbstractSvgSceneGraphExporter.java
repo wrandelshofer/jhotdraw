@@ -4,14 +4,39 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
-import javafx.scene.shape.*;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BorderImage;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -52,14 +77,23 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.Writer;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
-public abstract class AbstractSvgSceneGraphExporter {
+public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExporter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";
     public final static String SVG_NS = "http://www.w3.org/2000/svg";
     protected final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
@@ -389,12 +423,12 @@ public abstract class AbstractSvgSceneGraphExporter {
             fillRule = FillRule.NON_ZERO;
         }
         switch (fillRule) {
-            case EVEN_ODD:
-                elem.setAttribute("fill-rule", "evenodd");
-                break;
-            case NON_ZERO:
-            default:
-                break;
+        case EVEN_ODD:
+            elem.setAttribute("fill-rule", "evenodd");
+            break;
+        case NON_ZERO:
+        default:
+            break;
         }
     }
 
@@ -494,6 +528,7 @@ public abstract class AbstractSvgSceneGraphExporter {
         }
 
         if (elem != null && elem != parent) {
+            writeMetadataAttributes(doc, elem, node);
             writeStyleAttributes(elem, node);
             writeTransformAttributes(elem, node);
             writeCompositingAttributes(elem, node);
@@ -507,6 +542,35 @@ public abstract class AbstractSvgSceneGraphExporter {
             }
         }
 
+    }
+
+    private void writeMetadataAttributes(@NonNull Document doc, @NonNull Element elem, Node node) {
+        writeTitleElement(doc, elem, node);
+        writeDescElement(doc, elem, node);
+    }
+
+    protected void writeTitleElement(@NonNull Document doc, @NonNull Element elem, @NonNull Node node) {
+        Object titleObj = node.getProperties().get(TITLE_PROPERTY_NAME);
+        if ((titleObj instanceof String)) {
+            String title = ((String) titleObj).trim();
+            if (!title.isEmpty()) {
+                Element titleElem = doc.createElement("title");
+                titleElem.appendChild(doc.createTextNode(title));
+                elem.appendChild(titleElem);
+            }
+        }
+    }
+
+    protected void writeDescElement(@NonNull Document doc, @NonNull Element elem, @NonNull Node node) {
+        Object descObj = node.getProperties().get(DESC_PROPERTY_NAME);
+        if ((descObj instanceof String)) {
+            String desc = ((String) descObj).trim();
+            if (!desc.isEmpty()) {
+                Element titleElem = doc.createElement("desc");
+                titleElem.appendChild(doc.createTextNode(desc));
+                elem.appendChild(titleElem);
+            }
+        }
     }
 
     private void writePaintDefs(@NonNull Document doc, @NonNull Element
@@ -533,17 +597,17 @@ public abstract class AbstractSvgSceneGraphExporter {
                     elem.setAttribute("gradientUnits", "userSpaceOnUse");
                 }
                 switch (g.getCycleMethod()) {
-                    case NO_CYCLE:
-                        elem.setAttribute("spreadMethod", "pad");
-                        break;
-                    case REFLECT:
-                        elem.setAttribute("spreadMethod", "reflect");
-                        break;
-                    case REPEAT:
-                        elem.setAttribute("spreadMethod", "repeat");
-                        break;
-                    default:
-                        throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+                case NO_CYCLE:
+                    elem.setAttribute("spreadMethod", "pad");
+                    break;
+                case REFLECT:
+                    elem.setAttribute("spreadMethod", "reflect");
+                    break;
+                case REPEAT:
+                    elem.setAttribute("spreadMethod", "repeat");
+                    break;
+                default:
+                    throw new IOException("unsupported cycle method:" + g.getCycleMethod());
                 }
                 for (Stop s : g.getStops()) {
                     Element stopElem = doc.createElement("stop");
@@ -579,17 +643,17 @@ public abstract class AbstractSvgSceneGraphExporter {
                     elem.setAttribute("gradientUnits", "userSpaceOnUse");
                 }
                 switch (g.getCycleMethod()) {
-                    case NO_CYCLE:
-                        elem.setAttribute("spreadMethod", "pad");
-                        break;
-                    case REFLECT:
-                        elem.setAttribute("spreadMethod", "reflect");
-                        break;
-                    case REPEAT:
-                        elem.setAttribute("spreadMethod", "repeat");
-                        break;
-                    default:
-                        throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+                case NO_CYCLE:
+                    elem.setAttribute("spreadMethod", "pad");
+                    break;
+                case REFLECT:
+                    elem.setAttribute("spreadMethod", "reflect");
+                    break;
+                case REPEAT:
+                    elem.setAttribute("spreadMethod", "repeat");
+                    break;
+                default:
+                    throw new IOException("unsupported cycle method:" + g.getCycleMethod());
                 }
                 for (Stop s : g.getStops()) {
                     Element stopElem = doc.createElement("stop");
@@ -662,7 +726,7 @@ public abstract class AbstractSvgSceneGraphExporter {
 
     private void writeProcessingInstructions(Document
                                                      doc, javafx.scene.Node external) {
-// empty
+        // empty
     }
 
     private Element writeQuadCurve(@NonNull Document doc, @NonNull Element parent, @NonNull QuadCurve
@@ -807,12 +871,12 @@ public abstract class AbstractSvgSceneGraphExporter {
         Element elem = doc.createElement("path");
         elem.setAttribute("d", node.getContent());
         switch (node.getFillRule()) {
-            case NON_ZERO:
-                //    elem.setAttribute("fill-rule","nonzero");// default
-                break;
-            case EVEN_ODD:
-                elem.setAttribute("fill-rule", "evenodd");
-                break;
+        case NON_ZERO:
+            //    elem.setAttribute("fill-rule","nonzero");// default
+            break;
+        case EVEN_ODD:
+            elem.setAttribute("fill-rule", "evenodd");
+            break;
         }
         parent.appendChild(elem);
         return elem;
@@ -903,17 +967,17 @@ public abstract class AbstractSvgSceneGraphExporter {
             // XXX this is currentl only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (shape.getStrokeType()) {
-                case INSIDE:
-                    elem.setAttribute("stroke-alignment", "inner");
-                    break;
-                case CENTERED:
-                    elem.setAttribute("stroke-alignment", "center");
-                    break;
-                case OUTSIDE:
-                    elem.setAttribute("stroke-alignment", "outer");
-                    break;
-                default:
-                    throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
+            case INSIDE:
+                elem.setAttribute("stroke-alignment", "inner");
+                break;
+            case CENTERED:
+                elem.setAttribute("stroke-alignment", "center");
+                break;
+            case OUTSIDE:
+                elem.setAttribute("stroke-alignment", "outer");
+                break;
+            default:
+                throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
             }
         }
     }
@@ -946,17 +1010,17 @@ public abstract class AbstractSvgSceneGraphExporter {
             // XXX this is currently only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (style.getType()) {
-                case INSIDE:
-                    elem.setAttribute("stroke-alignment", "inner");
-                    break;
-                case CENTERED:
-                    elem.setAttribute("stroke-alignment", "center");
-                    break;
-                case OUTSIDE:
-                    elem.setAttribute("stroke-alignment", "outer");
-                    break;
-                default:
-                    throw new InternalError("Unsupported stroke type " + style.getType());
+            case INSIDE:
+                elem.setAttribute("stroke-alignment", "inner");
+                break;
+            case CENTERED:
+                elem.setAttribute("stroke-alignment", "center");
+                break;
+            case OUTSIDE:
+                elem.setAttribute("stroke-alignment", "outer");
+                break;
+            default:
+                throw new InternalError("Unsupported stroke type " + style.getType());
             }
         }
     }
@@ -1205,18 +1269,18 @@ public abstract class AbstractSvgSceneGraphExporter {
             // drawing, then honor alignment
             if (first == layouts.size() - 1) {
                 switch (textAlignment) {
-                    case RIGHT:
-                        penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
-                        break;
-                    case CENTER:
-                        penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
-                        break;
-                    case JUSTIFY:
-                        // not supported
-                        break;
-                    case LEFT:
-                    default:
-                        break;
+                case RIGHT:
+                    penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
+                    break;
+                case CENTER:
+                    penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                    break;
+                case JUSTIFY:
+                    // not supported
+                    break;
+                case LEFT:
+                default:
+                    break;
                 }
             }
 
