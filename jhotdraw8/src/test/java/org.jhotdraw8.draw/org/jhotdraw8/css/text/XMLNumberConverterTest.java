@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * @author werni
  */
-public class XMLDoubleConverterTest {
+public class XMLNumberConverterTest {
 
     /**
      * Test of toString method, of class XmlNumberConverter.
