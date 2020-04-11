@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * StrokeStyleableMapAccessor.
+ * Stroke Style combines all stroke attributes.
  *
  * @author Werner Randelshofer
  */
@@ -61,7 +61,8 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
                                       @NonNull MapAccessor<CssSize> widthKey,
                                       @NonNull MapAccessor<Paintable> paintKey,
                                       @NonNull MapAccessor<StrokeType> typeKey,
-                                      @NonNull MapAccessor<StrokeLineCap> lineCapKey, @NonNull MapAccessor<StrokeLineJoin> lineJoinKey,
+                                      @NonNull MapAccessor<StrokeLineCap> lineCapKey,
+                                      @NonNull MapAccessor<StrokeLineJoin> lineJoinKey,
                                       @NonNull MapAccessor<CssSize> miterLimitKey,
                                       @NonNull MapAccessor<CssSize> dashOffsetKey,
                                       @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey
@@ -122,8 +123,11 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     @Override
     public CssStroke get(@NonNull Map<? super Key<?>, Object> a) {
         return new CssStroke(
-                widthKey.get(a), paintKey.get(a),
-                typeKey.get(a), lineCapKey.get(a), lineJoinKey.get(a),
+                widthKey.get(a),
+                paintKey.get(a),
+                typeKey.get(a),
+                lineCapKey.get(a),
+                lineJoinKey.get(a),
                 miterLimitKey.get(a),
                 dashOffsetKey.get(a),
                 dashArrayKey.get(a)
