@@ -92,9 +92,14 @@ public class CssInsets {
     }
 
     @NonNull
+    public Insets getConvertedValue(UnitConverter converter, @NonNull String units) {
+        return new Insets(top.getConvertedValue(converter, units), right.getConvertedValue(converter, units),
+                bottom.getConvertedValue(converter, units), left.getConvertedValue(converter, units));
+    }
+
+    @NonNull
     public Insets getConvertedValue(@NonNull UnitConverter converter) {
-        return new Insets(top.getConvertedValue(converter), right.getConvertedValue(converter),
-                bottom.getConvertedValue(converter), left.getConvertedValue(converter));
+        return getConvertedValue(converter, UnitConverter.DEFAULT);
     }
 
     public CssSize getLeft() {

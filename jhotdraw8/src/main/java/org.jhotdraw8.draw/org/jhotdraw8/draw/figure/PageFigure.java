@@ -28,6 +28,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
@@ -113,16 +114,19 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     private double computeContentAreaFactor() {
-        double contentWidth = getNonNull(WIDTH).getConvertedValue();
-        double contentHeight = getNonNull(HEIGHT).getConvertedValue();
-        Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
+        String units = getNonNull(WIDTH).getUnits();
+        DefaultUnitConverter uc = DefaultUnitConverter.getInstance();
+
+        double contentWidth = getNonNull(WIDTH).getConvertedValue(uc, units);
+        double contentHeight = getNonNull(HEIGHT).getConvertedValue(uc, units);
+        Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue(uc, units);
         CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
-        double overX = overlap.getX().getConvertedValue();
-        double overY = overlap.getY().getConvertedValue();
+        double overX = overlap.getX().getConvertedValue(uc, units);
+        double overY = overlap.getY().getConvertedValue(uc, units);
         int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
         int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
-        double innerPageW = (getStyledNonNull(PAPER_WIDTH).getConvertedValue() - insets.getLeft() - insets.getRight());
-        double innerPageH = (getStyledNonNull(PAPER_HEIGHT).getConvertedValue() - insets.getTop() - insets.getBottom());
+        double innerPageW = (getStyledNonNull(PAPER_WIDTH).getConvertedValue(uc, units) - insets.getLeft() - insets.getRight());
+        double innerPageH = (getStyledNonNull(PAPER_HEIGHT).getConvertedValue(uc, units) - insets.getTop() - insets.getBottom());
         double totalInnerPageWidth = innerPageW * numPagesX - overX * max(0, numPagesX - 1);
         double totalInnerPageHeight = innerPageH * numPagesY - overY * max(0, numPagesY - 1);
         double contentRatio = contentWidth / contentHeight;

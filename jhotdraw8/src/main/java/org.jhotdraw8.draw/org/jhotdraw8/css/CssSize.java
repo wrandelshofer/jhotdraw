@@ -72,6 +72,10 @@ public class CssSize {
         return converter.convert(this, UnitConverter.DEFAULT);
     }
 
+    public double getConvertedValue(@NonNull UnitConverter converter, @NonNull String units) {
+        return converter.convert(this, units);
+    }
+
     @NonNull
     public String getUnits() {
         return units;
