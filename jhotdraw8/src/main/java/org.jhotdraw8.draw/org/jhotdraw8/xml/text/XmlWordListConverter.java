@@ -43,8 +43,7 @@ import java.util.TreeSet;
 public class XmlWordListConverter implements Converter<ImmutableList<String>> {
 
     public final static Comparator<String> NFD_COMPARATOR
-            = (o1, o2) -> Normalizer.normalize(o1, Normalizer.Form.NFD).compareTo(
-            Normalizer.normalize(o2, Normalizer.Form.NFD));
+            = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
     @Override
     public <TT extends ImmutableList<String>> void toString(Appendable out, IdFactory idFactory, @Nullable TT value) throws IOException {
