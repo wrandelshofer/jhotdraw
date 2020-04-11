@@ -72,7 +72,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         g.setAutoSizeChildren(false);
         Path p = new Path();
         Text text = new Text();
-        g.getChildren().addAll(p, text);
+        g.getProperties().put("pathNode", p);
+        g.getProperties().put("textNode", text);
         return g;
     }
 
@@ -171,11 +172,20 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group g = (Group) node;
-        Path p = (Path) g.getChildren().get(0);
-        Text t = (Text) g.getChildren().get(1);
+        Path p = (Path) g.getProperties().get("pathNode");
+        Text t = (Text) g.getProperties().get("textNode");
+
         updateGroupNode(ctx, g);
         updatePathNode(ctx, p);
         updateTextNode(ctx, t);
+
+        g.getChildren().clear();
+        if (p.getStroke() != null || p.getFill() != null) {
+            g.getChildren().add(p);
+        }
+        if (t.getStroke() != null || t.getFill() != null) {
+            g.getChildren().add(t);
+        }
     }
 
     protected void updatePathNode(RenderContext ctx, @NonNull Path node) {
