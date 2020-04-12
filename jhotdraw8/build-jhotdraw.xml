@@ -825,16 +825,194 @@
           depends="do-docbook.copy,do-docbook.compile,do-docbook.unzip-docbook,do-docbook.validate,do-docbook.transform.saxon"
           description="generates specification and user documentation">
   </target>
+  <target name="do-uml-to-epub"
+          depends=""
+          description="converts uml documentation to epub">
+    <delete dir="${build}/epub-docs"/>
+    <delete file="${build}/jhotdraw-uml.epub"/>
+    <mkdir dir="${build}/epub-docs/contents-html"/>
+    <copy todir="${build}/epub-docs/contents-html">
+      <fileset dir="${doc}/html-docs/contents">
+        <include name="*.html"/>
+      </fileset>
+    </copy>
+    <exec dir="${build}/epub-docs/contents-html" executable="bash">
+      <arg value="-c"/>
+      <arg value="tidy -asxhtml -quiet -modify --drop-empty-elements no *.html"/>
+    </exec>
+    <copy todir="${build}/epub-docs/contents-html">
+      <fileset dir="${build}/epub-docs/contents-html">
+        <include name="*.html"/>
+      </fileset>
+      <globmapper from="*.html" to="*.xhtml"/>
+    </copy>
+    <xslt style="${doc}/uml-to-epub-strip-javascript.xsl"
+          basedir="${build}/epub-docs/contents-html"
+          includes="*.xhtml"
+          extension=".xhtml"
+          destdir="${build}/epub-docs/OEBPS/contents"
+    >
+    </xslt>
+    <replaceregexp flags="g">
+      <regexp pattern="\.html"/>
+      <substitution expression=".xhtml"/>
+      <fileset dir="${build}/epub-docs/OEBPS/contents">
+        <include name="*.xhtml"/>
+      </fileset>
+    </replaceregexp>
+    <xslt style="${doc}/uml-to-epub-extract-spine.xsl"
+          in="${build}/epub-docs/OEBPS/contents/navigation.xhtml"
+          out="${build}/epub-docs/OEBPS/spine.txt"
+    />
+    <loadfile property="pub-spine" srcFile="${build}/epub-docs/OEBPS/spine.txt"/>
+    <delete file="${build}/epub-docs/OEBPS/spine.txt"/>
+
+    <xslt style="${doc}/uml-to-epub-extract-toc.xsl"
+          in="${build}/epub-docs/OEBPS/contents/navigation.xhtml"
+          out="${build}/epub-docs/OEBPS/toc.ncx"
+    />
+
+    <copy todir="${build}/epub-docs/OEBPS">
+      <fileset dir="${doc}/html-docs">
+        <include name="**/*.svg"/>
+        <include name="**/*.css"/>
+        <include name="**/*.woff"/>
+      </fileset>
+    </copy>
+    <mkdir dir="${build}/epub-docs/META-INF"/>
+    <delete dir="${build}/epub-docs/contents-html"/>
+    <echo file="${build}/epub-docs/mimetype" message="application/epub+zip"/>
+    <echo file="${build}/epub-docs/META-INF/container.xml">&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+      &lt;container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0"&gt;
+      &lt;rootfiles&gt;
+      &lt;rootfile full-path="OEBPS/package.opf" media-type="application/oebps-package+xml"/&gt;
+      &lt;/rootfiles&gt;
+      &lt;/container&gt;
+    </echo>
+
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-html-files.fileset">
+      <include name="**/*.xhtml"/>
+      <exclude name="**/navigation.xhtml"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-html-files" refid="pub-html-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="html:"/>
+    </pathconvert>
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-svg-files.fileset">
+      <include name="**/*.svg"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-svg-files" refid="pub-svg-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="svg:"/>
+    </pathconvert>
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-css-files.fileset">
+      <include name="**/*.css"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-css-files" refid="pub-css-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="css:"/>
+    </pathconvert>
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-woff-files.fileset">
+      <include name="**/*.woff"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-woff-files" refid="pub-woff-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="woff:"/>
+    </pathconvert>
+
+    <property name="pub-title" value="JHotDraw 8 Specification"/>
+    <property name="pub-author" value="Werner Randelshofer"/>
+    <tstamp>
+      <format property="pub-year" pattern="yyyy" locale="en,GB"/>
+    </tstamp>
+    <property name="pub-modified" value="${ant.tstamp.now.iso}"/>
+    <property name="pub-rights-holder" value="The authors and contributors of JHotDraw"/>
+    <property name="pub-copyright" value="Copyright © ${pub-year} ${pub-rights-holder}"/>
+    <echo file="${build}/epub-docs/OEBPS/package.opf">&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+      &lt;package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/" version="3.0" xml:lang="en" unique-identifier="pub-identifier"&gt;
+      &lt;metadata&gt;
+      &lt;dc:identifier id="pub-identifier"&gt;_d0e2&lt;/dc:identifier&gt;
+      &lt;meta id="meta-identifier" property="dcterms:identifier"&gt;_d0e2&lt;/meta&gt;
+      &lt;dc:title id="pub-title"&gt;${pub-title}&lt;/dc:title&gt;
+      &lt;meta property="dcterms:title" id="meta-title"&gt;${pub-title}&lt;/meta&gt;
+      &lt;dc:language id="pub-language"&gt;en&lt;/dc:language&gt;
+      &lt;meta property="dcterms:language" id="meta-language"&gt;en&lt;/meta&gt;
+      &lt;meta property="dcterms:modified"&gt;${pub-modified}&lt;/meta&gt;&lt;!--The preceding date value is actually
+      local time (not UTC) in UTC format because there is no function in XSLT 1.0 to generate a correct UTC time--&gt;
+      &lt;meta id="meta-creator2" property="dcterms:creator"&gt;Werner Randelshofer&lt;/meta&gt;
+      &lt;dc:creator id="pub-creator2"&gt;${pub-author}&lt;/dc:creator&gt;
+      &lt;meta property="dcterms:date"&gt;2017&lt;/meta&gt;
+      &lt;dc:date&gt;${pub-year}&lt;/dc:date&gt;
+      &lt;meta property="dcterms:rights"&gt;${pub-copyright}&lt;/meta&gt;
+      &lt;dc:rights&gt;${pub-copyright}&lt;/dc:rights&gt;
+      &lt;meta property="dcterms:rightsHolder"&gt;${pub-rights-holder}&lt;/meta&gt;
+      &lt;meta property="dcterms:rightsHolder"&gt;${pub-rights-holder}&lt;/meta&gt;
+      &lt;/metadata&gt;
+      &lt;manifest&gt;
+      &lt;item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/&gt;
+      ${pub-html-files}
+      ${pub-svg-files}
+      ${pub-css-files}
+      ${pub-woff-files}
+      &lt;/manifest&gt;
+      &lt;spine toc="ncx"&gt;
+      &lt;itemref idref="htmltoc" linear="yes"/&gt;
+      ${pub-spine}
+      &lt;itemref idref="diagrams.xhtml"/&gt;
+      &lt;itemref idref="element_index.xhtml"/&gt;
+      &lt;/spine&gt;
+      &lt;/package&gt;
+    </echo>
+    <replaceregexp flags="g">
+      <regexp pattern="html:(contents/(.*?\.xhtml)),?"/>
+      <substitution
+              expression="    &lt;item id=&quot;\2&quot; media-type=&quot;application/xhtml+xml&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp flags="g">
+      <regexp pattern="svg:(diagrams/(.*?.svg)),?"/>
+      <substitution
+              expression="    &lt;item id=&quot;\2&quot; media-type=&quot;image/svg+xml&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp flags="g">
+      <regexp pattern="css:(.*?/([^/]+?).css),?"/>
+      <substitution
+              expression="    &lt;item media-type=&quot;text/css&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp flags="g">
+      <regexp pattern="woff:(.*?/([^/]+?).woff),?"/>
+      <substitution
+              expression="    &lt;item media-type=&quot;font/woff&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <zip destfile="${build}/jhotdraw-uml.epub">
+      <fileset dir="${build}/epub-docs">
+        <exclude name="**/navigation.xhtml"/>
+      </fileset>
+    </zip>
+  </target>
 
   <target name="do-docbook.compile" depends="init">
     <mkdir dir="${build.doc.classes}"/>
     <javac executable="${jdk.documentation}/bin/javac" fork="yes"
-           source="${jdk.documentation.version}" target="${jdk.documentation.version}" encoding="UTF-8" destdir="${build.doc.classes}"
+           source="${jdk.documentation.version}" target="${jdk.documentation.version}" encoding="UTF-8"
+           destdir="${build.doc.classes}"
            debug="true"
     >
-        <compilerarg value="-Xlint"/>
-        <src path="${src.doc.java}"/>
-        <classpath>
+      <compilerarg value="-Xlint"/>
+      <src path="${src.doc.java}"/>
+      <classpath>
             <fileset dir="${lib.doc}" />
             <fileset file="${jdk}/lib/tools.jar" />
         </classpath>

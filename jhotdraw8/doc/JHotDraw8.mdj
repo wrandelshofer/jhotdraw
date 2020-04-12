@@ -44,9 +44,9 @@
 												"$ref": "AAAAAAFupk22ICakqJo="
 											},
 											"font": "Arial;13;0",
-											"left": 52.27001953125,
+											"left": 56.6181640625,
 											"top": 21,
-											"width": 143.96826171875,
+											"width": 159.9326171875,
 											"height": 13,
 											"text": "JHD8 Requirements (class)"
 										},
@@ -59,7 +59,7 @@
 											"font": "Arial;13;1",
 											"left": 21,
 											"top": 21,
-											"width": 26.27001953125,
+											"width": 30.6181640625,
 											"height": 13,
 											"text": "class"
 										}
@@ -397,9 +397,9 @@
 												"$ref": "AAAAAAFupk76XCdJWIU="
 											},
 											"font": "Arial;13;0",
-											"left": 52.27001953125,
+											"left": 56.6181640625,
 											"top": 21,
-											"width": 154.79736328125,
+											"width": 171.49169921875,
 											"height": 13,
 											"text": "JHD8-1 Requirements (class)"
 										},
@@ -412,7 +412,7 @@
 											"font": "Arial;13;1",
 											"left": 21,
 											"top": 21,
-											"width": 26.27001953125,
+											"width": 30.6181640625,
 											"height": 13,
 											"text": "class"
 										}
@@ -1022,6 +1022,36 @@
 									"templateParameterCompartment": {
 										"$ref": "AAAAAAFvIsLNXkbeWE0="
 									}
+								},
+								{
+									"_type": "UMLContainmentView",
+									"_id": "AAAAAAFxbUz10LS/yLQ=",
+									"_parent": {
+										"$ref": "AAAAAAFupk6g0ScDpy8="
+									},
+									"font": "Arial;13;0",
+									"head": {
+										"$ref": "AAAAAAFvIsDAzEZpIoI="
+									},
+									"tail": {
+										"$ref": "AAAAAAFvIsG0P0afm9g="
+									},
+									"points": "192:232;104:232;104:174"
+								},
+								{
+									"_type": "UMLContainmentView",
+									"_id": "AAAAAAFxbU0B/LTCvb8=",
+									"_parent": {
+										"$ref": "AAAAAAFupk6g0ScDpy8="
+									},
+									"font": "Arial;13;0",
+									"head": {
+										"$ref": "AAAAAAFvIsDAzEZpIoI="
+									},
+									"tail": {
+										"$ref": "AAAAAAFvIsLNXUbVdH0="
+									},
+									"points": "192:328;104:328;104:174"
 								}
 							]
 						}
@@ -1143,9 +1173,9 @@
 														"$ref": "AAAAAAFvj/yAlt6kJJI="
 													},
 													"font": "Arial;13;0",
-													"left": 44.27001953125,
+													"left": 48.6181640625,
 													"top": 13,
-													"width": 181.8828125,
+													"width": 194.62890625,
 													"height": 13,
 													"text": "Application Framework in JavaFX"
 												},
@@ -1158,7 +1188,7 @@
 													"font": "Arial;13;1",
 													"left": 13,
 													"top": 13,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -1790,9 +1820,9 @@
 														"$ref": "AAAAAAFvkBVJleHyn4s="
 													},
 													"font": "Arial;13;0",
-													"left": 44.27001953125,
+													"left": 48.6181640625,
 													"top": 13,
-													"width": 196.66015625,
+													"width": 210.5234375,
 													"height": 13,
 													"text": "Graphical user interfaces with FXML"
 												},
@@ -1805,7 +1835,7 @@
 													"font": "Arial;13;1",
 													"left": 13,
 													"top": 13,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -2806,7 +2836,7 @@
 													"font": "Arial;13;0",
 													"left": 35,
 													"top": 21,
-													"width": 136.03369140625,
+													"width": 149.83984375,
 													"height": 13,
 													"text": "Docking System Scenario"
 												},
@@ -6106,7 +6136,7 @@
 							]
 						}
 					],
-					"documentation": "The Scenarios View shows the elements of the other four views working\ntogether by the use of a small set of important scenarios.\n\nThe scenarios are in some sense an abstraction of the most important requirements. Their design is\n4 expressed using object scenario diagrams and object interaction diagrams .\nThis view is redundant with the other ones (hence the “+1”), but it serves two main purposes:\n• as a driver to discover the architectural elements during the architecture design as we will describe later\n• as a validation and illustration role after this architecture design is complete, both on paper and as the\nstarting point for the tests of an architectural prototype.\n\n"
+					"documentation": "The Scenarios View shows the elements of the other four views working\ntogether by the use of a small set of important scenarios.\n\nThe scenarios are in some sense an abstraction of the most important requirements. Their design is expressed using object scenario diagrams and object interaction diagrams .\nThis view is redundant with the other ones (hence the “+1”), but it serves two main purposes:\n• as a driver to discover the architectural elements during the architecture design as we will describe later\n• as a validation and illustration role after this architecture design is complete, both on paper and as the\nstarting point for the tests of an architectural prototype.\n\n"
 				},
 				{
 					"_type": "UMLModel",
@@ -6163,9 +6193,9 @@
 														"$ref": "AAAAAAFvixDkCiPHFSM="
 													},
 													"font": "Arial;13;0",
-													"left": 60.27001953125,
+													"left": 64.6181640625,
 													"top": 13,
-													"width": 105,
+													"width": 115.91162109375,
 													"height": 13,
 													"text": "Undo Redo Support"
 												},
@@ -6178,7 +6208,7 @@
 													"font": "Arial;13;1",
 													"left": 29,
 													"top": 13,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -6536,18 +6566,18 @@
 																"$ref": "AAAAAAFviyvJpiimUkI="
 															},
 															"font": "Arial;13;0",
-															"left": 398.287109375,
+															"left": 397.55712890625,
 															"top": 165,
-															"width": 7.94091796875,
+															"width": 8.6708984375,
 															"height": 13,
 															"text": "E",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
-													"left": 393.287109375,
+													"left": 392.55712890625,
 													"top": 160,
-													"width": 17.94091796875,
+													"width": 18.6708984375,
 													"height": 23
 												}
 											],
@@ -6732,18 +6762,18 @@
 																"$ref": "AAAAAAFviyy44ilBtBY="
 															},
 															"font": "Arial;13;0",
-															"left": 303.41748046875,
+															"left": 291.490234375,
 															"top": 253,
-															"width": 125.7470703125,
+															"width": 137.67431640625,
 															"height": 13,
 															"text": "E = ModelChangeEvent",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
-													"left": 298.41748046875,
+													"left": 286.490234375,
 													"top": 248,
-													"width": 135.7470703125,
+													"width": 147.67431640625,
 													"height": 23
 												}
 											],
@@ -9545,9 +9575,9 @@
 														"$ref": "AAAAAAFwC8vA0/uzL9I="
 													},
 													"font": "Arial;13;0",
-													"left": 52.27001953125,
+													"left": 56.6181640625,
 													"top": 13,
-													"width": 163.83642578125,
+													"width": 180.92431640625,
 													"height": 13,
 													"text": "Docking System design pattern"
 												},
@@ -9560,7 +9590,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 13,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -13321,9 +13351,9 @@
 														"$ref": "AAAAAAFwAgwRHyjw3wU="
 													},
 													"font": "Arial;13;0",
-													"left": 52.27001953125,
+													"left": 56.6181640625,
 													"top": 21,
-													"width": 167.45458984375,
+													"width": 183.7744140625,
 													"height": 13,
 													"text": "Docking System Class Diagram"
 												},
@@ -13336,7 +13366,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 21,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -16811,9 +16841,9 @@
 										"$ref": "AAAAAAFvI3LK95/6zKA="
 									},
 									"font": "Arial;13;0",
-									"left": 44.27001953125,
+									"left": 48.6181640625,
 									"top": 13,
-									"width": 91.2763671875,
+									"width": 97.83349609375,
 									"height": 13,
 									"text": "About this model"
 								},
@@ -16826,7 +16856,7 @@
 									"font": "Arial;13;1",
 									"left": 13,
 									"top": 13,
-									"width": 26.27001953125,
+									"width": 30.6181640625,
 									"height": 13,
 									"text": "class"
 								}
@@ -17083,9 +17113,9 @@
 										"$ref": "AAAAAAFuRabUqkxqGAM="
 									},
 									"font": "Arial;13;0",
-									"left": 69.580078125,
+									"left": 76.14990234375,
 									"top": 21,
-									"width": 191.98828125,
+									"width": 204.734375,
 									"height": 13,
 									"text": "JHotDraw 8 Application Framework"
 								},
@@ -17098,7 +17128,7 @@
 									"font": "Arial;13;1",
 									"left": 21,
 									"top": 21,
-									"width": 43.580078125,
+									"width": 50.14990234375,
 									"height": 13,
 									"text": "package"
 								}
@@ -19183,9 +19213,9 @@
 												"$ref": "AAAAAAFvj9tOKFzDjNE="
 											},
 											"font": "Arial;13;0",
-											"left": 52.27001953125,
+											"left": 56.6181640625,
 											"top": 21,
-											"width": 143.96826171875,
+											"width": 159.9326171875,
 											"height": 13,
 											"text": "JHD8 Requirements (class)"
 										},
@@ -19198,7 +19228,7 @@
 											"font": "Arial;13;1",
 											"left": 21,
 											"top": 21,
-											"width": 26.27001953125,
+											"width": 30.6181640625,
 											"height": 13,
 											"text": "class"
 										}
@@ -19535,7 +19565,7 @@
 													"font": "Arial;13;0",
 													"left": 51,
 													"top": 37,
-													"width": 95.94189453125,
+													"width": 102.87353515625,
 													"height": 13,
 													"text": "Drawing Example"
 												},
@@ -20947,7 +20977,7 @@
 							]
 						}
 					],
-					"documentation": "The Scenarios View shows the elements of the other four views working\ntogether by the use of a small set of important scenarios.\n\nThe scenarios are in some sense an abstraction of the most important requirements. Their design is\n4 expressed using object scenario diagrams and object interaction diagrams .\nThis view is redundant with the other ones (hence the “+1”), but it serves two main purposes:\n• as a driver to discover the architectural elements during the architecture design as we will describe later\n• as a validation and illustration role after this architecture design is complete, both on paper and as the\nstarting point for the tests of an architectural prototype.\n\n"
+					"documentation": "The Scenarios View shows the elements of the other four views working\ntogether by the use of a small set of important scenarios.\n\nThe scenarios are in some sense an abstraction of the most important requirements. Their design is expressed using object scenario diagrams and object interaction diagrams .\nThis view is redundant with the other ones (hence the “+1”), but it serves two main purposes:\n• as a driver to discover the architectural elements during the architecture design as we will describe later\n• as a validation and illustration role after this architecture design is complete, both on paper and as the\nstarting point for the tests of an architectural prototype.\n\n"
 				},
 				{
 					"_type": "UMLModel",
@@ -21003,9 +21033,9 @@
 														"$ref": "AAAAAAFvj6fhpFefulM="
 													},
 													"font": "Arial;13;0",
-													"left": 76.27001953125,
+													"left": 80.6181640625,
 													"top": 45,
-													"width": 194.501953125,
+													"width": 210.52978515625,
 													"height": 13,
 													"text": "Drawing Data Model Basic Structure"
 												},
@@ -21018,7 +21048,7 @@
 													"font": "Arial;13;1",
 													"left": 45,
 													"top": 45,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -22494,18 +22524,18 @@
 																"$ref": "AAAAAAFv7Omx8349xtc="
 															},
 															"font": "Arial;13;0",
-															"left": 239.89697265625,
+															"left": 234,
 															"top": 93,
-															"width": 88.27685546875,
+															"width": 94.173828125,
 															"height": 13,
 															"text": "T: TreeNode<T>",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
-													"left": 234.89697265625,
+													"left": 229,
 													"top": 88,
-													"width": 98.27685546875,
+													"width": 104.173828125,
 													"height": 23
 												}
 											],
@@ -24495,9 +24525,9 @@
 														"$ref": "AAAAAAFv7O5dd4HiEng="
 													},
 													"font": "Arial;13;0",
-													"left": 52.27001953125,
+													"left": 56.6181640625,
 													"top": 29,
-													"width": 159.49462890625,
+													"width": 167.181640625,
 													"height": 13,
 													"text": "Drawing Data Model Abilities"
 												},
@@ -24510,7 +24540,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 29,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -29233,9 +29263,9 @@
 														"$ref": "AAAAAAFv/+wWBiAcejU="
 													},
 													"font": "Arial;13;0",
-													"left": 44.27001953125,
+													"left": 48.6181640625,
 													"top": 13,
-													"width": 179.3564453125,
+													"width": 192.470703125,
 													"height": 13,
 													"text": "Support for Drawings with Layers"
 												},
@@ -29248,7 +29278,7 @@
 													"font": "Arial;13;1",
 													"left": 13,
 													"top": 13,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -30455,7 +30485,7 @@
 															"left": 93,
 															"top": 523,
 															"width": 431,
-															"height": 39,
+															"height": 52,
 															"text": "+text = Some drawing formats, such as SVG, do not support layers, where as for other kinds of drawing formats, we must enforce layering. Therefore we introduce separate interfaces for this, which can be implemented if needed.",
 															"horizontalAlignment": 0,
 															"wordWrap": true
@@ -30465,7 +30495,7 @@
 													"left": 88,
 													"top": 518,
 													"width": 441,
-													"height": 49
+													"height": 62
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -30785,9 +30815,9 @@
 																"$ref": "AAAAAAFu/2/G4+h+V2Y="
 															},
 															"font": "Arial;13;0",
-															"left": 68.27001953125,
+															"left": 72.6181640625,
 															"top": 29,
-															"width": 144.69189453125,
+															"width": 159.22802734375,
 															"height": 13,
 															"text": "Graph Constraints Diagram"
 														},
@@ -30800,7 +30830,7 @@
 															"font": "Arial;13;1",
 															"left": 37,
 															"top": 29,
-															"width": 26.27001953125,
+															"width": 30.6181640625,
 															"height": 13,
 															"text": "class"
 														}
@@ -31059,9 +31089,9 @@
 																"$ref": "AAAAAAFu/30Ej+xFszo="
 															},
 															"font": "Arial;13;0",
-															"left": 68.27001953125,
+															"left": 72.6181640625,
 															"top": 29,
-															"width": 202.44287109375,
+															"width": 222.09521484375,
 															"height": 13,
 															"text": "UndirectedGraph Constraints Diagram"
 														},
@@ -31074,7 +31104,7 @@
 															"font": "Arial;13;1",
 															"left": 37,
 															"top": 29,
-															"width": 26.27001953125,
+															"width": 30.6181640625,
 															"height": 13,
 															"text": "class"
 														}
@@ -31642,9 +31672,9 @@
 																"$ref": "AAAAAAFu/3MVP+ktgNU="
 															},
 															"font": "Arial;13;0",
-															"left": 68.27001953125,
+															"left": 72.6181640625,
 															"top": 29,
-															"width": 189.44287109375,
+															"width": 207.63525390625,
 															"height": 13,
 															"text": "DirectedGraph Constraints Diagram"
 														},
@@ -31657,7 +31687,7 @@
 															"font": "Arial;13;1",
 															"left": 37,
 															"top": 29,
-															"width": 26.27001953125,
+															"width": 30.6181640625,
 															"height": 13,
 															"text": "class"
 														}
@@ -32305,9 +32335,9 @@
 														"$ref": "AAAAAAFu/s5lgePaZzA="
 													},
 													"font": "Arial;13;0",
-													"left": 52.27001953125,
+													"left": 56.6181640625,
 													"top": 21,
-													"width": 123.00830078125,
+													"width": 131.04443359375,
 													"height": 13,
 													"text": "Graph library overview"
 												},
@@ -32320,7 +32350,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 21,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -32892,9 +32922,9 @@
 														"$ref": "AAAAAAFv7PezWIhZVBw="
 													},
 													"font": "Arial;13;0",
-													"left": 52.27001953125,
+													"left": 56.6181640625,
 													"top": 29,
-													"width": 104.796875,
+													"width": 113.70263671875,
 													"height": 13,
 													"text": "Tool Class Diagram"
 												},
@@ -32907,7 +32937,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 29,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -35168,9 +35198,9 @@
 														"$ref": "AAAAAAFv7PvgfIqKTy0="
 													},
 													"font": "Arial;13;0",
-													"left": 52.27001953125,
+													"left": 56.6181640625,
 													"top": 29,
-													"width": 115.44189453125,
+													"width": 127.43896484375,
 													"height": 13,
 													"text": "Handle ClassDiagram"
 												},
@@ -35183,7 +35213,7 @@
 													"font": "Arial;13;1",
 													"left": 21,
 													"top": 29,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -35422,7 +35452,7 @@
 															"font": "Arial;13;1",
 															"left": 165,
 															"top": 343,
-															"width": 147.31640625,
+															"width": 161.078125,
 															"height": 13,
 															"text": "AbstractConnectorHandle"
 														},
@@ -35453,7 +35483,7 @@
 													"font": "Arial;13;0",
 													"left": 160,
 													"top": 336,
-													"width": 157.31640625,
+													"width": 171.078125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7PyRXorBTxQ="
@@ -35533,7 +35563,7 @@
 											"containerChangeable": true,
 											"left": 160,
 											"top": 336,
-											"width": 157.31640625,
+											"width": 171.078125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -35593,7 +35623,7 @@
 															"font": "Arial;13;1",
 															"left": 349,
 															"top": 375,
-															"width": 88.8291015625,
+															"width": 96.078125,
 															"height": 13,
 															"text": "AbstractHandle"
 														},
@@ -35624,7 +35654,7 @@
 													"font": "Arial;13;0",
 													"left": 344,
 													"top": 368,
-													"width": 98.8291015625,
+													"width": 106.078125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7PyqHorrNjM="
@@ -35704,7 +35734,7 @@
 											"containerChangeable": true,
 											"left": 344,
 											"top": 368,
-											"width": 98.8291015625,
+											"width": 106.078125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -35764,7 +35794,7 @@
 															"font": "Arial;13;1",
 															"left": 469,
 															"top": 391,
-															"width": 183.89794921875,
+															"width": 200.83984375,
 															"height": 13,
 															"text": "AbstractResizeTransformHandle"
 														},
@@ -35795,7 +35825,7 @@
 													"font": "Arial;13;0",
 													"left": 464,
 													"top": 384,
-													"width": 193.89794921875,
+													"width": 210.83984375,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7Py/xYsVhPs="
@@ -35875,7 +35905,7 @@
 											"containerChangeable": true,
 											"left": 464,
 											"top": 384,
-											"width": 193.89794921875,
+											"width": 210.83984375,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -35935,7 +35965,7 @@
 															"font": "Arial;13;1",
 															"left": 261,
 															"top": 455,
-															"width": 148.52880859375,
+															"width": 159.64990234375,
 															"height": 13,
 															"text": "AbstractTransformHandle"
 														},
@@ -35966,7 +35996,7 @@
 													"font": "Arial;13;0",
 													"left": 256,
 													"top": 448,
-													"width": 158.52880859375,
+													"width": 169.64990234375,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7PzlCYs/wnE="
@@ -36046,7 +36076,7 @@
 											"containerChangeable": true,
 											"left": 256,
 											"top": 448,
-											"width": 158.52880859375,
+											"width": 169.64990234375,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -36106,7 +36136,7 @@
 															"font": "Arial;13;1",
 															"left": 413,
 															"top": 503,
-															"width": 124.236328125,
+															"width": 133.6181640625,
 															"height": 13,
 															"text": "AnchorOutlineHandle"
 														},
@@ -36137,7 +36167,7 @@
 													"font": "Arial;13;0",
 													"left": 408,
 													"top": 496,
-													"width": 134.236328125,
+													"width": 143.6181640625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P0AMotpCA0="
@@ -36217,7 +36247,7 @@
 											"containerChangeable": true,
 											"left": 408,
 											"top": 496,
-											"width": 134.236328125,
+											"width": 143.6181640625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -36277,7 +36307,7 @@
 															"font": "Arial;13;1",
 															"left": 541,
 															"top": 487,
-															"width": 172.37060546875,
+															"width": 185.6181640625,
 															"height": 13,
 															"text": "BezierControlPointEditHandle"
 														},
@@ -36308,7 +36338,7 @@
 													"font": "Arial;13;0",
 													"left": 536,
 													"top": 480,
-													"width": 182.37060546875,
+													"width": 195.6181640625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P0j64uTSkE="
@@ -36388,7 +36418,7 @@
 											"containerChangeable": true,
 											"left": 536,
 											"top": 480,
-											"width": 182.37060546875,
+											"width": 195.6181640625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -36450,7 +36480,7 @@
 															"font": "Arial;13;1",
 															"left": 101,
 															"top": 543,
-															"width": 128.54638671875,
+															"width": 139.41357421875,
 															"height": 13,
 															"text": "BezierNodeEditHandle"
 														},
@@ -36485,7 +36515,7 @@
 													"font": "Arial;13;0",
 													"left": 96,
 													"top": 536,
-													"width": 138.54638671875,
+													"width": 149.41357421875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P1F5Iu9yO0="
@@ -36569,7 +36599,7 @@
 											"containerChangeable": true,
 											"left": 96,
 											"top": 536,
-											"width": 138.54638671875,
+											"width": 149.41357421875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -36629,7 +36659,7 @@
 															"font": "Arial;13;1",
 															"left": 269,
 															"top": 543,
-															"width": 135.74462890625,
+															"width": 148.0908203125,
 															"height": 13,
 															"text": "BezierNodeMoveHandle"
 														},
@@ -36660,7 +36690,7 @@
 													"font": "Arial;13;0",
 													"left": 264,
 													"top": 536,
-													"width": 145.74462890625,
+													"width": 158.0908203125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P1hlovnQgc="
@@ -36740,7 +36770,7 @@
 											"containerChangeable": true,
 											"left": 264,
 											"top": 536,
-											"width": 145.74462890625,
+											"width": 158.0908203125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -36800,7 +36830,7 @@
 															"font": "Arial;13;1",
 															"left": 397,
 															"top": 607,
-															"width": 149.7412109375,
+															"width": 164.44873046875,
 															"height": 13,
 															"text": "BezierNodeTangentHandle"
 														},
@@ -36831,7 +36861,7 @@
 													"font": "Arial;13;0",
 													"left": 392,
 													"top": 600,
-													"width": 159.7412109375,
+													"width": 174.44873046875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P2CAowRdio="
@@ -36911,7 +36941,7 @@
 											"containerChangeable": true,
 											"left": 392,
 											"top": 600,
-											"width": 159.7412109375,
+											"width": 174.44873046875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -36971,7 +37001,7 @@
 															"font": "Arial;13;1",
 															"left": 589,
 															"top": 583,
-															"width": 125.658203125,
+															"width": 135.08447265625,
 															"height": 13,
 															"text": "BezierPathEditHandle"
 														},
@@ -37002,7 +37032,7 @@
 													"font": "Arial;13;0",
 													"left": 584,
 													"top": 576,
-													"width": 135.658203125,
+													"width": 145.08447265625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P2eZow7Q/E="
@@ -37082,7 +37112,7 @@
 											"containerChangeable": true,
 											"left": 584,
 											"top": 576,
-											"width": 135.658203125,
+											"width": 145.08447265625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -37142,7 +37172,7 @@
 															"font": "Arial;13;1",
 															"left": 477,
 															"top": 319,
-															"width": 167.60986328125,
+															"width": 182.00634765625,
 															"height": 13,
 															"text": "BoundsInLocalOutlineHandle"
 														},
@@ -37173,7 +37203,7 @@
 													"font": "Arial;13;0",
 													"left": 472,
 													"top": 312,
-													"width": 177.60986328125,
+													"width": 192.00634765625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P3DiYxlHXs="
@@ -37253,7 +37283,7 @@
 											"containerChangeable": true,
 											"left": 472,
 											"top": 312,
-											"width": 177.60986328125,
+											"width": 192.00634765625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -37313,7 +37343,7 @@
 															"font": "Arial;13;1",
 															"left": 509,
 															"top": 247,
-															"width": 173.86865234375,
+															"width": 188.5126953125,
 															"height": 13,
 															"text": "BoundsInParentOutlineHandle"
 														},
@@ -37344,7 +37374,7 @@
 													"font": "Arial;13;0",
 													"left": 504,
 													"top": 240,
-													"width": 183.86865234375,
+													"width": 198.5126953125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P3hM4yPwto="
@@ -37424,7 +37454,7 @@
 											"containerChangeable": true,
 											"left": 504,
 											"top": 240,
-											"width": 183.86865234375,
+											"width": 198.5126953125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -37486,7 +37516,7 @@
 															"font": "Arial;13;1",
 															"left": 141,
 															"top": 159,
-															"width": 200.611328125,
+															"width": 217.40087890625,
 															"height": 13,
 															"text": "BoundsInTranslationOutlineHandle"
 														},
@@ -37521,7 +37551,7 @@
 													"font": "Arial;13;0",
 													"left": 136,
 													"top": 152,
-													"width": 210.611328125,
+													"width": 227.40087890625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P4JzYy5YOc="
@@ -37605,7 +37635,7 @@
 											"containerChangeable": true,
 											"left": 136,
 											"top": 152,
-											"width": 210.611328125,
+											"width": 227.40087890625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -37666,7 +37696,7 @@
 															"font": "Arial;13;1",
 															"left": 237,
 															"top": 279,
-															"width": 130.7236328125,
+															"width": 142.29541015625,
 															"height": 13,
 															"text": "LabelConnectorHandle"
 														},
@@ -37699,7 +37729,7 @@
 													"font": "Arial;13;0",
 													"left": 232,
 													"top": 272,
-													"width": 140.7236328125,
+													"width": 152.29541015625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P5A6Yzj7BU="
@@ -37781,7 +37811,7 @@
 											"containerChangeable": true,
 											"left": 232,
 											"top": 272,
-											"width": 140.7236328125,
+											"width": 152.29541015625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -37841,7 +37871,7 @@
 															"font": "Arial;13;1",
 															"left": 557,
 															"top": 183,
-															"width": 124.2236328125,
+															"width": 135.0654296875,
 															"height": 13,
 															"text": "LineConnectorHandle"
 														},
@@ -37872,7 +37902,7 @@
 													"font": "Arial;13;0",
 													"left": 552,
 													"top": 176,
-													"width": 134.2236328125,
+													"width": 145.0654296875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P6P141RNwQ="
@@ -37952,7 +37982,7 @@
 											"containerChangeable": true,
 											"left": 552,
 											"top": 176,
-											"width": 134.2236328125,
+											"width": 145.0654296875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -38012,7 +38042,7 @@
 															"font": "Arial;13;1",
 															"left": 541,
 															"top": 135,
-															"width": 107.630859375,
+															"width": 114.841796875,
 															"height": 13,
 															"text": "LineOutlineHandle"
 														},
@@ -38043,7 +38073,7 @@
 													"font": "Arial;13;0",
 													"left": 536,
 													"top": 128,
-													"width": 117.630859375,
+													"width": 124.841796875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P6tcI179v4="
@@ -38123,7 +38153,7 @@
 											"containerChangeable": true,
 											"left": 536,
 											"top": 128,
-											"width": 117.630859375,
+											"width": 124.841796875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -38183,7 +38213,7 @@
 															"font": "Arial;13;1",
 															"left": 101,
 															"top": 279,
-															"width": 84.49365234375,
+															"width": 91.0126953125,
 															"height": 13,
 															"text": "LocatorHandle"
 														},
@@ -38214,7 +38244,7 @@
 													"font": "Arial;13;0",
 													"left": 96,
 													"top": 272,
-													"width": 94.49365234375,
+													"width": 101.0126953125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P7KEI2liHI="
@@ -38294,7 +38324,7 @@
 											"containerChangeable": true,
 											"left": 96,
 											"top": 272,
-											"width": 94.49365234375,
+											"width": 101.0126953125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -38354,7 +38384,7 @@
 															"font": "Arial;13;1",
 															"left": 141,
 															"top": 407,
-															"width": 71.49365234375,
+															"width": 76.57177734375,
 															"height": 13,
 															"text": "MoveHandle"
 														},
@@ -38385,7 +38415,7 @@
 													"font": "Arial;13;0",
 													"left": 136,
 													"top": 400,
-													"width": 81.49365234375,
+													"width": 86.57177734375,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P7lnY3PcuA="
@@ -38465,7 +38495,7 @@
 											"containerChangeable": true,
 											"left": 136,
 											"top": 400,
-											"width": 81.49365234375,
+											"width": 86.57177734375,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -38525,7 +38555,7 @@
 															"font": "Arial;13;1",
 															"left": 69,
 															"top": 455,
-															"width": 168.98095703125,
+															"width": 183.47265625,
 															"height": 13,
 															"text": "MultipleSelectionMoveHandle"
 														},
@@ -38556,7 +38586,7 @@
 													"font": "Arial;13;0",
 													"left": 64,
 													"top": 448,
-													"width": 178.98095703125,
+													"width": 193.47265625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P76to35k6Q="
@@ -38636,7 +38666,7 @@
 											"containerChangeable": true,
 											"left": 64,
 											"top": 448,
-											"width": 178.98095703125,
+											"width": 193.47265625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -38696,7 +38726,7 @@
 															"font": "Arial;13;1",
 															"left": 77,
 															"top": 503,
-															"width": 179.83544921875,
+															"width": 195.01904296875,
 															"height": 13,
 															"text": "MultipleSelectionOutlineHandle"
 														},
@@ -38727,7 +38757,7 @@
 													"font": "Arial;13;0",
 													"left": 72,
 													"top": 496,
-													"width": 189.83544921875,
+													"width": 205.01904296875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P8a644jOLU="
@@ -38807,7 +38837,7 @@
 											"containerChangeable": true,
 											"left": 72,
 											"top": 496,
-											"width": 189.83544921875,
+											"width": 205.01904296875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -38869,7 +38899,7 @@
 															"font": "Arial;13;1",
 															"left": 141,
 															"top": 591,
-															"width": 152.38818359375,
+															"width": 162.53173828125,
 															"height": 13,
 															"text": "PathIterableOutlineHandle"
 														},
@@ -38904,7 +38934,7 @@
 													"font": "Arial;13;0",
 													"left": 136,
 													"top": 584,
-													"width": 162.38818359375,
+													"width": 172.53173828125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P9EXY5N8xo="
@@ -38988,7 +39018,7 @@
 											"containerChangeable": true,
 											"left": 136,
 											"top": 584,
-											"width": 162.38818359375,
+											"width": 172.53173828125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -39048,7 +39078,7 @@
 															"font": "Arial;13;1",
 															"left": 277,
 															"top": 607,
-															"width": 145.16455078125,
+															"width": 157.47900390625,
 															"height": 13,
 															"text": "PathIterablePointsHandle"
 														},
@@ -39079,7 +39109,7 @@
 													"font": "Arial;13;0",
 													"left": 272,
 													"top": 600,
-													"width": 155.16455078125,
+													"width": 167.47900390625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P907Y53Vwk="
@@ -39159,7 +39189,7 @@
 											"containerChangeable": true,
 											"left": 272,
 											"top": 600,
-											"width": 155.16455078125,
+											"width": 167.47900390625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -39221,7 +39251,7 @@
 															"font": "Arial;13;1",
 															"left": 61,
 															"top": 591,
-															"width": 70.0654296875,
+															"width": 75.83544921875,
 															"height": 13,
 															"text": "PointHandle"
 														},
@@ -39256,7 +39286,7 @@
 													"font": "Arial;13;0",
 													"left": 56,
 													"top": 584,
-													"width": 80.0654296875,
+													"width": 85.83544921875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P+jyo6hCmg="
@@ -39340,7 +39370,7 @@
 											"containerChangeable": true,
 											"left": 56,
 											"top": 584,
-											"width": 80.0654296875,
+											"width": 85.83544921875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -39400,7 +39430,7 @@
 															"font": "Arial;13;1",
 															"left": 349,
 															"top": 671,
-															"width": 118.4599609375,
+															"width": 127.841796875,
 															"height": 13,
 															"text": "PolyPointEditHandle"
 														},
@@ -39431,7 +39461,7 @@
 													"font": "Arial;13;0",
 													"left": 344,
 													"top": 664,
-													"width": 128.4599609375,
+													"width": 137.841796875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P/Cyo7LMhk="
@@ -39511,7 +39541,7 @@
 											"containerChangeable": true,
 											"left": 344,
 											"top": 664,
-											"width": 128.4599609375,
+											"width": 137.841796875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -39571,7 +39601,7 @@
 															"font": "Arial;13;1",
 															"left": 493,
 															"top": 559,
-															"width": 125.658203125,
+															"width": 136.51904296875,
 															"height": 13,
 															"text": "PolyPointMoveHandle"
 														},
@@ -39602,7 +39632,7 @@
 													"font": "Arial;13;0",
 													"left": 488,
 													"top": 552,
-													"width": 135.658203125,
+													"width": 146.51904296875,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7P/tTI72tHI="
@@ -39682,7 +39712,7 @@
 											"containerChangeable": true,
 											"left": 488,
 											"top": 552,
-											"width": 135.658203125,
+											"width": 146.51904296875,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -39742,7 +39772,7 @@
 															"font": "Arial;13;1",
 															"left": 597,
 															"top": 647,
-															"width": 158.64697265625,
+															"width": 171.9072265625,
 															"height": 13,
 															"text": "RelativeControlPointHandle"
 														},
@@ -39773,7 +39803,7 @@
 													"font": "Arial;13;0",
 													"left": 592,
 													"top": 640,
-													"width": 168.64697265625,
+													"width": 181.9072265625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7QAQ7Y8gGQw="
@@ -39853,7 +39883,7 @@
 											"containerChangeable": true,
 											"left": 592,
 											"top": 640,
-											"width": 168.64697265625,
+											"width": 181.9072265625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -39913,7 +39943,7 @@
 															"font": "Arial;13;1",
 															"left": 525,
 															"top": 439,
-															"width": 115.54638671875,
+															"width": 125.6962890625,
 															"height": 13,
 															"text": "RelativePointHandle"
 														},
@@ -39944,7 +39974,7 @@
 													"font": "Arial;13;0",
 													"left": 520,
 													"top": 432,
-													"width": 125.54638671875,
+													"width": 135.6962890625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7QA6uo9KISM="
@@ -40024,7 +40054,7 @@
 											"containerChangeable": true,
 											"left": 520,
 											"top": 432,
-											"width": 125.54638671875,
+											"width": 135.6962890625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -40084,7 +40114,7 @@
 															"font": "Arial;13;1",
 															"left": 573,
 															"top": 375,
-															"width": 77.27001953125,
+															"width": 83.7890625,
 															"height": 13,
 															"text": "RotateHandle"
 														},
@@ -40115,7 +40145,7 @@
 													"font": "Arial;13;0",
 													"left": 568,
 													"top": 368,
-													"width": 87.27001953125,
+													"width": 93.7890625,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7QBZwI90ACw="
@@ -40195,7 +40225,7 @@
 											"containerChangeable": true,
 											"left": 568,
 											"top": 368,
-											"width": 87.27001953125,
+											"width": 93.7890625,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -40255,7 +40285,7 @@
 															"font": "Arial;13;1",
 															"left": 429,
 															"top": 359,
-															"width": 90.2763671875,
+															"width": 101.13720703125,
 															"height": 13,
 															"text": "SelectionHandle"
 														},
@@ -40286,7 +40316,7 @@
 													"font": "Arial;13;0",
 													"left": 424,
 													"top": 352,
-													"width": 100.2763671875,
+													"width": 111.13720703125,
 													"height": 25,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAFv7QB59o+esc4="
@@ -40366,7 +40396,7 @@
 											"containerChangeable": true,
 											"left": 424,
 											"top": 352,
-											"width": 100.2763671875,
+											"width": 111.13720703125,
 											"height": 25,
 											"autoResize": true,
 											"nameCompartment": {
@@ -40709,9 +40739,9 @@
 														"$ref": "AAAAAAFu9sghbqHMvR0="
 													},
 													"font": "Arial;13;0",
-													"left": 76.27001953125,
+													"left": 80.6181640625,
 													"top": 37,
-													"width": 127.33740234375,
+													"width": 135.38623046875,
 													"height": 13,
 													"text": "Graph Library overview"
 												},
@@ -40724,7 +40754,7 @@
 													"font": "Arial;13;1",
 													"left": 45,
 													"top": 37,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -41637,9 +41667,9 @@
 																"$ref": "AAAAAAFu9sghcKIhhMo="
 															},
 															"font": "Arial;13;0",
-															"left": 312.376953125,
+															"left": 313.09423828125,
 															"top": 229,
-															"width": 9.38818359375,
+															"width": 8.6708984375,
 															"height": 13,
 															"text": "V",
 															"horizontalAlignment": 0
@@ -41654,18 +41684,18 @@
 																"$ref": "AAAAAAFu9uI1MiFHi4w="
 															},
 															"font": "Arial;13;0",
-															"left": 312.376953125,
+															"left": 313.09423828125,
 															"top": 244,
-															"width": 9.38818359375,
+															"width": 8.6708984375,
 															"height": 13,
 															"text": "A",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
-													"left": 307.376953125,
+													"left": 308.09423828125,
 													"top": 224,
-													"width": 19.38818359375,
+													"width": 18.6708984375,
 													"height": 38
 												}
 											],
@@ -41904,9 +41934,9 @@
 																"$ref": "AAAAAAFu9sghcKIlb08="
 															},
 															"font": "Arial;13;0",
-															"left": 388.44873046875,
+															"left": 389.166015625,
 															"top": 93,
-															"width": 9.38818359375,
+															"width": 8.6708984375,
 															"height": 13,
 															"text": "V",
 															"horizontalAlignment": 0
@@ -41921,18 +41951,18 @@
 																"$ref": "AAAAAAFu9sghcKIm8AQ="
 															},
 															"font": "Arial;13;0",
-															"left": 388.44873046875,
+															"left": 389.166015625,
 															"top": 108,
-															"width": 9.38818359375,
+															"width": 8.6708984375,
 															"height": 13,
 															"text": "A",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
-													"left": 383.44873046875,
+													"left": 384.166015625,
 													"top": 88,
-													"width": 19.38818359375,
+													"width": 18.6708984375,
 													"height": 38
 												}
 											],
@@ -41976,9 +42006,9 @@
 														"$ref": "AAAAAAFu9sghb6H+NSA="
 													},
 													"font": "Arial;13;0",
-													"left": 76.27001953125,
+													"left": 80.6181640625,
 													"top": 45,
-													"width": 155.85107421875,
+													"width": 172.9580078125,
 													"height": 13,
 													"text": "Directed Graph class diagram"
 												},
@@ -41991,7 +42021,7 @@
 													"font": "Arial;13;1",
 													"left": 45,
 													"top": 45,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -42591,9 +42621,9 @@
 														"$ref": "AAAAAAFu9wsCnSWjhAk="
 													},
 													"font": "Arial;13;0",
-													"left": 116.27001953125,
+													"left": 120.6181640625,
 													"top": 37,
-													"width": 96.9892578125,
+													"width": 109.86865234375,
 													"height": 13,
 													"text": "Visited Set classes"
 												},
@@ -42606,7 +42636,7 @@
 													"font": "Arial;13;1",
 													"left": 85,
 													"top": 37,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -42800,18 +42830,18 @@
 																"$ref": "AAAAAAFu9wwo6CXqwS8="
 															},
 															"font": "Arial;13;0",
-															"left": 289.28076171875,
+															"left": 289.998046875,
 															"top": 141,
-															"width": 9.38818359375,
+															"width": 8.6708984375,
 															"height": 13,
 															"text": "V",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
-													"left": 284.28076171875,
+													"left": 284.998046875,
 													"top": 136,
-													"width": 19.38818359375,
+													"width": 18.6708984375,
 													"height": 23
 												}
 											],
@@ -43374,9 +43404,9 @@
 										"$ref": "AAAAAAFvj6fhpFextBY="
 									},
 									"font": "Arial;13;0",
-									"left": 44.27001953125,
+									"left": 48.6181640625,
 									"top": 13,
-									"width": 91.2763671875,
+									"width": 97.83349609375,
 									"height": 13,
 									"text": "About this model"
 								},
@@ -43389,7 +43419,7 @@
 									"font": "Arial;13;1",
 									"left": 13,
 									"top": 13,
-									"width": 26.27001953125,
+									"width": 30.6181640625,
 									"height": 13,
 									"text": "class"
 								}
@@ -43646,9 +43676,9 @@
 										"$ref": "AAAAAAFvj6fhpFfA+bQ="
 									},
 									"font": "Arial;13;0",
-									"left": 77.580078125,
+									"left": 84.14990234375,
 									"top": 29,
-									"width": 176.10009765625,
+									"width": 188.82080078125,
 									"height": 13,
 									"text": "JHotDraw 8 Drawing Framework"
 								},
@@ -43661,7 +43691,7 @@
 									"font": "Arial;13;1",
 									"left": 29,
 									"top": 29,
-									"width": 43.580078125,
+									"width": 50.14990234375,
 									"height": 13,
 									"text": "package"
 								}
@@ -45724,9 +45754,9 @@
 												"$ref": "AAAAAAFuRS/pUS8RLgI="
 											},
 											"font": "Arial;13;0",
-											"left": 68.27001953125,
+											"left": 72.6181640625,
 											"top": 37,
-											"width": 107.15185546875,
+											"width": 118.76806640625,
 											"height": 13,
 											"text": "Meta Model Classes"
 										},
@@ -45739,7 +45769,7 @@
 											"font": "Arial;13;1",
 											"left": 37,
 											"top": 37,
-											"width": 26.27001953125,
+											"width": 30.6181640625,
 											"height": 13,
 											"text": "class"
 										}
@@ -47743,9 +47773,9 @@
 												"$ref": "AAAAAAFvI3GbPJ8D8+s="
 											},
 											"font": "Arial;13;0",
-											"left": 44.27001953125,
+											"left": 48.6181640625,
 											"top": 13,
-											"width": 68.53271484375,
+											"width": 72.5380859375,
 											"height": 13,
 											"text": "Definitions 1"
 										},
@@ -47758,7 +47788,7 @@
 											"font": "Arial;13;1",
 											"left": 13,
 											"top": 13,
-											"width": 26.27001953125,
+											"width": 30.6181640625,
 											"height": 13,
 											"text": "class"
 										}
@@ -48382,7 +48412,7 @@
 									"font": "Arial;13;0",
 									"left": 35,
 									"top": 29,
-									"width": 91.2763671875,
+									"width": 97.83349609375,
 									"height": 13,
 									"text": "About this model"
 								},
@@ -48471,7 +48501,7 @@
 											"font": "Arial;13;0",
 											"left": 35,
 											"top": 37,
-											"width": 142.8955078125,
+											"width": 153.19775390625,
 											"height": 13,
 											"text": "TEMPLATE Requirements"
 										},
@@ -49085,7 +49115,7 @@
 											"font": "Arial;13;0",
 											"left": 83,
 											"top": 85,
-											"width": 78.27001953125,
+											"width": 80.21875,
 											"height": 13,
 											"text": "TEMPLATE-1"
 										},
@@ -49804,7 +49834,7 @@
 							}
 						}
 					],
-					"documentation": "The Scenarios View shows the elements of the other four views working\ntogether by the use of a small set of important scenarios.\n\nThe scenarios are in some sense an abstraction of the most important requirements. Their design is\n4 expressed using object scenario diagrams and object interaction diagrams .\nThis view is redundant with the other ones (hence the “+1”), but it serves two main purposes:\n• as a driver to discover the architectural elements during the architecture design as we will describe later\n• as a validation and illustration role after this architecture design is complete, both on paper and as the\nstarting point for the tests of an architectural prototype.\n\n"
+					"documentation": "The Scenarios View shows the elements of the other four views working\ntogether by the use of a small set of important scenarios.\n\nThe scenarios are in some sense an abstraction of the most important requirements. Their design is expressed using object scenario diagrams and object interaction diagrams .\nThis view is redundant with the other ones (hence the “+1”), but it serves two main purposes:\n• as a driver to discover the architectural elements during the architecture design as we will describe later\n• as a validation and illustration role after this architecture design is complete, both on paper and as the\nstarting point for the tests of an architectural prototype.\n\n"
 				},
 				{
 					"_type": "UMLModel",
@@ -49860,9 +49890,9 @@
 														"$ref": "AAAAAAFuRaI3b0puktU="
 													},
 													"font": "Arial;13;0",
-													"left": 76.27001953125,
+													"left": 80.6181640625,
 													"top": 45,
-													"width": 81.15185546875,
+													"width": 89.86083984375,
 													"height": 13,
 													"text": "ClassDiagram1"
 												},
@@ -49875,7 +49905,7 @@
 													"font": "Arial;13;1",
 													"left": 45,
 													"top": 45,
-													"width": 26.27001953125,
+													"width": 30.6181640625,
 													"height": 13,
 													"text": "class"
 												}
@@ -50064,9 +50094,9 @@
 										"$ref": "AAAAAAFvI3JlvJ+fgXU="
 									},
 									"font": "Arial;13;0",
-									"left": 44.27001953125,
+									"left": 48.6181640625,
 									"top": 13,
-									"width": 110.04638671875,
+									"width": 119.51708984375,
 									"height": 13,
 									"text": "About this document"
 								},
@@ -50079,7 +50109,7 @@
 									"font": "Arial;13;1",
 									"left": 13,
 									"top": 13,
-									"width": 26.27001953125,
+									"width": 30.6181640625,
 									"height": 13,
 									"text": "class"
 								}
@@ -50335,9 +50365,9 @@
 										"$ref": "AAAAAAFuRU4W/TqjJVQ="
 									},
 									"font": "Arial;13;0",
-									"left": 69.580078125,
+									"left": 76.14990234375,
 									"top": 21,
-									"width": 89.25146484375,
+									"width": 97.82080078125,
 									"height": 13,
 									"text": "Template Project"
 								},
@@ -50350,7 +50380,7 @@
 									"font": "Arial;13;1",
 									"left": 21,
 									"top": 21,
-									"width": 43.580078125,
+									"width": 50.14990234375,
 									"height": 13,
 									"text": "package"
 								}
@@ -52389,9 +52419,9 @@
 								"$ref": "AAAAAAFvj9N7Hlq03KM="
 							},
 							"font": "Arial;13;0",
-							"left": 44.27001953125,
+							"left": 48.6181640625,
 							"top": 13,
-							"width": 110.04638671875,
+							"width": 119.51708984375,
 							"height": 13,
 							"text": "About this document"
 						},
@@ -52404,7 +52434,7 @@
 							"font": "Arial;13;1",
 							"left": 13,
 							"top": 13,
-							"width": 26.27001953125,
+							"width": 30.6181640625,
 							"height": 13,
 							"text": "class"
 						}
