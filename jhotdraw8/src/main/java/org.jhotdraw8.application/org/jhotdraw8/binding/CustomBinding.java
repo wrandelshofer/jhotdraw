@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 
@@ -178,8 +179,22 @@ public class CustomBinding {
      * @param <S>    the type of list source
      */
     public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
-        TransformContentBinding<D, S> binding = new TransformContentBinding<>(dest, src, toDest);
-        src.removeListener(binding);
+        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest);
+        src.addListener(binding);
+    }
+
+    /**
+     * Binds list dest to set source.
+     * The binding can be removed by calling {@link #unbindContent};
+     *
+     * @param dest   list dest
+     * @param src    list source
+     * @param toDest mapping function to dest
+     * @param <D>    the type of list dest
+     * @param <S>    the type of list source
+     */
+    public static <D, S> void bindListContentToSet(ObservableList<D> dest, ObservableSet<S> src, Function<S, D> toDest) {
+        ListToSetTransformContentBinding<D, S> binding = new ListToSetTransformContentBinding<>(dest, src, toDest);
         src.addListener(binding);
     }
 
@@ -192,7 +207,7 @@ public class CustomBinding {
      * @param <S>  the type of list source
      */
     public static <D, S> void unbindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
-        TransformContentBinding<D, S> binding = new TransformContentBinding<>(dest, src, (a) -> null);
+        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, (a) -> null);
         src.removeListener(binding);
     }
 

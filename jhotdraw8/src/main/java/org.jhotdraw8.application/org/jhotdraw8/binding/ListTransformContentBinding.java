@@ -7,18 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-class TransformContentBinding<D, S> implements ListChangeListener<S> {
+class ListTransformContentBinding<D, S> implements ListChangeListener<S> {
     private final ObservableList<D> dest;
     private final ObservableList<S> source;
     private final Function<S, D> toDest;
 
 
-    TransformContentBinding(ObservableList<D> dest, ObservableList<S> source, Function<S, D> toDest) {
+    ListTransformContentBinding(ObservableList<D> dest, ObservableList<S> source, Function<S, D> toDest) {
         this.dest = dest;
         this.source = source;
         this.toDest = toDest;
         dest.clear();
-        source.stream().map(toDest).forEach(dest::add);
+        for (S s : source) {
+            D d = toDest.apply(s);
+            dest.add(d);
+        }
     }
 
     @Override
@@ -60,8 +63,8 @@ class TransformContentBinding<D, S> implements ListChangeListener<S> {
             return true;
         }
 
-        if (obj instanceof TransformContentBinding) {
-            final TransformContentBinding<?, ?> that = (TransformContentBinding<?, ?>) obj;
+        if (obj instanceof ListTransformContentBinding) {
+            final ListTransformContentBinding<?, ?> that = (ListTransformContentBinding<?, ?>) obj;
             return this.dest == that.dest && this.source == that.source;
         }
         return false;

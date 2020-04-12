@@ -6,18 +6,23 @@ package org.jhotdraw8.app;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -48,7 +53,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.WeakHashMap;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -99,7 +114,8 @@ public class DocumentBasedApplication extends AbstractApplication {
     });
     private boolean isSystemMenuSupported;
     private ApplicationModel model;
-    private final ListProperty<Activity> activities = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final SetProperty<Activity> activities = new SimpleSetProperty<>(FXCollections.observableSet(new LinkedHashSet<>()));
+
     @NonNull
     private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
     private List<Menu> systemMenus;
@@ -116,22 +132,12 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     {
-        activities.addListener((ListChangeListener.Change<? extends Activity> c) -> {
-            while (c.next()) {
-                if (c.wasPermutated()) {
-                    for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                        //permutate
-                    }
-                } else if (c.wasUpdated()) {
-                    //update item
-                } else {
-                    for (Activity remitem : c.getRemoved()) {
-                        onActivityRemoved((DocumentBasedActivity) remitem);
-                    }
-                    for (Activity additem : c.getAddedSubList()) {
-                        onActivityAdded((DocumentBasedActivity) additem);
-                    }
-                }
+        activities.addListener((SetChangeListener<? super Activity>) c -> {
+            if (c.wasRemoved()) {
+                onActivityRemoved((DocumentBasedActivity) c.getElementRemoved());
+            }
+            if (c.wasAdded()) {
+                onActivityAdded((DocumentBasedActivity) c.getElementAdded());
             }
         });
     }
@@ -161,13 +167,15 @@ public class DocumentBasedApplication extends AbstractApplication {
             final Menu menu = todo.remove();
             if (WINDOW_MENU_ID.equals(menu.getId())) {
                 Map<Activity, CheckMenuItem> menuItemMap = new WeakHashMap<>();
-                CustomBinding.bindContent(menu.getItems(), activities,
+                CustomBinding.bindListContentToSet(menu.getItems(), activities,
                         v -> menuItemMap.computeIfAbsent(v, k -> {
                             final CheckMenuItem menuItem = new CheckMenuItem();
                             menuItem.textProperty().bind(v.titleProperty());
                             menuItem.setOnAction(evt -> {
                                 final Stage s = v.get(STAGE_KEY);
-                                if (s != null) s.requestFocus();
+                                if (s != null) {
+                                    s.requestFocus();
+                                }
                                 menuItem.setSelected(v == activity);
                             });
                             menuItem.setSelected(v == activity);
@@ -447,7 +455,7 @@ public class DocumentBasedApplication extends AbstractApplication {
 
     @NonNull
     @Override
-    public ListProperty<Activity> activitiesProperty() {
+    public SetProperty<Activity> activitiesProperty() {
         return activities;
     }
 

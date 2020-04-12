@@ -4,8 +4,12 @@
  */
 package org.jhotdraw8.app;
 
-import javafx.beans.property.*;
-import javafx.collections.ObservableList;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.SetProperty;
+import javafx.collections.ObservableSet;
 import javafx.scene.Node;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
@@ -53,7 +57,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the activities
      */
-    @NonNull ListProperty<Activity> activitiesProperty();
+    @NonNull SetProperty<Activity> activitiesProperty();
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -75,7 +79,7 @@ public interface Application extends Disableable, PropertyBean {
     @NonNull IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default ObservableList<Activity> activities() {
+    default ObservableSet<Activity> activities() {
         return activitiesProperty().get();
     }
 
