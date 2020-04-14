@@ -25,8 +25,7 @@ import org.jhotdraw8.geom.Transforms;
 
 import java.util.function.Function;
 
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import static java.lang.Math.PI;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -116,8 +115,8 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         double size = targetNode.getWidth();
         // rotates the node:
-        targetNode.setRotate(f.getStyledNonNull(ROTATE));
-        targetNode.setRotationAxis(f.getStyled(ROTATION_AXIS));
+        final double a = connectorTangent == null ? 0 : Math.atan2(connectorTangent.getY(), connectorTangent.getX());
+        targetNode.setRotate(a * 180 / PI);
 
         Point2D origin = t.transform(f.getNonNull(originKey).getConvertedValue());
         lineNode.setStartX(origin.getX());

@@ -187,7 +187,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         final Point2D tangent;
         if (labelConnector != null && labelTarget != null) {
             labeledLoc = labelConnector.getPositionInWorld(this, labelTarget);
-            tangent = labelConnector.getTangentInWorld(this, labelTarget);
+            tangent = labelConnector.getTangentInWorld(this, labelTarget).normalize();
             perp = Geom.perp(tangent);
 
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
