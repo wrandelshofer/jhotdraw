@@ -6,6 +6,7 @@ import java.text.ParseException;
  * This parse exception can be thrown to indicate that an object id is illegal.
  */
 public class IllegalObjectIdParseException extends ParseException {
+    private static final long serialVersionUID = 1L;
     /**
      * Constructs a ParseException with the specified detail message and
      * offset.

@@ -65,7 +65,8 @@ public class ObservableListProxy<A, B> extends TransformationList<A, B> {
 
     @Override
     public boolean remove(Object o) {
-        return getSource().remove(toB.apply((A) o));
+        @SuppressWarnings("unchecked") final A a = (A) o;
+        return getSource().remove(toB.apply(a));
     }
 
     @Override
