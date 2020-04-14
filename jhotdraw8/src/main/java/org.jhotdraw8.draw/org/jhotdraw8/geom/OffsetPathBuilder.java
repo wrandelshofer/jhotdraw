@@ -6,10 +6,73 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 
 /**
  * OffsetPathBuilder.
+ * <p>
+ * If we draw an offset path, then for each original line segment {@code a, b},
+ * we draw a line segment at {@code a', b'}. Since the offset is perpendicular,
+ * we can visualize a rectangle {@code a, b, b', a'} that contains the offset
+ * region.
+ * <pre>
+ * offset region rectangle encompasses the rectangle from original lineTo to
+ * offset lineTo:
+ *
+ *                     a1'                 a1'
+ *  offset lineTo:     +------------------→+
+ *                     ↑                   ↑
+ *                     | offset            | offset
+ *  original lineTo:   +------------------→+
+ *                     a1                  a2
+ * </pre>
+ * <p>
+ * The next line segment can follow with an angle that may
+ * make the next offset region rectangle overlap with the previous one.
+ * For every {@code b'} point, we gat a second {@code b2'} point that
+ * belongs to the next line segment.
+ * <pre>
+ * offset region rectangles overlap:           b2'
+ *                                             ╱+╲
+ *                                            ╱   ╲
+ *                                           ╱     ╲
+ *                                          ╱       +b2
+ *                                         ╱       ╱
+ *                       a1'              ╱ a1'   ╱
+ *  offset lineTo's:     +---------------╱--→+   ╱
+ *                       ↑            b1'+╲  ↑  ╱
+ *                       |                 ╲ | ╱
+ *  original lineTo's:   +------------------╲+╱
+ *                       a1                  a2
+ *                                           b1
+ * </pre>
+ * <pre>
+ * offset region rectangles do not overlap:
+ *
+ *                       a1'                a2'  b1'
+ *  offset lineTo's:     +------------------→+
+ *                       ↑                   ↑  ╱+╲
+ *                       |                   | ╱   ╲
+ *  original lineTo's:   +-------------------+╱     ╲
+ *                       a1                 a2╲      + b2'
+ *                                          b1 ╲    ╱
+ *                                              ╲  ╱
+ *                                               +╱
+ *                                               b2
+ * </pre>
+ * We do not want to have any lines inside any offset region rectangle,
+ * unless the original path self-intersects.
+ * <p>
+ * The following algorithm works if the original path does not self-intersect:
+ * <ol>
+ *     <li>Remove last contained point:
+ *     while the last point {@code b2'} is inside the previous rectangle {@code a1 a2 a2' a'}
+ *     then remove it.</li>
+ *     <li>Clip offset line segments: if {@code a1' a2'} intersects with any following {@code b1' b2'}, then
+ *     remove all line segments in between, and clip the two line segments
+ *     at the intersection point {@code i'}, giving {@code a1' i'}, {@code i' b2'}.</li>
+ * </ol>
  *
  * @author Werner Randelshofer
  */
@@ -19,7 +82,6 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     private final PathBuilder target;
     private final double offset;
     private final ArrayList<Point2D> segments = new ArrayList<>();
-    private final ArrayList<Point2D> disks = new ArrayList<>();
 
     public OffsetPathBuilder(PathBuilder target, double offset) {
         this.target = target;
@@ -68,14 +130,42 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     }
 
     private void flush() {
-        // clip lines
+        // XXX the following algorithm only works if the original path does not self-intersect:
+
+        // 1. Remove last contained point b2' while it is containned in previous rectangle
+        // a1 a2 a2' a1'
+        final Path2D.Double path = new Path2D.Double();
+        for (int i = segments.size() - 1; i >= 3; --i) {
+            Point2D b2p = segments.get(i);
+            Point2D a1p = segments.get(i - 3);
+            Point2D a2p = segments.get(i - 2);
+            Point2D shift = new Point2D(a2p.getY() - a1p.getY(), a1p.getX() - a2p.getX()).normalize().multiply(offset);
+            Point2D a1 = a1p.subtract(shift);
+            Point2D a2 = a2p.subtract(shift);
+            path.reset();
+            path.moveTo(a1.getX(), a1.getY());
+            path.lineTo(a2.getX(), a2.getY());
+            path.lineTo(a2p.getX(), a2p.getY());
+            path.lineTo(a1p.getX(), a1p.getY());
+            path.closePath();
+            if (path.contains(b2p.getX(), b2p.getY())) {
+                segments.remove(i);
+                segments.remove(i - 1);
+                i--;
+            } else {
+                break;
+            }
+        }
+
+
+        // 1. Clip offset line segment a1' a2' with any following offset line segments b1' b2'.
         for (int i = 0, n = segments.size(); i < n - 2; ++i) {
-            Point2D a1 = segments.get(i);
-            Point2D a2 = segments.get(i + 1);
+            Point2D a1p = segments.get(i);
+            Point2D a2p = segments.get(i + 1);
             for (int j = n - 2; j >= i + 1; --j) {
-                Point2D b1 = segments.get(j);
-                Point2D b2 = segments.get(j + 1);
-                Intersection inter = Intersections.intersectLineLine(a1, a2, b1, b2);
+                Point2D b1p = segments.get(j);
+                Point2D b2p = segments.get(j + 1);
+                Intersection inter = Intersections.intersectLineLine(a1p, a2p, b1p, b2p);
                 if (inter.getStatus() == Intersection.Status.INTERSECTION) {
                     Point2D p = inter.getPoints().iterator().next();
                     //segments.set(i + 1, p);
@@ -90,6 +180,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             }
         }
 
+        // Draw segments
         for (int i = 0, n = segments.size(); i < n; i++) {
             Point2D p = segments.get(i);
             if (i == 0) {
@@ -100,7 +191,6 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
         }
 
         segments.clear();
-        disks.clear();
     }
 
     @Override
