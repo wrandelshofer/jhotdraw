@@ -39,26 +39,21 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
     @NonNull
     @Override
     public Locator parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        switch (tt.next()) {
-            case CssTokenType.TT_FUNCTION:
-                if (!RELATIVE_FUNCTION.equals(tt.currentString())) {
-                    throw new ParseException("Locator: function 'relative(' expected, found:" + tt.currentValue(), tt.getStartPosition());
-                }
-                break;
-            default:
-                throw new ParseException("Locator: function expected, found:" + tt.currentValue(), tt.getStartPosition());
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "Locator: function 'relative(' expected.");
+        if (!RELATIVE_FUNCTION.equals(tt.currentStringNonNull())) {
+            throw tt.createParseException("Locator: function 'relative(' expected.");
         }
-        double x, y;
 
+        double x, y;
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                x = tt.currentNumber().doubleValue();
+                x = tt.currentNumberNonNull().doubleValue();
                 break;
             case CssTokenType.TT_PERCENTAGE:
-                x = tt.currentNumber().doubleValue() / 100.0;
+                x = tt.currentNumberNonNull().doubleValue() / 100.0;
                 break;
             default:
-                throw new ParseException("BoundsLocator: x-value expected but found " + tt.currentValue(), tt.getStartPosition());
+                throw tt.createParseException("BoundsLocator: x-value expected.");
         }
         switch (tt.next()) {
             case ',':
@@ -69,17 +64,15 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
         }
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                y = tt.currentNumber().doubleValue();
+                y = tt.currentNumberNonNull().doubleValue();
                 break;
             case CssTokenType.TT_PERCENTAGE:
-                y = tt.currentNumber().doubleValue() / 100.0;
+                y = tt.currentNumberNonNull().doubleValue() / 100.0;
                 break;
             default:
-                throw new ParseException("BoundsLocator: y-value expected but found " + tt.currentValue(), tt.getStartPosition());
+                throw tt.createParseException("BoundsLocator: y-value expected.");
         }
-        if (tt.next() != ')') {
-            throw new ParseException("BoundsLocator: ')' expected but found " + tt.currentValue(), tt.getStartPosition());
-        }
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "BoundsLocator: ')' expected.");
 
         return new BoundsLocator(x, y);
     }
