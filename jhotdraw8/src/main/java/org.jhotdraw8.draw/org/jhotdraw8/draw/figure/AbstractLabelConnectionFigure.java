@@ -21,16 +21,8 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LabelConnectorHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
-import org.jhotdraw8.draw.key.NullableObjectKey;
+import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -51,6 +43,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The horizontal position of the text. Default value: {@code baseline}
      */
+    @NonNull
     public final static EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
     /**
@@ -63,11 +56,11 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      */
     @NonNull
     public final static NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
 
     /**
@@ -75,24 +68,26 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", CssSize.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.
      */
+    @NonNull
     public final static EnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
     /**
      * The position relative to the parent (respectively the offset).
      */
+    @NonNull
     public static final CssPoint2DStyleableKey LABEL_TRANSLATE = new CssPoint2DStyleableKey(
             "labelTranslation", new CssPoint2D(0, 0));
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
