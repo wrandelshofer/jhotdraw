@@ -26,6 +26,9 @@ public interface TextableFigure extends Figure {
 
     /**
      * Updates a text node with textable properties.
+     * <p>
+     * You must set the font before you set the text, so that JavaFx does not need to retrieve
+     * the system default font, which on Windows requires that the JavaFx Toolkit is launched.
      *
      * @param ctx  the render context
      * @param text a text node

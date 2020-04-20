@@ -134,12 +134,16 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public PathIterator getPathIterator(AffineTransform tx) {
         Text tn = new Text();
-        tn.setText(getText(null));
         tn.setX(getStyledNonNull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyTextFontableFigureProperties(null, tn);
         applyTextLayoutableFigureProperties(null, tn);
+
+        // We must set the font before we set the text, so that JavaFx does not need to retrieve
+        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
+        tn.setText(getText(null));
+
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
@@ -195,15 +199,19 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     protected void updateTextNode(@NonNull RenderContext ctx, @NonNull Text tn) {
-        final String text = getText(ctx);
-        if (!Objects.equals(text, tn.getText())) {
-            tn.setText(text);
-        }
         tn.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());
         applyTextFillableFigureProperties(ctx, tn);
         applyTextFontableFigureProperties(ctx, tn);
         applyTextLayoutableFigureProperties(ctx, tn);
+
+        // We must set the font before we set the text, so that JavaFx does not need to retrieve
+        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
+        tn.setText(getText(null));
+        final String text = getText(ctx);
+        if (!Objects.equals(text, tn.getText())) {
+            tn.setText(text);
+        }
     }
 
 }

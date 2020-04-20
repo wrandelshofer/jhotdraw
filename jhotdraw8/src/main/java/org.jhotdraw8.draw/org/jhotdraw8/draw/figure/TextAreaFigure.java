@@ -60,9 +60,13 @@ public class TextAreaFigure extends AbstractLeafFigure
         applyShapeableProperties(ctx, p);
         applyStrokableFigureProperties(ctx, p);
         applyFillableFigureProperties(ctx, p);
-        text.setText(getStyled(TEXT));
+
+        // We must set the font before we set the text, so that JavaFx does not need to retrieve
+        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
         applyTextFontableFigureProperties(ctx, text);
         applyTextLayoutableFigureProperties(ctx, text);
+        text.setText(getStyled(TEXT));
+
         applyTextFillableFigureProperties(ctx, text);
         applyTransformableFigureProperties(ctx, node);
 

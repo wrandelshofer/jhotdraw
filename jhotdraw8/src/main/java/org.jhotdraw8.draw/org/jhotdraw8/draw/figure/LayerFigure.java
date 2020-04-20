@@ -9,10 +9,13 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -69,6 +72,9 @@ public class LayerFigure extends AbstractCompositeFigure
 
             if (childNodes.size() > maxNodesPerLayer) {
                 Text text = new Text();
+                // We must set the font before we set the text, so that JavaFx does not need to retrieve
+                // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
+                text.setFont(CssFont.font("Arial", FontWeight.NORMAL, FontPosture.REGULAR, 13.0).getFont());
                 text.setText("Layer \"" + getId() + "\" has too many children: " + getChildren().size());
                 text.setFill(Color.RED);
                 text.setX(clipBounds.getMinX() + 20);

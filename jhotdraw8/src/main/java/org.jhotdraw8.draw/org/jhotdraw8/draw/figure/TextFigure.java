@@ -111,7 +111,6 @@ public class TextFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Text tn = (Text) node;
-        tn.setText(get(TEXT));
         tn.setX(getStyledNonNull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN).getY().getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
@@ -124,7 +123,10 @@ public class TextFigure extends AbstractLeafFigure
         applyTextFontableFigureProperties(ctx, tn);
         applyTextLayoutableFigureProperties(ctx, tn);
         applyStyleableFigureProperties(ctx, node);
-        tn.applyCss();// really??
+
+        // We must set the font before we set the text, so that JavaFx does not need to retrieve
+        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
+        tn.setText(get(TEXT));
     }
 
     @NonNull

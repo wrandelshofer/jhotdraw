@@ -83,6 +83,8 @@ public class FontIconDecoder implements ResourceDecoder {
     @Override
     public <T> T decode(String key, @NonNull String propertyValue, Class<T> type, Class<?> baseClass) {
 
+        // We must set the font before we set the text, so that JavaFx does not need to retrieve
+        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
         Text txt = new Text();
         txt.setFont(font);
         txt.setText(decodeValue(key, propertyValue));
