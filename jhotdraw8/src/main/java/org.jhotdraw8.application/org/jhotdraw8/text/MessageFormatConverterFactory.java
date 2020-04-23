@@ -48,7 +48,7 @@ public class MessageFormatConverterFactory implements ConverterFactory {
     private final Locale locale;
 
     public MessageFormatConverterFactory() {
-        this(Locale.getDefault());
+        this(Locale.ENGLISH);
     }
 
     public MessageFormatConverterFactory(Locale locale) {

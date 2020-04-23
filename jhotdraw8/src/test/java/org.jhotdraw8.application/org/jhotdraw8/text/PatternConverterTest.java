@@ -46,7 +46,7 @@ public class PatternConverterTest {
         System.out.println("ast:" + ast);
         Object[] actualValue = c.fromString(input);
         System.out.println(Arrays.asList(actualValue));
-        assertArrayEquals(actualValue, expectedValue);
+        assertArrayEquals(expectedValue, actualValue);
     }
 
     @NonNull
