@@ -19,7 +19,9 @@ public class GrapherApplication extends DocumentBasedApplication {
     public GrapherApplication() {
         super();
 
-        setModel(new GrapherApplicationModel());
+        GrapherApplicationModel newValue = new GrapherApplicationModel();
+        newValue.getSceneStylesheets(); // sets global scene stylesheet for JavaFX
+        setModel(newValue);
     }
 
     @Override

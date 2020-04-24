@@ -72,6 +72,7 @@ public class GrapherApplicationModel extends SimpleApplicationModel {
     public ReadOnlyList<String> getSceneStylesheets() {
         final Object value = MacOSPreferences.get(MacOSPreferences.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
         if ("Dark".equals(value)) {
+            System.setProperty("com.sun.javafx.highContrastTheme", "whiteOnBlack");
             return ImmutableLists.of(getClass().getResource("dark-theme.css").toString());
         } else {
             return ImmutableLists.of(getClass().getResource("light-theme.css").toString());
