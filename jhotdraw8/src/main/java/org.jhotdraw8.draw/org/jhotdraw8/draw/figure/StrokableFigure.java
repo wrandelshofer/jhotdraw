@@ -126,8 +126,8 @@ public interface StrokableFigure extends Figure {
      * <p>
      * Note: this is a non-standard composite map accessor and thus transient!
      */
-    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style", STROKE_WIDTH,
-            STROKE, STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
+    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style",
+            STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
     default void applyStrokeCapAndJoinProperties(RenderContext ctx, @NonNull Shape shape) {
         double d;

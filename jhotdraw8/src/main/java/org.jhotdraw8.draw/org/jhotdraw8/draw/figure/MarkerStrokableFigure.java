@@ -135,8 +135,8 @@ public interface MarkerStrokableFigure extends Figure {
      * <p>
      * Note: this is a non-standard composite map accessor and thus transient!
      */
-    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("marker-stroke-style", MARKER_STROKE_WIDTH,
-            MARKER_STROKE, MARKER_STROKE_TYPE, MARKER_STROKE_LINE_CAP, MARKER_STROKE_LINE_JOIN, MARKER_STROKE_MITER_LIMIT,
+    @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("marker-stroke-style",
+            MARKER_STROKE_TYPE, MARKER_STROKE_LINE_CAP, MARKER_STROKE_LINE_JOIN, MARKER_STROKE_MITER_LIMIT,
             MARKER_STROKE_DASH_OFFSET, MARKER_STROKE_DASH_ARRAY);
 
     default void applyMarkerStrokeCapAndJoinProperties(@NonNull Shape shape) {

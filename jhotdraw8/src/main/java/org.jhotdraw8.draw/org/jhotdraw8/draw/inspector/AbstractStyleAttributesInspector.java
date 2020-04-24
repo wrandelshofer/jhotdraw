@@ -38,7 +38,6 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssParser;
 import org.jhotdraw8.css.CssPrettyPrinter;
-import org.jhotdraw8.css.CssStroke;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.Paintable;
@@ -62,7 +61,6 @@ import org.jhotdraw8.draw.figure.TextFontableFigure;
 import org.jhotdraw8.draw.popup.BooleanPicker;
 import org.jhotdraw8.draw.popup.CssColorPicker;
 import org.jhotdraw8.draw.popup.CssFontPicker;
-import org.jhotdraw8.draw.popup.CssStrokePicker;
 import org.jhotdraw8.draw.popup.EnumPicker;
 import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
@@ -261,8 +259,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
             p = new BooleanPicker(nullable);
         } else if (type == CssColor.class) {
             p = new CssColorPicker();
-        } else if (type == CssStroke.class) {
-            p = new CssStrokePicker();
         } else if (type == Paintable.class) {
             p = new PaintablePicker();
         } else if (type == CssFont.class) {

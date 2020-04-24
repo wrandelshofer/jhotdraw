@@ -11,13 +11,11 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssStroke;
+import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.io.IdFactory;
 
@@ -30,9 +28,7 @@ import java.util.function.Consumer;
 /**
  * Allows to set all stroke properties at once.
  * <pre>
- *     StrokeStyle := [width], [ Paint, {Options} ] ;
- *     width := Size ;
- *     Paint := Color | Gradient ;
+ *     StrokeStyle := {Options};
  *     Options = ( Type | Linecap | Linejoin | Miterlimit | Dashoffset | Dasharray );
  *     Type = "type(" , ("inside"|"outside"|"centered"), ")";
  *     Linecap = "linecap(",("square"|"butt"|"round"),")";
@@ -42,7 +38,7 @@ import java.util.function.Consumer;
  *     Dasharray = "dasharray(",Size,{Size},")";
  * </pre>
  */
-public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
+public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle> {
 
     public static final String INSIDE = "inside";
     public static final String OUTSIDE = "outside";
@@ -66,15 +62,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
 
     @NonNull
     @Override
-    public CssStroke parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        CssSize width = parseSize("width", new CssSize(1.0), tt, idFactory);
-        if (tt.next() == CssTokenType.TT_EOF) {
-            return new CssStroke(width, CssColor.BLACK);
-        } else {
-            tt.pushBack();
-        }
-        Paintable paint = new CssPaintableConverter(true).parse(tt, idFactory);
-
+    public CssStrokeStyle parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         StrokeType type = StrokeType.CENTERED;
         StrokeLineCap lineCap = StrokeLineCap.BUTT;
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
@@ -108,7 +96,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
             }
         }
 
-        return new CssStroke(width, paint, type, lineCap, lineJoin, miterLimit, dashOffset, dashArray);
+        return new CssStrokeStyle(type, lineCap, lineJoin, miterLimit, dashOffset, dashArray);
     }
 
     @NonNull
@@ -129,7 +117,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
                 lineJoin = StrokeLineJoin.ROUND;
                 break;
             default:
-                throw new ParseException("⟨StrokeStyle⟩:One of " + MITER + ", " + BEVEL + ", " + ROUND + " expected.", tt.getStartPosition());
+                throw tt.createParseException("⟨StrokeStyle⟩: One of " + MITER + ", " + BEVEL + ", " + ROUND + " expected.");
         }
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩:: ⟨" + LINEJOIN + "⟩ right bracket expected.");
         return lineJoin;
@@ -245,28 +233,17 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStroke> {
 
 
     @Override
-    protected <TT extends CssStroke> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
-        if (value.getPaint() == null) {
-            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
-            return;
-        }
-
-        CssSize width = value.getWidth();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
-        out.accept(new CssToken(CssTokenType.TT_S, " "));
-        new CssPaintableConverter(true).produceTokens(value.getPaint(), idFactory, out);
-
+    protected <TT extends CssStrokeStyle> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         final StrokeType type = value.getType();
         if (printAllValues || type != StrokeType.CENTERED) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, TYPE));
             switch (type) {
-                case INSIDE:
-                    out.accept(new CssToken(CssTokenType.TT_IDENT, INSIDE));
-                    break;
-                case OUTSIDE:
-                    out.accept(new CssToken(CssTokenType.TT_IDENT, OUTSIDE));
-                    break;
+            case INSIDE:
+                out.accept(new CssToken(CssTokenType.TT_IDENT, INSIDE));
+                break;
+            case OUTSIDE:
+                out.accept(new CssToken(CssTokenType.TT_IDENT, OUTSIDE));
+                break;
                 case CENTERED:
                     out.accept(new CssToken(CssTokenType.TT_IDENT, CENTERED));
                     break;

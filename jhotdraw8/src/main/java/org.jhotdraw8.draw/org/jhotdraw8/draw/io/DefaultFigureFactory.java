@@ -29,7 +29,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssPoint3D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssStroke;
+import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
@@ -201,7 +201,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(StrokeLineJoin.class, new CssEnumConverter<>(StrokeLineJoin.class));
         addConverterForType(StrokeLineCap.class, new CssEnumConverter<>(StrokeLineCap.class));
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
-        addConverterForType(CssStroke.class, new CssStrokeStyleConverter(false));
+        addConverterForType(CssStrokeStyle.class, new CssStrokeStyleConverter(false));
 
 
         addConverter(StyleableFigure.STYLE_CLASS, new XmlWordListConverter());

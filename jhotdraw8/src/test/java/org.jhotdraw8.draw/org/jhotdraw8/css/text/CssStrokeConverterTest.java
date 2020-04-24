@@ -5,9 +5,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssStroke;
+import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
@@ -33,13 +32,13 @@ class CssStrokeConverterTest {
      * Test of fromString method, of class CssStrokeStyleConverter.
      */
     static
-    public void doTestFromString(CssStroke expected, @NonNull String string) throws Exception {
+    public void doTestFromString(CssStrokeStyle expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
 
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
-        CssStroke actual = instance.fromString(buf, idFactory);
+        CssStrokeStyle actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
@@ -49,7 +48,7 @@ class CssStrokeConverterTest {
      * Test of toString method, of class CssStrokeStyleConverter.
      */
     static
-    public void doTestToString(CssStroke value, String expected) throws Exception {
+    public void doTestToString(CssStrokeStyle value, String expected) throws Exception {
         System.out.println("toString " + value);
         CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
         String actual = instance.toString(value);
@@ -62,7 +61,7 @@ class CssStrokeConverterTest {
      * Test of fromString and toString methods, of class CssStrokeStyleConverter.
      */
     static
-    public void doTest(CssStroke value, @NonNull String str) throws Exception {
+    public void doTest(CssStrokeStyle value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
@@ -73,27 +72,27 @@ class CssStrokeConverterTest {
     public List<DynamicTest> testFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(
-                        new CssStroke(CssColor.BLACK),
-                        "1 black type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
+                        new CssStrokeStyle(),
+                        "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
                 dynamicTest("2", () -> doTest(
-                        new CssStroke(new CssSize(2), CssColor.BLACK),
-                        "2 black type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
+                        new CssStrokeStyle(),
+                        "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
                 dynamicTest("3", () -> doTest(
-                        new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
+                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black type(centered) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
+                        "type(centered) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("4", () -> doTest(
-                        new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(3)
+                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black type(centered) linecap(butt) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
+                        "type(centered) linecap(butt) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("5", () -> doTest(
-                        new CssStroke(new CssSize(2), CssColor.BLACK, StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
+                        new CssStrokeStyle(StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
                                 , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
-                        "2 black type(inside) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
+                        "type(inside) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("6", () -> doTest(
-                        new CssStroke(new CssSize(1), null, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4)
+                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4)
                                 , new CssSize(0), ImmutableLists.emptyList()),
-                        IDENT_NONE))
+                        "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()"))
         );
     }
 

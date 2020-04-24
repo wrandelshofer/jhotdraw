@@ -14,9 +14,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 
 import java.util.Objects;
 
-public class CssStroke {
-    private final CssSize width;
-    private final Paintable paint;
+public class CssStrokeStyle {
     private final CssSize dashOffset;
     private final ImmutableList<CssSize> dashArray;
     private final StrokeType type;
@@ -24,35 +22,20 @@ public class CssStroke {
     private final StrokeLineCap lineCap;
     private final CssSize miterLimit;
 
-    public CssStroke(Paintable paint) {
-        this(CssSize.ONE, paint, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4.0),
+    public CssStrokeStyle() {
+        this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4.0),
                 CssSize.ZERO, ImmutableLists.emptyList());
     }
 
-    public CssStroke(CssSize width, Paintable paint) {
-        this(width, paint, StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4.0),
-                CssSize.ZERO, ImmutableLists.emptyList());
-    }
-
-    public CssStroke(CssSize width, Paintable paint, StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,
-                     CssSize dashOffset,
-                     ImmutableList<CssSize> dashArray) {
-        this.width = width;
-        this.paint = paint;
+    public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,
+                          CssSize dashOffset,
+                          ImmutableList<CssSize> dashArray) {
         this.dashOffset = dashOffset;
         this.dashArray = dashArray;
         this.type = type;
         this.lineJoin = lineJoin;
         this.lineCap = lineCap;
         this.miterLimit = miterLimit;
-    }
-
-    public CssSize getWidth() {
-        return width;
-    }
-
-    public Paintable getPaint() {
-        return paint;
     }
 
     public CssSize getDashOffset() {
@@ -87,10 +70,8 @@ public class CssStroke {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        CssStroke cssStroke = (CssStroke) o;
-        return Objects.equals(width, cssStroke.width) &&
-                Objects.equals(paint, cssStroke.paint) &&
-                Objects.equals(dashOffset, cssStroke.dashOffset) &&
+        CssStrokeStyle cssStroke = (CssStrokeStyle) o;
+        return Objects.equals(dashOffset, cssStroke.dashOffset) &&
                 Objects.equals(dashArray, cssStroke.dashArray) &&
                 type == cssStroke.type &&
                 lineJoin == cssStroke.lineJoin &&
@@ -100,15 +81,13 @@ public class CssStroke {
 
     @Override
     public int hashCode() {
-        return Objects.hash(width, paint, dashOffset, dashArray, type, lineJoin, lineCap, miterLimit);
+        return Objects.hash(dashOffset, dashArray, type, lineJoin, lineCap, miterLimit);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "CssStroke{" +
-                "width=" + width +
-                ", paint=" + paint +
+        return "CssStrokeStyle{" +
                 ", type=" + type +
                 ", lineJoin=" + lineJoin +
                 ", lineCap=" + lineCap +
