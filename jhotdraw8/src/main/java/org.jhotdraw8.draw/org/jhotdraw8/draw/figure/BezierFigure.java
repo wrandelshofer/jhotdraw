@@ -48,7 +48,7 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class BezierFigure extends AbstractLeafFigure
-        implements StrokableFigure, FillableFigure, TransformableFigure, HideableFigure,
+        implements StrokableFigure, FillableFigure, FillRulableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
@@ -179,6 +179,7 @@ public class BezierFigure extends AbstractLeafFigure
         applyStyleableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, pathNode);
         applyFillableFigureProperties(ctx, pathNode);
+        applyFillRulableFigureProperties(ctx, pathNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, pathNode);
         pathNode.setFillRule(getStyled(FILL_RULE));

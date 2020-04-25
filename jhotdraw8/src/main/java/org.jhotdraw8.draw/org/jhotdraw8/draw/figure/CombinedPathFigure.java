@@ -41,7 +41,7 @@ import java.util.List;
 public class CombinedPathFigure extends AbstractCompositeFigure
         implements StrokableFigure, FillableFigure, Grouping,
         ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
-        CompositableFigure,
+        CompositableFigure, FillRulableFigure,
         ConnectableFigure, PathIterableFigure {
 
     @NonNull
@@ -204,6 +204,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
         applyFillableFigureProperties(ctx, n);
+        applyFillRulableFigureProperties(ctx, n);
         applyStrokableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
