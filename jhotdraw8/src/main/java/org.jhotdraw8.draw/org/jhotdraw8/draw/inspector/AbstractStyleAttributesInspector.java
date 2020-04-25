@@ -535,7 +535,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                                 AbstractStyleAttributesInspector.this.remove(f, finalSelectedAccessor);
                             }
                         }
-
+updateTextArea();
                     };
                     picker.show(getTextArea(), screenX, screenY,
                             initialValue, lambda);

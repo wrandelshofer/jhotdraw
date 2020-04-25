@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.css.CssColor;
@@ -23,8 +24,40 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class CssColorDialog {
+    @Nullable ButtonType chooseButtonType;
+    @Nullable ButtonType cancelButtonType;
     private CssColorChooserController controller;
     private Dialog<ButtonType> dialog;
+    /*
+        public CssColorDialog() {
+        }
+
+        public CssColorDialog(Window owner) {
+            if (owner != null) {
+                dialog.initOwner(owner);
+            }
+            dialog.initModality(Modality.WINDOW_MODAL);
+            dialog.initStyle(StageStyle.UTILITY);
+            dialog.setResizable(false);
+            dialog.addEventHandler(KeyEvent.ANY, keyEventListener);
+        }
+    */
+    private final EventHandler<KeyEvent> keyEventListener = e -> {
+        switch (e.getCode()) {
+        case ESCAPE:
+            dialog.close();
+            break;
+        default:
+            break;
+        }
+    };
+    private Runnable onSave;
+    private Runnable onUse;
+    private Runnable onCancel;
+    @NonNull
+    private ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
+    @NonNull
+    private ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(CssColor.TRANSPARENT);
 
     public CssColorDialog(Window owner) {
         final Resources labels = ApplicationLabels.getGuiResources();
@@ -60,39 +93,39 @@ public class CssColorDialog {
 
     }
 
-    @Nullable ButtonType chooseButtonType;
-    @Nullable ButtonType cancelButtonType;
-
-    private Runnable onSave;
-    private Runnable onUse;
-    private Runnable onCancel;
     @Nullable
-    private ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
-    @Nullable
-    private ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(CssColor.TRANSPARENT);
-    /*
-        public CssColorDialog() {
-        }
+    public ObjectProperty<CssColor> currentColorProperty() {
+        return currentColor;
+    }
 
-        public CssColorDialog(Window owner) {
-            if (owner != null) {
-                dialog.initOwner(owner);
-            }
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initStyle(StageStyle.UTILITY);
-            dialog.setResizable(false);
-            dialog.addEventHandler(KeyEvent.ANY, keyEventListener);
-        }
-    */
-    private final EventHandler<KeyEvent> keyEventListener = e -> {
-        switch (e.getCode()) {
-            case ESCAPE:
-                dialog.close();
-                break;
-            default:
-                break;
-        }
-    };
+    @Nullable
+    public ObjectProperty<CssColor> customColorProperty() {
+        return customColor;
+    }
+
+    public CssColor getCurrentColor() {
+        return currentColor.get();
+    }
+
+    public void setCurrentColor(CssColor currentColor) {
+        this.currentColor.set(currentColor);
+    }
+
+    public CssColor getCustomColor() {
+        return customColor.get();
+    }
+
+    public void setCustomColor(CssColor customColor) {
+        this.customColor.set(customColor);
+    }
+
+    public Runnable getOnCancel() {
+        return onCancel;
+    }
+
+    public void setOnCancel(Runnable onCancel) {
+        this.onCancel = onCancel;
+    }
 
     public Runnable getOnSave() {
         return onSave;
@@ -108,40 +141,6 @@ public class CssColorDialog {
 
     public void setOnUse(Runnable onUse) {
         this.onUse = onUse;
-    }
-
-    public Runnable getOnCancel() {
-        return onCancel;
-    }
-
-    public void setOnCancel(Runnable onCancel) {
-        this.onCancel = onCancel;
-    }
-
-    public CssColor getCurrentColor() {
-        return currentColor.get();
-    }
-
-    @Nullable
-    public ObjectProperty<CssColor> currentColorProperty() {
-        return currentColor;
-    }
-
-    public void setCurrentColor(CssColor currentColor) {
-        this.currentColor.set(currentColor);
-    }
-
-    public CssColor getCustomColor() {
-        return customColor.get();
-    }
-
-    @Nullable
-    public ObjectProperty<CssColor> customColorProperty() {
-        return customColor;
-    }
-
-    public void setCustomColor(CssColor customColor) {
-        this.customColor.set(customColor);
     }
 
     public void show() {

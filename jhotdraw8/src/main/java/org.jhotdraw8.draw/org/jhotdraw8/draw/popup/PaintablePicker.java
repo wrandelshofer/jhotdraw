@@ -13,15 +13,14 @@ import java.util.function.BiConsumer;
 
 public class PaintablePicker extends AbstractPicker<Paintable> {
     // FIXME create CssPaintableDialog
-    private CssColorDialog dialog;
+    private CssColorPopup dialog;
 
     private void update(@NonNull Node anchor, CssColor initialValue, @NonNull BiConsumer<Boolean, CssColor> callback) {
         if (dialog == null) {
-            dialog = new CssColorDialog(anchor.getScene().getWindow());
+            dialog = new CssColorPopup();
         }
 
-        dialog.setOnUse(() -> callback.accept(true, dialog.getCurrentColor()));
-        dialog.setOnSave(() -> callback.accept(true, dialog.getCurrentColor()));
+        dialog.setCallback(callback);
         dialog.setCurrentColor(initialValue);
 
     }
@@ -32,6 +31,6 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
                 (initial instanceof CssColor) ? ((CssColor) initial) : null,
                 callback::accept
         );
-        dialog.show();
+        dialog.show(anchor, screenX, screenY);
     }
 }
