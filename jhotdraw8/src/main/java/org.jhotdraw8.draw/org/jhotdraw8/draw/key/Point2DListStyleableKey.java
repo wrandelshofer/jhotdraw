@@ -62,7 +62,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         this.converter = new CssListConverter<>(
-                new Point2DConverter(false, false), " ");
+                new Point2DConverter(false, false), " ,");
         CssMetaData<Styleable, ImmutableList<Point2D>> md
                 = new SimpleCssMetaData<>(property, function,
                 new StyleConverterAdapter<>(this.converter),
