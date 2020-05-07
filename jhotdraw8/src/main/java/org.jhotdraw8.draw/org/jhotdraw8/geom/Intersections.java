@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 import static org.jhotdraw8.geom.Geom.argumentOnLine;
 import static org.jhotdraw8.geom.Geom.lerp;
 
@@ -2975,19 +2973,19 @@ public class Intersections {
     @NonNull
     public static Intersection intersectRayRay(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
         List<Intersection.IntersectionPoint> result = new ArrayList<>();
-        Intersection.Status status = Intersection.Status.NO_INTERSECTION;
+        Intersection.Status status;
 
-        final double a0y, b1x, b0x, b0y, b1y, a0x, a1y;
+        final double a0y, b1x, b0x, b0y, b1y, a0x, a1x, a1y;
         a0y = a0.getY();
         b1x = b1.getX();
         b0x = b0.getX();
         b0y = b0.getY();
         b1y = b1.getY();
         a0x = a0.getX();
+        a1x = a1.getX();
         a1y = a1.getY();
 
         double ua_t = (b1x - b0x) * (a0y - b0y) - (b1y - b0y) * (a0x - b0x);
-        final double a1x = a1.getX();
         double ub_t = (a1x - a0x) * (a0y - b0y) - (a1y - a0y) * (a0x - b0x);
         double u_b = (b1y - b0y) * (a1x - a0x) - (b1x - b0x) * (a1y - a0y);
 

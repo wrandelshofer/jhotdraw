@@ -4,30 +4,19 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 /**
  * Some geometric utilities.
@@ -211,7 +200,7 @@ public class Geom {
     /**
      * Returns true if the given bounds are finite.
      *
-     * @param r the bounds
+     * @param bounds the bounds
      * @return true if finiite
      */
     public static boolean isFinite(@NonNull Bounds bounds) {
@@ -219,6 +208,33 @@ public class Geom {
                 && Double.isFinite(bounds.getMinY())
                 && Double.isFinite(bounds.getWidth())
                 && Double.isFinite(bounds.getHeight());
+    }
+
+    /**
+     * Returns true if the three points are collinear.
+     *
+     * @param p0 a point
+     * @param p1 a point
+     * @param p2 a point
+     * @return true if the area is 0
+     */
+    public static boolean isCollinear(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
+        return isCollinear(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY());
+    }
+
+    /**
+     * Returns true if the three points are collinear.
+     *
+     * @param a x-coordinate of point 0
+     * @param b y-coordinate of point 0
+     * @param m x-coordinate of point 1
+     * @param n y-coordinate of point 1
+     * @param x x-coordinate of point 2
+     * @param y y-coordinate of point 2
+     * @return true if collinear
+     */
+    public static boolean isCollinear(double a, double b, double m, double n, double x, double y) {
+        return abs(a * (n - y) + m * (y - b) + x * (b - n)) < 1e-6;
     }
 
     /**
