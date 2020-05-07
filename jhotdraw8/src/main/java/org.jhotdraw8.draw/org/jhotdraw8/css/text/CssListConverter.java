@@ -16,17 +16,23 @@ import org.jhotdraw8.io.IdFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Parses a list with items separated by commas or whitespace.
+ * Parses a list with items separated by configurable optional delimiters.
+ * <p>
+ * If the delimiter consists of multiple character tokens, than the parser accepts each
+ * of the character tokens and any combination of them.
+ * <p>
+ * The delimiters are optional when the list is parsed from a String.
+ * When the list is converted into a String, then the specified delimiters are used to
+ * separate the items.
  * <p>
  * Stops parsing at EOF, semicolon and closing bracket.
+ * <p>
+ * This parser is intentionally forgiving, so that lists can be output with nice
+ * delimiters, but the user does not need to type in the delimiter.
  *
  * @param <T> the element type
  */
@@ -35,7 +41,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
      * When nonnull this comparator is used to sort the list.
      */
     @Nullable
-    private final Comparator<T> comparator;
+    private final Comparator<T> comparatorForSorting;
 
     private final CssConverter<T> elementConverter;
     @NonNull
@@ -59,8 +65,16 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix));
     }
 
-    public CssListConverter(CssConverter<T> elementConverter, String delimiter, String prefix, String suffix, Comparator<T> comparator) {
-        this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix), comparator);
+    /**
+     * @param elementConverter     the convert for a single element
+     * @param delimiter            a String which must be parsable into character tokens, each token and any combination of them
+     *                             is accepted as an optional delimiter
+     * @param prefix               the prefix of the list, for example a left bracket
+     * @param suffix               the suffix of the list, for example a right bracket
+     * @param comparatorForSorting if this value is non-null, then it is used to sort the list
+     */
+    public CssListConverter(CssConverter<T> elementConverter, String delimiter, String prefix, String suffix, Comparator<T> comparatorForSorting) {
+        this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix), comparatorForSorting);
     }
 
     private static List<CssToken> parseDelim(String delim) {
@@ -84,7 +98,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                             @NonNull Iterable<CssToken> delimiter,
                             Iterable<CssToken> prefix,
                             Iterable<CssToken> suffix,
-                            @Nullable Comparator<T> comparator
+                            @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
         this.delimiter = ImmutableLists.ofIterable(delimiter);
@@ -96,7 +110,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                 delimiterChars.add(cssToken.getType());
             }
         }
-        this.comparator = comparator;
+        this.comparatorForSorting = comparatorForSorting;
     }
 
 
@@ -136,8 +150,8 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
         }
         tt.pushBack();
-        if (comparator != null) {
-            list.sort(comparator);
+        if (comparatorForSorting != null) {
+            list.sort(comparatorForSorting);
         }
         return ImmutableLists.ofCollection(list);
     }
@@ -152,9 +166,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
             }
             boolean first = true;
             Iterable<T> ordered;
-            if (comparator != null) {
+            if (comparatorForSorting != null) {
                 ArrayList<T> ts = value.toArrayList();
-                ts.sort(comparator);
+                ts.sort(comparatorForSorting);
                 ordered = ts;
             } else {
                 ordered = value;
