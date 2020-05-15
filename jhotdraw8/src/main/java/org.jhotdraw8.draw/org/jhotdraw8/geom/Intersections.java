@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.jhotdraw8.geom.Geom.argumentOnLine;
 import static org.jhotdraw8.geom.Geom.lerp;
 
@@ -165,7 +167,6 @@ public class Intersections {
         if (c12y == 0) {
             double v0 = c12x * (c10y - c20y);
             double v1 = v0 - c11x * c11y;
-            double v2 = v0 + v1;
             double v3 = c11y * c11y;
 
             poly = new Polynomial(
@@ -587,9 +588,9 @@ public class Intersections {
      * : coefficients expanded
      * </li>
      * <li>{@literal (c2x^2 + c2y^2)*t^4 }<br>
-     * {@literal+ 2*(c1x*c2x + c1y*c2y)*t^3 }<br>
-     * {@literal+ (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 }<br>
-     * {@literal+ c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}<br>
+     * {@literal + 2*(c1x*c2x + c1y*c2y)*t^3 }<br>
+     * {@literal + (c1x ^ 2 + c1y ^ 2 + 2 * c0x * c2x + 2 * c0y * c2y - 2 * c2x * cx - 2 * c2y * cy)*t^2 }<br>
+     * {@literal + c0x^2 + c0y^2 - 2*c0x*cx + cx^2 - 2*c0y*cy + cy^2 + 2*(c0x*c1x + c0y*c1y - c1x*cx - c1y*cy)*t}<br>
      * : coefficients collected for t</li>
      * <li>{@literal a·t⁴ + b·t³ + c·t² + d·t + e = 0, 0 ≤ t ≤ 1 }<br>
      * : final polynomial equation
@@ -646,10 +647,8 @@ public class Intersections {
             final Point2D p;
             final double t;
             if (tt < 0) {
-                t = 0;
                 p = p1;
             } else if (tt > 1) {
-                t = 1;
                 p = p3;
             } else {
                 t = tt;
