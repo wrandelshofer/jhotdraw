@@ -445,25 +445,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return drawing.getReadOnlyProperty();
     }
 
-    public void dump(@NonNull StringBuilder buf, @NonNull Node n, int depth) {
-        for (int i = 0; i < depth; i++) {
-            buf.append(".");
-        }
-        buf.append(n).append(" lb: ").append(Geom.toString(n.getLayoutBounds())).append('\n');
-        Figure f = nodeToFigureMap.get(n);
-        if (f != null) {
-            buf.append(" flb: ").append(Geom.toString(f.getLayoutBoundsInParent())).append('\n');
-        } else {
-            buf.append('\n');
-        }
-        if (n instanceof Parent) {
-            Parent p = (Parent) n;
-            for (Node c : p.getChildrenUnmodifiable()) {
-                dump(buf, c, depth + 1);
-            }
-        }
-    }
-
     @Override
     public void duplicateSelection() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
