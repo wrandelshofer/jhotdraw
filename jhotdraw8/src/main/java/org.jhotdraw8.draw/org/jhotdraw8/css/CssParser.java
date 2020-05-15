@@ -230,9 +230,9 @@ public class CssParser {
     @NonNull
     private AtRule parseAtRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_AT_KEYWORD) {
-            throw new ParseException("AtRule: At-Keyword expected.", tt.getLineNumber());
+            throw tt.createParseException("AtRule: At-Keyword expected.");
         }
-        String atKeyword = tt.currentString();
+        String atKeyword = tt.currentStringNonNull();
         tt.next();
         List<CssToken> header = new ArrayList<>();
         List<CssToken> body = new ArrayList<>();
@@ -254,7 +254,7 @@ public class CssParser {
         }
     }
 
-    @Nullable
+    @NonNull
     private AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextNoSkip('[', "AttributeSelector: '[' expected.");
         tt.requireNextNoSkip(CssTokenType.TT_IDENT, "AttributeSelector: Identifier expected.");
@@ -278,7 +278,7 @@ public class CssParser {
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING
                         && tt.current() != CssTokenType.TT_NUMBER) {
-                    throw new ParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
                 selector = new EqualsMatchSelector(namespace, attributeName, tt.currentStringNonNull());
                 break;
@@ -286,7 +286,7 @@ public class CssParser {
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING
                         && tt.current() != CssTokenType.TT_NUMBER) {
-                    throw new ParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
                 selector = new IncludeMatchSelector(namespace, attributeName, tt.currentStringNonNull());
                 break;
@@ -294,7 +294,7 @@ public class CssParser {
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING
                         && tt.current() != CssTokenType.TT_NUMBER) {
-                    throw new ParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
                 selector = new DashMatchSelector(namespace, attributeName, tt.currentStringNonNull());
                 break;
@@ -302,7 +302,7 @@ public class CssParser {
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING
                         && tt.current() != CssTokenType.TT_NUMBER) {
-                    throw new ParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
                 selector = new PrefixMatchSelector(namespace, attributeName, tt.currentStringNonNull());
                 break;
@@ -310,7 +310,7 @@ public class CssParser {
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING
                         && tt.current() != CssTokenType.TT_NUMBER) {
-                    throw new ParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
                 selector = new SuffixMatchSelector(namespace, attributeName, tt.currentStringNonNull());
                 break;
@@ -318,7 +318,7 @@ public class CssParser {
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING
                         && tt.current() != CssTokenType.TT_NUMBER) {
-                    throw new ParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
                 selector = new SubstringMatchSelector(namespace, attributeName, tt.currentStringNonNull());
                 break;
@@ -327,11 +327,11 @@ public class CssParser {
                 tt.pushBack();
                 break;
             default:
-                throw new ParseException("AttributeSelector: operator expected. Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                throw tt.createParseException("AttributeSelector: operator expected. Line " + tt.getLineNumber() + ".");
 
         }
         if (tt.nextNoSkip() != ']') {
-            throw new ParseException("AttributeSelector: ']' expected.", tt.getLineNumber());
+            throw tt.createParseException("AttributeSelector: ']' expected.");
         }
         return selector;
     }
@@ -349,9 +349,9 @@ public class CssParser {
                 case CssTokenType.TT_CDO:
                     break;
                 case CssTokenType.TT_BAD_URI:
-                    throw new ParseException("Terms: Bad URI in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("BracketedTerms: Bad URI.");
                 case CssTokenType.TT_BAD_STRING:
-                    throw new ParseException("Terms: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("BracketedTerms: Bad String.");
                 default:
                     terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
                             tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
@@ -362,18 +362,17 @@ public class CssParser {
                 tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
     }
 
-    @Nullable
-    private Object parseComponentValue(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parseComponentValue(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         switch (tt.nextNoSkip()) {
-            case '{':
-                tt.pushBack();
-                parseCurlyBlock(tt, preservedTokens);
-                break;
-            case '(':
-                tt.pushBack();
-                parseRoundBlock(tt, preservedTokens);
-                break;
-            case '[':
+        case '{':
+            tt.pushBack();
+            parseCurlyBlock(tt, preservedTokens);
+            break;
+        case '(':
+            tt.pushBack();
+            parseRoundBlock(tt, preservedTokens);
+            break;
+        case '[':
                 tt.pushBack();
                 parseSquareBlock(tt, preservedTokens);
                 break;
@@ -386,12 +385,11 @@ public class CssParser {
                 parsePreservedToken(tt, preservedTokens);
                 break;
         }
-        return null;
     }
 
     private void parseCurlyBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != '{') {
-            throw new ParseException("CurlyBlock: '{' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("CurlyBlock: '{' expected.");
         }
         preservedTokens.add(tt.getToken());
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -400,7 +398,7 @@ public class CssParser {
             parseComponentValue(tt, preservedTokens);
         }
         if (tt.current() != '}') {
-            throw new ParseException("CurlyBlock: '}' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("CurlyBlock: '}' expected.");
         }
         preservedTokens.add(tt.getToken());
     }
@@ -408,17 +406,14 @@ public class CssParser {
     @NonNull
     private Declaration parseDeclaration(@NonNull CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
-            throw new ParseException(//
-                    "Declaration: property name expected. Line "//
-                            + tt.getLineNumber() + ".",//
-                    tt.getStartPosition());
+            throw tt.createParseException("Declaration: property name expected.");
         }
         String property = tt.currentStringNonNull();
         int startPos = tt.getStartPosition();
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
         if (tt.current() != ':') {
-            throw new ParseException("Declaration: ':' expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("Declaration: ':' expected.");
         }
         List<CssToken> terms = parseTerms(tt);
         int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.get(terms.size() - 1).getEndPos();
@@ -479,10 +474,7 @@ public class CssParser {
                 case ';':
                     break;
                 default:
-                    throw new ParseException(//
-                            "Declaration List: declaration or at-rule expected. Line "//
-                                    + tt.getLineNumber() + ".", //
-                            tt.getStartPosition());
+                    throw tt.createParseException("Declaration List: declaration or at-rule expected.");
 
             }
         }
@@ -494,7 +486,7 @@ public class CssParser {
 
     private void parseFunctionBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_FUNCTION) {
-            throw new ParseException("FunctionBlock: function expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("FunctionBlock: function expected.");
         }
         preservedTokens.add(tt.getToken());
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -504,26 +496,26 @@ public class CssParser {
             parseComponentValue(tt, preservedTokens);
         }
         if (tt.current() != ')') {
-            throw new ParseException("FunctionBlock: ')' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("FunctionBlock: ')' expected.");
         }
         preservedTokens.add(tt.getToken());
     }
 
     private void parsePreservedToken(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() == CssTokenType.TT_EOF) {
-            throw new ParseException("CssToken: token expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("CssToken: token expected.");
         }
         preservedTokens.add(tt.getToken());
     }
 
-    @Nullable
+    @NonNull
     private PseudoClassSelector parsePseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != ':') {
-            throw new ParseException("Pseudo Class Selector: ':' expected of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("Pseudo Class Selector: ':' expected of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
         }
         if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                 && tt.current() != CssTokenType.TT_FUNCTION) {
-            throw new ParseException("Pseudo Class Selector: identifier or function expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("Pseudo Class Selector: identifier or function expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
         }
 
         if (tt.current() == CssTokenType.TT_FUNCTION) {
@@ -537,7 +529,7 @@ public class CssParser {
 
     private void parseRoundBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != '(') {
-            throw new ParseException("RoundBlock: '(' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("RoundBlock: '(' expected.");
         }
         preservedTokens.add(tt.getToken());
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -547,12 +539,12 @@ public class CssParser {
             parseComponentValue(tt, preservedTokens);
         }
         if (tt.current() != ')') {
-            throw new ParseException("RoundBlock: ')' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("RoundBlock: ')' expected.");
         }
         preservedTokens.add(tt.getToken());
     }
 
-    @Nullable
+    @NonNull
     private Selector parseSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         SimpleSelector simpleSelector = parseSimpleSelector(tt);
         Selector selector = simpleSelector;
@@ -600,7 +592,7 @@ public class CssParser {
                 && tt.current() != '{') {
             skipWhitespaceAndComments(tt);
             if (tt.current() != ',') {
-                throw new ParseException("SelectorGroup: ',' expected.", tt.getLineNumber());
+                throw tt.createParseException("SelectorGroup: ',' expected.");
             }
             tt.nextNoSkip();
             skipWhitespaceAndComments(tt);
@@ -611,7 +603,7 @@ public class CssParser {
         return new SelectorGroup(selectors);
     }
 
-    @Nullable
+    @NonNull
     private SimpleSelector parseSimpleSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
@@ -639,7 +631,7 @@ public class CssParser {
                     return new IdSelector(tt.currentString());
                 case '.':
                     if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
-                        throw new ParseException("SimpleSelector: identifier expected.", tt.getLineNumber());
+                        throw tt.createParseException("SimpleSelector: identifier expected.");
                     }
                     return new ClassSelector(tt.currentString());
                 case ':':
@@ -650,10 +642,10 @@ public class CssParser {
                     return parseAttributeSelector(tt);
                 case '{':
                     tt.pushBack();
-                    throw new ParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
                 default:
                     // don't push back!
-                    throw new ParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
             }
         } catch (ParseException e) {
             exceptions.add(e);
@@ -663,7 +655,7 @@ public class CssParser {
 
     private void parseSquareBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != '[') {
-            throw new ParseException("SquareBlock: '[' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("SquareBlock: '[' expected.");
         }
         preservedTokens.add(tt.getToken());
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -673,7 +665,7 @@ public class CssParser {
             parseComponentValue(tt, preservedTokens);
         }
         if (tt.current() != ']') {
-            throw new ParseException("SquareBlock: ']' expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+            throw tt.createParseException("SquareBlock: ']' expected.");
         }
         preservedTokens.add(tt.getToken());
     }
@@ -692,13 +684,13 @@ public class CssParser {
         }
         skipWhitespaceAndComments(tt);
         if (tt.nextNoSkip() != '{') {
-            throw new ParseException("StyleRule: '{' expected.", tt.getLineNumber());
+            throw tt.createParseException("StyleRule: '{' expected.");
         }
         List<Declaration> declarations = parseDeclarationList(tt);
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
         if (tt.current() != '}') {
-            throw new ParseException("StyleRule: '}' expected.", tt.getLineNumber());
+            throw tt.createParseException("StyleRule: '}' expected.");
         }
         return new StyleRule(selectorGroup, declarations);
     }
@@ -741,19 +733,15 @@ public class CssParser {
                     case CssTokenType.TT_AT_KEYWORD: {
                         tt.pushBack();
                         AtRule r = parseAtRule(tt);
-                        if (r != null) {
                             interpretAtRule(r);
                             rules.add(r);
-                        }
                         break;
                     }
                     default: {
                         tt.pushBack();
                         // FIXME parse qualified rules instead of style rule
                         StyleRule r = parseStyleRule(tt);
-                        if (r != null) {
                             rules.add(r);
-                        }
                         break;
                     }
                 }
@@ -762,21 +750,6 @@ public class CssParser {
             }
         }
         return new Stylesheet(rules);
-    }
-
-    @NonNull
-    private CssToken parseTerm(@NonNull CssTokenizer tt) throws IOException, ParseException {
-        switch (tt.nextNoSkip()) {
-            case CssTokenType.TT_EOF:
-                throw new ParseException("Term: Term expected in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-            case CssTokenType.TT_BAD_URI:
-                throw new ParseException("Term: Bad URI in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-            case CssTokenType.TT_BAD_STRING:
-                throw new ParseException("Term: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
-            default:
-                return new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
-                        tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition());
-        }
     }
 
     @NonNull
@@ -793,9 +766,9 @@ public class CssParser {
                 case CssTokenType.TT_CDO:
                     break;
                 case CssTokenType.TT_BAD_URI:
-                    throw new ParseException("Terms: Bad URI in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("Terms: Bad URI.");
                 case CssTokenType.TT_BAD_STRING:
-                    throw new ParseException("Terms: Bad String in line " + tt.getLineNumber() + ".", tt.getStartPosition());
+                    throw tt.createParseException("Terms: Bad String.");
                 case CssTokenType.TT_LEFT_CURLY_BRACKET:
                     parseBracketedTerms(tt, terms, CssTokenType.TT_RIGHT_CURLY_BRACKET);
                     break;
@@ -829,7 +802,7 @@ public class CssParser {
         }
     }
 
-    private void skipWhitespaceAndComments(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private void skipWhitespaceAndComments(@NonNull CssTokenizer tt) throws IOException {
         while (tt.current() == CssTokenType.TT_S//
                 || tt.current() == CssTokenType.TT_CDC//
                 || tt.current() == CssTokenType.TT_CDO

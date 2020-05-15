@@ -118,25 +118,26 @@ public class CssToken /*extends AST*/ {
             return stringValue;
         }
         switch (ttype) {
-            case CssTokenType.TT_IDENT:
-                return fromIDENT();
-            case CssTokenType.TT_AT_KEYWORD:
-                return fromHASHorAT('@', stringValue);
-            case CssTokenType.TT_STRING:
-                return fromSTRING();
-            case CssTokenType.TT_BAD_STRING:
-                return fromBAD_STRING();
-            //case CssTokenType.TT_BAD_URI : return fromBAD_URI(stringValue) ;
-            //case CssTokenType.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
-            case CssTokenType.TT_HASH:
-                return fromHASHorAT('#', stringValue);
-            case CssTokenType.TT_NUMBER:
-                return fromNUMBER();
-            case CssTokenType.TT_PERCENTAGE:
-                return fromPERCENTAGE();
-            case CssTokenType.TT_DIMENSION:
-                return fromDIMENSION();
-            case CssTokenType.TT_URL:
+        case CssTokenType.TT_IDENT:
+            return fromIDENT();
+        case CssTokenType.TT_AT_KEYWORD:
+            return fromHASHorAT('@', stringValue);
+        case CssTokenType.TT_STRING:
+            return fromSTRING();
+        case CssTokenType.TT_BAD_STRING:
+            return fromBAD_STRING(stringValue);
+        case CssTokenType.TT_BAD_URI:
+            return fromBAD_URI(stringValue);
+        //case CssTokenType.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
+        case CssTokenType.TT_HASH:
+            return fromHASHorAT('#', stringValue);
+        case CssTokenType.TT_NUMBER:
+            return fromNUMBER();
+        case CssTokenType.TT_PERCENTAGE:
+            return fromPERCENTAGE();
+        case CssTokenType.TT_DIMENSION:
+            return fromDIMENSION();
+        case CssTokenType.TT_URL:
                 return fromURL();
             case CssTokenType.TT_UNICODE_RANGE:
                 return fromUNICODE_RANGE();
@@ -298,8 +299,8 @@ public class CssToken /*extends AST*/ {
     }
 
     @NonNull
-    private String fromBAD_STRING() {
-        return fromBAD_STRING(stringValue);
+    private String fromBAD_URI(String value) {
+        return fromURL(value);
     }
 
     @NonNull
@@ -369,6 +370,11 @@ public class CssToken /*extends AST*/ {
 
     @NonNull
     private String fromURL() {
+        return fromURL(stringValue);
+    }
+
+    @NonNull
+    private String fromURL(@NonNull String stringValue) {
         StringBuilder out = new StringBuilder();
         out.append("url(");
         Reader r = new StringReader(stringValue);
@@ -376,9 +382,9 @@ public class CssToken /*extends AST*/ {
             for (int ch = r.read(); ch != -1; ch = r.read()) {
                 final boolean escape;
                 switch (ch) {
-                    case '"':
-                    case '\'':
-                    case '(':
+                case '"':
+                case '\'':
+                case '(':
                     case ')':
                     case '\\':
                         escape = true;
