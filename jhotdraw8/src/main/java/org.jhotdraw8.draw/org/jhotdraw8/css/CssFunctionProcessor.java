@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  * Interface for CSS function processors.
  * <p>
  * This is a macro processor which takes CssTokens from a CssTokenizer and produces
- * processed tokens.
+ * processed CssTokens.
  * <p>
  * References:
  * <ul>

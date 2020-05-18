@@ -11,11 +11,12 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /**
- * Interface for CSS functions.
+ * Interface for CSS macro functions. A CSS macro function processes
+ * CssTokens.
  */
 public interface CssFunction<T> {
     /**
-     * Proceses the function.
+     * Processes the function.
      */
     void process(@NonNull T element,
                  @NonNull CssTokenizer tt,

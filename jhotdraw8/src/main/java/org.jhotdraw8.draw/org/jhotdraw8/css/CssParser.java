@@ -58,7 +58,7 @@ import java.util.Map;
  * The CSS Syntax Module Level 3 defines a grammar which is equivalent to the
  * following EBNF ISO/IEC 14977 productions:
  * <pre>
- * stylesheet_core = { S | CDO | CDC | qualified_rule | at_rule} ;
+ * stylesheet_core = { S | CDO | CDC | qualified_rule | at_rule } ;
  *
  * rule_list    = { S | qualified_rule | at_rule} ;
  *
@@ -235,7 +235,6 @@ public class CssParser {
         String atKeyword = tt.currentStringNonNull();
         tt.next();
         List<CssToken> header = new ArrayList<>();
-        List<CssToken> body = new ArrayList<>();
         while (tt.current() != CssTokenType.TT_EOF
                 && tt.current() != '{'//
                 && tt.current() != ';') {
@@ -243,6 +242,7 @@ public class CssParser {
             parseComponentValue(tt, header);
             tt.nextNoSkip();
         }
+        List<CssToken> body = new ArrayList<>();
         if (tt.current() == ';') {
             return new AtRule(atKeyword, header, body);
         } else {

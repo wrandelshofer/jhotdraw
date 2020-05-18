@@ -9,8 +9,10 @@ import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * BreadthFirstSpliterator.
@@ -24,7 +26,7 @@ public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V>
     private final Function<V, Iterable<V>> nextFunction;
     @NonNull
     private final Deque<V> deque;
-
+    private final Predicate<V> visited;
 
     /**
      * Creates a new instance.
@@ -33,22 +35,35 @@ public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V>
      * @param root         the root vertex
      */
     public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root) {
+        this(nextFunction, root, new HashSet<>()::add);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param nextFunction the nextFunction
+     * @param root         the root vertex
+     */
+    public BreadthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull Predicate<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction is null");
         Objects.requireNonNull(root, "root is null");
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         deque.add(root);
+        this.visited = visited;
     }
 
     @Override
     public boolean moveNext() {
-        current = deque.pollLast();
+        current = deque.pollFirst();
         if (current == null) {
             return false;
         }
         for (V next : nextFunction.apply(current)) {
+            if (visited.test(next)) {
                 deque.addLast(next);
+            }
         }
         return true;
     }

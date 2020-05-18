@@ -125,6 +125,11 @@ public class ImmutableLists {
     }
 
     @NonNull
+    public static <T> ImmutableList<T> ofArray(@NonNull Object[] a) {
+        return ofArray(a, 0, a.length);
+    }
+
+    @NonNull
     public static <T> ImmutableList<T> ofArray(@NonNull Object[] a, int offset, int length) {
         return length == 0 ? emptyList() : new ImmutableArrayList<>(a, offset, length);
     }
