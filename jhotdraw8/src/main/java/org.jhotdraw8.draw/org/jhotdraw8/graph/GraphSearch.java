@@ -24,7 +24,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
@@ -71,13 +70,12 @@ public class GraphSearch {
      * Uses Kruskal's algorithm.
      *
      * @param <V>             the vertex type
-     * @param <A>             the arrow type
      * @param vertices        the vertices of the directed graph
      * @param getNextVertices a function that returns the next vertices given a vertex
      * @return the disjoint sets.
      */
     @NonNull
-    public static <V, A> List<Set<V>> findDisjointSets(@NonNull Collection<V> vertices, @NonNull Function<V, Iterable<V>> getNextVertices) {
+    public static <V> List<Set<V>> findDisjointSets(@NonNull Collection<V> vertices, @NonNull Function<V, Iterable<V>> getNextVertices) {
         // Create initial forest
         Map<V, List<V>> forest = createForest(vertices);
         // Merge sets.
@@ -92,7 +90,7 @@ public class GraphSearch {
         }
 
         // Create final forest.
-        Set<List<V>> visited = Collections.newSetFromMap(new IdentityHashMap<List<V>, Boolean>(forest.size()));
+        Set<List<V>> visited = Collections.newSetFromMap(new IdentityHashMap<>(forest.size()));
         List<Set<V>> disjointSets = new ArrayList<>(forest.size());
         for (List<V> set : forest.values()) {
             if (visited.add(set)) {
@@ -303,7 +301,6 @@ public class GraphSearch {
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
         final int[] result = new int[n];// result array
         int done = 0;
-        Random random = null;
         while (done < n) {
             for (; done < n; done++) {
                 if (first == last) {
@@ -347,15 +344,32 @@ public class GraphSearch {
      * @return the sorted list of vertices
      */
     @NonNull
-    @SuppressWarnings("unchecked")
     public static <V, A> List<V> sortTopologicallyObject(DirectedGraph<V, A> model) {
-        final int n = model.getVertexCount();
+        return sortTopologically(model.getVertices(), model::getNextVertices);
+    }
+
+    /**
+     * Sorts the specified directed graph topologically.
+     * <p>
+     * If the graph contains cycles, then this method splits the graph
+     * inside of a cycle.
+     *
+     * @param <V>          the vertex type
+     * @param vertices     the vertices of the graph
+     * @param nextVertices a function that delivers the next vertices for a given vertex
+     * @return the sorted list of vertices
+     */
+    @NonNull
+    public static <V> List<V> sortTopologically(@NonNull Collection<V> vertices,
+                                                @NonNull Function<V, Iterable<? extends V>> nextVertices) {
+        final int n = vertices.size();
+        Set<V> verticesInLoops = null;
 
         // Step 1: compute number of incoming arrows for each vertex
-        final Map<V, Integer> deg = new HashMap<>(n); // deg is the number of unprocessed incoming arrows on vertex
-        for (V v : model.getVertices()) {
-            deg.put(v, 0);
-            for (V u : model.getNextVertices(v)) {
+        final Map<V, Integer> deg = new LinkedHashMap<>(n); // deg is the number of unprocessed incoming arrows on vertex
+        for (V v : vertices) {
+            deg.putIfAbsent(v, 0);
+            for (V u : nextVertices.apply(v)) {
                 deg.merge(u, 1, Integer::sum);
             }
         }
@@ -371,8 +385,6 @@ public class GraphSearch {
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
         final List<V> result = new ArrayList<>(n);// result array
         int done = 0;
-        Random random = null;
-        List<V> vertices = null;
         while (done < n) {
             for (; done < n; done++) {
                 if (queue.isEmpty()) {
@@ -380,9 +392,8 @@ public class GraphSearch {
                     break;
                 }
                 V v = queue.remove();
-                final int m = model.getNextCount(v);
-                for (V u : model.getNextVertices(v)) {
-                    if (deg.merge(u, -1, (a, b) -> a + b) == 0) {
+                for (V u : nextVertices.apply(v)) {
+                    if (deg.merge(u, -1, Integer::sum) == 0) {
                         queue.add(u);
                     }
                 }
@@ -390,17 +401,30 @@ public class GraphSearch {
             }
 
             if (done < n) {
-                // Break loop in graph by removing an arbitrary arrow.
-                if (random == null) {
-                    vertices = new ArrayList<>(model.getVertices());
-                    random = new Random(0);
+                // FIXME only search in remaining subgraph
+                if (verticesInLoops == null) {
+                    List<List<V>> stronglyConnectedComponents = findStronglyConnectedComponents(vertices, nextVertices);
+                    verticesInLoops = new LinkedHashSet<>();
+                    for (List<V> stronglyConnectedComponent : stronglyConnectedComponents) {
+                        if (stronglyConnectedComponent.size() > 1) {
+                            verticesInLoops.addAll(stronglyConnectedComponent);
+                        }
+                    }
                 }
-                int i;
-                do {
-                    i = random.nextInt(n);
-                } while (deg.get(vertices.get(i)) == 0);
-                deg.put(vertices.get(i), 0);// this can actually remove more than one arrow
-                queue.add(vertices.get(i));
+
+                // Break loop in graph by removing an arbitrary arrow.
+                boolean didBreakLoop = false;
+                for (V v : verticesInLoops) {
+                    if (deg.get(v) > 0) {
+                        deg.put(v, 0);// this can actually remove more than one arrow
+                        queue.add(v);
+                        didBreakLoop = true;
+                        break;
+                    }
+                }
+                if (!didBreakLoop) {
+                    throw new AssertionError("Programming error in loop breaking code.");
+                }
             }
         }
 
@@ -454,21 +478,20 @@ public class GraphSearch {
     @NonNull
     public static <V, A> List<List<V>> findStronglyConnectedComponents(
             @NonNull final DirectedGraph<V, A> graph) {
-        return findStronglyConnectedComponents(graph::getNextVertices, graph.getVertices());
+        return findStronglyConnectedComponents(graph.getVertices(), graph::getNextVertices);
     }
 
     /**
      * Returns all strongly connected components in the specified graph.
      *
-     * @param nextNodeFunction returns the next nodes of a given node
-     * @param vertices         the vertices of the graph
      * @param <V>              the vertex type
+     * @param vertices         the vertices of the graph
+     * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
     @NonNull
     public static <V> List<List<V>> findStronglyConnectedComponents(
-            @NonNull final Function<V, Iterable<? extends V>> nextNodeFunction,
-            @NonNull final Collection<? extends V> vertices
+            @NonNull final Collection<? extends V> vertices, @NonNull final Function<V, Iterable<? extends V>> nextNodeFunction
     ) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from

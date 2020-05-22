@@ -50,8 +50,10 @@ public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V>
         Objects.requireNonNull(root, "root is null");
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
-        deque.add(root);
         this.visited = visited;
+        if (visited.test(root)) {
+            deque.add(root);
+        }
     }
 
     @Override
