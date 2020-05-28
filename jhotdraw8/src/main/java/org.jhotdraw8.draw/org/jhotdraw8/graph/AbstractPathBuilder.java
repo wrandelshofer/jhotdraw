@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -137,7 +138,7 @@ public abstract class AbstractPathBuilder<V, A> {
     @Nullable
     private BackLink<V, A> search(@NonNull V start,
                                   @NonNull Predicate<V> goalPredicate,
-                                  @NonNull Predicate<V> visited) {
+                                  @NonNull AddToSet<V> visited) {
         return search(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
@@ -145,7 +146,7 @@ public abstract class AbstractPathBuilder<V, A> {
     protected abstract BackLink<V, A> search(V start,
                                              Predicate<V> goal,
                                              Function<V, Iterable<V>> nextNodesFunction,
-                                             @NonNull Predicate<V> visited, int maxLength);
+                                             @NonNull AddToSet<V> visited, int maxLength);
 
     protected static abstract class BackLink<VV, AA> {
         abstract BackLink<VV, AA> getParent();

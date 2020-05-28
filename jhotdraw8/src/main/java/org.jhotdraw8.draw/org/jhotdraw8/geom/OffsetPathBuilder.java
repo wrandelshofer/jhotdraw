@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * <p>
  * The next line segment can follow with an angle that may
  * make the next offset region rectangle overlap with the previous one.
- * For every {@code b'} point, we gat a second {@code b2'} point that
+ * For every {@code b'} point, we get a second {@code b2'} point that
  * belongs to the next line segment.
  * <pre>
  * offset region rectangles overlap:           b2'
@@ -132,7 +132,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     private void flush() {
         // XXX the following algorithm only works if the original path does not self-intersect:
 
-        // 1. Remove last contained point b2' while it is containned in previous rectangle
+        // 1. Remove last contained point b2' while it is contained in previous rectangle
         // a1 a2 a2' a1'
         final Path2D.Double path = new Path2D.Double();
         for (int i = segments.size() - 1; i >= 3; --i) {

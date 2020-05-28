@@ -7,13 +7,13 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * DepthFirstSpliterator.
@@ -28,13 +28,13 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
     @NonNull
     private final Deque<V> deque;
     @NonNull
-    private final Predicate<V> visited;
+    private final AddToSet<V> visited;
 
     /**
      * Creates a new instance.
      *
      * @param nextNodesFunction the nextFunction
-     * @param root               the root vertex
+     * @param root              the root vertex
      */
     public DepthFirstSpliterator(Function<V, Iterable<V>> nextNodesFunction, V root) {
         this(nextNodesFunction, root, new HashSet<>()::add);
@@ -49,7 +49,7 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
      *                     if the specified vertex has been visited, and marks the specified vertex
      *                     as visited.
      */
-    public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable Predicate<V> visited) {
+    public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable AddToSet<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction is null");
         Objects.requireNonNull(root, "root is null");
@@ -57,8 +57,9 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
-        deque.push(root);
-        visited.test(root);
+        if (visited.add(root)) {
+            deque.push(root);
+        }
     }
 
     @Override
@@ -68,7 +69,7 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
             return false;
         }
         for (V next : nextFunction.apply(current)) {
-            if (visited.test(next)) {
+            if (visited.add(next)) {
                 deque.addLast(next);
             }
         }

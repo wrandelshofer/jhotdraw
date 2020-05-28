@@ -7,13 +7,13 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * DepthFirstSpliterator.
@@ -28,7 +28,7 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
     @NonNull
     private final Deque<Arc<V, A>> deque;
     @NonNull
-    private final Predicate<Arc<V, A>> visited;
+    private final AddToSet<Arc<V, A>> visited;
 
     /**
      * Creates a new instance.
@@ -43,12 +43,13 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
 
     /**
      * Creates a new instance.
+     *
      * @param nextFunction the function that returns the next vertices of a given vertex
      * @param root         the root vertex
      * @param visited      a predicate with side effect. The predicate returns true
      *                     if the specified vertex has been visited, and marks the specified vertex
      */
-    public DepthFirstArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable Predicate<Arc<V, A>> visited) {
+    public DepthFirstArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction is null");
         Objects.requireNonNull(root, "root is null");
@@ -57,7 +58,7 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
         deque = new ArrayDeque<>(16);
         this.visited = visited;
         for (Arc<V, A> next : nextFunction.apply(root)) {
-            if (visited.test(next)) {
+            if (visited.add(next)) {
                 deque.addLast(next);
             }
         }
@@ -70,7 +71,7 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
             return false;
         }
         for (Arc<V, A> next : nextFunction.apply(current.getEnd())) {
-            if (visited.test(next)) {
+            if (visited.add(next)) {
                 deque.addLast(next);
             }
         }

@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashSet;
@@ -63,14 +64,15 @@ public class UniqueOrOneHopPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
     protected BackLink<V, A> search(@NonNull V root,
                                     @NonNull Predicate<V> goal,
                                     @NonNull Function<V, Iterable<V>> nextNodesFunction,
-                                    @NonNull Predicate<V> visited,
+                                    @NonNull AddToSet<V> visited,
                                     int maxLength) {
 
         Queue<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
 
         MyBackLink<V, A> rootBackLink = new MyBackLink<>(root, null, maxLength);
-        visited.test(root);
-        queue.add(rootBackLink);
+        if (visited.add(root)) {
+            queue.add(rootBackLink);
+        }
         MyBackLink<V, A> found = null;
         Set<V> nonUnique = new LinkedHashSet<>();
         while (!queue.isEmpty()) {
@@ -86,7 +88,7 @@ public class UniqueOrOneHopPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
             }
             if (node.depth > 0) {
                 for (V next : nextNodesFunction.apply(node.vertex)) {
-                    if (visited.test(next)) {
+                    if (visited.add(next)) {
                         MyBackLink<V, A> backLink = new MyBackLink<V, A>(next, node, node.depth - 1);
                         queue.add(backLink);
                     } else {

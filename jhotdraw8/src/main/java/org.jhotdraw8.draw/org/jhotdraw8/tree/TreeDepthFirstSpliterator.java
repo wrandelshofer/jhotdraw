@@ -6,13 +6,13 @@ package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * DepthFirstSpliterator.
@@ -27,7 +27,7 @@ public class TreeDepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<
     @NonNull
     private final Deque<V> deque;
     @NonNull
-    private final Predicate<V> visited;
+    private final AddToSet<V> visited;
 
     /**
      * Creates a new instance.
@@ -48,7 +48,7 @@ public class TreeDepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<
      *                     if the specified vertex has been visited, and marks the specified vertex
      *                     as visited.
      */
-    public TreeDepthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull Predicate<V> visited) {
+    public TreeDepthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction is null");
         Objects.requireNonNull(root, "root is null");
@@ -56,8 +56,9 @@ public class TreeDepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;
-        deque.add(root);
-        visited.test(root);
+        if (visited.add(root)) {
+            deque.add(root);
+        }
     }
 
     @Override
@@ -67,7 +68,7 @@ public class TreeDepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<
             return false;
         }
         for (V next : nextFunction.apply(current)) {
-            if (visited.test(next)) {
+            if (visited.add(next)) {
                 deque.addLast(next);
             }
         }
