@@ -56,6 +56,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private Supplier<MenuBar> menuFactory;
     @Nullable
     private String license;
+    private ResourceBundle resources = ApplicationLabels.getResources().asResourceBundle();
 
     public SimpleApplicationModel() {
 
@@ -256,7 +257,11 @@ public class SimpleApplicationModel implements ApplicationModel {
 
     @Override
     public ResourceBundle getResources() {
-        return ApplicationLabels.getResources().asResourceBundle();
+        return resources;
+    }
+
+    public void setResources(ResourceBundle resources) {
+        this.resources = resources;
     }
 
     @NonNull

@@ -54,7 +54,18 @@ public interface TextLayoutableFigure extends Figure {
     default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
-        double d = units.convert(getStyledNonNull(LINE_SPACING), UnitConverter.DEFAULT);
+        CssSize lineSpacing = getStyledNonNull(LINE_SPACING);
+        double d;
+        if (UnitConverter.PERCENTAGE.equals(lineSpacing.getUnits())) {
+            CssSize fontSize = getStyled(TextFontableFigure.FONT_SIZE);
+            if (fontSize != null) {
+                d = lineSpacing.getValue() * units.convert(fontSize, UnitConverter.DEFAULT) / 100.0;
+            } else {
+                d = units.convert(lineSpacing, UnitConverter.DEFAULT);
+            }
+        } else {
+            d = units.convert(lineSpacing, UnitConverter.DEFAULT);
+        }
         if (text.getLineSpacing() != d) {
             text.setLineSpacing(d);
         }

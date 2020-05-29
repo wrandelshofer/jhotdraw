@@ -9,6 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="org.jhotdraw8.application" />
-    <orderEntry type="library" name="org.openjfx:javafx:14" level="project" />
+    <orderEntry type="library" name="org.openjfx:javafx:14.0.1" level="project" />
+    <orderEntry type="module" module-name="org.jhotdraw8.draw" />
   </component>
 </module>

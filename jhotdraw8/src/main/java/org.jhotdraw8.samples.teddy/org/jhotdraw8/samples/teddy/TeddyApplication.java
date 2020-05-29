@@ -17,11 +17,14 @@ public class TeddyApplication extends DocumentBasedApplication {
 
     public TeddyApplication() {
         super();
-        setModel(new SimpleApplicationModel(
+        SimpleApplicationModel model = new SimpleApplicationModel(
                 "Teddy",
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
                 DocumentBasedApplication.getDocumentOrientedMenu(),
-                "Text Files", null, "*.txt"));
+                "Text Files", null, "*.txt");
+        model.setResources(TeddyLabels.getResources().asResourceBundle());
+        model.setMenuFxml(TeddyApplication.class.getResource("TeddyMenuBar.fxml"));
+        setModel(model);
     }
 
     /**

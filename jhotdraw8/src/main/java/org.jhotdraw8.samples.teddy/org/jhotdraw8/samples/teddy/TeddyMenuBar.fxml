@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ @(#)GrapherMenuBar.fxml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <menus>
+    <Menu id="file" mnemonicParsing="false" text="%file.text">
+      <items>
+        <MenuItem id="file.new" mnemonicParsing="false" text="New"/>
+        <MenuItem id="file.open" mnemonicParsing="false" text="Open"/>
+        <Menu id="file.openRecentMenu" mnemonicParsing="false" text="%file.openRecent.text"/>
+        <MenuItem id="file.save" mnemonicParsing="false" text="Save"/>
+        <MenuItem id="file.saveAs" mnemonicParsing="false" text="Save as..."/>
+        <MenuItem id="file.revert" mnemonicParsing="false" text="Revert to Saved"/>
+        <MenuItem id="file.browseFileDirectory" mnemonicParsing="false" text="Browse File Directory"/>
+        <MenuItem id="file.print" mnemonicParsing="false" text="Print..."/>
+        <MenuItem id="file.export" mnemonicParsing="false" text="%file.export.text"/>
+        <MenuItem id="file.close" mnemonicParsing="false" text="Close"/>
+        <SeparatorMenuItem mnemonicParsing="false"/>
+        <MenuItem id="application.exit" mnemonicParsing="false" text="Exit"/>
+      </items>
+    </Menu>
+    <Menu id="edit" mnemonicParsing="false" text="%edit.text">
+      <items>
+        <MenuItem id="edit.cut" mnemonicParsing="false" text="Cut"/>
+        <MenuItem id="edit.copy" mnemonicParsing="false" text="Copy"/>
+        <MenuItem id="edit.paste" mnemonicParsing="false" text="Paste"/>
+        <MenuItem id="edit.delete" mnemonicParsing="false" text="Delete"/>
+        <SeparatorMenuItem mnemonicParsing="false"/>
+        <MenuItem id="edit.selectAll" mnemonicParsing="false" text="Select All"/>
+      </items>
+    </Menu>
+    <Menu id="format" mnemonicParsing="false" text="%format.text">
+      <items>
+        <MenuItem id="format.font" mnemonicParsing="false" text="Font"/>
+      </items>
+    </Menu>
+    <Menu id="window" mnemonicParsing="false" text="%window.text">
+    </Menu>
+    <Menu id="help" mnemonicParsing="false" text="%help.text.mac">
+      <items>
+        <MenuItem id="application.about" mnemonicParsing="false" text="About"/>
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>

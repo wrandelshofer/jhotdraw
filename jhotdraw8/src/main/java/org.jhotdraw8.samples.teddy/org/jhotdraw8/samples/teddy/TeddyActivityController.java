@@ -4,20 +4,25 @@
  */
 package org.jhotdraw8.samples.teddy;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
+import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractDocumentBasedActivity;
+import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.DocumentBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.samples.teddy.action.FontAction;
+import org.jhotdraw8.samples.teddy.action.FontableActivity;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -35,7 +40,7 @@ import java.util.concurrent.CompletionStage;
  *
  * @author Werner Randelshofer
  */
-public class TeddyActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, Initializable {
+public class TeddyActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, Initializable, FontableActivity {
 
     @FXML
     private TextArea textArea;
@@ -59,7 +64,8 @@ public class TeddyActivityController extends AbstractDocumentBasedActivity imple
 
     @Override
     protected void initActionMap(HierarchicalMap<String, Action> map) {
-        // empty
+        final Application app = getApplication();
+        map.put(FontAction.ID, new FontAction(app, this));
     }
 
     @Override
@@ -101,6 +107,11 @@ public class TeddyActivityController extends AbstractDocumentBasedActivity imple
             }
             return format;
         });
+    }
+
+    @Override
+    public ObjectProperty<Font> fontProperty() {
+        return textArea.fontProperty();
     }
 
     @NonNull
