@@ -54,7 +54,7 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
 
 
         contextMenu.getItems().add(addPoint);
-        contextMenu.show(getNode(view), event.getX(), event.getScreenY());
+        contextMenu.show(getNode(view), event.getScreenX(), event.getScreenY());
         event.consume();
     }
 

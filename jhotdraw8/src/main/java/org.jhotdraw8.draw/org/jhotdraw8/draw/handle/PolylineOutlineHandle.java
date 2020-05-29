@@ -86,14 +86,25 @@ public class PolylineOutlineHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (event.isSecondaryButtonDown()) {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
-            addPoint.setOnAction(actionEvent -> addPoint(event, dv));
-            contextMenu.getItems().add(addPoint);
-            contextMenu.show(node, event.getX(), event.getScreenY());
-            event.consume();
+        if (event.isPopupTrigger()) {
+            onPopupTriggered(event, dv);
         }
+    }
+
+    @Override
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+        if (event.isPopupTrigger()) {
+            onPopupTriggered(event, dv);
+        }
+    }
+
+    protected void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
+        addPoint.setOnAction(actionEvent -> addPoint(event, dv));
+        contextMenu.getItems().add(addPoint);
+        contextMenu.show(node, event.getScreenX(), event.getScreenY());
+        event.consume();
     }
 
     @Override

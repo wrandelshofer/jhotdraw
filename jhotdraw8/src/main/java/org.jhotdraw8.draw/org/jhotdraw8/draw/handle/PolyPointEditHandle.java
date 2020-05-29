@@ -130,18 +130,25 @@ public class PolyPointEditHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (event.isSecondaryButtonDown()) {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
-            addPoint.setOnAction(actionEvent -> removePoint(dv));
-            contextMenu.getItems().add(addPoint);
-            contextMenu.show(node, event.getX(), event.getScreenY());
-            event.consume();
+        if (event.isPopupTrigger()) {
+            onPopupTriggered(event, dv);
         }
+    }
+
+    protected void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
+        addPoint.setOnAction(actionEvent -> removePoint(dv));
+        contextMenu.getItems().add(addPoint);
+        contextMenu.show(node, event.getScreenX(), event.getScreenY());
+        event.consume();
     }
 
     @Override
     public void onMouseReleased(MouseEvent event, DrawingView dv) {
+        if (event.isPopupTrigger()) {
+            onPopupTriggered(event, dv);
+        }
     }
 
     @Override

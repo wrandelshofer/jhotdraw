@@ -272,7 +272,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
         tangents.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
         contextMenu.getItems().add(tangents);
-        contextMenu.show(node, event.getX(), event.getScreenY());
+        contextMenu.show(node, event.getScreenY(), event.getScreenY());
         event.consume();
     }
 
