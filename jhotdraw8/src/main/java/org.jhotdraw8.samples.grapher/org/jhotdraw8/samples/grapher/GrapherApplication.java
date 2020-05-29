@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.samples.grapher;
 
+import javafx.stage.Screen;
 import org.jhotdraw8.app.DocumentBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.RevertFileAction;
@@ -37,10 +38,17 @@ public class GrapherApplication extends DocumentBasedApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        // The following settings improve font rendering quality (less color fringes around characters).
-        System.setProperty("prism.text", "t2k");
-        System.setProperty("prism.lcdtext", "true");
+        if (Screen.getPrimary().getOutputScaleX() >= 2.0) {
+            // The following settings improve font rendering quality on
+            // retina displays (no color fringes around characters).
+            System.setProperty("prism.subpixeltext", "on");
+            System.setProperty("prism.lcdtext", "false");
+        } else {
+            // The following settings improve font rendering on
+            // low-res lcd displays (less color fringes around characters).
+            System.setProperty("prism.text", "t2k");
+            System.setProperty("prism.lcdtext", "true");
+        }
 
         launch(args);
     }
