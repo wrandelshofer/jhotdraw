@@ -11,6 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 
@@ -48,7 +49,7 @@ public class LocatorConnector extends AbstractConnector {
     }
 
     @Override
-    public Intersection.IntersectionPoint chopStart(Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
+    public Intersection.IntersectionPoint chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
         final Bounds b = target.getLayoutBounds();
         Point2D center = new Point2D(b.getMinX() + b.getWidth() * 0.5, b.getMinY() + b.getHeight() * 0.5);
         Point2D location = locator.locate(target);

@@ -204,7 +204,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return path == null ? Shapes.emptyPathIterator() : Shapes.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
@@ -258,12 +258,12 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
         Point2D endTangent = null;
         if (startConnector != null && startTarget != null) {
-            Intersection.IntersectionPoint intersectionPoint = startConnector.chopStart(this, startTarget, start, end);
+            Intersection.IntersectionPoint intersectionPoint = startConnector.chopStart(ctx, this, startTarget, start, end);
             start = worldToParent(intersectionPoint.getPoint());
             set(START, new CssPoint2D(start));
         }
         if (endConnector != null && endTarget != null) {
-            Intersection.IntersectionPoint intersectionPoint = endConnector.chopEnd(this, endTarget, start, end);
+            Intersection.IntersectionPoint intersectionPoint = endConnector.chopEnd(ctx, this, endTarget, start, end);
             endTangent = intersectionPoint.getTangent2();
             end = worldToParent(intersectionPoint.getPoint());
             set(END, new CssPoint2D(end));

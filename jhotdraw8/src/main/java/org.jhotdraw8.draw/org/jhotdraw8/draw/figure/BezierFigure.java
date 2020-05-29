@@ -125,7 +125,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return new BezierNodePath(getStyledNonNull(PATH), getStyledNonNull(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 

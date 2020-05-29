@@ -120,7 +120,7 @@ public class TextAreaFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public PathIterator getPathIterator(@Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (path == null) {
             layout(new SimpleRenderContext());
         }

@@ -85,7 +85,7 @@ public class PolygonFigure extends AbstractLeafFigure
 
     @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return Shapes.pathIteratorFromPoints(getNonNull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
     }
 

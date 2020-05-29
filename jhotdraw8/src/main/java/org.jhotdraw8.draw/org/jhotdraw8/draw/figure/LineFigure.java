@@ -86,7 +86,7 @@ public class LineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return Shapes.awtShapeFromFX(new Line(getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
                 getNonNull(END_X).getConvertedValue(),

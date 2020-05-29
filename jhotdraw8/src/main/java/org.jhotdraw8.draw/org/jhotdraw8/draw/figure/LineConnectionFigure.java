@@ -111,7 +111,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     }
 
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return Shapes.awtShapeFromFX(new Line(
                 getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
@@ -135,11 +135,11 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         }
 
         if (startConnector != null && startTarget != null) {
-            final Point2D p = worldToParent(startConnector.chopStart(this, startTarget, start, end).getPoint());
+            final Point2D p = worldToParent(startConnector.chopStart(ctx, this, startTarget, start, end).getPoint());
             set(START, new CssPoint2D(p));
         }
         if (endConnector != null && endTarget != null) {
-            final Point2D p = worldToParent(endConnector.chopEnd(this, endTarget, start, end).getPoint());
+            final Point2D p = worldToParent(endConnector.chopEnd(ctx, this, endTarget, start, end).getPoint());
             set(END, new CssPoint2D(p));
         }
 

@@ -142,7 +142,7 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         if (textNode == null) {
             layout(new SimpleRenderContext());
         }

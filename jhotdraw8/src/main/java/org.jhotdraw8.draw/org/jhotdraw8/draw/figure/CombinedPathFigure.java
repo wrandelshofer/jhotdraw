@@ -64,7 +64,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    private PathIterator getStyledPathIteratorInParent(@NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
+    private PathIterator getStyledPathIteratorInParent(RenderContext ctx, @NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         if (localToParent != null) {
@@ -76,7 +76,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 childTx = ltpTx;
             }
         }
-        PathIterator iter = f.getPathIterator(childTx);
+        PathIterator iter = f.getPathIterator(ctx, childTx);
         if (f instanceof StrokableFigure) {
             Paint stroke = Paintable.getPaint(f.getStyled(STROKE));
             if (stroke != null) {
@@ -111,15 +111,15 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
     @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
         if (op != null) {
-            return getPathIteratorCAG(tx, op);
+            return getPathIteratorCAG(ctx, tx, op);
         }
         List<PathIterator> iterators = new ArrayList<>();
         for (Figure child : getChildren()) {
             if (child instanceof PathIterableFigure) {
-                final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
+                final PathIterator childPathIterator = getStyledPathIteratorInParent(ctx, (PathIterableFigure) child, tx);
                 iterators.add(childPathIterator);
             }
         }
@@ -128,12 +128,12 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @NonNull
-    private PathIterator getPathIteratorCAG(AffineTransform tx, @NonNull CagOperation op) {
+    private PathIterator getPathIteratorCAG(RenderContext ctx, AffineTransform tx, @NonNull CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {
             if (child instanceof PathIterableFigure) {
-                final PathIterator childPathIterator = getStyledPathIteratorInParent((PathIterableFigure) child, tx);
+                final PathIterator childPathIterator = getStyledPathIteratorInParent(ctx, (PathIterableFigure) child, tx);
                 if (first) {
                     first = false;
                     area = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).build());
@@ -209,7 +209,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
 
-        n.getElements().setAll(Shapes.fxPathElementsFromAWT(getPathIterator(null)));
+        n.getElements().setAll(Shapes.fxPathElementsFromAWT(getPathIterator(ctx, null)));
     }
 
     /**

@@ -93,7 +93,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();
         FXPathBuilder builder = new FXPathBuilder(elements);
-        Shapes.buildFromPathIterator(builder, f.getPathIterator(Shapes.awtTransformFromFX(t)));
+        Shapes.buildFromPathIterator(builder, f.getPathIterator(view, Shapes.awtTransformFromFX(t)));
         path1.getElements().setAll(elements);
         path2.getElements().setAll(elements);
     }

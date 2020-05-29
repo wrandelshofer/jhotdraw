@@ -132,7 +132,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         Text tn = new Text();
         tn.setX(getStyledNonNull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN).getY().getConvertedValue());
