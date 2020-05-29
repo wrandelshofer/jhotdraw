@@ -50,6 +50,6 @@ public abstract class LocatorHandle extends AbstractHandle {
     @Override
     public boolean contains(@NonNull DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocation(dv);
-        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance;
     }
 }

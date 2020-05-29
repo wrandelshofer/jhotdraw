@@ -50,7 +50,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
-        return path1.contains(x, y);
+        return false;
     }
 
     @Nullable

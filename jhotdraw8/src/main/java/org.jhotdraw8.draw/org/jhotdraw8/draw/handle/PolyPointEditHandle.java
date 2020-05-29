@@ -76,7 +76,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     @Override

@@ -121,7 +121,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     private BezierNode getBezierNode() {
@@ -327,7 +327,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
         constraints.getItems().addAll(noneRadio, colinearRadio, equidistantRadio, bothRadio);
         contextMenu.getItems().add(constraints);
-        contextMenu.show(node, event.getX(), event.getScreenY());
+        contextMenu.show(node, event.getScreenX(), event.getScreenY());
         event.consume();
     }
 

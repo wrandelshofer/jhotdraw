@@ -30,7 +30,10 @@ import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
+import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
+
+import java.awt.geom.PathIterator;
 
 /**
  * Draws the {@code wireframe} ofCollection a {@code PolygonFigure}.
@@ -66,6 +69,12 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
+        if (Geom.contains(poly2.getBoundsInParent(), x, y, tolerance)) {
+            Intersection i = Intersections.intersectPathIteratorPoint(
+                    Shapes.pathIteratorFromPointCoords(poly2.getPoints(), true, PathIterator.WIND_EVEN_ODD, null),
+                    x, y, tolerance);
+            return i.getStatus() == Intersection.Status.INTERSECTION;
+        }
         return false;
     }
 
@@ -88,14 +97,14 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (event.isPopupTrigger()) {
+        if (editable && event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }
     }
 
     @Override
     public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (event.isPopupTrigger()) {
+        if (editable && event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }
     }
@@ -111,9 +120,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-
         if (editable && key != null && event.getClickCount() == 2) {
-
             addPoint(event, dv);
         }
     }

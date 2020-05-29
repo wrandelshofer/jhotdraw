@@ -66,9 +66,9 @@ public class PointHandle extends AbstractHandle {
     }
 
     @Override
-    public boolean contains(DrawingView dv, double x, double y, double toleranceSquared) {
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.length2(x, y, p.getX(), p.getY()) <= toleranceSquared;
+        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     @Override

@@ -104,7 +104,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.length2(x, y, p.getX(), p.getY()) <= tolerance;
+        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance;
     }
 
     private BezierNode getBezierNode() {
@@ -272,7 +272,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
         tangents.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
         contextMenu.getItems().add(tangents);
-        contextMenu.show(node, event.getScreenY(), event.getScreenY());
+        contextMenu.show(node, event.getScreenX(), event.getScreenY());
         event.consume();
     }
 

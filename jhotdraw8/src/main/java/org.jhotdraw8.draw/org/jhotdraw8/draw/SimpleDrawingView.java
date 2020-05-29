@@ -699,13 +699,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             if (!handle.isSelectable()) {
                 continue;
             }
-            if (handle.contains(this, vx, vy, getEditor().getTolerance(), getEditor().getTolerance() * getEditor().getTolerance())) {
+            if (handle.contains(this, vx, vy, getEditor().getTolerance() * getEditor().getTolerance())) {
                 return handle;
             } else {
-                if (false)
+                if (false) {
                     if (contains(node, new Point2D(vx, vy), getEditor().getTolerance())) {
                         return handle;
                     }
+                }
             }
         }
         return null;

@@ -114,27 +114,13 @@ public interface Handle {
     /**
      * Whether the user picked the handle.
      *
-     * @param dv               the drawing view
-     * @param x                the point
-     * @param y                the point
-     * @param tolerance        the tolerance (radius around the point)
-     * @param toleranceSquared the squared tolerance (squared radius around the point)
+     * @param dv        the drawing view
+     * @param x         the point
+     * @param y         the point
+     * @param tolerance the tolerance (radius around the point)
      * @return true if we picked the handle
      */
-    default boolean contains(DrawingView dv, double x, double y, double tolerance, double toleranceSquared) {
-        return contains(dv, x, y, toleranceSquared);
-    }
-
-    /**
-     * Whether the user picked the handle.
-     *
-     * @param dv               the drawing view
-     * @param x                the point
-     * @param y                the point
-     * @param toleranceSquared the squared tolerance (squared radius around the point)
-     * @return true if we picked the handle
-     */
-    boolean contains(DrawingView dv, double x, double y, double toleranceSquared);
+    boolean contains(DrawingView dv, double x, double y, double tolerance);
 
 
     /**

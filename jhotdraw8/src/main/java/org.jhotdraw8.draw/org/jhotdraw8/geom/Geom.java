@@ -4,19 +4,30 @@
  */
 package org.jhotdraw8.geom;
 
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.*;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Some geometric utilities.
@@ -283,7 +294,7 @@ public class Geom {
                     ctr.getX(), ctr.getY());
 
             if (chop != null) {
-                double cl = Geom.length2(chop.getX(), chop.getY(), p.getX(), p.getY());
+                double cl = Geom.lengthSquared(chop.getX(), chop.getY(), p.getX(), p.getY());
                 if (cl < len) {
                     len = cl;
                     cx = chop.getX();
@@ -320,7 +331,7 @@ public class Geom {
             for (; !i.isDone(); i.next()) {
                 i.currentSegment(coords);
 
-                double l = Geom.length2(ctr.x, ctr.y, coords[0], coords[1]);
+                double l = Geom.lengthSquared(ctr.x, ctr.y, coords[0], coords[1]);
                 if (l < len) {
                     len = l;
                     cx = coords[0];
@@ -871,10 +882,10 @@ public class Geom {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
 
-            if (length2(xa, ya, px, py) <= limit2
-                    || length2(xb, yb, px, py) <= limit2
-                    || length2(xc, yc, px, py) <= limit2
-                    || length2(xd, yd, px, py) <= limit2) {
+            if (lengthSquared(xa, ya, px, py) <= limit2
+                    || lengthSquared(xb, yb, px, py) <= limit2
+                    || lengthSquared(xc, yc, px, py) <= limit2
+                    || lengthSquared(xd, yd, px, py) <= limit2) {
                 return new Point2D(px, py);
             }
 
@@ -932,7 +943,7 @@ public class Geom {
      * @return the distance between the two points
      */
     public static double length(double x1, double y1, double x2, double y2) {
-        return sqrt(length2(x1, y1, x2, y2));
+        return sqrt(lengthSquared(x1, y1, x2, y2));
     }
 
     /**
@@ -943,7 +954,7 @@ public class Geom {
      * @return the distance between the two points
      */
     public static double length(@NonNull Point2D p1, @NonNull Point2D p2) {
-        return sqrt(length2(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
+        return sqrt(lengthSquared(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
     /**
@@ -955,7 +966,7 @@ public class Geom {
      * @param y2 the y coordinate of point 2
      * @return the square distance between the two points
      */
-    public static double length2(double x1, double y1, double x2, double y2) {
+    public static double lengthSquared(double x1, double y1, double x2, double y2) {
         return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
     }
 
