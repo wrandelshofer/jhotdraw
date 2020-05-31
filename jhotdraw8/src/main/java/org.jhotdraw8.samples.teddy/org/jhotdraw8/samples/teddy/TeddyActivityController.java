@@ -13,9 +13,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.AbstractDocumentBasedActivity;
+import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
@@ -40,7 +40,7 @@ import java.util.concurrent.CompletionStage;
  *
  * @author Werner Randelshofer
  */
-public class TeddyActivityController extends AbstractDocumentBasedActivity implements DocumentBasedActivity, Initializable, FontableActivity {
+public class TeddyActivityController extends AbstractFileBasedActivity implements FileBasedActivity, Initializable, FontableActivity {
 
     @FXML
     private TextArea textArea;

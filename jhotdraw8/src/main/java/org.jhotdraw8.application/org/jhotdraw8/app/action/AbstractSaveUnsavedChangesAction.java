@@ -19,7 +19,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
@@ -35,7 +35,7 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
- * to write unsaved changes of a {@link DocumentBasedActivity}
+ * to write unsaved changes of a {@link FileBasedActivity}
  * before a destructive action is performed.
  * <p>
  * If the view has no unsaved changes, method {@code doIt} is invoked
@@ -48,7 +48,7 @@ import java.util.concurrent.CompletionStage;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<DocumentBasedActivity> {
+public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
     /**
      *
@@ -68,24 +68,24 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
      * @param app  the application
      * @param view the view
      */
-    public AbstractSaveUnsavedChangesAction(@NonNull Application app, DocumentBasedActivity view) {
-        super(app, view, DocumentBasedActivity.class);
+    public AbstractSaveUnsavedChangesAction(@NonNull Application app, FileBasedActivity view) {
+        super(app, view, FileBasedActivity.class);
     }
 
     @Override
-    protected final void onActionPerformed(ActionEvent evt, DocumentBasedActivity activity) {
+    protected final void onActionPerformed(ActionEvent evt, FileBasedActivity activity) {
         Application app = getApplication();
-        if (activity instanceof DocumentBasedActivity) {
+        if (activity instanceof FileBasedActivity) {
             onActionOnViewPerformed(activity);
         } else if (isMayCreateActivity()) {
             app.createActivity().thenAccept(v -> {
                 app.add(v);
-                onActionOnViewPerformed((DocumentBasedActivity) v);//FIXME class cast exception
+                onActionOnViewPerformed((FileBasedActivity) v);//FIXME class cast exception
             });
         }
     }
 
-    public void onActionOnViewPerformed(@NonNull DocumentBasedActivity v) {
+    public void onActionOnViewPerformed(@NonNull FileBasedActivity v) {
         if (!v.isDisabled()) {
             final Resources labels = ApplicationLabels.getResources();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -166,7 +166,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     @Nullable
-    protected URIChooser getChooser(@NonNull DocumentBasedActivity view) {
+    protected URIChooser getChooser(@NonNull FileBasedActivity view) {
         URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
         if (chsr == null) {
             chsr = getApplication().getModel().createSaveChooser();
@@ -175,7 +175,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         return chsr;
     }
 
-    protected void saveView(@NonNull final DocumentBasedActivity v, WorkState workState) {
+    protected void saveView(@NonNull final FileBasedActivity v, WorkState workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -213,7 +213,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    protected void saveViewToURI(@NonNull final DocumentBasedActivity v, @NonNull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
+    protected void saveViewToURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
         v.write(uri, chooser == null ? null : dataFormat, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
@@ -242,5 +242,5 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         });
     }
 
-    protected abstract CompletionStage<Void> doIt(DocumentBasedActivity p);
+    protected abstract CompletionStage<Void> doIt(FileBasedActivity p);
 }

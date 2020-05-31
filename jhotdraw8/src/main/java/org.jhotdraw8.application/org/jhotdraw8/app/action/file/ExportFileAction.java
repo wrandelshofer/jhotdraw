@@ -8,7 +8,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.gui.URIChooser;
 
@@ -45,7 +45,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param app  the application
      * @param view the view
      */
-    public ExportFileAction(Application app, DocumentBasedActivity view) {
+    public ExportFileAction(Application app, FileBasedActivity view) {
         this(app, view, ID, null);
     }
 
@@ -67,13 +67,13 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(Application app, DocumentBasedActivity view, String id, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(Application app, FileBasedActivity view, String id, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
         super(app, view, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
 
     @Override
-    protected URIChooser createChooser(DocumentBasedActivity view) {
+    protected URIChooser createChooser(FileBasedActivity view) {
         // XXX should be supplied to the action?
         return app.getModel().createExportChooser();
     }
@@ -85,7 +85,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected void onSaveSucceeded(DocumentBasedActivity v, URI uri, DataFormat format) {
+    protected void onSaveSucceeded(FileBasedActivity v, URI uri, DataFormat format) {
         // empty
     }
 }

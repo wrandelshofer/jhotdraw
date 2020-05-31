@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -32,7 +32,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
     @Nullable
-    protected URIChooser getChooser(DocumentBasedActivity view) {
+    protected URIChooser getChooser(FileBasedActivity view) {
         URIChooser c = app.get(OPEN_CHOOSER_KEY);
         if (c == null) {
             c = getApplication().getModel().createOpenChooser();
@@ -49,9 +49,9 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             WorkState workState = new SimpleWorkState(getLabel());
             app.addDisabler(workState);
             // Search for an empty view
-            DocumentBasedActivity emptyView;
+            FileBasedActivity emptyView;
             if (isReuseEmptyViews()) {
-                emptyView = (DocumentBasedActivity) app.getActiveActivity(); // FIXME class cast exception
+                emptyView = (FileBasedActivity) app.getActiveActivity(); // FIXME class cast exception
                 if (emptyView == null
                         || !emptyView.isEmpty()
                         || emptyView.isDisabled()) {
@@ -62,7 +62,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             }
 
             if (emptyView == null) {
-                app.createActivity().thenAccept(v -> doIt((DocumentBasedActivity) v, true, workState));
+                app.createActivity().thenAccept(v -> doIt((FileBasedActivity) v, true, workState));
             } else {
                 doIt(emptyView, false, workState);
             }
@@ -70,7 +70,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
 
-    public void doIt(@NonNull DocumentBasedActivity view, boolean disposeView, WorkState workState) {
+    public void doIt(@NonNull FileBasedActivity view, boolean disposeView, WorkState workState) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -79,7 +79,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             // Prevent same URI from being opened more than once
             if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
                 for (Activity vp : getApplication().activities()) {
-                    DocumentBasedActivity v = (DocumentBasedActivity) vp;
+                    FileBasedActivity v = (FileBasedActivity) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
                             app.remove(view);
@@ -101,7 +101,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(@NonNull final DocumentBasedActivity v, @NonNull final URI uri, @NonNull final URIChooser chooser, WorkState workState) {
+    protected void openViewFromURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, @NonNull final URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
         Map<? super Key<?>, Object> options = getReadOptions();
         if (app != null) {
@@ -148,7 +148,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
     /**
-     * Gets options for {@link DocumentBasedActivity#read(URI, DataFormat, Map, boolean, WorkState)}.
+     * Gets options for {@link FileBasedActivity#read(URI, DataFormat, Map, boolean, WorkState)}.
      * The options can be null, a constant, or from user input through a dialog window.
      * <p>
      * The value null means that the user has aborted the dialog window. In this case, the action

@@ -72,20 +72,20 @@ import java.util.logging.Logger;
 import static java.lang.Math.min;
 
 /**
- * An {@link DocumentBasedApplication} handles the life-cycle of {@link DocumentBasedActivity} objects and
+ * An {@link FileBasedApplication} handles the life-cycle of {@link FileBasedActivity} objects and
  * provides windows to present them on screen.
  * <p>
  * This implementation supports the following command line parameters:
  * <pre>
- *     [uri ...]
+ *     [path ...]
  * </pre>
  * <dl>
- * <dt>uri</dt><dd>The URI of a document. Opens a DocumentBasedActivity for each provided URI.</dd>
+ * <dt>path</dt><dd>The URI to a file. Opens a {@link FileBasedActivity} for each provided path.</dd>
  * </dl>
  *
  * @author Werner Randelshofer
  */
-public class DocumentBasedApplication extends AbstractApplication {
+public class FileBasedApplication extends AbstractApplication {
 
     @NonNull
     private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
@@ -93,7 +93,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     private final static Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
     @NonNull
     public static final String WINDOW_MENU_ID = "window";
-    private Logger LOGGER = Logger.getLogger(DocumentBasedApplication.class.getName());
+    private Logger LOGGER = Logger.getLogger(FileBasedApplication.class.getName());
 
     /**
      * @param args the command line arguments
@@ -117,16 +117,16 @@ public class DocumentBasedApplication extends AbstractApplication {
     private final SetProperty<Activity> activities = new SimpleSetProperty<>(FXCollections.observableSet(new LinkedHashSet<>()));
 
     @NonNull
-    private ArrayList<Action> systemMenuActiveViewtActions = new ArrayList<>();
+    private ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
     {
         activeView.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                onViewDeactivated((DocumentBasedActivity) oldv);
+                onViewDeactivated((FileBasedActivity) oldv);
             }
             if (newv != null) {
-                onViewActivated((DocumentBasedActivity) newv);
+                onViewActivated((FileBasedActivity) newv);
             }
         });
     }
@@ -134,15 +134,15 @@ public class DocumentBasedApplication extends AbstractApplication {
     {
         activities.addListener((SetChangeListener<? super Activity>) c -> {
             if (c.wasRemoved()) {
-                onActivityRemoved((DocumentBasedActivity) c.getElementRemoved());
+                onActivityRemoved((FileBasedActivity) c.getElementRemoved());
             }
             if (c.wasAdded()) {
-                onActivityAdded((DocumentBasedActivity) c.getElementAdded());
+                onActivityAdded((FileBasedActivity) c.getElementAdded());
             }
         });
     }
 
-    public DocumentBasedApplication() {
+    public FileBasedApplication() {
         recentUrisProperty().get().addListener(this::updateRecentMenuItemsInAllMenuBars);
     }
 
@@ -194,7 +194,7 @@ public class DocumentBasedApplication extends AbstractApplication {
                     } else {
                         a = new ScreenMenuBarProxyAction(this, mi.getId());
                         a.set(Action.LABEL, mi.getText());
-                        systemMenuActiveViewtActions.add(a);
+                        systemMenuActiveViewActions.add(a);
                         Actions.bindMenuItem(mi, a, true);
                     }
                     KeyCombination accelerator = mi.getAccelerator();
@@ -303,7 +303,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void onViewActivated(@NonNull DocumentBasedActivity view) {
+    protected void onViewActivated(@NonNull FileBasedActivity view) {
 
     }
 
@@ -313,7 +313,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param activity the activity
      */
-    protected void onActivityAdded(@NonNull DocumentBasedActivity activity) {
+    protected void onActivityAdded(@NonNull FileBasedActivity activity) {
         if (activity.getApplication() != this) {
             activity.setApplication(this);
             activity.init();
@@ -321,10 +321,10 @@ public class DocumentBasedApplication extends AbstractApplication {
         }
 
         activity.getActionMap().setParent(getActionMap());
-        activity.setApplication(DocumentBasedApplication.this);
+        activity.setApplication(FileBasedApplication.this);
         activity.setTitle(getLabels().getString("unnamedFile"));
         HierarchicalMap<String, Action> map = activity.getActionMap();
-        map.put(CloseFileAction.ID, new CloseFileAction(DocumentBasedApplication.this, activity));
+        map.put(CloseFileAction.ID, new CloseFileAction(FileBasedApplication.this, activity));
 
         Stage stage = createStage(activity);
         activity.put(STAGE_KEY, stage);
@@ -395,7 +395,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     @NonNull
-    protected Stage createStage(@NonNull DocumentBasedActivity activity) {
+    protected Stage createStage(@NonNull FileBasedActivity activity) {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNIFIED);
         BorderPane borderPane = new BorderPane();
@@ -417,7 +417,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void onViewDeactivated(@NonNull DocumentBasedActivity view) {
+    protected void onViewDeactivated(@NonNull FileBasedActivity view) {
 
     }
 
@@ -427,7 +427,7 @@ public class DocumentBasedApplication extends AbstractApplication {
      *
      * @param view the view
      */
-    protected void onActivityRemoved(@NonNull DocumentBasedActivity view) {
+    protected void onActivityRemoved(@NonNull FileBasedActivity view) {
         Stage stage = (Stage) view.getNode().getScene().getWindow();
         view.stop();
         ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
@@ -496,7 +496,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     private void openView(@NonNull URI uri) {
         final Resources labels = ApplicationLabels.getResources();
         createActivity().whenComplete((pv, ex1) -> {
-            DocumentBasedActivity v = (DocumentBasedActivity) pv;
+            FileBasedActivity v = (FileBasedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -538,7 +538,7 @@ public class DocumentBasedApplication extends AbstractApplication {
     private void openEmptyView() {
         final Resources labels = ApplicationLabels.getResources();
         createActivity().whenComplete((pv, ex1) -> {
-            DocumentBasedActivity v = (DocumentBasedActivity) pv;
+            FileBasedActivity v = (FileBasedActivity) pv;
             if (ex1 != null) {
                 ex1.printStackTrace();
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -637,6 +637,6 @@ public class DocumentBasedApplication extends AbstractApplication {
     }
 
     public static URL getDocumentOrientedMenu() {
-        return DocumentBasedApplication.class.getResource("DocumentBasedMenu.fxml");
+        return FileBasedApplication.class.getResource("DocumentBasedMenu.fxml");
     }
 }

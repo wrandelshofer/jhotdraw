@@ -52,7 +52,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     private final List<URIExtensionFilter> importExtensionFilters = new ArrayList<>();
     private final List<URIExtensionFilter> exportExtensionFilters = new ArrayList<>();
     private String name;
-    private Supplier<DocumentBasedActivity> activityFactory;
+    private Supplier<FileBasedActivity> activityFactory;
     private Supplier<MenuBar> menuFactory;
     @Nullable
     private String license;
@@ -63,7 +63,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(
-            Supplier<DocumentBasedActivity> activityFactory,
+            Supplier<FileBasedActivity> activityFactory,
             @NonNull URL menuFxml,
             @NonNull String fileDescription,
             DataFormat format,
@@ -86,7 +86,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(String name,
-                                  Supplier<DocumentBasedActivity> activityFactory,
+                                  Supplier<FileBasedActivity> activityFactory,
                                   @NonNull URL menuFxml,
                                   @NonNull String fileDescription,
                                   DataFormat format,
@@ -100,7 +100,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     public SimpleApplicationModel(String name,
-                                  Supplier<DocumentBasedActivity> activityFactory,
+                                  Supplier<FileBasedActivity> activityFactory,
                                   Supplier<MenuBar> menuFactory,
                                   @NonNull String fileDescription,
                                   DataFormat format,
@@ -123,7 +123,7 @@ public class SimpleApplicationModel implements ApplicationModel {
         }
     }
 
-    private static DocumentBasedActivity createActivity(@NonNull URL fxml, ResourceBundle resources) {
+    private static FileBasedActivity createActivity(@NonNull URL fxml, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
         loader.setResources(resources);
         try (InputStream in = fxml.openStream()) {
@@ -135,7 +135,7 @@ public class SimpleApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public DocumentBasedActivity createActivity() {
+    public FileBasedActivity createActivity() {
         return activityFactory.get();
     }
 
@@ -201,11 +201,11 @@ public class SimpleApplicationModel implements ApplicationModel {
         return c;
     }
 
-    public Supplier<DocumentBasedActivity> getActivityFactory() {
+    public Supplier<FileBasedActivity> getActivityFactory() {
         return activityFactory;
     }
 
-    public void setActivityFactory(Supplier<DocumentBasedActivity> factory) {
+    public void setActivityFactory(Supplier<FileBasedActivity> factory) {
         this.activityFactory = factory;
     }
 

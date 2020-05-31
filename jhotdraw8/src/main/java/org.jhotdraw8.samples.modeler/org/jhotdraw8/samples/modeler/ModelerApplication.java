@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.samples.modeler;
 
-import org.jhotdraw8.app.DocumentBasedApplication;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.RevertFileAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Werner Randelshofer
  */
-public class ModelerApplication extends DocumentBasedApplication {
+public class ModelerApplication extends FileBasedApplication {
 
     public ModelerApplication() {
         super();

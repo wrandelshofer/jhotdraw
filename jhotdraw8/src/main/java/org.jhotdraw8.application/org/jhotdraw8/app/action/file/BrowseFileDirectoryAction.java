@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 
 import java.awt.Desktop;
@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
-public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBasedActivity> {
+public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,8 +33,8 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
      * @param app  the application
      * @param view the view
      */
-    public BrowseFileDirectoryAction(@NonNull Application app, DocumentBasedActivity view) {
-        super(app, view, DocumentBasedActivity.class);
+    public BrowseFileDirectoryAction(@NonNull Application app, FileBasedActivity view) {
+        super(app, view, FileBasedActivity.class);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
@@ -48,7 +48,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<DocumentBa
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, @NonNull FileBasedActivity activity) {
         if (isDisabled()) {
             return;
         }

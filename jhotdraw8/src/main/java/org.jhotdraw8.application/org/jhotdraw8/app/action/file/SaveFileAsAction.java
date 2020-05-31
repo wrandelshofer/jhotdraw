@@ -5,7 +5,7 @@
 package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 
 /**
  * Presents an {@code URIChooser} and then saves the active view to the
@@ -25,7 +25,7 @@ public class SaveFileAsAction extends SaveFileAction {
      * @param app  the application
      * @param view the view
      */
-    public SaveFileAsAction(Application app, DocumentBasedActivity view) {
+    public SaveFileAsAction(Application app, FileBasedActivity view) {
         super(app, view, ID, true);
     }
 

@@ -5,7 +5,7 @@
 package org.jhotdraw8.samples.teddy;
 
 import javafx.stage.Screen;
-import org.jhotdraw8.app.DocumentBasedApplication;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.SimpleApplicationModel;
 
 /**
@@ -13,14 +13,14 @@ import org.jhotdraw8.app.SimpleApplicationModel;
  *
  * @author Werner Randelshofer
  */
-public class TeddyApplication extends DocumentBasedApplication {
+public class TeddyApplication extends FileBasedApplication {
 
     public TeddyApplication() {
         super();
         SimpleApplicationModel model = new SimpleApplicationModel(
                 "Teddy",
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
-                DocumentBasedApplication.getDocumentOrientedMenu(),
+                FileBasedApplication.getDocumentOrientedMenu(),
                 "Text Files", null, "*.txt");
         model.setResources(TeddyLabels.getResources().asResourceBundle());
         model.setMenuFxml(TeddyApplication.class.getResource("TeddyMenuBar.fxml"));

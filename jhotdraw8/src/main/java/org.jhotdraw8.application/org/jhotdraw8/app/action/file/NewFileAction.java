@@ -8,7 +8,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 /**
@@ -39,7 +39,7 @@ public class NewFileAction extends AbstractApplicationAction {
     @Override
     protected void onActionPerformed(ActionEvent evt, @NonNull Application app) {
         app.createActivity().thenAccept(newView -> {
-            DocumentBasedActivity newDOView = (DocumentBasedActivity) newView;
+            FileBasedActivity newDOView = (FileBasedActivity) newView;
             app.add(newDOView);
             newDOView.clear().thenRun(() -> {
                 newDOView.clearModified();

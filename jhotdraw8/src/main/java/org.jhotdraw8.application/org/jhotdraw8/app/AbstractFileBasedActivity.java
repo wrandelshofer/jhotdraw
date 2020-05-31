@@ -19,7 +19,7 @@ import java.net.URI;
  * @author Werner Randelshofer
  * $$
  */
-public abstract class AbstractDocumentBasedActivity extends AbstractActivity implements DocumentBasedActivity {
+public abstract class AbstractFileBasedActivity extends AbstractActivity implements FileBasedActivity {
 
     protected final BooleanProperty modified = new SimpleBooleanProperty() {
         @Override

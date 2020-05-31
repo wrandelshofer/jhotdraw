@@ -12,21 +12,21 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
 /**
  * Presents a printer chooser to the user and then prints the
- * {@link DocumentBasedActivity}.
+ * {@link FileBasedActivity}.
  * <p>
  * This action requires that the view implements the {@code PrintableView}
  * interface.
  *
  * @author Werner Randelshofer
  */
-public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivity> {
+public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,13 +47,13 @@ public class PrintFileAction extends AbstractActivityAction<DocumentBasedActivit
      * @param app  the application
      * @param view the view
      */
-    public PrintFileAction(@NonNull Application app, @Nullable DocumentBasedActivity view) {
-        super(app, view, DocumentBasedActivity.class);
+    public PrintFileAction(@NonNull Application app, @Nullable FileBasedActivity view) {
+        super(app, view, FileBasedActivity.class);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, @NonNull FileBasedActivity activity) {
         WorkState workState = new SimpleWorkState();
         activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();

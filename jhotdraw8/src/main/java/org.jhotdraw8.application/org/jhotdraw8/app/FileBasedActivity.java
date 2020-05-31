@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
 /**
- * A {@link DocumentBasedActivity} is a specialization of {@link Activity} for document
- * oriented applications.
+ * A {@link FileBasedActivity} is a specialization of {@link Activity} for document
+ * based applications.
  *
  * @author Werner Randelshofer
  */
-public interface DocumentBasedActivity extends Activity {
+public interface FileBasedActivity extends Activity {
     String MODIFIED_PROPERTY = "modified";
     String URI_PROPERTY = "uri";
     String DATA_FORMAT_PROPERTY = "dataFormat";

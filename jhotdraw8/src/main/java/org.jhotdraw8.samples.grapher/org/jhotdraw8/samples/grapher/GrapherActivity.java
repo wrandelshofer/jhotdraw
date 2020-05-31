@@ -18,8 +18,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.AbstractDocumentBasedActivity;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.AbstractFileBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
@@ -148,7 +148,7 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
  *
  * @author Werner Randelshofer
  */
-public class GrapherActivity extends AbstractDocumentBasedActivity implements DocumentBasedActivity, EditorView {
+public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorView {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";

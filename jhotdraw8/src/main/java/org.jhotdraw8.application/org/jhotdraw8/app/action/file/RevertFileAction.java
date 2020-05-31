@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
@@ -28,7 +28,7 @@ import java.util.function.BiFunction;
  *
  * @author Werner Randelshofer
  */
-public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivity> {
+public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,13 +40,13 @@ public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivi
      * @param app  the application
      * @param view the view
      */
-    public RevertFileAction(@NonNull Application app, DocumentBasedActivity view) {
-        super(app, view, DocumentBasedActivity.class);
+    public RevertFileAction(@NonNull Application app, FileBasedActivity view) {
+        super(app, view, FileBasedActivity.class);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, @NonNull FileBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
@@ -65,7 +65,7 @@ public class RevertFileAction extends AbstractActivityAction<DocumentBasedActivi
         }
     }
 
-    private void doIt(@NonNull DocumentBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
+    private void doIt(@NonNull FileBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
         WorkState workState = new SimpleWorkState(getLabel());
         view.addDisabler(workState);
 

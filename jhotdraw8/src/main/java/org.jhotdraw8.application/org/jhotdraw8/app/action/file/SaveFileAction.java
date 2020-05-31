@@ -7,7 +7,7 @@ package org.jhotdraw8.app.action.file;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 
@@ -41,7 +41,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param app  the application
      * @param view the view
      */
-    public SaveFileAction(Application app, DocumentBasedActivity view) {
+    public SaveFileAction(Application app, FileBasedActivity view) {
         this(app, view, false);
     }
 
@@ -52,7 +52,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param view   the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, DocumentBasedActivity view, boolean saveAs) {
+    public SaveFileAction(Application app, FileBasedActivity view, boolean saveAs) {
         this(app, view, ID, saveAs);
     }
 
@@ -64,17 +64,17 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param id     the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, DocumentBasedActivity view, String id, boolean saveAs) {
+    public SaveFileAction(Application app, FileBasedActivity view, String id, boolean saveAs) {
         super(app, view, id, saveAs);
     }
 
     @Override
-    protected URIChooser createChooser(DocumentBasedActivity view) {
+    protected URIChooser createChooser(FileBasedActivity view) {
         return app.getModel().createSaveChooser();
     }
 
     @Override
-    protected void onSaveSucceeded(@NonNull DocumentBasedActivity v, @NonNull URI uri, DataFormat format) {
+    protected void onSaveSucceeded(@NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format) {
         v.setURI(uri);
         v.clearModified();
         v.setTitle(UriUtil.getName(uri));

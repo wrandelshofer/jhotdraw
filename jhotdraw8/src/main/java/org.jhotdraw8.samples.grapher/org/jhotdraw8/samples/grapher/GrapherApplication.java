@@ -5,7 +5,7 @@
 package org.jhotdraw8.samples.grapher;
 
 import javafx.stage.Screen;
-import org.jhotdraw8.app.DocumentBasedApplication;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.RevertFileAction;
 import org.jhotdraw8.collection.HierarchicalMap;
@@ -15,7 +15,7 @@ import org.jhotdraw8.collection.HierarchicalMap;
  *
  * @author Werner Randelshofer
  */
-public class GrapherApplication extends DocumentBasedApplication {
+public class GrapherApplication extends FileBasedApplication {
 
     public GrapherApplication() {
         super();

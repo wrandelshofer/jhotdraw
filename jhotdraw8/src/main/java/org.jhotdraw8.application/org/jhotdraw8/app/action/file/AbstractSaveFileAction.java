@@ -15,7 +15,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.DocumentBasedActivity;
+import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -37,7 +37,7 @@ import java.util.concurrent.CancellationException;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSaveFileAction extends AbstractActivityAction<DocumentBasedActivity> {
+public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
@@ -52,7 +52,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
      * @param id     the id
      * @param saveAs whether to force a file dialog
      */
-    public AbstractSaveFileAction(@NonNull Application app, DocumentBasedActivity view, String id, boolean saveAs) {
+    public AbstractSaveFileAction(@NonNull Application app, FileBasedActivity view, String id, boolean saveAs) {
         this(app, view, id, saveAs, ApplicationLabels.getResources());
     }
 
@@ -65,14 +65,14 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
      * @param saveAs    whether to force a file dialog
      * @param resources the resources are used for setting labels and icons for the action
      */
-    public AbstractSaveFileAction(@NonNull Application app, DocumentBasedActivity view, String id, boolean saveAs, @NonNull Resources resources) {
-        super(app, view, DocumentBasedActivity.class);
+    public AbstractSaveFileAction(@NonNull Application app, FileBasedActivity view, String id, boolean saveAs, @NonNull Resources resources) {
+        super(app, view, FileBasedActivity.class);
         this.saveAs = saveAs;
         resources.configureAction(this, id);
     }
 
     @Nullable
-    protected URIChooser getChooser(@NonNull DocumentBasedActivity view) {
+    protected URIChooser getChooser(@NonNull FileBasedActivity view) {
         URIChooser c = view.get(saveChooserKey);
         if (c == null) {
             c = createChooser(view);
@@ -81,10 +81,10 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         return c;
     }
 
-    protected abstract URIChooser createChooser(DocumentBasedActivity view);
+    protected abstract URIChooser createChooser(FileBasedActivity view);
 
     @Override
-    protected void onActionPerformed(ActionEvent evt, @Nullable DocumentBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent evt, @Nullable FileBasedActivity activity) {
         if (activity == null) {
             return;
         }
@@ -94,7 +94,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         saveFileChooseUri(activity, workState);
     }
 
-    protected void saveFileChooseUri(@NonNull final DocumentBasedActivity v, WorkState workState) {
+    protected void saveFileChooseUri(@NonNull final FileBasedActivity v, WorkState workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -108,7 +108,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
                 // unless  multipe views to same URI are supported
                 if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
                     for (Activity pi : app.activities()) {
-                        DocumentBasedActivity vi = (DocumentBasedActivity) pi;
+                        FileBasedActivity vi = (FileBasedActivity) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
@@ -133,7 +133,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         }
     }
 
-    protected void saveFileChooseOptions(@NonNull final DocumentBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
+    protected void saveFileChooseOptions(@NonNull final FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
         Map<? super Key<?>, Object> options = null;
         Dialog<Map<? super Key<?>, Object>> dialog = null;
         try {
@@ -162,7 +162,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(@NonNull final DocumentBasedActivity view, @NonNull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    protected void saveFileToUri(@NonNull final FileBasedActivity view, @NonNull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
         view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
@@ -197,5 +197,5 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<Docu
         return null;
     }
 
-    protected abstract void onSaveSucceeded(DocumentBasedActivity v, URI uri, DataFormat format);
+    protected abstract void onSaveSucceeded(FileBasedActivity v, URI uri, DataFormat format);
 }
