@@ -30,6 +30,8 @@ import java.net.URI;
 
 import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.CANVAS_FILL_OPACITY;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_HEIGHT;
+import static org.jhotdraw.draw.AttributeKeys.CANVAS_WIDTH;
 
 /**
  * An output format for exporting drawings using one of the image formats
@@ -180,7 +182,7 @@ public class ImageOutputFormat implements OutputFormat {
      * @param figures A list of figures of the drawing.
      * @param scaleFactor The scale factor used when drawing the figures.
      * @param clipToFigures If this is true, the image is clipped to the figures.
-     * If this is false, the image includes the drawing area,  
+     * If this is false, the image includes the drawing area,
      */
     public BufferedImage toImage(Drawing drawing,
             java.util.List<Figure> figures,
@@ -191,17 +193,17 @@ public class ImageOutputFormat implements OutputFormat {
             return new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
         }
 
-        // Determine the draw bounds of the figures
-        Rectangle2D.Double drawBounds = null;
-        for (Figure f : figures) {
-            if (drawBounds == null) {
-                drawBounds = f.getDrawingArea();
-            } else {
-                drawBounds.add(f.getDrawingArea());
-            }
-        }
-
         if (clipToFigures) {
+           // Determine the draw bounds of the figures
+            Rectangle2D.Double drawBounds = null;
+            for (Figure f : figures) {
+                if (drawBounds == null) {
+                    drawBounds = f.getDrawingArea();
+                } else {
+                    drawBounds.add(f.getDrawingArea());
+                }
+            }
+
             AffineTransform transform = new AffineTransform();
             transform.translate(-drawBounds.x * scaleFactor,
                     -drawBounds.y * scaleFactor);
@@ -211,6 +213,10 @@ public class ImageOutputFormat implements OutputFormat {
                     (int) (drawBounds.width * scaleFactor),
                     (int) (drawBounds.height * scaleFactor)));
         } else {
+            Rectangle2D.Double drawBounds =
+                    new Rectangle2D.Double(0,0,
+                            drawing.get(CANVAS_WIDTH),
+                            drawing.get(CANVAS_HEIGHT));
 
             AffineTransform transform = new AffineTransform();
             if (drawBounds.x < 0) {
