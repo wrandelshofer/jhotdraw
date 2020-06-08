@@ -1,6 +1,6 @@
 /*
  * @(#)AbstractFigure.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -21,7 +21,12 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**

@@ -1,6 +1,6 @@
 /*
  * @(#)AbstractLabelConnectionFigure.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -21,8 +21,16 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.*;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LabelConnectorHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;

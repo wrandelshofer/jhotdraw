@@ -1,8 +1,16 @@
+/*
+ * @(#)MacOSPreferences.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.macos;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -15,7 +23,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.StreamSupport;
 
 public class MacOSPreferences {
@@ -167,18 +183,18 @@ public class MacOSPreferences {
         String name = node.getTagName();
         Object value;
         switch (name) {
-            case "plist":
-                value = readPList(node);
-                break;
-            case "dict":
-                value = readDict(node);
-                break;
-            case "array":
-                value = readArray(node);
-                break;
-            default:
-                value = readValue(node);
-                break;
+        case "plist":
+            value = readPList(node);
+            break;
+        case "dict":
+            value = readDict(node);
+            break;
+        case "array":
+            value = readArray(node);
+            break;
+        default:
+            value = readValue(node);
+            break;
         }
         return value;
     }
@@ -254,39 +270,39 @@ public class MacOSPreferences {
     private static Object readValue(@NonNull Element value) throws IOException {
         Object parsedValue;
         switch (value.getTagName()) {
-            case "true":
-                parsedValue = true;
-                break;
-            case "false":
-                parsedValue = false;
-                break;
-            case "data":
-                parsedValue = Base64.getDecoder().decode(getContent(value));
-                break;
-            case "date":
-                try {
-                    parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
-                } catch (IllegalArgumentException | DatatypeConfigurationException e) {
-                    throw new IOException(e);
-                }
-                break;
-            case "real":
-                try {
-                    parsedValue = Double.valueOf(getContent(value));
-                } catch (NumberFormatException e) {
-                    throw new IOException(e);
-                }
-                break;
-            case "integer":
-                try {
-                    parsedValue = Long.valueOf(getContent(value));
-                } catch (NumberFormatException e) {
-                    throw new IOException(e);
-                }
-                break;
-            default:
-                parsedValue = getContent(value);
-                break;
+        case "true":
+            parsedValue = true;
+            break;
+        case "false":
+            parsedValue = false;
+            break;
+        case "data":
+            parsedValue = Base64.getDecoder().decode(getContent(value));
+            break;
+        case "date":
+            try {
+                parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
+            } catch (IllegalArgumentException | DatatypeConfigurationException e) {
+                throw new IOException(e);
+            }
+            break;
+        case "real":
+            try {
+                parsedValue = Double.valueOf(getContent(value));
+            } catch (NumberFormatException e) {
+                throw new IOException(e);
+            }
+            break;
+        case "integer":
+            try {
+                parsedValue = Long.valueOf(getContent(value));
+            } catch (NumberFormatException e) {
+                throw new IOException(e);
+            }
+            break;
+        default:
+            parsedValue = getContent(value);
+            break;
         }
         return parsedValue;
     }

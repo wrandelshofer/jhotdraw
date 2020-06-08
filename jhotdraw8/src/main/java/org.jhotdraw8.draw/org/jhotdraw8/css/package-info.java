@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Provides support for parsing and interpreting cascading style sheets (CSS 3).

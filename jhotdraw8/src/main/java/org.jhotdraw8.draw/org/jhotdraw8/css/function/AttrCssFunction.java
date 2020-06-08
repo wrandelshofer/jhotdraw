@@ -1,3 +1,7 @@
+/*
+ * @(#)AttrCssFunction.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -85,142 +89,142 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         if (strValue != null) {
             Outer:
             switch (typeOrUnit == null ? "string" : typeOrUnit) {
-                case "string": {
-                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                    while (t2.next() != CssTokenType.TT_EOF) {
-                        switch (t2.current()) {
-                            case CssTokenType.TT_STRING:
-                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
-                                break;
-                            case CssTokenType.TT_IDENT:
-                                if (t2.currentStringNonNull().equals(CssTokenType.IDENT_NONE)) {
-                                    out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
-                                } else {
-                                    out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
-                                }
-                                break;
-                            case CssTokenType.TT_NUMBER:
-                            case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString(), null, line, start, end));
-                                break;
-                            case CssTokenType.TT_DIMENSION:
-                                out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString() + t2.currentStringNonNull(), null, line, start, end));
-                                break;
-                            default:
-                                break Outer; // use fallback
+            case "string": {
+                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                while (t2.next() != CssTokenType.TT_EOF) {
+                    switch (t2.current()) {
+                    case CssTokenType.TT_STRING:
+                        out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
+                        break;
+                    case CssTokenType.TT_IDENT:
+                        if (t2.currentStringNonNull().equals(CssTokenType.IDENT_NONE)) {
+                            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+                        } else {
+                            out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
                         }
-                    }
-                    return; // use output
-                }
-                case "color":
-                case "url":
-                    break;//use fallback
-                case "integer":
-                case "number": {
-                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                    if (t2.next() == CssTokenType.TT_EOF) {
+                        break;
+                    case CssTokenType.TT_NUMBER:
+                    case CssTokenType.TT_PERCENTAGE:
+                        out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString(), null, line, start, end));
+                        break;
+                    case CssTokenType.TT_DIMENSION:
+                        out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString() + t2.currentStringNonNull(), null, line, start, end));
+                        break;
+                    default:
                         break Outer; // use fallback
                     }
-                    t2.pushBack();
-                    while (t2.next() != CssTokenType.TT_EOF) {
-                        switch (t2.current()) {
-                            case CssTokenType.TT_STRING:
-                            case CssTokenType.TT_IDENT:
-                                double d;
-                                try {
-                                    d = Double.parseDouble(t2.currentStringNonNull());
-                                } catch (NumberFormatException e) {
-                                    break Outer; // use fallback
-                                }
-                                out.accept(new CssToken(CssTokenType.TT_NUMBER, null, d, line, start, end));
-                                break;
-                            case CssTokenType.TT_NUMBER:
-                            case CssTokenType.TT_DIMENSION:
-                            case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonNull(), line, start, end));
-                                break;
-                            default:
-                                break Outer; // use fallback
-                        }
-                    }
-                    return; // use output
                 }
-                case "length": {
-                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                    if (t2.next() == CssTokenType.TT_EOF) {
+                return; // use output
+            }
+            case "color":
+            case "url":
+                break;//use fallback
+            case "integer":
+            case "number": {
+                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                if (t2.next() == CssTokenType.TT_EOF) {
+                    break Outer; // use fallback
+                }
+                t2.pushBack();
+                while (t2.next() != CssTokenType.TT_EOF) {
+                    switch (t2.current()) {
+                    case CssTokenType.TT_STRING:
+                    case CssTokenType.TT_IDENT:
+                        double d;
+                        try {
+                            d = Double.parseDouble(t2.currentStringNonNull());
+                        } catch (NumberFormatException e) {
+                            break Outer; // use fallback
+                        }
+                        out.accept(new CssToken(CssTokenType.TT_NUMBER, null, d, line, start, end));
+                        break;
+                    case CssTokenType.TT_NUMBER:
+                    case CssTokenType.TT_DIMENSION:
+                    case CssTokenType.TT_PERCENTAGE:
+                        out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonNull(), line, start, end));
+                        break;
+                    default:
                         break Outer; // use fallback
                     }
-                    t2.pushBack();
-                    while (t2.next() != CssTokenType.TT_EOF) {
-                        switch (t2.current()) {
-                            case CssTokenType.TT_STRING:
-                            case CssTokenType.TT_IDENT:
-                                double d;
-                                try {
-                                    d = Double.parseDouble(t2.currentStringNonNull());
-                                } catch (NumberFormatException e) {
-                                    break Outer; // use fallback
-                                }
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, UnitConverter.DEFAULT, d, line, start, end));
-                                break;
-                            case CssTokenType.TT_NUMBER:
-                            case CssTokenType.TT_DIMENSION:
-                            case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentStringNonNull(), t2.currentNumberNonNull(), line, start, end));
-                                break;
-                            default:
-                                break Outer; // use fallback
-                        }
-                    }
-                    return; // use output
                 }
-                case "%": {
-                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                    while (t2.next() != CssTokenType.TT_EOF) {
-                        switch (t2.current()) {
-                            case CssTokenType.TT_STRING:
-                            case CssTokenType.TT_IDENT:
-                                double d;
-                                try {
-                                    d = Double.parseDouble(t2.currentStringNonNull());
-                                } catch (NumberFormatException e) {
-                                    break Outer; // use fallback
-                                }
-                                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, d, line, start, end));
-                                break;
-                            case CssTokenType.TT_NUMBER:
-                            case CssTokenType.TT_DIMENSION:
-                            case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonNull(), line, start, end));
-                                break;
-                            default:
-                                break Outer; // use fallback
-                        }
-                    }
-                    return; // use output
+                return; // use output
+            }
+            case "length": {
+                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                if (t2.next() == CssTokenType.TT_EOF) {
+                    break Outer; // use fallback
                 }
-                case "angle":
-                case "time":
-                case "frequency":
-                    // XXX currently not implemented
-                    break; // use fallback
-                default:
-                    final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                    while (t2.next() != CssTokenType.TT_EOF) {
-                        switch (t2.current()) {
-                            case CssTokenType.TT_STRING:
-                            case CssTokenType.TT_IDENT:
-                                break Outer;// use fallback
-                            case CssTokenType.TT_NUMBER:
-                            case CssTokenType.TT_DIMENSION:
-                            case CssTokenType.TT_PERCENTAGE:
-                                out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonNull(), line, start, end));
-                                break;
-                            default:
-                                break Outer; // use fallback
+                t2.pushBack();
+                while (t2.next() != CssTokenType.TT_EOF) {
+                    switch (t2.current()) {
+                    case CssTokenType.TT_STRING:
+                    case CssTokenType.TT_IDENT:
+                        double d;
+                        try {
+                            d = Double.parseDouble(t2.currentStringNonNull());
+                        } catch (NumberFormatException e) {
+                            break Outer; // use fallback
                         }
+                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, UnitConverter.DEFAULT, d, line, start, end));
+                        break;
+                    case CssTokenType.TT_NUMBER:
+                    case CssTokenType.TT_DIMENSION:
+                    case CssTokenType.TT_PERCENTAGE:
+                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentStringNonNull(), t2.currentNumberNonNull(), line, start, end));
+                        break;
+                    default:
+                        break Outer; // use fallback
                     }
-                    return; // use output
+                }
+                return; // use output
+            }
+            case "%": {
+                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                while (t2.next() != CssTokenType.TT_EOF) {
+                    switch (t2.current()) {
+                    case CssTokenType.TT_STRING:
+                    case CssTokenType.TT_IDENT:
+                        double d;
+                        try {
+                            d = Double.parseDouble(t2.currentStringNonNull());
+                        } catch (NumberFormatException e) {
+                            break Outer; // use fallback
+                        }
+                        out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, d, line, start, end));
+                        break;
+                    case CssTokenType.TT_NUMBER:
+                    case CssTokenType.TT_DIMENSION:
+                    case CssTokenType.TT_PERCENTAGE:
+                        out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonNull(), line, start, end));
+                        break;
+                    default:
+                        break Outer; // use fallback
+                    }
+                }
+                return; // use output
+            }
+            case "angle":
+            case "time":
+            case "frequency":
+                // XXX currently not implemented
+                break; // use fallback
+            default:
+                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
+                while (t2.next() != CssTokenType.TT_EOF) {
+                    switch (t2.current()) {
+                    case CssTokenType.TT_STRING:
+                    case CssTokenType.TT_IDENT:
+                        break Outer;// use fallback
+                    case CssTokenType.TT_NUMBER:
+                    case CssTokenType.TT_DIMENSION:
+                    case CssTokenType.TT_PERCENTAGE:
+                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonNull(), line, start, end));
+                        break;
+                    default:
+                        break Outer; // use fallback
+                    }
+                }
+                return; // use output
             }
 
         }

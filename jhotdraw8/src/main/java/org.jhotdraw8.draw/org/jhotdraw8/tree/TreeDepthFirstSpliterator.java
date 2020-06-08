@@ -1,6 +1,6 @@
 /*
- * @(#)BreadthFirstSpliterator.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * @(#)TreeDepthFirstSpliterator.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.tree;
 

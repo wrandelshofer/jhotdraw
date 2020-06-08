@@ -1,3 +1,7 @@
+/*
+ * @(#)AbstractStringCssFunction.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -25,21 +29,21 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
         functionProcessor.processToken(element, tt, temp::add);
         for (CssToken t : temp) {
             switch (t.getType()) {
-                case CssTokenType.TT_STRING:
-                case CssTokenType.TT_URL:
-                    buf.append(t.getStringValue());
-                    break;
-                case CssTokenType.TT_NUMBER:
-                case CssTokenType.TT_DIMENSION:
-                case CssTokenType.TT_PERCENTAGE:
-                    buf.append(t.fromToken());
-                    break;
-                case CssTokenType.TT_S:
-                case CssTokenType.TT_IDENT:
-                    // skip
-                    break;
-                default:
-                    throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
+            case CssTokenType.TT_STRING:
+            case CssTokenType.TT_URL:
+                buf.append(t.getStringValue());
+                break;
+            case CssTokenType.TT_NUMBER:
+            case CssTokenType.TT_DIMENSION:
+            case CssTokenType.TT_PERCENTAGE:
+                buf.append(t.fromToken());
+                break;
+            case CssTokenType.TT_S:
+            case CssTokenType.TT_IDENT:
+                // skip
+                break;
+            default:
+                throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
             }
         }
         return buf.toString();

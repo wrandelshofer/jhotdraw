@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ @(#)DocumentBasedMenu.fxml
-  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  ~ @(#)FileBasedMenu.fxml
+  ~ Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
   -->
 
 <?import javafx.scene.control.Menu?>

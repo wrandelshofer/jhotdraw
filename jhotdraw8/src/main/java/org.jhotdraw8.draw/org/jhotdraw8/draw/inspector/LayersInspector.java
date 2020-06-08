@@ -1,6 +1,6 @@
 /*
  * @(#)LayersInspector.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.inspector;
 
@@ -23,13 +23,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReversedObservableList;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelFigureChildrenObservableList;
 import org.jhotdraw8.event.Listener;
@@ -41,7 +50,11 @@ import org.jhotdraw8.tree.TreeModelEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**

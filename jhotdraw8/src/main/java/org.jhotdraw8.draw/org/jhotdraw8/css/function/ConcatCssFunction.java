@@ -1,3 +1,7 @@
+/*
+ * @(#)ConcatCssFunction.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -54,17 +58,17 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
         boolean first = true;
         while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             switch (tt.current()) {
-                case CssTokenType.TT_COMMA:
-                    if (!first) {
-                        continue;
-                    }
-                    tt.pushBack();
-                    buf.append(evalString(element, tt, getName(), functionProcessor));
-                    break;
-                default:
-                    tt.pushBack();
-                    buf.append(evalString(element, tt, getName(), functionProcessor));
-                    break;
+            case CssTokenType.TT_COMMA:
+                if (!first) {
+                    continue;
+                }
+                tt.pushBack();
+                buf.append(evalString(element, tt, getName(), functionProcessor));
+                break;
+            default:
+                tt.pushBack();
+                buf.append(evalString(element, tt, getName(), functionProcessor));
+                break;
             }
             first = false;
         }

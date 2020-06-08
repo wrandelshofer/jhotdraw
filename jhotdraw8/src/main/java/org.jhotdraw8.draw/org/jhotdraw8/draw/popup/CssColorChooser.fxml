@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<!--
+  ~ @(#)CssColorChooser.fxml
+  ~ Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.layout.VBox?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"

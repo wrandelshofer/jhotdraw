@@ -1,3 +1,7 @@
+/*
+ * @(#)ColorDialog.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.gui.colorchooser;
 
 import javafx.beans.property.ObjectProperty;
@@ -37,12 +41,12 @@ public class ColorDialog extends HBox {
 
     private final EventHandler<KeyEvent> keyEventListener = e -> {
         switch (e.getCode()) {
-            case ESCAPE:
-                dialog.setScene(null);
-                dialog.close();
-                break;
-            default:
-                break;
+        case ESCAPE:
+            dialog.setScene(null);
+            dialog.close();
+            break;
+        default:
+            break;
         }
     };
 

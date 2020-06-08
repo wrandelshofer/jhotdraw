@@ -1,6 +1,6 @@
 /*
  * @(#)SimpleDrawingModel.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.model;
 
@@ -25,7 +25,17 @@ import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 /**

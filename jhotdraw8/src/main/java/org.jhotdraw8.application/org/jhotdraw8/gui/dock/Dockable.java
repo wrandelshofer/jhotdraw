@@ -1,3 +1,7 @@
+/*
+ * @(#)Dockable.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.gui.dock;
 
 import javafx.beans.property.ObjectProperty;
@@ -45,8 +49,6 @@ public interface Dockable extends DockNode {
     default void setId(String value) {
         idProperty().set(value);
     }
-
-
 
 
 }

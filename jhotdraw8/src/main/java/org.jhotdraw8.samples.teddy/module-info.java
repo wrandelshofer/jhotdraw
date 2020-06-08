@@ -1,3 +1,7 @@
+/*
+ * @(#)module-info.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 import org.jhotdraw8.samples.teddy.spi.TeddyResourceBundleProvider;
 
 module org.jhotdraw8.samples.teddy {

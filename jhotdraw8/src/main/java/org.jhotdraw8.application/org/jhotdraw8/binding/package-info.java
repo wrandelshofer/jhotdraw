@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Provides utility classes for JavaFX property bindings.

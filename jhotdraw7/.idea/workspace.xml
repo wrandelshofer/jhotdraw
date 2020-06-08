@@ -24,12 +24,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
-      <change afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/gui/dock/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/AbstractDrawingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/AbstractDrawingView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/io/SimpleXmlIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/io/SimpleXmlIO.java" afterDir="false" />
     </list>
-    <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,25 +51,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/.idea/workspace.xml">
-      <ranges>
-        <range start1="26" end1="28" start2="26" end2="26" changelist="6c3f85af-290e-4ea4-a299-932234f5731b" />
-        <range start1="29" end1="38" start2="27" end2="30" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="39" end1="40" start2="31" end2="31" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="59" end1="133" start2="50" end2="50" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="135" end1="135" start2="52" end2="71" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="139" end1="139" start2="75" end2="82" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="155" end1="155" start2="98" end2="104" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="157" end1="157" start2="106" end2="109" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="163" end1="169" start2="115" end2="115" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="170" end1="183" start2="116" end2="117" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="270" end1="270" start2="204" end2="205" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="444" end1="445" start2="379" end2="401" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-        <range start1="509" end1="510" start2="465" end2="548" changelist="13fe2693-250d-4562-87a2-5c5fde983d66" />
-      </ranges>
-    </file>
-  </component>
   <component name="ProjectId" id="1P5xXk2Vep19FNKYPiO4Br88WBb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -79,7 +59,6 @@
     <option name="flattenModules" value="true" />
     <option name="flattenPackages" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -115,7 +94,7 @@
       <recent name="$PROJECT_DIR$/src/app/java" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Draw">
+  <component name="RunManager" selected="Application.SVG">
     <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
       <module name="org.jhotdraw7.nanoxml" />
       <option name="VM_PARAMETERS" />
@@ -195,7 +174,7 @@
     </list>
   </component>
   <component name="StructureViewFactory">
-    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR,SHOW_INHERITED" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -399,7 +378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580558516154</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Image output format uses canvas width/height to determine the size of the output image.">
+      <created>1591546925581</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1591546925581</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -423,9 +409,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -444,6 +428,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -467,135 +452,70 @@
     <MESSAGE value="Fixes instantiation of XMLParserFactory." />
     <MESSAGE value="Adds &quot;Revert&quot; action." />
     <MESSAGE value="Pretty prints SVG when saving." />
-    <option name="LAST_COMMIT_MESSAGE" value="Pretty prints SVG when saving." />
+    <MESSAGE value="Image output format uses canvas width/height to determine the size of the output image." />
+    <option name="LAST_COMMIT_MESSAGE" value="Image output format uses canvas width/height to determine the size of the output image." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="785" y="200" key="#com.intellij.ide.util.MemberChooser" timestamp="1580558312770">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state x="895" y="258" key="#xdebugger.evaluate" timestamp="1591546642098">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state x="785" y="200" key="#com.intellij.ide.util.MemberChooser/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580558312770" />
-    <state x="371" y="86" key="CommitChangelistDialog2" timestamp="1580558515835">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state x="895" y="258" key="#xdebugger.evaluate/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546642098" />
+    <state x="522" y="123" key="CommitChangelistDialog2" timestamp="1591546925404">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state x="371" y="86" key="CommitChangelistDialog2/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580557906597" />
-    <state x="371" y="86" key="CommitChangelistDialog2/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580558515835" />
-    <state width="1023" height="196" key="GridCell.Tab.0.bottom" timestamp="1580563413970">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state x="522" y="123" key="CommitChangelistDialog2/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546925404" />
+    <state x="536" y="123" width="1193" height="850" key="DiffContextDialog" timestamp="1591546906499">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="766" height="292" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475361" />
-    <state width="1023" height="196" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341972" />
-    <state width="1023" height="196" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
-    <state width="1023" height="196" key="GridCell.Tab.0.bottom/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412153" />
-    <state width="1023" height="196" key="GridCell.Tab.0.center" timestamp="1580563413970">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state x="536" y="123" width="1193" height="850" key="DiffContextDialog/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546906499" />
+    <state width="928" height="346" key="GridCell.Tab.0.bottom" timestamp="1591558403008">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="766" height="292" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475360" />
-    <state width="1023" height="196" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341972" />
-    <state width="1023" height="196" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
-    <state width="1023" height="196" key="GridCell.Tab.0.center/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412152" />
-    <state width="1023" height="196" key="GridCell.Tab.0.left" timestamp="1580563413969">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.0.bottom/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
+    <state width="928" height="346" key="GridCell.Tab.0.bottom/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880995" />
+    <state width="928" height="346" key="GridCell.Tab.0.center" timestamp="1591558403007">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="766" height="292" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475359" />
-    <state width="1023" height="196" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341971" />
-    <state width="1023" height="196" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413969" />
-    <state width="1023" height="196" key="GridCell.Tab.0.left/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412151" />
-    <state width="1023" height="196" key="GridCell.Tab.0.right" timestamp="1580563413970">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.0.center/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403007" />
+    <state width="928" height="346" key="GridCell.Tab.0.center/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880994" />
+    <state width="928" height="346" key="GridCell.Tab.0.left" timestamp="1591558403007">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="766" height="292" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.816@0.23.1680.922" timestamp="1580543475360" />
-    <state width="1023" height="196" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341972" />
-    <state width="1023" height="196" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
-    <state width="1023" height="196" key="GridCell.Tab.0.right/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412153" />
-    <state width="1023" height="196" key="GridCell.Tab.1.bottom" timestamp="1580563413971">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.0.left/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403007" />
+    <state width="928" height="346" key="GridCell.Tab.0.left/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880994" />
+    <state width="928" height="346" key="GridCell.Tab.0.right" timestamp="1591558403007">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="1023" height="196" key="GridCell.Tab.1.bottom/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341845" />
-    <state width="1023" height="196" key="GridCell.Tab.1.bottom/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413971" />
-    <state width="1023" height="196" key="GridCell.Tab.1.bottom/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412155" />
-    <state width="1023" height="196" key="GridCell.Tab.1.center" timestamp="1580563413971">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.0.right/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403007" />
+    <state width="928" height="346" key="GridCell.Tab.0.right/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880995" />
+    <state width="928" height="346" key="GridCell.Tab.1.bottom" timestamp="1591558403009">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="1023" height="196" key="GridCell.Tab.1.center/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341844" />
-    <state width="1023" height="196" key="GridCell.Tab.1.center/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413971" />
-    <state width="1023" height="196" key="GridCell.Tab.1.center/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412154" />
-    <state width="1023" height="196" key="GridCell.Tab.1.left" timestamp="1580563413970">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.1.bottom/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403009" />
+    <state width="928" height="346" key="GridCell.Tab.1.bottom/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880997" />
+    <state width="928" height="346" key="GridCell.Tab.1.center" timestamp="1591558403008">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="1023" height="196" key="GridCell.Tab.1.left/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341843" />
-    <state width="1023" height="196" key="GridCell.Tab.1.left/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413970" />
-    <state width="1023" height="196" key="GridCell.Tab.1.left/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412154" />
-    <state width="1023" height="196" key="GridCell.Tab.1.right" timestamp="1580563413971">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.1.center/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
+    <state width="928" height="346" key="GridCell.Tab.1.center/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880996" />
+    <state width="928" height="346" key="GridCell.Tab.1.left" timestamp="1591558403008">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state width="1023" height="196" key="GridCell.Tab.1.right/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580558341845" />
-    <state width="1023" height="196" key="GridCell.Tab.1.right/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580563413971" />
-    <state width="1023" height="196" key="GridCell.Tab.1.right/0.23.1680.922/480.968.1440.823@0.23.1680.922" timestamp="1580563412154" />
-    <state x="823" y="406" key="VCS.ChangelistChooser" timestamp="1580557888448">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.1.left/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
+    <state width="928" height="346" key="GridCell.Tab.1.left/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880996" />
+    <state width="928" height="346" key="GridCell.Tab.1.right" timestamp="1591558403008">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state x="823" y="406" key="VCS.ChangelistChooser/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580557888448" />
-    <state x="572" y="224" key="Vcs.Push.Dialog.v2" timestamp="1580558521990">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state width="928" height="346" key="GridCell.Tab.1.right/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
+    <state width="928" height="346" key="GridCell.Tab.1.right/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880997" />
+    <state x="732" y="288" key="Vcs.Push.Dialog.v2" timestamp="1591546930519">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state x="572" y="224" key="Vcs.Push.Dialog.v2/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580558521990" />
-    <state x="637" y="224" width="670" height="676" key="search.everywhere.popup" timestamp="1580557229380">
-      <screen x="0" y="23" width="1680" height="922" />
+    <state x="732" y="288" key="Vcs.Push.Dialog.v2/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546930519" />
+    <state x="797" y="256" width="670" height="676" key="search.everywhere.popup" timestamp="1591546744183">
+      <screen x="0" y="23" width="2048" height="1129" />
     </state>
-    <state x="637" y="224" width="670" height="676" key="search.everywhere.popup/0.23.1680.922/480.968.1440.821@0.23.1680.922" timestamp="1580543726562" />
-    <state x="637" y="224" width="670" height="676" key="search.everywhere.popup/0.23.1680.922/480.968.1440.822@0.23.1680.922" timestamp="1580557229380" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/SVGView.java</url>
-          <line>135</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="breakpointCondition">
-      <expression>
-        <expression-string>url==null</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
-    <expressions id="evaluateExpression">
-      <expression>
-        <expression-string>Reflection.getCallerClass()</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>baseClass.getResourceAsStream(&quot;images/actions.png&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>baseClass.getResourceAsStream(&quot;images/attribute.color.noColor.png&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>baseClass.getResourceAsStream(&quot;EditCanvasPanel.form&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>baseClass.getResourceAsStream(&quot;org/jhotdraw/draw/action/images/attribute.color.noColor.png&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>baseClass.getResourceAsStream(&quot;/org/jhotdraw/draw/action/images/attribute.color.noColor.png&quot;)</expression-string>
-        <language-id>JAVA</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-    </expressions>
+    <state x="797" y="256" width="670" height="676" key="search.everywhere.popup/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546744183" />
   </component>
   <component name="masterDetails">
     <states>

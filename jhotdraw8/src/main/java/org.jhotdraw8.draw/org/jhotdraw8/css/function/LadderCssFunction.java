@@ -1,3 +1,7 @@
+/*
+ * @(#)LadderCssFunction.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -107,14 +111,14 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
     protected CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize size = null;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                size = new CssSize(tt.currentNumberNonNull().doubleValue());
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                size = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
-                break;
-            default:
-                throw tt.createParseException("〈percentage-value〉: percentage value expected.");
+        case CssTokenType.TT_NUMBER:
+            size = new CssSize(tt.currentNumberNonNull().doubleValue());
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            size = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+            break;
+        default:
+            throw tt.createParseException("〈percentage-value〉: percentage value expected.");
         }
         return size;
 

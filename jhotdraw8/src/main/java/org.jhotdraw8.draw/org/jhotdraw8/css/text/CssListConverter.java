@@ -1,6 +1,6 @@
 /*
  * @(#)CssListConverter.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 
@@ -16,7 +16,11 @@ import org.jhotdraw8.io.IdFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**

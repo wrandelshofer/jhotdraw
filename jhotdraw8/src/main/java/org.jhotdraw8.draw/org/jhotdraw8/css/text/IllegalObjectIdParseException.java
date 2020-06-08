@@ -1,3 +1,7 @@
+/*
+ * @(#)IllegalObjectIdParseException.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css.text;
 
 import java.text.ParseException;
@@ -7,6 +11,7 @@ import java.text.ParseException;
  */
 public class IllegalObjectIdParseException extends ParseException {
     private static final long serialVersionUID = 1L;
+
     /**
      * Constructs a ParseException with the specified detail message and
      * offset.

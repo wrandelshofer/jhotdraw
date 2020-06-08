@@ -1,3 +1,7 @@
+/*
+ * @(#)AbstractColorCssFunction.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -26,20 +30,20 @@ public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T>
     protected CssColor parseColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssColor color = null;
         switch (tt.next()) {
-            case CssTokenType.TT_FUNCTION:
-                String name = tt.currentString();
-                tt.pushBack();
-                List<CssToken> list = new ArrayList<>();
-                functionProcessor.processToken(element, tt, list::add);
-                if (list.isEmpty()) {
-                    throw new ParseException("〈color-value〉: function " + name + "() must return a value.", tt.getStartPosition());
-                }
-                color = parseResolvedColorValue(element, new ListCssTokenizer(list), functionProcessor);
-                break;
-            default:
-                tt.pushBack();
-                color = parseResolvedColorValue(element, tt, functionProcessor);
-                break;
+        case CssTokenType.TT_FUNCTION:
+            String name = tt.currentString();
+            tt.pushBack();
+            List<CssToken> list = new ArrayList<>();
+            functionProcessor.processToken(element, tt, list::add);
+            if (list.isEmpty()) {
+                throw new ParseException("〈color-value〉: function " + name + "() must return a value.", tt.getStartPosition());
+            }
+            color = parseResolvedColorValue(element, new ListCssTokenizer(list), functionProcessor);
+            break;
+        default:
+            tt.pushBack();
+            color = parseResolvedColorValue(element, tt, functionProcessor);
+            break;
         }
         return color;
     }

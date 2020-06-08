@@ -1,6 +1,6 @@
 /*
  * @(#)SimpleXmlIO.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
 
@@ -288,6 +288,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
                 }
             }
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
+                figures.add(f);
                 newDrawing.removeChild(f);
                 String id = idFactory.createId(f);
                 f.set(StyleableFigure.ID, id);

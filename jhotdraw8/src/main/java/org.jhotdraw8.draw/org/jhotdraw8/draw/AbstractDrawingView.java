@@ -1,6 +1,6 @@
 /*
  * @(#)AbstractDrawingView.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw;
 
@@ -32,6 +32,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * AbstractDrawingView.
@@ -146,7 +147,9 @@ public abstract class AbstractDrawingView extends SimplePropertyBean implements 
         ClipboardInputFormat in = getClipboardInputFormat();
         if (in != null) {
             try {
-                in.read(cb, getModel(), getDrawing(), parent);
+                Set<Figure> pastedFigures = in.read(cb, getModel(), getDrawing(), parent);
+                getSelectedFigures().clear();
+                getSelectedFigures().addAll(pastedFigures);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

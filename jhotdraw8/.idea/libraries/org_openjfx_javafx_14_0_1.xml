@@ -1,0 +1,27 @@
+<component name="libraryTable">
+  <library name="org.openjfx:javafx:14.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.media.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.swing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.web.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx-swt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.base.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.controls.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.fxml.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/javafx.graphics.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib" />
+    </NATIVE>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.base" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.controls" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.fxml" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.graphics" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.media" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.swing" />
+      <root url="jar://$PROJECT_DIR$/lib/compile/modulepath/javafx-sdk-14.0.1/lib/src.zip!/javafx.web" />
+    </SOURCES>
+  </library>
+</component>

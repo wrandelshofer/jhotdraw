@@ -1,6 +1,6 @@
 /*
- * @(#)CssInsetsConverterOLD.java
- * Copyright © The authors and contributors of JHotDraw. MIT License.
+ * @(#)InsetsConverter.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 

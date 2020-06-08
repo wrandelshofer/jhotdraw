@@ -1,3 +1,8 @@
+/*
+ * @(#)CssColorChooserController.java
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ */
+
 /**
  * Sample Skeleton for 'CssColorChooser.fxml' Controller Class
  */

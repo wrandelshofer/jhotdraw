@@ -2,10 +2,14 @@
 
 <!--
   ~ @(#)GrapherMenuBar.fxml
-  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <menus>
     <Menu id="file" mnemonicParsing="false" text="%file.text">

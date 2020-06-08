@@ -1,9 +1,6 @@
 /*
  * @(#)BinaryPListParser.java
- *
- * Copyright (c) 2005-2013 Werner Randelshofer, Switzerland.
- * You may not use, copy or modify this file, except in compliance with the
- * accompanying license terms.
+ * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.macos;
 
@@ -20,7 +17,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.StringReader;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
