@@ -30,7 +30,6 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
-import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -46,7 +45,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
-        implements ConnectingFigure, TransformableFigure {
+        implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {
 
     /**
      * The horizontal position of the text. Default value: {@code baseline}
@@ -54,16 +53,6 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @NonNull
     public final static EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
-    /**
-     * The label target.
-     */
-    @NonNull
-    public final static NullableObjectKey<Figure> LABEL_TARGET = new NullableObjectKey<>("labelTarget", Figure.class, null);
-    /**
-     * The connector.
-     */
-    @NonNull
-    public final static NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
     @NonNull
     public final static CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
     @NonNull

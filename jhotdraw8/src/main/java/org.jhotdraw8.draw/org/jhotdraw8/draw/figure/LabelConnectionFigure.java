@@ -1,50 +1,19 @@
-/*
- * @(#)LabelConnectionFigure.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
- */
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.key.NullableObjectKey;
 
-/**
- * LabelConnectionFigure.
- *
- * @author Werner Randelshofer
- */
-public class LabelConnectionFigure extends AbstractLabelConnectionFigure
-        implements HideableFigure, TextFontableFigure, TextLayoutableFigure, TextableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
-
+public interface LabelConnectionFigure extends Figure {
     /**
-     * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
+     * The label target.
      */
-    public final static String TYPE_SELECTOR = "LabelConnection";
-
-    public LabelConnectionFigure(@NonNull Point2D position, String text) {
-        this(position.getX(), position.getY(), text);
-    }
-
-    public LabelConnectionFigure(double x, double y, String text, @NonNull Object... keyValues) {
-        set(TEXT, text);
-        set(ORIGIN, new CssPoint2D(x, y));
-        for (int i = 0; i < keyValues.length; i += 2) {
-            @SuppressWarnings("unchecked") // the set() method will perform the check for us
-                    Key<Object> key = (Key<Object>) keyValues[i];
-            set(key, keyValues[i + 1]);
-        }
-    }
-
-    @Override
-    protected String getText(RenderContext ctx) {
-        return get(TEXT);
-    }
-
     @NonNull
-    @Override
-    public String getTypeSelector() {
-        return TYPE_SELECTOR;
-    }
+    public final static NullableObjectKey<Figure> LABEL_TARGET = new NullableObjectKey<>("labelTarget", Figure.class, null);
+    /**
+     * The connector.
+     */
+    @NonNull
+    public final static NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
+
 }
