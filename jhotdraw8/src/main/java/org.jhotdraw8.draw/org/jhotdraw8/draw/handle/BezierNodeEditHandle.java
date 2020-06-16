@@ -104,7 +104,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance;
+        return Geom.lengthSquared(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
     private BezierNode getBezierNode() {
