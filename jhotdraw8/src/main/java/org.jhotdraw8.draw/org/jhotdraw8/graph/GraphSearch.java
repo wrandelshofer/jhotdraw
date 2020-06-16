@@ -321,11 +321,12 @@ public class GraphSearch {
             if (done < n) {
                 // Break loop in graph by removing all arrows on a node.
                 int i = 0;
-                do {
+                while (i < n - 1 && deg[i] <= 0) {
                     i++;
-                } while (i < n && deg[i] <= 0);
-                if (i == n) {
-                    throw new AssertionError("bug in loop-breaking algorithm i==" + n);
+                }
+                ;
+                if (deg[i] == 0) {
+                    throw new AssertionError("bug in loop-breaking algorithm i: " + i);
                 }
                 deg[i] = 0;// this can actually remove more than one arrow
                 queue[last++] = i;
