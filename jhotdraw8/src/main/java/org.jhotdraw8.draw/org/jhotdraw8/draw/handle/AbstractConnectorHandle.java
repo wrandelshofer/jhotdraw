@@ -31,6 +31,25 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public abstract class AbstractConnectorHandle extends AbstractHandle {
+    protected static class ConnectorAndConnectedFigure {
+        @NonNull
+        final Connector connector;
+        @NonNull
+        final Figure connectedFigure;
+
+        public ConnectorAndConnectedFigure(@NonNull Connector connector, @NonNull Figure connectedFigure) {
+            this.connector = connector;
+            this.connectedFigure = connectedFigure;
+        }
+
+        public Connector getConnector() {
+            return connector;
+        }
+
+        public Figure getConnectedFigure() {
+            return connectedFigure;
+        }
+    }
 
     @NonNull
     protected final MapAccessor<Connector> connectorKey;
@@ -131,9 +150,10 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 newConnectedFigure = prevTarget;
                 ConnectableFigure cff = (ConnectableFigure) prevTarget;
                 Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
-                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
+                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPoint, o, cff, event);
+                newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
                 if (newConnector != null && o.canConnect(cff, newConnector)) {
-                    newConnectedFigure = cff;
+                    newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
                     constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, cff));
                     isConnected = true;
                 }
@@ -148,9 +168,10 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
+                                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPoint, o, cff, event);
+                                newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
                                 if (newConnector != null && o.canConnect(ff, newConnector)) {
-                                    newConnectedFigure = ff;
+                                    newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
                                     constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, ff));
                                     isConnected = true;
                                     break SearchLoop;
@@ -165,6 +186,11 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         model.set(o, pointKey, owner.worldToLocal(constrainedPoint));
         model.set(o, connectorKey, newConnector);
         model.set(o, targetKey, newConnectedFigure);
+    }
+
+    protected ConnectorAndConnectedFigure find(CssPoint2D constrainedPoint, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent) {
+        final Connector connector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
+        return connector == null ? null : new ConnectorAndConnectedFigure(connector, cff);
     }
 
     @Override
