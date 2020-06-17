@@ -693,17 +693,18 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (recreateHandles) {
             return null;
         }
+            final double tolerance = getEditor().getTolerance();
         for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
             final Node node = e.getKey();
             final Handle handle = e.getValue();
             if (!handle.isSelectable()) {
                 continue;
             }
-            if (handle.contains(this, vx, vy, getEditor().getTolerance())) {
+            if (handle.contains(this, vx, vy, tolerance)) {
                 return handle;
             } else {
                 if (false) {
-                    if (contains(node, new Point2D(vx, vy), getEditor().getTolerance())) {
+                    if (contains(node, new Point2D(vx, vy), tolerance)) {
                         return handle;
                     }
                 }
