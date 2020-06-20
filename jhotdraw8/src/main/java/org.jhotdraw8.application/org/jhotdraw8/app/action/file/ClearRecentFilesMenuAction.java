@@ -41,7 +41,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull Application app) {
+    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
         app.recentUrisProperty().clear();
     }
 

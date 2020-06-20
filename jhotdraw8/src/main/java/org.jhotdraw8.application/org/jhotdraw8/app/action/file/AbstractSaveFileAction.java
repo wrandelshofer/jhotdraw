@@ -16,11 +16,13 @@ import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -29,6 +31,7 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
+import java.util.function.Supplier;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -42,7 +45,10 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     private static final long serialVersionUID = 1L;
     private boolean saveAs;
     private Node oldFocusOwner;
-    private final Key<URIChooser> saveChooserKey = new ObjectKey<>("saveChooser", URIChooser.class);
+    @NonNull
+    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>("saveChooser", URIChooser.class);
+    @NonNull
+    public final static Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new ObjectKey<>("saveChooserFactory", Supplier.class, new Class[]{URIChooser.class}, null);
 
     /**
      * Creates a new instance.
@@ -72,16 +78,16 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     }
 
     @Nullable
-    protected URIChooser getChooser(@NonNull FileBasedActivity view) {
-        URIChooser c = view.get(saveChooserKey);
-        if (c == null) {
-            c = createChooser(view);
-            view.set(saveChooserKey, c);
+    protected URIChooser getChooser(FileBasedActivity view) {
+        URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
+        if (chooser == null) {
+            Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
+            chooser = factory == null ? new FileURIChooser(FileURIChooser.Mode.SAVE) : factory.get();
+            app.put(SAVE_CHOOSER_KEY, chooser);
         }
-        return c;
+        return chooser;
     }
 
-    protected abstract URIChooser createChooser(FileBasedActivity view);
 
     @Override
     protected void onActionPerformed(ActionEvent evt, @Nullable FileBasedActivity activity) {
@@ -106,8 +112,8 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
 
                 // Prevent save to URI that is open in another view!
                 // unless  multipe views to same URI are supported
-                if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity pi : app.activities()) {
+                if (uri != null && !app.getNonNull(FileBasedApplication.ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI)) {
+                    for (Activity pi : app.getActivities()) {
                         FileBasedActivity vi = (FileBasedActivity) pi;
                         if (vi != v && uri.equals(v.getURI())) {
                             // FIXME Localize message

@@ -74,7 +74,7 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
     }
 
     @Override
-    protected final void onActionPerformed(ActionEvent event, Application app) {
+    protected final void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
         onActionPerformed(event, getActivity());
     }
 

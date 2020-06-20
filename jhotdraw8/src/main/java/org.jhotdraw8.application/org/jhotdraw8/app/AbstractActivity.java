@@ -5,17 +5,20 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
+
+import java.util.LinkedHashMap;
 
 /**
  * AbstractActivity.
@@ -25,17 +28,16 @@ import org.jhotdraw8.collection.Key;
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     @NonNull
-    protected ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
-    protected final HierarchicalMap<String, Action> actionMap = new HierarchicalMap<>();
+    protected final ReadOnlyObjectProperty<Application> application;
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableHashMap();
     protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY);
     private final IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
+    private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
 
-    @NonNull
-    @Override
-    public HierarchicalMap<String, Action> getActionMap() {
-        return actionMap;
+
+    public AbstractActivity(@NonNull Application application) {
+        this.application = new ReadOnlyObjectWrapper<>(this, APPLICATION_PROPERTY, application);
     }
 
     @NonNull
@@ -44,7 +46,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
         return disambiguation;
     }
 
-    protected abstract void initActionMap(HierarchicalMap<String, Action> actionMap);
+    protected abstract void initActions(ObservableMap<String, Action> actionMap);
 
     protected abstract void initView();
 
@@ -56,7 +58,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     @NonNull
     @Override
-    public ObjectProperty<Application> applicationProperty() {
+    public ReadOnlyObjectProperty<Application> applicationProperty() {
         return application;
     }
 
@@ -80,7 +82,12 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     public void init() {
         initView();
-        initActionMap(actionMap);
+        initActions(getActions());
         getNode().disableProperty().bind(disabledProperty());
+    }
+
+    @Override
+    public @NonNull ReadOnlyMapProperty<String, Action> actionsProperty() {
+        return actions;
     }
 }

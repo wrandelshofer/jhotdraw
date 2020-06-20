@@ -7,11 +7,15 @@ package org.jhotdraw8.app.action.app;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
-import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.ApplicationModel;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
+
+import static org.jhotdraw8.app.Application.COPYRIGHT_KEY;
+import static org.jhotdraw8.app.Application.LICENSE_KEY;
+import static org.jhotdraw8.app.Application.NAME_KEY;
+import static org.jhotdraw8.app.Application.VERSION_KEY;
 
 /**
  * Displays a dialog showing information about the application.
@@ -30,31 +34,30 @@ public class AboutAction extends AbstractApplicationAction {
      *
      * @param app the application
      */
-    public AboutAction(Application app) {
+    public AboutAction(@NonNull Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @Nullable Application app) {
+    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
         if (app == null) {
             return;
         }
 
         addDisabler(this);
-        ApplicationModel model = app.getModel();
 
-        String name = model.getName();
-        String version = model.getVersion();
-        String vendor = model.getVendor();
-        String license = model.getLicense();
-
+        String name = app.get(NAME_KEY);
+        String version = app.get(VERSION_KEY);
+        String vendor = app.get(COPYRIGHT_KEY);
+        String license = app.get(LICENSE_KEY);
 
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                (vendor == null ? "" : vendor)
-                        + (license == null ? "" : "\n" + license)
-                        + "\n\nRunning on"
+                (vendor == null ? "" : vendor + "\n")
+                        + (license == null ? "" : "" + license + "\n")
+                        + (vendor == null && license == null ? "" : "\n")
+                        + "Running on"
                         + "\n  Java: " + System.getProperty("java.version")
                         + ", " + System.getProperty("java.vendor")
                         + "\n  JVM: " + System.getProperty("java.vm.version")
@@ -62,7 +65,7 @@ public class AboutAction extends AbstractApplicationAction {
                         + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
                         + ", " + System.getProperty("os.arch"));
         alert.getDialogPane().setMaxWidth(640.0);
-        alert.setHeaderText((name == null ? "unnamed" : name) + (version == null ? "" : " " + version));
+        alert.setHeaderText((name == null ? "" : name) + (version == null ? "" : (name == null ? "" : " ") + version));
         alert.setGraphic(null);
         alert.initModality(Modality.NONE);
         alert.showingProperty().addListener((observable, oldValue, newValue) -> {
@@ -72,7 +75,7 @@ public class AboutAction extends AbstractApplicationAction {
                 }
         );
         alert.getDialogPane().getScene().getStylesheets().addAll(
-                getApplication().getModel().getSceneStylesheets().asList()
+                getApplication().getStylesheets()
         );
         alert.show();
     }

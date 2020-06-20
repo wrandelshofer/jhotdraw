@@ -34,9 +34,6 @@ public class FontAction extends AbstractActivityAction {
     public FontAction(@NonNull Application app, @Nullable Activity activity) {
         super(app, activity, FontableActivity.class);
         TeddyLabels.getResources().configureAction(this, ID);
-        disabledProperty().addListener((o, oldv, newv) -> {
-            System.out.println("FontAction.disabled=" + newv);
-        });
     }
 
     @Override

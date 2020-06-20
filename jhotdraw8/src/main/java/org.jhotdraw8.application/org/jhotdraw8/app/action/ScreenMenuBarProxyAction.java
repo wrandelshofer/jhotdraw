@@ -37,7 +37,7 @@ public class ScreenMenuBarProxyAction extends AbstractAction {
                 selectedProperty().set(false);
             }
             if (newv != null) {
-                currentAction = newv.getActionMap().get(id);
+                currentAction = newv.getActions().get(id);
             }
             if (currentAction != null) {
                 disabled.bind(Bindings.isNotEmpty(disablers).or(currentAction.disabledProperty()));

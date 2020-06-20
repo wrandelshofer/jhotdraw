@@ -57,7 +57,7 @@ public interface PropertyBean {
      *
      * @return the map
      */
-    @Nullable ObservableMap<Key<?>, Object> getProperties();
+    @NonNull ObservableMap<Key<?>, Object> getProperties();
 
     @NonNull
     default <T> ObjectProperty<T> getProperty(@NonNull Key<T> key) {

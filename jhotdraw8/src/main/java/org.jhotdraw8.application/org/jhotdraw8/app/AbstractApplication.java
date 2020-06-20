@@ -9,6 +9,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyMapWrapper;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -17,16 +20,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.gui.URIChooser;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.AbstractMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
 /**
@@ -46,12 +59,26 @@ public abstract class AbstractApplication extends javafx.application.Application
      * Holds the disablers.
      */
     private final ObservableSet<Object> disablers = FXCollections.observableSet();
-    /**
-     * Holds the model.
-     */
-    @Nullable
-    private final ObjectProperty<ApplicationModel> model = new SimpleObjectProperty<>(this, MODEL_PROPERTY, null);
 
+    private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(this, ACTIONS_PROPERTY, FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
+    private final ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
+    private final ReadOnlyListProperty<String> stylesheets = new javafx.beans.property.ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
+
+    private final ObjectProperty<Function<Application, Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
+    private final ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
+    private final ObjectProperty<Supplier<URIChooser>> openChooserFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
+    private final NonNullProperty<ResourceBundle> resourceBundle;
+    private final NonNullProperty<Preferences> preferences = new NonNullProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
+
+    {
+        try {
+            resourceBundle = new NonNullProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new PropertyResourceBundle(new StringReader("")));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create empty PropertyResourceBundle", e);
+        }
+    }
+
+    ;
     /**
      * Holds the max number of recent URIs.
      */
@@ -99,7 +126,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     protected void loadRecentUris(String applicationId) {
-        Preferences prefs = getModel().getPreferences();
+        Preferences prefs = getPreferences();
         String recentUrisSerialized = prefs.get(applicationId + RECENT_URIS, "");
         for (String row : recentUrisSerialized.split("\n")) {
             if (row.isEmpty()) {
@@ -153,15 +180,46 @@ public abstract class AbstractApplication extends javafx.application.Application
         return maxNumberOfRecentUris;
     }
 
-    @Nullable
-    @Override
-    public ObjectProperty<ApplicationModel> modelProperty() {
-        return model;
-    }
-
     @Override
     public ReadOnlySetProperty<Map.Entry<URI, DataFormat>> recentUrisProperty() {
         return recentUris;
     }
 
+    @Override
+    public @NonNull ReadOnlyMapProperty<String, Action> actionsProperty() {
+        return actions;
+    }
+
+    @NonNull
+    @Override
+    public ReadOnlySetProperty<Activity> activitiesProperty() {
+        return activities;
+    }
+
+    @NonNull
+    @Override
+    public ReadOnlyListProperty<String> stylesheetsProperty() {
+        return stylesheets;
+    }
+
+    @Override
+    public @NonNull ObjectProperty<Function<Application, Activity>> activityFactoryProperty() {
+        return activityFactory;
+    }
+
+    @Override
+    public @NonNull ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty() {
+        return menuFactory;
+    }
+
+    @Override
+    public @NonNull NonNullProperty<ResourceBundle> resourceBundleProperty() {
+        return resourceBundle;
+    }
+
+    @Override
+    public @NonNull NonNullProperty<Preferences> preferencesProperty() {
+        return preferences;
+    }
 }
+

@@ -5,26 +5,50 @@
 package org.jhotdraw8.samples.teddy;
 
 import javafx.stage.Screen;
-import org.jhotdraw8.app.FileBasedApplication;
-import org.jhotdraw8.app.SimpleApplicationModel;
+import org.jhotdraw8.app.SimpleFileBasedApplication;
+import org.jhotdraw8.gui.FileURIChooser;
+import org.jhotdraw8.gui.URIExtensionFilter;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.jhotdraw8.app.action.file.AbstractOpenFileAction.OPEN_CHOOSER_FACTORY_KEY;
+import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
 
 /**
  * TeddyApplication.
  *
  * @author Werner Randelshofer
  */
-public class TeddyApplication extends FileBasedApplication {
+public class TeddyApplication extends SimpleFileBasedApplication {
 
-    public TeddyApplication() {
-        super();
-        SimpleApplicationModel model = new SimpleApplicationModel(
-                "Teddy",
+    @Override
+    protected void initResourceBundle() {
+        setResourceBundle(TeddyLabels.getResources().asResourceBundle());
+    }
+
+    @Override
+    protected void initFactories() {
+        setActivityFactory(createFxmlActivityControllerFactory(
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
-                FileBasedApplication.getDocumentOrientedMenu(),
-                "Text Files", null, "*.txt");
-        model.setResources(TeddyLabels.getResources().asResourceBundle());
-        model.setMenuFxml(TeddyApplication.class.getResource("TeddyMenuBar.fxml"));
-        setModel(model);
+                getResourceBundle(), TeddyActivity::new));
+        setMenuBarFactory(createFxmlNodeSupplier(
+                TeddyApplication.class.getResource("TeddyMenuBar.fxml"), getResourceBundle()));
+    }
+
+    @Override
+    protected void initProperties() {
+        put(NAME_KEY, "Teddy");
+        put(COPYRIGHT_KEY, "The authors and contributors of JHotDraw.");
+        put(LICENSE_KEY, "MIT License");
+        List<URIExtensionFilter> extensions = Arrays.asList(new URIExtensionFilter("Text Files", "text/plain", "*.txt"));
+        put(SAVE_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, extensions));
+        put(OPEN_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, extensions));
+    }
+
+    @Override
+    protected void initActions() {
+        super.initActions();
     }
 
     /**

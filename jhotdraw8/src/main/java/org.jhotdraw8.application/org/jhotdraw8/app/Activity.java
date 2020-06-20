@@ -5,51 +5,52 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
-import org.jhotdraw8.collection.HierarchicalMap;
 
 /**
  * Represents an activity that the user performs with help of the computer.
  * <p>
- * The life-cycle of an {@code Activity} is managed by an {@link Application},
+ * The life-cycle of an {@link Activity} is managed by an {@link Application},
  * it consists of the following steps:
  * <ol>
  * <li><b>Creation</b><br>
- * The user invokes an {@code Action} that instantiates a new {@code Activity}
- * using the abstract factory provided by the {@code ApplicationModel}.
+ * The user invokes an {@code Action} that instantiates a new {@link Activity}
+ * for the {@link Application}, which is passed as an argument to the constructor
+ * of the {@link Activity}.
  * </li>
  * <li><b>Initialisation</b><br>
- * The {@code Action} adds the {@code Activity}  to the {@code Application}.<br>
- * The {@code Application} sets itself in the {@link #applicationProperty()} .<br>
- * The {@code Application} invokes {@link #init}.<br>
- * The {@code Application} retrieves {@link Action}s from the {@code Activity}
+ * The {@code Action} adds the {@link Activity}  to the {@link Application}.<br>
+ * The {@link Application} invokes {@link #init}.<br>
+ * The {@link Application} retrieves {@link Action}s from the {@link Activity}
  * and creates user interface elements for them.
- * The {@code Application} retrieves the {@link Node} from the {@code Activity}
+ * The {@link Application} retrieves the {@link Node} from the {@link Activity}
  * and adds it to one of its scene graphs.
  * </li>
  * <li><b>Start</b><br>
- * The {@code Application} invokes {@link #start()}, to
+ * The {@link Application} invokes {@link #start()}, to
  * inform the activity that it can start (or resume) execution.
  * </li>
  * <li><b>Stop</b><br>
- * The {@code Application} invokes {@link #stop()}, to
+ * The {@link Application} invokes {@link #stop()}, to
  * inform the activity that it should stop (or suspend) execution.<br>
- * The {@code Application} can invoke {@link #start()} again, to
+ * The {@link Application} can invoke {@link #start()} again, to
  * resume execution.
  * </li>
  * <li><b>Destroy</b><br>
- * When the view is no longer needed, the {@code Application} ensures that the
+ * When the view is no longer needed, the {@link Application} ensures that the
  * activity is stopped.<br>
- * The {@code Application} invokes {@link #destroy}.<br>
- * The {@code Application} removes the {@code Node} of the {@code Activity}
+ * The {@link Application} invokes {@link #destroy}.<br>
+ * The {@link Application} removes the {@code Node} of the {@link Activity}
  * from its scene graph.<br>
- * The {@code Application} sets the {@link #applicationProperty()} to null.<br>
+ * The {@link Application} sets the {@link #applicationProperty()} to null.<br>
  * </li>
  * </ol>
  * <p>
@@ -66,7 +67,20 @@ public interface Activity extends Disableable, PropertyBean {
     String TITLE_PROPERTY = "title";
 
     /**
-     * The application property is maintained by the {@code Application}
+     * Contains all {@link Action} objects that are managed by this
+     * {@link Activity}.
+     *
+     * @return the activities
+     */
+    @NonNull ReadOnlyMapProperty<String, Action> actionsProperty();
+
+    @NonNull
+    default ObservableMap<String, Action> getActions() {
+        return actionsProperty().get();
+    }
+
+    /**
+     * The application property is maintained by the {@link Application}
      * that manages this activity.
      * <p>
      * The value is set to the application before {@link #init} is called.
@@ -75,7 +89,7 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    @NonNull ObjectProperty<Application> applicationProperty();
+    @NonNull ReadOnlyObjectProperty<Application> applicationProperty();
 
     /**
      * Used by the application to display unique titles if multiple
@@ -85,24 +99,18 @@ public interface Activity extends Disableable, PropertyBean {
      */
     @NonNull IntegerProperty disambiguationProperty();
 
-    /**
-     * Returns actions available for this activity.
-     *
-     * @return the action map
-     */
-    @NonNull HierarchicalMap<String, Action> getActionMap();
-
 
     // getter and setter methods for properties
 
-    @Nullable
+    @NonNull
     default Application getApplication() {
-        return applicationProperty().get();
+        Application application = applicationProperty().get();
+        if (application == null) {
+            throw new NullPointerException("application was not initialized with a non-null value in the constructor of an Activity.");
+        }
+        return application;
     }
 
-    default void setApplication(@Nullable Application newValue) {
-        applicationProperty().set(newValue);
-    }
 
     default int getDisambiguation() {
         return disambiguationProperty().get();

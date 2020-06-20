@@ -5,8 +5,8 @@
 package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.collection.Key;
 
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class OpenFileAction extends AbstractOpenFileAction {
      *
      * @param app the application
      */
-    public OpenFileAction(Application app) {
+    public OpenFileAction(FileBasedApplication app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);
     }

@@ -7,6 +7,7 @@ package org.jhotdraw8.samples.grapher;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
@@ -19,11 +20,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
+import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
-import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
@@ -173,6 +174,10 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
+    public GrapherActivity(@NonNull Application application) {
+        super(application);
+    }
+
     @NonNull
     private DockItem addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
@@ -241,7 +246,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    protected void initActionMap(@NonNull HierarchicalMap<String, Action> map) {
+    protected void initActions(@NonNull ObservableMap<String, Action> map) {
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
         map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(getApplication()));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));

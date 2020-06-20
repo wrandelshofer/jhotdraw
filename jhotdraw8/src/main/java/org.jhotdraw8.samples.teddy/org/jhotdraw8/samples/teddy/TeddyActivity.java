@@ -5,6 +5,7 @@
 package org.jhotdraw8.samples.teddy;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
@@ -17,7 +18,6 @@ import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
@@ -40,10 +40,14 @@ import java.util.concurrent.CompletionStage;
  *
  * @author Werner Randelshofer
  */
-public class TeddyActivityController extends AbstractFileBasedActivity implements FileBasedActivity, Initializable, FontableActivity {
+public class TeddyActivity extends AbstractFileBasedActivity implements FileBasedActivity, Initializable, FontableActivity {
 
     @FXML
     private TextArea textArea;
+
+    public TeddyActivity(@NonNull Application application) {
+        super(application);
+    }
 
     @NonNull
     @Override
@@ -63,7 +67,7 @@ public class TeddyActivityController extends AbstractFileBasedActivity implement
     }
 
     @Override
-    protected void initActionMap(HierarchicalMap<String, Action> map) {
+    protected void initActions(ObservableMap<String, Action> map) {
         final Application app = getApplication();
         map.put(FontAction.ID, new FontAction(app, this));
     }

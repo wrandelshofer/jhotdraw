@@ -9,4 +9,4 @@
 <?import javafx.scene.control.TextArea?>
 <TextArea fx:id="textArea" minHeight="10.0" minWidth="10.0" prefHeight="320.0" prefWidth="240.0"
           xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="org.jhotdraw8.samples.teddy.TeddyActivityController"/>
+          fx:controller="org.jhotdraw8.samples.teddy.TeddyActivity"/>

@@ -73,7 +73,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
         {
             // Search for an empty view
             FileBasedActivity emptyView;

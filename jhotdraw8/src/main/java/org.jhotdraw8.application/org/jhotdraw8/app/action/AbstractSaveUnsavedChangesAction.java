@@ -20,10 +20,10 @@ import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -32,6 +32,10 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
+
+import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
+import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_KEY;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that asks
@@ -50,12 +54,7 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
-    /**
-     *
-     */
-    @Nullable
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>(
-            "saveChooser", URIChooser.class, null);
+
 
     private static final long serialVersionUID = 1L;
 
@@ -83,6 +82,17 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                 onActionOnViewPerformed((FileBasedActivity) v);//FIXME class cast exception
             });
         }
+    }
+
+    @Nullable
+    protected URIChooser getChooser(FileBasedActivity view) {
+        URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
+        if (chooser == null) {
+            Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
+            chooser = factory == null ? new FileURIChooser(FileURIChooser.Mode.SAVE) : factory.get();
+            app.put(SAVE_CHOOSER_KEY, chooser);
+        }
+        return chooser;
     }
 
     public void onActionOnViewPerformed(@NonNull FileBasedActivity v) {
@@ -165,16 +175,6 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    @Nullable
-    protected URIChooser getChooser(@NonNull FileBasedActivity view) {
-        URIChooser chsr = view.get(SAVE_CHOOSER_KEY);
-        if (chsr == null) {
-            chsr = getApplication().getModel().createSaveChooser();
-            view.set(SAVE_CHOOSER_KEY, chsr);
-        }
-        return chsr;
-    }
-
     protected void saveView(@NonNull final FileBasedActivity v, WorkState workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
@@ -186,10 +186,10 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                 uri = chooser.showDialog(v.getNode());
 
                 // Prevent save to URI that is open in another view!
-                // unless  multipe views to same URI are supported
+                // unless multiple views to same URI are supported
                 if (uri != null
-                        && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity vi : app.activities()) {
+                        && !app.getNonNull(FileBasedApplication.ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI)) {
+                    for (Activity vi : app.getActivities()) {
                         if (vi != v && v.getURI().equals(uri)) {
                             // FIXME Localize message
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");

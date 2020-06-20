@@ -4,10 +4,18 @@
  */
 package org.jhotdraw8.samples.modeler;
 
-import org.jhotdraw8.app.FileBasedApplication;
+import javafx.collections.ObservableMap;
+import org.jhotdraw8.app.SimpleFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.app.action.file.ExportFileAction;
+import org.jhotdraw8.app.action.file.PrintFileAction;
 import org.jhotdraw8.app.action.file.RevertFileAction;
-import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
+import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
+import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.gui.FileURIChooser;
+import org.jhotdraw8.gui.URIExtensionFilter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,27 +24,44 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jhotdraw8.app.action.file.ExportFileAction.EXPORT_CHOOSER_FACTORY_KEY;
 
 /**
  * ModelerApplication.
  *
  * @author Werner Randelshofer
  */
-public class ModelerApplication extends FileBasedApplication {
+public class ModelerApplication extends SimpleFileBasedApplication {
 
-    public ModelerApplication() {
-        super();
-
-        setModel(new ModelerApplicationModel());
+    @Override
+    protected void initResourceBundle() {
+        setResourceBundle(ModelerLabels.getResources().asResourceBundle());
     }
 
     @Override
-    public HierarchicalMap<String, Action> getActionMap() {
-        HierarchicalMap<String, Action> map = super.getActionMap();
+    protected void initProperties() {
+        super.initProperties();
+        put(NAME_KEY, "Modeler");
+        put(COPYRIGHT_KEY, "Copyright © 2020 The authors and contributors of JHotDraw.");
+        put(LICENSE_KEY, "MIT License.");
 
-        Action a;
+        List<URIExtensionFilter> exportExtensions = new ArrayList<>();
+        exportExtensions.add(new URIExtensionFilter("SVG", SvgFullSceneGraphExporter.SVG_MIME_TYPE, "*.svg"));
+        exportExtensions.add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_MIME_TYPE, "*.png"));
+        exportExtensions.add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE, "*.ser.xml"));
+        put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, exportExtensions));
+    }
+
+    @Override
+    public void initActions() {
+        super.initActions();
+        ObservableMap<String, Action> map = getActions();
         map.put(RevertFileAction.ID, new RevertFileAction(this, null));
-        return map;
+        map.put(PrintFileAction.ID, new PrintFileAction(this, null));
+        map.put(ExportFileAction.ID, new ExportFileAction(this, DrawingExportOptionsPane::createDialog));
     }
 
     /**

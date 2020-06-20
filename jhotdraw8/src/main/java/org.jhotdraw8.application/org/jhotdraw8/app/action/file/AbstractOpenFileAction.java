@@ -14,11 +14,13 @@ import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
+import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -26,29 +28,34 @@ import org.jhotdraw8.util.Resources;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
+import java.util.function.Supplier;
 
 
 public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
+    @NonNull
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new ObjectKey<>("openChooser", URIChooser.class);
+    @NonNull
+    public final static Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new ObjectKey<>("openChooserFactory", Supplier.class, new Class<?>[]{URIChooser.class}, null);
 
-    public AbstractOpenFileAction(@Nullable Application app) {
+    public AbstractOpenFileAction(@NonNull FileBasedApplication app) {
         super(app);
     }
 
     @Nullable
     protected URIChooser getChooser(FileBasedActivity view) {
-        URIChooser c = app.get(OPEN_CHOOSER_KEY);
-        if (c == null) {
-            c = getApplication().getModel().createOpenChooser();
-            app.set(OPEN_CHOOSER_KEY, c);
+        URIChooser chooser = app.get(OPEN_CHOOSER_KEY);
+        if (chooser == null) {
+            Supplier<URIChooser> factory = app.get(OPEN_CHOOSER_FACTORY_KEY);
+            chooser = factory == null ? new FileURIChooser() : factory.get();
+            app.put(OPEN_CHOOSER_KEY, chooser);
         }
-        return c;
+        return chooser;
     }
 
     protected abstract boolean isReuseEmptyViews();
 
     @Override
-    protected void onActionPerformed(ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
         {
             WorkState workState = new SimpleWorkState(getLabel());
             app.addDisabler(workState);
@@ -81,8 +88,8 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             app.add(view);
 
             // Prevent same URI from being opened more than once
-            if (!getApplication().getModel().isAllowMultipleViewsPerURI()) {
-                for (Activity vp : getApplication().activities()) {
+            if (!getApplication().getNonNull(FileBasedApplication.ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI)) {
+                for (Activity vp : getApplication().getActivities()) {
                     FileBasedActivity v = (FileBasedActivity) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
@@ -162,5 +169,6 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
      */
     @NonNull
     protected abstract Map<? super Key<?>, Object> getReadOptions();
+
 
 }

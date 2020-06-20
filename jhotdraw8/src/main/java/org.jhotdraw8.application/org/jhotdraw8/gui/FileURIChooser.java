@@ -14,6 +14,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,8 +50,13 @@ public class FileURIChooser implements URIChooser {
         this(Mode.OPEN);
     }
 
-    public FileURIChooser(Mode newValue) {
+    public FileURIChooser(@NonNull Mode newValue) {
+        this(newValue, Collections.emptyList());
+    }
+
+    public FileURIChooser(@NonNull Mode newValue, @NonNull List<URIExtensionFilter> extensionFilters) {
         mode = newValue;
+        this.filters.setAll(extensionFilters);
     }
 
     public void setMode(Mode newValue) {

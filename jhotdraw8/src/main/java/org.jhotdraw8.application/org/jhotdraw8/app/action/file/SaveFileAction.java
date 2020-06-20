@@ -8,7 +8,6 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
-import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 
 import java.net.URI;
@@ -22,7 +21,6 @@ import java.net.URI;
  */
 public class SaveFileAction extends AbstractSaveFileAction {
 
-    private static final long serialVersionUID = 1L;
 
     public static final String ID = "file.save";
 
@@ -68,10 +66,6 @@ public class SaveFileAction extends AbstractSaveFileAction {
         super(app, view, id, saveAs);
     }
 
-    @Override
-    protected URIChooser createChooser(FileBasedActivity view) {
-        return app.getModel().createSaveChooser();
-    }
 
     @Override
     protected void onSaveSucceeded(@NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format) {

@@ -6,58 +6,98 @@ package org.jhotdraw8.app;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.SetProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
+import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.beans.PropertyBean;
-import org.jhotdraw8.collection.HierarchicalMap;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.concurrent.FXWorker;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.prefs.Preferences;
 
 /**
  * An {@code Application} handles the life-cycle of {@link Activity} objects and
  * provides windows to present them on screen.
  *
  * @author Werner Randelshofer
- * @design.pattern Application Framework, KeyAbstraction. The application
- * framework supports the creation of document-based applications which can
- * support platform-specific guidelines. The application framework consists of
- * the following key abstractions: {@link Application}, {@link ApplicationModel}, {@link Activity},
- * {@link Action}.
  */
 public interface Application extends Disableable, PropertyBean {
-
+    String ACTIONS_PROPERTY = "actions";
+    String ACTIVITIES_PROPERTY = "activities";
+    String ACTIVITY_FACTORY_PROPERTY = "activityFactory";
+    String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
+    String MENU_BAR_FACTORY_PROPERTY = "menuBarFactory";
     String RECENT_URIS_PROPERTY = "recentUris";
+    String PREFERENCES_PROPERTY = "preferences";
     String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
     String MODEL_PROPERTY = "model";
+    String STYLESHEETS_PROPERTY = "stylesheets";
+
+    Key<String> NAME_KEY = new ObjectKey<>("name", String.class);
+    Key<String> VERSION_KEY = new ObjectKey<>("version", String.class);
+    Key<String> COPYRIGHT_KEY = new ObjectKey<>("copyright", String.class);
+    Key<String> LICENSE_KEY = new ObjectKey<>("license", String.class);
 
     /**
-     * The application model.
-     *
-     * @return the model
-     */
-    @Nullable ObjectProperty<ApplicationModel> modelProperty();
-
-    /**
-     * The list of activities contains all open activities.
-     * <p>
-     * Altough this is a list, an activity may only by contained
-     * once.
+     * Contains all {@link Activity} objects that are managed by this
+     * {@link Application}.
      *
      * @return the activities
      */
-    @NonNull SetProperty<Activity> activitiesProperty();
+    @NonNull ReadOnlySetProperty<Activity> activitiesProperty();
+
+    @NonNull NonNullProperty<Preferences> preferencesProperty();
+
+
+    /**
+     * Contains all {@link Action} objects that are managed by this
+     * {@link Application}.
+     *
+     * @return the activities
+     */
+    @NonNull ReadOnlyMapProperty<String, Action> actionsProperty();
+
+
+    @NonNull
+    default ObservableMap<String, Action> getActions() {
+        return actionsProperty().get();
+    }
+
+    @NonNull
+    default Preferences getPreferences() {
+        return preferencesProperty().get();
+    }
+
+    default void setPreferences(@NonNull Preferences preferences) {
+        preferencesProperty().set(preferences);
+    }
 
     /**
      * The set of recent URIs. The set must be ordered by most recently used
@@ -79,7 +119,8 @@ public interface Application extends Disableable, PropertyBean {
     @NonNull IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default ObservableSet<Activity> activities() {
+    @NonNull
+    default ObservableSet<Activity> getActivities() {
         return activitiesProperty().get();
     }
 
@@ -115,37 +156,8 @@ public interface Application extends Disableable, PropertyBean {
         return activeActivityProperty().get();
     }
 
-    /**
-     * Returns the action map of the application.
-     *
-     * @return the action map
-     */
-    HierarchicalMap<String, Action> getActionMap();
 
-    /**
-     * Executes a worker on the thread pool of the application.
-     *
-     * @param r the runnable
-     */
-    void execute(Runnable r);
 
-    /**
-     * Returns the application model.
-     *
-     * @return the model
-     */
-    default ApplicationModel getModel() {
-        return modelProperty().get();
-    }
-
-    /**
-     * Sets the application model.
-     *
-     * @param newValue the model
-     */
-    default void setModel(ApplicationModel newValue) {
-        modelProperty().set(newValue);
-    }
 
     /**
      * Exits the application.
@@ -162,16 +174,20 @@ public interface Application extends Disableable, PropertyBean {
         return null;
     }
 
-    default void addActivity() {
-        createActivity().thenAccept(this::add);
-    }
-
     /**
      * Creates a new activity, initializes it, then invokes the callback.
      *
      * @return A callback.
      */
-    CompletionStage<Activity> createActivity();
+    default CompletionStage<Activity> createActivity() {
+        return FXWorker.supply(() -> {
+            Function<Application, Activity> factory = getActivityFactory();
+            if (factory == null) {
+                throw new IllegalStateException("No activityFactory has been set on the Application.");
+            }
+            return factory.apply(this);
+        });
+    }
 
     /**
      * Adds a recent URI.
@@ -199,4 +215,92 @@ public interface Application extends Disableable, PropertyBean {
     default void setMaxNumberOfRecentUris(int newValue) {
         maxNumberOfRecentUrisProperty().set(newValue);
     }
+
+    @NonNull ObjectProperty<Function<Application, Activity>> activityFactoryProperty();
+
+    default Function<Application, Activity> getActivityFactory() {
+        return activityFactoryProperty().get();
+    }
+
+    default void setActivityFactory(Function<Application, Activity> newValue) {
+        activityFactoryProperty().set(newValue);
+    }
+
+    @NonNull ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty();
+
+    @NonNull NonNullProperty<ResourceBundle> resourceBundleProperty();
+
+    @Nullable
+    default Supplier<MenuBar> getMenuBarFactory() {
+        return menuBarFactoryProperty().get();
+    }
+
+    @NonNull ReadOnlyListProperty<String> stylesheetsProperty();
+
+    @NonNull
+    default ObservableList<String> getStylesheets() {
+        return stylesheetsProperty().get();
+    }
+
+    default void setMenuBarFactory(@Nullable Supplier<MenuBar> newValue) {
+        menuBarFactoryProperty().set(newValue);
+    }
+
+    @NonNull
+    default ResourceBundle getResourceBundle() {
+        return resourceBundleProperty().get();
+    }
+
+    default void setResourceBundle(@NonNull ResourceBundle newValue) {
+        resourceBundleProperty().set(newValue);
+    }
+
+    default void setMenuFactoryFxml(@NonNull URL fxml, ResourceBundle resources) {
+        setMenuBarFactory(createFxmlNodeSupplier(fxml, resources));
+    }
+
+    @NonNull
+    default <T> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
+        return () -> {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(resourceBundle);
+            try (InputStream in = fxml.openStream()) {
+                return loader.load(in);
+            } catch (IOException ex) {
+                throw new InternalError(ex);
+            }
+        };
+    }
+
+
+    @NonNull
+    default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
+                                                         @NonNull ResourceBundle resources) {
+        return createFxmlControllerSupplier(fxml, resources, null);
+    }
+
+    @NonNull
+    default Function<Application, Activity> createFxmlActivityControllerFactory(@NonNull URL fxml,
+                                                                                @NonNull ResourceBundle resources,
+                                                                                @Nullable Function<Application, Activity> activityFactory) {
+        return app -> this.<Activity>createFxmlControllerSupplier(fxml, resources, clazz -> activityFactory.apply(app)).get();
+    }
+
+    @NonNull
+    default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
+                                                         @NonNull ResourceBundle resources,
+                                                         @Nullable Callback<Class<?>, Object> controllerFactory) {
+        return () -> {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(resources);
+            loader.setControllerFactory(controllerFactory);
+            try (InputStream in = fxml.openStream()) {
+                loader.load(in);
+                return loader.getController();
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
+        };
+    }
+
 }

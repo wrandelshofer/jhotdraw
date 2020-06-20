@@ -27,8 +27,7 @@ import java.util.concurrent.ExecutionException;
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 
-    private static final long serialVersionUID = 1L;
-    @Nullable
+    @NonNull
     protected Application app;
 
     /**
@@ -36,7 +35,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      *
      * @param app the application
      */
-    public AbstractApplicationAction(@Nullable Application app) {
+    public AbstractApplicationAction(@NonNull Application app) {
         Objects.requireNonNull(app, "app is null");
         this.app = app;
         disabled.unbind();
@@ -64,7 +63,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         return buf.toString();
     }
 
-    @Nullable
+    @NonNull
     public final Application getApplication() {
         return app;
     }
@@ -81,7 +80,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param event the action event
      * @param app   the applicatoin
      */
-    protected abstract void onActionPerformed(ActionEvent event, Application app);
+    protected abstract void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app);
 
     @NonNull
     protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {

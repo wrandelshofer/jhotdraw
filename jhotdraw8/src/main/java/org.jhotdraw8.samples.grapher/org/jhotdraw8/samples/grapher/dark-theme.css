@@ -1,7 +1,7 @@
 .root {
     /* The base color for objects.
      */
-    -fx-base: #1d1d1d;
+    -fx-base: #323232;
 
    /* Color for highlighting/accenting objects.
    */
@@ -12,7 +12,7 @@
      * -fx-text-fill value for text painted on top of backgrounds colored
      * with -fx-control-inner-background.
      */
-    -fx-control-inner-background: #2b2b2b;
+    -fx-control-inner-background: -fx-base;
 
     /* One of these colors will be chosen based upon a ladder calculation
      * that uses the brightness of a background color.  Instead of using these
@@ -24,9 +24,9 @@
      * -fx-text-inner-color for text on top of -fx-control-inner-color
      * -fx-selection-bar-text for text on top of -fx-selection-bar
      */
-    -fx-dark-text-color: black;
+    -fx-dark-text-color: rgba(0,0,0,.87);
     -fx-mid-text-color: #333;
-    -fx-light-text-color: #bbbbbb;
+    -fx-light-text-color: rgba(255,255,255,.75);
 
     /* Default buttons color, this is similar to accent but more subtle */
     -fx-default-button: #1763d8;

@@ -91,7 +91,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
     }
 
     @Override
-    protected final void onActionPerformed(ActionEvent event, Application app) {
+    protected final void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
         EditableComponent ec = getEditableComponent();
         if (ec != null) {
             onActionPerformed(event, ec);

@@ -7,6 +7,7 @@ package org.jhotdraw8.samples.modeler;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
@@ -20,11 +21,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
+import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
-import org.jhotdraw8.collection.HierarchicalMap;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.Key;
@@ -176,6 +177,10 @@ public class ModelerActivityController extends AbstractFileBasedActivity impleme
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
+    public ModelerActivityController(@NonNull Application application) {
+        super(application);
+    }
+
     @NonNull
     private DockItem addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = ModelerLabels.getInspectorResources();
@@ -255,7 +260,7 @@ public class ModelerActivityController extends AbstractFileBasedActivity impleme
     }
 
     @Override
-    protected void initActionMap(@NonNull HierarchicalMap<String, Action> map) {
+    protected void initActions(@NonNull ObservableMap<String, Action> map) {
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
         map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
         map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));

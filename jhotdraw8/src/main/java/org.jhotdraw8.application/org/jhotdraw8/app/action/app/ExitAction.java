@@ -18,9 +18,9 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
@@ -30,6 +30,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
+import java.util.function.Supplier;
+
+import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
+import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_KEY;
 
 /**
  * Exits the application after letting the user review and possibly save all
@@ -58,7 +62,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull Application app) {
+    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
 
         WorkState workState = new SimpleWorkState(getLabel());
         app.addDisabler(workState);
@@ -66,7 +70,7 @@ public class ExitAction extends AbstractApplicationAction {
         int disabledViewsCount = 0;
         FileBasedActivity documentToBeReviewed = null;
         URI unsavedURI = null;
-        for (Activity pr : app.activities()) {
+        for (Activity pr : app.getActivities()) {
             FileBasedActivity p = (FileBasedActivity) pr;
             if (p.isDisabled()) {
                 disabledViewsCount++;
@@ -128,57 +132,14 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Nullable
-    protected URIChooser getChooser(@NonNull FileBasedActivity view) {
-        URIChooser chsr = view.get(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY);
-        if (chsr == null) {
-            chsr = getApplication().getModel().createSaveChooser();
-            view.set(AbstractSaveUnsavedChangesAction.SAVE_CHOOSER_KEY, chsr);
+    protected URIChooser getChooser(FileBasedActivity view) {
+        URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
+        if (chooser == null) {
+            Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
+            chooser = factory == null ? new FileURIChooser(FileURIChooser.Mode.SAVE) : factory.get();
+            app.put(SAVE_CHOOSER_KEY, chooser);
         }
-        return chsr;
-    }
-
-    protected void saveChanges(WorkState workState) {
-        FileBasedActivity v = unsavedView;
-        Resources labels = ApplicationLabels.getResources();
-        if (v.getURI() == null) {
-            URIChooser chooser = getChooser(v);
-            URI uri = null;
-
-            Outer:
-            while (true) {
-                uri = chooser.showDialog(v.getNode());
-
-                // Prevent save to URI that is open in another view!
-                // unless  multipe views to same URI are supported
-                if (uri != null && !app.getModel().isAllowMultipleViewsPerURI()) {
-                    for (Activity p : app.activities()) {
-                        FileBasedActivity vi = (FileBasedActivity) p;
-                        if (vi != v && v.getURI().equals(uri)) {
-                            // FIXME Localize message
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION, labels.getString("application.exit.canNotSaveToOpenFile"));
-                            alert.getDialogPane().setMaxWidth(640.0);
-                            alert.showAndWait();
-                            continue Outer;
-                        }
-                    }
-                }
-                break;
-            }
-
-            if (uri == null) {
-                unsavedView.removeDisabler(workState);
-                if (oldFocusOwner != null) {
-                    oldFocusOwner.requestFocus();
-                }
-                getApplication().removeDisabler(workState);
-            } else {
-
-                saveToFile(uri, chooser.getDataFormat(), workState);
-
-            }
-        } else {
-            saveToFile(v.getURI(), null, workState);
-        }
+        return chooser;
     }
 
     protected void reviewChanges(WorkState workState) {
@@ -249,7 +210,7 @@ public class ExitAction extends AbstractApplicationAction {
     protected void reviewNext(WorkState workState) {
         int unsavedViewsCount = 0;
         FileBasedActivity documentToBeReviewed = null;
-        for (Activity pr : getApplication().activities()) {
+        for (Activity pr : getApplication().getActivities()) {
             FileBasedActivity p = (FileBasedActivity) pr;
             if (p.isModified()) {
                 if (!p.isDisabled()) {
@@ -330,13 +291,13 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void doExit(WorkState workState) {
-        for (Activity pr : new ArrayList<>(app.activities())) {
+        for (Activity pr : new ArrayList<>(app.getActivities())) {
             FileBasedActivity p = (FileBasedActivity) pr;
             if (!p.isDisabled() && !p.isModified()) {
                 app.remove(p);
             }
         }
-        if (app.activities().isEmpty()) {
+        if (app.getActivities().isEmpty()) {
             app.exit();
         } else {
             app.removeDisabler(workState);
