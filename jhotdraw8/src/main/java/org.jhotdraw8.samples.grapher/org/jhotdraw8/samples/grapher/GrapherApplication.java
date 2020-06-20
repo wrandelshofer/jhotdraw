@@ -6,12 +6,9 @@ package org.jhotdraw8.samples.grapher;
 
 import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.SimpleFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.action.file.ExportFileAction;
-import org.jhotdraw8.app.action.file.PrintFileAction;
-import org.jhotdraw8.app.action.file.RevertFileAction;
-import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -54,19 +51,15 @@ public class GrapherApplication extends SimpleFileBasedApplication {
     }
 
     @Override
-    protected void initActions() {
-        super.initActions();
-        ObservableMap<String, Action> map = getActions();
-        map.put(RevertFileAction.ID, new RevertFileAction(this, null));
-        map.put(PrintFileAction.ID, new PrintFileAction(this, null));
-        map.put(ExportFileAction.ID, new ExportFileAction(this, DrawingExportOptionsPane::createDialog));
+    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+        super.initActions(map);
         map.put(GrapherAboutAction.ID, new GrapherAboutAction(this));
     }
 
     @Override
     protected void initFactories() {
         setActivityFactory(GrapherActivity::new);
-        setMenuBarFactory(createFxmlNodeSupplier(getClass().getResource("GrapherMenuBar.fxml"), getResourceBundle()));
+        setMenuBarFactory(createFxmlNodeSupplier(getClass().getResource("GrapherMenuBar.fxml")));
     }
 
     @Override
@@ -86,7 +79,7 @@ public class GrapherApplication extends SimpleFileBasedApplication {
 
     @Override
     protected void initResourceBundle() {
-        setResourceBundle(GrapherLabels.getResources().asResourceBundle());
+        setResources(GrapherLabels.getResources());
     }
 
     @Override

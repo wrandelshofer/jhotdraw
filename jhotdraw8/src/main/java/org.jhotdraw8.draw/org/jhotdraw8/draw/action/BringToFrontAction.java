@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -24,29 +22,24 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class BringToFrontAction extends AbstractSelectedAction {
+public class BringToFrontAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.bringToFront";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public BringToFrontAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public BringToFrontAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e, Activity activity) {
-        final DrawingView drawingView = getView();
-        if (drawingView == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
         final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         bringToFront(drawingView, figures);
 

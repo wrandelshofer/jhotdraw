@@ -9,12 +9,15 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.spi.ResourceBundleProvider;
 
@@ -99,7 +102,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * The parent resources object.
      */
     @Nullable
-    private final ModulepathResources parent;
+    private Resources parent;
     /**
      * The wrapped resource bundle.
      */
@@ -172,6 +175,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
 
+
     @NonNull
     @Override
     public ResourceBundle asResourceBundle() {
@@ -216,23 +220,6 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return MessageFormat.format(getString(key), arguments);
     }
 
-
-    @NonNull
-    @Override
-    public Enumeration<String> getKeys() {
-        return resource.getKeys();
-    }
-
-
-    /**
-     * Returns the wrapped resource bundle.
-     *
-     * @return The wrapped resource bundle.
-     */
-    public ResourceBundle getWrappedBundle() {
-        return resource;
-    }
-
     @Nullable
     @Override
     protected Object handleGetObject(@NonNull String key) {
@@ -249,7 +236,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
     @Nullable
-    protected Object handleGetObjectRecursively(@NonNull String key) {
+    public Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -271,5 +258,30 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return module;
     }
 
+    @Override
+    public Enumeration<String> getKeys() {
+        Set<String> keys = new LinkedHashSet<>();
 
+        for (String key : (Iterable<String>) () -> resource.getKeys().asIterator()) {
+            keys.add(key);
+        }
+        if (parent != null) {
+            for (String key : (Iterable<String>) () -> parent.getKeys().asIterator()) {
+                keys.add(key);
+            }
+        }
+
+        return Collections.enumeration(keys);
+    }
+
+    @Nullable
+    @Override
+    public Resources getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(Resources parent) {
+        this.parent = parent;
+    }
 }

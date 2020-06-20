@@ -275,4 +275,24 @@ public class CustomBinding {
             }
         });
     }
+
+    /**
+     * Adds or removes an element from a set depending on the bound boolean value.
+     *
+     * @param set     a set
+     * @param element an element that is added on true and removed on false
+     * @param value   the value
+     * @param <E>     the element type
+     */
+    public static <E> void bindAddRemoveElementToBoolean(ObservableSet<E> set, E element, ObservableValue<Boolean> value) {
+        ChangeListener<Boolean> changeListener = (o, oldv, newv) -> {
+            if (newv) {
+                set.add(element);
+            } else {
+                set.remove(element);
+            }
+        };
+        value.addListener(changeListener);
+        changeListener.changed(value, !value.getValue(), value.getValue());
+    }
 }

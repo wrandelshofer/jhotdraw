@@ -29,7 +29,7 @@ public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
     private final Function<Activity, Node> nodeGetter;
 
     public ToggleViewPropertyAction(@NonNull Application app, Activity view, @NonNull BooleanProperty property, String id, @NonNull Resources labels) {
-        super(app, view, null);
+        super(view);
         labels.configureAction(this, id);
         this.property = property;
         this.nodeGetter = null;
@@ -37,7 +37,7 @@ public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
     }
 
     public ToggleViewPropertyAction(@NonNull Application app, Activity view, Function<Activity, Node> nodeGetter, String id, @NonNull Resources labels) {
-        super(app, view, null);
+        super(view);
         labels.configureAction(this, id);
         this.property = null;
         this.nodeGetter = nodeGetter;

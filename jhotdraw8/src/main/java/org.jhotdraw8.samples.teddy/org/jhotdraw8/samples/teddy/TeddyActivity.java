@@ -67,7 +67,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    protected void initActions(ObservableMap<String, Action> map) {
+    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+        super.initActions(map);
         final Application app = getApplication();
         map.put(FontAction.ID, new FontAction(app, this));
     }

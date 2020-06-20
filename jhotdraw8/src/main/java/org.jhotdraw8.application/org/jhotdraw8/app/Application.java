@@ -26,6 +26,7 @@ import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -228,7 +229,7 @@ public interface Application extends Disableable, PropertyBean {
 
     @NonNull ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty();
 
-    @NonNull NonNullProperty<ResourceBundle> resourceBundleProperty();
+    @NonNull NonNullProperty<Resources> resourcesProperty();
 
     @Nullable
     default Supplier<MenuBar> getMenuBarFactory() {
@@ -247,16 +248,17 @@ public interface Application extends Disableable, PropertyBean {
     }
 
     @NonNull
-    default ResourceBundle getResourceBundle() {
-        return resourceBundleProperty().get();
+    default Resources getResources() {
+        return resourcesProperty().get();
     }
 
-    default void setResourceBundle(@NonNull ResourceBundle newValue) {
-        resourceBundleProperty().set(newValue);
+    default void setResources(@NonNull Resources newValue) {
+        resourcesProperty().set(newValue);
     }
 
-    default void setMenuFactoryFxml(@NonNull URL fxml, ResourceBundle resources) {
-        setMenuBarFactory(createFxmlNodeSupplier(fxml, resources));
+    @NonNull
+    default <T> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml) {
+        return createFxmlNodeSupplier(fxml, getResources().asResourceBundle());
     }
 
     @NonNull
@@ -281,8 +283,14 @@ public interface Application extends Disableable, PropertyBean {
 
     @NonNull
     default Function<Application, Activity> createFxmlActivityControllerFactory(@NonNull URL fxml,
-                                                                                @NonNull ResourceBundle resources,
                                                                                 @Nullable Function<Application, Activity> activityFactory) {
+        return createFxmlActivityControllerFactory(fxml, activityFactory, getResources().asResourceBundle());
+    }
+
+    @NonNull
+    default Function<Application, Activity> createFxmlActivityControllerFactory(@NonNull URL fxml,
+                                                                                @Nullable Function<Application, Activity> activityFactory,
+                                                                                @NonNull ResourceBundle resources) {
         return app -> this.<Activity>createFxmlControllerSupplier(fxml, resources, clazz -> activityFactory.apply(app)).get();
     }
 

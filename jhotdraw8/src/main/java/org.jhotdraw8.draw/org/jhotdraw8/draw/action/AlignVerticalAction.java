@@ -9,8 +9,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -21,29 +19,24 @@ import org.jhotdraw8.util.Resources;
 
 import java.util.Set;
 
-public class AlignVerticalAction extends AbstractSelectedAction {
+public class AlignVerticalAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignVertical";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public AlignVerticalAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public AlignVerticalAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, Activity activity) {
-        final DrawingView drawingView = getView();
-        if (drawingView == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         Figure lead = drawingView.getSelectionLead();
         alignVertical(drawingView, figures, lead);

@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -20,29 +18,24 @@ import org.jhotdraw8.util.Resources;
 
 import java.util.Set;
 
-public class AlignTopAction extends AbstractSelectedAction {
+public class AlignTopAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.alignTop";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public AlignTopAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public AlignTopAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, Activity activity) {
-        final DrawingView drawingView = getView();
-        if (drawingView == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         Figure lead = drawingView.getSelectionLead();
         alignTop(drawingView, figures, lead);

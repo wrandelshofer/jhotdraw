@@ -7,8 +7,6 @@ package org.jhotdraw8.app.action.file;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 
@@ -28,21 +26,11 @@ public static final String ID = "file.browseFileDirectory";
     /**
      * Creates a new instance.
      *
-     * @param app  the application
-     * @param view the view
+     * @param activity the view
      */
-    public BrowseFileDirectoryAction(@NonNull Application app, FileBasedActivity view) {
-        super(app, view, FileBasedActivity.class);
-        ApplicationLabels.getResources().configureAction(this, ID);
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
-    public BrowseFileDirectoryAction(@NonNull Application app) {
-        this(app, null);
+    public BrowseFileDirectoryAction(@NonNull FileBasedActivity activity) {
+        super(activity);
+        activity.getApplication().getResources().configureAction(this, ID);
     }
 
     @Override

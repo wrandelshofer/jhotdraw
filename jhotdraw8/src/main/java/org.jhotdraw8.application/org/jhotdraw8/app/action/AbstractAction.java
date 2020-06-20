@@ -73,7 +73,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      *
      * @param event the action event
      */
-    protected abstract void onActionPerformed(ActionEvent event);
+    protected abstract void onActionPerformed(@NonNull ActionEvent event);
 
     @NonNull
     @Override

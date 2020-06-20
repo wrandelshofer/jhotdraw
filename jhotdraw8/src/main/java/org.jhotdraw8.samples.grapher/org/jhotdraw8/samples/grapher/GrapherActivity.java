@@ -24,6 +24,8 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
+import org.jhotdraw8.app.action.file.ExportFileAction;
+import org.jhotdraw8.app.action.file.PrintFileAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
@@ -34,7 +36,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.EditorView;
+import org.jhotdraw8.draw.EditorActivity;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
 import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.action.AddToGroupAction;
@@ -81,6 +83,7 @@ import org.jhotdraw8.draw.figure.SliceFigure;
 import org.jhotdraw8.draw.figure.StrokableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.figure.TextAreaFigure;
+import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.input.MultiClipboardInputFormat;
 import org.jhotdraw8.draw.input.MultiClipboardOutputFormat;
@@ -149,7 +152,7 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
  *
  * @author Werner Randelshofer
  */
-public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorView {
+public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
     private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
@@ -247,31 +250,34 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
 
     @Override
     protected void initActions(@NonNull ObservableMap<String, Action> map) {
-        map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(getApplication(), editor));
-        map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(getApplication()));
-        map.put(SelectSameAction.ID, new SelectSameAction(getApplication(), editor));
-        map.put(SelectChildrenAction.ID, new SelectChildrenAction(getApplication(), editor));
-        map.put(SendToBackAction.ID, new SendToBackAction(getApplication(), editor));
-        map.put(BringToFrontAction.ID, new BringToFrontAction(getApplication(), editor));
-        map.put(BringForwardAction.ID, new BringForwardAction(getApplication(), editor));
-        map.put(SendBackwardAction.ID, new SendBackwardAction(getApplication(), editor));
+        super.initActions(map);
+        map.put(PrintFileAction.ID, new PrintFileAction(this));
+        map.put(ExportFileAction.ID, new ExportFileAction(this, DrawingExportOptionsPane::createDialog));
+        map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(editor));
+        map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(this));
+        map.put(SelectSameAction.ID, new SelectSameAction(editor));
+        map.put(SelectChildrenAction.ID, new SelectChildrenAction(editor));
+        map.put(SendToBackAction.ID, new SendToBackAction(editor));
+        map.put(BringToFrontAction.ID, new BringToFrontAction(editor));
+        map.put(BringForwardAction.ID, new BringForwardAction(editor));
+        map.put(SendBackwardAction.ID, new SendBackwardAction(editor));
         map.put(VIEWTOGGLE_PROPERTIES, new ToggleBooleanAction(
-                getApplication(), this,
+                this,
                 VIEWTOGGLE_PROPERTIES,
                 GrapherLabels.getResources(), detailsVisible));
-        map.put(GroupAction.ID, new GroupAction(getApplication(), editor, () -> createFigure(GroupFigure::new)));
-        map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, getApplication(), editor, () -> createFigure(CombinedPathFigure::new)));
-        map.put(UngroupAction.ID, new UngroupAction(getApplication(), editor));
-        map.put(AddToGroupAction.ID, new AddToGroupAction(getApplication(), editor));
-        map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction(getApplication(), editor));
-        map.put(AlignTopAction.ID, new AlignTopAction(getApplication(), editor));
-        map.put(AlignRightAction.ID, new AlignRightAction(getApplication(), editor));
-        map.put(AlignBottomAction.ID, new AlignBottomAction(getApplication(), editor));
-        map.put(AlignLeftAction.ID, new AlignLeftAction(getApplication(), editor));
-        map.put(AlignHorizontalAction.ID, new AlignHorizontalAction(getApplication(), editor));
-        map.put(AlignVerticalAction.ID, new AlignVerticalAction(getApplication(), editor));
-        map.put(DistributeHorizontallyAction.ID, new DistributeHorizontallyAction(getApplication(), editor));
-        map.put(DistributeVerticallyAction.ID, new DistributeVerticallyAction(getApplication(), editor));
+        map.put(GroupAction.ID, new GroupAction(editor, () -> createFigure(GroupFigure::new)));
+        map.put(GroupAction.COMBINE_PATHS_ID, new GroupAction(GroupAction.COMBINE_PATHS_ID, editor, () -> createFigure(CombinedPathFigure::new)));
+        map.put(UngroupAction.ID, new UngroupAction(editor));
+        map.put(AddToGroupAction.ID, new AddToGroupAction(editor));
+        map.put(RemoveFromGroupAction.ID, new RemoveFromGroupAction(editor));
+        map.put(AlignTopAction.ID, new AlignTopAction(editor));
+        map.put(AlignRightAction.ID, new AlignRightAction(editor));
+        map.put(AlignBottomAction.ID, new AlignBottomAction(editor));
+        map.put(AlignLeftAction.ID, new AlignLeftAction(editor));
+        map.put(AlignHorizontalAction.ID, new AlignHorizontalAction(editor));
+        map.put(AlignVerticalAction.ID, new AlignVerticalAction(editor));
+        map.put(DistributeHorizontallyAction.ID, new DistributeHorizontallyAction(editor));
+        map.put(DistributeVerticallyAction.ID, new DistributeVerticallyAction(editor));
     }
 
     @NonNull

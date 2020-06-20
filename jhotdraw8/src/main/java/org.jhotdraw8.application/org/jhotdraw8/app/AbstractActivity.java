@@ -46,7 +46,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
         return disambiguation;
     }
 
-    protected abstract void initActions(ObservableMap<String, Action> actionMap);
+    protected abstract void initActions(@NonNull ObservableMap<String, Action> actionMap);
 
     protected abstract void initView();
 

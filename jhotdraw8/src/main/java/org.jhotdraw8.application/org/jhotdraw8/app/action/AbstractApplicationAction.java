@@ -69,7 +69,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
     }
 
     @Override
-    protected final void onActionPerformed(ActionEvent event) {
+    protected final void onActionPerformed(@NonNull ActionEvent event) {
         onActionPerformed(event, app);
     }
 

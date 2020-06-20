@@ -5,12 +5,9 @@
 package org.jhotdraw8.samples.modeler;
 
 import javafx.collections.ObservableMap;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.SimpleFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.app.action.file.ExportFileAction;
-import org.jhotdraw8.app.action.file.PrintFileAction;
-import org.jhotdraw8.app.action.file.RevertFileAction;
-import org.jhotdraw8.draw.gui.DrawingExportOptionsPane;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -38,7 +35,7 @@ public class ModelerApplication extends SimpleFileBasedApplication {
 
     @Override
     protected void initResourceBundle() {
-        setResourceBundle(ModelerLabels.getResources().asResourceBundle());
+        setResources(ModelerLabels.getResources());
     }
 
     @Override
@@ -56,12 +53,8 @@ public class ModelerApplication extends SimpleFileBasedApplication {
     }
 
     @Override
-    public void initActions() {
-        super.initActions();
-        ObservableMap<String, Action> map = getActions();
-        map.put(RevertFileAction.ID, new RevertFileAction(this, null));
-        map.put(PrintFileAction.ID, new PrintFileAction(this, null));
-        map.put(ExportFileAction.ID, new ExportFileAction(this, DrawingExportOptionsPane::createDialog));
+    public void initActions(@NonNull ObservableMap<String, Action> map) {
+        super.initActions(map);
     }
 
     /**
@@ -71,6 +64,11 @@ public class ModelerApplication extends SimpleFileBasedApplication {
         printModulesOnModulepath();
         printJarsOnClasspath();
         launch(args);
+    }
+
+    @Override
+    protected void initFactories() {
+        setActivityFactory(ModelerActivity::new);
     }
 
     private static void printModulesOnModulepath() {

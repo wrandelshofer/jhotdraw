@@ -32,7 +32,7 @@ public class FontAction extends AbstractActivityAction {
      *                 specified activity.
      */
     public FontAction(@NonNull Application app, @Nullable Activity activity) {
-        super(app, activity, FontableActivity.class);
+        super(activity);
         TeddyLabels.getResources().configureAction(this, ID);
     }
 

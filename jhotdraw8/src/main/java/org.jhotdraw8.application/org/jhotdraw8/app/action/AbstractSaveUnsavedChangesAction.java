@@ -17,7 +17,6 @@ import javafx.stage.Window;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
@@ -62,24 +61,15 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     /**
      * Creates a new instance.
      *
-     * @param app  the application
-     * @param view the view
+     * @param activity the view
      */
-    public AbstractSaveUnsavedChangesAction(@NonNull Application app, FileBasedActivity view) {
-        super(app, view, FileBasedActivity.class);
+    public AbstractSaveUnsavedChangesAction(@NonNull FileBasedActivity activity) {
+        super(activity);
     }
 
     @Override
     protected final void onActionPerformed(ActionEvent evt, FileBasedActivity activity) {
-        Application app = getApplication();
-        if (activity instanceof FileBasedActivity) {
-            onActionOnViewPerformed(activity);
-        } else if (isMayCreateActivity()) {
-            app.createActivity().thenAccept(v -> {
-                app.add(v);
-                onActionOnViewPerformed((FileBasedActivity) v);//FIXME class cast exception
-            });
-        }
+        onActionOnViewPerformed(activity);
     }
 
     @Nullable

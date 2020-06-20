@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.util.Resources;
 
@@ -19,10 +18,10 @@ import org.jhotdraw8.util.Resources;
  * @author Werner Randelshofer
  */
 public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
-    private BooleanProperty value;
+    private final BooleanProperty value;
 
-    public ToggleBooleanAction(@NonNull Application app, Activity view, @Nullable String id, @Nullable Resources labels, BooleanProperty value) {
-        super(app, view, null);
+    public ToggleBooleanAction(@NonNull Activity activity, @Nullable String id, @Nullable Resources labels, BooleanProperty value) {
+        super(activity);
         if (labels != null && id != null) {
             labels.configureAction(this, id);
         }

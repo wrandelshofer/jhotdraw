@@ -216,7 +216,7 @@ public interface Resources {
 
     Class<?> getBaseClass();
 
-    void setBaseClass(Class<?> baseClass);
+
 
     /**
      * Returns a java.lang.Module if the resources have been created
@@ -278,7 +278,6 @@ public interface Resources {
         return ks;
     }
 
-    @NonNull Enumeration<String> getKeys();
 
     /**
      * Get a large image icon from the ResourceBundle for use on a
@@ -389,8 +388,6 @@ public interface Resources {
         }
     }
 
-    ResourceBundle getWrappedBundle();
-
     @NonNull
     default String substitutePlaceholders(String key, @NonNull String value) throws MissingResourceException {
 
@@ -465,5 +462,22 @@ public interface Resources {
         return s;
     }
 
+    @Nullable
+    Object handleGetObjectRecursively(@NonNull String key);
 
+    @NonNull
+    Enumeration<String> getKeys();
+
+    @Nullable
+    Resources getParent();
+
+    void setParent(@Nullable Resources newParent);
+
+    default @NonNull Resources getRoot() {
+        Resources root = this;
+        while (root.getParent() != null) {
+            root = root.getParent();
+        }
+        return root;
+    }
 }

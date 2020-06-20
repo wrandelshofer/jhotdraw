@@ -27,17 +27,15 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.gui.URIChooser;
+import org.jhotdraw8.util.EmptyResources;
+import org.jhotdraw8.util.Resources;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.AbstractMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
@@ -67,18 +65,9 @@ public abstract class AbstractApplication extends javafx.application.Application
     private final ObjectProperty<Function<Application, Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
     private final ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
     private final ObjectProperty<Supplier<URIChooser>> openChooserFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
-    private final NonNullProperty<ResourceBundle> resourceBundle;
+    private final NonNullProperty<Resources> resources = new NonNullProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
     private final NonNullProperty<Preferences> preferences = new NonNullProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
-    {
-        try {
-            resourceBundle = new NonNullProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new PropertyResourceBundle(new StringReader("")));
-        } catch (IOException e) {
-            throw new RuntimeException("Could not create empty PropertyResourceBundle", e);
-        }
-    }
-
-    ;
     /**
      * Holds the max number of recent URIs.
      */
@@ -213,8 +202,8 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public @NonNull NonNullProperty<ResourceBundle> resourceBundleProperty() {
-        return resourceBundle;
+    public @NonNull NonNullProperty<Resources> resourcesProperty() {
+        return resources;
     }
 
     @Override

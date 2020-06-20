@@ -42,7 +42,7 @@ public static final String ID = "edit.undo";
      * @param view the view
      */
     public UndoAction(@NonNull Application app, Activity view) {
-        super(app, view, null);
+        super(view);
         labels.configureAction(this, ID);
     }
 

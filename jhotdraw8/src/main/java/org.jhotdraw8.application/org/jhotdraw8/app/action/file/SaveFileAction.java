@@ -6,7 +6,6 @@ package org.jhotdraw8.app.action.file;
 
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.net.UriUtil;
 
@@ -24,46 +23,34 @@ public class SaveFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.save";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
-    public SaveFileAction(Application app) {
-        this(app, null, false);
-    }
+     /**
+      * Creates a new instance.
+      *
+      * @param view the view
+      */
+     public SaveFileAction(@NonNull FileBasedActivity view) {
+         this(view, false);
+     }
 
     /**
      * Creates a new instance.
      *
-     * @param app  the application
-     * @param view the view
-     */
-    public SaveFileAction(Application app, FileBasedActivity view) {
-        this(app, view, false);
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param app    the application
      * @param view   the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, FileBasedActivity view, boolean saveAs) {
-        this(app, view, ID, saveAs);
+    public SaveFileAction(@NonNull FileBasedActivity view, boolean saveAs) {
+        this(view, ID, saveAs);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param view   the view
      * @param id     the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(Application app, FileBasedActivity view, String id, boolean saveAs) {
-        super(app, view, id, saveAs);
+    public SaveFileAction(@NonNull FileBasedActivity view, String id, boolean saveAs) {
+        super(view, id, saveAs);
     }
 
 

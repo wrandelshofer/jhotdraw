@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -24,29 +22,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DistributeVerticallyAction extends AbstractSelectedAction {
+public class DistributeVerticallyAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.distributeVertically";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public DistributeVerticallyAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public DistributeVerticallyAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, Activity activity) {
-        final DrawingView drawingView = getView();
-        if (drawingView == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         distributeVertically(drawingView, figures);
     }

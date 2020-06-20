@@ -6,7 +6,6 @@ package org.jhotdraw8.app.action.file;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractSaveUnsavedChangesAction;
@@ -26,17 +25,13 @@ public static final String ID = "file.close";
     /**
      * Creates a new instance.
      *
-     * @param app  the application
-     * @param view the view
+     * @param activity the view
      */
-    public CloseFileAction(@NonNull Application app, FileBasedActivity view) {
-        super(app, view);
+    public CloseFileAction(@NonNull FileBasedActivity activity) {
+        super(activity);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
-    public CloseFileAction(@NonNull Application app) {
-        this(app, null);
-    }
 
     @NonNull
     @Override

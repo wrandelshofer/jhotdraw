@@ -8,7 +8,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -39,42 +38,26 @@ public class ExportFileAction extends AbstractSaveFileAction {
     /**
      * Creates a new instance.
      *
-     * @param app the application
+     * @param activity the view
      */
-    public ExportFileAction(Application app) {
-        this(app, null, ID, null);
+    public ExportFileAction(@NonNull FileBasedActivity activity) {
+        this(activity, ID, null);
     }
+
+    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+        this(activity, ID, optionsDialog);
+    }
+
 
     /**
      * Creates a new instance.
      *
-     * @param app  the application
-     * @param view the view
-     */
-    public ExportFileAction(Application app, FileBasedActivity view) {
-        this(app, view, ID, null);
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param app           the application, nonnull
-     * @param optionsDialog the dialog for specifying export options
-     */
-    public ExportFileAction(Application app, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
-        this(app, null, ID, optionsDialog);
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param app           the application, nonnull
-     * @param view          the view, nullable
+     * @param activity      the view, nullable
      * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(Application app, FileBasedActivity view, String id, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
-        super(app, view, id, true);
+    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+        super(activity, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
 

@@ -9,6 +9,6 @@ package org.jhotdraw8.draw;
  *
  * @author Werner Randelshofer
  */
-public interface EditorView {
+public interface EditorActivity {
     DrawingEditor getEditor();
 }

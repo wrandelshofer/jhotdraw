@@ -44,13 +44,9 @@ import org.jhotdraw8.app.action.edit.PasteAction;
 import org.jhotdraw8.app.action.edit.SelectAllAction;
 import org.jhotdraw8.app.action.file.ClearRecentFilesMenuAction;
 import org.jhotdraw8.app.action.file.CloseFileAction;
-import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.app.action.file.NewFileAction;
 import org.jhotdraw8.app.action.file.OpenFileAction;
 import org.jhotdraw8.app.action.file.OpenRecentFileAction;
-import org.jhotdraw8.app.action.file.RevertFileAction;
-import org.jhotdraw8.app.action.file.SaveFileAction;
-import org.jhotdraw8.app.action.file.SaveFileAsAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -295,7 +291,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
 
         activity.setTitle(getLabels().getString("unnamedFile"));
         ObservableMap<String, Action> map = activity.getActions();
-        map.put(CloseFileAction.ID, new CloseFileAction(SimpleFileBasedApplication.this, activity));
+        map.put(CloseFileAction.ID, new CloseFileAction(activity));
 
         Stage stage = createStage(activity);
         activity.put(STAGE_KEY, stage);
@@ -620,7 +616,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
         initResourceBundle();
         initProperties();
         initFactories();
-        initActions();
+        initActions(getActions());
     }
 
     protected void initResourceBundle() {
@@ -635,23 +631,16 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
     protected void initFactories() {
     }
 
-    protected void initActions() {
-        ObservableMap<String, Action> map = getActions();
+    protected void initActions(@NonNull ObservableMap<String, Action> map) {
         map.put(AboutAction.ID, new AboutAction(this));
         map.put(ExitAction.ID, new ExitAction(this));
         map.put(NewFileAction.ID, new NewFileAction(this));
-        map.put(RevertFileAction.ID, new RevertFileAction(this, null));
         map.put(OpenFileAction.ID, new OpenFileAction(this));
-        map.put(SaveFileAction.ID, new SaveFileAction(this));
-        map.put(SaveFileAsAction.ID, new SaveFileAsAction(this));
-        map.put(ExportFileAction.ID, new ExportFileAction(this));
-        map.put(CloseFileAction.ID, new CloseFileAction(this));
         map.put(CutAction.ID, new CutAction(this));
         map.put(CopyAction.ID, new CopyAction(this));
         map.put(PasteAction.ID, new PasteAction(this));
         map.put(DeleteAction.ID, new DeleteAction(this));
         map.put(SelectAllAction.ID, new SelectAllAction(this));
         map.put(ClearSelectionAction.ID, new ClearSelectionAction(this));
-
     }
 }

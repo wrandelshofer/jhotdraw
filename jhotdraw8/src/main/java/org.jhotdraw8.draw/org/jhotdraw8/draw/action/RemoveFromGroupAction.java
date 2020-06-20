@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -27,31 +25,26 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class RemoveFromGroupAction extends AbstractSelectedAction {
+public class RemoveFromGroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.removeFromGroup";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public RemoveFromGroupAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public RemoveFromGroupAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e, Activity activity) {
-        final DrawingView dview = getView();
-        if (dview == null) {
-            return;
-        }
-        final List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
-        removeFromGroup(dview, figures);
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
+        final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
+        removeFromGroup(drawingView, figures);
 
     }
 

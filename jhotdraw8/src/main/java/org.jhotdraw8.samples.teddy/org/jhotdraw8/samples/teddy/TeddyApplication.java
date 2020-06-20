@@ -4,8 +4,11 @@
  */
 package org.jhotdraw8.samples.teddy;
 
+import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.SimpleFileBasedApplication;
+import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 
@@ -24,16 +27,16 @@ public class TeddyApplication extends SimpleFileBasedApplication {
 
     @Override
     protected void initResourceBundle() {
-        setResourceBundle(TeddyLabels.getResources().asResourceBundle());
+        setResources(TeddyLabels.getResources());
     }
 
     @Override
     protected void initFactories() {
         setActivityFactory(createFxmlActivityControllerFactory(
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
-                getResourceBundle(), TeddyActivity::new));
+                TeddyActivity::new));
         setMenuBarFactory(createFxmlNodeSupplier(
-                TeddyApplication.class.getResource("TeddyMenuBar.fxml"), getResourceBundle()));
+                TeddyApplication.class.getResource("TeddyMenuBar.fxml")));
     }
 
     @Override
@@ -47,8 +50,8 @@ public class TeddyApplication extends SimpleFileBasedApplication {
     }
 
     @Override
-    protected void initActions() {
-        super.initActions();
+    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+        super.initActions(map);
     }
 
     /**

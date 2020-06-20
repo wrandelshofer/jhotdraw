@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
@@ -47,31 +46,29 @@ private boolean saveAs;
     @NonNull
     public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>("saveChooser", URIChooser.class);
     @NonNull
-    public final static Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new ObjectKey<>("saveChooserFactory", Supplier.class, new Class[]{URIChooser.class}, null);
+    public final static Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new ObjectKey<>("saveChooserFactory", Supplier.class, new Class<?>[]{URIChooser.class}, null);
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
-     * @param view   the view
-     * @param id     the id
-     * @param saveAs whether to force a file dialog
+     * @param activity the view
+     * @param id       the id
+     * @param saveAs   whether to force a file dialog
      */
-    public AbstractSaveFileAction(@NonNull Application app, FileBasedActivity view, String id, boolean saveAs) {
-        this(app, view, id, saveAs, ApplicationLabels.getResources());
+    public AbstractSaveFileAction(@NonNull FileBasedActivity activity, String id, boolean saveAs) {
+        this(activity, id, saveAs, activity.getApplication().getResources());
     }
 
     /**
      * Creates a new instance.
      *
-     * @param app       the application
-     * @param view      the view
+     * @param activity  the view
      * @param id        the id
      * @param saveAs    whether to force a file dialog
      * @param resources the resources are used for setting labels and icons for the action
      */
-    public AbstractSaveFileAction(@NonNull Application app, FileBasedActivity view, String id, boolean saveAs, @NonNull Resources resources) {
-        super(app, view, FileBasedActivity.class);
+    public AbstractSaveFileAction(@NonNull FileBasedActivity activity, @NonNull String id, boolean saveAs, @NonNull Resources resources) {
+        super(activity);
         this.saveAs = saveAs;
         resources.configureAction(this, id);
     }

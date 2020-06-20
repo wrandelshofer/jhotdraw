@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -29,29 +27,24 @@ import java.util.LinkedList;
  *
  * @author Werner Randelshofer
  */
-public class UngroupAction extends AbstractSelectedAction {
+public class UngroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.ungroup";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public UngroupAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public UngroupAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e, Activity activity) {
-        final DrawingView dview = getView();
-        if (dview == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
         final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         ungroup(dview, figures);
 

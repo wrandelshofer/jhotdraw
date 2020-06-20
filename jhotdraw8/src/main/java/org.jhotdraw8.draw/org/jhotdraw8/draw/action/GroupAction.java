@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.collection.Iterators;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -29,7 +27,7 @@ import java.util.function.Supplier;
  *
  * @author Werner Randelshofer
  */
-public class GroupAction extends AbstractSelectedAction {
+public class GroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.group";
     public static final String COMBINE_PATHS_ID = "edit.combinePaths";
@@ -39,16 +37,15 @@ public class GroupAction extends AbstractSelectedAction {
     /**
      * Creates a new instance.
      *
-     * @param app          the application
      * @param editor       the drawing editor
      * @param groupFactory the group factory
      */
-    public GroupAction(@NonNull Application app, DrawingEditor editor, Supplier<Figure> groupFactory) {
-        this(ID, app, editor, groupFactory);
+    public GroupAction(@NonNull DrawingEditor editor, Supplier<Figure> groupFactory) {
+        this(ID, editor, groupFactory);
     }
 
-    public GroupAction(String id, @NonNull Application app, DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
-        super(app, editor);
+    public GroupAction(String id, @NonNull DrawingEditor editor, @Nullable Supplier<Figure> groupFactory) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, id);
@@ -59,13 +56,9 @@ public class GroupAction extends AbstractSelectedAction {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e, Activity activity) {
-        final DrawingView dview = getView();
-        if (dview == null) {
-            return;
-        }
-        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
-        group(dview, figures, groupFactory);
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
+        final LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
+        group(drawingView, figures, groupFactory);
 
     }
 

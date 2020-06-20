@@ -10,7 +10,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
@@ -35,11 +34,10 @@ public static final String ID = "file.revert";
     /**
      * Creates a new instance.
      *
-     * @param app  the application
      * @param view the view
      */
-    public RevertFileAction(@NonNull Application app, FileBasedActivity view) {
-        super(app, view, FileBasedActivity.class);
+    public RevertFileAction(@NonNull FileBasedActivity view) {
+        super(view);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 

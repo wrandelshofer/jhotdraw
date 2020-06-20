@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -23,29 +21,24 @@ import java.util.LinkedList;
  *
  * @author Werner Randelshofer
  */
-public class SendToBackAction extends AbstractSelectedAction {
+public class SendToBackAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.sendToBack";
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
      * @param editor the drawing editor
      */
-    public SendToBackAction(@NonNull Application app, DrawingEditor editor) {
-        super(app, editor);
+    public SendToBackAction(@NonNull DrawingEditor editor) {
+        super(editor);
         Resources labels
                 = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent e, Activity activity) {
-        final DrawingView dview = getView();
-        if (dview == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
         final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         sendToBack(dview, figures);
 

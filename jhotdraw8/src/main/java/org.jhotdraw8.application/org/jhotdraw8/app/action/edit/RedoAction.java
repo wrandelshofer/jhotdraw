@@ -44,7 +44,7 @@ public static final String ID = "edit.redo";
      * @param view the view
      */
     public RedoAction(@NonNull Application app, Activity view) {
-        super(app, view, null);
+        super(view);
         labels.configureAction(this, ID);
     }
 

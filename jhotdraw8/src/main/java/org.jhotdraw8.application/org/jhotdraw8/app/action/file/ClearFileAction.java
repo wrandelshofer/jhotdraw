@@ -30,7 +30,7 @@ public static final String ID = "file.clear";
      * @param view the view
      */
     public ClearFileAction(@NonNull Application app, FileBasedActivity view) {
-        super(app, view);
+        super(view);
         Resources labels = ApplicationLabels.getResources();
         labels.configureAction(this, "file.clear");
     }

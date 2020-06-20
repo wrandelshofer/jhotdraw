@@ -28,7 +28,7 @@ public static final String ID = "edit.find";
      * @param viewClass the class of the view
      */
     public AbstractFindAction(@NonNull Application app, V view, Class<V> viewClass) {
-        super(app, view, viewClass);
+        super(view);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 }

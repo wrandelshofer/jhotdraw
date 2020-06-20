@@ -9,8 +9,6 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
@@ -30,23 +28,14 @@ public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
 public static final String ID = "file.print";
 
-    /**
-     * Creates a new instance.
-     *
-     * @param app the application
-     */
-    public PrintFileAction(@NonNull Application app) {
-        this(app, null);
-    }
 
     /**
      * Creates a new instance.
      *
-     * @param app  the application
-     * @param view the view
+     * @param activity the activity
      */
-    public PrintFileAction(@NonNull Application app, @Nullable FileBasedActivity view) {
-        super(app, view, FileBasedActivity.class);
+    public PrintFileAction(@NonNull FileBasedActivity activity) {
+        super(activity);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 

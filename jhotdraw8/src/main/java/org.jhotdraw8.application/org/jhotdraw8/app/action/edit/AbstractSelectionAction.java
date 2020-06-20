@@ -4,12 +4,9 @@
  */
 package org.jhotdraw8.app.action.edit;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.TextInputControl;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -19,69 +16,50 @@ import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 /**
- * {@code AbstractSelectionAction} acts on the selection of a target component.
+ * {@code AbstractSelectionAction} acts on the selection of a target component
+ * or of the currently focused component in the application.
  *
  * @author Werner Randelshofer
  */
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
-private Node target;
     @Nullable
-    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
-        disabled.unbind();
-        if (newValue == null || newValue.getNode() == null) {
-            disabled.set(true);
-        } else {
-            Scene s = newValue.getNode().getScene();
-            if (target == null) {
-                disabled.bind(
-                        s.focusOwnerProperty().isNull().or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
-            } else {
-                disabled.bind(
-                        s.focusOwnerProperty().isNotEqualTo(target).or(app.disabledProperty()).or(newValue.disabledProperty()).or(Bindings.isNotEmpty(disablers)));
-            }
-        }
-    };
+    private final Node target;
+
 
     /**
      * Creates a new instance.
      *
-     * @param app the application
+     * @param application the application
      */
-    public AbstractSelectionAction(@NonNull Application app) {
-        this(app, null);
+    public AbstractSelectionAction(@NonNull Application application) {
+        this(application, null);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param app    the application
-     * @param target the target node
+     * @param application the application
+     * @param target      the target node
      */
-    public AbstractSelectionAction(@NonNull Application app, Node target) {
-        super(app);
+    public AbstractSelectionAction(@NonNull Application application, @Nullable Node target) {
+        super(application);
         this.target = target;
-
-        app.activeActivityProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app.getActiveActivity());
-
     }
 
     @Nullable
     public EditableComponent getEditableComponent() {
+        if (target != null) {
+            return tryAsEditableComponent(target);
+        }
+
         Activity v = app.getActiveActivity();
         if (v != null && !v.isDisabled()) {
             Node n = v.getNode().getScene().getFocusOwner();
             while (n != null) {
-                if (n instanceof TextInputControl) {
-                    TextInputControl tic = (TextInputControl) n;
-                    return new TextInputControlAdapter(tic);
-                } else if (n instanceof EditableComponent) {
-                    EditableComponent tic = (EditableComponent) n;
-                    return tic;
-                } else if (n.getProperties().get(EditableComponent.EDITABLE_COMPONENT) instanceof EditableComponent) {
-                    EditableComponent tic = (EditableComponent) n.getProperties().get(EditableComponent.EDITABLE_COMPONENT);
-                    return tic;
+                EditableComponent editableComponent = tryAsEditableComponent(n);
+                if (editableComponent != null) {
+                    return editableComponent;
                 }
                 n = n.getParent();
             }
@@ -89,8 +67,24 @@ private Node target;
         return null;
     }
 
+    @Nullable
+    private EditableComponent tryAsEditableComponent(Node n) {
+        if (n instanceof TextInputControl) {
+            TextInputControl tic = (TextInputControl) n;
+            return new TextInputControlAdapter(tic);
+        } else if (n instanceof EditableComponent) {
+            EditableComponent tic = (EditableComponent) n;
+            return tic;
+        } else if (n.getProperties().get(EditableComponent.EDITABLE_COMPONENT) instanceof EditableComponent) {
+            EditableComponent tic = (EditableComponent) n.getProperties().get(EditableComponent.EDITABLE_COMPONENT);
+            return tic;
+        } else {
+            return null;
+        }
+    }
+
     @Override
-    protected final void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
+    protected final void onActionPerformed(@NonNull ActionEvent event, @NonNull Application application) {
         EditableComponent ec = getEditableComponent();
         if (ec != null) {
             onActionPerformed(event, ec);

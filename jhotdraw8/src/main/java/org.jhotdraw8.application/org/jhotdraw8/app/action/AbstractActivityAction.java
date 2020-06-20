@@ -4,9 +4,6 @@
  */
 package org.jhotdraw8.app.action;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -24,52 +21,26 @@ import org.jhotdraw8.app.Application;
  */
 public abstract class AbstractActivityAction<A extends Activity> extends AbstractApplicationAction {
 
-/**
-     * Set this to true if the action may create a new view if none exists.
-     */
-    private boolean mayCreateActivity;
-    private Class<A> pClass;
     @Nullable
-    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
-        disabled.unbind();
-        BooleanBinding binding = Bindings.isNotEmpty(disablers).or(app.disabledProperty()).or(app.activeActivityProperty().isNull());
-        if (newValue != null && (pClass == null || pClass.isAssignableFrom(newValue.getClass()))) {
-            disabled.bind(binding.or(newValue.disabledProperty()));
-        } else if (mayCreateActivity) {
-            disabled.bind(binding);
-        } else {
-            disabled.set(true);
-        }
-    };
-    @Nullable
-    private final Activity activity;
+    private final A activity;
 
     /**
      * Creates a new instance which acts on the specified activity of the
      * application.
      *
-     * @param app       The application.
-     * @param activity      The activity. If activity is null then the action acts on
-     *                  the active activity of the application. Otherwise it will act on the
-     *                  specified activity.
-     * @param activityClass the type of the activity. This is used for type checks.
+     * @param activity The activity. If activity is null then the action acts on
+     *                 the active activity of the application. Otherwise it will act on the
+     *                 specified activity.
      */
-    public AbstractActivityAction(@NonNull Application app, @Nullable A activity, Class<A> activityClass) {
-        super(app);
-        this.pClass = activityClass;
+    public AbstractActivityAction(@NonNull A activity) {
+        super(activity.getApplication());
         this.activity = activity;
-        if (activity != null) {
-            activeViewListener.changed(null, null, activity);
-        } else {
-            app.activeActivityProperty().addListener(activeViewListener);
-        }
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
     public A getActivity() {
-        Activity p = (activity != null) ? activity : app.getActiveActivity();
-        return p == null || pClass == null || pClass.isAssignableFrom(p.getClass()) ? (A) p : null;
+        return activity;
     }
 
     @Override
@@ -86,23 +57,5 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
      */
     protected abstract void onActionPerformed(ActionEvent event, A activity);
 
-    /**
-     * Returns to true if the action may create a new activity if none exists
-     *
-     * @return true
-     */
-    protected boolean isMayCreateActivity() {
-        return mayCreateActivity;
-    }
 
-    /**
-     * Set this to true if the action may create a new activity if none exists.
-     * If this is false, the action will be disabled, if no activity is
-     * available.
-     *
-     * @param b the new value
-     */
-    protected void setMayCreateActivity(boolean b) {
-        mayCreateActivity = b;
-    }
 }
