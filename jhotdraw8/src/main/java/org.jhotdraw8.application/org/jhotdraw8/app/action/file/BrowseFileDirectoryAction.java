@@ -23,9 +23,7 @@ import java.util.logging.Logger;
 
 public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "file.browseFileDirectory";
+public static final String ID = "file.browseFileDirectory";
 
     /**
      * Creates a new instance.

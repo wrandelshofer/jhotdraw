@@ -20,8 +20,7 @@ import java.util.Map;
  */
 public class OpenFileAction extends AbstractOpenFileAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "file.open";
+public static final String ID = "file.open";
     private boolean reuseEmptyViews = true;
 
     /**

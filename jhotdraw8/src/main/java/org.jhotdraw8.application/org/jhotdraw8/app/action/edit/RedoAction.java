@@ -20,9 +20,7 @@ import org.jhotdraw8.util.Resources;
  */
 public class RedoAction extends AbstractActivityAction<Activity> {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "edit.redo";
+public static final String ID = "edit.redo";
     private Resources labels = ApplicationLabels.getResources();
 
     /*

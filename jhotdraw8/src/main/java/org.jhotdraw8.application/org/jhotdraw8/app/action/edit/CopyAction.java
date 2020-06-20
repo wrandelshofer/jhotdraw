@@ -19,9 +19,7 @@ import org.jhotdraw8.app.EditableComponent;
  */
 public class CopyAction extends AbstractSelectionAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "edit.copy";
+public static final String ID = "edit.copy";
 
     /**
      * Creates a new instance which acts on the currently focused component.

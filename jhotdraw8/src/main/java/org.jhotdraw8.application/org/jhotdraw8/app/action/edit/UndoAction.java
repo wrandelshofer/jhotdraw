@@ -19,9 +19,7 @@ import org.jhotdraw8.util.Resources;
  */
 public class UndoAction extends AbstractActivityAction<Activity> {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "edit.undo";
+public static final String ID = "edit.undo";
     private Resources labels = ApplicationLabels.getResources();
 
     /*private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {

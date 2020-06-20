@@ -14,8 +14,7 @@ import org.jhotdraw8.app.Application;
  */
 public class NewWindowAction extends NewFileAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "file.newWindow";
+public static final String ID = "file.newWindow";
 
     /**
      * Creates a new instance.

@@ -30,9 +30,7 @@ import java.util.function.BiFunction;
  */
 public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "file.revert";
+public static final String ID = "file.revert";
 
     /**
      * Creates a new instance.

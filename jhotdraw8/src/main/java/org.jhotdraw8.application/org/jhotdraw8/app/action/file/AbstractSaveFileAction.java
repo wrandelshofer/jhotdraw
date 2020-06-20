@@ -42,8 +42,7 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private static final long serialVersionUID = 1L;
-    private boolean saveAs;
+private boolean saveAs;
     private Node oldFocusOwner;
     @NonNull
     public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>("saveChooser", URIChooser.class);

@@ -16,9 +16,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  */
 public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "application.preferences";
+public static final String ID = "application.preferences";
 
     /**
      * Creates a new instance.

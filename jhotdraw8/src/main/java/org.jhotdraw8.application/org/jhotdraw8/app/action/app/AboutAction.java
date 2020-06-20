@@ -25,9 +25,7 @@ import static org.jhotdraw8.app.Application.VERSION_KEY;
  */
 public class AboutAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "application.about";
+public static final String ID = "application.about";
 
     /**
      * Creates a new instance.

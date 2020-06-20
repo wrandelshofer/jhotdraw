@@ -21,8 +21,7 @@ import org.jhotdraw8.app.Application;
  */
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-    @Nullable
+@Nullable
     private Node target = null;
 
     @Nullable

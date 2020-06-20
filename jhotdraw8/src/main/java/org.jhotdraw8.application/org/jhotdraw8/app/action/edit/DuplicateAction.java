@@ -19,8 +19,7 @@ import org.jhotdraw8.app.EditableComponent;
  */
 public class DuplicateAction extends AbstractSelectionAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "edit.duplicate";
+public static final String ID = "edit.duplicate";
 
     /**
      * Creates a new instance which acts on the currently focused component.

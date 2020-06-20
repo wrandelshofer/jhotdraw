@@ -18,8 +18,7 @@ import org.jhotdraw8.app.EditableComponent;
  */
 public class DeleteAction extends AbstractSelectionAction {
 
-    private static final long serialVersionUID = 1L;
-    /**
+/**
      * The ID for this action.
      */
     public static final String ID = "edit.delete";

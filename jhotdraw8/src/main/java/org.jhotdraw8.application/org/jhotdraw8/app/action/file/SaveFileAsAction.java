@@ -16,8 +16,7 @@ import org.jhotdraw8.app.FileBasedActivity;
  */
 public class SaveFileAsAction extends SaveFileAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "file.saveAs";
+public static final String ID = "file.saveAs";
 
     /**
      * Creates a new instance.

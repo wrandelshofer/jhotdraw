@@ -24,8 +24,7 @@ import org.jhotdraw8.app.Application;
  */
 public abstract class AbstractActivityAction<A extends Activity> extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-    /**
+/**
      * Set this to true if the action may create a new view if none exists.
      */
     private boolean mayCreateActivity;

@@ -18,9 +18,7 @@ import org.jhotdraw8.app.EditableComponent;
  */
 public class ClearSelectionAction extends AbstractSelectionAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "edit.clearSelection";
+public static final String ID = "edit.clearSelection";
 
     /**
      * Creates a new instance which acts on the currently focused component.

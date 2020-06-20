@@ -24,8 +24,7 @@ import java.beans.PropertyChangeListener;
  */
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "file.clearRecentFiles";
+public static final String ID = "file.clearRecentFiles";
 
     private PropertyChangeListener applicationListener;
 

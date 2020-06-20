@@ -18,8 +18,7 @@ import org.jhotdraw8.app.action.AbstractActivityAction;
  */
 public abstract class AbstractFindAction<V extends Activity> extends AbstractActivityAction<V> {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "edit.find";
+public static final String ID = "edit.find";
 
     /**
      * Creates a new instance.

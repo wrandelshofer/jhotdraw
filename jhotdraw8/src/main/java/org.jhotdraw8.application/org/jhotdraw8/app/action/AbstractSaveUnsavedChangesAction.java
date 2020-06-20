@@ -56,9 +56,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
 
 
 
-    private static final long serialVersionUID = 1L;
-
-    @Nullable
+@Nullable
     private Node oldFocusOwner = null;
 
     /**

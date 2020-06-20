@@ -25,8 +25,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  */
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-    private Node target;
+private Node target;
     @Nullable
     private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();

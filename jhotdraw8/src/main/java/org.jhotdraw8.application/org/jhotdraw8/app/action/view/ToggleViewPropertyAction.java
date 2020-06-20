@@ -23,8 +23,7 @@ import java.util.function.Function;
  */
 public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
 
-    private static final long serialVersionUID = 1L;
-    @Nullable
+@Nullable
     private BooleanProperty property;
     @Nullable
     private final Function<Activity, Node> nodeGetter;

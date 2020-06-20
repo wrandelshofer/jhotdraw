@@ -19,9 +19,7 @@ import org.jhotdraw8.app.EditableComponent;
  */
 public class CutAction extends AbstractSelectionAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "edit.cut";
+public static final String ID = "edit.cut";
 
     /**
      * Creates a new instance which acts on the currently focused component.

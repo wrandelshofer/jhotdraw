@@ -44,9 +44,7 @@ import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_
  */
 public class ExitAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "application.exit";
+public static final String ID = "application.exit";
     private Node oldFocusOwner;
     @Nullable
     private FileBasedActivity unsavedView;

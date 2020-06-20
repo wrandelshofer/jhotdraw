@@ -21,9 +21,7 @@ import java.util.concurrent.CompletionStage;
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "file.close";
+public static final String ID = "file.close";
 
     /**
      * Creates a new instance.

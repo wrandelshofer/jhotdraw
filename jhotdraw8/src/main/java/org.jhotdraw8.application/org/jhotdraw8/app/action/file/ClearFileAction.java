@@ -21,8 +21,7 @@ import java.util.concurrent.CompletionStage;
  */
 public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "file.clear";
+public static final String ID = "file.clear";
 
     /**
      * Creates a new instance.

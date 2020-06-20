@@ -30,8 +30,6 @@ import java.util.function.Supplier;
 public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
-    private static final long serialVersionUID = 1L;
-
     private final Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialogFactory;
     @NonNull
     public final static Key<URIChooser> EXPORT_CHOOSER_KEY = new ObjectKey<>("exportChooser", URIChooser.class);

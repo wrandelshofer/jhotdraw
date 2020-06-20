@@ -19,8 +19,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  */
 public class NewFileAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-    public static final String ID = "file.new";
+public static final String ID = "file.new";
 
     /**
      * Creates a new instance.

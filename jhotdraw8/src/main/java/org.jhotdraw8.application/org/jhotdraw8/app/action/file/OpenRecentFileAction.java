@@ -51,9 +51,7 @@ import java.util.concurrent.CancellationException;
  */
 public class OpenRecentFileAction extends AbstractApplicationAction {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "file.openRecent";
+public static final String ID = "file.openRecent";
     private URI uri;
     private DataFormat format;
     private boolean reuseEmptyViews = true;

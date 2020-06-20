@@ -28,9 +28,7 @@ import org.jhotdraw8.concurrent.WorkState;
  */
 public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private static final long serialVersionUID = 1L;
-
-    public static final String ID = "file.print";
+public static final String ID = "file.print";
 
     /**
      * Creates a new instance.
