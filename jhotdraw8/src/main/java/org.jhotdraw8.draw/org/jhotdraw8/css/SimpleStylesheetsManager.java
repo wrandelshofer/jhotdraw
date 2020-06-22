@@ -182,11 +182,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 URI uri = (URI) t;
                 URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
                 StylesheetEntry old = oldMap.get(resolvedUri);
-                if (false && old != null) { // XXX we always need to reload the file!
-                    newMap.put(resolvedUri, old);
-                } else {
                     newMap.put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
-                }
             } else if (t instanceof String) {
                 StylesheetEntry old = oldMap.get(t);
                 if (old != null) {

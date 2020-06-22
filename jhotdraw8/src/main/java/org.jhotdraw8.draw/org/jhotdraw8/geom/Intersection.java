@@ -42,7 +42,8 @@ public class Intersection {
         /**
          * The index of the segment.
          */
-        private int segment;
+        private int segment1;
+        private int segment2;
 
         public IntersectionPoint(Point2D point, double t1) {
             this(point, t1, new Point2D(1, 0), 0, new Point2D(0, -1));
@@ -56,15 +57,27 @@ public class Intersection {
             this.tangent2 = tangent2;
         }
 
-        public int getSegment() {
-            return segment;
+        public int getSegment1() {
+            return segment1;
+        }
+
+        public int getSegment2() {
+            return segment2;
+        }
+
+
+        /**
+         * package private
+         */
+        void setSegment1(int segment1) {
+            this.segment1 = segment1;
         }
 
         /**
          * package private
          */
-        void setSegment(int segment) {
-            this.segment = segment;
+        void setSegment2(int segment2) {
+            this.segment2 = segment2;
         }
 
         public double getT1() {
@@ -117,6 +130,11 @@ public class Intersection {
         return intersections;
     }
 
+    @NonNull
+    public IntersectionPoint getFirst() {
+        return intersections.get(0);
+    }
+
     public Point2D getLastPoint() {
         return intersections.get(intersections.size() - 1).getPoint();
     }
@@ -136,6 +154,10 @@ public class Intersection {
 
     public List<Point2D> getPoints() {
         return intersections.stream().map(IntersectionPoint::getPoint).collect(Collectors.toList());
+    }
+
+    public Point2D getFirstPoint() {
+        return intersections.get(0).point;
     }
 
     public Status getStatus() {
