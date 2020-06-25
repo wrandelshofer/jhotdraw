@@ -6,44 +6,44 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 
-import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Math.abs;
 
 /**
  * OffsetPathBuilder.
  * <p>
- * If we draw an offset path, then for each original line segment {@code a, b},
- * we draw a line segment at {@code a', b'}. Since the offset is perpendicular,
- * we can visualize a rectangle {@code a, b, b', a'} that contains the offset
+ * If we draw an offset path, then for each original path segment {@code a1, a2},
+ * we draw a shifted path segment at {@code a1', a2'}.
+ * <p>
+ * We can visualize a shape {@code a1, a2, a1', a2'} that contains the offset
  * region.
  * <pre>
- * offset region rectangle encompasses the rectangle from original lineTo to
+ * example: If the path segment is a lineTo, the 'offset region shape' encompasses
+ * the rectangle from the original lineTo to the perpendicularly shifted
+ * lineTo.
+ *
  * offset lineTo:
  *
  *                     a1'                 a1'
- *  offset lineTo:     +------------------→+
+ *  offset lineTo:     +══════════════════⇒+
  *                     ↑                   ↑
  *                     | offset            | offset
  *  original lineTo:   +------------------→+
  *                     a1                  a2
  * </pre>
  * <p>
- * The next line segment can follow with an angle that may
- * make the next offset region rectangle overlap with the previous one.
- * For every {@code b'} point, we get a second {@code b2'} point that
- * belongs to the next line segment.
+ * The next path segment {@code b1, b2} can follow with an angle that may
+ * make the next offset region shape overlap with the previous one,
+ * or that may form a gap.
  * <pre>
- * offset region rectangles overlap:           b2'
- *                                             ╱+╲
- *                                            ╱   ╲
- *                                           ╱     ╲
- *                                          ╱       +b2
- *                                         ╱       ╱
- *                       a1'              ╱ a1'   ╱
- *  offset lineTo's:     +---------------╱--→+   ╱
+ * example: offset region shapes overlap:       b2'
+ *                                             ╱╱╲
+ *                                            ╱╱  ╲
+ *                                           ╱╱    ╲
+ *                                          ╱╱      +b2
+ *                                         ╱╱      ╱
+ *                       a1'              ╱╱a1'   ╱
+ *  offset lineTo's:     +═══════════════╱╱═⇒+   ╱
  *                       ↑            b1'+╲  ↑  ╱
  *                       |                 ╲ | ╱
  *  original lineTo's:   +------------------╲+╱
@@ -51,31 +51,26 @@ import static java.lang.Math.abs;
  *                                           b1
  * </pre>
  * <pre>
- * offset region rectangles do not overlap:
+ * example: offset region shapes do not overlap, forming a gap.
  *
  *                       a1'                a2'  b1'
- *  offset lineTo's:     +------------------→+
- *                       ↑                   ↑  ╱+╲
- *                       |                   | ╱   ╲
- *  original lineTo's:   +-------------------+╱     ╲
+ *  offset lineTo's:     +══════════════════⇒+
+ *                       ↑                   ↑  ╱+╲╲
+ *                       |                   | ╱   ╲╲
+ *  original lineTo's:   +-------------------+╱     ╲╲
  *                       a1                 a2╲      + b2'
  *                                          b1 ╲    ╱
  *                                              ╲  ╱
  *                                               +╱
  *                                               b2
  * </pre>
- * We do not want to have any lines inside any offset region rectangle,
- * unless the original path self-intersects.
+ * The gap must be filled in with a join segment (a2/b1, b1', a2' in the
+ * example above). The join segment is a new offset region shape.
  * <p>
- * The following algorithm works if the original path does not self-intersect:
- * <ol>
- *     <li>Remove last contained point:
- *     while the last point {@code b2'} is inside the previous rectangle {@code a1 a2 a2' a'}
- *     then remove it.</li>
- *     <li>Clip offset line segments: if {@code a1' a2'} intersects with any following {@code b1' b2'}, then
- *     remove all line segments in between, and clip the two line segments
- *     at the intersection point {@code i'}, giving {@code a1' i'}, {@code i' b2'}.</li>
- * </ol>
+ * We do not want to have any offset lines inside any offset region shape.
+ * Therefore we clip all offset lines with all offset region shapes.
+ * <p>
+ * Performance: This algorithm is O(n^2).
  *
  * @author Werner Randelshofer
  */
@@ -133,161 +128,6 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     }
 
 
-    private void flushNewButBroken() {
-        // XXX the following algorithm only works if the original path does not self-intersect:
-
-        final Path2D.Double path = new Path2D.Double();
-        for (int i = 0, n = segments.size(); i < n - 1; i++) {
-            Point2D a1p = segments.get(i);
-            Point2D a2p = segments.get(i + 1);
-            Point2D shift = new Point2D(a2p.getY() - a1p.getY(), a1p.getX() - a2p.getX()).normalize().multiply(offset);
-            Point2D a1 = a1p.subtract(shift);
-            Point2D a2 = a2p.subtract(shift);
-            path.moveTo(a1.getX(), a1.getY());
-            path.lineTo(a2.getX(), a2.getY());
-            path.lineTo(a2p.getX(), a2p.getY());
-            path.lineTo(a1p.getX(), a1p.getY());
-            path.closePath();
-            if (i < n - 2) {
-                Point2D b1p = segments.get(i + 2);
-                path.moveTo(a2.getX(), a2.getY());
-                path.lineTo(b1p.getX(), b1p.getY());
-                path.lineTo(a2p.getX(), a2p.getY());
-                path.closePath();
-            }
-        }
-
-
-        for (int i = 0, n = segments.size(); i < n - 2; ++i) {
-            Point2D a1p = segments.get(i);
-            Point2D a2p = segments.get(i + 1);
-            if (a1p.equals(a2p)) {
-                segments.remove(i);
-                n--;
-                i--;
-                continue;
-            }
-
-            Intersection inter = Intersections.intersectLinePathIterator(a1p, a2p, path.getPathIterator(null));
-
-            if (inter.getStatus() == Intersection.Status.INTERSECTION) {
-                if (path.contains(a1p.getX(), a1p.getY())) {
-                    segments.remove(i);
-                    n--;
-                    i--;
-                }
-                for (Intersection.IntersectionPoint p : inter.getIntersections()) {
-                    if (abs(p.t1) > 1e-6 && abs(p.t1 - 1.0) > 1e-6) {
-                        segments.add(i + 1, p.getPoint());
-                        n++;
-                        break;
-                    }
-                }
-            } else if (inter.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
-                segments.remove(i);
-                n--;
-            }
-
-        }
-
-    /*
-        // 1. Clip line segments a1' a2' with any following offset line segments b1' b2'.
-        final Path2D.Double path=new Path2D.Double();
-        for (int i = 0, n = segments.size(); i < n - 2; ++i) {
-            Point2D a1p = segments.get(i);
-            Point2D a2p = segments.get(i + 1);
-            for (int j = n - 2; j >= i + 1; --j) {
-                path.reset();
-                Point2D b1p = segments.get(j);
-                Point2D b2p = segments.get(j + 1);
-                Point2D shift = new Point2D(b2p.getY() - b1p.getY(), b1p.getX() - b2p.getX()).normalize().multiply(offset);
-                Point2D b1=b1p.subtract(shift);
-                Point2D b2=b2p.subtract(shift);
-                path.moveTo(b1p.getX(),b1p.getY());   // 1:b1'---2:b2'---3:b2---4:b1---closePath
-                path.lineTo(b2p.getX(),b2p.getY());
-                path.lineTo(b2.getX(),b2.getY());
-                path.lineTo(b1.getX(),b1.getY());
-                path.closePath();
-                Intersection inter = Intersections.intersectLinePathIterator(a1p, a2p, path.getPathIterator(null));
-                if (inter.getStatus() == Intersection.Status.NO_INTERSECTION_INSIDE) {
-                    // a1p a2p is completely inside, therefore a previous segment will intersect unless it is the first
-                    // segment.
-                    if (i==0) {
-                        segments.remove(0);
-                        i--;
-                        n--;
-                        break ;
-                    }
-                } else if (inter.getStatus() == Intersection.Status.INTERSECTION) {
-                    final boolean ap1IsInside = path.contains(a1p.getX(), a1p.getY());
-                    final boolean ap2IsInside = path.contains(a2p.getX(), a2p.getY());
-                    if (ap1IsInside&&!ap2IsInside) {
-                        // a1p is inside, a2p is outside.
-                    } else if (!ap1IsInside&&ap2IsInside){
-                        // a1p is outside, a1p is inside
-                        if (inter.getFirst().getSegment2()==1) {
-                            //             b2p                       b2p
-                            //            /                          /
-                            // a1p-----------a2p   ==>   a1p-------b1p
-                            //          /
-                            //        b1p
-                            Point2D p = inter.getFirstPoint();
-                            segments.set(j, p);
-                            // delete all points between i and j
-                            if (j > i + 1) {
-                                segments.subList(i + 1, j).clear();
-                            }
-                            n -= j - 1 - i;
-                            j -= j - 1 - i;
-                        } else if (inter.getFirst().getSegment2()==4){
-                            //             b1p----b2p                 b1p---b2p
-                            //            /                          /
-                            // a1p-----------a2p   ==>   a1p-------a2p
-                            //          /
-                            //        b1
-                            segments.set(i+1,inter.getFirstPoint());
-
-                            // delete all points between i+2 and j
-                            if (j > i + 2) {
-                                segments.subList(i + 2, j).clear();
-                            }
-                            n -= j - i-2;
-                            j -= j - i -2;
-                        }
-                    }
-                }
-                /*
-                Intersection inter2 = Intersections.intersectLineLine(a1p, a2p, b1p, b2p);
-                if (inter2.getStatus() == Intersection.Status.INTERSECTION) {
-                    // if a1' a2' is completely inside b1' b2' it will be clipped with
-                    // the next segment. However here we do not make the distinction whether
-                    // a1' is inside or outside b1 b1' b2' b2'.
-
-                    Point2D p = inter2.getPoints().iterator().next();
-                    segments.set(j, p);
-                    // delete all points between i and j
-                    if (j > i + 1) {
-                        segments.subList(i +1, j).clear();
-                    }
-                    n -= j - 1 - i;
-                    j -= j - 1 - i;
-                }* /
-            }
-        }*/
-
-        // Draw segments
-        for (int i = 0, n = segments.size(); i < n; i++) {
-            Point2D p = segments.get(i);
-            if (i == 0) {
-                target.moveTo(p);
-            } else {
-                target.lineTo(p);
-            }
-        }
-
-        segments.clear();
-    }
-
     private void flush() {
         // XXX the following algorithm only works if the original path does not self-intersect:
 
@@ -314,7 +154,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             }
         }
 
-        // 2. Clip offset line with any a1 a1' line. O(n^2).
+        // 2. Clip offset line with any a1 a1' line and with any a2 a2' line. O(n^2).
         for (int i = 0, n = originalSegments.size(); i < n - 2; i += 2) {
             Point2D a1p = originalSegments.get(i);
             Point2D a2p = originalSegments.get(i + 1);
