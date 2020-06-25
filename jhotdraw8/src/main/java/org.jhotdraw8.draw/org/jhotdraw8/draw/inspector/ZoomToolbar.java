@@ -30,6 +30,8 @@ public class ZoomToolbar extends BorderPane {
 
     private final double LOG2 = log(2.0);
 
+    private final double zoomPowerIncrement = 0.25;
+
     @FXML
     private Slider zoomSlider;
     private final DoubleProperty zoomPower = new SimpleDoubleProperty(this, "zoomPower", 0.0);
@@ -109,12 +111,12 @@ public class ZoomToolbar extends BorderPane {
 
     @FXML
     void zoomMinus(ActionEvent event) {
-        zoomPower.set(zoomPower.get() - 1);
+        zoomPower.set(Math.round((zoomPower.get() - zoomPowerIncrement) / zoomPowerIncrement) * zoomPowerIncrement);
     }
 
     @FXML
     void zoomPlus(ActionEvent event) {
-        zoomPower.set(zoomPower.get() + 1);
+        zoomPower.set(Math.round((zoomPower.get() + zoomPowerIncrement) / zoomPowerIncrement) * zoomPowerIncrement);
     }
 
     @NonNull
