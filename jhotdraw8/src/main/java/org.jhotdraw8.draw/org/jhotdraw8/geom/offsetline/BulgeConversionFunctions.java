@@ -3,6 +3,8 @@ package org.jhotdraw8.geom.offsetline;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.geom.Geom;
 
+import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
+
 /**
  * Provides bulge conversion functions.
  * <p>
@@ -126,4 +128,33 @@ public class BulgeConversionFunctions {
         double d = chord * 0.5;
         return r <= chord ? 0.0 : Math.tan(Math.asin(d / r) * 0.5);
     }
+
+    /* Compute the arc radius and arc center of a arc segment defined by v1 to v2.*/
+    public static BulgeConversionFunctions.ArcRadiusAndCenter arcRadiusAndCenter(PlineVertex v1,
+                                                                                 PlineVertex v2) {
+        assert !v1.bulgeIsZero() : "v1 to v2 must be an arc";
+        assert !fuzzyEqual(v1.pos(), v2.pos()) : "v1 must not be ontop of v2";
+
+        // compute radius
+        double b = Math.abs(v1.bulge());
+        Point2D v = v2.pos().subtract(v1.pos());
+        double d = v.magnitude();
+        double r = d * (b * b + 1.0) / (4.0 * b);
+
+        // compute center
+        double s = b * d / 2.0;
+        double m = r - s;
+        double offsX = -m * v.getY() / d;
+        double offsY = m * v.getX() / d;
+        if (v1.bulgeIsNeg()) {
+            offsX = -offsX;
+            offsY = -offsY;
+        }
+
+        Point2D c = new Point2D(v1.getX() + v.getX() * 0.5 + offsX, v1.getY() + v.getY() * 0.5 + offsY);
+        return new BulgeConversionFunctions.ArcRadiusAndCenter(r, c);
+
+
+    }
+
 }

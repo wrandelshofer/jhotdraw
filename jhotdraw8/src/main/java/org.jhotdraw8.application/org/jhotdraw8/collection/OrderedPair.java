@@ -2,7 +2,7 @@
  * @(#)OrderedPair.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.graph;
+package org.jhotdraw8.collection;
 
 
 import org.jhotdraw8.annotation.Nullable;
@@ -16,21 +16,21 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-class OrderedPair<V> implements Pair<V> {
+public class OrderedPair<U, V> implements Pair<U, V> {
 
-    private final V a;
+    private final U a;
     private final V b;
 
-    public OrderedPair(V a, V b) {
+    public OrderedPair(U a, V b) {
         this.a = a;
         this.b = b;
     }
 
-    public V getStart() {
+    public @Nullable U first() {
         return a;
     }
 
-    public V getEnd() {
+    public V second() {
         return b;
     }
 
@@ -49,7 +49,7 @@ class OrderedPair<V> implements Pair<V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked") final OrderedPair<V> other = (OrderedPair) obj;
+        @SuppressWarnings("unchecked") final OrderedPair<U, V> other = (OrderedPair) obj;
         if (!Objects.equals(this.a, other.a)) {
             return false;
         }

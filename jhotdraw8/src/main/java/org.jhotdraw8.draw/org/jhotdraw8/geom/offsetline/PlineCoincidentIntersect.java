@@ -1,0 +1,28 @@
+package org.jhotdraw8.geom.offsetline;
+
+import javafx.geometry.Point2D;
+
+/**
+ * Represents a coincident polyline intersect (stretch).
+ */
+public class PlineCoincidentIntersect {
+    /// Index of the start vertex of the first segment
+    int sIndex1;
+    /// Index of the start vertex of the second segment
+    int sIndex2;
+    /// One end point of the coincident path
+    Point2D point1;
+    /// Other end point of the coincident path
+    Point2D point2;
+
+    PlineCoincidentIntersect() {
+    }
+
+    PlineCoincidentIntersect(int si1, int si2, Point2D point1,
+                             Point2D point2) {
+        this.sIndex1 = si1;
+        this.sIndex2 = si2;
+        this.point1 = point1;
+        this.point2 = point2;
+    }
+}

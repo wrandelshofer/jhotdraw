@@ -8,6 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.IteratorEnumerator;
+import org.jhotdraw8.collection.Pair;
+import org.jhotdraw8.collection.UnorderedPair;
 import org.jhotdraw8.util.ToDoubleTriFunction;
 
 import java.util.ArrayDeque;
@@ -100,7 +102,7 @@ public class GraphSearch {
         return disjointSets;
     }
 
-    private static class Edge<VV, AA> extends UnorderedPair<VV> {
+    private static class Edge<VV, AA> extends UnorderedPair<VV, VV> {
         private final AA arrow;
         private final double cost;
 
@@ -163,8 +165,8 @@ public class GraphSearch {
             builder.addVertex(v);
         }
         for (Edge<V, A> e : mst) {
-            builder.addArrow(e.getStart(), e.getEnd(), e.arrow);
-            builder.addArrow(e.getEnd(), e.getStart(), e.arrow);
+            builder.addArrow(e.first(), e.second(), e.arrow);
+            builder.addArrow(e.second(), e.first(), e.arrow);
         }
         return builder;
     }
@@ -187,7 +189,7 @@ public class GraphSearch {
      * @return the graph builder
      */
     @NonNull
-    public static <V, A extends Pair<V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull Collection<V> vertices, @NonNull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
+    public static <V, A extends Pair<V, V>> DirectedGraphBuilder<V, A> findMinimumSpanningTreeGraph(@NonNull Collection<V> vertices, @NonNull List<A> orderedArrows, @Nullable List<A> includedArrows, List<A> rejectedArrows) {
         List<A> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);
@@ -197,8 +199,8 @@ public class GraphSearch {
             builder.addVertex(v);
         }
         for (A e : includedArrowList) {
-            builder.addArrow(e.getStart(), e.getEnd(), e);
-            builder.addArrow(e.getEnd(), e.getStart(), e);
+            builder.addArrow(e.first(), e.second(), e);
+            builder.addArrow(e.second(), e.first(), e);
         }
         return builder;
     }
@@ -219,7 +221,7 @@ public class GraphSearch {
      * @return the arrows that are part of the minimum spanning tree.
      */
     @NonNull
-    public static <V, P extends Pair<V>> List<P> findMinimumSpanningTree(@NonNull Collection<V> vertices, @NonNull List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
+    public static <V, P extends Pair<V, V>> List<P> findMinimumSpanningTree(@NonNull Collection<V> vertices, @NonNull List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
         List<P> minimumSpanningTree = new ArrayList<>(orderedEdges.size());
         if (rejectedEdges == null) {
             rejectedEdges = new ArrayList<>(orderedEdges.size());
@@ -230,8 +232,8 @@ public class GraphSearch {
 
         // Process arrows from lowest cost to highest cost
         for (P arrow : orderedEdges) {
-            List<V> uset = forest.get(arrow.getStart());
-            List<V> vset = forest.get(arrow.getEnd());
+            List<V> uset = forest.get(arrow.first());
+            List<V> vset = forest.get(arrow.second());
             if (uset != vset) {
                 union(uset, vset, forest);
                 minimumSpanningTree.add(arrow);

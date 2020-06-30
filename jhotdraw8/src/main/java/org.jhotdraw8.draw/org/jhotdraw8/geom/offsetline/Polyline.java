@@ -6,6 +6,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
+import java.util.function.BiPredicate;
+
+import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
 
 /**
  * A PolyArcPath is defined by a sequence of vertexes and a bool indicating
@@ -23,7 +26,12 @@ import java.util.ArrayList;
  * </ul>
  * </p>
  */
-public class Polyline extends ArrayList<PlineVertex> {
+public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
+    @Override
+    public Polyline clone() {
+        return (Polyline) super.clone();
+    }
+
     private boolean closed;
     private int windingRule = PathIterator.WIND_EVEN_ODD;
 
@@ -33,6 +41,10 @@ public class Polyline extends ArrayList<PlineVertex> {
 
     public Polyline(int initialCapacity) {
         super(initialCapacity);
+    }
+
+    public void addVertex(PlineVertex v) {
+        add(v);
     }
 
     public void addVertex(double x, double y) {
@@ -57,6 +69,33 @@ public class Polyline extends ArrayList<PlineVertex> {
 
     public int getWindingRule() {
         return windingRule;
+    }
+
+    public void pop_back() {
+        remove(size() - 1);
+    }
+
+    /// Iterate the segement indices of the polyline. visitor function is invoked for each segment
+    /// index pair, stops when all indices have been visited or visitor returns false. visitor
+    /// signature is bool(std::size_t, std::size_t).
+    public void visitSegIndices(BiPredicate<Integer, Integer> visitor) {
+        if (size() < 2) {
+            return;
+        }
+        int i;
+        int j;
+        if (isClosed()) {
+            i = 0;
+            j = size() - 1;
+        } else {
+            i = 1;
+            j = 0;
+        }
+
+        while (i < size() && visitor.test(j, i)) {
+            j = i;
+            i = i + 1;
+        }
     }
 
     public void setWindingRule(int windingRule) {
@@ -96,6 +135,30 @@ public class Polyline extends ArrayList<PlineVertex> {
         Path2D path = b.build();
         path.setWindingRule(getWindingRule());
         return path.getPathIterator(at);
+    }
+
+    /// Creates an approximate spatial index for all the segments in the polyline given using
+    /// createFastApproxBoundingBox.
+    public static StaticSpatialIndex createApproxSpatialIndex(final Polyline pline) {
+        assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
+
+        int segmentCount = pline.isClosed() ? pline.size() : pline.size() - 1;
+        StaticSpatialIndex result = new StaticSpatialIndex(segmentCount);
+
+        for (int i = 0; i < pline.size() - 1; ++i) {
+            AABB approxBB = createFastApproxBoundingBox(pline.get(i), pline.get(i + 1));
+            result.add(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax);
+        }
+
+        if (pline.isClosed()) {
+            // add final segment from last to first
+            AABB approxBB = createFastApproxBoundingBox(pline.lastVertex(), pline.get(0));
+            result.add(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax);
+        }
+
+        result.finish();
+
+        return result;
     }
 }
 
