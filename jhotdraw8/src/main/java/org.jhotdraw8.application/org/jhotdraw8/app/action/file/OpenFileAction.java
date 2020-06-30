@@ -39,9 +39,8 @@ public static final String ID = "file.open";
         return reuseEmptyViews;
     }
 
-    @NonNull
     @Override
-    protected Map<? super Key<?>, Object> getReadOptions() {
+    protected @NonNull Map<Key<?>, Object> getReadOptions() {
         return Collections.emptyMap();
     }
 }

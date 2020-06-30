@@ -114,10 +114,8 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
 
     protected void openViewFromURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, @NonNull final URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
-        Map<? super Key<?>, Object> options = getReadOptions();
-        if (app != null) {
+        Map<Key<?>, Object> options = getReadOptions();
             app.removeDisabler(workState);
-        }
         if (options == null) {
             return; // The user has decided, that he/she does not want to open a file after all.
         }
@@ -167,8 +165,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
      *
      * @return options or null if the user has aborted the dialog window
      */
-    @NonNull
-    protected abstract Map<? super Key<?>, Object> getReadOptions();
+    protected abstract @NonNull Map<Key<?>, Object> getReadOptions();
 
 
 }

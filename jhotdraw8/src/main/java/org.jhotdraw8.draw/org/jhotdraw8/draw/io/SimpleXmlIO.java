@@ -9,6 +9,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
@@ -83,7 +84,7 @@ import java.util.regex.Pattern;
  *
  * @author Werner Randelshofer
  */
-public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
+public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, OutputFormat, XmlOutputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
     /**
      * Holds the current options.
      */
@@ -91,7 +92,7 @@ public class SimpleXmlIO implements InputFormat, OutputFormat, XmlOutputFormatMi
     private Map<? super Key<?>, Object> options = Collections.emptyMap();
 
     @Override
-    public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
+    public void putAll(@Nullable Map<Key<?>, Object> options) {
         this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 

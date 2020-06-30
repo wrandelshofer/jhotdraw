@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -19,7 +19,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 /**
  * InputFormat.
@@ -27,13 +26,8 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @design.pattern Drawing Strategy, Strategy.
  */
-public interface InputFormat {
-    /**
-     * Sets options that affect the read operations of this format.
-     *
-     * @param options a map of options
-     */
-    void setOptions(@Nullable Map<? super Key<?>, Object> options);
+public interface InputFormat extends PropertyBean {
+
 
     /**
      * Reads a figure from an URI

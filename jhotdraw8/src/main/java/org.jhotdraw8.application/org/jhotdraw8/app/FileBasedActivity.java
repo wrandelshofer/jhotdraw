@@ -125,7 +125,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed with the data format that was
      * actually used for reading the file.
      */
-    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<? super Key<?>, Object> options, boolean insert, WorkState workState);
+    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, WorkState workState);
 
     /**
      * Asynchronously writes document data to the specified URI.
@@ -145,7 +145,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<? super Key<?>, Object> options, WorkState workState);
+    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<Key<?>, Object> options, WorkState workState);
 
     /**
      * Clears the document.

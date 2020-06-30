@@ -15,6 +15,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.NonNullObjectKey;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -67,17 +68,19 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
+    public final static NonNullObjectKey<Boolean> EXPORT_INVISIBLE_ELEMENTS_KEY = new NonNullObjectKey<>("exportInvisibleElements", Boolean.class, false);
 
     public final static DataFormat SVG_FORMAT;
+    public final static String SVG_MIME_TYPE = "image/svg+xml";
     private final static String SKIP_KEY = "skip";
     private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     private final static String XLINK_Q = "xlink";
     private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
     static {
-        DataFormat fmt = DataFormat.lookupMimeType("image/svg+xml");
+        DataFormat fmt = DataFormat.lookupMimeType(SVG_MIME_TYPE);
         if (fmt == null) {
-            fmt = new DataFormat("image/svg+xml");
+            fmt = new DataFormat(SVG_MIME_TYPE);
         }
         SVG_FORMAT = fmt;
     }
@@ -93,7 +96,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
     @NonNull
     private IdFactory idFactory = new SimpleIdFactory();
-    private boolean skipInvisibleNodes = true;
+
     private BiFunction<Object, Object, AbstractSvgSceneGraphExporter> exporterFactory = SvgFullSceneGraphExporter::new;
 
     public void setExporterFactory(BiFunction<Object, Object, AbstractSvgSceneGraphExporter> exporterFactory) {
@@ -118,13 +121,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         return true;
     }
 
-    public boolean isSkipInvisibleNodes() {
-        return skipInvisibleNodes;
-    }
-
-    public void setSkipInvisibleNodes(boolean skipInvisibleNodes) {
-        this.skipInvisibleNodes = skipInvisibleNodes;
-    }
 
     private void markNodesOutsideBoundsWithSkip(@NonNull Node node, Bounds sceneBounds) {
         boolean intersects = node.intersects(node.sceneToLocal(sceneBounds));
@@ -150,7 +146,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final AbstractSvgSceneGraphExporter exporter = createExporter();
-        exporter.setSkipInvisibleNodes(skipInvisibleNodes);
+        exporter.setExportInvisibleElements(getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY));
         exporter.setRelativizePaths(true);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);

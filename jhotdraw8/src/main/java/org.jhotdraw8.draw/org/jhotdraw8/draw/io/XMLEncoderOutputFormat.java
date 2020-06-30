@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -23,7 +24,7 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  */
-public class XMLEncoderOutputFormat implements OutputFormat {
+public class XMLEncoderOutputFormat extends AbstractPropertyBean implements OutputFormat {
     /**
      * Holds the current options.
      */
@@ -31,7 +32,7 @@ public class XMLEncoderOutputFormat implements OutputFormat {
     private Map<? super Key<?>, Object> options = Collections.emptyMap();
 
     @Override
-    public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
+    public void putAll(@Nullable Map<Key<?>, Object> options) {
         this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 

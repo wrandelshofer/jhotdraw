@@ -5,8 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 
@@ -17,7 +16,6 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
 
 /**
  * OutputFormat.
@@ -25,14 +23,7 @@ import java.util.Map;
  * @author Werner Randelshofer
  * @design.pattern Drawing Strategy, Strategy.
  */
-public interface OutputFormat {
-    /**
-     * Sets options that affect the write operations of this format.
-     *
-     * @param options a map of options
-     */
-    void setOptions(@Nullable Map<? super Key<?>, Object> options);
-
+public interface OutputFormat extends PropertyBean {
     /**
      * Writes a Drawing into the resource identified by the given URI.
      *

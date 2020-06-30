@@ -15,7 +15,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.SimplePropertyBean;
+import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
@@ -39,7 +39,7 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractDrawingView extends SimplePropertyBean implements DrawingView {
+public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
 
     @NonNull
     final private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());

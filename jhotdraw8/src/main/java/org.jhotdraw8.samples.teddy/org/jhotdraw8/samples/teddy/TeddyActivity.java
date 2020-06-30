@@ -14,6 +14,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
@@ -94,7 +95,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, WorkState workState) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, WorkState workState) {
         return FXWorker.supply(() -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
@@ -121,7 +122,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
 
     @NonNull
     @Override
-    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         final String text = textArea.getText();
         return FXWorker.run(() -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {

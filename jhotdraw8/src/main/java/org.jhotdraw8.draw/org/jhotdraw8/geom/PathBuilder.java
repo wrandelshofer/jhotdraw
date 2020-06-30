@@ -27,7 +27,7 @@ public interface PathBuilder {
      * decrease the angles and the final point of the arc.
      * <p>
      * As specified in
-     * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
+     * <a href=http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands>w3.org</a>
      * <p>
      * The default implementation of this method has been derived from Apache Batik
      * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc.
@@ -38,11 +38,12 @@ public interface PathBuilder {
      * @param radiusY       the y radius of the ellipse
      * @param xAxisRotation the angle from the x-axis of the current coordinate
      *                      system to the x-axis of the ellipse in degrees.
-     * @param largeArcFlag  the large arc flag. If true the arc spanning less
-     *                      than or equal to 180 degrees is chosen, otherwise the arc spanning
-     *                      greater than 180 degrees is chosen
+     * @param largeArcFlag  the large arc flag. If true the arc spanning more
+     *                      than or equal to 180 degrees is chosen, otherwise the
+     *                      arc spanning less than 180 degrees is chosen
      * @param sweepFlag     the sweep flag. If true the line joining center to arc
-     *                      sweeps through decreasing angles otherwise it sweeps through increasing
+     *                      sweeps through decreasing angles
+     *                      otherwise it sweeps through increasing
      *                      angles
      * @param x             the x coordinate of the end point
      * @param y             the y coordinate of the end point

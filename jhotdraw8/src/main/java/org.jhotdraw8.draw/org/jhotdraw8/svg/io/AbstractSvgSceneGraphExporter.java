@@ -112,7 +112,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
     private final Converter<ImmutableList<Number>> nbList = new CssListConverter<>(new CssNumberConverter(false));
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
-    private boolean skipInvisibleNodes = true;
+    private boolean exportInvisibleElements = true;
     private boolean relativizePaths = false;
     private final Object skipKey;
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
@@ -161,19 +161,19 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         }
     }
 
-    public boolean isSkipInvisibleNodes() {
-        return skipInvisibleNodes;
+    public boolean isExportInvisibleElements() {
+        return exportInvisibleElements;
     }
 
-    public void setSkipInvisibleNodes(boolean skipInvisibleNodes) {
-        this.skipInvisibleNodes = skipInvisibleNodes;
+    public void setExportInvisibleElements(boolean newValue) {
+        this.exportInvisibleElements = newValue;
     }
 
     private boolean isSkipNode(@NonNull Node node) {
         if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return true;
         }
-        if (skipInvisibleNodes) {
+        if (!exportInvisibleElements) {
             if (!node.isVisible()) {
                 return true;
             }
@@ -519,7 +519,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         } else if (node instanceof Group) {
             // a group can be omitted if it does not have any children
             Group g = (Group) node;
-            boolean omitGroup = skipInvisibleNodes && g.getChildren().isEmpty();
+            boolean omitGroup = !exportInvisibleElements && g.getChildren().isEmpty();
             if (!omitGroup) {
                 elem = writeGroup(doc, parent, (Group) node);
             }

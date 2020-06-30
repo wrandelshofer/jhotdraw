@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
@@ -456,7 +457,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -483,23 +484,23 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(SvgTinySceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.setExporterFactory(SvgTinySceneGraphExporter::new);
-                io.setOptions(options);
+                io.putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE).equals(format)
                     || registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION).equals(format)
                     || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
-                io.setOptions(options);
+                io.putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".png")) {
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
-                io.setOptions(options);
+                io.putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();

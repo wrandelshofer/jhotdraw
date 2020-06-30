@@ -8,7 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.SimplePropertyBean;
+import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  */
-public class SimpleDrawingRenderer extends SimplePropertyBean implements RenderContext {
+public class SimpleDrawingRenderer extends AbstractPropertyBean implements RenderContext {
 
     // ---
     // Field declarations

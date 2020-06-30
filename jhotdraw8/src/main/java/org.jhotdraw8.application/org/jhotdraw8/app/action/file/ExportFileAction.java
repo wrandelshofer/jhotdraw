@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
-    private final Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialogFactory;
+    private final Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialogFactory;
     @NonNull
     public final static Key<URIChooser> EXPORT_CHOOSER_KEY = new ObjectKey<>("exportChooser", URIChooser.class);
     @NonNull
@@ -44,7 +44,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         this(activity, ID, null);
     }
 
-    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialog) {
         this(activity, ID, optionsDialog);
     }
 
@@ -56,7 +56,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<Map<? super Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialog) {
         super(activity, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
@@ -74,7 +74,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
 
     @Nullable
     @Override
-    protected Dialog<Map<? super Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return optionsDialogFactory == null ? null : optionsDialogFactory.apply(format);
     }
 

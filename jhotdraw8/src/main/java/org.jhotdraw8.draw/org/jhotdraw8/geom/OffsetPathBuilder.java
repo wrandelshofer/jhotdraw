@@ -79,7 +79,18 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     private boolean needsMoveTo = false;
     private final PathBuilder target;
     private final double offset;
-    private final ArrayList<Point2D> segments = new ArrayList<>();
+    /**
+     * Line segments.
+     * <p>
+     * Each element is a double array.
+     * The length of the array depends on the type of the line segment:
+     * <dl>
+     *     <dd>2</dd><dt>line to x,y</dt>
+     *     <dd>4</dd><dt>quad to cx,cy, x,y</dt>
+     *     <dd>6</dd><dt>curve to cx1,cy1, cx2,cy2, x,y</dt>
+     * </dl>
+     */
+    private final ArrayList<double[]> segments = new ArrayList<>();
 
     public OffsetPathBuilder(PathBuilder target, double offset) {
         this.target = target;
@@ -100,19 +111,19 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
-        // FIXME should flatten curve
+        // FIXME should compute offset curve
     }
 
     @Override
     protected void doLineTo(double x, double y) {
         Point2D shift = new Point2D(y - getLastY(), getLastX() - x).normalize().multiply(offset);
         if (needsMoveTo) {
-            segments.add(new Point2D(getLastX() + shift.getX(), getLastY() + shift.getY()));
+            segments.add(new double[]{getLastX() + shift.getX(), getLastY() + shift.getY()});
             needsMoveTo = false;
         } else {
-            segments.add(new Point2D(getLastX() + shift.getX(), getLastY() + shift.getY()));// bevel joint
+            segments.add(new double[]{getLastX() + shift.getX(), getLastY() + shift.getY()});// bevel joint
         }
-        segments.add(new Point2D(x + shift.getX(), y + shift.getY()));
+        segments.add(new double[]{x + shift.getX(), y + shift.getY()});
     }
 
     @Override
@@ -123,7 +134,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
-        // FIXME should flatten curve
+        // FIXME should compute offset curve
 
     }
 
@@ -131,19 +142,19 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     private void flush() {
         // XXX the following algorithm only works if the original path does not self-intersect:
 
-        List<Point2D> originalSegments = new ArrayList<>(segments);
+        List<double[]> originalSegments = new ArrayList<>(segments);
 
         // 1. Clip offset line segment a1' a2' with any following offset line segments b1' b2'. O(n^2).
         for (int i = 0, n = segments.size(); i < n - 2; ++i) {
-            Point2D a1p = segments.get(i);
-            Point2D a2p = segments.get(i + 1);
+            Point2D a1p = getXY(segments.get(i));
+            Point2D a2p = getXY(segments.get(i + 1));
             for (int j = n - 2; j >= i + 1; --j) {
-                Point2D b1p = segments.get(j);
-                Point2D b2p = segments.get(j + 1);
+                Point2D b1p = getXY(segments.get(j));
+                Point2D b2p = getXY(segments.get(j + 1));
                 Intersection inter = Intersections.intersectLineLine(a1p, a2p, b1p, b2p);
                 if (inter.getStatus() == Intersection.Status.INTERSECTION) {
                     Point2D p = inter.getPoints().iterator().next();
-                    segments.set(j, p);
+                    segments.set(j, new double[]{p.getX(), p.getY()});
                     // delete all points between i and j
                     if (j > i + 1) {
                         segments.subList(i + 1, j).clear();
@@ -156,26 +167,28 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
         // 2. Clip offset line with any a1 a1' line and with any a2 a2' line. O(n^2).
         for (int i = 0, n = originalSegments.size(); i < n - 2; i += 2) {
-            Point2D a1p = originalSegments.get(i);
-            Point2D a2p = originalSegments.get(i + 1);
+            Point2D a1p = getXY(originalSegments.get(i));
+            Point2D a2p = getXY(originalSegments.get(i + 1));
             Point2D shift = new Point2D(a2p.getY() - a1p.getY(), a1p.getX() - a2p.getX()).normalize().multiply(offset);
             Point2D a1 = a1p.subtract(shift);
             Point2D a2 = a2p.subtract(shift);
             final double eps = 1e-6;
             for (int j = 0, m = segments.size(); j < m - 1; j++) {
-                Point2D b1p = segments.get(j);
-                Point2D b2p = segments.get(j + 1);
+                Point2D b1p = getXY(segments.get(j));
+                Point2D b2p = getXY(segments.get(j + 1));
                 Intersection inter = Intersections.intersectLineLine(b1p, b2p, a1, a1p);
                 if (inter.getStatus() == Intersection.Status.INTERSECTION) {
                     if (inter.getFirstT() > 0.0 + eps && inter.getFirstT() < 1.0 - eps) {
-                        segments.set(j + 1, b2p = inter.getFirstPoint());
+                        b2p = inter.getFirstPoint();
+                        segments.set(j + 1, new double[]{b2p.getX(), b2p.getY()});
                     }
                 }
                 inter = Intersections.intersectLineLine(b1p, b2p, a2, a2p);
                 if (inter.getStatus() == Intersection.Status.INTERSECTION) {
                     if (inter.getFirstT() > 0.0 + eps && inter.getFirstT() < 1.0 - eps) {
                         final Intersection.IntersectionPoint first = inter.getFirst();
-                        segments.set(j, b1p = inter.getFirstPoint());
+                        b1p = inter.getFirstPoint();
+                        segments.set(j, new double[]{b1p.getX(), b1p.getY()});
                     }
                 }
             }
@@ -185,7 +198,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
         // Draw segments
         for (int i = 0, n = segments.size(); i < n; i++) {
-            Point2D p = segments.get(i);
+            Point2D p = getXY(segments.get(i));
             if (i == 0) {
                 target.moveTo(p);
             } else {
@@ -196,21 +209,25 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
         segments.clear();
     }
 
+    private Point2D getXY(double[] segment) {
+        return new Point2D(segment[segment.length - 2], segment[segment.length - 1]);
+    }
+
     private void flushOld() {
         // XXX the following algorithm only works if the original path does not self-intersect:
 
         // 1. Clip offset line segment a1' a2' with any following offset line segments b1' b2'.
         for (int i = 0, n = segments.size(); i < n - 2; ++i) {
-            Point2D a1p = segments.get(i);
-            Point2D a2p = segments.get(i + 1);
+            Point2D a1p = getXY(segments.get(i));
+            Point2D a2p = getXY(segments.get(i + 1));
             for (int j = n - 2; j >= i + 1; --j) {
-                Point2D b1p = segments.get(j);
-                Point2D b2p = segments.get(j + 1);
+                Point2D b1p = getXY(segments.get(j));
+                Point2D b2p = getXY(segments.get(j + 1));
                 Intersection inter = Intersections.intersectLineLine(a1p, a2p, b1p, b2p);
                 if (inter.getStatus() == Intersection.Status.INTERSECTION) {
                     Point2D p = inter.getPoints().iterator().next();
                     //segments.set(i + 1, p);
-                    segments.set(j, p);
+                    segments.set(j, new double[]{p.getX(), p.getY()});
                     // delete all points between i and j
                     if (j > i + 1) {
                         segments.subList(i + 1, j).clear();
@@ -223,7 +240,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
         // Draw segments
         for (int i = 0, n = segments.size(); i < n; i++) {
-            Point2D p = segments.get(i);
+            Point2D p = getXY(segments.get(i));
             if (i == 0) {
                 target.moveTo(p);
             } else {

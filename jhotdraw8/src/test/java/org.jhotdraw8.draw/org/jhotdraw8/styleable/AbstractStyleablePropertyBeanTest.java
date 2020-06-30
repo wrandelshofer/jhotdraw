@@ -27,9 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Werner Randelshofer
  */
-public class AbstractStyleablePropertyBeanNGTest {
+public class AbstractStyleablePropertyBeanTest {
 
-    public AbstractStyleablePropertyBeanNGTest() {
+    public AbstractStyleablePropertyBeanTest() {
     }
 
     @Test
@@ -55,7 +55,7 @@ public class AbstractStyleablePropertyBeanNGTest {
 
     }
 
-    public class AbstractStyleablePropertyBeanImpl extends AbstractStyleablePropertyBean {
+    public static class AbstractStyleablePropertyBeanImpl extends AbstractStyleablePropertyBean {
 
         @NonNull
         @Override

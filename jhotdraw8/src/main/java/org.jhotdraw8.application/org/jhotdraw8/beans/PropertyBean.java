@@ -169,6 +169,16 @@ public interface PropertyBean {
         return result;
     }
 
+    /**
+     * Sets all values with the specified keys from the map.
+     *
+     * @param map a map with keys and values
+     */
+    @NonNull
+    default void putAll(@NonNull Map<Key<?>, Object> map) {
+        getProperties().putAll(map);
+    }
+
     @NonNull
     default <T> ObjectProperty<T> propertyAt(@NonNull Key<T> key) {
         return new MapEntryProperty<>(getProperties(), key, key.getValueType());

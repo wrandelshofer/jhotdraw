@@ -10,6 +10,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -40,16 +41,7 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-
-    protected double drawingDpi = 72.0;
-    private boolean exportDrawing = true;
-    private boolean exportPages = false;
-    private boolean exportSlices = false;
-    private boolean exportSlices2x = false;
-    private boolean exportSlices3x = false;
-    protected double pagesDpi = 72.0;
-    protected double slicesDpi = 72.0;
+public abstract class AbstractExportOutputFormat extends AbstractPropertyBean implements ExportOutputFormat {
 
     @NonNull
     protected abstract String getExtension();
@@ -58,47 +50,33 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     @Nullable
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
 
-    @Override
-    public void setOptions(@Nullable Map<? super Key<?>, Object> options) {
-        if (options != null) {
-            exportDrawing = EXPORT_DRAWING_KEY.getNonNull(options);
-            exportPages = EXPORT_PAGES_KEY.getNonNull(options);
-            exportSlices = EXPORT_SLICES_KEY.getNonNull(options);
-            exportSlices2x = EXPORT_SLICES_RESOLUTION_2X_KEY.getNonNull(options);
-            exportSlices3x = EXPORT_SLICES_RESOLUTION_3X_KEY.getNonNull(options);
-            drawingDpi = EXPORT_DRAWING_DPI_KEY.getNonNull(options);
-            pagesDpi = EXPORT_PAGES_DPI_KEY.getNonNull(options);
-            slicesDpi = EXPORT_SLICES_DPI_KEY.getNonNull(options);
-        }
-    }
-
     @Nullable
     public Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(Function<URI, URI> uriResolver) {
+    public void setUriResolver(@Nullable Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 
     public boolean isExportDrawing() {
-        return exportDrawing;
+        return getNonNull(EXPORT_DRAWING_KEY);
     }
 
     public boolean isExportPages() {
-        return exportPages;
+        return getNonNull(EXPORT_PAGES_KEY);
     }
 
     public boolean isExportSlices() {
-        return exportSlices;
+        return getNonNull(EXPORT_SLICES_KEY);
     }
 
     public boolean isExportSlices2x() {
-        return exportSlices2x;
+        return getNonNull(EXPORT_SLICES_RESOLUTION_2X_KEY);
     }
 
     public boolean isExportSlices3x() {
-        return exportSlices3x;
+        return getNonNull(EXPORT_SLICES_RESOLUTION_3X_KEY);
     }
 
     protected abstract boolean isResolutionIndependent();
@@ -126,7 +104,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        RenderContext.DPI.put(hints, pagesDpi);
+        RenderContext.DPI.put(hints, getNonNull(EXPORT_PAGES_DPI_KEY));
 
         writePages(dir, basename, drawing, pages, hints);
     }
@@ -221,12 +199,13 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
                 slices.add((Slice) f);
             }
         }
+        final Double slicesDpi = getNonNull(EXPORT_SLICES_DPI_KEY);
         writeSlices(dir, drawing, slices, "", slicesDpi);
         if (!isResolutionIndependent()) {
-            if (exportSlices2x) {
+            if (getNonNull(EXPORT_SLICES_RESOLUTION_2X_KEY)) {
                 writeSlices(dir, drawing, slices, "@2x", 2 * slicesDpi);
             }
-            if (exportSlices3x) {
+            if (getNonNull(EXPORT_SLICES_RESOLUTION_3X_KEY)) {
                 writeSlices(dir, drawing, slices, "@3x", 3 * slicesDpi);
             }
         }

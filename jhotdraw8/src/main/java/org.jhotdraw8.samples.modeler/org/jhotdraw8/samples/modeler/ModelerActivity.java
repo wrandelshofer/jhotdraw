@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
@@ -559,7 +560,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
+    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
         return FXWorker.supply(() -> {
             FigureFactory factory = new ModelerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
@@ -587,16 +588,16 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
 
     @NonNull
     @Override
-    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
-                io.setOptions(options);
+                io.putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".png")) {
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
-                io.setOptions(options);
+                io.putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {
                 XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
@@ -614,9 +615,9 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
                             uri.getPath().substring(0, uri.getPath().length() - 4) + ".svg"
                             , uri.getFragment());
                     SvgExportOutputFormat io2 = new SvgExportOutputFormat();
-                    Map<? super Key<?>, Object> options2 = new HashMap<>();
+                    Map<Key<?>, Object> options2 = new HashMap<>();
                     SvgExportOutputFormat.EXPORT_DRAWING_KEY.put(options2, true);
-                    io2.setOptions(options2);
+                    io2.putAll(options2);
                     io2.write(svgUri, drawing, workState);
                 }
             }

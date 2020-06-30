@@ -74,7 +74,7 @@ public class GrapherApplication extends SimpleFileBasedApplication {
         exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(SvgTinySceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
         exportExtensions.add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
-        put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, exportExtensions));
+        put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, exportExtensions));
     }
 
     @Override

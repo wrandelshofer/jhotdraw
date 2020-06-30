@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <!--
   ~ @(#)DrawingExportOptionsPane.fxml
   ~ Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
@@ -21,28 +20,31 @@
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" valignment="BASELINE" vgrow="SOMETIMES"/>
-    <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
-    <RowConstraints minHeight="10.0" valignment="BASELINE" vgrow="SOMETIMES"/>
-    <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
     <RowConstraints minHeight="10.0" valignment="BASELINE" vgrow="SOMETIMES"/>
     <RowConstraints minHeight="10.0" valignment="BASELINE" vgrow="SOMETIMES"/>
     <RowConstraints minHeight="10.0" valignment="BASELINE" vgrow="SOMETIMES"/>
+    <RowConstraints minHeight="10.0" valignment="BASELINE" vgrow="SOMETIMES"/>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES"/>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="BASELINE" vgrow="SOMETIMES"/>
   </rowConstraints>
   <children>
     <CheckBox fx:id="exportDrawingCheckBox" mnemonicParsing="false" text="%export.exportDrawing.text"/>
     <CheckBox fx:id="exportPagesCheckBox" mnemonicParsing="false" text="%export.exportPages.text"
-              GridPane.rowIndex="2"/>
+              GridPane.rowIndex="1"/>
     <CheckBox fx:id="exportSlicesCheckBox" mnemonicParsing="false" text="%export.exportSlices.text"
-              GridPane.rowIndex="4"/>
+              GridPane.rowIndex="2"/>
     <Label fx:id="drawingDpiLabel" text="%export.dpi.text" GridPane.columnIndex="1"/>
     <TextField fx:id="drawingDpiField" GridPane.columnIndex="2"/>
-    <Label fx:id="pagesDpiLabel" text="%export.dpi.text" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-    <Label fx:id="slicesDpiLabel" text="%export.dpi.text" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-    <TextField fx:id="pagesDpiField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-    <TextField fx:id="slicesDpiField" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+    <Label fx:id="pagesDpiLabel" text="%export.dpi.text" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label fx:id="slicesDpiLabel" text="%export.dpi.text" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <TextField fx:id="pagesDpiField" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+    <TextField fx:id="slicesDpiField" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
     <CheckBox fx:id="slicesResolution2xCheckBox" mnemonicParsing="false" text="%export.resolution2x.text"
-              GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+              GridPane.columnIndex="2" GridPane.rowIndex="3"/>
     <CheckBox fx:id="slicesResolution3xCheckBox" mnemonicParsing="false" text="%export.resolution3x.text"
-              GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+              GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+    <Label fx:id="optionsLabel" text="%export.options.text" GridPane.columnSpan="2147483647" GridPane.rowIndex="5"/>
+    <CheckBox fx:id="exportInvisibleElements" mnemonicParsing="false" text="%export.exportInvisibleElements.text"
+              GridPane.columnSpan="2147483647" GridPane.rowIndex="6"/>
   </children>
 </fx:root>

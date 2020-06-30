@@ -136,8 +136,8 @@ private boolean saveAs;
     }
 
     protected void saveFileChooseOptions(@NonNull final FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
-        Map<? super Key<?>, Object> options = null;
-        Dialog<Map<? super Key<?>, Object>> dialog = null;
+        Map<Key<?>, Object> options = null;
+        Dialog<Map<Key<?>, Object>> dialog = null;
         try {
             dialog = createOptionsDialog(format);
         } catch (RuntimeException e) {
@@ -152,7 +152,7 @@ private boolean saveAs;
         if (dialog != null) {
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(v.getNode().getScene().getWindow());
-            Optional<Map<? super Key<?>, Object>> result = dialog.showAndWait();
+            Optional<Map<Key<?>, Object>> result = dialog.showAndWait();
 
             if (result.isPresent()) {
                 options = result.get();
@@ -164,7 +164,7 @@ private boolean saveAs;
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(@NonNull final FileBasedActivity view, @NonNull final URI uri, final DataFormat format, Map<? super Key<?>, Object> options, WorkState workState) {
+    protected void saveFileToUri(@NonNull final FileBasedActivity view, @NonNull final URI uri, final DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
@@ -195,7 +195,7 @@ private boolean saveAs;
     }
 
     @Nullable
-    protected Dialog<Map<? super Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return null;
     }
 

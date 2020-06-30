@@ -141,4 +141,19 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         lastY = y;
     }
 
+    protected void setLastX(double lastX) {
+        this.lastX = lastX;
+    }
+
+    protected void setLastY(double lastY) {
+        this.lastY = lastY;
+    }
+
+    protected void setLastCX(double lastCX) {
+        this.lastCX = lastCX;
+    }
+
+    protected void setLastCY(double lastCY) {
+        this.lastCY = lastCY;
+    }
 }
