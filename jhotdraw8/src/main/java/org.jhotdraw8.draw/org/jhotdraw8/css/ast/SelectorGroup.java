@@ -82,24 +82,39 @@ public class SelectorGroup extends Selector {
     }
 
     /**
-     * Returns the selector which matches the specified element or null.
+     * Returns the last selector with highest specificity that
+     * matches the specified element or null.
+     * <p>
+     * If multiple selectors match, then this method returns the selector
+     * with the highest specificity value.
+     * <p>
+     * If multiple matching selectors have the highest specificity, then this
+     * method returns the last one.
      *
      * @param <T>     the element type
      * @param model   The helper is used to access properties of the element and
      *                parent or sibling elements in the document.
      * @param element the element
-     * @return the selector which matches the specified element, returns null if
-     * no selector matches
+     * @return the last selector with highest specificity that matches the specified element,
+     * returns null if no selector matches
      */
     @Nullable
     public <T> Selector matchSelector(@NonNull SelectorModel<T> model, @NonNull T element) {
+        int maxSpecificity = 0;
+        Selector found = null;// selector with maxSpecificity or last
+
         for (Selector s : selectors) {
             T result = s.match(model, element);
             if (result != null) {
-                return s;
+                final int specificity = s.getSpecificity();
+                if (found == null || specificity >= maxSpecificity) {
+                    found = s;
+                    maxSpecificity = specificity;
+                }
             }
         }
-        return null;
+
+        return found;
     }
 
     @Override

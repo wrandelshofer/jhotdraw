@@ -243,6 +243,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
                     // The value of a property was set by the user through a call to a set method with StyleOrigin.USER
                     // ... nothing to do!
+
                     // The stylesheet is an external file
                     for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
                         try {
@@ -468,18 +469,22 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     protected class StylesheetEntry {
 
+        @Nullable
+        private final URI uri;
         private StyleOrigin origin;
         @Nullable
         private FutureTask<Stylesheet> future;
         @Nullable
         private Stylesheet stylesheet;
 
+
         public StylesheetEntry(StyleOrigin origin, @NonNull URI uri) {
             this.origin = origin;
+            this.uri = uri;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
                 Stylesheet s = p.parseStylesheet(uri);
-                LOGGER.info("Parsed " + uri + ".\n#rules: " + s.getStyleRules().size());
+                LOGGER.info("Parsed " + uri + ".\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size());
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
                     LOGGER.info("Parsed " + uri + ".\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
@@ -490,11 +495,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
 
         public StylesheetEntry(StyleOrigin origin, @NonNull Stylesheet stylesheet) {
+            this.uri = null;
             this.origin = origin;
             this.stylesheet = stylesheet;
         }
 
         public StylesheetEntry(StyleOrigin origin, @NonNull String str) {
+            this.uri = null;
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
