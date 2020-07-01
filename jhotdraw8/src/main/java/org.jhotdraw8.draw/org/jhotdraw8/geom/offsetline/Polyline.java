@@ -6,9 +6,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.BiPredicate;
 
 import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.segLength;
 
 /**
  * A PolyArcPath is defined by a sequence of vertexes and a bool indicating
@@ -64,6 +66,10 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
         return get(size() - 1);
     }
 
+    public void lastVertex(PlineVertex newValue) {
+        set(size() - 1, newValue);
+    }
+
     public void isClosed(boolean closed) {
         this.closed = closed;
     }
@@ -78,7 +84,7 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
 
     /// Iterate the segement indices of the polyline. visitor function is invoked for each segment
     /// index pair, stops when all indices have been visited or visitor returns false. visitor
-    /// signature is bool(std::size_t, std::size_t).
+    /// signature is bool(int, int).
     public void visitSegIndices(BiPredicate<Integer, Integer> visitor) {
         if (size() < 2) {
             return;
@@ -161,5 +167,42 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
 
         return result;
     }
+
+    /// becomes the end vertex and the end vertex becomes the starting vertex.
+    public static void invertDirection(Polyline pline) {
+        if (pline.size() < 2) {
+            return;
+        }
+
+        Collections.reverse(pline);
+
+        // shift and negate bulge (to maintain same geometric path)
+        double firstBulge = pline.get(0).bulge();
+
+        for (int i = 1; i < pline.size(); ++i) {
+            pline.get(i - 1).bulge(-pline.get(i).bulge());
+        }
+
+        pline.lastVertex().bulge(-firstBulge);
+    }
+
+
+    /// Calculate the total path length of a polyline.
+    public double getPathLength() {
+        if (size() < 2) {
+            return 0.0;
+        }
+        double[] result = new double[]{0.0};
+        BiPredicate<Integer, Integer> visitor = (Integer i, Integer j) -> {
+            result[0] += segLength(get(i), get(j));
+            return true;
+        };
+
+        visitSegIndices(visitor);
+
+        return result[0];
+    }
+
+
 }
 

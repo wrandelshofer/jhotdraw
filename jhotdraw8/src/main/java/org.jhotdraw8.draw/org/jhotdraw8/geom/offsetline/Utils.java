@@ -21,6 +21,8 @@ public class Utils {
     public final static double realThreshold = 1e-8;
 
     public static final double tau = 2.0 * Math.PI;
+    // absolute threshold to be used for pruning invalid slices for offset
+    public static final double offsetThreshold = 1e-4;
 
     public static boolean fuzzyEqual(Point2D v1, Point2D v2) {
         return fuzzyEqual(v1, v2, Utils.realThreshold);
@@ -209,5 +211,27 @@ public class Utils {
         double midSweep = normalizeRadians(testAngle - startAngle);
 
         return midSweep < endSweep + epsilon;
+    }
+
+    /// Returns the closest point that lies on the line segment from p0 to p1 to the point given.
+
+    static Point2D closestPointOnLineSeg(Point2D p0, Point2D p1,
+                                         Point2D point) {
+        // Dot product used to find angles
+        // See: http://geomalgorithms.com/a02-_lines.html
+        Point2D v = p1.subtract(p0);
+        Point2D w = point.subtract(p0);
+        double c1 = w.dotProduct(v);
+        if (c1 < realThreshold) {
+            return p0;
+        }
+
+        double c2 = v.dotProduct(v);
+        if (c2 < c1 + realThreshold) {
+            return p1;
+        }
+
+        double b = c1 / c2;
+        return p0.add(v.multiply(b));
     }
 }

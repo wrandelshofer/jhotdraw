@@ -5,24 +5,47 @@
 package org.jhotdraw8.geom.offsetline;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.util.function.QuintFunction;
 import org.jhotdraw8.util.function.TriConsumer;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
+import static org.jhotdraw8.geom.offsetline.Intersections.allSelfIntersects;
+import static org.jhotdraw8.geom.offsetline.Intersections.findIntersects;
 import static org.jhotdraw8.geom.offsetline.Intersections.intrCircle2Circle2;
 import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2Circle2;
 import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2LineSeg2;
+import static org.jhotdraw8.geom.offsetline.Intersections.intrPlineSegs;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.closestPointOnSeg;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.segMidpoint;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.splitAtPoint;
+import static org.jhotdraw8.geom.offsetline.Polyline.createApproxSpatialIndex;
 import static org.jhotdraw8.geom.offsetline.Utils.angle;
 import static org.jhotdraw8.geom.offsetline.Utils.deltaAngle;
 import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
 import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
 import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
 import static org.jhotdraw8.geom.offsetline.Utils.realPrecision;
+import static org.jhotdraw8.geom.offsetline.Utils.sliceJoinThreshold;
 import static org.jhotdraw8.geom.offsetline.Utils.unitPerp;
 
 /**
@@ -87,6 +110,36 @@ import static org.jhotdraw8.geom.offsetline.Utils.unitPerp;
  */
 public class OffsetPathBuilder {
 
+
+    /// Function to test if a point is a valid distance from the original polyline.
+    public static boolean pointValidForOffset(Polyline pline, double offset,
+                                              StaticSpatialIndex spatialIndex,
+                                              Point2D point, Deque<Integer> queryStack) {
+        return pointValidForOffset(pline, offset, spatialIndex, point,
+                queryStack, Utils.offsetThreshold);
+    }
+
+    public static boolean pointValidForOffset(Polyline pline, double offset,
+                                              StaticSpatialIndex spatialIndex,
+                                              Point2D point, Deque<Integer> queryStack,
+                                              double offsetTol) {
+        final double absOffset = Math.abs(offset) - offsetTol;
+        final double minDist = absOffset * absOffset;
+
+        boolean[] pointValid = {true};
+
+        IntPredicate visitor = (int i) -> {
+            int j = Utils.nextWrappingIndex(i, pline);
+            var closestPoint = closestPointOnSeg(pline.get(i), pline.get(j), point);
+            double dist = Geom.squaredDistance(closestPoint, point);
+            pointValid[0] = dist > minDist;
+            return pointValid[0];
+        };
+
+        spatialIndex.visitQuery(point.getX() - absOffset, point.getY() - absOffset, point.getX() + absOffset,
+                point.getY() + absOffset, visitor, queryStack);
+        return pointValid[0];
+    }
 
     void addOrReplaceIfSamePos(Polyline pline, final PlineVertex vertex) {
         addOrReplaceIfSamePos(pline, vertex, realPrecision);
@@ -450,9 +503,309 @@ public class OffsetPathBuilder {
         return result;
     }
 
+    List<OpenPolylineSlice>
+    dualSliceAtIntersectsForOffset(final Polyline originalPline,
+                                   final Polyline rawOffsetPline,
+                                   final Polyline dualRawOffsetPline, double offset) {
+        List<OpenPolylineSlice> result = new ArrayList<>();
+        if (rawOffsetPline.size() < 2) {
+            return result;
+        }
+
+        StaticSpatialIndex origPlineSpatialIndex = createApproxSpatialIndex(originalPline);
+        StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
+
+        List<PlineIntersect> selfIntersects = new ArrayList<>();
+        allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
+
+        PlineIntersectsResult dualIntersects = new PlineIntersectsResult();
+        findIntersects(rawOffsetPline, dualRawOffsetPline, rawOffsetPlineSpatialIndex, dualIntersects);
+
+
+        Map<Integer, List<Point2D>> intersectsLookup;
+        if (!originalPline.isClosed()) {
+            // find intersects between circles generated at original open polyline end points and raw offset
+            // polyline
+            List<OrderedPair<Integer, List<Point2D>>> intersects = new ArrayList<>();
+            offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline.get(0).pos(),
+                    rawOffsetPlineSpatialIndex, intersects);
+            offsetCircleIntersectsWithPline(rawOffsetPline, offset,
+                    originalPline.lastVertex().pos(),
+                    rawOffsetPlineSpatialIndex, intersects);
+            intersectsLookup = new HashMap<>(2 * selfIntersects.size() + intersects.size());
+            for (final var pair : intersects) {
+                intersectsLookup.put(pair.first(), pair.second());
+            }
+        } else {
+            intersectsLookup = new HashMap<>(2 * selfIntersects.size());
+        }
+
+        for (final PlineIntersect si : selfIntersects) {
+            intersectsLookup.computeIfAbsent(si.sIndex1, k -> new ArrayList<>()).add(si.pos);
+            intersectsLookup.computeIfAbsent(si.sIndex2, k -> new ArrayList<>()).add(si.pos);
+        }
+
+        for (final PlineIntersect intr : dualIntersects.intersects) {
+            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.pos);
+        }
+
+        for (final PlineCoincidentIntersect intr : dualIntersects.coincidentIntersects) {
+            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.point1);
+            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.point2);
+        }
+
+        Deque<Integer> queryStack = new ArrayDeque<>(8);
+        if (intersectsLookup.size() == 0) {
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.get(0).pos(),
+                    queryStack)) {
+                return result;
+            }
+            // copy and convert raw offset into open polyline
+            OpenPolylineSlice back = new OpenPolylineSlice(Integer.MAX_VALUE, rawOffsetPline);
+            result.add(back);
+            back.pline.isClosed(false);
+            if (originalPline.isClosed()) {
+                back.pline.addVertex(rawOffsetPline.get(0));
+                back.pline.lastVertex().bulge(0.0);
+            }
+            return result;
+        }
+
+        // sort intersects by distance from start vertex
+        for (var kvp : intersectsLookup.entrySet()) {
+            Point2D startPos = rawOffsetPline.get(kvp.getKey()).pos();
+            Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
+            kvp.getValue().sort(cmp);
+        }
+
+        BiPredicate<PlineVertex, PlineVertex> intersectsOrigPline = (final PlineVertex v1, final PlineVertex v2) -> {
+            AABB approxBB = createFastApproxBoundingBox(v1, v2);
+            boolean[] intersects = {false};
+            IntPredicate visitor = (int i) -> {
+                int j = Utils.nextWrappingIndex(i, originalPline);
+                IntrPlineSegsResult intrResult =
+                        intrPlineSegs(v1, v2, originalPline.get(i), originalPline.get(j));
+                intersects[0] = intrResult.intrType != PlineSegIntrType.NoIntersect;
+                return !intersects[0];
+            };
+
+            origPlineSpatialIndex.visitQuery(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax,
+                    visitor, queryStack);
+
+            return intersects[0];
+        };
+
+        if (!originalPline.isClosed()) {
+            // build first open polyline that ends at the first intersect since we will not wrap back to
+            // capture it as in the case of a closed polyline
+            Polyline firstSlice = new Polyline();
+            int index = 0;
+            int loopCount = 0;
+            final int maxLoopCount = rawOffsetPline.size();
+            while (true) {
+                if (loopCount++ > maxLoopCount) {
+                    assert false : "Bug detected, should never loop this many times!";
+                    // break to avoid infinite loop
+                    break;
+                }
+                var iter = intersectsLookup.get(index);
+                if (iter == null) {
+                    // no intersect found, test segment will be valid before adding the vertex
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            rawOffsetPline.get(index).pos(), queryStack)) {
+                        break;
+                    }
+
+                    // index check (only test segment if we're not adding the first vertex)
+                    if (index != 0 && intersectsOrigPline.test(firstSlice.lastVertex(), rawOffsetPline.get(index))) {
+                        break;
+                    }
+
+                    addOrReplaceIfSamePos(firstSlice, rawOffsetPline.get(index));
+                } else {
+                    // intersect found, test segment will be valid before finishing first open polyline
+                    final Point2D intersectPos = iter.get(0);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            intersectPos, queryStack)) {
+                        break;
+                    }
+
+                    SplitResult split =
+                            splitAtPoint(rawOffsetPline.get(index), rawOffsetPline.get(index + 1), intersectPos);
+
+                    PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
+                    var midpoint = segMidpoint(split.updatedStart, sliceEndVertex);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
+                            queryStack)) {
+                        break;
+                    }
+
+                    if (intersectsOrigPline.test(split.updatedStart, sliceEndVertex)) {
+                        break;
+                    }
+
+                    addOrReplaceIfSamePos(firstSlice, split.updatedStart);
+                    addOrReplaceIfSamePos(firstSlice, sliceEndVertex);
+                    result.add(new OpenPolylineSlice(0, firstSlice));
+                    break;
+                }
+
+                index += 1;
+            }
+        }
+
+        for (final var kvp : intersectsLookup.entrySet()) {
+            // start index for the slice we're about to build
+            int sIndex = kvp.getKey();
+            // self intersect list for this start index
+            List<Point2D> siList = kvp.getValue();
+
+            final var startVertex = rawOffsetPline.get(sIndex);
+            int nextIndex = Utils.nextWrappingIndex(sIndex, rawOffsetPline);
+            final var endVertex = rawOffsetPline.get(nextIndex);
+
+            if (siList.size() != 1) {
+                // build all the segments between the N intersects in siList (N > 1), skipping the first
+                // segment (to be processed at the end)
+                SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.get(0));
+                var prevVertex = firstSplit.splitVertex;
+                for (int i = 1; i < siList.size(); ++i) {
+                    SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
+                    // update prevVertex for next loop iteration
+                    prevVertex = split.splitVertex;
+                    // skip if they're ontop of each other
+                    if (fuzzyEqual(split.updatedStart.pos(), split.splitVertex.pos(),
+                            Utils.realPrecision)) {
+                        continue;
+                    }
+
+                    // test start point
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            split.updatedStart.pos(), queryStack)) {
+                        continue;
+                    }
+
+                    // test end point
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            split.splitVertex.pos(), queryStack)) {
+                        continue;
+                    }
+
+                    // test mid point
+                    var midpoint = segMidpoint(split.updatedStart, split.splitVertex);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
+                            queryStack)) {
+                        continue;
+                    }
+
+                    // test intersection with original polyline
+                    if (intersectsOrigPline.test(split.updatedStart, split.splitVertex)) {
+                        continue;
+                    }
+                    OpenPolylineSlice back = new OpenPolylineSlice();
+                    result.add(back);
+                    back.intrStartIndex = sIndex;
+                    back.pline.addVertex(split.updatedStart);
+                    back.pline.addVertex(split.splitVertex);
+                }
+            }
+
+            // build the segment between the last intersect in siList and the next intersect found
+
+            // check that the first point is valid
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.get(siList.size() - 1),
+                    queryStack)) {
+                continue;
+            }
+
+            SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
+            Polyline currSlice = new Polyline();
+            currSlice.addVertex(split.splitVertex);
+
+            int index = nextIndex;
+            boolean isValidPline = true;
+            int loopCount = 0;
+            final int maxLoopCount = rawOffsetPline.size();
+            while (true) {
+                if (loopCount++ > maxLoopCount) {
+                    assert false : "Bug detected, should never loop this many times!";
+                    // break to avoid infinite loop
+                    break;
+                }
+                // check that vertex point is valid
+                if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                        rawOffsetPline.get(index).pos(), queryStack)) {
+                    isValidPline = false;
+                    break;
+                }
+
+                // check that the segment does not intersect original polyline
+                if (intersectsOrigPline.test(currSlice.lastVertex(), rawOffsetPline.get(index))) {
+                    isValidPline = false;
+                    break;
+                }
+
+                // add vertex
+                addOrReplaceIfSamePos(currSlice, rawOffsetPline.get(index));
+
+                // check if segment that starts at vertex we just added has an intersect
+                var nextIntr = intersectsLookup.get(index);
+                if (nextIntr != null) {
+                    // there is an intersect, slice is done, check if final segment is valid
+
+                    // check intersect pos is valid (which will also be end vertex position)
+                    final Point2D intersectPos = nextIntr.get(0);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            intersectPos, queryStack)) {
+                        isValidPline = false;
+                        break;
+                    }
+
+                    nextIndex = Utils.nextWrappingIndex(index, rawOffsetPline);
+                    split =
+                            splitAtPoint(currSlice.lastVertex(), rawOffsetPline.get(nextIndex), intersectPos);
+
+                    PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
+                    // check mid point is valid
+                    Point2D mp = segMidpoint(split.updatedStart, sliceEndVertex);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, mp,
+                            queryStack)) {
+                        isValidPline = false;
+                        break;
+                    }
+
+                    // trim last added vertex and add final intersect position
+                    currSlice.lastVertex(split.updatedStart);
+                    addOrReplaceIfSamePos(currSlice, sliceEndVertex);
+
+                    break;
+                }
+                // else there is not an intersect, increment index and continue
+                if (index == rawOffsetPline.size() - 1) {
+                    if (originalPline.isClosed()) {
+                        // wrap index
+                        index = 0;
+                    } else {
+                        // open polyline, we're done
+                        break;
+                    }
+                } else {
+                    index += 1;
+                }
+            }
+
+            if (isValidPline && currSlice.size() > 1) {
+                result.add(new OpenPolylineSlice(sIndex, currSlice));
+            }
+        }
+
+        return result;
+    }
+
     boolean falseIntersect(double t) {
         return t < 0.0 || t > 1.0;
     }
+    /// Slices a raw offset polyline at all of its self intersects.
 
     void lineToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                        boolean connectionArcsAreCCW, Polyline result) {
@@ -523,6 +876,7 @@ public class OffsetPathBuilder {
             }
         }
     }
+    /// Stitches raw offset polyline slices together, discarding any that are not valid.
 
     void lineToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                         boolean connectionArcsAreCCW, Polyline result) {
@@ -572,669 +926,434 @@ public class OffsetPathBuilder {
         }
     }
 
+    void offsetCircleIntersectsWithPline(Polyline pline, double offset,
+                                         Point2D circleCenter,
+                                         StaticSpatialIndex spatialIndex,
+                                         List<OrderedPair<Integer, List<Point2D>>> output) {
+
+        final double circleRadius = Math.abs(offset);
+
+        List<Integer> queryResults = new ArrayList<>();
+
+        spatialIndex.query(circleCenter.getX() - circleRadius, circleCenter.getY() - circleRadius,
+                circleCenter.getX() + circleRadius, circleCenter.getY() + circleRadius,
+                queryResults);
+
+        Predicate<Double> validLineSegIntersect = (Double t) -> {
+            return !falseIntersect(t) && Math.abs(t) > Utils.realPrecision;
+        };
+
+        QuintFunction<Point2D, Point2D, Point2D, Double, Point2D, Boolean>
+                validArcSegIntersect = (Point2D arcCenter, Point2D arcStart,
+                                        Point2D arcEnd, Double bulge,
+                                        Point2D intrPoint) -> {
+            return !fuzzyEqual(arcStart, intrPoint, Utils.realPrecision) &&
+                    pointWithinArcSweepAngle(arcCenter, arcStart, arcEnd, bulge, intrPoint);
+        };
+
+        for (int sIndex : queryResults) {
+            PlineVertex v1 = pline.get(sIndex);
+            PlineVertex v2 = pline.get(sIndex + 1);
+            if (v1.bulgeIsZero()) {
+                IntrLineSeg2Circle2Result intrResult =
+                        intrLineSeg2Circle2(v1.pos(), v2.pos(), circleRadius, circleCenter);
+                if (intrResult.numIntersects == 0) {
+                    continue;
+                } else if (intrResult.numIntersects == 1) {
+                    if (validLineSegIntersect.test(intrResult.t0)) {
+                        output.add(new OrderedPair<>(sIndex, Arrays.asList(pointFromParametric(v1.pos(), v2.pos(), intrResult.t0))));
+                    }
+                } else {
+                    assert intrResult.numIntersects == 2 : "should be two intersects here";
+                    if (validLineSegIntersect.test(intrResult.t0)) {
+                        output.add(new OrderedPair<>(sIndex, Arrays.asList(pointFromParametric(v1.pos(), v2.pos(), intrResult.t0))));
+                    }
+                    if (validLineSegIntersect.test(intrResult.t1)) {
+                        output.add(new OrderedPair<>(sIndex, Arrays.asList(pointFromParametric(v1.pos(), v2.pos(), intrResult.t1))));
+                    }
+                }
+            } else {
+                var arc = arcRadiusAndCenter(v1, v2);
+                IntrCircle2Circle2Result intrResult =
+                        intrCircle2Circle2(arc.radius, arc.center, circleRadius, circleCenter);
+                switch (intrResult.intrType) {
+                case NoIntersect:
+                    break;
+                case OneIntersect:
+                    if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
+                        output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
+                    }
+                    break;
+                case TwoIntersects:
+                    if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
+                        output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
+                    }
+                    if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point2)) {
+                        output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point2)));
+                    }
+                    break;
+                case Coincident:
+                    break;
+                }
+            }
+        }
+    }
+
+    /// Slices a raw offset polyline at all of its self intersects and intersects with its dual.
+
     /**
      * Creates the paralell offset polylines to the polyline given.
      *
      * @param pline  input polyline
      * @param offset offset
      * @return offset polyline
-     * /
-     @NonNull public List<Polyline> parallelOffset(@NonNull Polyline pline, double offset,
-     boolean hasSelfIntersects) {
-     if (pline.size() < 2) {
-     return new ArrayList<>();
-     }
-     var rawOffset = createRawOffsetPline(pline, offset);
-     if (pline.isClosed() && !hasSelfIntersects) {
-     var slices = slicesFromRawOffset(pline, rawOffset, offset);
-     return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
-     }
-
-     // not closed polyline or has self intersects, must apply dual clipping
-     var dualRawOffset = createRawOffsetPline(pline, -offset);
-     var slices = dualSliceAtIntersectsForOffset(pline, rawOffset, dualRawOffset, offset);
-     return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
-     }
-     /// Slices a raw offset polyline at all of its self intersects.
-
-     List<OpenPolylineSlice> slicesFromRawOffset(final Polyline originalPline,
-     final Polyline rawOffsetPline,
-     double offset) {
-     assert originalPline.isClosed() : "use dual slice at intersects for open polylines";
-
-     List<OpenPolylineSlice> result;
-     if (rawOffsetPline.size() < 2) {
-     return result;
-     }
-
-     StaticSpatialIndex origPlineSpatialIndex = createApproxSpatialIndex(originalPline);
-     StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
-
-     List<PlineIntersect> selfIntersects;
-     allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
-
-     Deque<Integer> queryStack=new ArrayDeque<>(8);
-     if (selfIntersects.size() == 0) {
-     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline[0].pos(),
-     queryStack)) {
-     return result;
-     }
-     // copy and convert raw offset into open polyline
-     result.emplace_back(std::numeric_limits<int>::max(), rawOffsetPline);
-     result.back().pline.isClosed() = false;
-     result.back().pline.addVertex(rawOffsetPline[0]);
-     result.back().pline.lastVertex().bulge() = 0.0;
-     return result;
-     }
-
-     std::unordered_map<int, List<Vector2>> intersectsLookup;
-     intersectsLookup.reserve(2 * selfIntersects.size());
-
-     for (final PlineIntersect si : selfIntersects) {
-     intersectsLookup[si.sIndex1].push_back(si.pos);
-     intersectsLookup[si.sIndex2].push_back(si.pos);
-     }
-
-     // sort intersects by distance from start vertex
-     for (var kvp : intersectsLookup) {
-     Vector2 startPos = rawOffsetPline[kvp.first].pos();
-     var cmp = [&](final Vector2 si1, final Vector2 si2) {
-     return distSquared(si1, startPos) < distSquared(si2, startPos);
-     };
-     std::sort(kvp.second.begin(), kvp.second.end(), cmp);
-     }
-
-     var intersectsOrigPline = [&](final PlineVertex v1, final PlineVertex v2) {
-     AABB approxBB = createFastApproxBoundingBox(v1, v2);
-     boolean hasIntersect = false;
-     var visitor = [&](int i) {
-     using namespace internal;
-     int j = utils::nextWrappingIndex(i, originalPline);
-     IntrPlineSegsResult intrResult =
-     intrPlineSegs(v1, v2, originalPline[i], originalPline[j]);
-     hasIntersect = intrResult.intrType != PlineSegIntrType::NoIntersect;
-     return !hasIntersect;
-     };
-
-     origPlineSpatialIndex.visitQuery(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax,
-     visitor, queryStack);
-
-     return hasIntersect;
-     };
-
-     for (final var kvp : intersectsLookup) {
-     // start index for the slice we're about to build
-     int sIndex = kvp.first;
-     // self intersect list for this start index
-     List<Vector2> final &siList = kvp.second;
-
-     final var startVertex = rawOffsetPline[sIndex];
-     int nextIndex = utils::nextWrappingIndex(sIndex, rawOffsetPline);
-     final var endVertex = rawOffsetPline[nextIndex];
-
-     if (siList.size() != 1) {
-     // build all the segments between the N intersects in siList (N > 1), skipping the first
-     // segment (to be processed at the end)
-     SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList[0]);
-     var prevVertex = firstSplit.splitVertex;
-     for (int i = 1; i < siList.size(); ++i) {
-     SplitResult split = splitAtPoint(prevVertex, endVertex, siList[i]);
-     // update prevVertex for next loop iteration
-     prevVertex = split.splitVertex;
-     // skip if they're ontop of each other
-     if (fuzzyEqual(split.updatedStart.pos(), split.splitVertex.pos(),
-     utils::realPrecision())) {
-     continue;
-     }
-
-     // test start point
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     split.updatedStart.pos(), queryStack)) {
-     continue;
-     }
-
-     // test end point
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     split.splitVertex.pos(), queryStack)) {
-     continue;
-     }
-
-     // test mid point
-     var midpoint = segMidpoint(split.updatedStart, split.splitVertex);
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
-     queryStack)) {
-     continue;
-     }
-
-     // test intersection with original polyline
-     if (intersectsOrigPline(split.updatedStart, split.splitVertex)) {
-     continue;
-     }
-
-     result.emplace_back();
-     result.back().intrStartIndex = sIndex;
-     result.back().pline.addVertex(split.updatedStart);
-     result.back().pline.addVertex(split.splitVertex);
-     }
-     }
-
-     // build the segment between the last intersect in siList and the next intersect found
-
-     // check that the first point is valid
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.back(),
-     queryStack)) {
-     continue;
-     }
-
-     SplitResult split = splitAtPoint(startVertex, endVertex, siList.back());
-     Polyline currSlice;
-     currSlice.addVertex(split.splitVertex);
-
-     int index = nextIndex;
-     boolean isValidPline = true;
-     int loopCount = 0;
-     final int maxLoopCount = rawOffsetPline.size();
-     while (true) {
-     if (loopCount++ > maxLoopCount) {
-     assert false : "Bug detected, should never loop this many times!";
-     // break to avoid infinite loop
-     break;
-     }
-     // check that vertex point is valid
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     rawOffsetPline[index].pos(), queryStack)) {
-     isValidPline = false;
-     break;
-     }
-
-     // check that the segment does not intersect original polyline
-     if (intersectsOrigPline(currSlice.lastVertex(), rawOffsetPline[index])) {
-     isValidPline = false;
-     break;
-     }
-
-     // add vertex
-     internal::addOrReplaceIfSamePos(currSlice, rawOffsetPline[index]);
-
-     // check if segment that starts at vertex we just added has an intersect
-     var nextIntr = intersectsLookup.find(index);
-     if (nextIntr != intersectsLookup.end()) {
-     // there is an intersect, slice is done, check if final segment is valid
-
-     // check intersect pos is valid (which will also be end vertex position)
-     final Vector2 intersectPos = nextIntr->second[0];
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     intersectPos, queryStack)) {
-     isValidPline = false;
-     break;
-     }
-
-     int nextIndex = utils::nextWrappingIndex(index, rawOffsetPline);
-     SplitResult split =
-     splitAtPoint(currSlice.lastVertex(), rawOffsetPline[nextIndex], intersectPos);
-
-     PlineVertex sliceEndVertex = PlineVertex(intersectPos, 0.0);
-     // check mid point is valid
-     Vector2 mp = segMidpoint(split.updatedStart, sliceEndVertex);
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, mp,
-     queryStack)) {
-     isValidPline = false;
-     break;
-     }
-
-     // trim last added vertex and add final intersect position
-     currSlice.lastVertex() = split.updatedStart;
-     internal::addOrReplaceIfSamePos(currSlice, sliceEndVertex);
-
-     break;
-     }
-     // else there is not an intersect, increment index and continue
-     index = utils::nextWrappingIndex(index, rawOffsetPline);
-     }
-
-     isValidPline = isValidPline && currSlice.size() > 1;
-
-     if (isValidPline && fuzzyEqual(currSlice[0].pos(), currSlice.lastVertex().pos())) {
-     // discard very short slice loops (invalid loops may arise due to valid offset distance
-     // thresholding)
-     isValidPline = getPathLength(currSlice) > double(1e-2);
-     }
-
-     if (isValidPline) {
-     result.emplace_back(sIndex, std::move(currSlice));
-     }
-     }
-
-     return result;
-     }
-     /// Stitches raw offset polyline slices together, discarding any that are not valid.
-
-     List<Polyline>
-     stitchOffsetSlicesTogether(final List<OpenPolylineSlice> slices, boolean closedPolyline,
-     int origMaxIndex) {
-     return stitchOffsetSlicesTogether(slices,closedPolyline,origMaxIndex,sliceJoinThreshold);
-     }
-     List<Polyline>
-     stitchOffsetSlicesTogether(final List<OpenPolylineSlice> slices, boolean closedPolyline,
-     int origMaxIndex,
-     double joinThreshold) {
-     List<Polyline> result=new ArrayList<>();
-     if (slices.size() == 0) {
-     return result;
-     }
-
-     if (slices.size() == 1) {
-     result.emplace_back(slices[0].pline);
-     if (closedPolyline &&
-     fuzzyEqual(result[0][0].pos(), result[0].lastVertex().pos(), joinThreshold)) {
-     result[0].isClosed() = true;
-     result[0].vertexes().pop_back();
-     }
-
-     return result;
-     }
-
-     // load spatial index with all start points
-     StaticSpatialIndex spatialIndex(slices.size());
-
-     for (final var slice : slices) {
-     final var point = slice.pline[0].pos();
-     spatialIndex.add(point.x() - joinThreshold, point.y() - joinThreshold,
-     point.x() + joinThreshold, point.y() + joinThreshold);
-     }
-
-     spatialIndex.finish();
-
-     List<Boolean> visitedIndexes(slices.size(), false);
-     List<int> queryResults;
-     List<int> queryStack;
-     queryStack.reserve(8);
-     for (int i = 0; i < slices.size(); ++i) {
-     if (visitedIndexes[i]) {
-     continue;
-     }
-
-     visitedIndexes[i] = true;
-
-     Polyline currPline;
-     int currIndex = i;
-     final var initialStartPoint = slices[i].pline[0].pos();
-     int loopCount = 0;
-     final int maxLoopCount = slices.size();
-     while (true) {
-     if (loopCount++ > maxLoopCount) {
-     assert false : "Bug detected, should never loop this many times!";
-     // break to avoid infinite loop
-     break;
-     }
-     final int currLoopStartIndex = slices[currIndex].intrStartIndex;
-     final var currSlice = slices[currIndex].pline;
-     final var currEndPoint = slices[currIndex].pline.lastVertex().pos();
-     currPline.vertexes().insert(currPline.vertexes().end(), currSlice.vertexes().begin(),
-     currSlice.vertexes().end());
-     queryResults.clear();
-     spatialIndex.query(currEndPoint.x() - joinThreshold, currEndPoint.y() - joinThreshold,
-     currEndPoint.x() + joinThreshold, currEndPoint.y() + joinThreshold,
-     queryResults, queryStack);
-
-     queryResults.erase(std::remove_if(queryResults.begin(), queryResults.end(),
-     [&](int index) { return visitedIndexes[index]; }),
-     queryResults.end());
-
-     var indexDistAndEqualInitial = [&](int index) {
-     final var slice = slices[index];
-     int indexDist;
-     if (currLoopStartIndex <= slice.intrStartIndex) {
-     indexDist = slice.intrStartIndex - currLoopStartIndex;
-     } else {
-     // forward wrapping distance (distance to end + distance to index)
-     indexDist = origMaxIndex - currLoopStartIndex + slice.intrStartIndex;
-     }
-
-     boolean equalToInitial = fuzzyEqual(slice.pline.lastVertex().pos(), initialStartPoint,
-     utils::realPrecision());
-
-     return std::make_pair(indexDist, equalToInitial);
-     };
-
-     std::sort(queryResults.begin(), queryResults.end(),
-     [&](int index1, int index2) {
-     var distAndEqualInitial1 = indexDistAndEqualInitial(index1);
-     var distAndEqualInitial2 = indexDistAndEqualInitial(index2);
-     if (distAndEqualInitial1.first == distAndEqualInitial2.first) {
-     // index distances are equal, compare on position being equal to initial start
-     // (testing index1 < index2, we want the longest closed loop possible)
-     return distAndEqualInitial1.second < distAndEqualInitial2.second;
-     }
-
-     return distAndEqualInitial1.first < distAndEqualInitial2.first;
-     });
-
-     if (queryResults.size() == 0) {
-     // we're done
-     if (currPline.size() > 1) {
-     if (closedPolyline && fuzzyEqual(currPline[0].pos(), currPline.lastVertex().pos(),
-     utils::realPrecision())) {
-     currPline.vertexes().pop_back();
-     currPline.isClosed() = true;
-     }
-     result.emplace_back(std::move(currPline));
-     }
-     break;
-     }
-
-     // else continue stitching
-     visitedIndexes[queryResults[0]] = true;
-     currPline.vertexes().pop_back();
-     currIndex = queryResults[0];
-     }
-     }
-
-     return result;
-     }
-
-     /// Slices a raw offset polyline at all of its self intersects and intersects with its dual.
-
-     List<OpenPolylineSlice>
-     dualSliceAtIntersectsForOffset(final Polyline originalPline,
-     final Polyline rawOffsetPline,
-     final Polyline dualRawOffsetPline, double offset) {
-     List<OpenPolylineSlice> result;
-     if (rawOffsetPline.size() < 2) {
-     return result;
-     }
-
-     StaticSpatialIndex origPlineSpatialIndex = createApproxSpatialIndex(originalPline);
-     StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
-
-     List<PlineIntersect> selfIntersects;
-     allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
-
-     PlineIntersectsResult dualIntersects;
-     findIntersects(rawOffsetPline, dualRawOffsetPline, rawOffsetPlineSpatialIndex, dualIntersects);
-
-     std::unordered_map<int, List<Vector2>> intersectsLookup;
-
-     if (!originalPline.isClosed()) {
-     // find intersects between circles generated at original open polyline end points and raw offset
-     // polyline
-     List<std::pair<int, Vector2>> intersects;
-     internal::offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline[0].pos(),
-     rawOffsetPlineSpatialIndex, intersects);
-     internal::offsetCircleIntersectsWithPline(rawOffsetPline, offset,
-     originalPline.lastVertex().pos(),
-     rawOffsetPlineSpatialIndex, intersects);
-     intersectsLookup.reserve(2 * selfIntersects.size() + intersects.size());
-     for (final var pair : intersects) {
-     intersectsLookup[pair.first].push_back(pair.second);
-     }
-     } else {
-     intersectsLookup.reserve(2 * selfIntersects.size());
-     }
-
-     for (final PlineIntersect si : selfIntersects) {
-     intersectsLookup[si.sIndex1].push_back(si.pos);
-     intersectsLookup[si.sIndex2].push_back(si.pos);
-     }
-
-     for (final PlineIntersect intr : dualIntersects.intersects) {
-     intersectsLookup[intr.sIndex1].push_back(intr.pos);
-     }
-
-     for (final PlineCoincidentIntersect intr : dualIntersects.coincidentIntersects) {
-     intersectsLookup[intr.sIndex1].push_back(intr.point1);
-     intersectsLookup[intr.sIndex1].push_back(intr.point2);
-     }
-
-     List<int> queryStack;
-     queryStack.reserve(8);
-     if (intersectsLookup.size() == 0) {
-     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline[0].pos(),
-     queryStack)) {
-     return result;
-     }
-     // copy and convert raw offset into open polyline
-     result.emplace_back(std::numeric_limits<int>::max(), rawOffsetPline);
-     result.back().pline.isClosed() = false;
-     if (originalPline.isClosed()) {
-     result.back().pline.addVertex(rawOffsetPline[0]);
-     result.back().pline.lastVertex().bulge() = 0.0;
-     }
-     return result;
-     }
-
-     // sort intersects by distance from start vertex
-     for (var kvp : intersectsLookup) {
-     Vector2 startPos = rawOffsetPline[kvp.first].pos();
-     var cmp = [&](final Vector2 si1, final Vector2 si2) {
-     return distSquared(si1, startPos) < distSquared(si2, startPos);
-     };
-     std::sort(kvp.second.begin(), kvp.second.end(), cmp);
-     }
-
-     var intersectsOrigPline = [&](final PlineVertex v1, final PlineVertex v2) {
-     AABB approxBB = createFastApproxBoundingBox(v1, v2);
-     boolean intersects = false;
-     var visitor = [&](int i) {
-     using namespace internal;
-     int j = utils::nextWrappingIndex(i, originalPline);
-     IntrPlineSegsResult intrResult =
-     intrPlineSegs(v1, v2, originalPline[i], originalPline[j]);
-     intersects = intrResult.intrType != PlineSegIntrType::NoIntersect;
-     return !intersects;
-     };
-
-     origPlineSpatialIndex.visitQuery(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax,
-     visitor, queryStack);
-
-     return intersects;
-     };
-
-     if (!originalPline.isClosed()) {
-     // build first open polyline that ends at the first intersect since we will not wrap back to
-     // capture it as in the case of a closed polyline
-     Polyline firstSlice;
-     int index = 0;
-     int loopCount = 0;
-     final int maxLoopCount = rawOffsetPline.size();
-     while (true) {
-     if (loopCount++ > maxLoopCount) {
-     assert false : "Bug detected, should never loop this many times!";
-     // break to avoid infinite loop
-     break;
-     }
-     var iter = intersectsLookup.find(index);
-     if (iter == intersectsLookup.end()) {
-     // no intersect found, test segment will be valid before adding the vertex
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     rawOffsetPline[index].pos(), queryStack)) {
-     break;
-     }
-
-     // index check (only test segment if we're not adding the first vertex)
-     if (index != 0 && intersectsOrigPline(firstSlice.lastVertex(), rawOffsetPline[index])) {
-     break;
-     }
-
-     internal::addOrReplaceIfSamePos(firstSlice, rawOffsetPline[index]);
-     } else {
-     // intersect found, test segment will be valid before finishing first open polyline
-     final Vector2 intersectPos = iter->second[0];
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     intersectPos, queryStack)) {
-     break;
-     }
-
-     SplitResult split =
-     splitAtPoint(rawOffsetPline[index], rawOffsetPline[index + 1], intersectPos);
-
-     PlineVertex sliceEndVertex = PlineVertex(intersectPos, 0.0);
-     var midpoint = segMidpoint(split.updatedStart, sliceEndVertex);
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
-     queryStack)) {
-     break;
-     }
-
-     if (intersectsOrigPline(split.updatedStart, sliceEndVertex)) {
-     break;
-     }
-
-     internal::addOrReplaceIfSamePos(firstSlice, split.updatedStart);
-     internal::addOrReplaceIfSamePos(firstSlice, sliceEndVertex);
-     result.emplace_back(0, std::move(firstSlice));
-     break;
-     }
-
-     index += 1;
-     }
-     }
-
-     for (final var kvp : intersectsLookup) {
-     // start index for the slice we're about to build
-     int sIndex = kvp.first;
-     // self intersect list for this start index
-     List<Vector2> final &siList = kvp.second;
-
-     final var startVertex = rawOffsetPline[sIndex];
-     int nextIndex = utils::nextWrappingIndex(sIndex, rawOffsetPline);
-     final var endVertex = rawOffsetPline[nextIndex];
-
-     if (siList.size() != 1) {
-     // build all the segments between the N intersects in siList (N > 1), skipping the first
-     // segment (to be processed at the end)
-     SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList[0]);
-     var prevVertex = firstSplit.splitVertex;
-     for (int i = 1; i < siList.size(); ++i) {
-     SplitResult split = splitAtPoint(prevVertex, endVertex, siList[i]);
-     // update prevVertex for next loop iteration
-     prevVertex = split.splitVertex;
-     // skip if they're ontop of each other
-     if (fuzzyEqual(split.updatedStart.pos(), split.splitVertex.pos(),
-     utils::realPrecision())) {
-     continue;
-     }
-
-     // test start point
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     split.updatedStart.pos(), queryStack)) {
-     continue;
-     }
-
-     // test end point
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     split.splitVertex.pos(), queryStack)) {
-     continue;
-     }
-
-     // test mid point
-     var midpoint = segMidpoint(split.updatedStart, split.splitVertex);
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
-     queryStack)) {
-     continue;
-     }
-
-     // test intersection with original polyline
-     if (intersectsOrigPline(split.updatedStart, split.splitVertex)) {
-     continue;
-     }
-
-     result.emplace_back();
-     result.back().intrStartIndex = sIndex;
-     result.back().pline.addVertex(split.updatedStart);
-     result.back().pline.addVertex(split.splitVertex);
-     }
-     }
-
-     // build the segment between the last intersect in siList and the next intersect found
-
-     // check that the first point is valid
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.back(),
-     queryStack)) {
-     continue;
-     }
-
-     SplitResult split = splitAtPoint(startVertex, endVertex, siList.back());
-     Polyline currSlice;
-     currSlice.addVertex(split.splitVertex);
-
-     int index = nextIndex;
-     boolean isValidPline = true;
-     int loopCount = 0;
-     final int maxLoopCount = rawOffsetPline.size();
-     while (true) {
-     if (loopCount++ > maxLoopCount) {
-     assert false : "Bug detected, should never loop this many times!";
-     // break to avoid infinite loop
-     break;
-     }
-     // check that vertex point is valid
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     rawOffsetPline[index].pos(), queryStack)) {
-     isValidPline = false;
-     break;
-     }
-
-     // check that the segment does not intersect original polyline
-     if (intersectsOrigPline(currSlice.lastVertex(), rawOffsetPline[index])) {
-     isValidPline = false;
-     break;
-     }
-
-     // add vertex
-     internal::addOrReplaceIfSamePos(currSlice, rawOffsetPline[index]);
-
-     // check if segment that starts at vertex we just added has an intersect
-     var nextIntr = intersectsLookup.find(index);
-     if (nextIntr != intersectsLookup.end()) {
-     // there is an intersect, slice is done, check if final segment is valid
-
-     // check intersect pos is valid (which will also be end vertex position)
-     final Vector2 intersectPos = nextIntr->second[0];
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
-     intersectPos, queryStack)) {
-     isValidPline = false;
-     break;
-     }
-
-     int nextIndex = utils::nextWrappingIndex(index, rawOffsetPline);
-     SplitResult split =
-     splitAtPoint(currSlice.lastVertex(), rawOffsetPline[nextIndex], intersectPos);
-
-     PlineVertex sliceEndVertex = PlineVertex(intersectPos, 0.0);
-     // check mid point is valid
-     Vector2 mp = segMidpoint(split.updatedStart, sliceEndVertex);
-     if (!internal::pointValidForOffset(originalPline, offset, origPlineSpatialIndex, mp,
-     queryStack)) {
-     isValidPline = false;
-     break;
-     }
-
-     // trim last added vertex and add final intersect position
-     currSlice.lastVertex() = split.updatedStart;
-     internal::addOrReplaceIfSamePos(currSlice, sliceEndVertex);
-
-     break;
-     }
-     // else there is not an intersect, increment index and continue
-     if (index == rawOffsetPline.size() - 1) {
-     if (originalPline.isClosed()) {
-     // wrap index
-     index = 0;
-     } else {
-     // open polyline, we're done
-     break;
-     }
-     } else {
-     index += 1;
-     }
-     }
-
-     if (isValidPline && currSlice.size() > 1) {
-     result.emplace_back(sIndex, std::move(currSlice));
-     }
-     }
-
-     return result;
-     }
      */
+    @NonNull
+    public List<Polyline> parallelOffset(@NonNull Polyline pline, double offset,
+                                         boolean hasSelfIntersects) {
+        if (pline.size() < 2) {
+            return new ArrayList<>();
+        }
+        var rawOffset = createRawOffsetPline(pline, offset);
+        if (pline.isClosed() && !hasSelfIntersects) {
+            var slices = slicesFromRawOffset(pline, rawOffset, offset);
+            return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
+        }
+
+        // not closed polyline or has self intersects, must apply dual clipping
+        var dualRawOffset = createRawOffsetPline(pline, -offset);
+        var slices = dualSliceAtIntersectsForOffset(pline, rawOffset, dualRawOffset, offset);
+        return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
+    }
+
+    List<OpenPolylineSlice> slicesFromRawOffset(final Polyline originalPline,
+                                                final Polyline rawOffsetPline,
+                                                double offset) {
+        assert originalPline.isClosed() : "use dual slice at intersects for open polylines";
+
+        List<OpenPolylineSlice> result = new ArrayList<>();
+        if (rawOffsetPline.size() < 2) {
+            return result;
+        }
+
+        StaticSpatialIndex origPlineSpatialIndex = createApproxSpatialIndex(originalPline);
+        StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
+
+        List<PlineIntersect> selfIntersects = new ArrayList<>();
+        allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
+
+        Deque<Integer> queryStack = new ArrayDeque<>(8);
+        if (selfIntersects.size() == 0) {
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.get(0).pos(),
+                    queryStack)) {
+                return result;
+            }
+            // copy and convert raw offset into open polyline
+            OpenPolylineSlice back = new OpenPolylineSlice(Integer.MAX_VALUE, rawOffsetPline);
+            result.add(back);
+            back.pline.isClosed(false);
+            back.pline.addVertex(rawOffsetPline.get(0));
+            back.pline.lastVertex().bulge(0.0);
+            return result;
+        }
+
+        Map<Integer, List<Point2D>> intersectsLookup = new HashMap<>(2 * selfIntersects.size());
+
+        for (final PlineIntersect si : selfIntersects) {
+            intersectsLookup.computeIfAbsent(si.sIndex1, k -> new ArrayList<>()).add(si.pos);
+            intersectsLookup.computeIfAbsent(si.sIndex2, k -> new ArrayList<>()).add(si.pos);
+        }
+
+        // sort intersects by distance from start vertex
+        for (var kvp : intersectsLookup.entrySet()) {
+            Point2D startPos = rawOffsetPline.get(kvp.getKey()).pos();
+            Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
+            kvp.getValue().sort(cmp);
+        }
+
+        BiPredicate<PlineVertex, PlineVertex> intersectsOrigPline = (final PlineVertex v1, final PlineVertex v2) -> {
+            AABB approxBB = createFastApproxBoundingBox(v1, v2);
+            boolean[] hasIntersect = new boolean[]{false};
+            IntPredicate visitor = (int i) -> {
+                int j = Utils.nextWrappingIndex(i, originalPline);
+                IntrPlineSegsResult intrResult =
+                        intrPlineSegs(v1, v2, originalPline.get(i), originalPline.get(j));
+                hasIntersect[0] = intrResult.intrType != PlineSegIntrType.NoIntersect;
+                return !hasIntersect[0];
+            };
+
+            origPlineSpatialIndex.visitQuery(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax,
+                    visitor, queryStack);
+
+            return hasIntersect[0];
+        };
+
+        for (final var kvp : intersectsLookup.entrySet()) {
+            // start index for the slice we're about to build
+            int sIndex = kvp.getKey();
+            // self intersect list for this start index
+            List<Point2D> siList = kvp.getValue();
+
+            final var startVertex = rawOffsetPline.get(sIndex);
+            int nextIndex = Utils.nextWrappingIndex(sIndex, rawOffsetPline);
+            final var endVertex = rawOffsetPline.get(nextIndex);
+
+            if (siList.size() != 1) {
+                // build all the segments between the N intersects in siList (N > 1), skipping the first
+                // segment (to be processed at the end)
+                SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.get(0));
+                var prevVertex = firstSplit.splitVertex;
+                for (int i = 1; i < siList.size(); ++i) {
+                    SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
+                    // update prevVertex for next loop iteration
+                    prevVertex = split.splitVertex;
+                    // skip if they're ontop of each other
+                    if (fuzzyEqual(split.updatedStart.pos(), split.splitVertex.pos(),
+                            Utils.realPrecision)) {
+                        continue;
+                    }
+
+                    // test start point
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            split.updatedStart.pos(), queryStack)) {
+                        continue;
+                    }
+
+                    // test end point
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            split.splitVertex.pos(), queryStack)) {
+                        continue;
+                    }
+
+                    // test mid point
+                    var midpoint = segMidpoint(split.updatedStart, split.splitVertex);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
+                            queryStack)) {
+                        continue;
+                    }
+
+                    // test intersection with original polyline
+                    if (intersectsOrigPline.test(split.updatedStart, split.splitVertex)) {
+                        continue;
+                    }
+
+                    OpenPolylineSlice back = new OpenPolylineSlice();
+                    result.add(back);
+                    back.intrStartIndex = sIndex;
+                    back.pline.addVertex(split.updatedStart);
+                    back.pline.addVertex(split.splitVertex);
+                }
+            }
+
+            // build the segment between the last intersect in siList and the next intersect found
+
+            // check that the first point is valid
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.get(siList.size() - 1),
+                    queryStack)) {
+                continue;
+            }
+
+            SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
+            Polyline currSlice = new Polyline();
+            currSlice.addVertex(split.splitVertex);
+
+            int index = nextIndex;
+            boolean isValidPline = true;
+            int loopCount = 0;
+            final int maxLoopCount = rawOffsetPline.size();
+            while (true) {
+                if (loopCount++ > maxLoopCount) {
+                    assert false : "Bug detected, should never loop this many times!";
+                    // break to avoid infinite loop
+                    break;
+                }
+                // check that vertex point is valid
+                if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                        rawOffsetPline.get(index).pos(), queryStack)) {
+                    isValidPline = false;
+                    break;
+                }
+
+                // check that the segment does not intersect original polyline
+                if (intersectsOrigPline.test(currSlice.lastVertex(), rawOffsetPline.get(index))) {
+                    isValidPline = false;
+                    break;
+                }
+
+                // add vertex
+                addOrReplaceIfSamePos(currSlice, rawOffsetPline.get(index));
+
+                // check if segment that starts at vertex we just added has an intersect
+                var nextIntr = intersectsLookup.get(index);
+                if (nextIntr != null) {
+                    // there is an intersect, slice is done, check if final segment is valid
+
+                    // check intersect pos is valid (which will also be end vertex position)
+                    final Point2D intersectPos = nextIntr.get(0);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
+                            intersectPos, queryStack)) {
+                        isValidPline = false;
+                        break;
+                    }
+
+                    nextIndex = Utils.nextWrappingIndex(index, rawOffsetPline);
+                    split =
+                            splitAtPoint(currSlice.lastVertex(), rawOffsetPline.get(nextIndex), intersectPos);
+
+                    PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
+                    // check mid point is valid
+                    Point2D mp = segMidpoint(split.updatedStart, sliceEndVertex);
+                    if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, mp,
+                            queryStack)) {
+                        isValidPline = false;
+                        break;
+                    }
+
+                    // trim last added vertex and add final intersect position
+                    currSlice.lastVertex(split.updatedStart);
+                    addOrReplaceIfSamePos(currSlice, sliceEndVertex);
+
+                    break;
+                }
+                // else there is not an intersect, increment index and continue
+                index = Utils.nextWrappingIndex(index, rawOffsetPline);
+            }
+
+            isValidPline = isValidPline && currSlice.size() > 1;
+
+            if (isValidPline && fuzzyEqual(currSlice.get(0).pos(), currSlice.lastVertex().pos())) {
+                // discard very short slice loops (invalid loops may arise due to valid offset distance
+                // thresholding)
+                isValidPline = currSlice.getPathLength() > 1e-2;
+            }
+
+            if (isValidPline) {
+                result.add(new OpenPolylineSlice(sIndex, currSlice));
+            }
+        }
+
+        return result;
+    }
+
+    List<Polyline>
+    stitchOffsetSlicesTogether(final List<OpenPolylineSlice> slices, boolean closedPolyline,
+                               int origMaxIndex) {
+        return stitchOffsetSlicesTogether(slices, closedPolyline, origMaxIndex,
+                sliceJoinThreshold);
+    }
+
+    List<Polyline>
+    stitchOffsetSlicesTogether(final List<OpenPolylineSlice> slices, boolean closedPolyline,
+                               int origMaxIndex,
+                               double joinThreshold) {
+        List<Polyline> result = new ArrayList<>();
+        if (slices.size() == 0) {
+            return result;
+        }
+
+        if (slices.size() == 1) {
+            result.add(slices.get(0).pline);
+            if (closedPolyline &&
+                    fuzzyEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
+                result.get(0).isClosed(true);
+                result.get(0).pop_back();
+            }
+
+            return result;
+        }
+
+        // load spatial index with all start points
+        StaticSpatialIndex spatialIndex = new StaticSpatialIndex(slices.size());
+
+        for (final var slice : slices) {
+            final var point = slice.pline.get(0).pos();
+            spatialIndex.add(point.getX() - joinThreshold, point.getY() - joinThreshold,
+                    point.getX() + joinThreshold, point.getY() + joinThreshold);
+        }
+
+        spatialIndex.finish();
+
+        BitSet visitedIndexes = new BitSet(slices.size());
+        List<Integer> queryResults = new ArrayList<>();
+        Deque<Integer> queryStack = new ArrayDeque<>(8);
+        for (int i = 0; i < slices.size(); ++i) {
+            if (visitedIndexes.get(i)) {
+                continue;
+            }
+
+            visitedIndexes.set(i, true);
+
+            Polyline currPline = new Polyline();
+            int currIndex = i;
+            final var initialStartPoint = slices.get(i).pline.get(0).pos();
+            int loopCount = 0;
+            final int maxLoopCount = slices.size();
+            while (true) {
+                if (loopCount++ > maxLoopCount) {
+                    assert false : "Bug detected, should never loop this many times!";
+                    // break to avoid infinite loop
+                    break;
+                }
+                final int currLoopStartIndex = slices.get(currIndex).intrStartIndex;
+                final var currSlice = slices.get(currIndex).pline;
+                final var currEndPoint = slices.get(currIndex).pline.lastVertex().pos();
+                currPline.addAll(currSlice);
+                queryResults.clear();
+                spatialIndex.query(currEndPoint.getX() - joinThreshold, currEndPoint.getY() - joinThreshold,
+                        currEndPoint.getX() + joinThreshold, currEndPoint.getY() + joinThreshold,
+                        queryResults, queryStack);
+
+                queryResults.removeIf(visitedIndexes::get);
+
+                Function<Integer, OrderedPair<Integer, Boolean>> indexDistAndEqualInitial = (Integer index) -> {
+                    final var slice = slices.get(index);
+                    int indexDist;
+                    if (currLoopStartIndex <= slice.intrStartIndex) {
+                        indexDist = slice.intrStartIndex - currLoopStartIndex;
+                    } else {
+                        // forward wrapping distance (distance to end + distance to index)
+                        indexDist = origMaxIndex - currLoopStartIndex + slice.intrStartIndex;
+                    }
+
+                    boolean equalToInitial = fuzzyEqual(slice.pline.lastVertex().pos(), initialStartPoint,
+                            Utils.realPrecision);
+
+                    return new OrderedPair<>(indexDist, equalToInitial);
+                };
+
+                queryResults.sort(
+                        (Integer index1, Integer index2) -> {
+                            var distAndEqualInitial1 = indexDistAndEqualInitial.apply(index1);
+                            var distAndEqualInitial2 = indexDistAndEqualInitial.apply(index2);
+                            if (distAndEqualInitial1.first() == distAndEqualInitial2.first()) {
+                                // index distances are equal, compare on position being equal to initial start
+                                // (testing index1 < index2, we want the longest closed loop possible)
+                                return (distAndEqualInitial1.second() ? 1 : 0) - (distAndEqualInitial2.second() ? 1 : 0);
+                            }
+
+                            return distAndEqualInitial1.first() - distAndEqualInitial2.first();
+                        });
+
+                if (queryResults.size() == 0) {
+                    // we're done
+                    if (currPline.size() > 1) {
+                        if (closedPolyline && fuzzyEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
+                                Utils.realPrecision)) {
+                            currPline.pop_back();
+                            currPline.isClosed(true);
+                        }
+                        result.add(currPline);
+                    }
+                    break;
+                }
+
+                // else continue stitching
+                visitedIndexes.set(queryResults.get(0), true);
+                currPline.pop_back();
+                currIndex = queryResults.get(0);
+            }
+        }
+
+        return result;
+    }
 }
