@@ -72,12 +72,13 @@ import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -417,8 +418,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         DrawingModel model = getModel();
 
         // Also delete dependent figures.
-        // FIXME this does not work in all cases!
-        Set<Figure> cascade = new LinkedHashSet<>(figures);
+        Deque<Figure> cascade = new ArrayDeque<>(figures);
         for (Figure f : figures) {
             for (Figure ff : f.preorderIterable()) {
                 StreamSupport.stream(new TreeBreadthFirstSpliterator<Figure>(
@@ -427,7 +427,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                                                 .filter(x -> x.getLayoutSubjects().size() == 1).iterator()
                                 , ff),
                         false)
-                        .forEach(cascade::add);
+                        .forEach(cascade::addFirst);
             }
         }
         for (Figure f : cascade) {

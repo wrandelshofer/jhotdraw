@@ -428,6 +428,7 @@ public interface DrawingView extends RenderContext {
 
     default void setDrawing(Drawing newValue) {
         getModel().setRoot(newValue);
+        setActiveParent(null);
     }
 
     default Drawing getDrawing() {
@@ -478,7 +479,6 @@ public interface DrawingView extends RenderContext {
         Set<Figure> selection = getSelectedFigures();
         return selection.isEmpty() ? null : selection.iterator().next();
     }
-
 
     default void setActiveParent(@Nullable Figure newValue) {
         activeParentProperty().set(newValue);

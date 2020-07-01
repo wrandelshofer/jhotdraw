@@ -83,7 +83,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     protected void onNodeAdded(N f, N parentE, int index) {
-        TreeItem<N> item = items.get(f);
+        TreeItem<N> item = items.computeIfAbsent(f, TreeItem::new);
         TreeItem<N> newParent = items.get(parentE);
         if (reversed) {
             newParent.getChildren().add(newParent.getChildren().size() - index, item);

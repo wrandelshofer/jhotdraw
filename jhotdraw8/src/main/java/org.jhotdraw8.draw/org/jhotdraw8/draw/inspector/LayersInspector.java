@@ -84,11 +84,16 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     @Nullable
     private ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
+        int changedRecursion = 0;
+
         @Override
         public void changed(ObservableValue<? extends Figure> observable, Figure oldValue, @Nullable Figure newValue) {
-            if (newValue != null) {
-                listView.getSelectionModel().select(newValue);
+            if (changedRecursion++ == 0) {
+                if (newValue != null) {
+                    listView.getSelectionModel().select(newValue);
+                }
             }
+            changedRecursion--;
         }
     };
     @Nullable
