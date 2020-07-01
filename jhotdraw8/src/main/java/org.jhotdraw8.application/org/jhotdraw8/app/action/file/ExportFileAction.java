@@ -67,7 +67,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(EXPORT_CHOOSER_FACTORY_KEY);
             chooser = factory == null ? new FileURIChooser(FileURIChooser.Mode.SAVE) : factory.get();
-            app.put(SAVE_CHOOSER_KEY, chooser);
+            app.put(EXPORT_CHOOSER_KEY, chooser);
         }
         return chooser;
     }

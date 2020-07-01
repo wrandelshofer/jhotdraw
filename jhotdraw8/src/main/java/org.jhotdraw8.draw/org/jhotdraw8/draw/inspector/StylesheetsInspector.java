@@ -24,6 +24,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
@@ -186,10 +187,13 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             return;
         }
         getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
+        updateAllFigures();
+        /*
         getDrawing().updateStyleManager();
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireStyleInvalidated(f);
-        }
+        }*/
+
     }
 
     @Override
@@ -220,9 +224,22 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     }
 
     private void onRefreshAction(ActionEvent event) {
+        updateAllFigures();
+    }
+
+    private void updateAllFigures() {
+        Drawing drawing = getDrawing();
+        final DrawingView subject = getSubject();
+        if (drawing == null || subject == null) {
+            return;
+        }
         getDrawing().updateStyleManager();
+
+        // FIXME calling updateAllCss and then fireLayoutInvalidated
+        //       is faster than calling fireStyleInvalidated.
+        getDrawing().updateAllCss(subject);
         for (Figure f : getDrawing().preorderIterable()) {
-            getDrawingModel().fireStyleInvalidated(f);
+            getDrawingModel().fireLayoutInvalidated(f);
         }
     }
 }

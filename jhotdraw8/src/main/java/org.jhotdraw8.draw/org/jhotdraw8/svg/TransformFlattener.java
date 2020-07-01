@@ -21,6 +21,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
@@ -88,7 +89,7 @@ public class TransformFlattener {
         // apply  translation to children
         if (!translate.isIdentity()) {
             for (Node child : group.getChildren()) {
-                child.getTransforms().add(translate);
+                child.getTransforms().add(0, translate);
             }
         }
         // try to flatten the children
@@ -183,14 +184,24 @@ public class TransformFlattener {
         path.setEndY(p2.getY());
     }
 
-    private void flattenTranslatesInRectangle(@NonNull Rectangle path) {
-        if (!canFlattenTranslate(path)) {
+    private void flattenTranslatesInRectangle(@NonNull Rectangle rectangle) {
+        if (!canFlattenTranslate(rectangle)) {
             return;
         }
-        Translate t = flattenTranslate(path);
-        Point2D p = t.transform(path.getX(), path.getY());
-        path.setX(p.getX());
-        path.setY(p.getY());
+        Translate t = flattenTranslate(rectangle);
+        Point2D p = t.transform(rectangle.getX(), rectangle.getY());
+        rectangle.setX(p.getX());
+        rectangle.setY(p.getY());
+    }
+
+    private void flattenTranslatesInText(@NonNull Text text) {
+        if (!canFlattenTranslate(text)) {
+            return;
+        }
+        Translate t = flattenTranslate(text);
+        Point2D p = t.transform(text.getX(), text.getY());
+        text.setX(p.getX());
+        text.setY(p.getY());
     }
 
     private void flattenTranslatesInShape(Shape shape) {
@@ -204,6 +215,8 @@ public class TransformFlattener {
             flattenTranslatesInLine((Line) shape);
         } else if (shape instanceof Rectangle) {
             flattenTranslatesInRectangle((Rectangle) shape);
+        } else if (shape instanceof Text) {
+            flattenTranslatesInText((Text) shape);
         }
         // FIXME implement more shapes
     }

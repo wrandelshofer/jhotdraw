@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -119,7 +118,7 @@ public class Intersection {
                 || status != Status.INTERSECTION && !intersections.isEmpty()) {
             throw new IllegalArgumentException("status=" + status + " intersections=" + intersections);
         }
-        intersections.sort(Comparator.comparingDouble(IntersectionPoint::getT1));
+        //intersections.sort(Comparator.comparingDouble(IntersectionPoint::getT1));
 
         this.intersections = Collections.unmodifiableList(intersections);
         this.status = status;

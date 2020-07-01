@@ -107,6 +107,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     private AbstractSvgSceneGraphExporter createExporter() {
         AbstractSvgSceneGraphExporter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setUriResolver(getUriResolver());
+        exporter.setExportInvisibleElements(getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY));
         return exporter;
     }
 
@@ -146,7 +147,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final AbstractSvgSceneGraphExporter exporter = createExporter();
-        exporter.setExportInvisibleElements(getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY));
         exporter.setRelativizePaths(true);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
