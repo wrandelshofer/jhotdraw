@@ -29,8 +29,8 @@ import static java.lang.Double.max;
  *
  * @author Werner Randelshofer
  */
-public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Rectangle2D>
-        implements NonNullMapAccessor<Rectangle2D> {
+public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Rectangle2D>
+        implements NonNullMapAccessor<@NonNull Rectangle2D> {
 
     private final static long serialVersionUID = 1L;
 
@@ -77,9 +77,8 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
         this.heightKey = heightKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Rectangle2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Rectangle2D> getCssMetaData() {
         return cssMetaData;
 
     }

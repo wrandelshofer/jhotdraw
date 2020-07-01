@@ -77,9 +77,8 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
         converter = new CssRegexConverter(isNullable());
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, RegexReplace> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, RegexReplace> getCssMetaData() {
         return cssMetaData;
 
     }

@@ -14,15 +14,16 @@ import org.jhotdraw8.collection.ObjectKey;
  *
  * @author Werner Randelshofer
  */
-public class ObjectFigureKey<T> extends ObjectKey<T> implements
-        NonNullMapAccessor<T> {
+public class ObjectFigureKey<@NonNull T> extends ObjectKey<@NonNull T> implements
+        NonNullMapAccessor<@NonNull T> {
 
     final static long serialVersionUID = 1L;
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value.
-     *  @param key          The name of the name.
+     *
+     * @param key          The name of the name.
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */

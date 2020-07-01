@@ -22,8 +22,8 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.function.Function;
 
-public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<MLCompartmentalizedData>
-        implements WriteableStyleableMapAccessor<MLCompartmentalizedData>, NonNullMapAccessor<MLCompartmentalizedData> {
+public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<@NonNull MLCompartmentalizedData>
+        implements WriteableStyleableMapAccessor<@NonNull MLCompartmentalizedData>, NonNullMapAccessor<@NonNull MLCompartmentalizedData> {
 
     final static long serialVersionUID = 1L;
     @NonNull
@@ -74,9 +74,8 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, MLCompartmentalizedData> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull MLCompartmentalizedData> getCssMetaData() {
         return cssMetaData;
 
     }

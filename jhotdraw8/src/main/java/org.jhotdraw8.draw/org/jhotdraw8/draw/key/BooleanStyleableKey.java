@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBooleanConverter;
@@ -20,12 +21,12 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
-        implements WriteableStyleableMapAccessor<Boolean>,
-        NonNullMapAccessor<Boolean> {
+public class BooleanStyleableKey extends AbstractStyleableKey<@NonNull Boolean>
+        implements WriteableStyleableMapAccessor<@NonNull Boolean>,
+        NonNullMapAccessor<@NonNull Boolean> {
 
     final static long serialVersionUID = 1L;
-    private final CssMetaData<? extends Styleable, Boolean> cssMetaData;
+    private final CssMetaData<? extends Styleable, @NonNull Boolean> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -33,7 +34,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *
      * @param name The name of the key.
      */
-    public BooleanStyleableKey(String name) {
+    public BooleanStyleableKey(@NonNull String name) {
         this(name, false);
     }
 
@@ -46,7 +47,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public BooleanStyleableKey(String key, boolean defaultValue) {
+    public BooleanStyleableKey(@NonNull String key, boolean defaultValue) {
         this(null, key, defaultValue);
     }
 
@@ -58,7 +59,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public BooleanStyleableKey(@Nullable String namespace, String key, boolean defaultValue) {
+    public BooleanStyleableKey(@Nullable String namespace, @NonNull String key, boolean defaultValue) {
         super(namespace, key, Boolean.class, false, defaultValue);
 
         StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
@@ -70,15 +71,15 @@ public class BooleanStyleableKey extends AbstractStyleableKey<Boolean>
     }
 
     @Override
-    public CssMetaData<? extends Styleable, Boolean> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull Boolean> getCssMetaData() {
         return cssMetaData;
 
     }
 
-    private Converter<Boolean> converter;
+    private Converter<@NonNull Boolean> converter;
 
     @Override
-    public Converter<Boolean> getConverter() {
+    public @NonNull Converter<@NonNull Boolean> getConverter() {
         if (converter == null) {
             converter = new CssBooleanConverter(isNullable());
         }

@@ -69,7 +69,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
     }
 
     @Override
-    public CssMetaData<? extends Styleable, Boolean> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Boolean> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -77,7 +77,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
     private Converter<Boolean> converter;
 
     @Override
-    public Converter<Boolean> getConverter() {
+    public @NonNull Converter<Boolean> getConverter() {
         if (converter == null) {
             converter = new CssBooleanConverter(isNullable());
         }

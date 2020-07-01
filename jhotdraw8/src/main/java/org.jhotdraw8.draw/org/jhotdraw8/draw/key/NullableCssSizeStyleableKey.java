@@ -63,9 +63,8 @@ public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
         return converter;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, CssSize> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssSize> getCssMetaData() {
         return cssMetaData;
 
     }

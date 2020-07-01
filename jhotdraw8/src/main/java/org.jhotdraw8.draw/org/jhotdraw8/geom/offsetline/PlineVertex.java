@@ -173,7 +173,7 @@ public class PlineVertex {
             result.updatedStart = v1;
             result.splitVertex = new PlineVertex(v2.pos(), 0.0);
         } else {
-            var radiusAndCenter = arcRadiusAndCenter(v1, v2);
+            BulgeConversionFunctions.ArcRadiusAndCenter radiusAndCenter = arcRadiusAndCenter(v1, v2);
             Point2D arcCenter = radiusAndCenter.center;
             double a = angle(arcCenter, point);
             double arcStartAngle = angle(arcCenter, v1.pos());

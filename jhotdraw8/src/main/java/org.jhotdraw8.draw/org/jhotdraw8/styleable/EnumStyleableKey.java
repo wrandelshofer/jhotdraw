@@ -5,8 +5,10 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -17,8 +19,8 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
-        implements WriteableStyleableMapAccessor<T>, NonNullMapAccessor<T> {
+public class EnumStyleableKey<@Nullable T extends Enum<T>> extends SimpleStyleableKey<@Nullable T>
+        implements WriteableStyleableMapAccessor<@Nullable T>, NonNullMapAccessor<@Nullable T> {
 
     private final static long serialVersionUID = 1L;
 
@@ -33,7 +35,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public EnumStyleableKey(String name, Class<T> clazz, @NonNull T defaultValue) {
+    public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @Nullable T defaultValue) {
         super(name, clazz, null, null, defaultValue);
 
         converter = new CssEnumConverter<>(getValueType(), false);
@@ -46,7 +48,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
     }
 
     @Override
-    public CssMetaData<?, T> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, T> getCssMetaData() {
         return cssMetaData;
 
     }

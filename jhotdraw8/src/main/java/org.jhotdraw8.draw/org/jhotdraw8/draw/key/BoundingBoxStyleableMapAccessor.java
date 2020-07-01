@@ -74,9 +74,8 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         this.heightKey = heightKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, BoundingBox> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, BoundingBox> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -84,7 +83,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
     private Converter<BoundingBox> converter;
 
     @Override
-    public Converter<BoundingBox> getConverter() {
+    public @NonNull Converter<BoundingBox> getConverter() {
         if (converter == null) {
             converter = new CssBoundingBoxConverter(false);
         }

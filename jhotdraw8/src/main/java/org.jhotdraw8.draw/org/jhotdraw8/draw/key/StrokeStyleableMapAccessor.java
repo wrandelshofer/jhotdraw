@@ -94,9 +94,8 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
         this.miterLimitKey = miterLimitKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssStrokeStyle> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssStrokeStyle> getCssMetaData() {
         return cssMetaData;
 
     }

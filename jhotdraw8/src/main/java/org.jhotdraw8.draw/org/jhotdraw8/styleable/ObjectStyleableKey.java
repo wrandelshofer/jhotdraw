@@ -54,9 +54,8 @@ public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyl
         cssMetaData = new SimpleCssMetaData<>(name, function, styleConverter, defaultValue, false);
     }
 
-    @Nullable
     @Override
-    public CssMetaData<? extends Styleable, T> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, T> getCssMetaData() {
         return cssMetaData;
     }
 

@@ -62,9 +62,8 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Insets> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Insets> getCssMetaData() {
         return cssMetaData;
 
     }

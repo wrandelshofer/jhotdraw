@@ -27,15 +27,15 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<Point2D>>
-        implements WriteableStyleableMapAccessor<ImmutableList<Point2D>>, NonNullMapAccessor<ImmutableList<Point2D>> {
+public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull ImmutableList<@NonNull Point2D>>
+        implements WriteableStyleableMapAccessor<@NonNull ImmutableList<@NonNull Point2D>>, NonNullMapAccessor<ImmutableList<@NonNull Point2D>> {
 
     private final static long serialVersionUID = 1L;
 
     @NonNull
-    private final CssMetaData<?, ImmutableList<Point2D>> cssMetaData;
+    private final CssMetaData<?, ImmutableList<@NonNull Point2D>> cssMetaData;
     @NonNull
-    private final Converter<ImmutableList<Point2D>> converter;
+    private final Converter<ImmutableList<@NonNull Point2D>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -49,10 +49,11 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
 
     /**
      * Creates a new instance with the specified name, mask and default value.
-     *  @param name         The name of the key.
+     *
+     * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableKey(@NonNull String name, ImmutableList<Point2D> defaultValue) {
+    public Point2DListStyleableKey(@NonNull String name, @NonNull ImmutableList<@NonNull Point2D> defaultValue) {
         super(name, ImmutableList.class, new Class<?>[]{Point2D.class}, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Point2D>>> function = s -> {
@@ -70,9 +71,8 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<Point2D>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<Point2D>> getCssMetaData() {
         return cssMetaData;
     }
 

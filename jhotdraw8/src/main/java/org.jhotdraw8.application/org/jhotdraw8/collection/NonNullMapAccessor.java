@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public interface NonNullMapAccessor<T> extends MapAccessor<T> {
+public interface NonNullMapAccessor<@NonNull T> extends MapAccessor<T> {
     long serialVersionUID = 1L;
 
     /**

@@ -64,9 +64,8 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssColor> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssColor> getCssMetaData() {
         return cssMetaData;
 
     }

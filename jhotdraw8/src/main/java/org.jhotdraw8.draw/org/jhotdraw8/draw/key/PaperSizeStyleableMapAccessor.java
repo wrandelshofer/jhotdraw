@@ -74,16 +74,15 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
 
 
     @Override
-    public Converter<CssPoint2D> getConverter() {
+    public @NonNull Converter<CssPoint2D> getConverter() {
         if (converter == null) {
             converter = new CssPaperSizeConverter();
         }
         return converter;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssPoint2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssPoint2D> getCssMetaData() {
         return cssMetaData;
 
     }

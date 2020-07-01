@@ -25,15 +25,14 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implements WriteableStyleableMapAccessor<CssSize>,
-        NonNullMapAccessor<CssSize> {
+public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> implements WriteableStyleableMapAccessor<@NonNull CssSize>,
+        NonNullMapAccessor<@NonNull CssSize> {
 
     final static long serialVersionUID = 1L;
 
-    private final Converter<CssSize> converter = new CssSizeConverter(false);
+    private final Converter<@NonNull CssSize> converter = new CssSizeConverter(false);
     @NonNull
-    private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
-
+    private final CssMetaData<@NonNull Styleable, @NonNull CssSize> cssMetaData;
 
 
     /**
@@ -44,15 +43,15 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implement
     public CssSizeStyleableKey(String name, @NonNull CssSize defaultValue) {
         super(name, CssSize.class, defaultValue);
 
-        Function<Styleable, StyleableProperty<CssSize>> function = s -> {
+        Function<Styleable, StyleableProperty<@NonNull CssSize>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssSize> cvrtr
+        final StyleConverter<String, @NonNull CssSize> cvrtr
                 = new StyleConverterAdapter<>(converter);
-        CssMetaData<Styleable, CssSize> md
+        CssMetaData<@NonNull Styleable, @NonNull CssSize> md
                 = new SimpleCssMetaData<>(property, function,
                 cvrtr, defaultValue, inherits);
         cssMetaData = md;
@@ -65,9 +64,8 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implement
         return converter;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, CssSize> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssSize> getCssMetaData() {
         return cssMetaData;
 
     }

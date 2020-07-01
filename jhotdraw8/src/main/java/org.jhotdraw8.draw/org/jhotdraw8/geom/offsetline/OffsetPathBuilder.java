@@ -110,19 +110,19 @@ public class OffsetPathBuilder {
     void arcToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                       boolean connectionArcsAreCCW, Polyline result) {
 
-        final var v1 = s1.v1;
-        final var v2 = s1.v2;
-        final var u1 = s2.v1;
-        final var u2 = s2.v2;
+        final PlineVertex v1 = s1.v1;
+        final PlineVertex v2 = s1.v2;
+        final PlineVertex u1 = s2.v1;
+        final PlineVertex u2 = s2.v2;
         assert !v1.bulgeIsZero() && !u1.bulgeIsZero() : "both segs should be arcs";
 
-        final var arc1 = arcRadiusAndCenter(v1, v2);
-        final var arc2 = arcRadiusAndCenter(u1, u2);
+        final BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
+        final BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
         Runnable connectUsingArc = () -> {
-            final var arcCenter = s1.origV2Pos;
-            final var sp = v2.pos();
-            final var ep = u1.pos();
+            final Point2D arcCenter = s1.origV2Pos;
+            final Point2D sp = v2.pos();
+            final Point2D ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, u1);
@@ -139,7 +139,7 @@ public class OffsetPathBuilder {
                 PlineVertex prevVertex = result.lastVertex();
                 if (!prevVertex.bulgeIsZero()) {
                     double a1 = angle(arc1.center, intersect);
-                    var prevArc = arcRadiusAndCenter(prevVertex, v2);
+                    BulgeConversionFunctions.ArcRadiusAndCenter prevArc = arcRadiusAndCenter(prevVertex, v2);
                     double prevArcStartAngle = angle(prevArc.center, prevVertex.pos());
                     double updatedPrevTheta = deltaAngle(prevArcStartAngle, a1);
 
@@ -168,7 +168,7 @@ public class OffsetPathBuilder {
             }
         };
 
-        final var intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
+        final IntrCircle2Circle2Result intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
         switch (intrResult.intrType) {
         case NoIntersect:
             connectUsingArc.run();
@@ -196,23 +196,23 @@ public class OffsetPathBuilder {
     void arcToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                        boolean connectionArcsAreCCW, Polyline result) {
 
-        final var v1 = s1.v1;
-        final var v2 = s1.v2;
-        final var u1 = s2.v1;
-        final var u2 = s2.v2;
+        final PlineVertex v1 = s1.v1;
+        final PlineVertex v2 = s1.v2;
+        final PlineVertex u1 = s2.v1;
+        final PlineVertex u2 = s2.v2;
         assert !v1.bulgeIsZero() && u1.bulgeIsZero() :
                 "first seg should be line, second seg should be arc";
 
         Runnable connectUsingArc = () -> {
-            final var arcCenter = s1.origV2Pos;
-            final var sp = v2.pos();
-            final var ep = u1.pos();
+            final Point2D arcCenter = s1.origV2Pos;
+            final Point2D sp = v2.pos();
+            final Point2D ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, u1);
         };
 
-        final var arc = arcRadiusAndCenter(v1, v2);
+        final BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
 
         BiConsumer<Double, Point2D> processIntersect = (Double t, final Point2D intersect) -> {
             final boolean trueSegIntersect = !falseIntersect(t);
@@ -224,7 +224,7 @@ public class OffsetPathBuilder {
 
                 if (!prevVertex.bulgeIsZero()) {
                     double a = angle(arc.center, intersect);
-                    var prevArc = arcRadiusAndCenter(prevVertex, v2);
+                    BulgeConversionFunctions.ArcRadiusAndCenter prevArc = arcRadiusAndCenter(prevVertex, v2);
                     double prevArcStartAngle = angle(prevArc.center, prevVertex.pos());
                     double updatedPrevTheta = deltaAngle(prevArcStartAngle, a);
 
@@ -242,14 +242,14 @@ public class OffsetPathBuilder {
             }
         };
 
-        var intrResult = intrLineSeg2Circle2(u1.pos(), u2.pos(), arc.radius, arc.center);
+        IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(u1.pos(), u2.pos(), arc.radius, arc.center);
         if (intrResult.numIntersects == 0) {
             connectUsingArc.run();
         } else if (intrResult.numIntersects == 1) {
             processIntersect.accept(intrResult.t0, pointFromParametric(u1.pos(), u2.pos(), intrResult.t0));
         } else {
             assert intrResult.numIntersects == 2 : "should have 2 intersects here";
-            final var origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
+            final Point2D origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
             Point2D i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
             double dist1 = Geom.squaredDistance(i1, origPoint);
             Point2D i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
@@ -326,22 +326,22 @@ public class OffsetPathBuilder {
         // two segment joins for closed polyline)
         if (rawOffsets.size() > 1) {
 
-            final var seg01 = rawOffsets.get(0);
-            final var seg12 = rawOffsets.get(1);
+            final PlineOffsetSegment seg01 = rawOffsets.get(0);
+            final PlineOffsetSegment seg12 = rawOffsets.get(1);
             joinResultVisitor.accept(seg01, seg12, result);
         }
         final boolean firstVertexReplaced = result.size() == 1;
 
         for (int i = 2; i < rawOffsets.size(); ++i) {
-            final var seg1 = rawOffsets.get(i - 1);
-            final var seg2 = rawOffsets.get(i);
+            final PlineOffsetSegment seg1 = rawOffsets.get(i - 1);
+            final PlineOffsetSegment seg2 = rawOffsets.get(i);
             joinResultVisitor.accept(seg1, seg2, result);
         }
 
         if (pline.isClosed() && result.size() > 1) {
             // joining segments at vertex indexes (n, 0) and (0, 1)
-            final var s1 = rawOffsets.get(rawOffsets.size() - 1);
-            final var s2 = rawOffsets.get(0);
+            final PlineOffsetSegment s1 = rawOffsets.get(rawOffsets.size() - 1);
+            final PlineOffsetSegment s2 = rawOffsets.get(0);
 
             // temp polyline to capture results of joining (to avoid mutating result)
             Polyline closingPartResult = new Polyline();
@@ -363,7 +363,7 @@ public class OffsetPathBuilder {
                     result.get(0).pos(updatedFirstPos);
                 } else if (result.size() > 1) {
                     // update position and bulge
-                    final var arc = arcRadiusAndCenter(result.get(0), result.get(1));
+                    final BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(result.get(0), result.get(1));
                     final double a1 = angle(arc.center, updatedFirstPos);
                     final double a2 = angle(arc.center, result.get(1).pos());
                     final double updatedTheta = deltaAngle(a1, a2);
@@ -420,7 +420,7 @@ public class OffsetPathBuilder {
         };
 
         BiConsumer<PlineVertex, PlineVertex> arcVisitor = (v1, v2) -> {
-            var arc = arcRadiusAndCenter(v1, v2);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
             double offs = v1.bulgeIsNeg() ? offset : -offset;
             double radiusAfterOffset = arc.radius + offs;
             Point2D v1ToCenter = v1.pos().subtract(arc.center).normalize();
@@ -457,23 +457,23 @@ public class OffsetPathBuilder {
     void lineToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                        boolean connectionArcsAreCCW, Polyline result) {
 
-        final var v1 = s1.v1;
-        final var v2 = s1.v2;
-        final var u1 = s2.v1;
-        final var u2 = s2.v2;
+        final PlineVertex v1 = s1.v1;
+        final PlineVertex v2 = s1.v2;
+        final PlineVertex u1 = s2.v1;
+        final PlineVertex u2 = s2.v2;
         assert v1.bulgeIsZero() && !u1.bulgeIsZero() :
                 "first seg should be arc, second seg should be line";
 
         Runnable connectUsingArc = () -> {
-            final var arcCenter = s1.origV2Pos;
-            final var sp = v2.pos();
-            final var ep = u1.pos();
+            final Point2D arcCenter = s1.origV2Pos;
+            final Point2D sp = v2.pos();
+            final Point2D ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, u1);
         };
 
-        final var arc = arcRadiusAndCenter(u1, u2);
+        final BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(u1, u2);
 
         BiConsumer<Double, Point2D> processIntersect = (Double t, final Point2D intersect) -> {
             final boolean trueSegIntersect = !falseIntersect(t);
@@ -503,7 +503,7 @@ public class OffsetPathBuilder {
             }
         };
 
-        var intrResult = intrLineSeg2Circle2(v1.pos(), v2.pos(), arc.radius, arc.center);
+        IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(v1.pos(), v2.pos(), arc.radius, arc.center);
         if (intrResult.numIntersects == 0) {
             connectUsingArc.run();
         } else if (intrResult.numIntersects == 1) {
@@ -526,16 +526,16 @@ public class OffsetPathBuilder {
 
     void lineToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                         boolean connectionArcsAreCCW, Polyline result) {
-        final var v1 = s1.v1;
-        final var v2 = s1.v2;
-        final var u1 = s2.v1;
-        final var u2 = s2.v2;
+        final PlineVertex v1 = s1.v1;
+        final PlineVertex v2 = s1.v2;
+        final PlineVertex u1 = s2.v1;
+        final PlineVertex u2 = s2.v2;
         assert v1.bulgeIsZero() && u1.bulgeIsZero() : "both segs should be lines";
 
         Runnable connectUsingArc = () -> {
-            final var arcCenter = s1.origV2Pos;
-            final var sp = v2.pos();
-            final var ep = u1.pos();
+            final Point2D arcCenter = s1.origV2Pos;
+            final Point2D sp = v2.pos();
+            final Point2D ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, new PlineVertex(ep, 0.0));
@@ -545,7 +545,7 @@ public class OffsetPathBuilder {
             // connecting to/from collapsed arc, always connect using arc
             connectUsingArc.run();
         } else {
-            var intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntrLineSeg2LineSeg2Result intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
 
             switch (intrResult.intrType) {
             case None:

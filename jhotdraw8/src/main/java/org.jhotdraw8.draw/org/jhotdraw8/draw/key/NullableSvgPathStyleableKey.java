@@ -71,9 +71,8 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, String> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }

@@ -80,9 +80,8 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, String> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }

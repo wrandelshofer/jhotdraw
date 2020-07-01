@@ -9,7 +9,6 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.StringKey;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
@@ -43,9 +42,8 @@ public class StringStyleableKey extends StringKey implements WriteableStyleableM
         cssName = ReadOnlyStyleableMapAccessor.toCssName(getName());
     }
 
-    @Nullable
     @Override
-    public CssMetaData<? extends Styleable, String> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
         return cssMetaData;
     }
 

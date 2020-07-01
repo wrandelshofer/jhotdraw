@@ -30,13 +30,13 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFont>
-        implements NonNullMapAccessor<CssFont> {
+public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull CssFont>
+        implements NonNullMapAccessor<@NonNull CssFont> {
 
     private final static long serialVersionUID = 1L;
 
     @NonNull
-    private final CssMetaData<?, CssFont> cssMetaData;
+    private final CssMetaData<?, @NonNull CssFont> cssMetaData;
     @NonNull
     private final MapAccessor<String> familyKey;
     @NonNull
@@ -44,7 +44,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
     @NonNull
     private final MapAccessor<FontPosture> postureKey;
     @NonNull
-    private final MapAccessor<CssSize> sizeKey;
+    private final MapAccessor<@NonNull CssSize> sizeKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -55,9 +55,9 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
      * @param postureKey the font posture key
      * @param sizeKey    the font size key
      */
-    public FontStyleableMapAccessor(String name,
+    public FontStyleableMapAccessor(@NonNull String name,
                                     @NonNull MapAccessor<String> familyKey, @NonNull MapAccessor<FontWeight> weightKey,
-                                    @NonNull MapAccessor<FontPosture> postureKey, @NonNull MapAccessor<CssSize> sizeKey) {
+                                    @NonNull MapAccessor<FontPosture> postureKey, @NonNull MapAccessor<@NonNull CssSize> sizeKey) {
         super(name, CssFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey},
                 CssFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(),
                         sizeKey.getDefaultValue()));
@@ -79,9 +79,8 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFo
         this.postureKey = postureKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssFont> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssFont> getCssMetaData() {
         return cssMetaData;
 
     }

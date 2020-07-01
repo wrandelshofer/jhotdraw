@@ -11,11 +11,11 @@ import org.jhotdraw8.annotation.NonNull;
  *
  * @author Werner Randelshofer
  */
-public class NonNullBooleanKey extends ObjectKey<Boolean> implements NonNullMapAccessor<Boolean> {
+public class NonNullBooleanKey extends ObjectKey<@NonNull Boolean> implements NonNullMapAccessor<@NonNull Boolean> {
 
     private final static long serialVersionUID = 1L;
 
-    public NonNullBooleanKey(@NonNull String key, Boolean defaultValue) {
+    public NonNullBooleanKey(@NonNull String key, @NonNull Boolean defaultValue) {
         super(key, Boolean.class, defaultValue);
     }
 }

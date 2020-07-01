@@ -63,16 +63,15 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<String>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<String>> getCssMetaData() {
         return cssMetaData;
     }
 
     private Converter<ImmutableList<String>> converter;
 
     @Override
-    public Converter<ImmutableList<String>> getConverter() {
+    public @NonNull Converter<ImmutableList<String>> getConverter() {
         if (converter == null) {
             converter = new XmlWordListConverter();
         }

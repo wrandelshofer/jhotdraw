@@ -78,9 +78,8 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<String>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<String>> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -88,7 +87,7 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
     private Converter<ImmutableList<String>> converter;
 
     @Override
-    public Converter<ImmutableList<String>> getConverter() {
+    public @NonNull Converter<ImmutableList<String>> getConverter() {
         if (converter == null) {
             converter = new XmlWordListConverter();
         }

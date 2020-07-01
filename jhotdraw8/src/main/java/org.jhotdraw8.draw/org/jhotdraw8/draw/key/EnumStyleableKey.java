@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
@@ -21,8 +22,8 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class EnumStyleableKey<T extends Enum<T>> extends AbstractStyleableKey<T>
-        implements WriteableStyleableMapAccessor<T>, NonNullMapAccessor<T> {
+public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStyleableKey<@NonNull T>
+        implements WriteableStyleableMapAccessor<@NonNull T>, NonNullMapAccessor<@NonNull T> {
 
     private final static long serialVersionUID = 1L;
 
@@ -50,7 +51,7 @@ public class EnumStyleableKey<T extends Enum<T>> extends AbstractStyleableKey<T>
     }
 
     @Override
-    public CssMetaData<?, T> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, T> getCssMetaData() {
         return cssMetaData;
 
     }

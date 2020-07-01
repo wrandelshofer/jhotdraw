@@ -63,14 +63,13 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<Double>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<Double>> getCssMetaData() {
         return cssMetaData;
     }
 
     @Override
-    public Converter<ImmutableList<Double>> getConverter() {
+    public @NonNull Converter<ImmutableList<Double>> getConverter() {
         return converter;
     }
 

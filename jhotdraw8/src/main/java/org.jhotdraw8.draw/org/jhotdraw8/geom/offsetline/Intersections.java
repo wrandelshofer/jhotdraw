@@ -107,12 +107,12 @@ public class Intersections {
                                                                final Point2D segEnd) -> {
             if (Utils.fuzzyEqual(segStart.getX(), segEnd.getX())) {
                 // vertical segment, test y coordinate
-                var minMax = Utils.minmax(segStart.getY(), segEnd.getY());
+                MinMax minMax = Utils.minmax(segStart.getY(), segEnd.getY());
                 return Utils.fuzzyInRange(minMax.first(), pt.getY(), minMax.second);
             }
 
             // else just test x coordinate
-            var minMax = Utils.minmax(segStart.getX(), segEnd.getX());
+            MinMax minMax = Utils.minmax(segStart.getX(), segEnd.getX());
             return Utils.fuzzyInRange(minMax.first(), pt.getX(), minMax.second);
         };
 
@@ -274,12 +274,12 @@ public class Intersections {
             return result;
         }
 
-        for (var intr : coincidentIntrs) {
-            var sp = pline1.get(intr.sIndex1).pos();
+        for (PlineCoincidentIntersect intr : coincidentIntrs) {
+            Point2D sp = pline1.get(intr.sIndex1).pos();
             double dist1 = Geom.squaredDistance(sp, intr.point1);
             double dist2 = Geom.squaredDistance(sp, intr.point2);
             if (dist1 > dist2) {
-                var swap = intr.point1;
+                Point2D swap = intr.point1;
                 intr.point1 = intr.point2;
                 intr.point2 = swap;
             }
@@ -290,27 +290,27 @@ public class Intersections {
                 return intr1.sIndex1 - intr2.sIndex1;
             }
             // equal index so sort distance from start
-            final var sp = pline1.get(intr1.sIndex1).pos();
+            final Point2D sp = pline1.get(intr1.sIndex1).pos();
             double dist1 = Geom.squaredDistance(sp, intr1.point1);
             double dist2 = Geom.squaredDistance(sp, intr2.point1);
             return Double.compare(dist1, dist2);
         });
 
-        var sliceStartPoints = result.sliceStartPoints;
-        var sliceEndPoints = result.sliceEndPoints;
-        var coincidentSlices = result.coincidentSlices;
+        Deque<PlineIntersect> sliceStartPoints = result.sliceStartPoints;
+        Deque<PlineIntersect> sliceEndPoints = result.sliceEndPoints;
+        Deque<Polyline> coincidentSlices = result.coincidentSlices;
 
         Polyline[] currCoincidentSlice = new Polyline[]{new Polyline()};
 
         IntConsumer startCoincidentSliceAt = (int intrIndex) -> {
-            final var intr = coincidentIntrs.get(intrIndex);
-            final var v1 = pline1.get(intr.sIndex1);
-            final var v2 = pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1));
-            final var u1 = pline2.get(intr.sIndex2);
+            final PlineCoincidentIntersect intr = coincidentIntrs.get(intrIndex);
+            final PlineVertex v1 = pline1.get(intr.sIndex1);
+            final PlineVertex v2 = pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1));
+            final PlineVertex u1 = pline2.get(intr.sIndex2);
 
-            var split1 = splitAtPoint(v1, v2, intr.point1);
+            SplitResult split1 = splitAtPoint(v1, v2, intr.point1);
             currCoincidentSlice[0].addVertex(split1.splitVertex);
-            var split2 = splitAtPoint(v1, v2, intr.point2);
+            SplitResult split2 = splitAtPoint(v1, v2, intr.point2);
             currCoincidentSlice[0].addVertex(split2.splitVertex);
 
             PlineIntersect sliceStart = new PlineIntersect();
@@ -333,8 +333,8 @@ public class Intersections {
         };
 
         IntConsumer endCoincidentSliceAt = (int intrIndex) -> {
-            final var intr = coincidentIntrs.get(intrIndex);
-            final var u1 = pline2.get(intr.sIndex2);
+            final PlineCoincidentIntersect intr = coincidentIntrs.get(intrIndex);
+            final PlineVertex u1 = pline2.get(intr.sIndex2);
 
             coincidentSlices.add(currCoincidentSlice[0]);
             currCoincidentSlice[0] = new Polyline();
@@ -352,17 +352,17 @@ public class Intersections {
 
         startCoincidentSliceAt.accept(0);
         for (int i = 1; i < coincidentIntrs.size(); ++i) {
-            final var intr = coincidentIntrs.get(i);
-            final var v1 = pline1.get(intr.sIndex1);
-            final var v2 = pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1));
+            final PlineCoincidentIntersect intr = coincidentIntrs.get(i);
+            final PlineVertex v1 = pline1.get(intr.sIndex1);
+            final PlineVertex v2 = pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1));
 
             if (fuzzyEqual(intr.point1, currCoincidentSlice[0].lastVertex().pos(),
                     Utils.realPrecision)) {
                 // continue coincident slice
                 currCoincidentSlice[0].pop_back();
-                var split1 = splitAtPoint(v1, v2, intr.point1);
+                SplitResult split1 = splitAtPoint(v1, v2, intr.point1);
                 currCoincidentSlice[0].addVertex(split1.splitVertex);
-                var split2 = splitAtPoint(v1, v2, intr.point2);
+                SplitResult split2 = splitAtPoint(v1, v2, intr.point2);
                 currCoincidentSlice[0].addVertex(split2.splitVertex);
 
             } else {
@@ -377,11 +377,11 @@ public class Intersections {
 
         if (coincidentSlices.size() > 1) {
             // check if last coincident slice connects with first()
-            final var lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
-            final var firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
+            final Point2D lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
+            final Point2D firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
             if (fuzzyEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
-                final var lastSlice = coincidentSlices.getLast();
+                final Polyline lastSlice = coincidentSlices.getLast();
                 lastSlice.pop_back();
                 lastSlice.addAll(coincidentSlices.getFirst());
 
@@ -570,8 +570,8 @@ public class Intersections {
 
         Set<OrderedPair<Integer, Integer>> possibleDuplicates = new HashSet<>();
 
-        final var intrs = output.intersects;
-        final var coincidentIntrs = output.coincidentIntersects;
+        final List<PlineIntersect> intrs = output.intersects;
+        final List<PlineCoincidentIntersect> coincidentIntrs = output.coincidentIntersects;
 
         BiPredicate<Integer, Integer> pline2SegVisitor = (Integer i2, Integer j2) -> {
             final PlineVertex p2v1 = pline2.get(i2);
@@ -591,7 +591,7 @@ public class Intersections {
                     return fuzzyEqual(p1v1.pos(), intr) || fuzzyEqual(p2v1.pos(), intr);
                 };
 
-                var intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
+                IntrPlineSegsResult intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
                 switch (intrResult.intrType) {
                 case NoIntersect:
                     break;
@@ -631,19 +631,19 @@ public class Intersections {
         pline2.visitSegIndices(pline2SegVisitor);
 
         // remove duplicate points caused by the coincident intersect definition
-        intrs.removeIf((final var intr) -> {
-            var found = possibleDuplicates.contains(new OrderedPair<>(intr.sIndex1, intr.sIndex2));
+        intrs.removeIf((final PlineIntersect intr) -> {
+            boolean found = possibleDuplicates.contains(new OrderedPair<>(intr.sIndex1, intr.sIndex2));
             if (!found) {
                 return false;
             }
 
-            final var endPt1 =
+            final Point2D endPt1 =
                     pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1)).pos();
             if (fuzzyEqual(intr.pos, endPt1)) {
                 return true;
             }
 
-            final var endPt2 =
+            final Point2D endPt2 =
                     pline2.get(Utils.nextWrappingIndex(intr.sIndex2, pline2)).pos();
             return fuzzyEqual(intr.pos, endPt2);
         });
@@ -659,8 +659,8 @@ public class Intersections {
         QuadConsumer<Point2D, Point2D, PlineVertex, PlineVertex> processLineArcIntr
                 = (final Point2D p0, final Point2D p1,
                    final PlineVertex a1, final PlineVertex a2) -> {
-            var arc = arcRadiusAndCenter(a1, a2);
-            var intrResult = intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
+            IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
             DoubleFunction<OrderedPairNonNull<Boolean, Point2D>> pointInSweep = (double t) -> {
@@ -677,7 +677,7 @@ public class Intersections {
             if (intrResult.numIntersects == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.numIntersects == 1) {
-                var p = pointInSweep.apply(intrResult.t0);
+                OrderedPairNonNull<Boolean, Point2D> p = pointInSweep.apply(intrResult.t0);
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -686,8 +686,8 @@ public class Intersections {
                 }
             } else {
                 assert intrResult.numIntersects == 2 : "shouldn't get here without 2 intersects";
-                var p1_ = pointInSweep.apply(intrResult.t0);
-                var p2_ = pointInSweep.apply(intrResult.t1);
+                OrderedPairNonNull<Boolean, Point2D> p1_ = pointInSweep.apply(intrResult.t0);
+                OrderedPairNonNull<Boolean, Point2D> p2_ = pointInSweep.apply(intrResult.t1);
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;
@@ -706,7 +706,7 @@ public class Intersections {
         };
 
         if (vIsLine && uIsLine) {
-            var intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntrLineSeg2LineSeg2Result intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             switch (intrResult.intrType) {
             case None:
                 result.intrType = PlineSegIntrType.NoIntersect;
@@ -731,8 +731,8 @@ public class Intersections {
         } else if (uIsLine) {
             processLineArcIntr.accept(u1.pos(), u2.pos(), v1, v2);
         } else {
-            var arc1 = arcRadiusAndCenter(v1, v2);
-            var arc2 = arcRadiusAndCenter(u1, u2);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
             TriFunction<Point2D, Point2D, Double, OrderedPairNonNull<Double, Double>> startAndSweepAngle = (final Point2D sp, final Point2D center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(Utils.angle(center, sp));
@@ -745,7 +745,7 @@ public class Intersections {
                         pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
             };
 
-            var intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
+            IntrCircle2Circle2Result intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 
             switch (intrResult.intrType) {
             case NoIntersect:
@@ -780,7 +780,7 @@ public class Intersections {
             case Coincident:
                 // determine if arcs overlap along their sweep
                 // start and sweep angles
-                var arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
+                OrderedPairNonNull<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
                 // we have the arcs go the same direction to simplify checks
                 OrderedPairNonNull<Double, Double> arc2StartAndSweep = ((Supplier<OrderedPairNonNull<Double, Double>>) () -> {
                     if (v1.bulgeIsNeg() == u1.bulgeIsNeg()) {
@@ -789,8 +789,8 @@ public class Intersections {
                     return startAndSweepAngle.apply(u2.pos(), arc2.center, -u1.bulge());
                 }).get();
                 // end angles (start + sweep)
-                var arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
-                var arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
+                double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
+                double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
                 if (Utils.fuzzyEqual(arc1StartAndSweep.first(), arc2End)) {
                     // only end points touch at start of arc1

@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.ImmutableList;
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordListKey extends ObjectFigureKey<ImmutableList<String>> {
+public class ObservableWordListKey extends ObjectFigureKey<@NonNull ImmutableList<String>> {
 
     private final static long serialVersionUID = 1L;
 

@@ -72,9 +72,8 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, URI> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, URI> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -82,7 +81,7 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
     private Converter<URI> converter;
 
     @Override
-    public Converter<URI> getConverter() {
+    public @NonNull Converter<URI> getConverter() {
         if (converter == null) {
             converter = new CssUriConverter();
         }

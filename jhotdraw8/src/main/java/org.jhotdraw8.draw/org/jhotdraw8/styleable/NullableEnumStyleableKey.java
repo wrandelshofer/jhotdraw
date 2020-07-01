@@ -5,6 +5,7 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -56,7 +57,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleable
     }
 
     @Override
-    public CssMetaData<?, T> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, T> getCssMetaData() {
         return cssMetaData;
 
     }

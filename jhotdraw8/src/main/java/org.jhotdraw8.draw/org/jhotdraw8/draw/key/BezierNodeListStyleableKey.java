@@ -26,9 +26,9 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class BezierNodeListStyleableKey
-        extends AbstractStyleableKey<ImmutableList<BezierNode>>
-        implements WriteableStyleableMapAccessor<ImmutableList<BezierNode>>,
-        NonNullMapAccessor<ImmutableList<BezierNode>> {
+        extends AbstractStyleableKey<@NonNull ImmutableList<BezierNode>>
+        implements WriteableStyleableMapAccessor<@NonNull ImmutableList<BezierNode>>,
+        NonNullMapAccessor<@NonNull ImmutableList<BezierNode>> {
 
     private final static long serialVersionUID = 1L;
 
@@ -65,9 +65,8 @@ public class BezierNodeListStyleableKey
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<BezierNode>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull ImmutableList<BezierNode>> getCssMetaData() {
         return cssMetaData;
     }
 

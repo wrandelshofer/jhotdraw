@@ -15,7 +15,7 @@ import java.util.List;
  *  </p>
  */
 public class PolyArcPathBuilder extends AbstractPathBuilder {
-    private List<Polyline> paths = new ArrayList();
+    private final List<Polyline> paths = new ArrayList<>();
     private Polyline current;
 
     public List<Polyline> getPaths() {

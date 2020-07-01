@@ -4,5 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-public interface NonNullKey<T> extends Key<T>, NonNullMapAccessor<T> {
+import org.jhotdraw8.annotation.NonNull;
+
+public interface NonNullKey<@NonNull T> extends Key<@NonNull T>, NonNullMapAccessor<@NonNull T> {
 }

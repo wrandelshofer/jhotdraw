@@ -33,7 +33,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class NonNullObjectKey<T> implements NonNullKey<T> {
+public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,7 +51,7 @@ public class NonNullObjectKey<T> implements NonNullKey<T> {
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @Nullable
+    @NonNull
     private final Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
@@ -70,7 +70,7 @@ public class NonNullObjectKey<T> implements NonNullKey<T> {
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public NonNullObjectKey(String name, Class<T> clazz, @NonNull T defaultValue) {
+    public NonNullObjectKey(@NonNull String name, Class<T> clazz, @NonNull T defaultValue) {
         this(name, clazz, null, defaultValue);
     }
 
@@ -84,11 +84,11 @@ public class NonNullObjectKey<T> implements NonNullKey<T> {
      *                       no type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public NonNullObjectKey(String name, Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
+    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
         this(name, clazz, typeParameters, false, defaultValue);
     }
 
-    public NonNullObjectKey(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
+    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
         Objects.requireNonNull(name, "name is null");
         Objects.requireNonNull(clazz, "clazz is null");
         Objects.requireNonNull(defaultValue, "defaultValue may not be null if isNullable==false");

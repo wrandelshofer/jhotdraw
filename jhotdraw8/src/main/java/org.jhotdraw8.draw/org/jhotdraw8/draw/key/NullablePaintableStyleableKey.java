@@ -64,15 +64,14 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Paintable> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Paintable> getCssMetaData() {
         return cssMetaData;
 
     }
 
     @Override
-    public Converter<Paintable> getConverter() {
+    public @NonNull Converter<Paintable> getConverter() {
         return converter;
     }
 }

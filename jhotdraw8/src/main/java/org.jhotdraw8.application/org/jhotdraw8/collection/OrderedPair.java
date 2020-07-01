@@ -26,7 +26,7 @@ public class OrderedPair<U, V> implements Pair<U, V> {
         this.b = b;
     }
 
-    public @Nullable U first() {
+    public U first() {
         return a;
     }
 

@@ -26,8 +26,8 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
-        implements NonNullMapAccessor<Point3D> {
+public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Point3D>
+        implements NonNullMapAccessor<@NonNull Point3D> {
 
     private final static long serialVersionUID = 1L;
 
@@ -72,15 +72,14 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         this.zKey = zKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Point3D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Point3D> getCssMetaData() {
         return cssMetaData;
 
     }
 
     @Override
-    public Converter<Point3D> getConverter() {
+    public @NonNull Converter<Point3D> getConverter() {
         return converter;
     }
 

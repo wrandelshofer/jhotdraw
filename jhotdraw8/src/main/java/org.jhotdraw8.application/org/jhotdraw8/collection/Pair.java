@@ -5,8 +5,6 @@
 package org.jhotdraw8.collection;
 
 
-import org.jhotdraw8.annotation.Nullable;
-
 /**
  * Pair.
  *
@@ -16,7 +14,7 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public interface Pair<U, V> {
 
-    @Nullable U first();
+     U first();
 
-    @Nullable V second();
+     V second();
 }

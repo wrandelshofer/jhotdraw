@@ -26,15 +26,16 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class ListStyleableKey<T> extends AbstractStyleableKey<ImmutableList<T>>
-        implements WriteableStyleableMapAccessor<ImmutableList<T>>,
-        NonNullMapAccessor<ImmutableList<T>> {
+public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull ImmutableList<T>>
+        implements WriteableStyleableMapAccessor<@NonNull ImmutableList<T>>,
+        NonNullMapAccessor<@NonNull ImmutableList<T>> {
 
     private final static long serialVersionUID = 1L;
 
     @NonNull
-    private final CssMetaData<?, ImmutableList<T>> cssMetaData;
-    private Converter<ImmutableList<T>> converter;
+    private final CssMetaData<?, @NonNull ImmutableList<T>> cssMetaData;
+    @NonNull
+    private Converter<@NonNull ImmutableList<T>> converter;
 
     /**
      * Creates a new instance with the specified name and with an empty list as the
@@ -71,14 +72,13 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<ImmutableList<T>>
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<T>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<T>> getCssMetaData() {
         return cssMetaData;
     }
 
     @Override
-    public Converter<ImmutableList<T>> getConverter() {
+    public @NonNull Converter<ImmutableList<T>> getConverter() {
         return converter;
     }
 

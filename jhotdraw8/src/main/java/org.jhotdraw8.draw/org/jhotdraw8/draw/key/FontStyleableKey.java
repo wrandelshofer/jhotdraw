@@ -71,9 +71,8 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssFont> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssFont> getCssMetaData() {
         return cssMetaData;
 
     }

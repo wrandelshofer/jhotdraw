@@ -28,13 +28,13 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<CssRectangle2D>
-        implements NonNullMapAccessor<CssRectangle2D> {
+public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull CssRectangle2D>
+        implements NonNullMapAccessor<@NonNull CssRectangle2D> {
 
     private final static long serialVersionUID = 1L;
 
     @NonNull
-    private final CssMetaData<?, CssRectangle2D> cssMetaData;
+    private final CssMetaData<@NonNull Styleable, @NonNull CssRectangle2D> cssMetaData;
     @NonNull
     private final NonNullMapAccessor<CssSize> xKey;
     @NonNull
@@ -66,7 +66,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, CssRectangle2D> md
+        CssMetaData<@NonNull Styleable, @NonNull CssRectangle2D> md
                 = new SimpleCssMetaData<>(property, function,
                 new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
         cssMetaData = md;
@@ -77,9 +77,8 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
         this.heightKey = heightKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssRectangle2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssRectangle2D> getCssMetaData() {
         return cssMetaData;
 
     }

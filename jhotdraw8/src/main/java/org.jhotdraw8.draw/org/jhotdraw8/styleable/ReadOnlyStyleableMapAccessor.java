@@ -26,21 +26,22 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return name string.
      */
-    @Nullable String getName();
+    @NonNull String getName();
 
     /**
      * Gets the CssMetaData.
      *
      * @return the meta data
      */
-    @Nullable
-    CssMetaData<? extends Styleable, T> getCssMetaData();
+    @NonNull
+    CssMetaData<@NonNull ? extends @NonNull Styleable, T> getCssMetaData();
 
     /**
      * FIXME this is horribly inefficient since we have already parsed the CSS.
      *
      * @return the converter
      */
+    @NonNull
     Converter<T> getConverter();
 
     /**
@@ -57,7 +58,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
     /**
      * Returns the CSS namespace uri.
      * <p>
-     * The default implementation return null.
+     * The default implementation returns null.
      *
      * @return namespace uri string.
      */
@@ -76,7 +77,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @return cssName string.
      */
     @NonNull
-    static String toCssName(String camelCaseName) {
+    static String toCssName(@NonNull String camelCaseName) {
         final StringBuilder b = new StringBuilder();
         final String name = camelCaseName;
         boolean insertDash = false;

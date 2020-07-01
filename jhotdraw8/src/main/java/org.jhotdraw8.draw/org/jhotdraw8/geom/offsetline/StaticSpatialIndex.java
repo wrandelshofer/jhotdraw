@@ -18,7 +18,7 @@ public class StaticSpatialIndex {
     public StaticSpatialIndex(int numItems, int NodeSize) {
         assert numItems > 0 : "number of items must be greater than 0";
         assert NodeSize >= 2 && NodeSize <= 65535 : "node size must be between 2 and 65535";
-        this.NodeSize = NodeSize;
+        StaticSpatialIndex.NodeSize = NodeSize;
         // calculate the total number of nodes in the R-tree to allocate space for
         // and the index of each tree level (used in search later)
         m_numItems = numItems;
@@ -132,22 +132,22 @@ public class StaticSpatialIndex {
         // generate nodes at each tree level, bottom-up
         pos = 0;
         for (int i = 0; i < m_numLevels - 1; i++) {
-            var end = m_levelBounds[i];
+            int end = m_levelBounds[i];
 
             // generate a parent node for each block of consecutive <nodeSize> nodes
             while (pos < end) {
-                var nodeMinX = Double.POSITIVE_INFINITY;
-                var nodeMinY = Double.POSITIVE_INFINITY;
-                var nodeMaxX = -1 * Double.POSITIVE_INFINITY;
-                var nodeMaxY = -1 * Double.POSITIVE_INFINITY;
-                var nodeIndex = pos;
+                double nodeMinX = Double.POSITIVE_INFINITY;
+                double nodeMinY = Double.POSITIVE_INFINITY;
+                double nodeMaxX = -1 * Double.POSITIVE_INFINITY;
+                double nodeMaxY = -1 * Double.POSITIVE_INFINITY;
+                int nodeIndex = pos;
 
                 // calculate bbox for the new node
                 for (int j = 0; j < NodeSize && pos < end; j++) {
-                    var minX = m_boxes[pos++];
-                    var minY = m_boxes[pos++];
-                    var maxX = m_boxes[pos++];
-                    var maxY = m_boxes[pos++];
+                    double minX = m_boxes[pos++];
+                    double minY = m_boxes[pos++];
+                    double maxX = m_boxes[pos++];
+                    double maxY = m_boxes[pos++];
                     if (minX < nodeMinX) {
                         nodeMinX = minX;
                     }
@@ -188,9 +188,9 @@ public class StaticSpatialIndex {
 
         boolean done = false;
         while (!done) {
-            var end = Math.min(nodeIndex + NodeSize * 4, m_levelBounds[level]);
+            int end = Math.min(nodeIndex + NodeSize * 4, m_levelBounds[level]);
             for (int pos = nodeIndex; pos < end; pos += 4) {
-                var index = m_indices[pos >> 2];
+                int index = m_indices[pos >> 2];
                 if (!visitor.visit(level, m_boxes[pos], m_boxes[pos + 1], m_boxes[pos + 2], m_boxes[pos + 3])) {
                     return;
                 }
@@ -258,20 +258,20 @@ public class StaticSpatialIndex {
                     Deque<Integer> stack) {
         assert m_pos == 4 * m_numNodes : "data not yet indexed - call Finish() before querying";
 
-        var nodeIndex = 4 * m_numNodes - 4;
-        var level = m_numLevels - 1;
+        int nodeIndex = 4 * m_numNodes - 4;
+        int level = m_numLevels - 1;
 
         stack.clear();
 
-        var done = false;
+        boolean done = false;
 
         while (!done) {
             // find the end index of the node
-            var end = Math.min(nodeIndex + NodeSize * 4, m_levelBounds[level]);
+            int end = Math.min(nodeIndex + NodeSize * 4, m_levelBounds[level]);
 
             // search through child nodes
             for (int pos = nodeIndex; pos < end; pos += 4) {
-                var index = m_indices[pos >> 2];
+                int index = m_indices[pos >> 2];
                 // check if node bbox intersects with query bbox
                 if (maxX < m_boxes[pos] || maxY < m_boxes[pos + 1] || minX > m_boxes[pos + 2] ||
                         minY > m_boxes[pos + 3]) {
@@ -388,9 +388,9 @@ public class StaticSpatialIndex {
             return;
         }
 
-        var pivot = values[(left + right) >> 1];
-        var i = left - 1;
-        var j = right + 1;
+        int pivot = values[(left + right) >> 1];
+        int i = left - 1;
+        int j = right + 1;
 
         while (true) {
             do {
@@ -413,17 +413,17 @@ public class StaticSpatialIndex {
 
     static void swap(int[] values, double[] boxes, int[] indices, int i,
                      int j) {
-        var temp = values[i];
+        int temp = values[i];
         values[i] = values[j];
         values[j] = temp;
 
-        var k = 4 * i;
-        var m = 4 * j;
+        int k = 4 * i;
+        int m = 4 * j;
 
-        var a = boxes[k];
-        var b = boxes[k + 1];
-        var c = boxes[k + 2];
-        var d = boxes[k + 3];
+        double a = boxes[k];
+        double b = boxes[k + 1];
+        double c = boxes[k + 2];
+        double d = boxes[k + 3];
         boxes[k] = boxes[m];
         boxes[k + 1] = boxes[m + 1];
         boxes[k + 2] = boxes[m + 2];
@@ -433,7 +433,7 @@ public class StaticSpatialIndex {
         boxes[m + 2] = c;
         boxes[m + 3] = d;
 
-        var e = indices[i];
+        int e = indices[i];
         indices[i] = indices[j];
         indices[j] = e;
     }

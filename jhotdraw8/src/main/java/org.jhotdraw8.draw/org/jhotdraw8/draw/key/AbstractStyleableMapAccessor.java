@@ -108,9 +108,8 @@ public abstract class AbstractStyleableMapAccessor<T>
      *
      * @return name string.
      */
-    @Nullable
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 

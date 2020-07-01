@@ -33,7 +33,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     @NonNull
     public final static Key<URIChooser> EXPORT_CHOOSER_KEY = new ObjectKey<>("exportChooser", URIChooser.class);
     @NonNull
-    public final static Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new ObjectKey<>("exportChooserFactory", Supplier.class, new Class[]{URIChooser.class}, null);
+    public final static Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new ObjectKey<>("exportChooserFactory", Supplier.class, new Class<?>[]{URIChooser.class}, null);
 
     /**
      * Creates a new instance.

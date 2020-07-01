@@ -67,14 +67,13 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, ImmutableList<Transform>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<Transform>> getCssMetaData() {
         return cssMetaData;
     }
 
     @Override
-    public Converter<ImmutableList<Transform>> getConverter() {
+    public @NonNull Converter<ImmutableList<Transform>> getConverter() {
         return converter;
     }
 

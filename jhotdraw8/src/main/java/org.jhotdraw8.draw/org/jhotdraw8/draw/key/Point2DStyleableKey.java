@@ -62,9 +62,8 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Point2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Point2D> getCssMetaData() {
         return cssMetaData;
 
     }

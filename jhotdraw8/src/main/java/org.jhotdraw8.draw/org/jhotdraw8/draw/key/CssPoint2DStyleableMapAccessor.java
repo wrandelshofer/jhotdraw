@@ -28,14 +28,14 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class CssPoint2DStyleableMapAccessor
-        extends AbstractStyleableMapAccessor<CssPoint2D>
-        implements NonNullMapAccessor<CssPoint2D> {
+        extends AbstractStyleableMapAccessor<@NonNull CssPoint2D>
+        implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
     private final static long serialVersionUID = 1L;
-    private final Converter<CssPoint2D> converter;
+    private final Converter<@NonNull CssPoint2D> converter;
 
     @NonNull
-    private final CssMetaData<?, CssPoint2D> cssMetaData;
+    private final CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> cssMetaData;
     @NonNull
     private final NonNullMapAccessor<CssSize> xKey;
     @NonNull
@@ -48,7 +48,7 @@ public class CssPoint2DStyleableMapAccessor
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public CssPoint2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey) {
+    public CssPoint2DStyleableMapAccessor(@NonNull String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey) {
         this(name, xKey, yKey, new CssPoint2DConverter(false));
     }
 
@@ -60,7 +60,7 @@ public class CssPoint2DStyleableMapAccessor
      * @param yKey      the key for the y coordinate of the point
      * @param converter String converter for the point
      */
-    public CssPoint2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey, Converter<CssPoint2D> converter) {
+    public CssPoint2DStyleableMapAccessor(@NonNull String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey, @NonNull Converter<CssPoint2D> converter) {
         super(name, CssPoint2D.class, new NonNullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
@@ -72,7 +72,7 @@ public class CssPoint2DStyleableMapAccessor
         this.converter = converter;
         final StyleConverter<String, CssPoint2D> cnvrtr
                 = new StyleConverterAdapter<>(converter);
-        CssMetaData<Styleable, CssPoint2D> md
+        CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
@@ -89,13 +89,12 @@ public class CssPoint2DStyleableMapAccessor
 
 
     @Override
-    public Converter<CssPoint2D> getConverter() {
+    public @NonNull Converter<@NonNull CssPoint2D> getConverter() {
         return converter;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssPoint2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull CssPoint2D> getCssMetaData() {
         return cssMetaData;
 
     }

@@ -24,12 +24,12 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class StringStyleableKey extends AbstractStyleableKey<String>
-        implements WriteableStyleableMapAccessor<String>, NonNullMapAccessor<String> {
+public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
+        implements WriteableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
 
     final static long serialVersionUID = 1L;
     @NonNull
-    private final CssMetaData<? extends Styleable, String> cssMetaData;
+    private final CssMetaData<? extends Styleable, @NonNull String> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -37,7 +37,7 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
      *
      * @param name The name of the key.
      */
-    public StringStyleableKey(String name) {
+    public StringStyleableKey(@NonNull String name) {
         this(name, "");
     }
 
@@ -47,7 +47,7 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public StringStyleableKey(String name, String defaultValue) {
+    public StringStyleableKey(@NonNull String name, @NonNull String defaultValue) {
         this(name, defaultValue, null);
     }
 
@@ -79,9 +79,8 @@ public class StringStyleableKey extends AbstractStyleableKey<String>
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, String> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
         return cssMetaData;
 
     }

@@ -29,13 +29,13 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class CssInsetsStyleableMapAccessor
-        extends AbstractStyleableMapAccessor<CssInsets>
-        implements NonNullMapAccessor<CssInsets> {
+        extends AbstractStyleableMapAccessor<@NonNull CssInsets>
+        implements NonNullMapAccessor<@NonNull CssInsets> {
 
     private final static long serialVersionUID = 1L;
 
     @NonNull
-    private final CssMetaData<?, CssInsets> cssMetaData;
+    private final CssMetaData<@NonNull Styleable, @NonNull CssInsets> cssMetaData;
     @NonNull
     private final NonNullMapAccessor<CssSize> topKey;
     @NonNull
@@ -54,7 +54,7 @@ public class CssInsetsStyleableMapAccessor
      * @param bottomKey the insets bottom key
      * @param leftKey   the insets left key
      */
-    public CssInsetsStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> topKey, @NonNull NonNullMapAccessor<CssSize> rightKey, @NonNull NonNullMapAccessor<CssSize> bottomKey, @NonNull NonNullMapAccessor<CssSize> leftKey) {
+    public CssInsetsStyleableMapAccessor(@NonNull String name, @NonNull NonNullMapAccessor<CssSize> topKey, @NonNull NonNullMapAccessor<CssSize> rightKey, @NonNull NonNullMapAccessor<CssSize> bottomKey, @NonNull NonNullMapAccessor<CssSize> leftKey) {
         super(name, CssInsets.class, new NonNullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssInsets>> function = s -> {
@@ -65,7 +65,7 @@ public class CssInsetsStyleableMapAccessor
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssInsets> cnvrtr
                 = new StyleConverterAdapter<>(getConverter());
-        CssMetaData<Styleable, CssInsets> md
+        CssMetaData<@NonNull Styleable, @NonNull CssInsets> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
@@ -76,9 +76,8 @@ public class CssInsetsStyleableMapAccessor
         this.leftKey = leftKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, CssInsets> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull CssInsets> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -102,10 +101,10 @@ public class CssInsetsStyleableMapAccessor
             return null;
         }
         return new CssInsets(
-                top == null ? CssSize.ZERO : top,
-                right == null ? CssSize.ZERO : right,
-                bottom == null ? CssSize.ZERO : bottom,
-                left == null ? CssSize.ZERO : left
+                top,
+                right,
+                bottom,
+                left
         );
     }
 

@@ -64,9 +64,8 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Rectangle2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Rectangle2D> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -74,7 +73,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
     private Converter<Rectangle2D> converter;
 
     @Override
-    public Converter<Rectangle2D> getConverter() {
+    public @NonNull Converter<Rectangle2D> getConverter() {
         if (converter == null) {
             converter = new Rectangle2DConverter(false);
         }

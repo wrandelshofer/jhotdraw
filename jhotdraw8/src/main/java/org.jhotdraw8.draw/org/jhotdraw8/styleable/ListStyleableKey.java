@@ -9,7 +9,6 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ListKey;
@@ -22,12 +21,13 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.function.Function;
 
-public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleableMapAccessor<ImmutableList<T>>, NonNullMapAccessor<ImmutableList<T>> {
+public class ListStyleableKey<T> extends ListKey<T>
+        implements WriteableStyleableMapAccessor<@NonNull ImmutableList<T>>, NonNullMapAccessor<@NonNull ImmutableList<T>> {
     private final static long serialVersionUID = 0L;
     @NonNull
-    private final Converter<ImmutableList<T>> converter;
+    private final Converter<@NonNull ImmutableList<T>> converter;
     @NonNull
-    private final CssMetaData<? extends Styleable, ImmutableList<T>> cssMetaData;
+    private final CssMetaData<? extends Styleable, @NonNull ImmutableList<T>> cssMetaData;
     private final String cssName;
 
     public ListStyleableKey(@NonNull String key, @NonNull Class<T> elemClass, @NonNull CssConverter<T> converter) {
@@ -65,9 +65,8 @@ public class ListStyleableKey<T> extends ListKey<T> implements WriteableStyleabl
 
     }
 
-    @Nullable
     @Override
-    public CssMetaData<? extends Styleable, ImmutableList<T>> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<T>> getCssMetaData() {
         return cssMetaData;
     }
 

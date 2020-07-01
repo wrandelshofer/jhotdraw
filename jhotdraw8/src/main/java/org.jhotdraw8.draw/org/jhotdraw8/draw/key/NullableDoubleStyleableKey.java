@@ -66,9 +66,8 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
         cssMetaData = md;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<? extends Styleable, Double> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Double> getCssMetaData() {
         return cssMetaData;
 
     }

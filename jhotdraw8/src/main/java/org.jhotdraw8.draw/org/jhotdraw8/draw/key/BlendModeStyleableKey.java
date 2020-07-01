@@ -54,7 +54,7 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
     }
 
     @Override
-    public CssMetaData<? extends Styleable, BlendMode> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, BlendMode> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -62,7 +62,7 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
     private Converter<BlendMode> converter;
 
     @Override
-    public Converter<BlendMode> getConverter() {
+    public @NonNull Converter<BlendMode> getConverter() {
         if (converter == null) {
             converter = new CssEnumConverter<>(BlendMode.class, false);
         }

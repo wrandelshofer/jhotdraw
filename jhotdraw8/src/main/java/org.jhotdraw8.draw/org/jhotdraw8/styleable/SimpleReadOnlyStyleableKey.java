@@ -5,8 +5,8 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.text.Converter;
 
@@ -20,8 +20,10 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
     private final String cssName;
     private final static long serialVersionUID = 1L;
 
-    private CssMetaData<?, T> cssMetaData;
-    private Converter<T> converter;
+    @NonNull
+    protected CssMetaData<?, T> cssMetaData;
+    @NonNull
+    protected Converter<T> converter;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -32,7 +34,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      * @param metaData  The CSS meta data.
      * @param converter the converter
      */
-    public SimpleReadOnlyStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
+    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
         this(key, clazz, null, metaData, converter, null);
     }
 
@@ -46,7 +48,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public SimpleReadOnlyStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter, T defaultValue) {
         this(key, clazz, null, metaData, converter, defaultValue);
     }
 
@@ -62,16 +64,16 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      * @param converter      the converter
      * @param defaultValue   The default value.
      */
-    public SimpleReadOnlyStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Class<?> clazz, @NonNull Class<?>[] typeParameters,
+                                      CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
         super(key, clazz, typeParameters, defaultValue);
         this.converter = converter;
         this.cssMetaData = metaData;
         this.cssName = ReadOnlyStyleableMapAccessor.toCssName(key);
     }
 
-    @Nullable
     @Override
-    public CssMetaData<?, T> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, T> getCssMetaData() {
         return cssMetaData;
     }
 
@@ -80,11 +82,12 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      *
      * @param cssMetaData the meta data
      */
-    protected void setCssMetaData(CssMetaData<?, T> cssMetaData) {
+    protected void setCssMetaData(@NonNull CssMetaData<?, T> cssMetaData) {
         this.cssMetaData = cssMetaData;
     }
 
     @Override
+    @NonNull
     public Converter<T> getConverter() {
         return converter;
     }
@@ -94,7 +97,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      *
      * @param converter the converter
      */
-    public void setConverter(Converter<T> converter) {
+    public void setConverter(@NonNull Converter<T> converter) {
         this.converter = converter;
     }
 

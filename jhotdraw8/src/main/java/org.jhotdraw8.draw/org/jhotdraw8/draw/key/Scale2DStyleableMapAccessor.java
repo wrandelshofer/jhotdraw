@@ -64,9 +64,8 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         this.yKey = yKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Point2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Point2D> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -74,7 +73,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     private Converter<Point2D> converter;
 
     @Override
-    public Converter<Point2D> getConverter() {
+    public @NonNull Converter<Point2D> getConverter() {
         if (converter == null) {
             converter = new CssScale2DConverter();
         }

@@ -197,15 +197,15 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public Enumeration<String> getKeys() {
+    public @NonNull Enumeration<String> getKeys() {
         Set<String> keys = new LinkedHashSet<>();
 
-        for (String key : (Iterable<String>) () -> resource.getKeys().asIterator()) {
-            keys.add(key);
+        for (Enumeration<String> i = resource.getKeys(); i.hasMoreElements(); ) {
+            keys.add(i.nextElement());
         }
         if (parent != null) {
-            for (String key : (Iterable<String>) () -> parent.getKeys().asIterator()) {
-                keys.add(key);
+            for (Enumeration<String> i = parent.getKeys(); i.hasMoreElements(); ) {
+                keys.add(i.nextElement());
             }
         }
 

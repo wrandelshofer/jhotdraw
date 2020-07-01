@@ -54,7 +54,7 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
     }
 
     @Override
-    public CssMetaData<? extends Styleable, Effect> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Effect> getCssMetaData() {
         return cssMetaData;
 
     }

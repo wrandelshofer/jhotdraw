@@ -72,9 +72,8 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         this.leftKey = leftKey;
     }
 
-    @NonNull
     @Override
-    public CssMetaData<?, Insets> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, Insets> getCssMetaData() {
         return cssMetaData;
 
     }
@@ -82,7 +81,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     private Converter<Insets> converter;
 
     @Override
-    public Converter<Insets> getConverter() {
+    public @NonNull Converter<Insets> getConverter() {
         if (converter == null) {
             converter = new InsetsConverter(false);
         }

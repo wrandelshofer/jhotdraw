@@ -5,6 +5,8 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.CssMetaData;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -26,7 +28,7 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param metaData  The CSS meta data.
      * @param converter the converter
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter) {
+    public SimpleStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
         this(key, clazz, null, metaData, converter, null);
     }
 
@@ -40,7 +42,7 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(String key, Class<T> clazz, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @Nullable CssMetaData<?, T> metaData, @Nullable Converter<T> converter, T defaultValue) {
         this(key, clazz, null, metaData, converter, defaultValue);
     }
 
@@ -56,7 +58,8 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param converter      the converter
      * @param defaultValue   The default value.
      */
-    public SimpleStyleableKey(String key, Class<?> clazz, Class<?>[] typeParameters, CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
+    public SimpleStyleableKey(@NonNull String key, @NonNull Class<?> clazz, Class<?>[] typeParameters,
+                              @Nullable CssMetaData<?, T> metaData, @Nullable Converter<T> converter, T defaultValue) {
         super(key, clazz, typeParameters, metaData, converter, defaultValue);
     }
 

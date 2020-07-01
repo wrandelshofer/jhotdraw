@@ -27,6 +27,7 @@ import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBounding
  * </p>
  */
 public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
+    private final static long serialVersionUID = 1L;
     @Override
     public Polyline clone() {
         return (Polyline) super.clone();
