@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -52,6 +53,25 @@ public class IntArrayDeque {
         }
     }
 
+    public void clear() {
+        if (head <= tail) {
+            Arrays.fill(elements, 0, head, tail);
+        } else {
+            Arrays.fill(elements, 0, 0, tail);
+            Arrays.fill(elements, 0, head, elements.length);
+        }
+        this.head = this.tail = 0;
+    }
+
+    /**
+     * Inserts the specified element at the head of this deque.
+     *
+     * @param e the element to add
+     */
+    public void push(int e) {
+        addFirst(e);
+    }
+
     /**
      * Inserts the specified element at the tail of this deque.
      *
@@ -68,7 +88,7 @@ public class IntArrayDeque {
     /**
      * Removes the element at the head of the deque.
      *
-     * @throws NoSuchElementException {@inheritDoc}
+     * @throws NoSuchElementException if the queue is empty
      */
     public int removeFirst() {
         if (head == tail) {
@@ -78,6 +98,15 @@ public class IntArrayDeque {
         elements[head] = 0;
         head = (head == elements.length - 1) ? 0 : head + 1;
         return result;
+    }
+
+    /**
+     * Removes the element at the head of the deque.
+     *
+     * @throws NoSuchElementException if the queue is empty
+     */
+    public int pop() {
+        return removeFirst();
     }
 
     /**

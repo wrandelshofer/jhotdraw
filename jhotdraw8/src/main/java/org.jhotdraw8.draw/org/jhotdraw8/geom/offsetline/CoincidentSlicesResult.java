@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class CoincidentSlicesResult {
-    Deque<Polyline> coincidentSlices = new ArrayDeque<>();
+    Deque<PolyArcPath> coincidentSlices = new ArrayDeque<>();
     Deque<PlineIntersect> sliceStartPoints = new ArrayDeque<>();
     Deque<PlineIntersect> sliceEndPoints = new ArrayDeque<>();
 }

@@ -6,8 +6,13 @@ import org.jhotdraw8.geom.Shapes;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,8 +51,8 @@ public class OffsetPathBuilderTest {
         );
     }
 
-    private static Polyline polylineOf(double[][] coords) {
-        Polyline p = new Polyline();
+    private static PolyArcPath polylineOf(double[][] coords) {
+        PolyArcPath p = new PolyArcPath();
         for (int i = 0; i < coords.length; i++) {
             double[] v = coords[i];
             p.addVertex(v[0], v[1], v[2]);
@@ -55,7 +60,7 @@ public class OffsetPathBuilderTest {
         return p;
     }
 
-    private void testOffsetLine(Polyline input, boolean closed, double offset, Polyline expected) throws Exception, InterruptedException {
+    private void testOffsetLine(PolyArcPath input, boolean closed, double offset, PolyArcPath expected) throws Exception, InterruptedException {
         input.isClosed(closed);
         SwingUtilities.invokeAndWait(() -> {
             JDialog f = new JDialog();
@@ -76,9 +81,9 @@ public class OffsetPathBuilderTest {
         });
     }
 
-    private void rawOffsetSegmentsTest(Polyline input, boolean closed, double offset, Polyline expected) throws Exception, InterruptedException {
+    private void rawOffsetSegmentsTest(PolyArcPath input, boolean closed, double offset, PolyArcPath expected) throws Exception, InterruptedException {
         input.isClosed(closed);
-        OffsetPathBuilder cc = new OffsetPathBuilder();
+        PapOffsetPathBuilder cc = new PapOffsetPathBuilder();
         List<PlineOffsetSegment> actual = cc.createUntrimmedOffsetSegments(input, offset);
 
         SwingUtilities.invokeAndWait(() -> {

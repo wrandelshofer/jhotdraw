@@ -1,6 +1,7 @@
 package org.jhotdraw8.geom.offsetline;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.OrderedPairNonNull;
 import org.jhotdraw8.geom.Geom;
@@ -9,7 +10,6 @@ import org.jhotdraw8.util.function.QuadConsumer;
 import org.jhotdraw8.util.function.TriConsumer;
 import org.jhotdraw8.util.function.TriPredicate;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
@@ -267,7 +267,7 @@ public class Intersections {
 
     public static CoincidentSlicesResult
     sortAndjoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
-                                Polyline pline1, Polyline pline2) {
+                                PolyArcPath pline1, PolyArcPath pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();
 
         if (coincidentIntrs.size() == 0) {
@@ -298,9 +298,9 @@ public class Intersections {
 
         Deque<PlineIntersect> sliceStartPoints = result.sliceStartPoints;
         Deque<PlineIntersect> sliceEndPoints = result.sliceEndPoints;
-        Deque<Polyline> coincidentSlices = result.coincidentSlices;
+        Deque<PolyArcPath> coincidentSlices = result.coincidentSlices;
 
-        Polyline[] currCoincidentSlice = new Polyline[]{new Polyline()};
+        PolyArcPath[] currCoincidentSlice = new PolyArcPath[]{new PolyArcPath()};
 
         IntConsumer startCoincidentSliceAt = (int intrIndex) -> {
             final PlineCoincidentIntersect intr = coincidentIntrs.get(intrIndex);
@@ -337,7 +337,7 @@ public class Intersections {
             final PlineVertex u1 = pline2.get(intr.sIndex2);
 
             coincidentSlices.add(currCoincidentSlice[0]);
-            currCoincidentSlice[0] = new Polyline();
+            currCoincidentSlice[0] = new PolyArcPath();
             PlineIntersect sliceEnd = new PlineIntersect();
             sliceEnd.pos = intr.point2;
             sliceEnd.sIndex1 = intr.sIndex1;
@@ -381,7 +381,7 @@ public class Intersections {
             final Point2D firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
             if (fuzzyEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
-                final Polyline lastSlice = coincidentSlices.getLast();
+                final PolyArcPath lastSlice = coincidentSlices.getLast();
                 lastSlice.pop_back();
                 lastSlice.addAll(coincidentSlices.getFirst());
 
@@ -397,10 +397,12 @@ public class Intersections {
         return result;
     }
 
-    /// Finds all local self intersects of the polyline, local self intersects are defined as between
-    /// two polyline segments that share a vertex. NOTES:
-    /// - Singularities (repeating vertexes) are returned as coincident intersects
-    public static void localSelfIntersects(final Polyline pline, final List<PlineIntersect> output) {
+    /**
+     * Finds all local self intersects of the polyline, local self intersects are defined as between
+     * two polyline segments that share a vertex. NOTES:
+     * - Singularities (repeating vertexes) are returned as coincident intersects
+     */
+    public static void localSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output) {
         if (pline.size() < 2) {
             return;
         }
@@ -477,7 +479,7 @@ public class Intersections {
      * /// - We never include intersects at a segment's start point, the matching intersect from the
      * /// previous segment's end point is included (no sense in including both)
      */
-    static void globalSelfIntersects(final Polyline pline, final List<PlineIntersect> output,
+    static void globalSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
                                      final StaticSpatialIndex spatialIndex) {
         if (pline.size() < 3) {
             return;
@@ -486,7 +488,7 @@ public class Intersections {
         Set<OrderedPair<Integer, Integer>>
                 visitedSegmentPairs = new HashSet<>(pline.size());
 
-        Deque<Integer> queryStack = new ArrayDeque<>(8);
+        IntArrayDeque queryStack = new IntArrayDeque(8);
 
         StaticSpatialIndex.Visitor visitor = (int i, double minX, double minY, double maxX, double maxY) -> {
             int j = Utils.nextWrappingIndex(i, pline);
@@ -554,7 +556,7 @@ public class Intersections {
 
     /// Finds all self intersects of the polyline (equivalent to calling localSelfIntersects and
     /// globalSelfIntersects).
-    public static void allSelfIntersects(final Polyline pline, final List<PlineIntersect> output,
+    public static void allSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
                                          final StaticSpatialIndex spatialIndex) {
         localSelfIntersects(pline, output);
         globalSelfIntersects(pline, output, spatialIndex);
@@ -562,11 +564,11 @@ public class Intersections {
 
     /// Finds all intersects between pline1 and pline2.
 
-    static void findIntersects(final Polyline pline1, final Polyline pline2,
+    static void findIntersects(final PolyArcPath pline1, final PolyArcPath pline2,
                                final StaticSpatialIndex pline1SpatialIndex,
                                final PlineIntersectsResult output) {
         List<Integer> queryResults = new ArrayList<>();
-        Deque<Integer> queryStack = new ArrayDeque<>(8);
+        IntArrayDeque queryStack = new IntArrayDeque(8);
 
         Set<OrderedPair<Integer, Integer>> possibleDuplicates = new HashSet<>();
 

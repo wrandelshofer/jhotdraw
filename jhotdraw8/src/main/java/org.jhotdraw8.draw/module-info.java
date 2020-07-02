@@ -51,6 +51,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.gui;
     exports org.jhotdraw8.svg.io;
     exports org.jhotdraw8.tree;
+    exports org.jhotdraw8.geom.offsetline;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
 }

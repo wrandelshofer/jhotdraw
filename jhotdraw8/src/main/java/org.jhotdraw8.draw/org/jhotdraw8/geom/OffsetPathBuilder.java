@@ -76,9 +76,10 @@ import java.util.List;
  */
 public class OffsetPathBuilder extends AbstractPathBuilder {
 
-    private boolean needsMoveTo = false;
+    private boolean needsMoveTo = true;
     private final PathBuilder target;
     private final double offset;
+    private double moveX, moveY;
     /**
      * Line segments.
      * <p>
@@ -99,14 +100,12 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doClosePath() {
-        if (needsMoveTo) {
-            target.moveTo(getLastX(), getLastY());
-            needsMoveTo = false;
-        } else {
-            target.lineTo(getLastX(), getLastY());// bbvel joint
+        if (!needsMoveTo) {
+            segments.add(new double[]{moveX, moveY});
         }
         flush();
         target.closePath();
+        needsMoveTo = true;
     }
 
     @Override
@@ -129,6 +128,8 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doMoveTo(double x, double y) {
         flush();
+        moveX = x;
+        moveY = y;
         needsMoveTo = true;
     }
 
@@ -255,8 +256,8 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     protected void doPathDone() {
         if (needsMoveTo) {
             target.moveTo(getLastX(), getLastY());
-            needsMoveTo = false;
         }
+        needsMoveTo = true;
         flush();
         target.pathDone();
     }

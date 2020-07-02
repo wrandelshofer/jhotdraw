@@ -1,7 +1,7 @@
 package org.jhotdraw8.geom.offsetline;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import org.jhotdraw8.collection.IntArrayDeque;
+
 import java.util.List;
 import java.util.function.IntPredicate;
 
@@ -184,7 +184,7 @@ public class StaticSpatialIndex {
         int nodeIndex = 4 * m_numNodes - 4;
         int level = m_numLevels - 1;
 
-        Deque<Integer> stack = new ArrayDeque<>(16);
+        IntArrayDeque stack = new IntArrayDeque(16);
 
         boolean done = false;
         while (!done) {
@@ -234,7 +234,7 @@ public class StaticSpatialIndex {
     // Query the spatial index adding indexes to the results vector given. This overload accepts an
     // existing vector to use as a stack and takes care of clearing the stack before use.
     void query(double minX, double minY, double maxX, double maxY, List<Integer> results,
-               Deque<Integer> stack) {
+               IntArrayDeque stack) {
         IntPredicate visitor = (index) -> {
             results.add(index);
             return true;
@@ -246,7 +246,7 @@ public class StaticSpatialIndex {
     // See other overloads for details.
 
     void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor) {
-        Deque<Integer> stack = new ArrayDeque<>(16);
+        IntArrayDeque stack = new IntArrayDeque(16);
         visitQuery(minX, minY, maxX, maxY, visitor, stack);
     }
 
@@ -255,7 +255,7 @@ public class StaticSpatialIndex {
     // the query stops early, otherwise the query continues. This overload accepts an existing vector
     // to use as a stack and takes care of clearing the stack before use.
     void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor,
-                    Deque<Integer> stack) {
+                    IntArrayDeque stack) {
         assert m_pos == 4 * m_numNodes : "data not yet indexed - call Finish() before querying";
 
         int nodeIndex = 4 * m_numNodes - 4;
