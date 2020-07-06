@@ -6,7 +6,11 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.css.ast.*;
+import org.jhotdraw8.css.ast.Declaration;
+import org.jhotdraw8.css.ast.Rule;
+import org.jhotdraw8.css.ast.SelectorGroup;
+import org.jhotdraw8.css.ast.StyleRule;
+import org.jhotdraw8.css.ast.Stylesheet;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
