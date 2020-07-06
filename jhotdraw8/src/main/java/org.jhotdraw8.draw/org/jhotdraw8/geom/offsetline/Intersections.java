@@ -267,7 +267,7 @@ public class Intersections {
 
     public static CoincidentSlicesResult
     sortAndjoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
-                                PolyArcPath pline1, PolyArcPath pline2) {
+                                Polyline pline1, Polyline pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();
 
         if (coincidentIntrs.size() == 0) {
@@ -298,9 +298,9 @@ public class Intersections {
 
         Deque<PlineIntersect> sliceStartPoints = result.sliceStartPoints;
         Deque<PlineIntersect> sliceEndPoints = result.sliceEndPoints;
-        Deque<PolyArcPath> coincidentSlices = result.coincidentSlices;
+        Deque<Polyline> coincidentSlices = result.coincidentSlices;
 
-        PolyArcPath[] currCoincidentSlice = new PolyArcPath[]{new PolyArcPath()};
+        Polyline[] currCoincidentSlice = new Polyline[]{new Polyline()};
 
         IntConsumer startCoincidentSliceAt = (int intrIndex) -> {
             final PlineCoincidentIntersect intr = coincidentIntrs.get(intrIndex);
@@ -337,7 +337,7 @@ public class Intersections {
             final PlineVertex u1 = pline2.get(intr.sIndex2);
 
             coincidentSlices.add(currCoincidentSlice[0]);
-            currCoincidentSlice[0] = new PolyArcPath();
+            currCoincidentSlice[0] = new Polyline();
             PlineIntersect sliceEnd = new PlineIntersect();
             sliceEnd.pos = intr.point2;
             sliceEnd.sIndex1 = intr.sIndex1;
@@ -381,7 +381,7 @@ public class Intersections {
             final Point2D firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
             if (fuzzyEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
-                final PolyArcPath lastSlice = coincidentSlices.getLast();
+                final Polyline lastSlice = coincidentSlices.getLast();
                 lastSlice.pop_back();
                 lastSlice.addAll(coincidentSlices.getFirst());
 
@@ -402,7 +402,7 @@ public class Intersections {
      * two polyline segments that share a vertex. NOTES:
      * - Singularities (repeating vertexes) are returned as coincident intersects
      */
-    public static void localSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output) {
+    public static void localSelfIntersects(final Polyline pline, final List<PlineIntersect> output) {
         if (pline.size() < 2) {
             return;
         }
@@ -479,7 +479,7 @@ public class Intersections {
      * /// - We never include intersects at a segment's start point, the matching intersect from the
      * /// previous segment's end point is included (no sense in including both)
      */
-    static void globalSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
+    static void globalSelfIntersects(final Polyline pline, final List<PlineIntersect> output,
                                      final StaticSpatialIndex spatialIndex) {
         if (pline.size() < 3) {
             return;
@@ -556,15 +556,16 @@ public class Intersections {
 
     /// Finds all self intersects of the polyline (equivalent to calling localSelfIntersects and
     /// globalSelfIntersects).
-    public static void allSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
+    public static void allSelfIntersects(final Polyline pline, final List<PlineIntersect> output,
                                          final StaticSpatialIndex spatialIndex) {
         localSelfIntersects(pline, output);
         globalSelfIntersects(pline, output, spatialIndex);
     }
 
-    /// Finds all intersects between pline1 and pline2.
-
-    static void findIntersects(final PolyArcPath pline1, final PolyArcPath pline2,
+    /**
+     * Finds all intersects between pline1 and pline2.
+     */
+    static void findIntersects(final Polyline pline1, final Polyline pline2,
                                final StaticSpatialIndex pline1SpatialIndex,
                                final PlineIntersectsResult output) {
         List<Integer> queryResults = new ArrayList<>();
@@ -580,10 +581,8 @@ public class Intersections {
             final PlineVertex p2v2 = pline2.get(j2);
 
             queryResults.clear();
-
             AABB bb = createFastApproxBoundingBox(p2v1, p2v2);
             pline1SpatialIndex.query(bb.xMin, bb.yMin, bb.xMax, bb.yMax, queryResults, queryStack);
-
             for (int i1 : queryResults) {
                 int j1 = Utils.nextWrappingIndex(i1, pline1);
                 final PlineVertex p1v1 = pline1.get(i1);

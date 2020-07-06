@@ -15,10 +15,10 @@ import java.util.List;
  *  </p>
  */
 public class PolyArcPathBuilder extends AbstractPathBuilder {
-    private final List<PolyArcPath> paths = new ArrayList<>();
-    private PolyArcPath current;
+    private final List<Polyline> paths = new ArrayList<>();
+    private Polyline current;
 
-    public List<PolyArcPath> getPaths() {
+    public List<Polyline> getPaths() {
         return paths;
     }
 
@@ -45,7 +45,7 @@ public class PolyArcPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doLineTo(double x, double y) {
         if (current == null) {
-            current = new PolyArcPath();
+            current = new Polyline();
         }
         current.addVertex(x, y);
     }
@@ -55,7 +55,7 @@ public class PolyArcPathBuilder extends AbstractPathBuilder {
         if (current != null) {
             paths.add(current);
         }
-        current = new PolyArcPath();
+        current = new Polyline();
         current.addVertex(x, y);
     }
 

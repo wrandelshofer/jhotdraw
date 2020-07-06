@@ -118,4 +118,9 @@ public class SvgFloatPathBuilder implements PathBuilder {
     public String build() {
         return buf.toString();
     }
+
+    @Override
+    public boolean needsMoveTo() {
+        return buf.length() == 0;
+    }
 }

@@ -51,6 +51,9 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+        if (numCommands == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_CUBICTO;
         coords[numCoords++] = x1;
@@ -63,6 +66,9 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doLineTo(double x, double y) {
+        if (numCommands == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_LINETO;
         coords[numCoords++] = x;
@@ -79,6 +85,9 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doQuadTo(double x1, double y1, double x, double y) {
+        if (numCommands == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_QUADTO;
         coords[numCoords++] = x1;

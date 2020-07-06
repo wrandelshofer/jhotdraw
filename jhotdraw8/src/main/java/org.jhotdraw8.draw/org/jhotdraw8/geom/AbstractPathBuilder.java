@@ -17,8 +17,13 @@ public abstract class AbstractPathBuilder implements PathBuilder {
     private double lastX, lastY;
     private double lastCX, lastCY;
 
+    private int numCommands = 0;
+
     @Override
     public void arcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doArcTo(radiusX, radiusY, xAxisRotation, x, y, largeArcFlag, sweepFlag);
         lastX = x;
         lastY = y;
@@ -28,11 +33,17 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public final void closePath() {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doClosePath();
     }
 
     @Override
     public final void curveTo(double x1, double y1, double x2, double y2, double x, double y) {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doCurveTo(x1, y1, x2, y2, x, y);
         lastX = x;
         lastY = y;
@@ -96,6 +107,9 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public final void lineTo(double x, double y) {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doLineTo(x, y);
         lastX = x;
         lastY = y;
@@ -105,6 +119,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public final void moveTo(double x, double y) {
+        numCommands++;
         doMoveTo(x, y);
         lastX = x;
         lastY = y;
@@ -114,6 +129,9 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public final void quadTo(double x1, double y1, double x, double y) {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doQuadTo(x1, y1, x, y);
         lastX = x;
         lastY = y;
@@ -123,6 +141,9 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public final void smoothCurveTo(double x2, double y2, double x, double y) {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doSmoothCurveTo(
                 lastX - lastCX + lastX, lastY - lastCY + lastY, x2, y2, x, y);
         lastX = x;
@@ -133,6 +154,9 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     @Override
     public final void smoothQuadTo(double x, double y) {
+        if (numCommands++ == 0) {
+            throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
         doSmoothQuadTo(
                 lastX - lastCX + lastX, lastY - lastCY + lastY, x, y);
         lastCX = lastX - lastCX + lastX;
@@ -155,5 +179,9 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     protected void setLastCY(double lastCY) {
         this.lastCY = lastCY;
+    }
+
+    public boolean needsMoveTo() {
+        return numCommands == 0;
     }
 }

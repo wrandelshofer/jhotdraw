@@ -46,7 +46,7 @@ public class Utils {
     }
 
     public static MinMax minmax(double a, double b) {
-        return new MinMax(b, a);
+        return new MinMax(a, b);
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue) {
@@ -122,8 +122,7 @@ public class Utils {
         }
 
         double sol2 = (c / a) / sol1;
-
-        return new MinMax(sol1, sol2);
+        return minmax(sol1, sol2);
     }
 
     /**

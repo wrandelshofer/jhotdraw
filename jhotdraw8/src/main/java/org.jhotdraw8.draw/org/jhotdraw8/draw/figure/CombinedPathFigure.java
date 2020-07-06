@@ -22,7 +22,7 @@ import org.jhotdraw8.geom.ConcatenatedPathIterator;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;

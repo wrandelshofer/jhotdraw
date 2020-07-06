@@ -11,8 +11,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
@@ -23,7 +25,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.FXPathBuilder;
@@ -31,7 +32,10 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.offsetline.PapOffsetPathBuilder;
-import org.jhotdraw8.geom.offsetline.PolyArcPath;
+import org.jhotdraw8.geom.offsetline.PlineVertex;
+import org.jhotdraw8.geom.offsetline.Polyline;
+
+import java.util.List;
 
 /**
  * CardinalSplineSampleMain.
@@ -39,7 +43,7 @@ import org.jhotdraw8.geom.offsetline.PolyArcPath;
  * @author Werner Randelshofer
  */
 public class OffsetPathSampleMain extends Application {
-    private Polyline polyline = new Polyline(
+    private javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
             110, 200,
             160, 180,
             210, 120,
@@ -50,7 +54,6 @@ public class OffsetPathSampleMain extends Application {
     StackPane canvas = new StackPane();
     private DoubleProperty offset = new SimpleDoubleProperty(0.0);
     private BooleanProperty closed = new SimpleBooleanProperty();
-    private BooleanProperty selfIntersects = new SimpleBooleanProperty();
 
     @Override
     public void start(@NonNull Stage primaryStage) {
@@ -60,15 +63,16 @@ public class OffsetPathSampleMain extends Application {
         slider.valueProperty().bindBidirectional(offset);
         slider.setMin(-100.0);
         slider.setMax(100.0);
+        slider.setMajorTickUnit(10.0);
+        slider.setSnapToTicks(true);
         CheckBox checkBox = new CheckBox("Closed");
         checkBox.selectedProperty().bindBidirectional(closed);
-        CheckBox checkBox2 = new CheckBox("Self-Intersects");
-        checkBox2.selectedProperty().bindBidirectional(selfIntersects);
         checkBox.selectedProperty().addListener((v, o, n) -> updatePath());
-        checkBox2.selectedProperty().addListener((v, o, n) -> updatePath());
+        Button button = new Button("Create Test");
+        button.setOnAction(this::createTest);
         hbox.getChildren().add(slider);
         hbox.getChildren().add(checkBox);
-        hbox.getChildren().add(checkBox2);
+        hbox.getChildren().add(button);
         hbox.setSpacing(10.0);
 
         borderPane.setTop(hbox);
@@ -97,16 +101,58 @@ public class OffsetPathSampleMain extends Application {
         primaryStage.show();
     }
 
+    private void createTest(ActionEvent actionEvent) {
+        Polyline pline = createPline(polyline);
+        PapOffsetPathBuilder papb = new PapOffsetPathBuilder();
+        List<Polyline> offsetPlines = papb.parallelOffset(pline, offset.get());
+        StringBuilder buf = new StringBuilder();
+        buf.append("dynamicTest(\"1\", () -> doTest(\n");
+        dumpPline(pline, buf);
+        buf.append(",\n");
+        buf.append(offset.get());
+        buf.append(",\n");
+        buf.append("Arrays.asList(");
+        boolean first = true;
+        for (Polyline opl : offsetPlines) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(",\n");
+            }
+            dumpPline(opl, buf);
+        }
+
+        buf.append(")\n");
+        buf.append(")),\n");
+        System.out.println(buf);
+    }
+
+    private void dumpPline(Polyline pline, StringBuilder buf) {
+        buf.append("polylineOf(").append(pline.isClosed()).append(",new double[][]{");
+
+        boolean first = true;
+        for (PlineVertex v : pline) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(", ");
+            }
+            buf.append('{').append(v.getX()).append(", ").append(v.getY()).append(", ").append(v.bulge()).append('}');
+        }
+        buf.append("})");
+    }
+
     private void onPropertyChanged(Observable observable) {
         updatePath();
     }
 
     private Integer activePolypoint = null;
+    private double grid = 10.0;
 
     private void onMouseDragged(MouseEvent mouseEvent) {
         if (activePolypoint != null) {
-            polyline.getPoints().set(activePolypoint, mouseEvent.getX());
-            polyline.getPoints().set(activePolypoint + 1, mouseEvent.getY());
+            polyline.getPoints().set(activePolypoint, Math.floor(mouseEvent.getX() / grid) * grid);
+            polyline.getPoints().set(activePolypoint + 1, Math.floor(mouseEvent.getY() / grid) * grid);
             updatePath();
         }
     }
@@ -135,7 +181,7 @@ public class OffsetPathSampleMain extends Application {
         doOffsetPath(polyline, offsetPath2, -offset.get());
     }
 
-    private void doOffsetPathWithOldAlgo(Polyline polyline, Path path, double offset) {
+    private void doOffsetPathWithOldAlgo(javafx.scene.shape.Polyline polyline, Path path, double offset) {
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
         if (closed.get()) {
@@ -153,33 +199,37 @@ public class OffsetPathSampleMain extends Application {
         }
     }
 
-    private void doOffsetPath(Polyline polyline, Path path, double offset) {
-        PolyArcPath pap = new PolyArcPath();
-        ObservableList<Double> points = polyline.getPoints();
-        for (int i = 0, n = points.size(); i < n; i += 2) {
-            pap.addVertex(points.get(i), points.get(i + 1));
-        }
-        pap.isClosed(closed.get());
+    private void doOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
+        Polyline pap = createPline(polyline);
         PapOffsetPathBuilder papb = new PapOffsetPathBuilder();
+        List<Polyline> offsetPlines = papb.parallelOffset(pap, offset);
+
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
-        for (var offPap : papb.parallelOffset(pap, offset, selfIntersects.get())) {
+        for (var offPap : offsetPlines) {
             elements.addAll(
                     Shapes.fxPathElementsFromAWT(offPap.getPathIterator(null)));
         }
     }
 
-    private void doRawOffsetPath(Polyline polyline, Path path, double offset) {
-        PolyArcPath pap = new PolyArcPath();
+    @NonNull
+    private Polyline createPline(javafx.scene.shape.Polyline polyline) {
+        Polyline pap = new Polyline();
         ObservableList<Double> points = polyline.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {
             pap.addVertex(points.get(i), points.get(i + 1));
         }
         pap.isClosed(closed.get());
+        return pap;
+    }
+
+    private void doRawOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
+        Polyline pap = createPline(polyline);
+        pap.isClosed(closed.get());
         PapOffsetPathBuilder papb = new PapOffsetPathBuilder();
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
-        PolyArcPath offPap = papb.createRawOffsetPline(pap, offset);
+        Polyline offPap = papb.createRawOffsetPline(pap, offset);
         elements.addAll(
                 Shapes.fxPathElementsFromAWT(offPap.getPathIterator(null)));
 

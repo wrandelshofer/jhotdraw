@@ -27,7 +27,7 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collections;

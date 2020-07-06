@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 

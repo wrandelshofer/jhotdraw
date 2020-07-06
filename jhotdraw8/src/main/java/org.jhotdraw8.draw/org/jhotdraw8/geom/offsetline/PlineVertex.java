@@ -7,6 +7,7 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -88,9 +89,29 @@ public class PlineVertex {
         y = p.getY();
     }
 
-    /// Computes a fast approximate AABB of a segment described by v1 to v2, bounding box may be larger
-    /// than the true bounding box for the segment
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        PlineVertex that = (PlineVertex) o;
+        return Double.compare(that.x, x) == 0 &&
+                Double.compare(that.y, y) == 0 &&
+                Double.compare(that.bulge, bulge) == 0;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, bulge);
+    }
+
+    /**
+     * Computes a fast approximate AABB of a segment described by v1 to v2, bounding box may be larger
+     * than the true bounding box for the segment
+     */
     static AABB createFastApproxBoundingBox(final PlineVertex v1, final PlineVertex v2) {
         AABB result = new AABB();
         if (v1.bulgeIsZero()) {

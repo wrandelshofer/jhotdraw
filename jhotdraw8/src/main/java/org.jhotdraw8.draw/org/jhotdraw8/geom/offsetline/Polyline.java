@@ -28,22 +28,22 @@ import static org.jhotdraw8.geom.offsetline.PlineVertex.segLength;
  * </ul>
  * </p>
  */
-public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
+public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
     private final static long serialVersionUID = 1L;
 
     @Override
-    public PolyArcPath clone() {
-        return (PolyArcPath) super.clone();
+    public Polyline clone() {
+        return (Polyline) super.clone();
     }
 
     private boolean closed;
     private int windingRule = PathIterator.WIND_EVEN_ODD;
 
-    public PolyArcPath() {
+    public Polyline() {
         super();
     }
 
-    public PolyArcPath(int initialCapacity) {
+    public Polyline(int initialCapacity) {
         super(initialCapacity);
     }
 
@@ -112,9 +112,9 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
 
     public PathIterator getPathIterator(AffineTransform at) {
         AWTPathBuilder b = new AWTPathBuilder();
-        PlineVertex prev = PolyArcPath.this.get(PolyArcPath.this.size() - 1);
+        PlineVertex prev = Polyline.this.get(Polyline.this.size() - 1);
         boolean first = true;
-        for (PlineVertex vertex : PolyArcPath.this) {
+        for (PlineVertex vertex : Polyline.this) {
             double bulge = prev.bulge();
             if (bulge == 0.0) {
                 if (first) {
@@ -137,7 +137,7 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
             }
             prev = vertex;
         }
-        if (PolyArcPath.this.isClosed()) {
+        if (Polyline.this.isClosed()) {
             b.closePath();
         }
         Path2D path = b.build();
@@ -147,7 +147,7 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
 
     /// Creates an approximate spatial index for all the segments in the polyline given using
     /// createFastApproxBoundingBox.
-    public static StaticSpatialIndex createApproxSpatialIndex(final PolyArcPath pline) {
+    public static StaticSpatialIndex createApproxSpatialIndex(final Polyline pline) {
         assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
 
         int segmentCount = pline.isClosed() ? pline.size() : pline.size() - 1;
@@ -170,7 +170,7 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     }
 
     /// becomes the end vertex and the end vertex becomes the starting vertex.
-    public static void invertDirection(PolyArcPath pline) {
+    public static void invertDirection(Polyline pline) {
         if (pline.size() < 2) {
             return;
         }

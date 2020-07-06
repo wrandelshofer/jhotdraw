@@ -7,10 +7,10 @@ import javafx.geometry.Point2D;
  * Represents a raw polyline offset segment.
  */
 class PlineOffsetSegment {
-    PlineVertex v1;
-    PlineVertex v2;
-    Point2D origV2Pos;
-    boolean collapsedArc;
+    final PlineVertex v1;
+    final PlineVertex v2;
+    final Point2D origV2Pos;
+    final boolean collapsedArc;
 
 
     public PlineOffsetSegment(PlineVertex v1, PlineVertex v2, Point2D origV2Pos, boolean collapsedArc) {
@@ -18,13 +18,5 @@ class PlineOffsetSegment {
         this.v2 = v2;
         this.origV2Pos = origV2Pos;
         this.collapsedArc = collapsedArc;
-    }
-
-    public void setV1(PlineVertex v1) {
-        this.v1 = v1;
-    }
-
-    public void setV2(PlineVertex v2) {
-        this.v2 = v2;
     }
 }

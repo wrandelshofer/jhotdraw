@@ -7,8 +7,7 @@ package org.jhotdraw8.geom;
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.Rectangle;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;

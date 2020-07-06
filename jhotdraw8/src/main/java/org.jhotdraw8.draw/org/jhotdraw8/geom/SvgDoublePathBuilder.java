@@ -119,4 +119,8 @@ public class SvgDoublePathBuilder implements PathBuilder {
         return buf.toString();
     }
 
+    @Override
+    public boolean needsMoveTo() {
+        return buf.length() == 0;
+    }
 }
