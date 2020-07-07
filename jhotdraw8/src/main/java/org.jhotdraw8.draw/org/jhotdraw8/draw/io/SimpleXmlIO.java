@@ -724,21 +724,22 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     protected void writeElementAttributes(@NonNull Element elem, @NonNull Figure figure) throws IOException {
         String id = idFactory.createId(figure);
         setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
-        Set<MapAccessor<?>> todo = new LinkedHashSet<>(figureFactory.figureAttributeKeys(figure));
+        final Set<MapAccessor<?>> keys = figureFactory.figureAttributeKeys(figure);
+        Set<MapAccessor<?>> done = new HashSet<>(keys.size());
 
         // First write all non-transient composite attributes, then write the remaining non-transient non-composite attributes
-        for (MapAccessor<?> k : new ArrayList<>(todo)) {
+        for (MapAccessor<?> k : keys) {
             if (k instanceof CompositeMapAccessor) {
-                todo.remove(k);
+                done.add(k);
                 if (!k.isTransient()) {
                     @SuppressWarnings("unchecked") CompositeMapAccessor<Object> cmap = (CompositeMapAccessor<Object>) k;
-                    todo.removeAll(cmap.getSubAccessors());
+                    done.addAll(cmap.getSubAccessors());
                     writeElementAttribute(elem, figure, cmap);
                 }
             }
         }
-        for (MapAccessor<?> k : todo) {
-            if (!k.isTransient()) {
+        for (MapAccessor<?> k : keys) {
+            if (!k.isTransient() && !done.contains(k)) {
                 @SuppressWarnings("unchecked") MapAccessor<Object> cmap = (MapAccessor<Object>) k;
                 writeElementAttribute(elem, figure, cmap);
             }
