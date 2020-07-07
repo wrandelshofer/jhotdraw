@@ -77,15 +77,12 @@ public class CssFont {
     }
 
     public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, double size) {
-        return cachedFonts.computeIfAbsent(family
-                + (weight == null ? "" : weight.name())
-                + (posture == null ? "" : posture.name())
-                + Double.doubleToRawLongBits(size), str -> new CssFont(family, weight, posture, new CssSize(size)));
+        return font(family, weight, posture, new CssSize(size));
     }
 
     @NonNull
     public static CssFont font(String family, double size) {
-        return new CssFont(family, FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(size));
+        return font(family, null, null, new CssSize(size));
     }
 
     @Override
