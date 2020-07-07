@@ -27,7 +27,7 @@ public class FXWorker {
      */
     @NonNull
     public static CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
-        return run(r -> new Thread(r).start(), runnable);
+        return run(ForkJoinPool.commonPool(), runnable);
     }
 
     /**
