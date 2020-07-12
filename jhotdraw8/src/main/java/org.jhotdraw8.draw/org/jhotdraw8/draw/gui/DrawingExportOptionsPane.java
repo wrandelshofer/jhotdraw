@@ -21,6 +21,7 @@ import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.gui.InputDialog;
+import org.jhotdraw8.svg.io.SvgSceneGraphExporter;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.util.Resources;
 
@@ -123,7 +124,7 @@ public class DrawingExportOptionsPane extends GridPane {
         EXPORT_SLICES_DPI_KEY.put(map, slicesDpiFormatter.getValue().doubleValue());
         EXPORT_SLICES_RESOLUTION_2X_KEY.put(map, slicesResolution2xCheckBox.isSelected());
         EXPORT_SLICES_RESOLUTION_3X_KEY.put(map, slicesResolution3xCheckBox.isSelected());
-        SvgExportOutputFormat.EXPORT_INVISIBLE_ELEMENTS_KEY.put(map, exportInvisibleElements.isSelected());
+        SvgSceneGraphExporter.EXPORT_INVISIBLE_ELEMENTS_KEY.put(map, exportInvisibleElements.isSelected());
         return map;
     }
 

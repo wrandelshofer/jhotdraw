@@ -79,7 +79,7 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
         return windingRule;
     }
 
-    public void pop_back() {
+    public void removeLast() {
         remove(size() - 1);
     }
 
@@ -145,8 +145,10 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
         return path.getPathIterator(at);
     }
 
-    /// Creates an approximate spatial index for all the segments in the polyline given using
-    /// createFastApproxBoundingBox.
+    /**
+     * Creates an approximate spatial index for all the segments in the polyline given using
+     * createFastApproxBoundingBox.
+     */
     public static StaticSpatialIndex createApproxSpatialIndex(final Polyline pline) {
         assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
 
@@ -165,7 +167,6 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
         }
 
         result.finish();
-
         return result;
     }
 

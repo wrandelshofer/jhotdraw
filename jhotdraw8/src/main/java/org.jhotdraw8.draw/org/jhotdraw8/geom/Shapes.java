@@ -2066,4 +2066,12 @@ public class Shapes {
             }
         };
     }
+
+    public static PathIterator pathIterator(List<PathElement> pathElements, int windingRule, AffineTransform tx) {
+        final AWTPathBuilder b = new AWTPathBuilder(new Path2D.Double());
+        buildFromFXPathElements(b, pathElements);
+        final Path2D p = b.build();
+        p.setWindingRule(windingRule);
+        return p.getPathIterator(tx);
+    }
 }

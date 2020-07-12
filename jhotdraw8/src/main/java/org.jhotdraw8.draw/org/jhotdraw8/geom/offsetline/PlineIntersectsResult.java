@@ -9,4 +9,12 @@ import java.util.List;
 public class PlineIntersectsResult {
     List<PlineIntersect> intersects = new ArrayList<>();
     List<PlineCoincidentIntersect> coincidentIntersects = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "PlineIntersectsResult{" +
+                "intersects=" + intersects +
+                ", coincidentIntersects=" + coincidentIntersects +
+                '}';
+    }
 }

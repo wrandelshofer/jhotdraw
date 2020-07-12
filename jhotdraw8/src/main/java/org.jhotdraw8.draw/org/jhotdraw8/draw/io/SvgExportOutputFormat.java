@@ -15,7 +15,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonNullObjectKey;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -36,6 +35,7 @@ import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.TransformFlattener;
 import org.jhotdraw8.svg.io.AbstractSvgSceneGraphExporter;
 import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
+import org.jhotdraw8.svg.io.SvgSceneGraphExporter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
@@ -68,7 +68,6 @@ import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
-    public final static NonNullObjectKey<Boolean> EXPORT_INVISIBLE_ELEMENTS_KEY = new NonNullObjectKey<>("exportInvisibleElements", Boolean.class, false);
 
     public final static DataFormat SVG_FORMAT;
     public final static String SVG_MIME_TYPE = "image/svg+xml";
@@ -107,7 +106,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     private AbstractSvgSceneGraphExporter createExporter() {
         AbstractSvgSceneGraphExporter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setUriResolver(getUriResolver());
-        exporter.setExportInvisibleElements(getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY));
+        exporter.setExportInvisibleElements(getNonNull(SvgSceneGraphExporter.EXPORT_INVISIBLE_ELEMENTS_KEY));
         return exporter;
     }
 

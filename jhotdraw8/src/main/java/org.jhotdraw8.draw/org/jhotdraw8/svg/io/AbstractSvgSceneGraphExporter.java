@@ -50,11 +50,11 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.css.text.CssNumberConverter;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.Transforms;
@@ -97,7 +97,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExporter {
+public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean implements SvgSceneGraphExporter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";
     public final static String SVG_NS = "http://www.w3.org/2000/svg";
     protected final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
@@ -107,13 +107,10 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
     protected IdFactory idFactory = new SimpleIdFactory();
     private final Object imageUriKey;
     @Nullable
-    private final String namespaceQualifier = null;
+    private String namespaceQualifier = null;
     protected final XmlNumberConverter nb = new XmlNumberConverter();
-    private final Converter<ImmutableList<Number>> nbList = new CssListConverter<>(new CssNumberConverter(false));
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
-    private boolean exportInvisibleElements = true;
-    private boolean relativizePaths = false;
     private final Object skipKey;
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
     @Nullable
@@ -162,18 +159,18 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
     }
 
     public boolean isExportInvisibleElements() {
-        return exportInvisibleElements;
+        return getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY);
     }
 
     public void setExportInvisibleElements(boolean newValue) {
-        this.exportInvisibleElements = newValue;
+        this.setNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY, newValue);
     }
 
     private boolean isSkipNode(@NonNull Node node) {
         if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return true;
         }
-        if (!exportInvisibleElements) {
+        if (!isExportInvisibleElements()) {
             if (!node.isVisible()) {
                 return true;
             }
@@ -202,16 +199,25 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         return false;
     }
 
+    @Nullable
+    public String getNamespaceQualifier() {
+        return namespaceQualifier;
+    }
+
+    public void setNamespaceQualifier(@Nullable String namespaceQualifier) {
+        this.namespaceQualifier = namespaceQualifier;
+    }
+
     public Document toDocument(@NonNull javafx.scene.Node drawingNode) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             Document doc;
             builderFactory.setNamespaceAware(true);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            // We do not want that the reader creates a socket connection!
+            // We do not want that the builder creates a socket connection!
             builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
             DOMImplementation domImpl = builder.getDOMImplementation();
-            doc = domImpl.createDocument(SVG_NS, namespaceQualifier == null ? "svg" : namespaceQualifier + ":" + "svg", null);
+            doc = domImpl.createDocument(SVG_NS, getQualifiedName("svg"), null);
 
             Element docElement = doc.getDocumentElement();
 
@@ -223,7 +229,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
             idFactory.reset();
             initIdFactoryRecursively(drawingNode);
-            Element defsElement = doc.createElement("defs");
+            Element defsElement = createElement(doc, "defs");
             writeDefsRecursively(doc, defsElement, drawingNode);
             if (defsElement.getChildNodes().getLength() > 0) {
                 docElement.appendChild(defsElement);
@@ -237,6 +243,11 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         }
     }
 
+    @NonNull
+    public String getQualifiedName(@NonNull String unqualifiedName) {
+        return namespaceQualifier == null ? unqualifiedName : namespaceQualifier + ":" + unqualifiedName;
+    }
+
     public void write(OutputStream out, @NonNull javafx.scene.Node drawing) throws IOException {
         Document doc = toDocument(drawing);
         XmlUtil.write(out, doc);
@@ -248,7 +259,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
     }
 
     private Element writeArc(@NonNull Document doc, @NonNull Element parent, @NonNull Arc node) {
-        Element elem = doc.createElement("path");
+        Element elem = createElement(doc, "path");
         parent.appendChild(elem);
         StringBuilder buf = new StringBuilder();
         double centerX = node.getCenterX();
@@ -308,7 +319,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeCircle(@NonNull Document doc, @NonNull Element
             parent, @NonNull Circle node) {
-        Element elem = doc.createElement("circle");
+        Element elem = createElement(doc, "circle");
         if (node.getCenterX() != 0.0) {
             elem.setAttribute("cx", nb.toString(node.getCenterX()));
         }
@@ -332,7 +343,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeCubicCurve(@NonNull Document doc, @NonNull Element
             parent, @NonNull CubicCurve node) {
-        Element elem = doc.createElement("path");
+        Element elem = createElement(doc, "path");
         parent.appendChild(elem);
         final StringBuilder buf = new StringBuilder();
         buf.append('M')
@@ -383,7 +394,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeEllipse(@NonNull Document doc, @NonNull Element
             parent, @NonNull Ellipse node) {
-        Element elem = doc.createElement("ellipse");
+        Element elem = createElement(doc, "ellipse");
         if (node.getCenterX() != 0.0) {
             elem.setAttribute("cx", nb.toString(node.getCenterX()));
         }
@@ -427,12 +438,12 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
             fillRule = FillRule.NON_ZERO;
         }
         switch (fillRule) {
-        case EVEN_ODD:
-            elem.setAttribute("fill-rule", "evenodd");
-            break;
-        case NON_ZERO:
-        default:
-            break;
+            case EVEN_ODD:
+                elem.setAttribute("fill-rule", "evenodd");
+                break;
+            case NON_ZERO:
+            default:
+                break;
         }
     }
 
@@ -447,15 +458,21 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
      */
     protected Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
             node) {
-        Element elem = doc.createElement("g");
+        Element elem = createElement(doc, "g");
         writeClipAttributes(elem, node);
         parent.appendChild(elem);
         return elem;
     }
 
+    private Element createElement(@NonNull Document doc, @NonNull String unqualifiedName) {
+        return namespaceQualifier == null
+                ? doc.createElement(unqualifiedName)
+                : doc.createElementNS(SVG_NS, namespaceQualifier + ":" + unqualifiedName);
+    }
+
     private Element writeImageView(@NonNull Document doc, @NonNull Element parent, @NonNull ImageView
             node) throws IOException {
-        Element elem = doc.createElement("image");
+        Element elem = createElement(doc, "image");
         parent.appendChild(elem);
 
         elem.setAttribute("x", nb.toString(node.getX()));
@@ -486,7 +503,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeLine(@NonNull Document doc, @NonNull Element parent, @NonNull Line
             node) {
-        Element elem = doc.createElement("line");
+        Element elem = createElement(doc, "line");
         if (node.getStartX() != 0.0) {
             elem.setAttribute("x1", nb.toString(node.getStartX()));
         }
@@ -519,7 +536,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         } else if (node instanceof Group) {
             // a group can be omitted if it does not have any children
             Group g = (Group) node;
-            boolean omitGroup = !exportInvisibleElements && g.getChildren().isEmpty();
+            boolean omitGroup = !isExportInvisibleElements() && g.getChildren().isEmpty();
             if (!omitGroup) {
                 elem = writeGroup(doc, parent, (Group) node);
             }
@@ -558,7 +575,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         if ((titleObj instanceof String)) {
             String title = ((String) titleObj).trim();
             if (!title.isEmpty()) {
-                Element titleElem = doc.createElement("title");
+                Element titleElem = createElement(doc, "title");
                 titleElem.appendChild(doc.createTextNode(title));
                 elem.appendChild(titleElem);
             }
@@ -570,7 +587,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         if ((descObj instanceof String)) {
             String desc = ((String) descObj).trim();
             if (!desc.isEmpty()) {
-                Element titleElem = doc.createElement("desc");
+                Element titleElem = createElement(doc, "desc");
                 titleElem.appendChild(doc.createTextNode(desc));
                 elem.appendChild(titleElem);
             }
@@ -582,96 +599,104 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         if (idFactory.getId(paint) == null) {
             if (paint instanceof LinearGradient) {
                 LinearGradient g = (LinearGradient) paint;
-                String id = idFactory.createId(paint, "linearGradient");
-                Element elem = doc.createElement("linearGradient");
-                defsNode.appendChild(doc.createTextNode("\n"));
-                elem.setAttribute("id", id);
-                if (g.isProportional()) {
-                    elem.setAttribute("x1", nb.toString(g.getStartX() * 100) + "%");
-                    elem.setAttribute("y1", nb.toString(g.getStartY() * 100) + "%");
-                    elem.setAttribute("x2", nb.toString(g.getEndX() * 100) + "%");
-                    elem.setAttribute("y2", nb.toString(g.getEndY() * 100) + "%");
-                    elem.setAttribute("gradientUnits", "objectBoundingBox");
-
-                } else {
-                    elem.setAttribute("x1", nb.toString(g.getStartX()));
-                    elem.setAttribute("y1", nb.toString(g.getStartY()));
-                    elem.setAttribute("x2", nb.toString(g.getEndX()));
-                    elem.setAttribute("y2", nb.toString(g.getEndY()));
-                    elem.setAttribute("gradientUnits", "userSpaceOnUse");
-                }
-                switch (g.getCycleMethod()) {
-                case NO_CYCLE:
-                    elem.setAttribute("spreadMethod", "pad");
-                    break;
-                case REFLECT:
-                    elem.setAttribute("spreadMethod", "reflect");
-                    break;
-                case REPEAT:
-                    elem.setAttribute("spreadMethod", "repeat");
-                    break;
-                default:
-                    throw new IOException("unsupported cycle method:" + g.getCycleMethod());
-                }
-                for (Stop s : g.getStops()) {
-                    Element stopElem = doc.createElement("stop");
-                    stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
-                    Color c = s.getColor();
-                    stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
-                    if (!c.isOpaque()) {
-                        stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
-                    }
-                    elem.appendChild(stopElem);
-                }
-                defsNode.appendChild(elem);
+                writeLinearGradientDef(doc, defsNode, g);
             } else if (paint instanceof RadialGradient) {
                 RadialGradient g = (RadialGradient) paint;
-                String id = idFactory.createId(paint, "radialGradient");
-                Element elem = doc.createElement("radialGradient");
-                defsNode.appendChild(doc.createTextNode("\n"));
-                elem.setAttribute("id", id);
-                if (g.isProportional()) {
-                    elem.setAttribute("cx", nb.toString(g.getCenterX() * 100) + "%");
-                    elem.setAttribute("cy", nb.toString(g.getCenterY() * 100) + "%");
-                    elem.setAttribute("r", nb.toString(g.getRadius() * 100) + "%");
-                    elem.setAttribute("fx", nb.toString((g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
-                    elem.setAttribute("fy", nb.toString((g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
-                    elem.setAttribute("gradientUnits", "objectBoundingBox");
-
-                } else {
-                    elem.setAttribute("cx", nb.toString(g.getCenterX()));
-                    elem.setAttribute("cy", nb.toString(g.getCenterY()));
-                    elem.setAttribute("r", nb.toString(g.getRadius()));
-                    elem.setAttribute("fx", nb.toString(g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
-                    elem.setAttribute("fy", nb.toString(g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
-                    elem.setAttribute("gradientUnits", "userSpaceOnUse");
-                }
-                switch (g.getCycleMethod()) {
-                case NO_CYCLE:
-                    elem.setAttribute("spreadMethod", "pad");
-                    break;
-                case REFLECT:
-                    elem.setAttribute("spreadMethod", "reflect");
-                    break;
-                case REPEAT:
-                    elem.setAttribute("spreadMethod", "repeat");
-                    break;
-                default:
-                    throw new IOException("unsupported cycle method:" + g.getCycleMethod());
-                }
-                for (Stop s : g.getStops()) {
-                    Element stopElem = doc.createElement("stop");
-                    stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
-                    Color c = s.getColor();
-                    stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
-                    if (!c.isOpaque()) {
-                        stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
-                    }
-                    elem.appendChild(stopElem);
-                }
-                defsNode.appendChild(elem);
+                writeRadialGradientDef(doc, defsNode, g);
             }
         }
+    }
+
+    private void writeRadialGradientDef(@NonNull Document doc, @NonNull Element defsNode, RadialGradient g) throws IOException {
+        String id = idFactory.createId(g, "radialGradient");
+        Element elem = createElement(doc, "radialGradient");
+        defsNode.appendChild(doc.createTextNode("\n"));
+        elem.setAttribute("id", id);
+        if (g.isProportional()) {
+            elem.setAttribute("cx", nb.toString(g.getCenterX() * 100) + "%");
+            elem.setAttribute("cy", nb.toString(g.getCenterY() * 100) + "%");
+            elem.setAttribute("r", nb.toString(g.getRadius() * 100) + "%");
+            elem.setAttribute("fx", nb.toString((g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
+            elem.setAttribute("fy", nb.toString((g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
+            elem.setAttribute("gradientUnits", "objectBoundingBox");
+
+        } else {
+            elem.setAttribute("cx", nb.toString(g.getCenterX()));
+            elem.setAttribute("cy", nb.toString(g.getCenterY()));
+            elem.setAttribute("r", nb.toString(g.getRadius()));
+            elem.setAttribute("fx", nb.toString(g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
+            elem.setAttribute("fy", nb.toString(g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
+            elem.setAttribute("gradientUnits", "userSpaceOnUse");
+        }
+        switch (g.getCycleMethod()) {
+            case NO_CYCLE:
+                elem.setAttribute("spreadMethod", "pad");
+                break;
+            case REFLECT:
+                elem.setAttribute("spreadMethod", "reflect");
+                break;
+            case REPEAT:
+                elem.setAttribute("spreadMethod", "repeat");
+                break;
+            default:
+                throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+        }
+        for (Stop s : g.getStops()) {
+            Element stopElem = createElement(doc, "stop");
+            stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
+            Color c = s.getColor();
+            stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
+            if (!c.isOpaque()) {
+                stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
+            }
+            elem.appendChild(stopElem);
+        }
+        defsNode.appendChild(elem);
+    }
+
+    private void writeLinearGradientDef(@NonNull Document doc, @NonNull Element defsNode, LinearGradient g) throws IOException {
+        String id = idFactory.createId(g, "linearGradient");
+        Element elem = createElement(doc, "linearGradient");
+        defsNode.appendChild(doc.createTextNode("\n"));
+        elem.setAttribute("id", id);
+        if (g.isProportional()) {
+            elem.setAttribute("x1", nb.toString(g.getStartX() * 100) + "%");
+            elem.setAttribute("y1", nb.toString(g.getStartY() * 100) + "%");
+            elem.setAttribute("x2", nb.toString(g.getEndX() * 100) + "%");
+            elem.setAttribute("y2", nb.toString(g.getEndY() * 100) + "%");
+            elem.setAttribute("gradientUnits", "objectBoundingBox");
+
+        } else {
+            elem.setAttribute("x1", nb.toString(g.getStartX()));
+            elem.setAttribute("y1", nb.toString(g.getStartY()));
+            elem.setAttribute("x2", nb.toString(g.getEndX()));
+            elem.setAttribute("y2", nb.toString(g.getEndY()));
+            elem.setAttribute("gradientUnits", "userSpaceOnUse");
+        }
+        switch (g.getCycleMethod()) {
+            case NO_CYCLE:
+                elem.setAttribute("spreadMethod", "pad");
+                break;
+            case REFLECT:
+                elem.setAttribute("spreadMethod", "reflect");
+                break;
+            case REPEAT:
+                elem.setAttribute("spreadMethod", "repeat");
+                break;
+            default:
+                throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+        }
+        for (Stop s : g.getStops()) {
+            Element stopElem = createElement(doc, "stop");
+            stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
+            Color c = s.getColor();
+            stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
+            if (!c.isOpaque()) {
+                stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
+            }
+            elem.appendChild(stopElem);
+        }
+        defsNode.appendChild(elem);
     }
 
     @Nullable
@@ -680,10 +705,10 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
         if (node.getElements().isEmpty()) {
             return null;
         }
-        Element elem = doc.createElement("path");
+        Element elem = createElement(doc, "path");
         parent.appendChild(elem);
         String d;
-        if (relativizePaths) {
+        if (isRelativizePaths()) {
             d = Shapes.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements()).getPathIterator(null));
         } else {
             d = Shapes.doubleSvgStringFromElements(node.getElements());
@@ -694,7 +719,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writePolygon(@NonNull Document doc, @NonNull Element
             parent, @NonNull Polygon node) {
-        Element elem = doc.createElement("polygon");
+        Element elem = createElement(doc, "polygon");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
         for (int i = 0, n = ps.size(); i < n; i += 2) {
@@ -712,7 +737,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writePolyline(@NonNull Document doc, @NonNull Element
             parent, @NonNull Polyline node) {
-        Element elem = doc.createElement("polyline");
+        Element elem = createElement(doc, "polyline");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
         for (int i = 0, n = ps.size(); i < n; i += 2) {
@@ -735,7 +760,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeQuadCurve(@NonNull Document doc, @NonNull Element parent, @NonNull QuadCurve
             node) {
-        Element elem = doc.createElement("path");
+        Element elem = createElement(doc, "path");
         parent.appendChild(elem);
         final StringBuilder buf = new StringBuilder();
         buf.append('M')
@@ -757,7 +782,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeRectangle(@NonNull Document doc, @NonNull Element
             parent, @NonNull Rectangle node) {
-        Element elem = doc.createElement("rect");
+        Element elem = createElement(doc, "rect");
         if (node.getX() != 0.0) {
             elem.setAttribute("x", nb.toString(node.getX()));
         }
@@ -781,7 +806,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
     }
 
     private Element writeRegion(@NonNull Document doc, @NonNull Element parent, @NonNull Region region) throws IOException {
-        Element elem = doc.createElement("g");
+        Element elem = createElement(doc, "g");
         parent.appendChild(elem);
 
         double x = region.getLayoutX();
@@ -872,15 +897,15 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeSVGPath(@NonNull Document doc, @NonNull Element
             parent, @NonNull SVGPath node) {
-        Element elem = doc.createElement("path");
+        Element elem = createElement(doc, "path");
         elem.setAttribute("d", node.getContent());
         switch (node.getFillRule()) {
-        case NON_ZERO:
-            //    elem.setAttribute("fill-rule","nonzero");// default
-            break;
-        case EVEN_ODD:
-            elem.setAttribute("fill-rule", "evenodd");
-            break;
+            case NON_ZERO:
+                //    elem.setAttribute("fill-rule","nonzero");// default
+                break;
+            case EVEN_ODD:
+                elem.setAttribute("fill-rule", "evenodd");
+                break;
         }
         parent.appendChild(elem);
         return elem;
@@ -971,17 +996,17 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
             // XXX this is currentl only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (shape.getStrokeType()) {
-            case INSIDE:
-                elem.setAttribute("stroke-alignment", "inner");
-                break;
-            case CENTERED:
-                elem.setAttribute("stroke-alignment", "center");
-                break;
-            case OUTSIDE:
-                elem.setAttribute("stroke-alignment", "outer");
-                break;
-            default:
-                throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
+                case INSIDE:
+                    elem.setAttribute("stroke-alignment", "inner");
+                    break;
+                case CENTERED:
+                    elem.setAttribute("stroke-alignment", "center");
+                    break;
+                case OUTSIDE:
+                    elem.setAttribute("stroke-alignment", "outer");
+                    break;
+                default:
+                    throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
             }
         }
     }
@@ -1014,17 +1039,17 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
             // XXX this is currently only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (style.getType()) {
-            case INSIDE:
-                elem.setAttribute("stroke-alignment", "inner");
-                break;
-            case CENTERED:
-                elem.setAttribute("stroke-alignment", "center");
-                break;
-            case OUTSIDE:
-                elem.setAttribute("stroke-alignment", "outer");
-                break;
-            default:
-                throw new InternalError("Unsupported stroke type " + style.getType());
+                case INSIDE:
+                    elem.setAttribute("stroke-alignment", "inner");
+                    break;
+                case CENTERED:
+                    elem.setAttribute("stroke-alignment", "center");
+                    break;
+                case OUTSIDE:
+                    elem.setAttribute("stroke-alignment", "outer");
+                    break;
+                default:
+                    throw new InternalError("Unsupported stroke type " + style.getType());
             }
         }
     }
@@ -1076,7 +1101,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeUnwrappedText(@NonNull Document doc, @NonNull Element parent, @NonNull Text
             node) {
-        Element elem = doc.createElement("text");
+        Element elem = createElement(doc, "text");
         parent.appendChild(elem);
 
         String x = nb.toString(node.getX());
@@ -1094,7 +1119,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
                 elem.appendChild(doc.createTextNode(lines[0]));
             } else {
                 for (int i = 0; i < lines.length; i++) {
-                    Element tspan = doc.createElement("tspan");
+                    Element tspan = createElement(doc, "tspan");
                     tspan.appendChild(doc.createTextNode(lines[i]));
                     tspan.setAttribute("x", x);
                     if (i != 0) {
@@ -1110,7 +1135,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
 
     private Element writeWrappedText(@NonNull Document doc, @NonNull Element parent, @NonNull Text
             node) {
-        Element elem = doc.createElement("text");
+        Element elem = createElement(doc, "text");
         parent.appendChild(elem);
         drawText(doc, elem, node.getText(), node.getLayoutBounds(), node.getFont(), 8,
                 node.isUnderline(), node.isStrikethrough(), node.getTextAlignment(), node.getLineSpacing());
@@ -1273,18 +1298,18 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
             // drawing, then honor alignment
             if (first == layouts.size() - 1) {
                 switch (textAlignment) {
-                case RIGHT:
-                    penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
-                    break;
-                case CENTER:
-                    penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
-                    break;
-                case JUSTIFY:
-                    // not supported
-                    break;
-                case LEFT:
-                default:
-                    break;
+                    case RIGHT:
+                        penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
+                        break;
+                    case CENTER:
+                        penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                        break;
+                    case JUSTIFY:
+                        // not supported
+                        break;
+                    case LEFT:
+                    default:
+                        break;
                 }
             }
 
@@ -1296,7 +1321,7 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
             for (TextLayout nextLayout : layouts) {
                 float nextPosition = positionEnum.next();
 
-                Element tspan = doc.createElement("tspan");
+                Element tspan = createElement(doc, "tspan");
                 int characterCount = nextLayout.getCharacterCount();
                 tspan.appendChild(doc.createTextNode(paragraph.substring(textIndex, textIndex + characterCount)));
                 tspan.setAttribute("x", nb.toString(nextPosition));
@@ -1368,11 +1393,11 @@ public abstract class AbstractSvgSceneGraphExporter implements SvgSceneGraphExpo
     }
 
     public boolean isRelativizePaths() {
-        return relativizePaths;
+        return getNonNull(RELATIVIZE_PATHS_KEY);
     }
 
     public void setRelativizePaths(boolean relativizePaths) {
-        this.relativizePaths = relativizePaths;
+        this.setNonNull(RELATIVIZE_PATHS_KEY, relativizePaths);
     }
 
     protected abstract String getSvgVersion();

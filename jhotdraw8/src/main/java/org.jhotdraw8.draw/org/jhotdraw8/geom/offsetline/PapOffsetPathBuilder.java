@@ -7,6 +7,7 @@ package org.jhotdraw8.geom.offsetline;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.function.QuintFunction;
@@ -222,26 +223,26 @@ public class PapOffsetPathBuilder {
 
         final IntrCircle2Circle2Result intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
         switch (intrResult.intrType) {
-        case NoIntersect:
-            connectUsingArc.run();
-            break;
-        case OneIntersect:
-            processIntersect.accept(intrResult.point1);
-            break;
-        case TwoIntersects: {
-            double dist1 = Geom.squaredDistance(intrResult.point1, s1.origV2Pos);
-            double dist2 = Geom.squaredDistance(intrResult.point2, s1.origV2Pos);
-            if (dist1 < dist2) {
+            case NoIntersect:
+                connectUsingArc.run();
+                break;
+            case OneIntersect:
                 processIntersect.accept(intrResult.point1);
-            } else {
-                processIntersect.accept(intrResult.point2);
+                break;
+            case TwoIntersects: {
+                double dist1 = Geom.squaredDistance(intrResult.point1, s1.origV2Pos);
+                double dist2 = Geom.squaredDistance(intrResult.point2, s1.origV2Pos);
+                if (dist1 < dist2) {
+                    processIntersect.accept(intrResult.point1);
+                } else {
+                    processIntersect.accept(intrResult.point2);
+                }
             }
-        }
-        break;
-        case Coincident:
-            // same constant arc radius and center, just add the vertex (nothing to trim/extend)
-            addOrReplaceIfSamePos(result, u1);
             break;
+            case Coincident:
+                // same constant arc radius and center, just add the vertex (nothing to trim/extend)
+                addOrReplaceIfSamePos(result, u1);
+                break;
         }
     }
 
@@ -336,6 +337,7 @@ public class PapOffsetPathBuilder {
      * Creates the raw offset polyline.
      */
     public Polyline createRawOffsetPline(Polyline pline, double offset) {
+        //final Polyline pline = removeCoincidentPoints(pline0);
         Polyline result = new Polyline();
         if (pline.size() < 2) {
             return result;
@@ -404,14 +406,14 @@ public class PapOffsetPathBuilder {
             for (int i = 1; i < closingPartResult.size(); ++i) {
                 result.addVertex(closingPartResult.get(i));
             }
-            result.pop_back();
+            result.removeLast();
 
             // update first vertex (only if it has not already been updated/replaced)
             if (!firstVertexReplaced) {
                 final Point2D updatedFirstPos = closingPartResult.lastVertex().pos();
                 if (result.get(0).bulgeIsZero()) {
                     // just update position
-                    result.get(0).pos(updatedFirstPos);
+                    result.set(0, new PlineVertex(updatedFirstPos, 0.0));
                 } else if (result.size() > 1) {
                     // update position and bulge
                     final BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(result.get(0), result.get(1));
@@ -421,11 +423,10 @@ public class PapOffsetPathBuilder {
                     if ((updatedTheta < 0.0 && result.get(0).bulgeIsPos()) ||
                             (updatedTheta > 0.0 && result.get(0).bulgeIsNeg())) {
                         // first vertex not valid, just update its position to be removed later
-                        result.get(0).pos(updatedFirstPos);
+                        result.set(0, new PlineVertex(updatedFirstPos, result.get(0).bulge()));
                     } else {
                         // update position and bulge
-                        result.get(0).pos(updatedFirstPos);
-                        result.get(0).bulge(Math.tan(updatedTheta / 4.0));
+                        result.set(0, new PlineVertex(updatedFirstPos, Math.tan(updatedTheta / 4.0)));
                     }
                 }
             }
@@ -453,7 +454,7 @@ public class PapOffsetPathBuilder {
     /**
      * Creates all the raw polyline offset segments.
      */
-    List<PlineOffsetSegment> createUntrimmedOffsetSegments(Polyline pline,
+    List<PlineOffsetSegment> createUntrimmedOffsetSegments(@NonNull Polyline pline,
                                                            double offset) {
         int size = pline.size();
         int segmentCount = pline.isClosed() ? size : size - 1;
@@ -477,7 +478,10 @@ public class PapOffsetPathBuilder {
             Point2D v1ToCenter = v1.pos().subtract(arc.center).normalize();
             Point2D v2ToCenter = v2.pos().subtract(arc.center).normalize();
 
+            // collapsed arc, offset arc start and end points towards arc center and turn into line
+            // handles case where offset vertexes are equal and simplifies path for clipping algorithm
             boolean isCollapsedArc = radiusAfterOffset < Utils.realThreshold;
+
             PlineOffsetSegment seg = new PlineOffsetSegment(
                     new PlineVertex(v1ToCenter.multiply(offs).add(v1.pos()),
                             isCollapsedArc ? 0.0 : v1.bulge()),
@@ -487,6 +491,13 @@ public class PapOffsetPathBuilder {
         };
 
         BiConsumer<PlineVertex, PlineVertex> offsetVisitor = (v1, v2) -> {
+            double dx = v1.getX() - v2.getX();
+            double dy = v1.getY() - v2.getY();
+            double squaredDistance = dx * dx + dy * dy;
+            if (squaredDistance <= Utils.realPrecision) {
+                return;
+            }
+
             if (v1.bulgeIsZero()) {
                 lineVisitor.accept(v1, v2);
             } else {
@@ -501,58 +512,19 @@ public class PapOffsetPathBuilder {
         return result;
     }
 
-    List<OpenPolylineSlice>
-    dualSliceAtIntersectsForOffset(final Polyline originalPline,
-                                   final Polyline rawOffsetPline,
-                                   final Polyline dualRawOffsetPline, double offset) {
+    List<OpenPolylineSlice> dualSliceAtIntersectsForOffset(final Polyline originalPline,
+                                                           final Polyline rawOffsetPline,
+                                                           final Polyline dualRawOffsetPline, double offset) {
         List<OpenPolylineSlice> result = new ArrayList<>();
         if (rawOffsetPline.size() < 2) {
             return result;
         }
 
         StaticSpatialIndex origPlineSpatialIndex = createApproxSpatialIndex(originalPline);
-        StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
 
-        List<PlineIntersect> selfIntersects = new ArrayList<>();
-        allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
+        Map<Integer, List<Point2D>> intersectsLookup = computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(originalPline, rawOffsetPline, dualRawOffsetPline, offset);
 
-        PlineIntersectsResult dualIntersects = new PlineIntersectsResult();
-        findIntersects(rawOffsetPline, dualRawOffsetPline, rawOffsetPlineSpatialIndex, dualIntersects);
-
-
-        Map<Integer, List<Point2D>> intersectsLookup;
-        if (!originalPline.isClosed()) {
-            // find intersects between circles generated at original open polyline end points and raw offset
-            // polyline
-            List<OrderedPair<Integer, List<Point2D>>> intersects = new ArrayList<>();
-            offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline.get(0).pos(),
-                    rawOffsetPlineSpatialIndex, intersects);
-            offsetCircleIntersectsWithPline(rawOffsetPline, offset,
-                    originalPline.lastVertex().pos(),
-                    rawOffsetPlineSpatialIndex, intersects);
-            intersectsLookup = new HashMap<>(2 * selfIntersects.size() + intersects.size());
-            for (final var pair : intersects) {
-                intersectsLookup.put(pair.first(), new ArrayList<>(pair.second()));
-            }
-        } else {
-            intersectsLookup = new HashMap<>(2 * selfIntersects.size());
-        }
-
-        for (final PlineIntersect si : selfIntersects) {
-            intersectsLookup.computeIfAbsent(si.sIndex1, k -> new ArrayList<>()).add(si.pos);
-            intersectsLookup.computeIfAbsent(si.sIndex2, k -> new ArrayList<>()).add(si.pos);
-        }
-
-        for (final PlineIntersect intr : dualIntersects.intersects) {
-            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.pos);
-        }
-
-        for (final PlineCoincidentIntersect intr : dualIntersects.coincidentIntersects) {
-            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.point1);
-            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.point2);
-        }
-
-        IntArrayDeque queryStack = new IntArrayDeque();
+        IntArrayDeque queryStack = new IntArrayDeque(8);
         if (intersectsLookup.size() == 0) {
             if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.get(0).pos(),
                     queryStack)) {
@@ -560,20 +532,20 @@ public class PapOffsetPathBuilder {
             }
             // copy and convert raw offset into open polyline
             OpenPolylineSlice back = new OpenPolylineSlice(Integer.MAX_VALUE, rawOffsetPline);
-            result.add(back);
             back.pline.isClosed(false);
             if (originalPline.isClosed()) {
                 back.pline.addVertex(rawOffsetPline.get(0));
                 back.pline.lastVertex().bulge(0.0);
             }
+            result.add(back);
             return result;
         }
 
         // sort intersects by distance from start vertex
-        for (var kvp : intersectsLookup.entrySet()) {
-            Point2D startPos = rawOffsetPline.get(kvp.getKey()).pos();
+        for (var entry : intersectsLookup.entrySet()) {
+            Point2D startPos = rawOffsetPline.get(entry.getKey()).pos();
             Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
-            kvp.getValue().sort(cmp);
+            entry.getValue().sort(cmp);
         }
 
         BiPredicate<PlineVertex, PlineVertex> intersectsOrigPline = (final PlineVertex v1, final PlineVertex v2) -> {
@@ -700,11 +672,10 @@ public class PapOffsetPathBuilder {
                     if (intersectsOrigPline.test(split.updatedStart, split.splitVertex)) {
                         continue;
                     }
-                    OpenPolylineSlice back = new OpenPolylineSlice();
-                    result.add(back);
-                    back.intrStartIndex = sIndex;
+                    OpenPolylineSlice back = new OpenPolylineSlice(sIndex);
                     back.pline.addVertex(split.updatedStart);
                     back.pline.addVertex(split.splitVertex);
+                    result.add(back);
                 }
             }
 
@@ -718,7 +689,7 @@ public class PapOffsetPathBuilder {
 
             SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
             Polyline currSlice = new Polyline();
-            currSlice.addVertex(split.splitVertex);
+            currSlice.addVertex(split.splitVertex.clone());
 
             int index = nextIndex;
             boolean isValidPline = true;
@@ -800,6 +771,53 @@ public class PapOffsetPathBuilder {
         return result;
     }
 
+    @NonNull
+    private Map<Integer, List<Point2D>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
+            @NonNull Polyline originalPline,
+            @NonNull Polyline rawOffsetPline,
+            @NonNull Polyline dualRawOffsetPline,
+            double offset) {
+
+        StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
+
+        List<PlineIntersect> selfIntersects = new ArrayList<>();
+        allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
+
+        PlineIntersectsResult dualIntersects = new PlineIntersectsResult();
+        findIntersects(rawOffsetPline, dualRawOffsetPline, rawOffsetPlineSpatialIndex, dualIntersects);
+
+        Map<Integer, List<Point2D>> intersectsLookup;
+        if (!originalPline.isClosed()) {
+            // find intersects between circles generated at original open polyline end points and raw offset
+            // polyline
+            List<OrderedPair<Integer, List<Point2D>>> intersects = new ArrayList<>();
+            offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline.get(0).pos(),
+                    rawOffsetPlineSpatialIndex, intersects);
+            offsetCircleIntersectsWithPline(rawOffsetPline, offset,
+                    originalPline.lastVertex().pos(),
+                    rawOffsetPlineSpatialIndex, intersects);
+            intersectsLookup = new HashMap<>(2 * selfIntersects.size() + intersects.size());
+            for (final var pair : intersects) {
+                intersectsLookup.computeIfAbsent(pair.first(), k -> new ArrayList<>()).addAll(pair.second());
+            }
+        } else {
+            intersectsLookup = new HashMap<>(2 * selfIntersects.size());
+        }
+
+        for (final PlineIntersect si : selfIntersects) {
+            intersectsLookup.computeIfAbsent(si.sIndex1, k -> new ArrayList<>()).add(si.pos);
+            intersectsLookup.computeIfAbsent(si.sIndex2, k -> new ArrayList<>()).add(si.pos);
+        }
+        for (final PlineIntersect intr : dualIntersects.intersects) {
+            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.pos);
+        }
+        for (final PlineCoincidentIntersect intr : dualIntersects.coincidentIntersects) {
+            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.point1);
+            intersectsLookup.computeIfAbsent(intr.sIndex1, k -> new ArrayList<>()).add(intr.point2);
+        }
+        return intersectsLookup;
+    }
+
     boolean falseIntersect(double t) {
         return t < 0.0 || t > 1.0;
     }
@@ -874,7 +892,7 @@ public class PapOffsetPathBuilder {
             }
         }
     }
-    /// Stitches raw offset polyline slices together, discarding any that are not valid.
+    /* Stitches raw offset polyline slices together, discarding any that are not valid. */
 
     void lineToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                         boolean connectionArcsAreCCW, Polyline result) {
@@ -900,26 +918,39 @@ public class PapOffsetPathBuilder {
             IntrLineSeg2LineSeg2Result intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
 
             switch (intrResult.intrType) {
-            case None:
-                // just join with straight line
-                addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                addOrReplaceIfSamePos(result, u1);
-                break;
-            case True:
-                addOrReplaceIfSamePos(result, new PlineVertex(intrResult.point, 0.0));
-                break;
-            case Coincident:
-                addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                break;
-            case False:
-                if (intrResult.t0 > 1.0 && falseIntersect(intrResult.t1)) {
-                    // extend and join the lines together using an arc
-                    connectUsingArc.run();
-                } else {
+                case None:
+                    // PATCH WR: If the path turns back on itself, we must join it
+                    //           with an arc, to prevent that the path slice is
+                    //           removed, because without the arc, the intersection
+                    //           point of the segment may lie inside the shape.
+                    if (true) {
+                        connectUsingArc.run();
+                    } else {
+                        // just join with straight line
+                        addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
+                        addOrReplaceIfSamePos(result, u1);
+                    }
+                    break;
+                case True:
+                    addOrReplaceIfSamePos(result, new PlineVertex(intrResult.point, 0.0));
+                    break;
+                case Coincident:
                     addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                    addOrReplaceIfSamePos(result, u1);
-                }
-                break;
+                    break;
+                case False:
+                    // PATCH WR: If the path turns by more than 180 degrees, we must
+                    //           also join it with an arc, to prevent that the path
+                    //           segment is removed, because without the arc,
+                    //           the intersection point of the slice may lie
+                    //           inside the shape.
+                    if (true || intrResult.t0 > 1.0 && falseIntersect(intrResult.t1)) {
+                        // extend and join the lines together using an arc
+                        connectUsingArc.run();
+                    } else {
+                        addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
+                        addOrReplaceIfSamePos(result, u1);
+                    }
+                    break;
             }
         }
     }
@@ -931,23 +962,19 @@ public class PapOffsetPathBuilder {
 
         final double circleRadius = Math.abs(offset);
 
-        List<Integer> queryResults = new ArrayList<>();
+        IntArrayList queryResults = new IntArrayList();
 
         spatialIndex.query(circleCenter.getX() - circleRadius, circleCenter.getY() - circleRadius,
                 circleCenter.getX() + circleRadius, circleCenter.getY() + circleRadius,
                 queryResults);
 
-        Predicate<Double> validLineSegIntersect = (Double t) -> {
-            return !falseIntersect(t) && Math.abs(t) > Utils.realPrecision;
-        };
+        Predicate<Double> validLineSegIntersect = (Double t) -> !falseIntersect(t) && Math.abs(t) > Utils.realPrecision;
 
         QuintFunction<Point2D, Point2D, Point2D, Double, Point2D, Boolean>
                 validArcSegIntersect = (Point2D arcCenter, Point2D arcStart,
                                         Point2D arcEnd, Double bulge,
-                                        Point2D intrPoint) -> {
-            return !fuzzyEqual(arcStart, intrPoint, Utils.realPrecision) &&
-                    pointWithinArcSweepAngle(arcCenter, arcStart, arcEnd, bulge, intrPoint);
-        };
+                                        Point2D intrPoint) -> !fuzzyEqual(arcStart, intrPoint, Utils.realPrecision) &&
+                pointWithinArcSweepAngle(arcCenter, arcStart, arcEnd, bulge, intrPoint);
 
         for (int sIndex : queryResults) {
             PlineVertex v1 = pline.get(sIndex);
@@ -975,23 +1002,23 @@ public class PapOffsetPathBuilder {
                 IntrCircle2Circle2Result intrResult =
                         intrCircle2Circle2(arc.radius, arc.center, circleRadius, circleCenter);
                 switch (intrResult.intrType) {
-                case NoIntersect:
-                    break;
-                case OneIntersect:
-                    if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
-                        output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
-                    }
-                    break;
-                case TwoIntersects:
-                    if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
-                        output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
-                    }
-                    if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point2)) {
-                        output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point2)));
-                    }
-                    break;
-                case Coincident:
-                    break;
+                    case NoIntersect:
+                        break;
+                    case OneIntersect:
+                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
+                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
+                        }
+                        break;
+                    case TwoIntersects:
+                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
+                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
+                        }
+                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point2)) {
+                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point2)));
+                        }
+                        break;
+                    case Coincident:
+                        break;
                 }
             }
         }
@@ -1149,11 +1176,10 @@ public class PapOffsetPathBuilder {
                         continue;
                     }
 
-                    OpenPolylineSlice back = new OpenPolylineSlice();
-                    result.add(back);
-                    back.intrStartIndex = sIndex;
+                    OpenPolylineSlice back = new OpenPolylineSlice(sIndex);
                     back.pline.addVertex(split.updatedStart);
                     back.pline.addVertex(split.splitVertex);
+                    result.add(back);
                 }
             }
 
@@ -1247,17 +1273,17 @@ public class PapOffsetPathBuilder {
         return result;
     }
 
-    List<Polyline>
-    stitchOffsetSlicesTogether(final List<OpenPolylineSlice> slices, boolean closedPolyline,
-                               int origMaxIndex) {
-        return stitchOffsetSlicesTogether(slices, closedPolyline, origMaxIndex,
-                sliceJoinThreshold);
+    protected List<Polyline> stitchOffsetSlicesTogether(
+            final List<OpenPolylineSlice> slices, boolean closedPolyline, int origMaxIndex) {
+        return stitchOffsetSlicesTogether(slices, closedPolyline, origMaxIndex, sliceJoinThreshold);
     }
 
-    List<Polyline>
-    stitchOffsetSlicesTogether(final List<OpenPolylineSlice> slices, boolean closedPolyline,
-                               int origMaxIndex,
-                               double joinThreshold) {
+    protected List<Polyline> stitchOffsetSlicesTogether(
+            @NonNull final List<OpenPolylineSlice> slices,
+            boolean closedPolyline,
+            int origMaxIndex,
+            double joinThreshold) {
+
         List<Polyline> result = new ArrayList<>();
         if (slices.size() == 0) {
             return result;
@@ -1268,7 +1294,7 @@ public class PapOffsetPathBuilder {
             if (closedPolyline &&
                     fuzzyEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
                 result.get(0).isClosed(true);
-                result.get(0).pop_back();
+                result.get(0).removeLast();
             }
 
             return result;
@@ -1276,17 +1302,15 @@ public class PapOffsetPathBuilder {
 
         // load spatial index with all start points
         StaticSpatialIndex spatialIndex = new StaticSpatialIndex(slices.size());
-
         for (final var slice : slices) {
             final var point = slice.pline.get(0).pos();
             spatialIndex.add(point.getX() - joinThreshold, point.getY() - joinThreshold,
                     point.getX() + joinThreshold, point.getY() + joinThreshold);
         }
-
         spatialIndex.finish();
 
         BitSet visitedIndexes = new BitSet(slices.size());
-        List<Integer> queryResults = new ArrayList<>();
+        IntArrayList queryResults = new IntArrayList();
         IntArrayDeque queryStack = new IntArrayDeque(8);
         for (int i = 0; i < slices.size(); ++i) {
             if (visitedIndexes.get(i)) {
@@ -1314,7 +1338,6 @@ public class PapOffsetPathBuilder {
                 spatialIndex.query(currEndPoint.getX() - joinThreshold, currEndPoint.getY() - joinThreshold,
                         currEndPoint.getX() + joinThreshold, currEndPoint.getY() + joinThreshold,
                         queryResults, queryStack);
-
                 queryResults.removeIf(visitedIndexes::get);
 
                 Function<Integer, OrderedPair<Integer, Boolean>> indexDistAndEqualInitial = (Integer index) -> {
@@ -1337,7 +1360,7 @@ public class PapOffsetPathBuilder {
                         (Integer index1, Integer index2) -> {
                             var distAndEqualInitial1 = indexDistAndEqualInitial.apply(index1);
                             var distAndEqualInitial2 = indexDistAndEqualInitial.apply(index2);
-                            if (distAndEqualInitial1.first() == distAndEqualInitial2.first()) {
+                            if (distAndEqualInitial1.first().equals(distAndEqualInitial2.first())) {
                                 // index distances are equal, compare on position being equal to initial start
                                 // (testing index1 < index2, we want the longest closed loop possible)
                                 return (distAndEqualInitial1.second() ? 1 : 0) - (distAndEqualInitial2.second() ? 1 : 0);
@@ -1351,7 +1374,7 @@ public class PapOffsetPathBuilder {
                     if (currPline.size() > 1) {
                         if (closedPolyline && fuzzyEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
                                 Utils.realPrecision)) {
-                            currPline.pop_back();
+                            currPline.removeLast();
                             currPline.isClosed(true);
                         }
                         result.add(currPline);
@@ -1361,7 +1384,7 @@ public class PapOffsetPathBuilder {
 
                 // else continue stitching
                 visitedIndexes.set(queryResults.get(0), true);
-                currPline.pop_back();
+                currPline.removeLast();
                 currIndex = queryResults.get(0);
             }
         }

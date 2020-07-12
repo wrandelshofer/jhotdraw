@@ -56,16 +56,62 @@ public class OffsetPathBuilderTest {
     @TestFactory
     public List<DynamicTest> offsetPathTests() {
         return Arrays.asList(
-                dynamicTest("inside open p - split vertical line not done - NOK", () -> doTest(
+                dynamicTest("shape with coincident line - angle from seg 0 to 1 > 180°, angle from seg 1 to 2 = 360°", () -> doTest(
+                        polylineOf(false, new double[][]{{220.0, 40.0, 0.0}, {190.0, 110.0, 0.0}, {210.0, 90.0, 0.0}, {200.0, 100.0, 0.0}, {280.0, 180.0, 0.0}}),
+                        -7,
+                        Arrays.asList(polylineOf(false, new double[][]{
+                                        {226.4340152101264, 42.75743509005417, 0.0}
+                                        , {209.16582399091348, 83.04988126821766, 0.7122671462660679}
+                                        , {214.94974746830584, 94.94974746830583, 0.0}
+                                        , {209.89949493661166, 100.00000000000001, 0.0}
+                                        , {284.9497474683058, 175.05025253169416, 0.0}
+                                })
+                        )
+                )),
+
+
+                dynamicTest("b shape - last point coincides with another point", () -> doTest(
+                        polylineOf(false, new double[][]{{190.0, 170.0, 0.0}, {210.0, 120.0, 0.0}, {230.0, 150.0, 0.0}, {190.0, 170.0, 0.0}}),
+                        20.0,
+                        Arrays.asList()
+                )),
+
+                dynamicTest("u", () -> doTest(
+                        polylineOf(false, new double[][]{{130.0, 80.0, 0.0}, {130.0, 190.0, 0.0}, {200.0, 190.0, 0.0}, {200.0, 80.0, 0.0}}),
+                        5.0,
+                        Arrays.asList(polylineOf(false, new double[][]{
+                                {125.0, 80.0, 0.0}
+                                , {125.0, 190.0, -0.41421356237309503}
+                                , {130.0, 195.0, 0.0}
+                                , {200.0, 195.0, -0.41421356237309503}
+                                , {205.0, 190.0, 0.0}
+                                , {205.0, 80.0, 0.0}
+                        }))
+                )),
+
+                dynamicTest("h", () -> doTest(
+                        polylineOf(false, new double[][]{{130.0, 80.0, 0.0}, {130.0, 180.0, 0.0}, {210.0, 120.0, 0.0}, {260.0, 180.0, 0.0}}),
+                        -15.0,
+                        Arrays.asList(polylineOf(false, new double[][]{
+                                {145.0, 80.0, 0.0}
+                                , {145.0, 150.0, 0.0}
+                                , {201.0, 108.0, 0.399284935042546}
+                                , {221.52331919396065, 110.3972340050328, 0.0}
+                                , {271.5233191939606, 170.3972340050328, 0.0}
+                        }))
+                )),
+
+
+                dynamicTest("inside open p - medium gap", () -> doTest(
                         polylineOf(false, new double[][]{{110.0, 180.0, 0.0}, {110.0, 70.0, 0.0}, {220.0, 70.0, 0.0}, {220.0, 140.0, 0.0}, {130.0, 140.0, 0.0}}),
                         17.5,
                         Arrays.asList(
-                                polylineOf(false, new double[][]{{127.5, 180, 0.0}, {127.5, 160.5, 0.0}}),
+                                polylineOf(false, new double[][]{{127.5, 180, 0.0}, {127.5, 157.32050807568876, 0.0}}),
                                 polylineOf(false, new double[][]{{127.5, 122.67949192431124, 0.0}, {127.5, 87.5, 0.0}, {202.5, 87.5, 0.0}, {202.5, 122.5, 0.0}, {130.0, 122.5, 0.0}})
                         )
                 )),
 
-                dynamicTest("inside open p - split vertical line done", () -> doTest(
+                dynamicTest("inside open p - small gap", () -> doTest(
                         polylineOf(false, new double[][]{{110.0, 180.0, 0.0}, {110.0, 70.0, 0.0}, {220.0, 70.0, 0.0}, {220.0, 140.0, 0.0}, {130.0, 140.0, 0.0}}),
                         20.0,
                         Arrays.asList(
@@ -106,7 +152,72 @@ public class OffsetPathBuilderTest {
     }
 
     private void doTest(Polyline input, double offset, List<Polyline> expected) throws Exception, InterruptedException {
-        List<Polyline> actual = new PapOffsetPathBuilder().parallelOffset(input, offset);
+        final PapOffsetPathBuilder pap = new PapOffsetPathBuilder();
+        //final Polyline raw = pap.createRawOffsetPline(input, offset);
+        //final StringBuilder b = new StringBuilder();
+        //dumpPline(raw,b);
+        //System.err.println(b);
+
+        List<Polyline> actual = pap.parallelOffset(input, offset);
+
+        if (!(expected.equals(actual))) {
+            for (Polyline p : actual) {
+                System.out.println("polylineOf(" + p.isClosed() + ",new double[][]{");
+                boolean first = true;
+                for (PlineVertex v : p) {
+                    if (first) first = false;
+                    else System.out.print(", ");
+                    System.out.println("{" + v.getX() + "," + v.getY() + "," + v.bulge() + "}");
+                }
+                System.out.println("})");
+            }
+            SwingUtilities.invokeAndWait(() -> {
+                JDialog f = new JDialog();
+                f.setModal(true);
+                f.setSize(new Dimension(600, 400));
+                JComponent canvas = new JComponent() {
+                    @Override
+                    public void paint(Graphics gr) {
+                        Graphics2D g = (Graphics2D) gr;
+                        g.setColor(Color.BLACK);
+                        AWTPathBuilder b = new AWTPathBuilder();
+                        Shapes.buildFromPathIterator(b, input.getPathIterator(null));
+                        g.draw(b.build());
+
+                        b = new AWTPathBuilder();
+                        final Polyline rawOffsetPline = pap.createRawOffsetPline(input, offset);
+                        Shapes.buildFromPathIterator(b, rawOffsetPline.getPathIterator(null));
+                        g.setColor(Color.PINK);
+                        g.draw(b.build());
+
+
+                        g.setColor(Color.GREEN);
+                        final List<OpenPolylineSlice> slices = pap.dualSliceAtIntersectsForOffset(input, pap.createRawOffsetPline(input, offset),
+                                pap.createRawOffsetPline(input, -offset), offset);
+                        for (OpenPolylineSlice s : slices) {
+                            b = new AWTPathBuilder();
+                            Shapes.buildFromPathIterator(b, s.pline.getPathIterator(null));
+                            g.draw(b.build());
+                        }
+
+                        if (true) return;
+
+                        g.setColor(Color.MAGENTA);
+                        b = new AWTPathBuilder();
+                        for (Polyline segs : actual) {
+                            segs.getPathIterator(null);
+                            Shapes.buildFromPathIterator(b, segs.getPathIterator(null));
+                        }
+                        g.draw(b.build());
+                    }
+                };
+
+
+                f.getContentPane().add(canvas);
+                f.setVisible(true);
+            });
+        }
+
         assertEquals(expected, actual);
     }
 
@@ -162,4 +273,20 @@ public class OffsetPathBuilderTest {
             f.setVisible(true);
         });
     }
+
+    private void dumpPline(Polyline pline, StringBuilder buf) {
+        buf.append("polylineOf(").append(pline.isClosed()).append(",new double[][]{");
+
+        boolean first = true;
+        for (PlineVertex v : pline) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(", ");
+            }
+            buf.append('{').append(v.getX()).append(", ").append(v.getY()).append(", ").append(v.bulge()).append('}');
+        }
+        buf.append("})");
+    }
+
 }

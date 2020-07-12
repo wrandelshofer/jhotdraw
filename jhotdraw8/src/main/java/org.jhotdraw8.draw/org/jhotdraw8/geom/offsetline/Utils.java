@@ -1,6 +1,8 @@
 package org.jhotdraw8.geom.offsetline;
 
 import javafx.geometry.Point2D;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.Geom;
 
 import java.util.List;
@@ -45,8 +47,8 @@ public class Utils {
         return v0.getX() * v1.getY() - v0.getY() * v1.getX();
     }
 
-    public static MinMax minmax(double a, double b) {
-        return new MinMax(a, b);
+    public static OrderedPair<Double, Double> minmax(double a, double b) {
+        return a < b ? new OrderedPair<>(a, b) : new OrderedPair<>(b, a);
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue) {
@@ -106,7 +108,7 @@ public class Utils {
     /**
      * Returns the solutions to for the quadratic equation -b +/- sqrt (b * b - 4 * a * c) / (2 * a).
      */
-    static MinMax quadraticSolutions(double a, double b, double c, double discr) {
+    static OrderedPair<Double, Double> quadraticSolutions(double a, double b, double c, double discr) {
         // Function avoids loss in precision due to taking the difference of two floating point values
         // that are very near each other in value.
         // See:
@@ -170,20 +172,14 @@ public class Utils {
         return result.normalize();
     }
 
-    static <T> int nextWrappingIndex(int index, List<T> container) {
-        if (index == container.size() - 1) {
-            return 0;
-        }
+    static <T> int nextWrappingIndex(int index, @NonNull List<T> container) {
+        return index == container.size() - 1 ? 0 : index + 1;
 
-        return index + 1;
     }
 
-    static <T> int prevWrappingIndex(int index, List<T> container) {
-        if (index == 0) {
-            return container.size() - 1;
-        }
+    static <T> int prevWrappingIndex(int index, @NonNull List<T> container) {
+        return index == 0 ? container.size() - 1 : index - 1;
 
-        return index - 1;
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle) {

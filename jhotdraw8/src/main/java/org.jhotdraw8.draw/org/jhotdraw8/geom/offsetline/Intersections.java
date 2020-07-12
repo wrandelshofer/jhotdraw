@@ -2,6 +2,7 @@ package org.jhotdraw8.geom.offsetline;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.OrderedPairNonNull;
 import org.jhotdraw8.geom.Geom;
@@ -10,7 +11,6 @@ import org.jhotdraw8.util.function.QuadConsumer;
 import org.jhotdraw8.util.function.TriConsumer;
 import org.jhotdraw8.util.function.TriPredicate;
 
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -107,13 +107,13 @@ public class Intersections {
                                                                final Point2D segEnd) -> {
             if (Utils.fuzzyEqual(segStart.getX(), segEnd.getX())) {
                 // vertical segment, test y coordinate
-                MinMax minMax = Utils.minmax(segStart.getY(), segEnd.getY());
-                return Utils.fuzzyInRange(minMax.first(), pt.getY(), minMax.second);
+                OrderedPair<Double, Double> minmax = Utils.minmax(segStart.getY(), segEnd.getY());
+                return Utils.fuzzyInRange(minmax.first(), pt.getY(), minmax.second());
             }
 
             // else just test x coordinate
-            MinMax minMax = Utils.minmax(segStart.getX(), segEnd.getX());
-            return Utils.fuzzyInRange(minMax.first(), pt.getX(), minMax.second);
+            OrderedPair<Double, Double> minmax = Utils.minmax(segStart.getX(), segEnd.getX());
+            return Utils.fuzzyInRange(minmax.first(), pt.getX(), minmax.second());
         };
 
         // threshold check here to avoid almost parallel lines resulting in very distant intersection
@@ -255,7 +255,7 @@ public class Intersections {
                 result.numIntersects = 0;
             } else {
                 result.numIntersects = 2;
-                MinMax sols = Utils.quadraticSolutions(a, b, c, discr);
+                OrderedPair<Double, Double> sols = Utils.quadraticSolutions(a, b, c, discr);
                 result.t0 = sols.first();
                 result.t1 = sols.second();
             }
@@ -359,7 +359,7 @@ public class Intersections {
             if (fuzzyEqual(intr.point1, currCoincidentSlice[0].lastVertex().pos(),
                     Utils.realPrecision)) {
                 // continue coincident slice
-                currCoincidentSlice[0].pop_back();
+                currCoincidentSlice[0].removeLast();
                 SplitResult split1 = splitAtPoint(v1, v2, intr.point1);
                 currCoincidentSlice[0].addVertex(split1.splitVertex);
                 SplitResult split2 = splitAtPoint(v1, v2, intr.point2);
@@ -382,7 +382,7 @@ public class Intersections {
             if (fuzzyEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
                 final Polyline lastSlice = coincidentSlices.getLast();
-                lastSlice.pop_back();
+                lastSlice.removeLast();
                 lastSlice.addAll(coincidentSlices.getFirst());
 
                 // cleanup
@@ -485,7 +485,7 @@ public class Intersections {
             return;
         }
 
-        Set<OrderedPair<Integer, Integer>>
+        Set<OrderedPair>
                 visitedSegmentPairs = new HashSet<>(pline.size());
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
@@ -568,10 +568,10 @@ public class Intersections {
     static void findIntersects(final Polyline pline1, final Polyline pline2,
                                final StaticSpatialIndex pline1SpatialIndex,
                                final PlineIntersectsResult output) {
-        List<Integer> queryResults = new ArrayList<>();
+        IntArrayList queryResults = new IntArrayList();
         IntArrayDeque queryStack = new IntArrayDeque(8);
 
-        Set<OrderedPair<Integer, Integer>> possibleDuplicates = new HashSet<>();
+        Set<OrderedPair> possibleDuplicates = new HashSet<>();
 
         final List<PlineIntersect> intrs = output.intersects;
         final List<PlineCoincidentIntersect> coincidentIntrs = output.coincidentIntersects;

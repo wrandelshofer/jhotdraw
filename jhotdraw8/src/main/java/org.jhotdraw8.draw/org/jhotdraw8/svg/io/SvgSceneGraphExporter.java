@@ -5,6 +5,7 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
+import org.jhotdraw8.collection.NonNullObjectKey;
 
 public interface SvgSceneGraphExporter {
     /**
@@ -23,4 +24,6 @@ public interface SvgSceneGraphExporter {
      * The value of this constant is: {@value #DESC_PROPERTY_NAME}.
      */
     String DESC_PROPERTY_NAME = "desc";
+    NonNullObjectKey<Boolean> EXPORT_INVISIBLE_ELEMENTS_KEY = new NonNullObjectKey<>("exportInvisibleElements", Boolean.class, false);
+    NonNullObjectKey<Boolean> RELATIVIZE_PATHS_KEY = new NonNullObjectKey<>("relativizePaths", Boolean.class, false);
 }

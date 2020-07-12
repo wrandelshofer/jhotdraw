@@ -19,4 +19,14 @@ class PlineOffsetSegment {
         this.origV2Pos = origV2Pos;
         this.collapsedArc = collapsedArc;
     }
+
+    @Override
+    public String toString() {
+        return "PlineOffsetSegment{" +
+                "v1=" + v1 +
+                ", v2=" + v2 +
+                ", origV2Pos=" + origV2Pos +
+                ", collapsedArc=" + collapsedArc +
+                '}';
+    }
 }

@@ -9,11 +9,14 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import static java.lang.Integer.max;
@@ -65,6 +68,18 @@ public class IntArrayList implements Iterable<Integer> {
     private IntArrayList(@NonNull int[] items) {
         this.items = items;
         this.size = items.length;
+    }
+
+    /**
+     * Creates a new instance with the specified items.
+     *
+     * @param items the items (the newly created instance references the
+     *              provided array)
+     * @return the new instance
+     */
+    @NonNull
+    public static IntArrayList of(@NonNull int... items) {
+        return new IntArrayList(items);
     }
 
     /**
@@ -300,8 +315,8 @@ public class IntArrayList implements Iterable<Integer> {
     public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int index = 0;
-            private int size = IntArrayList.this.size;
-            private int[] items = IntArrayList.this.items;
+            private final int size = IntArrayList.this.size;
+            private final int[] items = IntArrayList.this.items;
 
             @Override
             public int nextInt() {
@@ -327,7 +342,6 @@ public class IntArrayList implements Iterable<Integer> {
     public Spliterator.OfInt spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
-
 
     /**
      * Returns a stream for processing the items of this list.
@@ -358,22 +372,52 @@ public class IntArrayList implements Iterable<Integer> {
     }
 
     /**
-     * Creates a new instance with the specified items.
-     *
-     * @param items the items (the newly created instance references the
-     *              provided array)
-     * @return the new instance
-     */
-    @NonNull
-    public static IntArrayList of(@NonNull int... items) {
-        return new IntArrayList(items);
-    }
-
-    /**
      * Sorts the items in ascending order.
      */
     public void sort() {
         Arrays.sort(items, 0, size);
     }
 
+    /**
+     * Removes all of the elements of this collection that satisfy the given
+     * predicate.
+     *
+     * @param filter a predicate which returns {@code true} for elements to be
+     *               removed
+     * @return {@code true} if any elements were removed
+     */
+    public boolean removeIf(IntPredicate filter) {
+        boolean hasRemoved = false;
+        Objects.requireNonNull(filter);
+        for (int i = size - 1; i >= 0; i--) {
+            if (filter.test(get(i))) {
+                removeAt(i);
+                hasRemoved = true;
+            }
+        }
+        return hasRemoved;
+    }
+
+    /**
+     * Sorts this list according to the order induced by the specified
+     * {@link Comparator}. The sort is <i>stable</i>: it does not
+     * reorder equal elements.
+     *
+     * @param c the {@code Comparator} used to compare list elements.
+     *          A {@code null} value indicates that the elements'
+     *          {@linkplain Comparable natural ordering} should be used.
+     */
+    public void sort(Comparator<? super Integer> c) {
+        if (size > 1) {
+            if (c == null) {
+                Arrays.sort(items, 0, size);
+            } else {
+                // FIXME this is inefficient, we need a sort method for an int-array that takes a comparator.
+                final Integer[] objects = new Integer[size];
+                for (int i = 0; i < size; i++) objects[i] = items[i];
+                Arrays.sort(objects, 0, size, c);
+                for (int i = 0; i < size; i++) items[i] = objects[i];
+            }
+        }
+    }
 }

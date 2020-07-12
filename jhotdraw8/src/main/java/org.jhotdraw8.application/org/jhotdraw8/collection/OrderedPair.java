@@ -64,4 +64,11 @@ public class OrderedPair<U, V> implements Pair<U, V> {
         return hash;
     }
 
+    @Override
+    public String toString() {
+        return "OrderedPair{"
+                + a +
+                ", " + b +
+                '}';
+    }
 }
