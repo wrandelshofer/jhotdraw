@@ -13,15 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 class ResourcesHelper {
@@ -85,7 +77,7 @@ class ResourcesHelper {
     static Node getIconProperty(@NonNull Resources r, String key, String suffix, @NonNull Class<?> baseClass) {
         try {
             String rsrcName = r.getString(key + suffix);
-            if ("".equals(rsrcName) || rsrcName == null) {
+            if ("".equals(rsrcName)) {
                 return null;
             }
 

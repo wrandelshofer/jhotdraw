@@ -6,10 +6,7 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.io.IdFactory;
 
 import java.io.IOException;
@@ -44,13 +41,12 @@ public class CssSizeConverter implements CssConverter<CssSize> {
     public CssSize parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (nullable) {
             if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-                //tt.skipWhitespace();
-                return nullable ? null : CssSize.ZERO;
+                return null;
             } else {
                 tt.pushBack();
             }
         }
-        Number value = null;
+        Number value;
         String units;
         switch (tt.next()) {
             case CssTokenType.TT_DIMENSION:
@@ -59,11 +55,11 @@ public class CssSizeConverter implements CssConverter<CssSize> {
                 break;
             case CssTokenType.TT_PERCENTAGE:
                 value = tt.currentNumberNonNull();
-                units = "%";
+                units = UnitConverter.PERCENTAGE;
                 break;
             case CssTokenType.TT_NUMBER:
                 value = tt.currentNumberNonNull();
-                units = null;
+                units = UnitConverter.DEFAULT;
                 break;
             case CssTokenType.TT_IDENT: {
                 units = null;
@@ -93,16 +89,16 @@ public class CssSizeConverter implements CssConverter<CssSize> {
     public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
-        } else if (value.getUnits() == null || "".equals(value.getUnits())) {
+        } else if (UnitConverter.DEFAULT.equals(value.getUnits())) {
             out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getValue(), ""));
         } else {
             switch (value.getUnits()) {
-                case "%":
-                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, value.getValue(), "%"));
-                    break;
-                default:
-                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getValue(), value.getUnits()));
-                    break;
+            case UnitConverter.PERCENTAGE:
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, value.getValue(), "%"));
+                break;
+            default:
+                out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getValue(), value.getUnits()));
+                break;
             }
         }
     }
