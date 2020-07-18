@@ -21,15 +21,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Polyline;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.CSplines;
+import org.jhotdraw8.geom.CardinalSplines;
 import org.jhotdraw8.geom.Geom;
 
 import java.util.ArrayList;
@@ -136,7 +131,7 @@ public class CardinalSplineSampleMain extends Application {
                 ps.add(pp.get(pp.size() - 1));
             }
         }
-        Point2D[] points = CSplines.cardinalSplineToBezier(ps, tension.get());
+        Point2D[] points = CardinalSplines.cardinalSplineToBezier(ps, tension.get());
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
         for (int i = 0, n = points.length; i < n; ) {
