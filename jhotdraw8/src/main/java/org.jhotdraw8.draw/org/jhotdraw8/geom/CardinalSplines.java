@@ -9,7 +9,11 @@ import javafx.geometry.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSplines {
+/**
+ * Provides conversion functions from cardinal splines (c-splines) to
+ * bezier curves.
+ */
+public class CardinalSplines {
     /**
      * Converts a cardinal spline into a bezier curve.
      * <p>

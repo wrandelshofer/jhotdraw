@@ -15,7 +15,19 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
     private byte[] commands = new byte[10];
     @NonNull
     private double[] coords = new double[60];
+    private final int windingRule;
 
+    public PathIteratorPathBuilder() {
+        this(PathIterator.WIND_EVEN_ODD);
+    }
+
+    public PathIteratorPathBuilder(int windingRule) {
+        this.windingRule = windingRule;
+    }
+
+    public boolean isEmpty() {
+        return numCoords == 0;
+    }
 
     private void needRoom() {
         if (numCommands >= commands.length) {
@@ -98,7 +110,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
 
     @NonNull
     public PathIterator build() {
-        return new MyPathIterator(numCommands, numCoords, commands, coords);
+        return new MyPathIterator(windingRule, numCommands, numCoords, commands, coords);
     }
 
     private static class MyPathIterator implements PathIterator {
@@ -109,8 +121,10 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
         private final byte[] commands;
         private final double[] coords;
         private static final int[] curvecoords = {2, 2, 4, 6, 0};
+        private final int windingRule;
 
-        public MyPathIterator(int numCommands, int numCoords, byte[] commands, double[] coords) {
+        public MyPathIterator(int windingRule, int numCommands, int numCoords, byte[] commands, double[] coords) {
+            this.windingRule = windingRule;
             this.numCommands = numCommands;
             this.numCoords = numCoords;
             this.commands = commands;
@@ -119,7 +133,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder {
 
         @Override
         public int getWindingRule() {
-            return PathIterator.WIND_NON_ZERO;
+            return windingRule;
         }
 
         @Override

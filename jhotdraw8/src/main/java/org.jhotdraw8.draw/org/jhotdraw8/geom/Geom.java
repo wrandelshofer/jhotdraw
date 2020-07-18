@@ -4,12 +4,8 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.*;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -20,14 +16,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.abs;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 /**
  * Some geometric utilities.
@@ -171,10 +160,9 @@ public class Geom {
     public static Point2D cap(@NonNull Point2D p1, @NonNull Point2D p2, double radius) {
         double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY()
                 - p1.getY());
-        Point2D p3 = new Point2D(
+        return new Point2D(
                 p2.getX() + radius * cos(angle),
                 p2.getY() + radius * sin(angle));
-        return p3;
     }
 
     @NonNull
@@ -1009,7 +997,7 @@ public class Geom {
 
     @NonNull
     public static Point2D north(@NonNull Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() / 2, r.getMinY());
+        return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY());
     }
 
     /**
@@ -1179,7 +1167,7 @@ public class Geom {
 
     @NonNull
     public static Point2D south(@NonNull Rectangle2D r) {
-        return new Point2D(r.getMinX() + r.getWidth() * 0.2, r.getMinY()
+        return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
                 + r.getHeight());
     }
 

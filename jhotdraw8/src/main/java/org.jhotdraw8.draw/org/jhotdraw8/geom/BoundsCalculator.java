@@ -77,6 +77,4 @@ public class BoundsCalculator {
     public Bounds getBounds() {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
-
-
 }

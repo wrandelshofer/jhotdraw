@@ -13,10 +13,14 @@ import java.awt.geom.Path2D;
  */
 public class AWTPathBuilder extends AbstractPathBuilder {
 
-    private Path2D path;
+    private final Path2D path;
 
     public AWTPathBuilder() {
         this(new Path2D.Double());
+    }
+
+    public boolean isEmpty() {
+        return path.getCurrentPoint() == null;
     }
 
     public AWTPathBuilder(Path2D path) {
