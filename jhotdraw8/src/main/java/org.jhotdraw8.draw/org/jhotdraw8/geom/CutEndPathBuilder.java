@@ -60,7 +60,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                 } else if (isect.isEmpty()) {
                     out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
                 } else {
-                    Beziers.splitCubicCurve(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastT(),
+                    BezierCurves.splitCubicCurve(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastT(),
                             out::curveTo, null);
                     //  break Loop;
                 }
@@ -96,7 +96,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                 } else if (isect.isEmpty()) {
                     out.quadTo(seg[0], seg[1], seg[2], seg[3]);
                 } else {
-                    Beziers.splitQuadCurve(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastT(),
+                    BezierCurves.splitQuadCurve(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastT(),
                             out::quadTo, null);
                     //   break Loop;
                 }

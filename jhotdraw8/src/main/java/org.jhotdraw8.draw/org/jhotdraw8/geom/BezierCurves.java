@@ -18,12 +18,12 @@ import org.jhotdraw8.util.function.Double6Consumer;
  *
  * @author Werner Randelshofer
  */
-public class Beziers {
+public class BezierCurves {
 
     /**
      * Prevent instantiation.
      */
-    private Beziers() {
+    private BezierCurves() {
     }
 
     /**

@@ -16,30 +16,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.Beziers;
+import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -430,12 +415,12 @@ public class IntersectionSampleMain extends Application {
                     System.out.println("  t:" + isect.getFirstT() + " ctrlPoint:" + isect.getLastPoint());
                     double[] left = new double[6];
                     double[] right = new double[6];
-                    Beziers.splitCubicCurve(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(),
+                    BezierCurves.splitCubicCurve(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(),
                             l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
-                    double[] newControlPoint = Beziers.mergeCubicCurve(
+                    double[] newControlPoint = BezierCurves.mergeCubicCurve(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], left[4], left[5], right[0], right[1], right[2], right[3], right[4], right[5], 1.0);
                     System.out.println("  new ctrlPoint:" + Arrays.toString(newControlPoint));
                 }
@@ -521,11 +506,11 @@ public class IntersectionSampleMain extends Application {
                     System.out.println("  t:" + isect.getFirstT() + " ctrlPoint:" + isect.getLastPoint());
                     double[] left = new double[4];
                     double[] right = new double[4];
-                    Beziers.splitQuadCurve(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
+                    BezierCurves.splitQuadCurve(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
-                    double[] newControlPoint = Beziers.mergeQuadCurve(
+                    double[] newControlPoint = BezierCurves.mergeQuadCurve(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], right[0], right[1], right[2], right[3], 1.0);
                     System.out.println("  new ctrlPoints:" + newControlPoint);
                 }
