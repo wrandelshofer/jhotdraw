@@ -31,9 +31,9 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.offsetline.PapOffsetPathBuilder;
+import org.jhotdraw8.geom.offsetline.ContourBuilder;
 import org.jhotdraw8.geom.offsetline.PlineVertex;
-import org.jhotdraw8.geom.offsetline.Polyline;
+import org.jhotdraw8.geom.offsetline.PolyArcPath;
 
 import java.util.List;
 
@@ -102,9 +102,9 @@ public class OffsetPathSampleMain extends Application {
     }
 
     private void createTest(ActionEvent actionEvent) {
-        Polyline pline = createPline(polyline);
-        PapOffsetPathBuilder papb = new PapOffsetPathBuilder();
-        List<Polyline> offsetPlines = papb.parallelOffset(pline, offset.get());
+        PolyArcPath pline = createPline(polyline);
+        ContourBuilder papb = new ContourBuilder();
+        List<PolyArcPath> offsetPlines = papb.parallelOffset(pline, offset.get());
         StringBuilder buf = new StringBuilder();
         buf.append("dynamicTest(\"1\", () -> doTest(\n");
         dumpPline(pline, buf);
@@ -113,7 +113,7 @@ public class OffsetPathSampleMain extends Application {
         buf.append(",\n");
         buf.append("Arrays.asList(");
         boolean first = true;
-        for (Polyline opl : offsetPlines) {
+        for (PolyArcPath opl : offsetPlines) {
             if (first) {
                 first = false;
             } else {
@@ -127,7 +127,7 @@ public class OffsetPathSampleMain extends Application {
         System.out.println(buf);
     }
 
-    private void dumpPline(Polyline pline, StringBuilder buf) {
+    private void dumpPline(PolyArcPath pline, StringBuilder buf) {
         buf.append("polylineOf(").append(pline.isClosed()).append(",new double[][]{");
 
         boolean first = true;
@@ -179,6 +179,8 @@ public class OffsetPathSampleMain extends Application {
         //doOffsetPathWithOldAlgo(polyline,offsetPath2,-offset.get());
         // doRawOffsetPath(polyline,offsetPath2,offset.get());
         doOffsetPath(polyline, offsetPath2, -offset.get());
+        offsetPath1.setStrokeWidth(3.0);
+        offsetPath2.setVisible(true);
     }
 
     private void doOffsetPathWithOldAlgo(javafx.scene.shape.Polyline polyline, Path path, double offset) {
@@ -200,9 +202,9 @@ public class OffsetPathSampleMain extends Application {
     }
 
     private void doOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
-        Polyline pap = createPline(polyline);
-        PapOffsetPathBuilder papb = new PapOffsetPathBuilder();
-        List<Polyline> offsetPlines = papb.parallelOffset(pap, offset);
+        PolyArcPath pap = createPline(polyline);
+        ContourBuilder papb = new ContourBuilder();
+        List<PolyArcPath> offsetPlines = papb.parallelOffset(pap, offset);
 
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
@@ -213,8 +215,8 @@ public class OffsetPathSampleMain extends Application {
     }
 
     @NonNull
-    private Polyline createPline(javafx.scene.shape.Polyline polyline) {
-        Polyline pap = new Polyline();
+    private PolyArcPath createPline(javafx.scene.shape.Polyline polyline) {
+        PolyArcPath pap = new PolyArcPath();
         ObservableList<Double> points = polyline.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {
             pap.addVertex(points.get(i), points.get(i + 1));
@@ -224,12 +226,12 @@ public class OffsetPathSampleMain extends Application {
     }
 
     private void doRawOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
-        Polyline pap = createPline(polyline);
+        PolyArcPath pap = createPline(polyline);
         pap.isClosed(closed.get());
-        PapOffsetPathBuilder papb = new PapOffsetPathBuilder();
+        ContourBuilder papb = new ContourBuilder();
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
-        Polyline offPap = papb.createRawOffsetPline(pap, offset);
+        PolyArcPath offPap = papb.createRawOffsetPline(pap, offset);
         elements.addAll(
                 Shapes.fxPathElementsFromAWT(offPap.getPathIterator(null)));
 
