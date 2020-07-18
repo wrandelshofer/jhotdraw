@@ -15,11 +15,7 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.offsetline.Utils.angle;
-import static org.jhotdraw8.geom.offsetline.Utils.closestPointOnLineSeg;
-import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
-import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.offsetline.Utils.*;
 
 /**
  * Vertex of a Polyline Arc.
@@ -211,7 +207,7 @@ public class PlineVertex implements Cloneable {
             return Math.sqrt(Geom.squaredDistance(v1.pos(), v2.pos()));
         }
 
-        var arc = arcRadiusAndCenter(v1, v2);
+        BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
         double startAngle = angle(arc.center, v1.pos());
         double endAngle = angle(arc.center, v2.pos());
         return Math.abs(arc.radius * Utils.deltaAngle(startAngle, endAngle));
@@ -223,7 +219,7 @@ public class PlineVertex implements Cloneable {
             return midpoint(v1.pos(), v2.pos());
         }
 
-        var arc = arcRadiusAndCenter(v1, v2);
+        BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
         double a1 = angle(arc.center, v1.pos());
         double a2 = angle(arc.center, v2.pos());
         double angleOffset = Math.abs(Utils.deltaAngle(a1, a2) / 2.0);
@@ -251,7 +247,7 @@ public class PlineVertex implements Cloneable {
             return closestPointOnLineSeg(v1.pos(), v2.pos(), point);
         }
 
-        var arc = arcRadiusAndCenter(v1, v2);
+        BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
 
         if (fuzzyEqual(point, arc.center)) {
             // avoid normalizing zero length vector (point is at center, just return start point)
@@ -284,8 +280,8 @@ public class PlineVertex implements Cloneable {
         QuadConsumer<Point2D, Point2D, PlineVertex, PlineVertex>
                 processLineArcIntr = /*[&result]*/(Point2D p0, Point2D p1,
                                                    PlineVertex a1, PlineVertex a2) -> {
-            var arc = arcRadiusAndCenter(a1, a2);
-            var intrResult = Intersections.intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
+            IntrLineSeg2Circle2Result intrResult = Intersections.intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
             Function<Double, OrderedPair<Boolean, Point2D>> pointInSweep = (Double t) -> {
@@ -302,7 +298,7 @@ public class PlineVertex implements Cloneable {
             if (intrResult.numIntersects == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.numIntersects == 1) {
-                var p = pointInSweep.apply(intrResult.t0);
+                OrderedPair<Boolean, Point2D> p = pointInSweep.apply(intrResult.t0);
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -311,8 +307,8 @@ public class PlineVertex implements Cloneable {
                 }
             } else {
                 assert intrResult.numIntersects == 2 : "shouldn't get here without 2 intersects";
-                var p1_ = pointInSweep.apply(intrResult.t0);
-                var p2_ = pointInSweep.apply(intrResult.t1);
+                OrderedPair<Boolean, Point2D> p1_ = pointInSweep.apply(intrResult.t0);
+                OrderedPair<Boolean, Point2D> p2_ = pointInSweep.apply(intrResult.t1);
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;
@@ -331,7 +327,7 @@ public class PlineVertex implements Cloneable {
         };
 
         if (vIsLine && uIsLine) {
-            var intrResult = Intersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntrLineSeg2LineSeg2Result intrResult = Intersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             switch (intrResult.intrType) {
                 case None:
                     result.intrType = PlineSegIntrType.NoIntersect;
@@ -356,8 +352,8 @@ public class PlineVertex implements Cloneable {
         } else if (uIsLine) {
             processLineArcIntr.accept(u1.pos(), u2.pos(), v1, v2);
         } else {
-            var arc1 = arcRadiusAndCenter(v1, v2);
-            var arc2 = arcRadiusAndCenter(u1, u2);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
+            BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
             TriFunction<Point2D, Point2D, Double, OrderedPair<Double, Double>> startAndSweepAngle = (Point2D sp, Point2D center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(angle(center, sp));
@@ -370,7 +366,7 @@ public class PlineVertex implements Cloneable {
                         pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
             };
 
-            var intrResult = Intersections.intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
+            IntrCircle2Circle2Result intrResult = Intersections.intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 
             switch (intrResult.intrType) {
                 case NoIntersect:
@@ -405,7 +401,7 @@ public class PlineVertex implements Cloneable {
                 case Coincident:
                     // determine if arcs overlap along their sweep
                     // start and sweep angles
-                    var arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
+                    OrderedPair<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
                     // we have the arcs go the same direction to simplify checks
                     OrderedPair<Double, Double> arc2StartAndSweep;
                     if (v1.bulgeIsNeg() == u1.bulgeIsNeg()) {
@@ -414,8 +410,8 @@ public class PlineVertex implements Cloneable {
                         arc2StartAndSweep = startAndSweepAngle.apply(u2.pos(), arc2.center, -u1.bulge());
                     }
                     // end angles (start + sweep)
-                    var arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
-                    var arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
+                    double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
+                    double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
                     if (Utils.fuzzyEqual(arc1StartAndSweep.first(), arc2End)) {
                         // only end points touch at start of arc1

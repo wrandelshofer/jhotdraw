@@ -13,40 +13,14 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.function.QuintFunction;
 import org.jhotdraw8.util.function.TriConsumer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.offsetline.Intersections.allSelfIntersects;
-import static org.jhotdraw8.geom.offsetline.Intersections.findIntersects;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrCircle2Circle2;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2Circle2;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2LineSeg2;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrPlineSegs;
-import static org.jhotdraw8.geom.offsetline.PlineVertex.closestPointOnSeg;
-import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
-import static org.jhotdraw8.geom.offsetline.PlineVertex.segMidpoint;
-import static org.jhotdraw8.geom.offsetline.PlineVertex.splitAtPoint;
+import static org.jhotdraw8.geom.offsetline.Intersections.*;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.*;
 import static org.jhotdraw8.geom.offsetline.Polyline.createApproxSpatialIndex;
-import static org.jhotdraw8.geom.offsetline.Utils.angle;
-import static org.jhotdraw8.geom.offsetline.Utils.deltaAngle;
-import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
-import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
-import static org.jhotdraw8.geom.offsetline.Utils.realPrecision;
-import static org.jhotdraw8.geom.offsetline.Utils.sliceJoinThreshold;
-import static org.jhotdraw8.geom.offsetline.Utils.unitPerp;
+import static org.jhotdraw8.geom.offsetline.Utils.*;
 
 /**
  * Computes an offset path using the algorithm of the library
@@ -130,7 +104,7 @@ public class PapOffsetPathBuilder {
 
         IntPredicate visitor = (int i) -> {
             int j = Utils.nextWrappingIndex(i, pline);
-            var closestPoint = closestPointOnSeg(pline.get(i), pline.get(j), point);
+            Point2D closestPoint = closestPointOnSeg(pline.get(i), pline.get(j), point);
             double dist = Geom.squaredDistance(closestPoint, point);
             pointValid[0] = dist > minDist;
             return pointValid[0];
@@ -542,7 +516,7 @@ public class PapOffsetPathBuilder {
         }
 
         // sort intersects by distance from start vertex
-        for (var entry : intersectsLookup.entrySet()) {
+        for (Map.Entry<Integer, List<Point2D>> entry : intersectsLookup.entrySet()) {
             Point2D startPos = rawOffsetPline.get(entry.getKey()).pos();
             Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
             entry.getValue().sort(cmp);
@@ -578,7 +552,7 @@ public class PapOffsetPathBuilder {
                     // break to avoid infinite loop
                     break;
                 }
-                var iter = intersectsLookup.get(index);
+                List<Point2D> iter = intersectsLookup.get(index);
                 if (iter == null) {
                     // no intersect found, test segment will be valid before adding the vertex
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
@@ -604,7 +578,7 @@ public class PapOffsetPathBuilder {
                             splitAtPoint(rawOffsetPline.get(index), rawOffsetPline.get(index + 1), intersectPos);
 
                     PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
-                    var midpoint = segMidpoint(split.updatedStart, sliceEndVertex);
+                    Point2D midpoint = segMidpoint(split.updatedStart, sliceEndVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
                             queryStack)) {
                         break;
@@ -624,21 +598,21 @@ public class PapOffsetPathBuilder {
             }
         }
 
-        for (final var kvp : intersectsLookup.entrySet()) {
+        for (final Map.Entry<Integer, List<Point2D>> kvp : intersectsLookup.entrySet()) {
             // start index for the slice we're about to build
             int sIndex = kvp.getKey();
             // self intersect list for this start index
             List<Point2D> siList = kvp.getValue();
 
-            final var startVertex = rawOffsetPline.get(sIndex);
+            final PlineVertex startVertex = rawOffsetPline.get(sIndex);
             int nextIndex = Utils.nextWrappingIndex(sIndex, rawOffsetPline);
-            final var endVertex = rawOffsetPline.get(nextIndex);
+            final PlineVertex endVertex = rawOffsetPline.get(nextIndex);
 
             if (siList.size() != 1) {
                 // build all the segments between the N intersects in siList (N > 1), skipping the first
                 // segment (to be processed at the end)
                 SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.get(0));
-                var prevVertex = firstSplit.splitVertex;
+                PlineVertex prevVertex = firstSplit.splitVertex;
                 for (int i = 1; i < siList.size(); ++i) {
                     SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
                     // update prevVertex for next loop iteration
@@ -662,7 +636,7 @@ public class PapOffsetPathBuilder {
                     }
 
                     // test mid point
-                    var midpoint = segMidpoint(split.updatedStart, split.splitVertex);
+                    Point2D midpoint = segMidpoint(split.updatedStart, split.splitVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
                             queryStack)) {
                         continue;
@@ -718,7 +692,7 @@ public class PapOffsetPathBuilder {
                 addOrReplaceIfSamePos(currSlice, rawOffsetPline.get(index));
 
                 // check if segment that starts at vertex we just added has an intersect
-                var nextIntr = intersectsLookup.get(index);
+                List<Point2D> nextIntr = intersectsLookup.get(index);
                 if (nextIntr != null) {
                     // there is an intersect, slice is done, check if final segment is valid
 
@@ -797,7 +771,7 @@ public class PapOffsetPathBuilder {
                     originalPline.lastVertex().pos(),
                     rawOffsetPlineSpatialIndex, intersects);
             intersectsLookup = new HashMap<>(2 * selfIntersects.size() + intersects.size());
-            for (final var pair : intersects) {
+            for (final OrderedPair<Integer, List<Point2D>> pair : intersects) {
                 intersectsLookup.computeIfAbsent(pair.first(), k -> new ArrayList<>()).addAll(pair.second());
             }
         } else {
@@ -998,7 +972,7 @@ public class PapOffsetPathBuilder {
                     }
                 }
             } else {
-                var arc = arcRadiusAndCenter(v1, v2);
+                BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
                 IntrCircle2Circle2Result intrResult =
                         intrCircle2Circle2(arc.radius, arc.center, circleRadius, circleCenter);
                 switch (intrResult.intrType) {
@@ -1053,15 +1027,15 @@ public class PapOffsetPathBuilder {
         if (pline.size() < 2) {
             return new ArrayList<>();
         }
-        var rawOffset = createRawOffsetPline(pline, offset);
+        Polyline rawOffset = createRawOffsetPline(pline, offset);
         if (pline.isClosed() && !hasSelfIntersects) {
-            var slices = slicesFromRawOffset(pline, rawOffset, offset);
+            List<OpenPolylineSlice> slices = slicesFromRawOffset(pline, rawOffset, offset);
             return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
         }
 
         // not closed polyline or has self intersects, must apply dual clipping
-        var dualRawOffset = createRawOffsetPline(pline, -offset);
-        var slices = dualSliceAtIntersectsForOffset(pline, rawOffset, dualRawOffset, offset);
+        Polyline dualRawOffset = createRawOffsetPline(pline, -offset);
+        List<OpenPolylineSlice> slices = dualSliceAtIntersectsForOffset(pline, rawOffset, dualRawOffset, offset);
         return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
     }
 
@@ -1104,7 +1078,7 @@ public class PapOffsetPathBuilder {
         }
 
         // sort intersects by distance from start vertex
-        for (var kvp : intersectsLookup.entrySet()) {
+        for (Map.Entry<Integer, List<Point2D>> kvp : intersectsLookup.entrySet()) {
             Point2D startPos = rawOffsetPline.get(kvp.getKey()).pos();
             Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
             kvp.getValue().sort(cmp);
@@ -1127,21 +1101,21 @@ public class PapOffsetPathBuilder {
             return hasIntersect[0];
         };
 
-        for (final var kvp : intersectsLookup.entrySet()) {
+        for (final Map.Entry<Integer, List<Point2D>> kvp : intersectsLookup.entrySet()) {
             // start index for the slice we're about to build
             int sIndex = kvp.getKey();
             // self intersect list for this start index
             List<Point2D> siList = kvp.getValue();
 
-            final var startVertex = rawOffsetPline.get(sIndex);
+            final PlineVertex startVertex = rawOffsetPline.get(sIndex);
             int nextIndex = Utils.nextWrappingIndex(sIndex, rawOffsetPline);
-            final var endVertex = rawOffsetPline.get(nextIndex);
+            final PlineVertex endVertex = rawOffsetPline.get(nextIndex);
 
             if (siList.size() != 1) {
                 // build all the segments between the N intersects in siList (N > 1), skipping the first
                 // segment (to be processed at the end)
                 SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.get(0));
-                var prevVertex = firstSplit.splitVertex;
+                PlineVertex prevVertex = firstSplit.splitVertex;
                 for (int i = 1; i < siList.size(); ++i) {
                     SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
                     // update prevVertex for next loop iteration
@@ -1165,7 +1139,7 @@ public class PapOffsetPathBuilder {
                     }
 
                     // test mid point
-                    var midpoint = segMidpoint(split.updatedStart, split.splitVertex);
+                    Point2D midpoint = segMidpoint(split.updatedStart, split.splitVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
                             queryStack)) {
                         continue;
@@ -1222,7 +1196,7 @@ public class PapOffsetPathBuilder {
                 addOrReplaceIfSamePos(currSlice, rawOffsetPline.get(index));
 
                 // check if segment that starts at vertex we just added has an intersect
-                var nextIntr = intersectsLookup.get(index);
+                List<Point2D> nextIntr = intersectsLookup.get(index);
                 if (nextIntr != null) {
                     // there is an intersect, slice is done, check if final segment is valid
 
@@ -1302,8 +1276,8 @@ public class PapOffsetPathBuilder {
 
         // load spatial index with all start points
         StaticSpatialIndex spatialIndex = new StaticSpatialIndex(slices.size());
-        for (final var slice : slices) {
-            final var point = slice.pline.get(0).pos();
+        for (final OpenPolylineSlice slice : slices) {
+            final Point2D point = slice.pline.get(0).pos();
             spatialIndex.add(point.getX() - joinThreshold, point.getY() - joinThreshold,
                     point.getX() + joinThreshold, point.getY() + joinThreshold);
         }
@@ -1321,7 +1295,7 @@ public class PapOffsetPathBuilder {
 
             Polyline currPline = new Polyline();
             int currIndex = i;
-            final var initialStartPoint = slices.get(i).pline.get(0).pos();
+            final Point2D initialStartPoint = slices.get(i).pline.get(0).pos();
             int loopCount = 0;
             final int maxLoopCount = slices.size();
             while (true) {
@@ -1331,8 +1305,8 @@ public class PapOffsetPathBuilder {
                     break;
                 }
                 final int currLoopStartIndex = slices.get(currIndex).intrStartIndex;
-                final var currSlice = slices.get(currIndex).pline;
-                final var currEndPoint = slices.get(currIndex).pline.lastVertex().pos();
+                final Polyline currSlice = slices.get(currIndex).pline;
+                final Point2D currEndPoint = slices.get(currIndex).pline.lastVertex().pos();
                 currPline.addAll(currSlice);
                 queryResults.clear();
                 spatialIndex.query(currEndPoint.getX() - joinThreshold, currEndPoint.getY() - joinThreshold,
@@ -1341,7 +1315,7 @@ public class PapOffsetPathBuilder {
                 queryResults.removeIf(visitedIndexes::get);
 
                 Function<Integer, OrderedPair<Integer, Boolean>> indexDistAndEqualInitial = (Integer index) -> {
-                    final var slice = slices.get(index);
+                    final OpenPolylineSlice slice = slices.get(index);
                     int indexDist;
                     if (currLoopStartIndex <= slice.intrStartIndex) {
                         indexDist = slice.intrStartIndex - currLoopStartIndex;
@@ -1358,8 +1332,8 @@ public class PapOffsetPathBuilder {
 
                 queryResults.sort(
                         (Integer index1, Integer index2) -> {
-                            var distAndEqualInitial1 = indexDistAndEqualInitial.apply(index1);
-                            var distAndEqualInitial2 = indexDistAndEqualInitial.apply(index2);
+                            OrderedPair<Integer, Boolean> distAndEqualInitial1 = indexDistAndEqualInitial.apply(index1);
+                            OrderedPair<Integer, Boolean> distAndEqualInitial2 = indexDistAndEqualInitial.apply(index2);
                             if (distAndEqualInitial1.first().equals(distAndEqualInitial2.first())) {
                                 // index distances are equal, compare on position being equal to initial start
                                 // (testing index1 < index2, we want the longest closed loop possible)

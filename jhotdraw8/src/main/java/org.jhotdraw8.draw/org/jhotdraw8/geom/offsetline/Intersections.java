@@ -15,20 +15,12 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.DoubleFunction;
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.splitAtPoint;
-import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
-import static org.jhotdraw8.geom.offsetline.Utils.perpDot;
-import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.offsetline.Utils.*;
 
 public class Intersections {
     private Intersections() {
@@ -571,7 +563,7 @@ public class Intersections {
         IntArrayList queryResults = new IntArrayList();
         IntArrayDeque queryStack = new IntArrayDeque(8);
 
-        Set<OrderedPair> possibleDuplicates = new HashSet<>();
+        Set<OrderedPair<Integer, Integer>> possibleDuplicates = new HashSet<>();
 
         final List<PlineIntersect> intrs = output.intersects;
         final List<PlineCoincidentIntersect> coincidentIntrs = output.coincidentIntersects;
