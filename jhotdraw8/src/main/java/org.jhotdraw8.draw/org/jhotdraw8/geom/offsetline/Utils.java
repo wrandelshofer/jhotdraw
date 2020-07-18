@@ -26,21 +26,7 @@ public class Utils {
     // absolute threshold to be used for pruning invalid slices for offset
     public static final double offsetThreshold = 1e-4;
 
-    public static boolean fuzzyEqual(Point2D v1, Point2D v2) {
-        return fuzzyEqual(v1, v2, Utils.realThreshold);
-    }
 
-    public static boolean fuzzyEqual(Point2D v1, Point2D v2, double epsilon) {
-        return Geom.squaredDistance(v1, v2) < epsilon * epsilon;
-    }
-
-    public static boolean fuzzyEqual(double x, double y) {
-        return fuzzyEqual(x, y, realThreshold);
-    }
-
-    public static boolean fuzzyEqual(double x, double y, double epsilon) {
-        return Math.abs(x - y) < epsilon;
-    }
 
     /// Perpendicular dot product. Equivalent to dot(v0, perp(v1)).
     public static double perpDot(final Point2D v0, final Point2D v1) {
@@ -113,7 +99,7 @@ public class Utils {
         // that are very near each other in value.
         // See:
         // https://math.stackexchange.com/questions/311382/solving-a-quadratic-equation-with-precision-when-using-floating-point-variables
-        assert fuzzyEqual(b * b - 4.0 * a * c, discr) : "discriminate is not correct";
+        assert Geom.almostEqual(b * b - 4.0 * a * c, discr, realThreshold) : "discriminate is not correct";
         double sqrtDiscr = Math.sqrt(discr);
         double denom = 2.0 * a;
         double sol1;
@@ -138,7 +124,7 @@ public class Utils {
      * Counter clockwise angle of the vector going from p0 to p1.
      */
     public static double angle(final Point2D p0, final Point2D p1) {
-        return Math.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
+        return Geom.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
     }
 
     /**

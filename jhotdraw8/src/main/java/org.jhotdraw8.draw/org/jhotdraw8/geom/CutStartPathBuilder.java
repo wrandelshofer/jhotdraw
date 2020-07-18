@@ -52,7 +52,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             case INTERSECTION:
                 double t = i.getLastT();
                 out.moveTo(i.getLastPoint());
-                BezierCurves.splitCubicCurve(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
+                BezierCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
                 break;
             case NO_INTERSECTION_INSIDE:
                 cx = x3;
@@ -125,7 +125,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             case INTERSECTION:
                 double t = i.getLastT();
                 out.moveTo(i.getLastPoint());
-                BezierCurves.splitQuadCurve(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
+                BezierCurves.splitQuadCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
                 state = State.CUT_DONE;
                 break;
             case NO_INTERSECTION_INSIDE:

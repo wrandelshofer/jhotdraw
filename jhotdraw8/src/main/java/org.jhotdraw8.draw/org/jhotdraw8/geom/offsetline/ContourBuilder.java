@@ -126,7 +126,7 @@ public class ContourBuilder {
             return;
         }
 
-        if (fuzzyEqual(pline.lastVertex().pos(), vertex.pos(), epsilon)) {
+        if (Geom.almostEqual(pline.lastVertex().pos(), vertex.pos(), epsilon)) {
             pline.lastVertex().bulge(vertex.bulge());
             return;
         }
@@ -408,7 +408,7 @@ public class ContourBuilder {
             // must do final singularity prune between first and second vertex after joining curves (n, 0)
             // and (0, 1)
             if (result.size() > 1) {
-                if (fuzzyEqual(result.get(0).pos(), result.get(1).pos(), realPrecision)) {
+                if (Geom.almostEqual(result.get(0).pos(), result.get(1).pos(), realPrecision)) {
                     result.remove(0);
                 }
             }
@@ -618,7 +618,7 @@ public class ContourBuilder {
                     // update prevVertex for next loop iteration
                     prevVertex = split.splitVertex;
                     // skip if they're ontop of each other
-                    if (fuzzyEqual(split.updatedStart.pos(), split.splitVertex.pos(),
+                    if (Geom.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
                             Utils.realPrecision)) {
                         continue;
                     }
@@ -947,7 +947,7 @@ public class ContourBuilder {
         QuintFunction<Point2D, Point2D, Point2D, Double, Point2D, Boolean>
                 validArcSegIntersect = (Point2D arcCenter, Point2D arcStart,
                                         Point2D arcEnd, Double bulge,
-                                        Point2D intrPoint) -> !fuzzyEqual(arcStart, intrPoint, Utils.realPrecision) &&
+                                        Point2D intrPoint) -> !Geom.almostEqual(arcStart, intrPoint, Utils.realPrecision) &&
                 pointWithinArcSweepAngle(arcCenter, arcStart, arcEnd, bulge, intrPoint);
 
         for (int sIndex : queryResults) {
@@ -1121,7 +1121,7 @@ public class ContourBuilder {
                     // update prevVertex for next loop iteration
                     prevVertex = split.splitVertex;
                     // skip if they're ontop of each other
-                    if (fuzzyEqual(split.updatedStart.pos(), split.splitVertex.pos(),
+                    if (Geom.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
                             Utils.realPrecision)) {
                         continue;
                     }
@@ -1233,7 +1233,7 @@ public class ContourBuilder {
 
             isValidPline = isValidPline && currSlice.size() > 1;
 
-            if (isValidPline && fuzzyEqual(currSlice.get(0).pos(), currSlice.lastVertex().pos())) {
+            if (isValidPline && Geom.almostEqual(currSlice.get(0).pos(), currSlice.lastVertex().pos())) {
                 // discard very short slice loops (invalid loops may arise due to valid offset distance
                 // thresholding)
                 isValidPline = currSlice.getPathLength() > 1e-2;
@@ -1266,7 +1266,7 @@ public class ContourBuilder {
         if (slices.size() == 1) {
             result.add(slices.get(0).pline);
             if (closedPolyline &&
-                    fuzzyEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
+                    Geom.almostEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
                 result.get(0).isClosed(true);
                 result.get(0).removeLast();
             }
@@ -1324,7 +1324,7 @@ public class ContourBuilder {
                         indexDist = origMaxIndex - currLoopStartIndex + slice.intrStartIndex;
                     }
 
-                    boolean equalToInitial = fuzzyEqual(slice.pline.lastVertex().pos(), initialStartPoint,
+                    boolean equalToInitial = Geom.almostEqual(slice.pline.lastVertex().pos(), initialStartPoint,
                             Utils.realPrecision);
 
                     return new OrderedPair<>(indexDist, equalToInitial);
@@ -1346,7 +1346,7 @@ public class ContourBuilder {
                 if (queryResults.size() == 0) {
                     // we're done
                     if (currPline.size() > 1) {
-                        if (closedPolyline && fuzzyEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
+                        if (closedPolyline && Geom.almostEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
                                 Utils.realPrecision)) {
                             currPline.removeLast();
                             currPline.isClosed(true);

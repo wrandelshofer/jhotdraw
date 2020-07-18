@@ -292,8 +292,8 @@ public class BezierFit {
                 continue;
             }
 
-            double aPrev = Math.atan2(prev.getY() - p.getY(), prev.getX() - p.getX());
-            double aNext = Math.atan2(next.getY() - p.getY(), next.getX() - p.getX());
+            double aPrev = Geom.atan2(prev.getY() - p.getY(), prev.getX() - p.getX());
+            double aNext = Geom.atan2(next.getY() - p.getY(), next.getX() - p.getX());
             double angle = Math.abs(aPrev - aNext);
             if (angle < Math.PI - minAngle || angle > Math.PI + minAngle) {
                 if (intersectsPreviousCorner) {

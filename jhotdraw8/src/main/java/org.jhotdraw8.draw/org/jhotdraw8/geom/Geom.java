@@ -20,7 +20,6 @@ import static java.lang.Math.*;
 
 /**
  * Some geometric utilities.
- *
  */
 public class Geom {
 
@@ -42,6 +41,7 @@ public class Geom {
      * The bitmask that indicates that a point lies above the rectangle.
      */
     public static final int OUT_TOP = 2;
+    private static final double REAL_THRESHOLD = 1e-8;
 
     private Geom() {
     } // never instantiated
@@ -65,6 +65,19 @@ public class Geom {
     /**
      * Gets the angle of the specified line.
      *
+     * @param a the start point
+     * @param b the end point
+     * @return the angle in radians
+     */
+    public static double angle(Point2D a, Point2D b) {
+        double dy = b.getY() - a.getY();
+        double dx = b.getX() - a.getX();
+        return atan2(dy, dx);
+    }
+
+    /**
+     * Gets the angle of the specified line.
+     *
      * @param x1 the x-coordinate of point 1 on the line
      * @param y1 the y-coordinate of point 1 on the line
      * @param x2 the x-coordinate of point 2 on the line
@@ -72,7 +85,22 @@ public class Geom {
      * @return the angle in radians
      */
     public static double angle(double x1, double y1, double x2, double y2) {
-        return atan2(y2 - y1, x2 - x1);
+        double dy = y2 - y1;
+        double dx = x2 - x1;
+        return atan2(dy, dx);
+    }
+
+    /**
+     * Computes atan2 if dy and dx are large enough.
+     * <p>
+     * Math.atan2 can go into an infinite loop if dy and dx are almost zero.
+     *
+     * @param dy the dy
+     * @param dx the dx
+     * @return atan2 of dy, dx or 0.
+     */
+    public static double atan2(double dy, double dx) {
+        return almostZero(dy) && almostZero(dx) ? 0.0 : Math.atan2(dy, dx);
     }
 
     /**
@@ -145,24 +173,6 @@ public class Geom {
      */
     public static double anglesUnsignedSpan(double from, double to) {
         return from > to ? from - to : to - from;
-    }
-
-    /**
-     * Caps the line defined by p1 and p2 by the number of units specified by
-     * radius.
-     *
-     * @param p1     point 1, the start point
-     * @param p2     point 2, the end point
-     * @param radius the radius
-     * @return A new end point for the line.
-     */
-    @NonNull
-    public static Point2D cap(@NonNull Point2D p1, @NonNull Point2D p2, double radius) {
-        double angle = PI / 2 - atan2(p2.getX() - p1.getX(), p2.getY()
-                - p1.getY());
-        return new Point2D(
-                p2.getX() + radius * cos(angle),
-                p2.getY() + radius * sin(angle));
     }
 
     @NonNull
@@ -733,6 +743,19 @@ public class Geom {
         );
     }
 
+    @Nullable
+    public static Point2D intersect(Point2D a,
+                                    Point2D b,
+                                    Point2D c,
+                                    Point2D d) {
+        return intersect(
+                a.getX(), a.getY(),
+                b.getX(), b.getY(),
+                c.getX(), c.getY(),
+                d.getX(), d.getY()
+        );
+    }
+
     /**
      * Standard line intersection algorithm Return the point of intersection if
      * it exists, else null
@@ -1104,7 +1127,7 @@ public class Geom {
     public static double pointToAngle(@NonNull Rectangle2D r, @NonNull Point2D p) {
         double px = p.getX() - (r.getMinX() + r.getWidth() * 0.5);
         double py = p.getY() - (r.getMinY() + r.getHeight() * 0.5);
-        return atan2(py * r.getWidth(), px * r.getHeight());
+        return Geom.atan2(py * r.getWidth(), px * r.getHeight());
     }
 
     /**
@@ -1330,5 +1353,36 @@ public class Geom {
         return x * x + y * y;
     }
 
+    public static boolean almostEqual(Point2D v1, Point2D v2) {
+        return almostEqual(v1, v2, REAL_THRESHOLD);
+    }
 
+    public static boolean almostZero(Point2D v) {
+        return almostZero(v, REAL_THRESHOLD);
+    }
+
+    public static boolean almostZero(Point2D v, double epsilon) {
+        return Geom.squaredMagnitude(v) < epsilon * epsilon;
+    }
+
+    public static boolean almostEqual(Point2D v1, Point2D v2, double epsilon) {
+        return Geom.squaredDistance(v1, v2) < epsilon * epsilon;
+    }
+
+    public static boolean almostEqual(double x, double y) {
+        return almostEqual(x, y, REAL_THRESHOLD);
+    }
+
+    public static boolean almostEqual(double x, double y, double epsilon) {
+        return Math.abs(x - y) < epsilon;
+    }
+
+
+    public static boolean almostZero(double x) {
+        return almostZero(x, REAL_THRESHOLD);
+    }
+
+    public static boolean almostZero(double x, double epsilon) {
+        return Math.abs(x) < epsilon;
+    }
 }

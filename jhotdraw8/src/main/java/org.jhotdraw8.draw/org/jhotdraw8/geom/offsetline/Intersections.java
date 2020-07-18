@@ -39,7 +39,7 @@ public class Intersections {
         double d = Math.sqrt(d2);
         if (d < Utils.realThreshold) {
             // same center position
-            if (fuzzyEqual(radius1, radius2)) {
+            if (Geom.almostEqual(radius1, radius2)) {
                 result.intrType = Circle2Circle2IntrType.Coincident;
             } else {
                 result.intrType = Circle2Circle2IntrType.NoIntersect;
@@ -68,7 +68,7 @@ public class Intersections {
                     double y2 = midPoint.getY() + yTerm;
                     result.point1 = new Point2D(x1, y1);
                     result.point2 = new Point2D(x2, y2);
-                    if (fuzzyEqual(result.point1, result.point2)) {
+                    if (Geom.almostEqual(result.point1, result.point2)) {
                         result.intrType = Circle2Circle2IntrType.OneIntersect;
                     } else {
                         result.intrType = Circle2Circle2IntrType.TwoIntersects;
@@ -97,7 +97,7 @@ public class Intersections {
         // Test if point is inside a segment, NOTE: assumes points are aligned
         TriPredicate<Point2D, Point2D, Point2D> isInSegment = (final Point2D pt, final Point2D segStart,
                                                                final Point2D segEnd) -> {
-            if (Utils.fuzzyEqual(segStart.getX(), segEnd.getX())) {
+            if (Geom.almostEqual(segStart.getX(), segEnd.getX())) {
                 // vertical segment, test y coordinate
                 OrderedPair<Double, Double> minmax = Utils.minmax(segStart.getY(), segEnd.getY());
                 return Utils.fuzzyInRange(minmax.first(), pt.getY(), minmax.second());
@@ -132,11 +132,11 @@ public class Intersections {
                 result.intrType = LineSeg2LineSeg2IntrType.None;
             } else {
                 // either collinear or degenerate (segments are single points)
-                boolean uIsPoint = fuzzyEqual(u1, u2);
-                boolean vIsPoint = fuzzyEqual(v1, v2);
+                boolean uIsPoint = Geom.almostEqual(u1, u2);
+                boolean vIsPoint = Geom.almostEqual(v1, v2);
                 if (uIsPoint && vIsPoint) {
                     // both segments are just points
-                    if (fuzzyEqual(u1, v1)) {
+                    if (Geom.almostEqual(u1, v1)) {
                         // same point
                         result.point = u1;
                         result.intrType = LineSeg2LineSeg2IntrType.True;
@@ -227,7 +227,7 @@ public class Intersections {
             // v1 = v2, test if point is on the circle
             double xh = p0.getX() - h;
             double yk = p0.getY() - k;
-            if (Utils.fuzzyEqual(xh * xh + yk * yk, radius * radius)) {
+            if (Geom.almostEqual(xh * xh + yk * yk, radius * radius)) {
                 result.numIntersects = 1;
                 result.t0 = 0.0;
             } else {
@@ -239,7 +239,7 @@ public class Intersections {
                     (p0.getY() * p0.getY() - 2.0 * k * p0.getY() + k * k) - radius * radius;
             double discr = b * b - 4.0 * a * c;
 
-            if (Math.abs(discr) < Utils.realThreshold) {
+            if (Geom.almostZero(discr, Utils.realThreshold)) {
                 // 1 solution (tangent line)
                 result.numIntersects = 1;
                 result.t0 = -b / (2.0 * a);
@@ -308,14 +308,14 @@ public class Intersections {
             PlineIntersect sliceStart = new PlineIntersect();
             sliceStart.pos = split1.splitVertex.pos();
 
-            if (fuzzyEqual(v1.pos(), intr.point1, Utils.realPrecision)) {
+            if (Geom.almostEqual(v1.pos(), intr.point1, Utils.realPrecision)) {
                 // coincidence starts at beginning of segment, report as starting at end of previous index
                 sliceStart.sIndex1 = Utils.prevWrappingIndex(intr.sIndex1, pline1);
             } else {
                 sliceStart.sIndex1 = intr.sIndex1;
             }
 
-            if (fuzzyEqual(u1.pos(), sliceStart.pos, Utils.realPrecision)) {
+            if (Geom.almostEqual(u1.pos(), sliceStart.pos, Utils.realPrecision)) {
                 sliceStart.sIndex2 = Utils.prevWrappingIndex(intr.sIndex2, pline2);
             } else {
                 sliceStart.sIndex2 = intr.sIndex2;
@@ -333,7 +333,7 @@ public class Intersections {
             PlineIntersect sliceEnd = new PlineIntersect();
             sliceEnd.pos = intr.point2;
             sliceEnd.sIndex1 = intr.sIndex1;
-            if (fuzzyEqual(u1.pos(), sliceEnd.pos, Utils.realPrecision)) {
+            if (Geom.almostEqual(u1.pos(), sliceEnd.pos, Utils.realPrecision)) {
                 sliceEnd.sIndex2 = Utils.prevWrappingIndex(intr.sIndex2, pline2);
             } else {
                 sliceEnd.sIndex2 = intr.sIndex2;
@@ -348,7 +348,7 @@ public class Intersections {
             final PlineVertex v1 = pline1.get(intr.sIndex1);
             final PlineVertex v2 = pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1));
 
-            if (fuzzyEqual(intr.point1, currCoincidentSlice[0].lastVertex().pos(),
+            if (Geom.almostEqual(intr.point1, currCoincidentSlice[0].lastVertex().pos(),
                     Utils.realPrecision)) {
                 // continue coincident slice
                 currCoincidentSlice[0].removeLast();
@@ -371,7 +371,7 @@ public class Intersections {
             // check if last coincident slice connects with first()
             final Point2D lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
             final Point2D firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
-            if (fuzzyEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
+            if (Geom.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
                 final PolyArcPath lastSlice = coincidentSlices.getLast();
                 lastSlice.removeLast();
@@ -402,7 +402,7 @@ public class Intersections {
         if (pline.size() == 2) {
             if (pline.isClosed()) {
                 // check if overlaps on itself from vertex 1 to vertex 2
-                if (Utils.fuzzyEqual(pline.get(0).bulge(), -pline.get(1).bulge())) {
+                if (Geom.almostEqual(pline.get(0).bulge(), -pline.get(1).bulge())) {
                     // coincident
                     output.add(new PlineIntersect(0, 1, pline.get(1).pos()));
                     output.add(new PlineIntersect(1, 0, pline.get(0).pos()));
@@ -417,7 +417,7 @@ public class Intersections {
             final PlineVertex v3 = pline.get(k);
             // testing intersection between v1->v2 and v2->v3 segments
 
-            if (fuzzyEqual(v1.pos(), v2.pos(), Utils.realPrecision)) {
+            if (Geom.almostEqual(v1.pos(), v2.pos(), Utils.realPrecision)) {
                 // singularity
                 // coincident
                 output.add(new PlineIntersect(i, j, v1.pos()));
@@ -428,15 +428,15 @@ public class Intersections {
                     break;
                 case TangentIntersect:
                 case OneIntersect:
-                    if (!fuzzyEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
+                    if (!Geom.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
                         output.add(new PlineIntersect(i, j, intrResult.point1));
                     }
                     break;
                 case TwoIntersects:
-                    if (!fuzzyEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
+                    if (!Geom.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
                         output.add(new PlineIntersect(i, j, intrResult.point1));
                     }
-                    if (!fuzzyEqual(intrResult.point2, v2.pos(), Utils.realPrecision)) {
+                    if (!Geom.almostEqual(intrResult.point2, v2.pos(), Utils.realPrecision)) {
                         output.add(new PlineIntersect(i, j, intrResult.point2));
                     }
                     break;
@@ -505,7 +505,7 @@ public class Intersections {
                 final PlineVertex u2 = pline.get(hitIndexEnd);
 
                 Predicate<Point2D> intrAtStartPt = (final Point2D intr) ->
-                        fuzzyEqual(v1.pos(), intr) || fuzzyEqual(u1.pos(), intr);
+                        Geom.almostEqual(v1.pos(), intr) || Geom.almostEqual(u1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(v1, v2, u1, u2);
                 switch (intrResult.intrType) {
@@ -579,7 +579,7 @@ public class Intersections {
                 final PlineVertex p1v2 = pline1.get(j1);
 
                 Predicate<Point2D> intrAtStartPt = (final Point2D intr) ->
-                        fuzzyEqual(p1v1.pos(), intr) || fuzzyEqual(p2v1.pos(), intr);
+                        Geom.almostEqual(p1v1.pos(), intr) || Geom.almostEqual(p2v1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
                 switch (intrResult.intrType) {
@@ -602,12 +602,12 @@ public class Intersections {
                 case SegmentOverlap:
                 case ArcOverlap:
                     coincidentIntrs.add(new PlineCoincidentIntersect(i1, i2, intrResult.point1, intrResult.point2));
-                    if (fuzzyEqual(p1v1.pos(), intrResult.point1) ||
-                            fuzzyEqual(p1v1.pos(), intrResult.point2)) {
+                    if (Geom.almostEqual(p1v1.pos(), intrResult.point1) ||
+                            Geom.almostEqual(p1v1.pos(), intrResult.point2)) {
                         possibleDuplicates.add(new OrderedPair<>(Utils.prevWrappingIndex(i1, pline1), i2));
                     }
-                    if (fuzzyEqual(p2v1.pos(), intrResult.point1) ||
-                            fuzzyEqual(p2v1.pos(), intrResult.point2)) {
+                    if (Geom.almostEqual(p2v1.pos(), intrResult.point1) ||
+                            Geom.almostEqual(p2v1.pos(), intrResult.point2)) {
                         possibleDuplicates.add(new OrderedPair<>(i1, Utils.prevWrappingIndex(i2, pline2)));
                     }
                     break;
@@ -629,13 +629,13 @@ public class Intersections {
 
             final Point2D endPt1 =
                     pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1)).pos();
-            if (fuzzyEqual(intr.pos, endPt1)) {
+            if (Geom.almostEqual(intr.pos, endPt1)) {
                 return true;
             }
 
             final Point2D endPt2 =
                     pline2.get(Utils.nextWrappingIndex(intr.sIndex2, pline2)).pos();
-            return fuzzyEqual(intr.pos, endPt2);
+            return Geom.almostEqual(intr.pos, endPt2);
         });
     }
 
@@ -781,11 +781,11 @@ public class Intersections {
                 double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
                 double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                if (Utils.fuzzyEqual(arc1StartAndSweep.first(), arc2End)) {
+                if (Geom.almostEqual(arc1StartAndSweep.first(), arc2End)) {
                     // only end points touch at start of arc1
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = v1.pos();
-                } else if (Utils.fuzzyEqual(arc2StartAndSweep.first(), arc1End)) {
+                } else if (Geom.almostEqual(arc2StartAndSweep.first(), arc1End)) {
                     // only end points touch at start of arc2
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = u1.pos();

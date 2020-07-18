@@ -172,11 +172,11 @@ public class PlineVertex implements Cloneable {
         if (v1.bulgeIsZero()) {
             result.updatedStart = v1;
             result.splitVertex = new PlineVertex(point, 0.0);
-        } else if (fuzzyEqual(v1.pos(), v2.pos(), Utils.realPrecision) ||
-                fuzzyEqual(v1.pos(), point, Utils.realPrecision)) {
+        } else if (Geom.almostEqual(v1.pos(), v2.pos(), Utils.realPrecision) ||
+                Geom.almostEqual(v1.pos(), point, Utils.realPrecision)) {
             result.updatedStart = new PlineVertex(point, 0.0);
             result.splitVertex = new PlineVertex(point, v1.bulge());
-        } else if (fuzzyEqual(v2.pos(), point, Utils.realPrecision)) {
+        } else if (Geom.almostEqual(v2.pos(), point, Utils.realPrecision)) {
             result.updatedStart = v1;
             result.splitVertex = new PlineVertex(v2.pos(), 0.0);
         } else {
@@ -199,7 +199,7 @@ public class PlineVertex implements Cloneable {
 
     /// Calculate the path length for the segment defined from v1 to v2.
     public static double segLength(PlineVertex v1, PlineVertex v2) {
-        if (fuzzyEqual(v1.pos(), v2.pos())) {
+        if (Geom.almostEqual(v1.pos(), v2.pos())) {
             return 0.0;
         }
 
@@ -249,7 +249,7 @@ public class PlineVertex implements Cloneable {
 
         BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
 
-        if (fuzzyEqual(point, arc.center)) {
+        if (Geom.almostEqual(point, arc.center)) {
             // avoid normalizing zero length vector (point is at center, just return start point)
             return v1.pos();
         }
@@ -413,11 +413,11 @@ public class PlineVertex implements Cloneable {
                     double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
                     double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                    if (Utils.fuzzyEqual(arc1StartAndSweep.first(), arc2End)) {
+                    if (Geom.almostEqual(arc1StartAndSweep.first(), arc2End)) {
                         // only end points touch at start of arc1
                         result.intrType = PlineSegIntrType.OneIntersect;
                         result.point1 = v1.pos();
-                    } else if (Utils.fuzzyEqual(arc2StartAndSweep.first(), arc1End)) {
+                    } else if (Geom.almostEqual(arc2StartAndSweep.first(), arc1End)) {
                         // only end points touch at start of arc2
                         result.intrType = PlineSegIntrType.OneIntersect;
                         result.point1 = u1.pos();

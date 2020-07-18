@@ -96,7 +96,7 @@ public class OffsetPathSampleMain extends Application {
         Parent root = borderPane;
         Scene scene = new Scene(root, 400, 300);
         updatePath();
-        primaryStage.setTitle("JHotDraw: Cardinal Spline Sample");
+        primaryStage.setTitle("JHotDraw: Offset Path Sample");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

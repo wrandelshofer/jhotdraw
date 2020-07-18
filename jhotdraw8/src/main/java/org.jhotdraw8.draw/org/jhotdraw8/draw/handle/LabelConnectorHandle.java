@@ -6,19 +6,9 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -31,6 +21,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Transforms;
 
 import java.util.function.Function;
@@ -125,7 +116,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         double size = targetNode.getWidth();
         // rotates the node:
-        final double a = connectorTangent == null ? 0 : Math.atan2(connectorTangent.getY(), connectorTangent.getX());
+        final double a = connectorTangent == null ? 0 : Geom.atan2(connectorTangent.getY(), connectorTangent.getX());
         targetNode.setRotate(a * 180 / PI);
 
         Point2D origin = t.transform(f.getNonNull(originKey).getConvertedValue());

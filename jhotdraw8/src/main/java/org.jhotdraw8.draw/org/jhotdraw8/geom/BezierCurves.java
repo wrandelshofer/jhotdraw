@@ -7,9 +7,16 @@ package org.jhotdraw8.geom;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
+import org.jhotdraw8.util.function.Double8Consumer;
+
+import java.awt.geom.CubicCurve2D;
+
+import static java.lang.Math.abs;
 
 /**
  * Provides utility methods for Bézier curves.
@@ -65,6 +72,12 @@ public class BezierCurves {
         return new Point2D(x0123, y0123);
     }
 
+    @NonNull
+    public static Point2D evalCubicCurve(CubicCurve2D.Double c,
+                                         double t) {
+        return evalCubicCurve(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2, t);
+    }
+
     /**
      * Linear interpolation from {@code a} to {@code b} at {@code t}.
      *
@@ -91,6 +104,7 @@ public class BezierCurves {
     public static Point2D evalLine(double x0, double y0, double x1, double y1, double t) {
         return new Point2D(lerp(x0, x1, t), lerp(y0, y1, t));
     }
+
 
     /**
      * Evaluates the given curve at the specified time.
@@ -201,23 +215,84 @@ public class BezierCurves {
      * <p>
      * Reference:
      * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
+     */
+    public static OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> split(CubicCurve2D.Double source,
+                                                                              double t) {
+        CubicCurve2D.Double left = new CubicCurve2D.Double();
+        CubicCurve2D.Double right = new CubicCurve2D.Double();
+        splitCubicCurve(source.x1, source.y1, source.ctrlx1, source.ctrly1, source.ctrlx2, source.ctrly2, source.x2, source.y2,
+                t,
+
+                left::setCurve, right::setCurve);
+        return new OrderedPair<>(left, right);
+    }
+
+    /**
+     * Splits the provided bezier curve into two parts.
+     * <p>
+     * Reference:
+     * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
+     */
+    public static void split(CubicCurve2D.Double source,
+                             double t,
+                             CubicCurve2D.Double left,
+                             CubicCurve2D.Double right) {
+        splitCubicCurve(source.x1, source.y1, source.ctrlx1, source.ctrly1, source.ctrlx2, source.ctrly2, source.x2, source.y2,
+                t,
+
+                left::setCurve, right::setCurve);
+    }
+
+    /**
+     * Splits the provided bezier curve into two parts.
+     * <p>
+     * Reference:
+     * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
      *
-     * @param x0           point P0 of the curve
-     * @param y0           point P0 of the curve
-     * @param x1           point P1 of the curve
-     * @param y1           point P1 of the curve
-     * @param x2           point P2 of the curve
-     * @param y2           point P2 of the curve
-     * @param x3           point P3 of the curve
-     * @param y3           point P3 of the curve
-     * @param t            where to split
-     * @param leftCurveTo  if not null, accepts the curve from x1,y1 to t
-     * @param rightCurveTo if not null, accepts the curve from t to x4,y4
+     * @param x0    point P0 of the curve
+     * @param y0    point P0 of the curve
+     * @param x1    point P1 of the curve
+     * @param y1    point P1 of the curve
+     * @param x2    point P2 of the curve
+     * @param y2    point P2 of the curve
+     * @param x3    point P3 of the curve
+     * @param y3    point P3 of the curve
+     * @param t     where to split
+     * @param left  if not null, accepts the curve from x1,y1 to t
+     * @param right if not null, accepts the curve from t to x4,y4
+     */
+    public static void splitCubicCurveTo(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+                                         double t,
+                                         @Nullable Double6Consumer left,
+                                         @Nullable Double6Consumer right) {
+        splitCubicCurve(x0, y0, x1, y1, x2, y2, x3, y3, t,
+                left == null ? null : (lx, ly, lx1, ly1, lx2, ly2, lx3, ly3) -> left.accept(lx1, ly1, lx2, ly2, lx3, ly3),
+                right == null ? null : (lx, ly, lx1, ly1, lx2, ly2, lx3, ly3) -> right.accept(lx1, ly1, lx2, ly2, lx3, ly3)
+        );
+    }
+
+    /**
+     * Splits the provided bezier curve into two parts.
+     * <p>
+     * Reference:
+     * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
+     *
+     * @param x0    point P0 of the curve
+     * @param y0    point P0 of the curve
+     * @param x1    point P1 of the curve
+     * @param y1    point P1 of the curve
+     * @param x2    point P2 of the curve
+     * @param y2    point P2 of the curve
+     * @param x3    point P3 of the curve
+     * @param y3    point P3 of the curve
+     * @param t     where to split
+     * @param left  if not null, accepts the curve from x1,y1 to t
+     * @param right if not null, accepts the curve from t to x4,y4
      */
     public static void splitCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                        double t,
-                                       @Nullable Double6Consumer leftCurveTo,
-                                       @Nullable Double6Consumer rightCurveTo) {
+                                       @Nullable Double8Consumer left,
+                                       @Nullable Double8Consumer right) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -232,11 +307,11 @@ public class BezierCurves {
         x0123 = lerp(x012, x123, t);
         y0123 = lerp(y012, y123, t);
 
-        if (leftCurveTo != null) {
-            leftCurveTo.accept(x01, y01, x012, y012, x0123, y0123);
+        if (left != null) {
+            left.accept(x0, y0, x01, y01, x012, y012, x0123, y0123);
         }
-        if (rightCurveTo != null) {
-            rightCurveTo.accept(x123, y123, x23, y23, x3, y3);
+        if (right != null) {
+            right.accept(x0123, y0123, x123, y123, x23, y23, x3, y3);
         }
     }
 
@@ -262,7 +337,7 @@ public class BezierCurves {
                                        double[] left,
                                        double[] right) {
         splitCubicCurve(x0, y0, x1, y1, x2, y2, x3, y3, t,
-                left == null ? null : (a, b, c, d, e, f) -> {
+                left == null ? null : (x,y,a, b, c, d, e, f) -> {
                     left[0] = a;
                     left[1] = b;
                     left[2] = c;
@@ -270,7 +345,7 @@ public class BezierCurves {
                     left[4] = e;
                     left[5] = f;
                 },
-                right == null ? null : (a, b, c, d, e, f) -> {
+                right == null ? null : (x, y, a, b, c, d, e, f) -> {
                     right[0] = a;
                     right[1] = b;
                     right[2] = c;
@@ -298,10 +373,10 @@ public class BezierCurves {
         Geom.splitLine(x0, y0, x1, y1, t, leftLineTo, rightLineTo);
     }
 
-    public static void splitQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t,
-                                      double[] left,
-                                      double[] right) {
-        splitQuadCurve(x0, y0, x1, y1, x2, y2, t,
+    public static void splitQuadCurveTo(double x0, double y0, double x1, double y1, double x2, double y2, double t,
+                                        double[] left,
+                                        double[] right) {
+        splitQuadCurveTo(x0, y0, x1, y1, x2, y2, t,
                 (a, b, c, d) -> {
                     left[0] = a;
                     left[1] = b;
@@ -330,9 +405,9 @@ public class BezierCurves {
      * @param leftCurveTo  if not null, accepts the curve from x1,y1 to t
      * @param rightCurveTo if not null, accepts the curve from t to x3,y3
      */
-    public static void splitQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t,
-                                      @Nullable Double4Consumer leftCurveTo,
-                                      @Nullable Double4Consumer rightCurveTo) {
+    public static void splitQuadCurveTo(double x0, double y0, double x1, double y1, double x2, double y2, double t,
+                                        @Nullable Double4Consumer leftCurveTo,
+                                        @Nullable Double4Consumer rightCurveTo) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -398,11 +473,125 @@ public class BezierCurves {
         double[] left = new double[4];
         double[] right = new double[4];
         double tab = ta / tb;
-        splitQuadCurve(x0, y0,
+        splitQuadCurveTo(x0, y0,
                 x1, y1, x2, y2, tb, left, null);
-        splitQuadCurve(x0, y0,
+        splitQuadCurveTo(x0, y0,
                 left[0], left[1], left[2], left[3], tab, left, right);
         return new double[]{left[2], left[3],
                 right[0], right[1], right[2], right[3]};
+    }
+
+    /**
+     * Rotates and translates the provided bezier curve so that 3 coordinates
+     * are approximately 0: x0, y0 and y3.
+     */
+    public static double[] align(double x0, double y0,
+                                 double x1, double y1,
+                                 double x2, double y2,
+                                 double x3, double y3) {
+        double[] e = {x0, y0, x1, y1, x2, y2, x3, y3};
+        double theta = -Geom.atan2(y3 - y0, x3 - x0);
+        double cosTheta = Math.cos(theta);
+        double sinTheta = Math.sin(theta);
+        double[] n = new double[8];
+        for (int i = 0; i < 8; i += 2) {
+            double px = e[i];
+            double py = e[i + 1];
+            n[i] = (px - x0) * cosTheta - (py - y0) * sinTheta;
+            n[i + 1] = (px - x0) * sinTheta + (py - y0) * cosTheta;
+        }
+        return n;
+    }
+
+    /**
+     * Returns true if a is approximately equal to b.
+     *
+     * @param a value a
+     * @param b value b
+     * @return true if approximately equal
+     */
+    private static boolean fuzzyEqual(double a, double b) {
+        return fuzzyEqual(a, b, 1e-6);
+    }
+
+    /**
+     * Returns true if a is approximately equal to b
+     * .
+     *
+     * @param a   value a
+     * @param b   value b
+     * @param eps the absolute difference of (a - b) that is treated
+     *            as equal.
+     * @return true if approximately equal
+     */
+    private static boolean fuzzyEqual(double a, double b, double eps) {
+        return abs(a - b) <= eps;
+    }
+
+    /**
+     * Computes the inflection points of the given cubic curve.
+     * <p>
+     * References:
+     * <ol>
+     *     <li><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow</a></a></li>
+     * </ol>
+     * </p>
+     */
+    public static DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
+        return inflectionPoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
+    }
+
+    /**
+     * Computes the inflection points of the given cubic curve.
+     * <p>
+     * References:
+     * <ol>
+     *     <li><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow</a></a></li>
+     * </ol>
+     * </p>
+     */
+    public static DoubleArrayList inflectionPoints(double x0, double y0,
+                                                   double x1, double y1,
+                                                   double x2, double y2,
+                                                   double x3, double y3) {
+
+        DoubleArrayList result = new DoubleArrayList();
+        double[] n = align(x0, y0, x1, y1, x2, y2, x3, y3);
+        double ax2 = n[4],
+                ay1 = n[3],
+                ax3 = n[6],
+                ax1 = n[2],
+                ay2 = n[5];
+        double
+                i = ax2 * ay1,
+                a = ax3 * ay1,
+                r = ax1 * ay2,
+                o = ax3 * ay2,
+                s = -3 * i + 2 * a + 3 * r - o,
+                l = 3 * i - a - 3 * r,
+                c = r - i;
+        if (fuzzyEqual(s, 0)) {
+            if (!fuzzyEqual(l, 0)) {
+                var h = -c / l;
+                if (0 <= h && 1 >= h) {
+                    result.add(h);
+                    return result;
+                }
+            }
+            return result;
+        }
+        double det = Math.sqrt(l * l - 4 * s * c);
+        double q = 2 * s;
+        if (fuzzyEqual(q, 0)) {
+            return result;
+        } else {
+            double t1 = (det - l) / q;
+            double t2 = -(l + det) / q;
+            if (0 <= t1 && 1 >= t1)
+                result.add(t1);
+            if (0 <= t2 && 1 >= t2)
+                result.add(t2);
+        }
+        return result;
     }
 }

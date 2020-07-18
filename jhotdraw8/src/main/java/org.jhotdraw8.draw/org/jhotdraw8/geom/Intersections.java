@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 import static org.jhotdraw8.geom.Geom.argumentOnLine;
 import static org.jhotdraw8.geom.Geom.lerp;
 
@@ -2433,40 +2431,42 @@ public class Intersections {
         for (; !pit.isDone(); pit.next()) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
-                case PathIterator.SEG_CLOSE:
-                    inter = Intersections.intersectLineLine(a0x, a0y, a1x, a1y, lastx, lasty, firstx, firsty, Double.MAX_VALUE);
-                    if (inter.getStatus() == Status.NO_INTERSECTION_COINCIDENT) hasTangent = true;
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    x = seg[4];
-                    y = seg[5];
-                    inter = Intersections.intersectLineCubicCurve(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Double.MAX_VALUE);
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_LINETO:
-                    x = seg[0];
-                    y = seg[1];
-                    inter = Intersections.intersectLineLine(a0x, a0y, a1x, a1y, lastx, lasty, x, y, Double.MAX_VALUE);
-                    if (inter.getStatus() == Status.NO_INTERSECTION_COINCIDENT) hasTangent = true;
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    inter = null;
-                    lastx = firstx = seg[0];
-                    lasty = firsty = seg[1];
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    x = seg[2];
-                    y = seg[3];
-                    inter = Intersections.intersectLineQuadraticCurve(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y, Double.MAX_VALUE);
-                    lastx = x;
-                    lasty = y;
-                    break;
-                default:
-                    inter = null;
-                    break;
+            case PathIterator.SEG_CLOSE:
+                inter = Intersections.intersectLineLine(a0x, a0y, a1x, a1y, lastx, lasty, firstx, firsty, Double.MAX_VALUE);
+                if (inter.getStatus() == Status.NO_INTERSECTION_COINCIDENT)
+                    hasTangent = true;
+                break;
+            case PathIterator.SEG_CUBICTO:
+                x = seg[4];
+                y = seg[5];
+                inter = Intersections.intersectLineCubicCurve(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Double.MAX_VALUE);
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_LINETO:
+                x = seg[0];
+                y = seg[1];
+                inter = Intersections.intersectLineLine(a0x, a0y, a1x, a1y, lastx, lasty, x, y, Double.MAX_VALUE);
+                if (inter.getStatus() == Status.NO_INTERSECTION_COINCIDENT)
+                    hasTangent = true;
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_MOVETO:
+                inter = null;
+                lastx = firstx = seg[0];
+                lasty = firsty = seg[1];
+                break;
+            case PathIterator.SEG_QUADTO:
+                x = seg[2];
+                y = seg[3];
+                inter = Intersections.intersectLineQuadraticCurve(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y, Double.MAX_VALUE);
+                lastx = x;
+                lasty = y;
+                break;
+            default:
+                inter = null;
+                break;
             }
 
             if (inter != null)
@@ -2507,38 +2507,38 @@ public class Intersections {
         for (; !pit.isDone(); pit.next()) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
-                case PathIterator.SEG_CLOSE:
-                    inter = Intersections.intersectLineLine(lastx, lasty, firstx, firsty, a0x, a0y, a1x, a1y);
-                    result.addAll(inter.getIntersections());
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    x = seg[4];
-                    y = seg[5];
-                    inter = Intersections.intersectCubicCurveLine(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, a0x, a0y, a1x, a1y);
-                    result.addAll(inter.getIntersections());
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_LINETO:
-                    x = seg[0];
-                    y = seg[1];
-                    inter = Intersections.intersectLineLine(lastx, lasty, x, y, a0x, a0y, a1x, a1y);
-                    result.addAll(inter.getIntersections());
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    lastx = firstx = seg[0];
-                    lasty = firsty = seg[1];
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    x = seg[2];
-                    y = seg[3];
-                    inter = Intersections.intersectQuadraticCurveLine(lastx, lasty, seg[0], seg[1], x, y, a0x, a0y, a1x, a1y);
-                    result.addAll(inter.getIntersections());
-                    lastx = x;
-                    lasty = y;
-                    break;
+            case PathIterator.SEG_CLOSE:
+                inter = Intersections.intersectLineLine(lastx, lasty, firstx, firsty, a0x, a0y, a1x, a1y);
+                result.addAll(inter.getIntersections());
+                break;
+            case PathIterator.SEG_CUBICTO:
+                x = seg[4];
+                y = seg[5];
+                inter = Intersections.intersectCubicCurveLine(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, a0x, a0y, a1x, a1y);
+                result.addAll(inter.getIntersections());
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_LINETO:
+                x = seg[0];
+                y = seg[1];
+                inter = Intersections.intersectLineLine(lastx, lasty, x, y, a0x, a0y, a1x, a1y);
+                result.addAll(inter.getIntersections());
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_MOVETO:
+                lastx = firstx = seg[0];
+                lasty = firsty = seg[1];
+                break;
+            case PathIterator.SEG_QUADTO:
+                x = seg[2];
+                y = seg[3];
+                inter = Intersections.intersectQuadraticCurveLine(lastx, lasty, seg[0], seg[1], x, y, a0x, a0y, a1x, a1y);
+                result.addAll(inter.getIntersections());
+                lastx = x;
+                lasty = y;
+                break;
             }
         }
 
@@ -2743,42 +2743,42 @@ public class Intersections {
         for (; !pit.isDone(); pit.next()) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
-                case PathIterator.SEG_CLOSE:
-                    inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty, cx, cy, r);
-                    // FIXME add segment number to t
-                    result.addAll(inter.getIntersections());
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    x = seg[4];
-                    y = seg[5];
-                    inter = Intersections.intersectCubicCurveCircle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, cx, cy, r);
-                    // FIXME add segment number to t
-                    result.addAll(inter.getIntersections());
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_LINETO:
-                    x = seg[0];
-                    y = seg[1];
-                    inter = Intersections.intersectLineCircle(lastx, lasty, x, y, cx, cy, r);
-                    // FIXME add segment number to t
-                    result.addAll(inter.getIntersections());
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    lastx = firstx = seg[0];
-                    lasty = firsty = seg[1];
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    x = seg[2];
-                    y = seg[3];
-                    inter = Intersections.intersectQuadraticCurveCircle(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
-                    // FIXME add segment number to t
-                    result.addAll(inter.getIntersections());
-                    lastx = x;
-                    lasty = y;
-                    break;
+            case PathIterator.SEG_CLOSE:
+                inter = Intersections.intersectLineCircle(lastx, lasty, firstx, firsty, cx, cy, r);
+                // FIXME add segment number to t
+                result.addAll(inter.getIntersections());
+                break;
+            case PathIterator.SEG_CUBICTO:
+                x = seg[4];
+                y = seg[5];
+                inter = Intersections.intersectCubicCurveCircle(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, cx, cy, r);
+                // FIXME add segment number to t
+                result.addAll(inter.getIntersections());
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_LINETO:
+                x = seg[0];
+                y = seg[1];
+                inter = Intersections.intersectLineCircle(lastx, lasty, x, y, cx, cy, r);
+                // FIXME add segment number to t
+                result.addAll(inter.getIntersections());
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_MOVETO:
+                lastx = firstx = seg[0];
+                lasty = firsty = seg[1];
+                break;
+            case PathIterator.SEG_QUADTO:
+                x = seg[2];
+                y = seg[3];
+                inter = Intersections.intersectQuadraticCurveCircle(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
+                // FIXME add segment number to t
+                result.addAll(inter.getIntersections());
+                lastx = x;
+                lasty = y;
+                break;
             }
         }
 
@@ -2807,38 +2807,38 @@ public class Intersections {
         for (; !pit.isDone(); pit.next(), i++) {
             Intersection inter;
             switch (pit.currentSegment(seg)) {
-                case PathIterator.SEG_CLOSE:
-                    inter = Intersections.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    x = seg[4];
-                    y = seg[5];
-                    inter = Intersections.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_LINETO:
-                    x = seg[0];
-                    y = seg[1];
-                    inter = Intersections.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
-                    lastx = x;
-                    lasty = y;
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    lastx = firstx = seg[0];
-                    lasty = firsty = seg[1];
-                    inter = null;
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    x = seg[2];
-                    y = seg[3];
-                    inter = Intersections.intersectQuadraticCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
-                    lastx = x;
-                    lasty = y;
-                    break;
-                default:
-                    inter = null;
-                    break;
+            case PathIterator.SEG_CLOSE:
+                inter = Intersections.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
+                break;
+            case PathIterator.SEG_CUBICTO:
+                x = seg[4];
+                y = seg[5];
+                inter = Intersections.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_LINETO:
+                x = seg[0];
+                y = seg[1];
+                inter = Intersections.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
+                lastx = x;
+                lasty = y;
+                break;
+            case PathIterator.SEG_MOVETO:
+                lastx = firstx = seg[0];
+                lasty = firsty = seg[1];
+                inter = null;
+                break;
+            case PathIterator.SEG_QUADTO:
+                x = seg[2];
+                y = seg[3];
+                inter = Intersections.intersectQuadraticCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
+                lastx = x;
+                lasty = y;
+                break;
+            default:
+                inter = null;
+                break;
             }
             if (inter != null) {
                 for (Intersection.IntersectionPoint entry : inter.getIntersections()) {
@@ -2983,7 +2983,12 @@ public class Intersections {
      * Computes the intersection between two infinitely long rays 'a' and 'b'.
      * <p>
      * The intersection will contain the parameters 't' of ray 'a' in range
-     * [0,MAX_VALUE].
+     * [-MAX_VALUE,MAX_VALUE].
+     * <p>
+     * The computed intersection will have one of the states
+     * {@link Intersection.Status#INTERSECTION},
+     * {@link Intersection.Status#NO_INTERSECTION_COINCIDENT},
+     * {@link Intersection.Status#NO_INTERSECTION_PARALLEL},
      *
      * @param a0 point 0 of ray 'a'
      * @param a1 point 1 of ray 'a'
@@ -2993,18 +2998,62 @@ public class Intersections {
      */
     @NonNull
     public static Intersection intersectRayRay(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
+        final double
+                a0y = a0.getY(),
+                b1x = b1.getX(),
+                b0x = b0.getX(),
+                b0y = b0.getY(),
+                b1y = b1.getY(),
+                a0x = a0.getX(),
+                a1x = a1.getX(),
+                a1y = a1.getY();
+        return intersectRayRay(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y);
+
+    }
+
+    @NonNull
+    public static Intersection intersectRayRay(@NonNull java.awt.geom.Point2D a0,
+                                               @NonNull java.awt.geom.Point2D a1,
+                                               @NonNull java.awt.geom.Point2D b0,
+                                               @NonNull java.awt.geom.Point2D b1) {
+        final double
+                a0y = a0.getY(),
+                b1x = b1.getX(),
+                b0x = b0.getX(),
+                b0y = b0.getY(),
+                b1y = b1.getY(),
+                a0x = a0.getX(),
+                a1x = a1.getX(),
+                a1y = a1.getY();
+        return intersectRayRay(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y);
+
+    }
+
+    /**
+     * Computes the intersection between two infinitely long rays 'a' and 'b'.
+     * <p>
+     * The intersection will contain the parameters 't' of ray 'a' in range
+     * [-MAX_VALUE,MAX_VALUE].
+     * <p>
+     * The computed intersection will have one of the states
+     * {@link Intersection.Status#INTERSECTION},
+     * {@link Intersection.Status#NO_INTERSECTION_COINCIDENT},
+     * {@link Intersection.Status#NO_INTERSECTION_PARALLEL},
+     *
+     * @param a0x point 0 of ray 'a'
+     * @param a0y point 0 of ray 'a'
+     * @param a1x point 1 of ray 'a'
+     * @param a1y point 1 of ray 'a'
+     * @param b0x point 0 of ray 'a'
+     * @param b0y point 0 of ray 'a'
+     * @param b1x point 1 of ray 'b'
+     * @param b1y point 1 of ray 'b'
+     * @return computed intersection
+     */
+    public static Intersection intersectRayRay(double a0x, double a0y, double a1x, double a1y, double b0x, double b0y, double b1x, double b1y) {
         List<Intersection.IntersectionPoint> result = new ArrayList<>();
         Intersection.Status status;
 
-        final double a0y, b1x, b0x, b0y, b1y, a0x, a1x, a1y;
-        a0y = a0.getY();
-        b1x = b1.getX();
-        b0x = b0.getX();
-        b0y = b0.getY();
-        b1y = b1.getY();
-        a0x = a0.getX();
-        a1x = a1.getX();
-        a1y = a1.getY();
 
         double ua_t = (b1x - b0x) * (a0y - b0y) - (b1y - b0y) * (a0x - b0x);
         double ub_t = (a1x - a0x) * (a0y - b0y) - (a1y - a0y) * (a0x - b0x);
@@ -3012,13 +3061,12 @@ public class Intersections {
 
         if (u_b != 0) {
             double ua = ua_t / u_b;
-
             status = Intersection.Status.INTERSECTION;
-            result.add(new Intersection.IntersectionPoint(new Point2D(
-                    a0x + ua * (a1x - a0x),
-                    a0y + ua * (a1y - a0y)
-            ), ua
-            ));
+            result.add(new Intersection.IntersectionPoint(
+                    new Point2D(
+                            a0x + ua * (a1x - a0x),
+                            a0y + ua * (a1y - a0y)),
+                    ua));
         } else {
             if (ua_t == 0 || ub_t == 0) {
                 status = Intersection.Status.NO_INTERSECTION_COINCIDENT;

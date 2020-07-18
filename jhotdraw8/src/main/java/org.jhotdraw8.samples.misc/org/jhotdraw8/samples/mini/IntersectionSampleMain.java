@@ -506,7 +506,7 @@ public class IntersectionSampleMain extends Application {
                     System.out.println("  t:" + isect.getFirstT() + " ctrlPoint:" + isect.getLastPoint());
                     double[] left = new double[4];
                     double[] right = new double[4];
-                    BezierCurves.splitQuadCurve(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
+                    BezierCurves.splitQuadCurveTo(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));

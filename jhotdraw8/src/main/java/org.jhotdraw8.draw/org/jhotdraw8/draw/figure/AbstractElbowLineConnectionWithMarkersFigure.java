@@ -18,13 +18,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
-import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -191,7 +185,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
                                     @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
-            double angle = Math.atan2(start.getY() - end.getY(), start.getX() - end.getX());
+            double angle = Geom.angle(end, start);
             markerNode.getTransforms().setAll(
                     new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),
                     new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),

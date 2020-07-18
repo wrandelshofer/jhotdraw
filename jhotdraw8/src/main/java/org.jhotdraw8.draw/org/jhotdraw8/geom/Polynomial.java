@@ -11,15 +11,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cbrt;
-import static java.lang.Math.ceil;
-import static java.lang.Math.cos;
-import static java.lang.Math.log;
-import static java.lang.Math.max;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 public class Polynomial implements ToDoubleFunction<Double> {
 
@@ -267,7 +259,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
             results[numResults++] = root - offset;
         } else if (discrim < 0) {
             double distance = sqrt(-a / 3);
-            double angle = atan2(sqrt(-discrim), -halfB) / 3;
+            double angle = Geom.atan2(sqrt(-discrim), -halfB) / 3;
             double cos = cos(angle);
             double sin = sin(angle);
             final double sqrt3 = sqrt(3);
@@ -344,11 +336,26 @@ public class Polynomial implements ToDoubleFunction<Double> {
         double a = this.coefs[2];
         double b = this.coefs[1] / a;
         double c = this.coefs[0] / a;
-        double d = b * b - 4 * c;
+        return getQuadraticRoots(a, b, c);
+    }
 
+    /**
+     * Returns the roots of a quadratic polynomial (degree equals two).
+     * <pre>
+     *     a*t^2 + b*t + c = 0
+     *
+     *     d = b^2 - 4 * c
+     *     t1 = ( -b + sqrt(d) ) / 2
+     *     t2 = ( -b - sqrt(d) ) / 2
+     * </pre>
+     *
+     * @return the roots
+     */
+    @NonNull
+    public static double[] getQuadraticRoots(double a, double b, double c) {
+        double d = b * b - 4 * c;
         if (d > 0) {
             double e = sqrt(d);
-
             return new double[]{
                     0.5 * (-b + e),
                     0.5 * (-b - e)};
@@ -462,23 +469,23 @@ public class Polynomial implements ToDoubleFunction<Double> {
         final int simplifiedDegree = simplifiedDegree();
 
         switch (simplifiedDegree) {
-            case 0:
-                result = new double[0];
-                break;
-            case 1:
-                result = getLinearRoot();
-                break;
-            case 2:
-                result = getQuadraticRoots();
-                break;
-            case 3:
-                result = getCubicRoots();
-                break;
-            case 4:
-                result = getQuarticRoots();
-                break;
-            default:
-                throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
+        case 0:
+            result = new double[0];
+            break;
+        case 1:
+            result = getLinearRoot();
+            break;
+        case 2:
+            result = getQuadraticRoots();
+            break;
+        case 3:
+            result = getCubicRoots();
+            break;
+        case 4:
+            result = getQuarticRoots();
+            break;
+        default:
+            throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
         }
 
         return result;
@@ -498,31 +505,31 @@ public class Polynomial implements ToDoubleFunction<Double> {
         int numRoots = 0;
 
         switch (this.simplifiedDegree()) {
-            case 0:
-                break;
-            case 1:
-            case 2:
-            case 3:
-            case 4: {
-                double[] allroots = getRoots();
-                for (int i = 0; i < allroots.length; i++) {
-                    double root = allroots[i];
-                    if (min <= root && root <= max) {
-                        roots[numRoots++] = root;
-                    }
-                    Arrays.sort(roots, 0, numRoots);
+        case 0:
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 4: {
+            double[] allroots = getRoots();
+            for (int i = 0; i < allroots.length; i++) {
+                double root = allroots[i];
+                if (min <= root && root <= max) {
+                    roots[numRoots++] = root;
                 }
-                break;
+                Arrays.sort(roots, 0, numRoots);
             }
-            default: {
-                // get roots of derivative
-                Polynomial deriv = this.getDerivative();
-                double[] droots = deriv.getRootsInInterval(min, max);
+            break;
+        }
+        default: {
+            // get roots of derivative
+            Polynomial deriv = this.getDerivative();
+            double[] droots = deriv.getRootsInInterval(min, max);
 
-                roots = getRootsInInterval(this, droots, min, max);
-                numRoots = roots.length;
-                break;
-            }
+            roots = getRootsInInterval(this, droots, min, max);
+            numRoots = roots.length;
+            break;
+        }
         }
 
         return trim(numRoots, roots);

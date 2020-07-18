@@ -3,7 +3,6 @@ package org.jhotdraw8.geom.offsetline;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.geom.Geom;
 
-import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
 
 /**
  * Provides bulge conversion functions.
@@ -93,7 +92,7 @@ public class BulgeConversionFunctions {
         double theta = 4 * Math.atan(b);
 
         double r = chord * (b * b + 1) / (4 * b);
-        double a = Math.atan2(y2 - y1, x2 - x1) + (Math.PI - theta) / 2;
+        double a = Geom.atan2(y2 - y1, x2 - x1) + (Math.PI - theta) / 2;
         double cx = x1 + Math.sin(a) * r;
         double cy = y1 + Math.cos(a) * r;
 
@@ -117,7 +116,7 @@ public class BulgeConversionFunctions {
      * @return the bulge
      */
     public static double computeBulge(double x1, double y1, double x2, double y2, double x3, double y3) {
-        double a = 0.5 * (Math.PI - Math.atan2(y2 - y1, x2 - x1) + Math.atan2(y2 - y3, x2 - x3));
+        double a = 0.5 * (Math.PI - Geom.atan2(y2 - y1, x2 - x1) + Geom.atan2(y2 - y3, x2 - x3));
         double cosa = Math.cos(a);
         return cosa == 0.0 ? 0 : Math.sin(a) / cosa;
     }
@@ -150,7 +149,7 @@ public class BulgeConversionFunctions {
     public static BulgeConversionFunctions.ArcRadiusAndCenter arcRadiusAndCenter(PlineVertex v1,
                                                                                  PlineVertex v2) {
         assert !v1.bulgeIsZero() : "v1 to v2 must be an arc";
-        assert !fuzzyEqual(v1.pos(), v2.pos()) : "v1 must not be ontop of v2";
+        assert !Geom.almostEqual(v1.pos(), v2.pos()) : "v1 must not be ontop of v2";
 
         // compute radius
         double b = Math.abs(v1.bulge());
