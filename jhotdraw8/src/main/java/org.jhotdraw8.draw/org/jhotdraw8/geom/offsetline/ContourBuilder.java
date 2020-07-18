@@ -19,7 +19,7 @@ import java.util.function.*;
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.offsetline.Intersections.*;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.*;
-import static org.jhotdraw8.geom.offsetline.Polyline.createApproxSpatialIndex;
+import static org.jhotdraw8.geom.offsetline.PolyArcPath.createApproxSpatialIndex;
 import static org.jhotdraw8.geom.offsetline.Utils.*;
 
 /**
@@ -82,21 +82,21 @@ import static org.jhotdraw8.geom.offsetline.Utils.*;
  * </ol>
  * </p>
  */
-public class PapOffsetPathBuilder {
+public class ContourBuilder {
 
 
     /// Function to test if a point is a valid distance from the original polyline.
-    public static boolean pointValidForOffset(Polyline pline, double offset,
-                                              StaticSpatialIndex spatialIndex,
-                                              Point2D point, IntArrayDeque queryStack) {
+    static boolean pointValidForOffset(PolyArcPath pline, double offset,
+                                       StaticSpatialIndex spatialIndex,
+                                       Point2D point, IntArrayDeque queryStack) {
         return pointValidForOffset(pline, offset, spatialIndex, point,
                 queryStack, Utils.offsetThreshold);
     }
 
-    public static boolean pointValidForOffset(Polyline pline, double offset,
-                                              StaticSpatialIndex spatialIndex,
-                                              Point2D point, IntArrayDeque queryStack,
-                                              double offsetTol) {
+    static boolean pointValidForOffset(PolyArcPath pline, double offset,
+                                       StaticSpatialIndex spatialIndex,
+                                       Point2D point, IntArrayDeque queryStack,
+                                       double offsetTol) {
         final double absOffset = Math.abs(offset) - offsetTol;
         final double minDist = absOffset * absOffset;
 
@@ -115,11 +115,11 @@ public class PapOffsetPathBuilder {
         return pointValid[0];
     }
 
-    void addOrReplaceIfSamePos(Polyline pline, final PlineVertex vertex) {
+    void addOrReplaceIfSamePos(PolyArcPath pline, final PlineVertex vertex) {
         addOrReplaceIfSamePos(pline, vertex, realPrecision);
     }
 
-    void addOrReplaceIfSamePos(Polyline pline, final PlineVertex vertex,
+    void addOrReplaceIfSamePos(PolyArcPath pline, final PlineVertex vertex,
                                double epsilon) {
         if (pline.size() == 0) {
             pline.addVertex(vertex);
@@ -135,7 +135,7 @@ public class PapOffsetPathBuilder {
     }
 
     void arcToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
-                      boolean connectionArcsAreCCW, Polyline result) {
+                      boolean connectionArcsAreCCW, PolyArcPath result) {
 
         final PlineVertex v1 = s1.v1;
         final PlineVertex v2 = s1.v2;
@@ -221,7 +221,7 @@ public class PapOffsetPathBuilder {
     }
 
     void arcToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
-                       boolean connectionArcsAreCCW, Polyline result) {
+                       boolean connectionArcsAreCCW, PolyArcPath result) {
 
         final PlineVertex v1 = s1.v1;
         final PlineVertex v2 = s1.v2;
@@ -310,9 +310,9 @@ public class PapOffsetPathBuilder {
     /**
      * Creates the raw offset polyline.
      */
-    public Polyline createRawOffsetPline(Polyline pline, double offset) {
+    public PolyArcPath createRawOffsetPline(PolyArcPath pline, double offset) {
         //final Polyline pline = removeCoincidentPoints(pline0);
-        Polyline result = new Polyline();
+        PolyArcPath result = new PolyArcPath();
         if (pline.size() < 2) {
             return result;
         }
@@ -328,12 +328,12 @@ public class PapOffsetPathBuilder {
             return result;
         }
 
-        result = new Polyline(pline.size());
+        result = new PolyArcPath(pline.size());
         result.isClosed(pline.isClosed());
 
         final boolean connectionArcsAreCCW = offset < 0;
 
-        TriConsumer<PlineOffsetSegment, PlineOffsetSegment, Polyline> joinResultVisitor = (s1, s2, presult) -> {
+        TriConsumer<PlineOffsetSegment, PlineOffsetSegment, PolyArcPath> joinResultVisitor = (s1, s2, presult) -> {
             final boolean s1IsLine = s1.v1.bulgeIsZero();
             final boolean s2IsLine = s2.v1.bulgeIsZero();
             if (s1IsLine && s2IsLine) {
@@ -371,7 +371,7 @@ public class PapOffsetPathBuilder {
             final PlineOffsetSegment s2 = rawOffsets.get(0);
 
             // temp polyline to capture results of joining (to avoid mutating result)
-            Polyline closingPartResult = new Polyline();
+            PolyArcPath closingPartResult = new PolyArcPath();
             closingPartResult.addVertex(result.lastVertex());
             joinResultVisitor.accept(s1, s2, closingPartResult);
 
@@ -428,7 +428,7 @@ public class PapOffsetPathBuilder {
     /**
      * Creates all the raw polyline offset segments.
      */
-    List<PlineOffsetSegment> createUntrimmedOffsetSegments(@NonNull Polyline pline,
+    List<PlineOffsetSegment> createUntrimmedOffsetSegments(@NonNull PolyArcPath pline,
                                                            double offset) {
         int size = pline.size();
         int segmentCount = pline.isClosed() ? size : size - 1;
@@ -486,9 +486,9 @@ public class PapOffsetPathBuilder {
         return result;
     }
 
-    List<OpenPolylineSlice> dualSliceAtIntersectsForOffset(final Polyline originalPline,
-                                                           final Polyline rawOffsetPline,
-                                                           final Polyline dualRawOffsetPline, double offset) {
+    List<OpenPolylineSlice> dualSliceAtIntersectsForOffset(final PolyArcPath originalPline,
+                                                           final PolyArcPath rawOffsetPline,
+                                                           final PolyArcPath dualRawOffsetPline, double offset) {
         List<OpenPolylineSlice> result = new ArrayList<>();
         if (rawOffsetPline.size() < 2) {
             return result;
@@ -542,7 +542,7 @@ public class PapOffsetPathBuilder {
         if (!originalPline.isClosed()) {
             // build first open polyline that ends at the first intersect since we will not wrap back to
             // capture it as in the case of a closed polyline
-            Polyline firstSlice = new Polyline();
+            PolyArcPath firstSlice = new PolyArcPath();
             int index = 0;
             int loopCount = 0;
             final int maxLoopCount = rawOffsetPline.size();
@@ -662,7 +662,7 @@ public class PapOffsetPathBuilder {
             }
 
             SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
-            Polyline currSlice = new Polyline();
+            PolyArcPath currSlice = new PolyArcPath();
             currSlice.addVertex(split.splitVertex.clone());
 
             int index = nextIndex;
@@ -747,9 +747,9 @@ public class PapOffsetPathBuilder {
 
     @NonNull
     private Map<Integer, List<Point2D>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
-            @NonNull Polyline originalPline,
-            @NonNull Polyline rawOffsetPline,
-            @NonNull Polyline dualRawOffsetPline,
+            @NonNull PolyArcPath originalPline,
+            @NonNull PolyArcPath rawOffsetPline,
+            @NonNull PolyArcPath dualRawOffsetPline,
             double offset) {
 
         StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
@@ -798,7 +798,7 @@ public class PapOffsetPathBuilder {
     /// Slices a raw offset polyline at all of its self intersects.
 
     void lineToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
-                       boolean connectionArcsAreCCW, Polyline result) {
+                       boolean connectionArcsAreCCW, PolyArcPath result) {
 
         final PlineVertex v1 = s1.v1;
         final PlineVertex v2 = s1.v2;
@@ -869,7 +869,7 @@ public class PapOffsetPathBuilder {
     /* Stitches raw offset polyline slices together, discarding any that are not valid. */
 
     void lineToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
-                        boolean connectionArcsAreCCW, Polyline result) {
+                        boolean connectionArcsAreCCW, PolyArcPath result) {
         final PlineVertex v1 = s1.v1;
         final PlineVertex v2 = s1.v2;
         final PlineVertex u1 = s2.v1;
@@ -929,7 +929,7 @@ public class PapOffsetPathBuilder {
         }
     }
 
-    void offsetCircleIntersectsWithPline(Polyline pline, double offset,
+    void offsetCircleIntersectsWithPline(PolyArcPath pline, double offset,
                                          Point2D circleCenter,
                                          StaticSpatialIndex spatialIndex,
                                          List<OrderedPair<Integer, List<Point2D>>> output) {
@@ -1008,7 +1008,7 @@ public class PapOffsetPathBuilder {
      * @return offset polyline
      */
     @NonNull
-    public List<Polyline> parallelOffset(@NonNull Polyline pline, double offset) {
+    public List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset) {
         return parallelOffset(pline, offset, true);
     }
 
@@ -1021,26 +1021,26 @@ public class PapOffsetPathBuilder {
      * @return list of offset polylines
      */
     @NonNull
-    private List<Polyline> parallelOffset(@NonNull Polyline pline, double offset,
-                                          boolean hasSelfIntersects) {
+    private List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset,
+                                             boolean hasSelfIntersects) {
 
         if (pline.size() < 2) {
             return new ArrayList<>();
         }
-        Polyline rawOffset = createRawOffsetPline(pline, offset);
+        PolyArcPath rawOffset = createRawOffsetPline(pline, offset);
         if (pline.isClosed() && !hasSelfIntersects) {
             List<OpenPolylineSlice> slices = slicesFromRawOffset(pline, rawOffset, offset);
             return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
         }
 
         // not closed polyline or has self intersects, must apply dual clipping
-        Polyline dualRawOffset = createRawOffsetPline(pline, -offset);
+        PolyArcPath dualRawOffset = createRawOffsetPline(pline, -offset);
         List<OpenPolylineSlice> slices = dualSliceAtIntersectsForOffset(pline, rawOffset, dualRawOffset, offset);
         return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
     }
 
-    List<OpenPolylineSlice> slicesFromRawOffset(final Polyline originalPline,
-                                                final Polyline rawOffsetPline,
+    List<OpenPolylineSlice> slicesFromRawOffset(final PolyArcPath originalPline,
+                                                final PolyArcPath rawOffsetPline,
                                                 double offset) {
         assert originalPline.isClosed() : "use dual slice at intersects for open polylines";
 
@@ -1166,7 +1166,7 @@ public class PapOffsetPathBuilder {
             }
 
             SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
-            Polyline currSlice = new Polyline();
+            PolyArcPath currSlice = new PolyArcPath();
             currSlice.addVertex(split.splitVertex);
 
             int index = nextIndex;
@@ -1247,18 +1247,18 @@ public class PapOffsetPathBuilder {
         return result;
     }
 
-    protected List<Polyline> stitchOffsetSlicesTogether(
+    protected List<PolyArcPath> stitchOffsetSlicesTogether(
             final List<OpenPolylineSlice> slices, boolean closedPolyline, int origMaxIndex) {
         return stitchOffsetSlicesTogether(slices, closedPolyline, origMaxIndex, sliceJoinThreshold);
     }
 
-    protected List<Polyline> stitchOffsetSlicesTogether(
+    protected List<PolyArcPath> stitchOffsetSlicesTogether(
             @NonNull final List<OpenPolylineSlice> slices,
             boolean closedPolyline,
             int origMaxIndex,
             double joinThreshold) {
 
-        List<Polyline> result = new ArrayList<>();
+        List<PolyArcPath> result = new ArrayList<>();
         if (slices.size() == 0) {
             return result;
         }
@@ -1293,7 +1293,7 @@ public class PapOffsetPathBuilder {
 
             visitedIndexes.set(i, true);
 
-            Polyline currPline = new Polyline();
+            PolyArcPath currPline = new PolyArcPath();
             int currIndex = i;
             final Point2D initialStartPoint = slices.get(i).pline.get(0).pos();
             int loopCount = 0;
@@ -1305,7 +1305,7 @@ public class PapOffsetPathBuilder {
                     break;
                 }
                 final int currLoopStartIndex = slices.get(currIndex).intrStartIndex;
-                final Polyline currSlice = slices.get(currIndex).pline;
+                final PolyArcPath currSlice = slices.get(currIndex).pline;
                 final Point2D currEndPoint = slices.get(currIndex).pline.lastVertex().pos();
                 currPline.addAll(currSlice);
                 queryResults.clear();

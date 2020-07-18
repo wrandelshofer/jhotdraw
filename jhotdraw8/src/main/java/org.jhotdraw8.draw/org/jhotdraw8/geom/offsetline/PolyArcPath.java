@@ -1,9 +1,8 @@
 package org.jhotdraw8.geom.offsetline;
 
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.PathIteratorPathBuilder;
 
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,37 +12,39 @@ import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBounding
 import static org.jhotdraw8.geom.offsetline.PlineVertex.segLength;
 
 /**
- * A PolyArcPath is defined by a sequence of vertexes and a bool indicating
- * whether the polyline is closed or open. Each vertex has a 2D position
- * (x and y) as well as a bulge value. Bulge is used to define arcs,
- * where bulge = tan(theta/4). theta is the arc sweep angle from the starting
- * vertex position to the next vertex position. If the polyline is closed then
- * the last vertex connects to the first vertex, otherwise it does not
- * (and the last vertex bulge value is unused). See [2] for more details
- * regarding bulge calculations.
+ * A {@code PolyArcPath} is defined by a sequence of vertexes and a bool
+ * indicating whether the path is closed or open.
  * <p>
- * References:
- * <ul>
- *  <li>Bulge conversions: http://www.lee-mac.com/bulgeconversion.html</li>
- * </ul>
- * </p>
+ * Each vertex has a 2D position ({@code x} and {@code y}) as well as a
+ * {@code bulge} value.
+ * <p>
+ * Bulge is used to define arcs, where {@code bulge = tan(theta/4)}.
+ * {@code theta} is the arc sweep angle from the starting
+ * vertex position to the next vertex position.
+ * <p>
+ * If the polyline is closed then
+ * the last vertex connects to the first vertex, otherwise it does not
+ * (and the last vertex bulge value is unused).
+ * <p>
+ * See {@link BulgeConversionFunctions} for more details regarding bulge
+ * calculations.
  */
-public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
+public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     private final static long serialVersionUID = 1L;
 
     @Override
-    public Polyline clone() {
-        return (Polyline) super.clone();
+    public PolyArcPath clone() {
+        return (PolyArcPath) super.clone();
     }
 
     private boolean closed;
     private int windingRule = PathIterator.WIND_EVEN_ODD;
 
-    public Polyline() {
+    public PolyArcPath() {
         super();
     }
 
-    public Polyline(int initialCapacity) {
+    public PolyArcPath(int initialCapacity) {
         super(initialCapacity);
     }
 
@@ -111,25 +112,22 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
     }
 
     public PathIterator getPathIterator(AffineTransform at) {
-        AWTPathBuilder b = new AWTPathBuilder();
-        PlineVertex prev = Polyline.this.get(Polyline.this.size() - 1);
-        boolean first = true;
-        for (PlineVertex vertex : Polyline.this) {
-            double bulge = prev.bulge();
-            if (bulge == 0.0) {
-                if (first) {
-                    first = false;
+        PathIteratorPathBuilder b = new PathIteratorPathBuilder(getWindingRule());
+        PlineVertex prev = PolyArcPath.this.get(PolyArcPath.this.size() - 1);
+        for (PlineVertex vertex : PolyArcPath.this) {
+            if (prev.bulgeIsZero()) {
+                if (b.isEmpty()) {
                     b.moveTo(vertex.getX(), vertex.getY());
                 } else {
                     b.lineTo(vertex.getX(), vertex.getY());
                 }
             } else {
+                double bulge = prev.bulge();
                 BulgeConversionFunctions.ArcRadiusAndCenter circle = BulgeConversionFunctions.computeCircle(
                         prev.getX(), prev.getY(),
                         vertex.getX(), vertex.getY(),
                         bulge);
-                if (first) {
-                    first = false;
+                if (b.isEmpty()) {
                     b.moveTo(prev.getX(), prev.getY());
                 }
                 b.arcTo(circle.getRadius(), circle.getRadius(), 0,
@@ -137,19 +135,17 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
             }
             prev = vertex;
         }
-        if (Polyline.this.isClosed()) {
+        if (PolyArcPath.this.isClosed()) {
             b.closePath();
         }
-        Path2D path = b.build();
-        path.setWindingRule(getWindingRule());
-        return path.getPathIterator(at);
+        return b.build();
     }
 
     /**
      * Creates an approximate spatial index for all the segments in the polyline given using
      * createFastApproxBoundingBox.
      */
-    public static StaticSpatialIndex createApproxSpatialIndex(final Polyline pline) {
+    public static StaticSpatialIndex createApproxSpatialIndex(final PolyArcPath pline) {
         assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
 
         int segmentCount = pline.isClosed() ? pline.size() : pline.size() - 1;
@@ -171,7 +167,7 @@ public class Polyline extends ArrayList<PlineVertex> implements Cloneable {
     }
 
     /// becomes the end vertex and the end vertex becomes the starting vertex.
-    public static void invertDirection(Polyline pline) {
+    public static void invertDirection(PolyArcPath pline) {
         if (pline.size() < 2) {
             return;
         }

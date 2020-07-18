@@ -259,7 +259,7 @@ public class Intersections {
 
     public static CoincidentSlicesResult
     sortAndjoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
-                                Polyline pline1, Polyline pline2) {
+                                PolyArcPath pline1, PolyArcPath pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();
 
         if (coincidentIntrs.size() == 0) {
@@ -290,9 +290,9 @@ public class Intersections {
 
         Deque<PlineIntersect> sliceStartPoints = result.sliceStartPoints;
         Deque<PlineIntersect> sliceEndPoints = result.sliceEndPoints;
-        Deque<Polyline> coincidentSlices = result.coincidentSlices;
+        Deque<PolyArcPath> coincidentSlices = result.coincidentSlices;
 
-        Polyline[] currCoincidentSlice = new Polyline[]{new Polyline()};
+        PolyArcPath[] currCoincidentSlice = new PolyArcPath[]{new PolyArcPath()};
 
         IntConsumer startCoincidentSliceAt = (int intrIndex) -> {
             final PlineCoincidentIntersect intr = coincidentIntrs.get(intrIndex);
@@ -329,7 +329,7 @@ public class Intersections {
             final PlineVertex u1 = pline2.get(intr.sIndex2);
 
             coincidentSlices.add(currCoincidentSlice[0]);
-            currCoincidentSlice[0] = new Polyline();
+            currCoincidentSlice[0] = new PolyArcPath();
             PlineIntersect sliceEnd = new PlineIntersect();
             sliceEnd.pos = intr.point2;
             sliceEnd.sIndex1 = intr.sIndex1;
@@ -373,7 +373,7 @@ public class Intersections {
             final Point2D firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
             if (fuzzyEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
-                final Polyline lastSlice = coincidentSlices.getLast();
+                final PolyArcPath lastSlice = coincidentSlices.getLast();
                 lastSlice.removeLast();
                 lastSlice.addAll(coincidentSlices.getFirst());
 
@@ -394,7 +394,7 @@ public class Intersections {
      * two polyline segments that share a vertex. NOTES:
      * - Singularities (repeating vertexes) are returned as coincident intersects
      */
-    public static void localSelfIntersects(final Polyline pline, final List<PlineIntersect> output) {
+    public static void localSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output) {
         if (pline.size() < 2) {
             return;
         }
@@ -471,13 +471,13 @@ public class Intersections {
      * /// - We never include intersects at a segment's start point, the matching intersect from the
      * /// previous segment's end point is included (no sense in including both)
      */
-    static void globalSelfIntersects(final Polyline pline, final List<PlineIntersect> output,
+    static void globalSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
                                      final StaticSpatialIndex spatialIndex) {
         if (pline.size() < 3) {
             return;
         }
 
-        Set<OrderedPair>
+        Set<OrderedPair<Integer, Integer>>
                 visitedSegmentPairs = new HashSet<>(pline.size());
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
@@ -486,8 +486,6 @@ public class Intersections {
             int j = Utils.nextWrappingIndex(i, pline);
             final PlineVertex v1 = pline.get(i);
             final PlineVertex v2 = pline.get(j);
-            AABB envelope = new AABB(minX, minY, maxX, maxY);
-            envelope.expand(Utils.realThreshold);
             IntPredicate indexVisitor = (int hitIndexStart) -> {
                 int hitIndexEnd = Utils.nextWrappingIndex(hitIndexStart, pline);
                 // skip/filter already visited intersects
@@ -506,9 +504,8 @@ public class Intersections {
                 final PlineVertex u1 = pline.get(hitIndexStart);
                 final PlineVertex u2 = pline.get(hitIndexEnd);
 
-                Predicate<Point2D> intrAtStartPt = (final Point2D intr) -> {
-                    return fuzzyEqual(v1.pos(), intr) || fuzzyEqual(u1.pos(), intr);
-                };
+                Predicate<Point2D> intrAtStartPt = (final Point2D intr) ->
+                        fuzzyEqual(v1.pos(), intr) || fuzzyEqual(u1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(v1, v2, u1, u2);
                 switch (intrResult.intrType) {
@@ -536,7 +533,8 @@ public class Intersections {
                 return true;
             };
 
-            spatialIndex.visitQuery(envelope.xMin, envelope.yMin, envelope.xMax, envelope.yMax,
+            spatialIndex.visitQuery(
+                    minX - Utils.realThreshold, minY - Utils.realThreshold, maxX + Utils.realThreshold, maxY + Utils.realThreshold,
                     indexVisitor, queryStack);
 
             // visit all pline indexes
@@ -548,7 +546,7 @@ public class Intersections {
 
     /// Finds all self intersects of the polyline (equivalent to calling localSelfIntersects and
     /// globalSelfIntersects).
-    public static void allSelfIntersects(final Polyline pline, final List<PlineIntersect> output,
+    public static void allSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
                                          final StaticSpatialIndex spatialIndex) {
         localSelfIntersects(pline, output);
         globalSelfIntersects(pline, output, spatialIndex);
@@ -557,7 +555,7 @@ public class Intersections {
     /**
      * Finds all intersects between pline1 and pline2.
      */
-    static void findIntersects(final Polyline pline1, final Polyline pline2,
+    static void findIntersects(final PolyArcPath pline1, final PolyArcPath pline2,
                                final StaticSpatialIndex pline1SpatialIndex,
                                final PlineIntersectsResult output) {
         IntArrayList queryResults = new IntArrayList();
@@ -580,9 +578,8 @@ public class Intersections {
                 final PlineVertex p1v1 = pline1.get(i1);
                 final PlineVertex p1v2 = pline1.get(j1);
 
-                Predicate<Point2D> intrAtStartPt = (final Point2D intr) -> {
-                    return fuzzyEqual(p1v1.pos(), intr) || fuzzyEqual(p2v1.pos(), intr);
-                };
+                Predicate<Point2D> intrAtStartPt = (final Point2D intr) ->
+                        fuzzyEqual(p1v1.pos(), intr) || fuzzyEqual(p2v1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
                 switch (intrResult.intrType) {
@@ -659,12 +656,12 @@ public class Intersections {
             DoubleFunction<OrderedPairNonNull<Boolean, Point2D>> pointInSweep = (double t) -> {
                 if (t + Utils.realThreshold < 0.0 ||
                         t > 1.0 + Utils.realThreshold) {
-                    return new OrderedPairNonNull<Boolean, Point2D>(false, new Point2D(0, 0));
+                    return new OrderedPairNonNull<>(false, new Point2D(0, 0));
                 }
 
                 Point2D p = pointFromParametric(p0, p1, t);
                 boolean withinSweep = pointWithinArcSweepAngle(arc.center, a1.pos(), a2.pos(), a1.bulge(), p);
-                return new OrderedPairNonNull<Boolean, Point2D>(withinSweep, p);
+                return new OrderedPairNonNull<>(withinSweep, p);
             };
 
             if (intrResult.numIntersects == 0) {
@@ -733,10 +730,9 @@ public class Intersections {
                 return new OrderedPairNonNull<>(startAngle, sweepAngle);
             };
 
-            Predicate<Point2D> bothArcsSweepPoint = (final Point2D pt) -> {
-                return pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), pt) &&
-                        pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
-            };
+            Predicate<Point2D> bothArcsSweepPoint = (final Point2D pt) ->
+                    pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), pt) &&
+                            pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
 
             IntrCircle2Circle2Result intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 

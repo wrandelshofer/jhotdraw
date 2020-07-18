@@ -9,10 +9,23 @@ import java.util.function.IntPredicate;
 import static java.lang.Math.min;
 
 /**
- * Spatial index for quickly finding elements that intersect a specified bounding box.
+ * Spatial index for quickly finding elements that intersect a specified
+ * bounding box.
  * <p>
- * To create a spatial index, create a new instance, {@link #add} elements and then call
- * the {@link #finish()} method.
+ * To create a spatial index, create a new instance, {@link #add} elements and
+ * then call the {@link #finish()} method.
+ * <p>
+ * The spatial index is static, which means that you can not add, remove
+ * or change elements after you have called the {@link #finish()} method.
+ * <p>
+ * The spatial index is implemented using a Hilbert R-tree [1].
+ * <p>
+ * References:
+ * <ul>
+ *  <li>[1] <a href="https://en.wikipedia.org/wiki/Hilbert_R-tree">Hilbert R-Tree</a></li>
+ *  <li>[2] <a href="http://threadlocalmutex.com/?p=126">Hilbert curves in O(log(n)) time</a></li>
+ * </ul>
+ * </p>
  */
 public class StaticSpatialIndex {
     /**
@@ -92,13 +105,27 @@ public class StaticSpatialIndex {
      */
     private int m_pos;
 
+    /**
+     * Creates a new instance which can hold the specified number of items.
+     *
+     * @param numItems number of items in spatial index
+     */
     public StaticSpatialIndex(int numItems) {
         this(numItems, 16);
     }
 
+    /**
+     * Creates a new instance which can hold the specified number of items,
+     * and which uses the specified number of items per node.
+     *
+     * @param numItems number of items in spatial index
+     * @param nodeSize number of items per node
+     */
     public StaticSpatialIndex(int numItems, int nodeSize) {
-        assert numItems > 0 : "number of items must be greater than 0";
-        assert 2 <= nodeSize && nodeSize <= 65535 : "node size must be between 2 and 65535";
+        if (numItems <= 0)
+            throw new IllegalArgumentException("number of items (" + numItems + ") must be greater than 0");
+        if (!(2 <= nodeSize && nodeSize <= 65535))
+            throw new IllegalArgumentException("node size (" + nodeSize + ") must be between 2 and 65535");
         this.nodeSize = nodeSize;
         // calculate the total number of nodes in the R-tree to allocate space for
         // and the index of each tree level (used in search later)
@@ -128,6 +155,15 @@ public class StaticSpatialIndex {
         m_maxY = Double.NEGATIVE_INFINITY;
     }
 
+    /**
+     * Returns the Hilbert curve index for the given vertex coordinates.
+     * <p>
+     * See [2] for a description of the algorithm.
+     *
+     * @param x the x-coordinate of the vertex in the Hilbert curve
+     * @param y the y-coordinate of the vertex in the Hilbert curve
+     * @return the hilbert curve index for the given vertex coordinates (x,y)
+     */
     static int hilbertXYToIndex(int x, int y) {
         int a = x ^ y;
         int b = 0xFFFF ^ a;
@@ -264,8 +300,9 @@ public class StaticSpatialIndex {
     public void finish() {
         assert m_pos >> 2 == m_numItems : "added item count should equal static size given";
 
-        // if number of items is less than node size then skip sorting since each node of boxes must be
-        // fully scanned regardless and there is only one node
+        // if number of items is less than node size then skip sorting since
+        // each node of boxes must be fully scanned regardless and there is only
+        // one node
         if (m_numItems <= nodeSize) {
             m_indices[m_pos >> 2] = 0;
             // fill root box with total extents
@@ -289,15 +326,13 @@ public class StaticSpatialIndex {
             double maxY = m_boxes[pos++];
 
             // hilbert max input value for x and y
-            final double hilbertMax = (double) ((1 << 16) - 1);
+            final double hilbertMax = (1 << 16) - 1;
             // mapping the x and y coordinates of the center of the box to values in the range
             // [0 -> n - 1] such that the min of the entire set of bounding boxes maps to 0 and the max of
             // the entire set of bounding boxes maps to n - 1 our 2d space is x: [0 -> n-1] and
             // y: [0 -> n-1], our 1d hilbert curve value space is d: [0 -> n^2 - 1]
-            double x = Math.floor(hilbertMax * ((minX + maxX) / 2 - m_minX) / width);
-            int hx = (int) (x);
-            double y = Math.floor(hilbertMax * ((minY + maxY) / 2 - m_minY) / height);
-            int hy = (int) (y);
+            int hx = (int) (hilbertMax * ((minX + maxX) / 2 - m_minX) / width);
+            int hy = (int) (hilbertMax * ((minY + maxY) / 2 - m_minY) / height);
             hilbertValues[i] = hilbertXYToIndex(hx, hy);
         }
 
@@ -313,8 +348,8 @@ public class StaticSpatialIndex {
             while (pos < end) {
                 double nodeMinX = Double.POSITIVE_INFINITY;
                 double nodeMinY = Double.POSITIVE_INFINITY;
-                double nodeMaxX = -1 * Double.POSITIVE_INFINITY;
-                double nodeMaxY = -1 * Double.POSITIVE_INFINITY;
+                double nodeMaxX = Double.NEGATIVE_INFINITY;
+                double nodeMaxY = Double.NEGATIVE_INFINITY;
                 int nodeIndex = pos;
 
                 // calculate bbox for the new node
@@ -432,7 +467,8 @@ public class StaticSpatialIndex {
      */
     void visitQuery(double minX, double minY, double maxX, double maxY, @NonNull IntPredicate visitor,
                     @NonNull IntArrayDeque stack) {
-        assert m_pos == 4 * m_numNodes : "data not yet indexed - call Finish() before querying";
+        if (m_pos != 4 * m_numNodes)
+            throw new IllegalStateException("data not yet indexed - call Finish() before querying");
 
         int nodeIndex = 4 * m_numNodes - 4;
         int level = m_numLevels - 1;

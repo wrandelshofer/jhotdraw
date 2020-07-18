@@ -6,10 +6,10 @@ package org.jhotdraw8.geom.offsetline;
 
 public class OpenPolylineSlice {
     final int intrStartIndex;
-    final Polyline pline;
+    final PolyArcPath pline;
 
     public OpenPolylineSlice(int startIndex) {
-        this.pline = new Polyline();
+        this.pline = new PolyArcPath();
         this.intrStartIndex = startIndex;
     }
 
@@ -19,7 +19,7 @@ public class OpenPolylineSlice {
      * @param sIndex start index
      * @param slice  a polyline slice (will be cloned)
      */
-    public OpenPolylineSlice(int sIndex, Polyline slice) {
+    public OpenPolylineSlice(int sIndex, PolyArcPath slice) {
         this.intrStartIndex = sIndex;
         this.pline = slice.clone();
     }

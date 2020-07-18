@@ -8,6 +8,23 @@ import static org.jhotdraw8.geom.offsetline.Utils.fuzzyEqual;
 /**
  * Provides bulge conversion functions.
  * <p>
+ * The curvature of a {@link PolyArcPath} arc segment is defined using a quantity
+ * known as {@code bulge}. This unit measures the deviation of the curve from
+ * the straight line (chord) joining the two vertices of the segment.
+ * It is defined as the ratio of the arc sagitta (versine) to half the length
+ * of the chord between the two vertices; this ratio is equal to the tangent of
+ * a quarter of the included arc angle between the two polyline vertices.
+ * <p>
+ * In this way, a negative bulge indicates that the arc follows a clockwise
+ * direction from the first vertex to the next, with a positive bulge describing
+ * an anticlockwise oriented arc.
+ * A bulge of 0 indicates a straight segment, and a bulge of 1 is a semicircle.
+ * <p>
+ * An AutoCAD Arc Entity is defined by a center, radius and start & end angle.
+ * The arc is always defined to be anticlockwise oriented, that is, following
+ * an anticlockwise direction from the start angle to the end angle.
+ *
+ * <p>
  * References:
  * <ul>
  *  <li>Bulge conversions: http://www.lee-mac.com/bulgeconversion.html</li>
@@ -54,11 +71,11 @@ public class BulgeConversionFunctions {
      *                .
      *         .      |    .
      *     .          |s        .
-     *   .∡θ    d     |          .
+     *   .∡θ/4   d    |          .
      * p1-------------+------------p2
      *    \                      /
      *       \                / r
-     *          \          /
+     *          \    ∡θ    /
      *                c
      * </pre>
      * <ul>
