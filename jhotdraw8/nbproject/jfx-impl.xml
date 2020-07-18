@@ -5,13 +5,12 @@
 -->
 
 <project name="jfx-impl" default="jfx-deployment" basedir=".."
-         xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1"
-         xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+         xmlns:fx="javafx:com.sun.javafx.tools.ant">
     <description>JavaFX-specific Ant calls</description>
 
 
     <!-- Empty placeholders for easier customization in ../build.xml -->
-    
+
     <target name="-pre-jfx-jar">
         <!-- Called right before <fx:jar> task. You can override this target in the ../build.xml file. -->
     </target>
