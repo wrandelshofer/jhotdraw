@@ -13,10 +13,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * AbstractStyleablePropertyBean.
@@ -24,15 +23,25 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Werner Randelshofer
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
-    // FIXME should be one instance per class. The instance should be unmodifiable.
-    private final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = Collections.synchronizedMap(new HashMap<>());
+    private final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
 
     /**
      * Holds the properties.
      */
     protected final StyleableMap<Key<?>, Object> properties = new SimpleStyleableMap<Key<?>, Object>(
-            keyMaps.computeIfAbsent(getClass(), k -> new ConcurrentHashMap<>())
-            //keyMaps.computeIfAbsent(getClass(), k -> Collections.synchronizedMap(new HashMap<>()))
+            keyMaps.computeIfAbsent(getClass(), k -> {
+                ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
+                    @NonNull
+                    final AtomicInteger count = new AtomicInteger();
+
+                    @Override
+                    public Integer get(Object key) {
+                        return super.computeIfAbsent((Key<?>) key, k -> count.incrementAndGet());
+                    }
+                };
+
+                return m;
+            })
     ) {
 
         @Override
@@ -67,9 +76,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
 
     @NonNull
     protected StyleableMap<Key<?>, Object> getStyleableMap() {
-        @SuppressWarnings("unchecked")
-        StyleableMap<Key<?>, Object> map = properties;
-        return map;
+        return properties;
     }
 
     /**

@@ -10,15 +10,7 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,14 +28,19 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     private final static Object NULL_VALUE = new Object();
     private final static int numOrigins = 4;
+    @Nullable
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
 
-    private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
-    private final Map<K, Integer> keyMap;
     @Nullable
+    private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
+    @NonNull
+    private final Map<K, Integer> keyMap;
+    @NonNull
     private final StyleOrigin origin;
     private final int originOrdinal;
+    @NonNull
     private final int[] sizes;
+    @NonNull
     private final ArrayList<Object> values;
     @NonNull
     private final SimpleStyleableMap<K, V> originalMap;
@@ -136,22 +133,22 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(Object key) {
-        return containsKey(origin, key);
+        return containsKey(origin, (K) key);
     }
 
-    public boolean containsKey(@Nullable StyleOrigin origin, Object key) {
+    public boolean containsKey(@Nullable StyleOrigin origin, K key) {
         Integer index = keyMap.get(key);
 
         if (origin == null) {
             return getStyleOrigin(key) != null;
         }
 
-        boolean result = index != null
+        return index != null
                 && index * numOrigins + origin.ordinal() < values.size()
                 && values.get(index * numOrigins + origin.ordinal()) != null;
-        return result;
     }
 
     @Override
@@ -172,11 +169,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     private int ensureCapacity(K key) {
-        // Method computeIfAbsent is not available in UnmodifiableMap,
-        // so we have to try a get() first.
         Integer indexNullable = keyMap.get(key);
-        int index = indexNullable == null ? keyMap.computeIfAbsent(key, k -> keyMap.size()) : indexNullable;
-        int n = n = (1 + index) * numOrigins;
+        if (indexNullable == null) throw new NoSuchElementException("key: " + key);
+        int index = indexNullable;
+        int n = (1 + index) * numOrigins;
         values.ensureCapacity(n);
         for (int i = values.size(); i < n; i++) {
             values.add(null);
@@ -238,8 +234,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return null;
     }
 
-    @Nullable
-    public Map<K, V> getStyledMap() {
+    public @NonNull Map<K, V> getStyledMap() {
         return new SimpleStyleableMap<>(this, null);
     }
 

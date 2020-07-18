@@ -37,7 +37,7 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
 
     @Nullable StyleOrigin getStyleOrigin(Object key);
 
-    @Nullable Map<K, V> getStyledMap();
+    @NonNull Map<K, V> getStyledMap();
 
     @Nullable V put(StyleOrigin styleOrigin, K key, V value);
 
