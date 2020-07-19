@@ -10,7 +10,15 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -169,8 +177,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     private int ensureCapacity(K key) {
+        // try get first, because an unmodifiable map, will not support compute if absent
         Integer indexNullable = keyMap.get(key);
-        if (indexNullable == null) throw new NoSuchElementException("key: " + key);
+        if (indexNullable == null) {
+            indexNullable = keyMap.computeIfAbsent(key, k -> keyMap.size());
+        }
         int index = indexNullable;
         int n = (1 + index) * numOrigins;
         values.ensureCapacity(n);
