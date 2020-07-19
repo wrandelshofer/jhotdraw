@@ -19,7 +19,7 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 /**
  * Draws the {@code wireframe} of a {@code LineFigure}, but does not provide any
@@ -74,7 +74,7 @@ public class LineOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getLayoutBounds();
         points[0] = f.getNonNull(LineConnectionFigure.START).getX().getConvertedValue();
         points[1] = f.getNonNull(LineConnectionFigure.START).getY().getConvertedValue();

@@ -5,9 +5,29 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Bounds;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.HLineTo;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.*;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Text;
 import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Transform;
@@ -17,9 +37,18 @@ import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
+import java.awt.BasicStroke;
 import java.awt.Shape;
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.FlatteningPathIterator;
+import java.awt.geom.IllegalPathStateException;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -1959,11 +1988,11 @@ public class Shapes {
             try {
                 Shape shape = Shapes.awtShapeFromSvgString(pathstr);
                 java.awt.geom.Rectangle2D r2d = shape.getBounds2D();
-                Transform tx = Transforms.createReshapeTransform(
+                Transform tx = FXTransforms.createReshapeTransform(
                         r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
                         b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()
                 );
-                buildFromPathIterator(builder, shape.getPathIterator(Transforms.toAWT(tx)));
+                buildFromPathIterator(builder, shape.getPathIterator(FXTransforms.toAWT(tx)));
             } catch (IOException ex) {
                 pathstr = null;
                 Logger.getLogger(Shape.class.getName()).log(Level.SEVERE, null, ex);

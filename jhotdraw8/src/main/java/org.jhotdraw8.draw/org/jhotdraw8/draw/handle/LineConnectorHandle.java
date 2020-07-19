@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.function.Function;
 
@@ -95,7 +95,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();
         pickLocation = p = t.transform(p);
         Connector connector = f.get(connectorKey);

@@ -65,9 +65,9 @@ import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 
@@ -549,7 +549,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         Transform viewToNode = null;
         for (Node p = n; p != null; p = p.getParent()) {
             try {
-                viewToNode = Transforms.concat(viewToNode, p.getLocalToParentTransform().createInverse());
+                viewToNode = FXTransforms.concat(viewToNode, p.getLocalToParentTransform().createInverse());
             } catch (NonInvertibleTransformException e) {
                 return null;
             }
@@ -557,7 +557,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 break;
             }
         }
-        Point2D pl = Transforms.transform(viewToNode, vx, vy);
+        Point2D pl = FXTransforms.transform(viewToNode, vx, vy);
         return findFigureNodeRecursive(figure, n, pl.getX(), pl.getY());
     }
 
@@ -791,7 +791,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(-drawingPane.getTranslateX() + overlaysPane.getTranslateX(), -drawingPane.getTranslateY() + overlaysPane.getTranslateX());
             double zoom = zoomFactor.get();
-            viewToWorldTransform = (zoom == 1.0) ? tr : Transforms.concat(new Scale(1.0 / zoom, 1.0 / zoom), tr);
+            viewToWorldTransform = (zoom == 1.0) ? tr : FXTransforms.concat(new Scale(1.0 / zoom, 1.0 / zoom), tr);
         }
         return viewToWorldTransform;
     }
@@ -834,7 +834,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             // We try to avoid the Scale transform as it is slower than a Translate transform
             Transform tr = new Translate(drawingPane.getTranslateX() - overlaysPane.getTranslateX(), drawingPane.getTranslateY() - overlaysPane.getTranslateX());
             double zoom = zoomFactor.get();
-            worldToViewTransform = (zoom == 1.0) ? tr : Transforms.concat(tr, new Scale(zoom, zoom));
+            worldToViewTransform = (zoom == 1.0) ? tr : FXTransforms.concat(tr, new Scale(zoom, zoom));
         }
         return worldToViewTransform;
     }

@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -69,7 +69,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     private WritableImage doRenderImage(@NonNull Figure slice, @NonNull Node node, @NonNull Bounds bounds, double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();
         double scale = dpi / RenderContext.DPI.getDefaultValueNonNull();
-        parameters.setTransform(Transforms.concat(Transform.scale(scale, scale), slice.getWorldToLocal()));
+        parameters.setTransform(FXTransforms.concat(Transform.scale(scale, scale), slice.getWorldToLocal()));
         Drawing drawing = (slice instanceof Drawing) ? (Drawing) slice : slice.getDrawing();
         final CssColor color = drawing != null ? drawing.get(Drawing.BACKGROUND) : CssColor.WHITE;
         if (color != null) {

@@ -6,9 +6,19 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -21,8 +31,8 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import java.util.function.Function;
 
@@ -107,7 +117,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();
         pickLocation = p = t.transform(p);
         final Connector connector = f.get(connectorKey);

@@ -33,8 +33,8 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -185,7 +185,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);

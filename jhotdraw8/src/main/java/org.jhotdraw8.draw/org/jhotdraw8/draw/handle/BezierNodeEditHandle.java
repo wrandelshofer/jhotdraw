@@ -39,8 +39,8 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -291,7 +291,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
         if (pointIndex >= list.size()) {
             return;

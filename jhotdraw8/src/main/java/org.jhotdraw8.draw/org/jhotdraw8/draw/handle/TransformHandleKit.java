@@ -31,7 +31,7 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -243,7 +243,7 @@ public class TransformHandleKit {
             if (!Double.isNaN(sx) && !Double.isNaN(sy)
                     && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                     && (sx != 1d || sy != 1d)) {
-                transform = Transforms.concat(transform, new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+                transform = FXTransforms.concat(transform, new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
             }
             switch (oldTransforms.size()) {
                 case 0:
@@ -251,7 +251,7 @@ public class TransformHandleKit {
                     break;
                 default:
                     int last = oldTransforms.size() - 1;
-                    model.set(owner, TRANSFORMS, ImmutableLists.set(oldTransforms, last, Transforms.concat(oldTransforms.get(last), transform)));
+                    model.set(owner, TRANSFORMS, ImmutableLists.set(oldTransforms, last, FXTransforms.concat(oldTransforms.get(last), transform)));
                     break;
             }
         }

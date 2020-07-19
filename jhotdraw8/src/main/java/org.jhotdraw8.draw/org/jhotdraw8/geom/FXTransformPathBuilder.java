@@ -12,12 +12,12 @@ import javafx.scene.transform.Transform;
  *
  * @author Werner Randelshofer
  */
-public class TransformPathBuilder extends AbstractPathBuilder {
+public class FXTransformPathBuilder extends AbstractPathBuilder {
 
     private final PathBuilder target;
     private Transform transform;
 
-    public TransformPathBuilder(PathBuilder target) {
+    public FXTransformPathBuilder(PathBuilder target) {
         this.target = target;
     }
 

@@ -4,12 +4,12 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
 
 /**
  * AnyPathBuilder.
@@ -239,8 +239,8 @@ public interface PathBuilder {
      * @return the last end point.
      */
     @NonNull
-    default Point2D getLastPoint() {
-        return new Point2D(getLastX(), getLastY());
+    default Point2D.Double getLastPoint() {
+        return new Point2D.Double(getLastX(), getLastY());
     }
 
     /**

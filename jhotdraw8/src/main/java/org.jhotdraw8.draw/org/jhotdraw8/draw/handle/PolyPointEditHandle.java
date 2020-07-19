@@ -31,8 +31,8 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import java.util.function.Function;
 
@@ -159,7 +159,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<Point2D> list = f.get(pointKey);
         Point2D p = list.get(pointIndex);
         pickLocation = p = t == null ? p : t.transform(p);

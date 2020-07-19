@@ -8,7 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 /**
  * Provides default implementations for figures which can not be transformed.
@@ -30,7 +30,7 @@ public interface NonTransformableFigure extends TransformCacheableFigure {
 
     @Override
     default void reshapeInParent(Transform transform) {
-        reshapeInLocal(Transforms.concat(getParentToLocal(), transform));
+        reshapeInLocal(FXTransforms.concat(getParentToLocal(), transform));
     }
 
     @Override

@@ -55,9 +55,9 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
@@ -834,8 +834,8 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
 
                             java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                            tx = Transforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                            tx = Transforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                            tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                            tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
                             bgs = Shapes.fxShapeFromAWT(awtShape, tx);
                         } else {
                             bgs = s;
@@ -867,8 +867,8 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
                                 java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
 
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                                tx = Transforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                                tx = Transforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                                tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                                tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
                                 bgs = Shapes.fxShapeFromAWT(awtShape, tx);
                             } else {
                                 bgs = s;

@@ -71,39 +71,39 @@ public class NineRegionsScalingBuilder extends AbstractPathBuilder {
                 dw = destBounds.getWidth(),
                 dh = destBounds.getHeight();
 
-        center = Transforms.createReshapeTransform(
+        center = FXTransforms.createReshapeTransform(
                 sx + il, sy + it, sw - il - ir, sh - it - ib,
                 dx + il, dy + it, dw - il - ir, dh - it - ib
         );
-        top = Transforms.createReshapeTransform(
+        top = FXTransforms.createReshapeTransform(
                 sx + il, sy + it, sw - il - ir, it,
                 dx + il, dy + it, dw - il - ir, it
         );
-        bottom = Transforms.createReshapeTransform(
+        bottom = FXTransforms.createReshapeTransform(
                 sx + il, sy + sh - ib, sw - il - ir, ib,
                 dx + il, dy + dh - ib, dw - il - ir, ib
         );
-        left = Transforms.createReshapeTransform(
+        left = FXTransforms.createReshapeTransform(
                 sx, sy + it, il, sh - it - ib,
                 dx, dy + it, il, dh - it - ib
         );
-        right = Transforms.createReshapeTransform(
+        right = FXTransforms.createReshapeTransform(
                 sx + sw - ir, sy + it, ir, sh - it - ib,
                 dx + dw - ir, dy + it, ir, dh - it - ib
         );
-        topLeft = Transforms.createReshapeTransform(
+        topLeft = FXTransforms.createReshapeTransform(
                 sx, sy, il, it,
                 dx, dy, il, it
         );
-        bottomLeft = Transforms.createReshapeTransform(
+        bottomLeft = FXTransforms.createReshapeTransform(
                 sx, sy + sh - ib, il, ib,
                 dx, dy + dh - ib, il, ib
         );
-        topRight = Transforms.createReshapeTransform(
+        topRight = FXTransforms.createReshapeTransform(
                 sx + sw - ir, sy, ir, it,
                 dx + dw - ir, dy, ir, it
         );
-        bottomRight = Transforms.createReshapeTransform(
+        bottomRight = FXTransforms.createReshapeTransform(
                 sx + sw - ir, sy + sh - ib, ir, ib,
                 dx + dw - ir, dy + dh - ib, ir, ib
         );

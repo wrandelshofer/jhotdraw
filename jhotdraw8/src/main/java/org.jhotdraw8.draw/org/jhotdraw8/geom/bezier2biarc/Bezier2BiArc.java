@@ -1,11 +1,12 @@
 package org.jhotdraw8.geom.bezier2biarc;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
+import org.jhotdraw8.geom.Points2D;
 
 import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,29 +66,24 @@ public class Bezier2BiArc {
 
             var V = intersection.getFirstPoint();
 
-            // G: incenter point of the triangle (P1, V, P2)
-            // http://www.mathopenref.com/coordincenter.html
-            var dP2V = bezier.getP2().distance(V.getX(), V.getY());
-            var dP1V = bezier.getP1().distance(V.getX(), V.getY());
-            var dP1P2 = bezier.getP1().distance(bezier.getP2());
-            Point2D P1 = new Point2D(bezier.getX1(), bezier.getY1());
-            Point2D P2 = new Point2D(bezier.getX2(), bezier.getY2());
-            var G = (P1.multiply(dP2V).add(P2.multiply(dP1V)).add(V.multiply(dP1P2))).multiply(1.0 / (dP2V + dP1V + dP1P2));
+            Point2D.Double P1 = new Point2D.Double(bezier.getX1(), bezier.getY1());
+            Point2D.Double P2 = new Point2D.Double(bezier.getX2(), bezier.getY2());
+            Point2D.Double G = computeIncenterPoint(V, P1, P2);
 
             // ---------------------------------------------------------------------------
             // Calculate the BiArc
-            BiArc biarc = new BiArc(P1, (P1.subtract(C1.getX(), C1.getY())), P2, (P2.subtract(C2.getX(), C2.getY())), G);
+            BiArc biarc = new BiArc(P1,
+                    Points2D.subtract(P1,C1), P2,
+                    Points2D.subtract(P2,C2), G);
 
             // ---------------------------------------------------------------------------
-            // Calculate the t value with maximum error > tolerance,
-            // returns -1 if all checked points are within tolerance
-            double maxDistanceAt = getValueWithMaxErrorOverTolerance(bezier, nrPointsToCheck, tolerance, biarc);
+            double tMaxError = getParamWithMaxErrorOverTolerance(bezier, nrPointsToCheck, tolerance, biarc);
 
             // Check if the two curves are close enough
-            if (maxDistanceAt != -1d && stack.size() + biarcs.size() < maxCurves) {
+            if (tMaxError != -1d && stack.size() + biarcs.size() < maxCurves) {
                 // If not, split the bezier curve the point where the distance is the maximum
                 // and try again with the two halves
-                var bs = BezierCurves.split(bezier, maxDistanceAt);
+                var bs = BezierCurves.split(bezier, tMaxError);
                 stack.push(bs.second());
                 stack.push(bs.first());
             } else {
@@ -99,7 +95,39 @@ public class Bezier2BiArc {
         return biarcs;
     }
 
-    public static double getValueWithMaxErrorOverTolerance(CubicCurve2D.Double bezier, int nrPointsToCheck, double tolerance, BiArc biarc) {
+    /**
+     * G: incenter point of the triangle (P1, V, P2).
+     * <p>
+     * Reference:<br>
+     * <a href="http://www.mathopenref.com/coordincenter.html">mathopenref.com</a>
+     *
+     * @param a point A of the triangle
+     * @param b point B of the triangle
+     * @param c point C of the triangle
+     * @return the incenter point G
+     */
+    public static Point2D.Double computeIncenterPoint(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
+        var dac = c.distance(a);
+        var dab = b.distance(a);
+        var dbc = b.distance(c);
+        return Points2D.divide(
+                Points2D.sum(Points2D.multiply(b,dac),
+                Points2D.multiply(c,dab),
+                        Points2D.multiply(a,dbc)),
+                dac + dab + dbc);
+    }
+
+    /**
+     * Calculate the parameter value with maximum error > tolerance,
+     * returns -1d if all checked points are within tolerance
+     *
+     * @param bezier the bezier curve
+     * @param nrPointsToCheck the number of points to check
+     * @param tolerance the tolerated distance
+     * @param biarc the approximated bi-arc
+     * @return the parameter with maximum error or -1d
+     */
+    private static double getParamWithMaxErrorOverTolerance(CubicCurve2D.Double bezier, int nrPointsToCheck, double tolerance, BiArc biarc) {
         var maxDistance = tolerance;
         var maxDistanceAt = -1d;
         var parameterStep = 1d / nrPointsToCheck;

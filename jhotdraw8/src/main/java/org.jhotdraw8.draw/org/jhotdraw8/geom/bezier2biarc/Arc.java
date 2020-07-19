@@ -1,6 +1,7 @@
 package org.jhotdraw8.geom.bezier2biarc;
 
-import javafx.geometry.Point2D;
+
+import java.awt.geom.Point2D;
 
 /**
  * Definition of an Arc. It contains redundant information.
@@ -10,7 +11,7 @@ public class Arc {
     /**
      * Center point.
      */
-    public final Point2D c;
+    public final Point2D.Double c;
     /**
      * Radius.
      */
@@ -26,13 +27,13 @@ public class Arc {
     /**
      * Start point of the arc.
      */
-    public final Point2D p1;
+    public final Point2D.Double p1;
     /**
      * End point of the arc.
      */
-    public final Point2D p2;
+    public final Point2D.Double p2;
 
-    public Arc(Point2D c, double r, double startAngle, double sweepAngle, Point2D p1, Point2D p2) {
+    public Arc(Point2D.Double c, double r, double startAngle, double sweepAngle, Point2D.Double p1, Point2D.Double p2) {
         this.c = c;
         this.r = r;
         this.startAngle = startAngle;
@@ -54,10 +55,10 @@ public class Arc {
      * @param t Parameter of the curve. Must be in [0,1]
      * @return the point at t
      */
-    public Point2D pointAt(double t) {
+    public Point2D.Double pointAt(double t) {
         var x = c.getX() + r * Math.cos(startAngle + t * sweepAngle);
         var y = c.getY() + r * Math.sin(startAngle + t * sweepAngle);
-        return new Point2D((double) x, (double) y);
+        return new Point2D.Double(x, y);
     }
 
     public double length() {

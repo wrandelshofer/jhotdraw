@@ -28,8 +28,8 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -140,7 +140,7 @@ public class RelativePointHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Bounds bounds = f.getLayoutBounds();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.get(pointKey).getConvertedValue().add(bounds.getMinX(), bounds.getMinY());
         pickLocation = p = t == null ? p : t.transform(p);
         double size = node.getWidth();

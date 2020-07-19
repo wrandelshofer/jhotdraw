@@ -1,26 +1,35 @@
 package org.jhotdraw8.geom.offsetline;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.OrderedPairNonNull;
+import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 import org.jhotdraw8.util.function.TriConsumer;
 import org.jhotdraw8.util.function.TriPredicate;
 
+import java.awt.geom.Point2D;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.*;
+import java.util.function.BiPredicate;
+import java.util.function.DoubleFunction;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.splitAtPoint;
-import static org.jhotdraw8.geom.offsetline.Utils.*;
+import static org.jhotdraw8.geom.offsetline.Utils.perpDot;
+import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
 
 public class Intersections {
     private Intersections() {
@@ -29,13 +38,13 @@ public class Intersections {
     /**
      * Find intersect between two circles in 2D.
      */
-    public static IntrCircle2Circle2Result intrCircle2Circle2(double radius1, final Point2D center1,
-                                                              double radius2, final Point2D center2) {
+    public static IntrCircle2Circle2Result intrCircle2Circle2(double radius1, final Point2D.Double center1,
+                                                              double radius2, final Point2D.Double center2) {
         // Reference algorithm: http://paulbourke.net/geometry/circlesphere/
 
         IntrCircle2Circle2Result result = new IntrCircle2Circle2Result();
-        Point2D cv = center2.subtract(center1);
-        double d2 = cv.dotProduct(cv);
+        Point2D.Double cv = Points2D.subtract(center2,center1);
+        double d2 = Points2D.dotProduct(cv,cv);
         double d = Math.sqrt(d2);
         if (d < Utils.realThreshold) {
             // same center position
@@ -52,7 +61,8 @@ public class Intersections {
             } else {
                 double rad1Sq = radius1 * radius1;
                 double a = (rad1Sq - radius2 * radius2 + d2) / (2.0 * d);
-                Point2D midPoint = center1.add(cv.multiply(a / d));
+                Point2D.Double midPoint = Points2D.add(center1,
+                        Points2D.multiply(cv,a / d));
                 double diff = rad1Sq - a * a;
                 if (diff < 0.0) {
                     result.intrType = Circle2Circle2IntrType.OneIntersect;
@@ -66,8 +76,8 @@ public class Intersections {
                     double y1 = midPoint.getY() - yTerm;
                     double x2 = midPoint.getX() - xTerm;
                     double y2 = midPoint.getY() + yTerm;
-                    result.point1 = new Point2D(x1, y1);
-                    result.point2 = new Point2D(x2, y2);
+                    result.point1 = new Point2D.Double(x1, y1);
+                    result.point2 = new Point2D.Double(x2, y2);
                     if (Geom.almostEqual(result.point1, result.point2)) {
                         result.intrType = Circle2Circle2IntrType.OneIntersect;
                     } else {
@@ -80,23 +90,23 @@ public class Intersections {
         return result;
     }
 
-    public static IntrLineSeg2LineSeg2Result intrLineSeg2LineSeg2(final Point2D u1, final Point2D u2, final Point2D v1,
-                                                                  final Point2D v2) {
+    public static IntrLineSeg2LineSeg2Result intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
+                                                                  final Point2D.Double v2) {
         // This implementation works by processing the segments in parametric equation form and using
         // perpendicular products
         // see: http://geomalgorithms.com/a05-_intersect-1.html and
         // http://mathworld.wolfram.com/PerpDotProduct.html
 
         IntrLineSeg2LineSeg2Result result = new IntrLineSeg2LineSeg2Result();
-        Point2D u = u2.subtract(u1);
-        Point2D v = v2.subtract(v1);
+        Point2D.Double u = Points2D.subtract(u2,u1);
+        Point2D.Double v = Points2D.subtract(v2,v1);
         double d = perpDot(u, v);
 
-        Point2D w = u1.subtract(v1);
+        Point2D.Double w = Points2D.subtract(u1,v1);
 
         // Test if point is inside a segment, NOTE: assumes points are aligned
-        TriPredicate<Point2D, Point2D, Point2D> isInSegment = (final Point2D pt, final Point2D segStart,
-                                                               final Point2D segEnd) -> {
+        TriPredicate<Point2D.Double, Point2D.Double, Point2D.Double> isInSegment = (final Point2D.Double pt, final Point2D.Double segStart,
+                                                               final Point2D.Double segEnd) -> {
             if (Geom.almostEqual(segStart.getX(), segEnd.getX())) {
                 // vertical segment, test y coordinate
                 OrderedPair<Double, Double> minmax = Utils.minmax(segStart.getY(), segEnd.getY());
@@ -113,7 +123,7 @@ public class Intersections {
             // segments not parallel or collinear
             result.t0 = perpDot(v, w) / d;
             result.t1 = perpDot(u, w) / d;
-            result.point = v1.add(v.multiply(result.t1));
+            result.point = Points2D.add(v1,Points2D.multiply(v,result.t1));
             if (result.t0 + Utils.realThreshold < 0.0 ||
                     result.t0 > 1.0 + Utils.realThreshold ||
                     result.t1 + Utils.realThreshold < 0.0 ||
@@ -162,7 +172,7 @@ public class Intersections {
                     }
                 } else {
                     // neither segment is a point, check if they overlap
-                    Point2D w2 = u2.subtract(v1);
+                    Point2D.Double w2 = Points2D.subtract(u2,v1);
                     if (Math.abs(v.getX()) < Utils.realThreshold) {
                         result.t0 = w.getY() / v.getY();
                         result.t1 = w2.getY() / v.getY();
@@ -189,7 +199,7 @@ public class Intersections {
                         if (Math.abs(result.t1 - result.t0) < Utils.realThreshold) {
                             // intersect is a single point (segments line up end to end)
                             result.intrType = LineSeg2LineSeg2IntrType.True;
-                            result.point = v1.add(v.multiply(result.t0));
+                            result.point = Points2D.add(v1,Points2D.multiply(v,result.t0));
                         } else {
                             result.intrType = LineSeg2LineSeg2IntrType.Coincident;
                         }
@@ -209,9 +219,9 @@ public class Intersections {
      * if t > 0 then intersect nearest v2), intersects are "sticky" and "snap" to tangent points, e.g. a
      * segment very close to being a tangent will be returned as a single intersect point.
      */
-    public static IntrLineSeg2Circle2Result intrLineSeg2Circle2(final Point2D p0,
-                                                                final Point2D p1, double radius,
-                                                                final Point2D circleCenter) {
+    public static IntrLineSeg2Circle2Result intrLineSeg2Circle2(final Point2D.Double p0,
+                                                                final Point2D.Double p1, double radius,
+                                                                final Point2D.Double circleCenter) {
         // This function solves for t by substituting the parametric equations for the segment x = v1.X +
         // t * (v2.X - v1.X) and y = v1.Y + t * (v2.Y - v1.Y) for t = 0 to t = 1 into the circle equation
         // (x-h)^2 + (y-k)^2 = r^2 and then solving the resulting equation in the form a*t^2 + b*t + c = 0
@@ -267,11 +277,11 @@ public class Intersections {
         }
 
         for (PlineCoincidentIntersect intr : coincidentIntrs) {
-            Point2D sp = pline1.get(intr.sIndex1).pos();
-            double dist1 = Geom.squaredDistance(sp, intr.point1);
-            double dist2 = Geom.squaredDistance(sp, intr.point2);
+            Point2D.Double sp = pline1.get(intr.sIndex1).pos();
+            double dist1 = sp.distanceSq( intr.point1);
+            double dist2 = sp.distanceSq( intr.point2);
             if (dist1 > dist2) {
-                Point2D swap = intr.point1;
+                Point2D.Double swap = intr.point1;
                 intr.point1 = intr.point2;
                 intr.point2 = swap;
             }
@@ -282,9 +292,9 @@ public class Intersections {
                 return intr1.sIndex1 - intr2.sIndex1;
             }
             // equal index so sort distance from start
-            final Point2D sp = pline1.get(intr1.sIndex1).pos();
-            double dist1 = Geom.squaredDistance(sp, intr1.point1);
-            double dist2 = Geom.squaredDistance(sp, intr2.point1);
+            final Point2D.Double sp = pline1.get(intr1.sIndex1).pos();
+            double dist1 = sp.distanceSq( intr1.point1);
+            double dist2 = sp.distanceSq( intr2.point1);
             return Double.compare(dist1, dist2);
         });
 
@@ -369,8 +379,8 @@ public class Intersections {
 
         if (coincidentSlices.size() > 1) {
             // check if last coincident slice connects with first()
-            final Point2D lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
-            final Point2D firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
+            final Point2D.Double lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
+            final Point2D.Double firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
             if (Geom.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
                 final PolyArcPath lastSlice = coincidentSlices.getLast();
@@ -504,7 +514,7 @@ public class Intersections {
                 final PlineVertex u1 = pline.get(hitIndexStart);
                 final PlineVertex u2 = pline.get(hitIndexEnd);
 
-                Predicate<Point2D> intrAtStartPt = (final Point2D intr) ->
+                Predicate<Point2D.Double> intrAtStartPt = (final Point2D.Double intr) ->
                         Geom.almostEqual(v1.pos(), intr) || Geom.almostEqual(u1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(v1, v2, u1, u2);
@@ -572,13 +582,13 @@ public class Intersections {
 
             queryResults.clear();
             AABB bb = createFastApproxBoundingBox(p2v1, p2v2);
-            pline1SpatialIndex.query(bb.xMin, bb.yMin, bb.xMax, bb.yMax, queryResults, queryStack);
+            pline1SpatialIndex.query(bb.getMinX(), bb.getMinY(), bb.getMaxX(), bb.getMaxY(), queryResults, queryStack);
             for (int i1 : queryResults) {
                 int j1 = Utils.nextWrappingIndex(i1, pline1);
                 final PlineVertex p1v1 = pline1.get(i1);
                 final PlineVertex p1v2 = pline1.get(j1);
 
-                Predicate<Point2D> intrAtStartPt = (final Point2D intr) ->
+                Predicate<Point2D.Double> intrAtStartPt = (final Point2D.Double intr) ->
                         Geom.almostEqual(p1v1.pos(), intr) || Geom.almostEqual(p2v1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
@@ -627,13 +637,13 @@ public class Intersections {
                 return false;
             }
 
-            final Point2D endPt1 =
+            final Point2D.Double endPt1 =
                     pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1)).pos();
             if (Geom.almostEqual(intr.pos, endPt1)) {
                 return true;
             }
 
-            final Point2D endPt2 =
+            final Point2D.Double endPt2 =
                     pline2.get(Utils.nextWrappingIndex(intr.sIndex2, pline2)).pos();
             return Geom.almostEqual(intr.pos, endPt2);
         });
@@ -646,20 +656,20 @@ public class Intersections {
         final boolean uIsLine = u1.bulgeIsZero();
 
         // helper function to process line arc intersect
-        QuadConsumer<Point2D, Point2D, PlineVertex, PlineVertex> processLineArcIntr
-                = (final Point2D p0, final Point2D p1,
+        QuadConsumer<Point2D.Double, Point2D.Double, PlineVertex, PlineVertex> processLineArcIntr
+                = (final Point2D.Double p0, final Point2D.Double p1,
                    final PlineVertex a1, final PlineVertex a2) -> {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
             IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
-            DoubleFunction<OrderedPairNonNull<Boolean, Point2D>> pointInSweep = (double t) -> {
+            DoubleFunction<OrderedPairNonNull<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
                 if (t + Utils.realThreshold < 0.0 ||
                         t > 1.0 + Utils.realThreshold) {
-                    return new OrderedPairNonNull<>(false, new Point2D(0, 0));
+                    return new OrderedPairNonNull<>(false, new Point2D.Double(0, 0));
                 }
 
-                Point2D p = pointFromParametric(p0, p1, t);
+                Point2D.Double p = pointFromParametric(p0, p1, t);
                 boolean withinSweep = pointWithinArcSweepAngle(arc.center, a1.pos(), a2.pos(), a1.bulge(), p);
                 return new OrderedPairNonNull<>(withinSweep, p);
             };
@@ -667,7 +677,7 @@ public class Intersections {
             if (intrResult.numIntersects == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.numIntersects == 1) {
-                OrderedPairNonNull<Boolean, Point2D> p = pointInSweep.apply(intrResult.t0);
+                OrderedPairNonNull<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.t0);
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -676,8 +686,8 @@ public class Intersections {
                 }
             } else {
                 assert intrResult.numIntersects == 2 : "shouldn't get here without 2 intersects";
-                OrderedPairNonNull<Boolean, Point2D> p1_ = pointInSweep.apply(intrResult.t0);
-                OrderedPairNonNull<Boolean, Point2D> p2_ = pointInSweep.apply(intrResult.t1);
+                OrderedPairNonNull<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.t0);
+                OrderedPairNonNull<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.t1);
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;
@@ -724,13 +734,13 @@ public class Intersections {
             BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
             BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
-            TriFunction<Point2D, Point2D, Double, OrderedPairNonNull<Double, Double>> startAndSweepAngle = (final Point2D sp, final Point2D center, Double bulge) -> {
+            TriFunction<Point2D.Double, Point2D.Double, Double, OrderedPairNonNull<Double, Double>> startAndSweepAngle = (final Point2D.Double sp, final Point2D.Double center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(Utils.angle(center, sp));
                 double sweepAngle = 4.0 * Math.atan(bulge);
                 return new OrderedPairNonNull<>(startAngle, sweepAngle);
             };
 
-            Predicate<Point2D> bothArcsSweepPoint = (final Point2D pt) ->
+            Predicate<Point2D.Double> bothArcsSweepPoint = (final Point2D.Double pt) ->
                     pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), pt) &&
                             pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
 

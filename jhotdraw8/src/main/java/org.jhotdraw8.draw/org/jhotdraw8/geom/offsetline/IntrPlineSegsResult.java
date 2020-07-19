@@ -1,10 +1,11 @@
 package org.jhotdraw8.geom.offsetline;
 
-import javafx.geometry.Point2D;
+
+import java.awt.geom.Point2D;
 
 public class IntrPlineSegsResult {
         PlineSegIntrType intrType;
-        Point2D point1;
-        Point2D point2;
+        Point2D.Double point1;
+        Point2D.Double point2;
 }
 

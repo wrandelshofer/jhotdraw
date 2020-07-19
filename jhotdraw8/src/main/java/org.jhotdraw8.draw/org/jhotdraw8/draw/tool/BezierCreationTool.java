@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.BezierFit;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.util.Resources;
 
 import java.util.ArrayList;
@@ -142,7 +142,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
              */
             if (!points.isEmpty()) {
                 BezierNode lastNode = points.get(points.size() - 1);
-                Point2D start = Transforms.transform(Transforms.concat(dv.getWorldToView(), createdFigure.getLocalToWorld()), lastNode.getX0(), lastNode.getY0());
+                Point2D start = FXTransforms.transform(FXTransforms.concat(dv.getWorldToView(), createdFigure.getLocalToWorld()), lastNode.getX0(), lastNode.getY0());
                 rubberBand.setStartX(start.getX());
                 rubberBand.setStartY(start.getY());
                 rubberBand.setEndX(event.getX());

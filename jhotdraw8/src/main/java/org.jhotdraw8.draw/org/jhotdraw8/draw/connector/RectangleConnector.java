@@ -58,7 +58,8 @@ public class RectangleConnector extends LocatorConnector {
             bounds = Geom.grow(bounds, grow, grow);
         }
 
-        Intersection i = Intersections.intersectLineRectangle(s, e, bounds);
+        Intersection i = Intersections.intersectLineAABB(s.getX(),s.getY(), e.getX(),e.getY(),
+                bounds.getMinX(),bounds.getMinY(),bounds.getMaxX(),bounds.getMaxY());
         return i.getLastIntersectionPoint();
     }
 }

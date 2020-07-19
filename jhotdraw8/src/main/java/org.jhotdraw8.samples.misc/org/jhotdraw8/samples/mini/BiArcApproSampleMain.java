@@ -6,14 +6,20 @@ package org.jhotdraw8.samples.mini;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.BezierCurves;
@@ -98,7 +104,7 @@ public class BiArcApproSampleMain extends Application {
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double px = points.get(i);
             double py = points.get(i + 1);
-            double sq = Geom.squaredDistance(x, y, px, py);
+            double sq = Geom.distanceSq(x, y, px, py);
             if (sq < 25 && sq < bestDistance) {
                 bestDistance = sq;
                 index = i;
@@ -188,7 +194,7 @@ public class BiArcApproSampleMain extends Application {
         for (double t : BezierCurves.inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3)) {
             double r = 2;
-            Point2D p = BezierCurves.evalCubicCurve(x, y, x1, y1, x2, y2, x3, y3, t);
+            java.awt.geom.Point2D p = BezierCurves.evalCubicCurve(x, y, x1, y1, x2, y2, x3, y3, t);
 
             inf1.add(new MoveTo(p.getX() - r, p.getY()));
             inf1.add(new ArcTo(r, r, 0, p.getX() + r, p.getY(), false, false));

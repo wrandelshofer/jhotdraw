@@ -25,8 +25,8 @@ import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -161,7 +161,7 @@ public class PolygonFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getLayoutBounds(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
+        reshapeInLocal(FXTransforms.createReshapeTransform(getLayoutBounds(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }
 

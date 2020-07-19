@@ -4,23 +4,50 @@
  */
 package org.jhotdraw8.geom.offsetline;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.util.function.QuintFunction;
 import org.jhotdraw8.util.function.TriConsumer;
 
-import java.util.*;
-import java.util.function.*;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.offsetline.Intersections.*;
-import static org.jhotdraw8.geom.offsetline.PlineVertex.*;
+import static org.jhotdraw8.geom.offsetline.Intersections.allSelfIntersects;
+import static org.jhotdraw8.geom.offsetline.Intersections.findIntersects;
+import static org.jhotdraw8.geom.offsetline.Intersections.intrCircle2Circle2;
+import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2Circle2;
+import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2LineSeg2;
+import static org.jhotdraw8.geom.offsetline.Intersections.intrPlineSegs;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.closestPointOnSeg;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.segMidpoint;
+import static org.jhotdraw8.geom.offsetline.PlineVertex.splitAtPoint;
 import static org.jhotdraw8.geom.offsetline.PolyArcPath.createApproxSpatialIndex;
-import static org.jhotdraw8.geom.offsetline.Utils.*;
+import static org.jhotdraw8.geom.offsetline.Utils.angle;
+import static org.jhotdraw8.geom.offsetline.Utils.deltaAngle;
+import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.offsetline.Utils.realPrecision;
+import static org.jhotdraw8.geom.offsetline.Utils.sliceJoinThreshold;
+import static org.jhotdraw8.geom.offsetline.Utils.unitPerp;
 
 /**
  * Computes an offset path using the algorithm of the library
@@ -88,14 +115,14 @@ public class ContourBuilder {
     /// Function to test if a point is a valid distance from the original polyline.
     static boolean pointValidForOffset(PolyArcPath pline, double offset,
                                        StaticSpatialIndex spatialIndex,
-                                       Point2D point, IntArrayDeque queryStack) {
+                                       Point2D.Double point, IntArrayDeque queryStack) {
         return pointValidForOffset(pline, offset, spatialIndex, point,
                 queryStack, Utils.offsetThreshold);
     }
 
     static boolean pointValidForOffset(PolyArcPath pline, double offset,
                                        StaticSpatialIndex spatialIndex,
-                                       Point2D point, IntArrayDeque queryStack,
+                                       Point2D.Double point, IntArrayDeque queryStack,
                                        double offsetTol) {
         final double absOffset = Math.abs(offset) - offsetTol;
         final double minDist = absOffset * absOffset;
@@ -104,8 +131,8 @@ public class ContourBuilder {
 
         IntPredicate visitor = (int i) -> {
             int j = Utils.nextWrappingIndex(i, pline);
-            Point2D closestPoint = closestPointOnSeg(pline.get(i), pline.get(j), point);
-            double dist = Geom.squaredDistance(closestPoint, point);
+            Point2D.Double closestPoint = closestPointOnSeg(pline.get(i), pline.get(j), point);
+            double dist = Geom.distanceSq(closestPoint, point);
             pointValid[0] = dist > minDist;
             return pointValid[0];
         };
@@ -147,15 +174,15 @@ public class ContourBuilder {
         final BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
         Runnable connectUsingArc = () -> {
-            final Point2D arcCenter = s1.origV2Pos;
-            final Point2D sp = v2.pos();
-            final Point2D ep = u1.pos();
+            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double sp = v2.pos();
+            final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, u1);
         };
 
-        Consumer<Point2D> processIntersect = (final Point2D intersect) -> {
+        Consumer<Point2D.Double> processIntersect = (final Point2D.Double intersect) -> {
             final boolean trueArcIntersect1 =
                     pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), intersect);
             final boolean trueArcIntersect2 =
@@ -204,8 +231,8 @@ public class ContourBuilder {
                 processIntersect.accept(intrResult.point1);
                 break;
             case TwoIntersects: {
-                double dist1 = Geom.squaredDistance(intrResult.point1, s1.origV2Pos);
-                double dist2 = Geom.squaredDistance(intrResult.point2, s1.origV2Pos);
+                double dist1 = Geom.distanceSq(intrResult.point1, s1.origV2Pos);
+                double dist2 = Geom.distanceSq(intrResult.point2, s1.origV2Pos);
                 if (dist1 < dist2) {
                     processIntersect.accept(intrResult.point1);
                 } else {
@@ -231,9 +258,9 @@ public class ContourBuilder {
                 "first seg should be line, second seg should be arc";
 
         Runnable connectUsingArc = () -> {
-            final Point2D arcCenter = s1.origV2Pos;
-            final Point2D sp = v2.pos();
-            final Point2D ep = u1.pos();
+            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double sp = v2.pos();
+            final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, u1);
@@ -241,7 +268,7 @@ public class ContourBuilder {
 
         final BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
 
-        BiConsumer<Double, Point2D> processIntersect = (Double t, final Point2D intersect) -> {
+        BiConsumer<Double, Point2D.Double> processIntersect = (Double t, final Point2D.Double intersect) -> {
             final boolean trueSegIntersect = !falseIntersect(t);
             final boolean trueArcIntersect =
                     pointWithinArcSweepAngle(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersect);
@@ -276,11 +303,11 @@ public class ContourBuilder {
             processIntersect.accept(intrResult.t0, pointFromParametric(u1.pos(), u2.pos(), intrResult.t0));
         } else {
             assert intrResult.numIntersects == 2 : "should have 2 intersects here";
-            final Point2D origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
-            Point2D i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
-            double dist1 = Geom.squaredDistance(i1, origPoint);
-            Point2D i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
-            double dist2 = Geom.squaredDistance(i2, origPoint);
+            final Point2D.Double origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
+            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
+            double dist1 = Geom.distanceSq(i1, origPoint);
+            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
+            double dist2 = Geom.distanceSq(i2, origPoint);
 
             if (dist1 < dist2) {
                 processIntersect.accept(intrResult.t0, i1);
@@ -294,8 +321,8 @@ public class ContourBuilder {
      * Gets the bulge to describe the arc going from start point to end point with the given arc center
      * and curve orientation, if orientation is negative then bulge is negative otherwise it is positive
      */
-    double bulgeForConnection(final Point2D arcCenter, final Point2D sp,
-                              final Point2D ep, boolean isCCW) {
+    double bulgeForConnection(final Point2D.Double arcCenter, final Point2D.Double sp,
+                              final Point2D.Double ep, boolean isCCW) {
         double a1 = angle(arcCenter, sp);
         double a2 = angle(arcCenter, ep);
         double absSweepAngle = Math.abs(deltaAngle(a1, a2));
@@ -384,7 +411,7 @@ public class ContourBuilder {
 
             // update first vertex (only if it has not already been updated/replaced)
             if (!firstVertexReplaced) {
-                final Point2D updatedFirstPos = closingPartResult.lastVertex().pos();
+                final Point2D.Double updatedFirstPos = closingPartResult.lastVertex().pos();
                 if (result.get(0).bulgeIsZero()) {
                     // just update position
                     result.set(0, new PlineVertex(updatedFirstPos, 0.0));
@@ -436,11 +463,11 @@ public class ContourBuilder {
         List<PlineOffsetSegment> result = new ArrayList<>(segmentCount);
 
         BiConsumer<PlineVertex, PlineVertex> lineVisitor = (v1, v2) -> {
-            Point2D edge = v2.pos().subtract(v1.pos());
-            Point2D offsetV = unitPerp(edge).multiply(offset);
+            Point2D.Double edge = Points2D.subtract(v2.pos(),v1.pos());
+            Point2D.Double offsetV = Points2D.multiply(unitPerp(edge),offset);
             PlineOffsetSegment seg = new PlineOffsetSegment(
-                    new PlineVertex(v1.pos().add(offsetV), 0.0),
-                    new PlineVertex(v2.pos().add(offsetV), 0.0),
+                    new PlineVertex(Points2D.add(v1.pos(),offsetV), 0.0),
+                    new PlineVertex(Points2D.add(v2.pos(),offsetV), 0.0),
                     v2.pos(), false);
             result.add(seg);
         };
@@ -449,17 +476,17 @@ public class ContourBuilder {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
             double offs = v1.bulgeIsNeg() ? offset : -offset;
             double radiusAfterOffset = arc.radius + offs;
-            Point2D v1ToCenter = v1.pos().subtract(arc.center).normalize();
-            Point2D v2ToCenter = v2.pos().subtract(arc.center).normalize();
+            Point2D.Double v1ToCenter = Points2D.normalize(Points2D.subtract(v1.pos(),arc.center));
+            Point2D.Double v2ToCenter = Points2D.normalize(Points2D.subtract(v2.pos(),arc.center));
 
             // collapsed arc, offset arc start and end points towards arc center and turn into line
             // handles case where offset vertexes are equal and simplifies path for clipping algorithm
             boolean isCollapsedArc = radiusAfterOffset < Utils.realThreshold;
 
             PlineOffsetSegment seg = new PlineOffsetSegment(
-                    new PlineVertex(v1ToCenter.multiply(offs).add(v1.pos()),
+                    new PlineVertex(Points2D.add(Points2D.multiply(v1ToCenter,offs),v1.pos()),
                             isCollapsedArc ? 0.0 : v1.bulge()),
-                    new PlineVertex(v2ToCenter.multiply(offs).add(v2.pos()), v2.bulge()),
+                    new PlineVertex(Points2D.add(Points2D.multiply(v2ToCenter,offs),v2.pos()), v2.bulge()),
                     v2.pos(), isCollapsedArc);
             result.add(seg);
         };
@@ -496,7 +523,7 @@ public class ContourBuilder {
 
         StaticSpatialIndex origPlineSpatialIndex = createApproxSpatialIndex(originalPline);
 
-        Map<Integer, List<Point2D>> intersectsLookup = computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(originalPline, rawOffsetPline, dualRawOffsetPline, offset);
+        Map<Integer, List<Point2D.Double>> intersectsLookup = computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(originalPline, rawOffsetPline, dualRawOffsetPline, offset);
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
         if (intersectsLookup.size() == 0) {
@@ -516,9 +543,9 @@ public class ContourBuilder {
         }
 
         // sort intersects by distance from start vertex
-        for (Map.Entry<Integer, List<Point2D>> entry : intersectsLookup.entrySet()) {
-            Point2D startPos = rawOffsetPline.get(entry.getKey()).pos();
-            Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
+        for (Map.Entry<Integer, List<Point2D.Double>> entry : intersectsLookup.entrySet()) {
+            Point2D.Double startPos = rawOffsetPline.get(entry.getKey()).pos();
+            Comparator<Point2D.Double> cmp = Comparator.comparingDouble((Point2D.Double si) -> Geom.distanceSq(si, startPos));
             entry.getValue().sort(cmp);
         }
 
@@ -533,7 +560,8 @@ public class ContourBuilder {
                 return !intersects[0];
             };
 
-            origPlineSpatialIndex.visitQuery(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax,
+            origPlineSpatialIndex.visitQuery(approxBB.getMinX(), approxBB.getMinY(),
+                    approxBB.getMaxX(), approxBB.getMaxY(),
                     visitor, queryStack);
 
             return intersects[0];
@@ -552,7 +580,7 @@ public class ContourBuilder {
                     // break to avoid infinite loop
                     break;
                 }
-                List<Point2D> iter = intersectsLookup.get(index);
+                List<Point2D.Double> iter = intersectsLookup.get(index);
                 if (iter == null) {
                     // no intersect found, test segment will be valid before adding the vertex
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
@@ -568,7 +596,7 @@ public class ContourBuilder {
                     addOrReplaceIfSamePos(firstSlice, rawOffsetPline.get(index));
                 } else {
                     // intersect found, test segment will be valid before finishing first open polyline
-                    final Point2D intersectPos = iter.get(0);
+                    final Point2D.Double intersectPos = iter.get(0);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
                         break;
@@ -578,7 +606,7 @@ public class ContourBuilder {
                             splitAtPoint(rawOffsetPline.get(index), rawOffsetPline.get(index + 1), intersectPos);
 
                     PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
-                    Point2D midpoint = segMidpoint(split.updatedStart, sliceEndVertex);
+                    Point2D.Double midpoint = segMidpoint(split.updatedStart, sliceEndVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
                             queryStack)) {
                         break;
@@ -598,11 +626,11 @@ public class ContourBuilder {
             }
         }
 
-        for (final Map.Entry<Integer, List<Point2D>> kvp : intersectsLookup.entrySet()) {
+        for (final Map.Entry<Integer, List<Point2D.Double>> kvp : intersectsLookup.entrySet()) {
             // start index for the slice we're about to build
             int sIndex = kvp.getKey();
             // self intersect list for this start index
-            List<Point2D> siList = kvp.getValue();
+            List<Point2D.Double> siList = kvp.getValue();
 
             final PlineVertex startVertex = rawOffsetPline.get(sIndex);
             int nextIndex = Utils.nextWrappingIndex(sIndex, rawOffsetPline);
@@ -636,7 +664,7 @@ public class ContourBuilder {
                     }
 
                     // test mid point
-                    Point2D midpoint = segMidpoint(split.updatedStart, split.splitVertex);
+                    Point2D.Double midpoint = segMidpoint(split.updatedStart, split.splitVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
                             queryStack)) {
                         continue;
@@ -692,12 +720,12 @@ public class ContourBuilder {
                 addOrReplaceIfSamePos(currSlice, rawOffsetPline.get(index));
 
                 // check if segment that starts at vertex we just added has an intersect
-                List<Point2D> nextIntr = intersectsLookup.get(index);
+                List<Point2D.Double> nextIntr = intersectsLookup.get(index);
                 if (nextIntr != null) {
                     // there is an intersect, slice is done, check if final segment is valid
 
                     // check intersect pos is valid (which will also be end vertex position)
-                    final Point2D intersectPos = nextIntr.get(0);
+                    final Point2D.Double intersectPos = nextIntr.get(0);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
                         isValidPline = false;
@@ -710,7 +738,7 @@ public class ContourBuilder {
 
                     PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
                     // check mid point is valid
-                    Point2D mp = segMidpoint(split.updatedStart, sliceEndVertex);
+                    Point2D.Double mp = segMidpoint(split.updatedStart, sliceEndVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, mp,
                             queryStack)) {
                         isValidPline = false;
@@ -746,7 +774,7 @@ public class ContourBuilder {
     }
 
     @NonNull
-    private Map<Integer, List<Point2D>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
+    private Map<Integer, List<Point2D.Double>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
             @NonNull PolyArcPath originalPline,
             @NonNull PolyArcPath rawOffsetPline,
             @NonNull PolyArcPath dualRawOffsetPline,
@@ -760,18 +788,18 @@ public class ContourBuilder {
         PlineIntersectsResult dualIntersects = new PlineIntersectsResult();
         findIntersects(rawOffsetPline, dualRawOffsetPline, rawOffsetPlineSpatialIndex, dualIntersects);
 
-        Map<Integer, List<Point2D>> intersectsLookup;
+        Map<Integer, List<Point2D.Double>> intersectsLookup;
         if (!originalPline.isClosed()) {
             // find intersects between circles generated at original open polyline end points and raw offset
             // polyline
-            List<OrderedPair<Integer, List<Point2D>>> intersects = new ArrayList<>();
+            List<OrderedPair<Integer, List<Point2D.Double>>> intersects = new ArrayList<>();
             offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline.get(0).pos(),
                     rawOffsetPlineSpatialIndex, intersects);
             offsetCircleIntersectsWithPline(rawOffsetPline, offset,
                     originalPline.lastVertex().pos(),
                     rawOffsetPlineSpatialIndex, intersects);
             intersectsLookup = new HashMap<>(2 * selfIntersects.size() + intersects.size());
-            for (final OrderedPair<Integer, List<Point2D>> pair : intersects) {
+            for (final OrderedPair<Integer, List<Point2D.Double>> pair : intersects) {
                 intersectsLookup.computeIfAbsent(pair.first(), k -> new ArrayList<>()).addAll(pair.second());
             }
         } else {
@@ -808,9 +836,9 @@ public class ContourBuilder {
                 "first seg should be arc, second seg should be line";
 
         Runnable connectUsingArc = () -> {
-            final Point2D arcCenter = s1.origV2Pos;
-            final Point2D sp = v2.pos();
-            final Point2D ep = u1.pos();
+            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double sp = v2.pos();
+            final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, u1);
@@ -818,7 +846,7 @@ public class ContourBuilder {
 
         final BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(u1, u2);
 
-        BiConsumer<Double, Point2D> processIntersect = (Double t, final Point2D intersect) -> {
+        BiConsumer<Double, Point2D.Double> processIntersect = (Double t, final Point2D.Double intersect) -> {
             final boolean trueSegIntersect = !falseIntersect(t);
             final boolean trueArcIntersect =
                     pointWithinArcSweepAngle(arc.center, u1.pos(), u2.pos(), u1.bulge(), intersect);
@@ -854,10 +882,10 @@ public class ContourBuilder {
         } else {
             assert intrResult.numIntersects == 2 : "should have 2 intersects here";
             // always use intersect closest to original point
-            Point2D i1 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t0);
-            double dist1 = Geom.squaredDistance(i1, s1.origV2Pos);
-            Point2D i2 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t1);
-            double dist2 = Geom.squaredDistance(i2, s1.origV2Pos);
+            Point2D.Double i1 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t0);
+            double dist1 = Geom.distanceSq(i1, s1.origV2Pos);
+            Point2D.Double i2 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t1);
+            double dist2 = Geom.distanceSq(i2, s1.origV2Pos);
 
             if (dist1 < dist2) {
                 processIntersect.accept(intrResult.t0, i1);
@@ -877,9 +905,9 @@ public class ContourBuilder {
         assert v1.bulgeIsZero() && u1.bulgeIsZero() : "both segs should be lines";
 
         Runnable connectUsingArc = () -> {
-            final Point2D arcCenter = s1.origV2Pos;
-            final Point2D sp = v2.pos();
-            final Point2D ep = u1.pos();
+            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double sp = v2.pos();
+            final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
             addOrReplaceIfSamePos(result, new PlineVertex(sp, bulge));
             addOrReplaceIfSamePos(result, new PlineVertex(ep, 0.0));
@@ -930,9 +958,9 @@ public class ContourBuilder {
     }
 
     void offsetCircleIntersectsWithPline(PolyArcPath pline, double offset,
-                                         Point2D circleCenter,
+                                         Point2D.Double circleCenter,
                                          StaticSpatialIndex spatialIndex,
-                                         List<OrderedPair<Integer, List<Point2D>>> output) {
+                                         List<OrderedPair<Integer, List<Point2D.Double>>> output) {
 
         final double circleRadius = Math.abs(offset);
 
@@ -944,10 +972,10 @@ public class ContourBuilder {
 
         Predicate<Double> validLineSegIntersect = (Double t) -> !falseIntersect(t) && Math.abs(t) > Utils.realPrecision;
 
-        QuintFunction<Point2D, Point2D, Point2D, Double, Point2D, Boolean>
-                validArcSegIntersect = (Point2D arcCenter, Point2D arcStart,
-                                        Point2D arcEnd, Double bulge,
-                                        Point2D intrPoint) -> !Geom.almostEqual(arcStart, intrPoint, Utils.realPrecision) &&
+        QuintFunction<Point2D.Double, Point2D.Double, Point2D.Double, Double, Point2D.Double, Boolean>
+                validArcSegIntersect = (Point2D.Double arcCenter, Point2D.Double arcStart,
+                                        Point2D.Double arcEnd, Double bulge,
+                                        Point2D.Double intrPoint) -> !Geom.almostEqual(arcStart, intrPoint, Utils.realPrecision) &&
                 pointWithinArcSweepAngle(arcCenter, arcStart, arcEnd, bulge, intrPoint);
 
         for (int sIndex : queryResults) {
@@ -1070,7 +1098,7 @@ public class ContourBuilder {
             return result;
         }
 
-        Map<Integer, List<Point2D>> intersectsLookup = new HashMap<>(2 * selfIntersects.size());
+        Map<Integer, List<Point2D.Double>> intersectsLookup = new HashMap<>(2 * selfIntersects.size());
 
         for (final PlineIntersect si : selfIntersects) {
             intersectsLookup.computeIfAbsent(si.sIndex1, k -> new ArrayList<>()).add(si.pos);
@@ -1078,9 +1106,9 @@ public class ContourBuilder {
         }
 
         // sort intersects by distance from start vertex
-        for (Map.Entry<Integer, List<Point2D>> kvp : intersectsLookup.entrySet()) {
-            Point2D startPos = rawOffsetPline.get(kvp.getKey()).pos();
-            Comparator<Point2D> cmp = Comparator.comparingDouble((Point2D si) -> Geom.squaredDistance(si, startPos));
+        for (Map.Entry<Integer, List<Point2D.Double>> kvp : intersectsLookup.entrySet()) {
+            Point2D.Double startPos = rawOffsetPline.get(kvp.getKey()).pos();
+            Comparator<Point2D.Double> cmp = Comparator.comparingDouble((Point2D.Double si) -> Geom.distanceSq(si, startPos));
             kvp.getValue().sort(cmp);
         }
 
@@ -1095,17 +1123,18 @@ public class ContourBuilder {
                 return !hasIntersect[0];
             };
 
-            origPlineSpatialIndex.visitQuery(approxBB.xMin, approxBB.yMin, approxBB.xMax, approxBB.yMax,
+            origPlineSpatialIndex.visitQuery(approxBB.getMinX(), approxBB.getMinY(),
+                    approxBB.getMaxX(), approxBB.getMaxY(),
                     visitor, queryStack);
 
             return hasIntersect[0];
         };
 
-        for (final Map.Entry<Integer, List<Point2D>> kvp : intersectsLookup.entrySet()) {
+        for (final Map.Entry<Integer, List<Point2D.Double>> kvp : intersectsLookup.entrySet()) {
             // start index for the slice we're about to build
             int sIndex = kvp.getKey();
             // self intersect list for this start index
-            List<Point2D> siList = kvp.getValue();
+            List<Point2D.Double> siList = kvp.getValue();
 
             final PlineVertex startVertex = rawOffsetPline.get(sIndex);
             int nextIndex = Utils.nextWrappingIndex(sIndex, rawOffsetPline);
@@ -1139,7 +1168,7 @@ public class ContourBuilder {
                     }
 
                     // test mid point
-                    Point2D midpoint = segMidpoint(split.updatedStart, split.splitVertex);
+                    Point2D.Double midpoint = segMidpoint(split.updatedStart, split.splitVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, midpoint,
                             queryStack)) {
                         continue;
@@ -1196,12 +1225,12 @@ public class ContourBuilder {
                 addOrReplaceIfSamePos(currSlice, rawOffsetPline.get(index));
 
                 // check if segment that starts at vertex we just added has an intersect
-                List<Point2D> nextIntr = intersectsLookup.get(index);
+                List<Point2D.Double> nextIntr = intersectsLookup.get(index);
                 if (nextIntr != null) {
                     // there is an intersect, slice is done, check if final segment is valid
 
                     // check intersect pos is valid (which will also be end vertex position)
-                    final Point2D intersectPos = nextIntr.get(0);
+                    final Point2D.Double intersectPos = nextIntr.get(0);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
                         isValidPline = false;
@@ -1214,7 +1243,7 @@ public class ContourBuilder {
 
                     PlineVertex sliceEndVertex = new PlineVertex(intersectPos, 0.0);
                     // check mid point is valid
-                    Point2D mp = segMidpoint(split.updatedStart, sliceEndVertex);
+                    Point2D.Double mp = segMidpoint(split.updatedStart, sliceEndVertex);
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, mp,
                             queryStack)) {
                         isValidPline = false;
@@ -1277,7 +1306,7 @@ public class ContourBuilder {
         // load spatial index with all start points
         StaticSpatialIndex spatialIndex = new StaticSpatialIndex(slices.size());
         for (final OpenPolylineSlice slice : slices) {
-            final Point2D point = slice.pline.get(0).pos();
+            final Point2D.Double point = slice.pline.get(0).pos();
             spatialIndex.add(point.getX() - joinThreshold, point.getY() - joinThreshold,
                     point.getX() + joinThreshold, point.getY() + joinThreshold);
         }
@@ -1295,7 +1324,7 @@ public class ContourBuilder {
 
             PolyArcPath currPline = new PolyArcPath();
             int currIndex = i;
-            final Point2D initialStartPoint = slices.get(i).pline.get(0).pos();
+            final Point2D.Double initialStartPoint = slices.get(i).pline.get(0).pos();
             int loopCount = 0;
             final int maxLoopCount = slices.size();
             while (true) {
@@ -1306,7 +1335,7 @@ public class ContourBuilder {
                 }
                 final int currLoopStartIndex = slices.get(currIndex).intrStartIndex;
                 final PolyArcPath currSlice = slices.get(currIndex).pline;
-                final Point2D currEndPoint = slices.get(currIndex).pline.lastVertex().pos();
+                final Point2D.Double currEndPoint = slices.get(currIndex).pline.lastVertex().pos();
                 currPline.addAll(currSlice);
                 queryResults.clear();
                 spatialIndex.query(currEndPoint.getX() - joinThreshold, currEndPoint.getY() - joinThreshold,

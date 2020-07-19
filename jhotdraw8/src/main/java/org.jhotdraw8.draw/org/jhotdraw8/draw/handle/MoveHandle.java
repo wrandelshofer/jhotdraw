@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -84,7 +84,7 @@ public class MoveHandle extends LocatorHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         pickLocation = p = t.transform(p);
@@ -127,7 +127,7 @@ public class MoveHandle extends LocatorHandle {
             // meta snaps the location of the handle to the grid
             Point2D loc = getLocation();
             final Transform localToWorld = owner.getLocalToWorld();
-            oldPoint = new CssPoint2D(Transforms.transform(localToWorld, loc));
+            oldPoint = new CssPoint2D(FXTransforms.transform(localToWorld, loc));
         }
 
         if (oldPoint.equals(newPoint)) {

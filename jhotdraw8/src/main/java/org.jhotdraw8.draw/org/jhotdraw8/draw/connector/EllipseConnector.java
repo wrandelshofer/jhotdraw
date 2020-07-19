@@ -58,7 +58,8 @@ public class EllipseConnector extends LocatorConnector {
             bounds = Geom.grow(bounds, grow, grow);
         }
 
-        Intersection i = Intersections.intersectLineEllipse(s, e, bounds);
+        Intersection i = Intersections.intersectLineEllipse(s.getX(),s.getY(), e.getX(),e.getY(),
+                bounds.getMinX(),bounds.getMinY(),bounds.getWidth(),bounds.getHeight());
         return i.getLastIntersectionPoint();
     }
 }

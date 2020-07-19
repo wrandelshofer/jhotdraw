@@ -36,8 +36,8 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
@@ -167,7 +167,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         double maxy = Double.NEGATIVE_INFINITY;
 
         for (Figure f : selection) {
-            Bounds fb = Transforms.transform(f.getLocalToWorld(), f.getLayoutBounds());
+            Bounds fb = FXTransforms.transform(f.getLocalToWorld(), f.getLayoutBounds());
             double v = fb.getMaxX();
             if (v > maxx) {
                 maxx = v;
@@ -526,7 +526,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @NonNull
     default Bounds getLayoutBoundsInParent() {
-        return Transforms.transformedBoundingBox(getLocalToParent(), getLayoutBounds());
+        return FXTransforms.transformedBoundingBox(getLocalToParent(), getLayoutBounds());
     }
 
     /**
@@ -543,7 +543,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @NonNull
     default Bounds getBoundsInParent() {
-        return Transforms.transformedBoundingBox(getLocalToParent(), getBoundsInLocal());
+        return FXTransforms.transformedBoundingBox(getLocalToParent(), getBoundsInLocal());
     }
 
     /**
@@ -560,7 +560,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @NonNull
     default Bounds getBoundsInWorld() {
-        return Transforms.transformedBoundingBox(getLocalToWorld(), getBoundsInLocal());
+        return FXTransforms.transformedBoundingBox(getLocalToWorld(), getBoundsInLocal());
     }
 
     /**
@@ -571,7 +571,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     @NonNull
     default Bounds getLayoutBoundsInWorld() {
-        return Transforms.transformedBoundingBox(getLocalToWorld(), getLayoutBounds());
+        return FXTransforms.transformedBoundingBox(getLocalToWorld(), getLayoutBounds());
     }
 
 
@@ -1158,7 +1158,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param t the translation in x and in y direction
      */
     default void translateInParent(@NonNull CssPoint2D t) {
-        if (Transforms.isIdentityOrNull(getParentToLocal())) {
+        if (FXTransforms.isIdentityOrNull(getParentToLocal())) {
             translateInLocal(t);
         } else {
             Point2D p = t.getConvertedValue();
@@ -1285,13 +1285,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @NonNull
     default Point2D worldToLocal(@NonNull Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
-        return Transforms.isIdentityOrNull(wtl) ? pointInWorld : wtl.transform(pointInWorld);
+        return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : wtl.transform(pointInWorld);
     }
 
     @NonNull
     default CssPoint2D worldToLocal(@NonNull CssPoint2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
-        return Transforms.isIdentityOrNull(wtl) ? pointInWorld : new CssPoint2D(wtl.transform(pointInWorld.getConvertedValue()));
+        return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : new CssPoint2D(wtl.transform(pointInWorld.getConvertedValue()));
     }
 
     /**
@@ -1307,7 +1307,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @NonNull
     default Point2D worldToParent(@NonNull Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
-        return Transforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
+        return FXTransforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
+    }
+    @NonNull
+    default Point2D worldToParent(double x, double y) {
+        final Transform wtp = getWorldToParent();
+        return FXTransforms.isIdentityOrNull(wtp) ? new Point2D(x,y) : wtp.transform(x,y);
     }
 
     /**

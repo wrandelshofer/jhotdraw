@@ -27,11 +27,12 @@ import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
+import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 import java.awt.geom.PathIterator;
 
@@ -130,7 +131,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
         Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
         Point2D pInLocal = owner.worldToLocal(pInDrawing);
 
-        double tolerance = Transforms.deltaTransform(owner.getWorldToLocal(), Transforms.deltaTransform(dv.getViewToWorld(),
+        double tolerance = FXTransforms.deltaTransform(owner.getWorldToLocal(), FXTransforms.deltaTransform(dv.getViewToWorld(),
                 dv.getEditor().getTolerance(), dv.getEditor().getTolerance())).getX();
         double px = pInLocal.getX();
         double py = pInLocal.getY();
@@ -143,7 +144,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
             Intersection result = Intersections.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
             if (result.getTs().size() == 2) {
-                insertLocation = Geom.lerp(p1, p2, (result.getFirstT() + result.getLastT()) / 2);
+                insertLocation = FXGeom.lerp(p1, p2, (result.getFirstT() + result.getLastT()) / 2);
                 insertAt = i;
                 break;
             }
@@ -162,7 +163,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getLayoutBounds();
         double[] points = PolylineFigure.toPointArray(f, key);
         if (t != null) {

@@ -4,10 +4,10 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,17 +26,17 @@ public class Intersection {
         /**
          * The point of intersection.
          */
-        final Point2D point;
+        final Point2D.Double point;
         /**
          * The tangent vector at the intersection of the first parametric function.
          * This vector is not normalized.
          */
-        final Point2D tangent1;
+        final Point2D.Double tangent1;
         /**
          * The tangent vector at the intersection of the second parametric function.
          * This vector is not normalized.
          */
-        final Point2D tangent2;
+        final Point2D.Double tangent2;
 
         /**
          * The index of the segment.
@@ -44,16 +44,23 @@ public class Intersection {
         private int segment1;
         private int segment2;
 
-        public IntersectionPoint(Point2D point, double t1) {
-            this(point, t1, new Point2D(1, 0), 0, new Point2D(0, -1));
+        public IntersectionPoint(Point2D.Double point, double t1) {
+            this(point, t1, new Point2D.Double(1, 0), 0, new Point2D.Double(0, -1));
         }
 
-        public IntersectionPoint(Point2D point, double t1, Point2D tangent1, double t2, Point2D tangent2) {
+        public IntersectionPoint(Point2D.Double point, double t1, Point2D.Double tangent1, double t2, Point2D.Double tangent2) {
             this.point = point;
             this.t1 = t1;
             this.tangent1 = tangent1;
             this.t2 = t2;
             this.tangent2 = tangent2;
+        }
+        public IntersectionPoint(double px, double py, double t1, double tx1, double ty1, double t2, double tx2, double ty2) {
+            this.point = new Point2D.Double(px,py);
+            this.t1 = t1;
+            this.tangent1 = new Point2D.Double(tx1,ty1);
+            this.t2 = t2;
+            this.tangent2 = new Point2D.Double(tx2,ty2);
         }
 
         public int getSegment1() {
@@ -83,11 +90,11 @@ public class Intersection {
             return t1;
         }
 
-        public Point2D getPoint() {
+        public Point2D.Double getPoint() {
             return point;
         }
 
-        public Point2D getTangent1() {
+        public Point2D.Double getTangent1() {
             return tangent1;
         }
 
@@ -95,7 +102,7 @@ public class Intersection {
             return t2;
         }
 
-        public Point2D getTangent2() {
+        public Point2D.Double getTangent2() {
             return tangent2;
         }
     }
@@ -134,7 +141,7 @@ public class Intersection {
         return intersections.get(0);
     }
 
-    public Point2D getLastPoint() {
+    public Point2D.Double getLastPoint() {
         return intersections.get(intersections.size() - 1).getPoint();
     }
 
@@ -151,11 +158,11 @@ public class Intersection {
         return intersections.get(0).getT1();
     }
 
-    public List<Point2D> getPoints() {
+    public List<Point2D.Double> getPoints() {
         return intersections.stream().map(IntersectionPoint::getPoint).collect(Collectors.toList());
     }
 
-    public Point2D getFirstPoint() {
+    public Point2D.Double getFirstPoint() {
         return intersections.get(0).point;
     }
 
@@ -181,7 +188,7 @@ public class Intersection {
         StringBuilder b = new StringBuilder();
         b.append("Intersection{").append(status).append(", points=");
         boolean first = true;
-        for (Point2D p : getPoints()) {
+        for (Point2D.Double p : getPoints()) {
             if (first) {
                 first = false;
             } else {

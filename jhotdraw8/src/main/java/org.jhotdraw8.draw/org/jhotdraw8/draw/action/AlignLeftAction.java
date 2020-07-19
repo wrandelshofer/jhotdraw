@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.util.Resources;
 
 import java.util.Set;
@@ -50,7 +50,7 @@ public class AlignLeftAction extends AbstractDrawingViewAction {
         Point2D xPointInWorld = new Point2D(xInWorld, 0);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
-                double desiredX = Transforms.transform(f.getWorldToParent(), xPointInWorld).getX();
+                double desiredX = FXTransforms.transform(f.getWorldToParent(), xPointInWorld).getX();
                 double actualX = f.getLayoutBoundsInParent().getMinX();
                 double dx = desiredX - actualX;
                 Translate tx = new Translate(dx, 0);

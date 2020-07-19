@@ -1,7 +1,9 @@
 package org.jhotdraw8.geom.offsetline;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points2D;
+
+import java.awt.geom.Point2D;
 
 
 /**
@@ -34,18 +36,18 @@ public class BulgeConversionFunctions {
 
     public static class ArcRadiusAndCenter {
         final double radius;
-        final Point2D center;
+        final Point2D.Double center;
 
-        public ArcRadiusAndCenter(double radius, Point2D c) {
+        public ArcRadiusAndCenter(double radius, Point2D.Double c) {
             this(c.getX(), c.getY(), radius);
         }
 
         public ArcRadiusAndCenter(double cx, double cy, double radius) {
-            this.center = new Point2D(cx, cy);
+            this.center = new Point2D.Double(cx, cy);
             this.radius = radius;
         }
 
-        public Point2D getCenter() {
+        public Point2D.Double getCenter() {
             return center;
         }
 
@@ -153,8 +155,8 @@ public class BulgeConversionFunctions {
 
         // compute radius
         double b = Math.abs(v1.bulge());
-        Point2D v = v2.pos().subtract(v1.pos());
-        double d = v.magnitude();
+        Point2D.Double v = Points2D.subtract(v2.pos(),v1.pos());
+        double d = Points2D.magnitude(v);
         double r = d * (b * b + 1.0) / (4.0 * b);
 
         // compute center
@@ -167,7 +169,7 @@ public class BulgeConversionFunctions {
             offsY = -offsY;
         }
 
-        Point2D c = new Point2D(v1.getX() + v.getX() * 0.5 + offsX, v1.getY() + v.getY() * 0.5 + offsY);
+        Point2D.Double c = new Point2D.Double(v1.getX() + v.getX() * 0.5 + offsX, v1.getY() + v.getY() * 0.5 + offsY);
         return new BulgeConversionFunctions.ArcRadiusAndCenter(r, c);
 
 

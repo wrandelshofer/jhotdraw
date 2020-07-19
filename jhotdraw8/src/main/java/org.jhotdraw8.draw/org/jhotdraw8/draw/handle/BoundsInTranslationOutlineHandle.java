@@ -20,7 +20,7 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
@@ -79,12 +79,12 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getParentToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getParentToWorld());
         if (f instanceof TransformableFigure) {
             TransformableFigure tf = (TransformableFigure) f;
-            t = Transforms.concat(t, new Translate(tf.getNonNull(TRANSLATE_X), tf.getNonNull(TRANSLATE_Y)));
+            t = FXTransforms.concat(t, new Translate(tf.getNonNull(TRANSLATE_X), tf.getNonNull(TRANSLATE_Y)));
         }
-        t = Transforms.concat(Transform.translate(0.5, 0.5), t);
+        t = FXTransforms.concat(Transform.translate(0.5, 0.5), t);
         Bounds b = f.getLayoutBounds();
         points[0] = b.getMinX();
         points[1] = b.getMinY();

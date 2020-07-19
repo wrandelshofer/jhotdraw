@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
@@ -193,7 +193,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     @Override
     protected void writePage(@NonNull Path file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
-        markNodesOutsideBoundsWithSkip(node, Transforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
+        markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
         final AbstractSvgSceneGraphExporter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
@@ -217,7 +217,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         markNodesOutsideBoundsWithSkip(node, slice.getLayoutBounds());
         Transform worldToLocal = slice.getWorldToLocal();
         Point2D sliceOrigin = slice.getSliceOrigin();
-        worldToLocal = Transforms.concat(worldToLocal, new Translate(-sliceOrigin.getX(), -sliceOrigin.getY()));
+        worldToLocal = FXTransforms.concat(worldToLocal, new Translate(-sliceOrigin.getX(), -sliceOrigin.getY()));
         if (worldToLocal != null) {
             node.getTransforms().setAll(worldToLocal);
         }

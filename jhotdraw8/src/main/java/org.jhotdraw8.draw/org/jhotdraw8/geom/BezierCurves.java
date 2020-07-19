@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.DoubleArrayList;
@@ -15,8 +14,10 @@ import org.jhotdraw8.util.function.Double6Consumer;
 import org.jhotdraw8.util.function.Double8Consumer;
 
 import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Point2D;
 
 import static java.lang.Math.abs;
+import static org.jhotdraw8.geom.Geom.lerp;
 
 /**
  * Provides utility methods for Bézier curves.
@@ -48,8 +49,8 @@ public class BezierCurves {
      * @return the point at time t
      */
     @NonNull
-    public static Point2D evalCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
-                                         double t) {
+    public static Point2D.Double evalCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+                                                double t) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -69,26 +70,15 @@ public class BezierCurves {
         x0123 = lerp(x012, x123, t);
         y0123 = lerp(y012, y123, t);
 
-        return new Point2D(x0123, y0123);
+        return new Point2D.Double(x0123, y0123);
     }
 
     @NonNull
-    public static Point2D evalCubicCurve(CubicCurve2D.Double c,
+    public static Point2D.Double evalCubicCurve(CubicCurve2D.Double c,
                                          double t) {
         return evalCubicCurve(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2, t);
     }
 
-    /**
-     * Linear interpolation from {@code a} to {@code b} at {@code t}.
-     *
-     * @param a a
-     * @param b b
-     * @param t a value in the range [0, 1]
-     * @return the interpolated value
-     */
-    private static double lerp(double a, double b, double t) {
-        return (b - a) * t + a;
-    }
 
     /**
      * Evaluates the given curve at the specified time.
@@ -101,8 +91,8 @@ public class BezierCurves {
      * @return the point at time t
      */
     @NonNull
-    public static Point2D evalLine(double x0, double y0, double x1, double y1, double t) {
-        return new Point2D(lerp(x0, x1, t), lerp(y0, y1, t));
+    public static Point2D.Double evalLine(double x0, double y0, double x1, double y1, double t) {
+        return new Point2D.Double(lerp(x0, x1, t), lerp(y0, y1, t));
     }
 
 
@@ -119,7 +109,7 @@ public class BezierCurves {
      * @return the point at time t
      */
     @NonNull
-    public static Point2D evalQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
+    public static Point2D.Double evalQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -130,7 +120,7 @@ public class BezierCurves {
         x012 = lerp(x01, x12, t);
         y012 = lerp(y01, y12, t);
 
-        return new Point2D(x012, y012);
+        return new Point2D.Double(x012, y012);
     }
 
     /**
@@ -161,16 +151,16 @@ public class BezierCurves {
                                            double tolerance) {
 
         final double t = (x012 - x123 == 0) ? (y012 - y0123) / (y012 - y123) : (x012 - x0123) / (x012 - x123);
-        final Point2D ctrl1, ctrl2;
+        final Point2D.Double ctrl1, ctrl2;
         if (t == 0 || t == 1) {
-            ctrl1 = new Point2D(x01, y01);
-            ctrl2 = new Point2D(x23, y23);
+            ctrl1 = new Point2D.Double(x01, y01);
+            ctrl2 = new Point2D.Double(x23, y23);
         } else {
-            ctrl1 = Geom.divide(new Point2D(x01, y01).subtract(x0, y0), t).add(x0, y0);
-            ctrl2 = Geom.divide(new Point2D(x23, y23).subtract(x3, y3), 1 - t).add(x3, y3);
+            ctrl1 = Points2D.add(Points2D.divide(Points2D.subtract(x01, y01,x0, y0), t),x0, y0);
+            ctrl2 = Points2D.add(Points2D.divide(Points2D.subtract(x23, y23,x3, y3), 1 - t),x3, y3);
         }
 
-        final Point2D joint0123 = evalCubicCurve(x0, y0, ctrl1.getX(), ctrl1.getY(), ctrl2.getX(), ctrl2.getY(), x3, y3, t);
+        final Point2D.Double joint0123 = evalCubicCurve(x0, y0, ctrl1.getX(), ctrl1.getY(), ctrl2.getX(), ctrl2.getY(), x3, y3, t);
 
         return joint0123.distance(x0123, y0123) <= tolerance
                 ? new double[]{x0, y0, ctrl1.getX(), ctrl1.getY(), ctrl2.getX(), ctrl2.getY(), x3, y3} : null;
@@ -196,22 +186,23 @@ public class BezierCurves {
     public static double[] mergeQuadCurve(final double x0, final double y0, final double x01, final double y01,
                                           final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
                                           double tolerance) {
-        final Point2D start = new Point2D(x0, y0);
-        final Intersection isect = Intersections.intersectRayRay(start, new Point2D(x01, y01), new Point2D(x2, y2), new Point2D(x12, y12));
+        final Point2D.Double start = new Point2D.Double(x0, y0);
+        final Intersection isect = Intersections.intersectRayRay(start, new Point2D.Double(x01, y01), new Point2D.Double(x2, y2), new Point2D.Double(x12, y12));
         if (isect.isEmpty()) {
             return null;
         }
-        final Point2D ctrl = isect.getLastPoint();
+        final Point2D.Double ctrl = isect.getLastPoint();
 
         final double t = start.distance(x01, y01) / start.distance(ctrl);
-        final Point2D joint01 = evalQuadCurve(x0, y0, ctrl.getX(), ctrl.getY(), x2, y2, t);
+        final Point2D.Double joint01 = evalQuadCurve(x0, y0, ctrl.getX(), ctrl.getY(), x2, y2, t);
 
         return (joint01.distance(x012, y012) <= tolerance) ?
                 new double[]{x0, y0, ctrl.getX(), ctrl.getY(), x2, y2} : null;
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided bezier curve into two parts at the specified
+     * parameter value {@code t}.
      * <p>
      * Reference:
      * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
@@ -220,15 +211,18 @@ public class BezierCurves {
                                                                               double t) {
         CubicCurve2D.Double left = new CubicCurve2D.Double();
         CubicCurve2D.Double right = new CubicCurve2D.Double();
-        splitCubicCurve(source.x1, source.y1, source.ctrlx1, source.ctrly1, source.ctrlx2, source.ctrly2, source.x2, source.y2,
+        splitCubicCurve(source.x1, source.y1,
+                source.ctrlx1, source.ctrly1,
+                source.ctrlx2, source.ctrly2,
+                source.x2, source.y2,
                 t,
-
                 left::setCurve, right::setCurve);
         return new OrderedPair<>(left, right);
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided bezier curve into two parts at the specified
+     * parameter value {@code t}.
      * <p>
      * Reference:
      * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
@@ -244,7 +238,8 @@ public class BezierCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided bezier curve into two parts at the specified
+     * parameter value {@code t}.
      * <p>
      * Reference:
      * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
@@ -272,7 +267,8 @@ public class BezierCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided bezier curve into two parts at the specified
+     * parameter value {@code t}.
      * <p>
      * Reference:
      * <a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">splitting-a-bezier-curve</a>.
@@ -337,7 +333,7 @@ public class BezierCurves {
                                        double[] left,
                                        double[] right) {
         splitCubicCurve(x0, y0, x1, y1, x2, y2, x3, y3, t,
-                left == null ? null : (x,y,a, b, c, d, e, f) -> {
+                left == null ? null : (x, y, a, b, c, d, e, f) -> {
                     left[0] = a;
                     left[1] = b;
                     left[2] = c;

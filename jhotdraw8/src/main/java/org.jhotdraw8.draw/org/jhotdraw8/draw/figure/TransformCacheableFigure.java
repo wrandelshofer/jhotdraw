@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.CACHE;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRANSFORM;
@@ -46,7 +46,7 @@ public interface TransformCacheableFigure extends CacheableFigure {
         if (t == null) {
             t = getLocalToParent();
             final Figure parent = getParent();
-            t = parent == null ? t : Transforms.concat(parent.getLocalToWorld(), t);
+            t = parent == null ? t : FXTransforms.concat(parent.getLocalToWorld(), t);
             if (CACHE) {
                 setCachedValue(LOCAL_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
             }
@@ -61,7 +61,7 @@ public interface TransformCacheableFigure extends CacheableFigure {
         if (t == null) {
             t = getParentToLocal();
             final Figure parent = getParent();
-            t = parent == null ? t : Transforms.concat(t, parent.getWorldToLocal());
+            t = parent == null ? t : FXTransforms.concat(t, parent.getWorldToLocal());
             setCachedValue(WORLD_TO_LOCAL, t == null ? IDENTITY_TRANSFORM : t);
         }
         return t == IDENTITY_TRANSFORM ? null : t;

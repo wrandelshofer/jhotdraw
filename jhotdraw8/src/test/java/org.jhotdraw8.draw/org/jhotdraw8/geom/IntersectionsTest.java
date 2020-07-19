@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Ellipse;
@@ -14,6 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,11 +61,11 @@ public class IntersectionsTest {
      */
     public static void testIntersectLineQuadraticCurve_5args(@NonNull Line a, @NonNull QuadCurve b, @NonNull double[] expected) {
         System.out.println("intersectLineBezier2");
-        Point2D b1 = new Point2D(b.getStartX(), b.getEndX());
-        Point2D b2 = new Point2D(b.getControlX(), b.getControlY());
-        Point2D b3 = new Point2D(b.getEndX(), b.getEndX());
-        Point2D a1 = new Point2D(a.getStartX(), a.getStartY());
-        Point2D a2 = new Point2D(a.getEndX(), a.getEndY());
+        Point2D b1 = new Point2D.Double(b.getStartX(), b.getEndX());
+        Point2D b2 = new Point2D.Double(b.getControlX(), b.getControlY());
+        Point2D b3 = new Point2D.Double(b.getEndX(), b.getEndX());
+        Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
+        Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
         System.out.println("line->bezier2");
         Intersection isec = Intersections.intersectLineQuadraticCurve(a1, a2, b1, b2, b3);
         System.out.println("  isec: " + isec);
@@ -84,11 +84,11 @@ public class IntersectionsTest {
      */
     public static void testIntersectLineEllipse_5args(@NonNull Line a, @NonNull Ellipse b, @NonNull double[] expected) {
         System.out.println("intersectLineEllipse");
-        Point2D bc = new Point2D(b.getCenterX(), b.getCenterX());
+        Point2D bc = new Point2D.Double(b.getCenterX(), b.getCenterX());
         double brx = b.getRadiusX();
         double bry = b.getRadiusY();
-        Point2D a1 = new Point2D(a.getStartX(), a.getStartY());
-        Point2D a2 = new Point2D(a.getEndX(), a.getEndY());
+        Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
+        Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
         Intersection isec = Intersections.intersectLineEllipse(a1, a2, bc, brx, bry);
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];

@@ -67,7 +67,7 @@ public class PathConnector extends LocatorConnector {
             pit = pif.getPathIterator(ctx, null);
         }
 
-        Intersection i = Intersections.intersectLinePathIterator(s, e, pit);
+        Intersection i = Intersections.intersectLinePathIterator(s.getX(),s.getY(), e.getX(),e.getY(), pit);
         return i.getLastIntersectionPoint();
     }
 }

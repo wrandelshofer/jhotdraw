@@ -17,8 +17,8 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -73,9 +73,9 @@ public class AnchorOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        Transform tinv = Transforms.concat(f.getWorldToLocal(), view.getViewToWorld());
-        t = Transforms.concat(Transform.translate(0.5, 0.5), t);
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform tinv = FXTransforms.concat(f.getWorldToLocal(), view.getViewToWorld());
+        t = FXTransforms.concat(Transform.translate(0.5, 0.5), t);
         Bounds b = f.getLayoutBounds();
         // FIXME we should perform the grow in view coordinates on the transformed shape
         //            instead of growing in local

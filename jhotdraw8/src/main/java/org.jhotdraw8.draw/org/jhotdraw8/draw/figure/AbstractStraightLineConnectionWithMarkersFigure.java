@@ -15,7 +15,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.Geom;
@@ -138,11 +143,13 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         }
 
         if (startConnector != null && startTarget != null) {
-            final Point2D p = worldToParent(startConnector.chopStart(ctx, this, startTarget, start, end).getPoint());
+            java.awt.geom.Point2D.Double chp = startConnector.chopStart(ctx, this, startTarget, start, end).getPoint();
+            final Point2D p = worldToParent(chp.getX(),chp.getY());
             set(START, new CssPoint2D(p));
         }
         if (endConnector != null && endTarget != null) {
-            final Point2D p = worldToParent(endConnector.chopEnd(ctx, this, endTarget, start, end).getPoint());
+            java.awt.geom.Point2D.Double chp = endConnector.chopEnd(ctx, this, endTarget, start, end).getPoint();
+            final Point2D p = worldToParent(chp.getX(),chp.getY());
             set(END, new CssPoint2D(p));
         }
     }

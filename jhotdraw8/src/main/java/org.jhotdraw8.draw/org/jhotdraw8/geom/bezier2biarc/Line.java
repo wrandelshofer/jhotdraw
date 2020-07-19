@@ -1,6 +1,7 @@
 package org.jhotdraw8.geom.bezier2biarc;
 
-import javafx.geometry.Point2D;
+
+import java.awt.geom.Point2D;
 
 /**
  * Defines a line in point-slope form: y - y1 = m * (x - x1).
@@ -17,7 +18,7 @@ public class Line {
     /**
      * Point.
      */
-    public final Point2D p;
+    public final Point2D.Double p;
 
     /**
      * Define a line by two points.
@@ -25,7 +26,7 @@ public class Line {
      * @param p1 first point
      * @param p2 second point
      */
-    public Line(Point2D p1, Point2D p2) {
+    public Line(Point2D.Double p1, Point2D.Double p2) {
         this(p1, slope(p1, p2));
     }
 
@@ -36,7 +37,7 @@ public class Line {
      * @param p point
      * @param m slope
      */
-    public Line(Point2D p, double m) {
+    public Line(Point2D.Double p, double m) {
         this.p = p;
         this.m = m;
     }
@@ -47,7 +48,7 @@ public class Line {
      * @param l another line
      * @return the intersection point
      */
-    public Point2D Intersection(Line l) {
+    public Point2D.Double Intersection(Line l) {
         if (Double.isNaN(this.m)) {
             return verticalIntersection(this, l);
         } else if (Double.isNaN(l.m)) {
@@ -55,7 +56,7 @@ public class Line {
         } else {
             var x = (this.m * this.p.getX() - l.m * l.p.getX() - this.p.getY() + l.p.getY()) / (this.m - l.m);
             var y = m * x - m * p.getX() + p.getY();
-            return new Point2D(x, y);
+            return new Point2D.Double(x, y);
         }
     }
 
@@ -68,10 +69,10 @@ public class Line {
      * @param l
      * @return
      */
-    private static Point2D verticalIntersection(Line vl, Line l) {
+    private static Point2D.Double verticalIntersection(Line vl, Line l) {
         var x = vl.p.getX();
         var y = l.m * (x - l.p.getX()) + l.p.getY();
-        return new Point2D(x, y);
+        return new Point2D.Double(x, y);
     }
 
     /**
@@ -81,7 +82,7 @@ public class Line {
      * @param P1
      * @return
      */
-    public static Line createPerpendicularAt(Point2D P, Point2D P1) {
+    public static Line createPerpendicularAt(Point2D.Double P, Point2D.Double P1) {
         var m = slope(P, P1);
 
         if (m == 0) {
@@ -93,7 +94,7 @@ public class Line {
         }
     }
 
-    private static double slope(Point2D P1, Point2D P2) {
+    private static double slope(Point2D.Double P1, Point2D.Double P2) {
         if (P2.getX() == P1.getX()) {
             return Double.NaN;
         } else {

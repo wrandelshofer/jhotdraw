@@ -62,9 +62,12 @@ public class LocatorConnector extends AbstractConnector {
         }
 
         Transform localToWorld = target.getLocalToWorld();
+        Point2D targetP = target.localToWorld(location);
+        Point2D t1p = localToWorld == null ? tangent1 : localToWorld.deltaTransform(tangent1);
+        Point2D t2p = localToWorld == null ? tangent2 : localToWorld.deltaTransform(tangent2);
         return new Intersection.IntersectionPoint(
-                target.localToWorld(location),
-                0, localToWorld == null ? tangent1 : localToWorld.deltaTransform(tangent1),
-                0, localToWorld == null ? tangent2 : localToWorld.deltaTransform(tangent2));
+                targetP.getX(),targetP.getY(),
+                0, t1p.getX(),t1p.getY(),
+                0, t2p.getX(),t2p.getY());
     }
 }

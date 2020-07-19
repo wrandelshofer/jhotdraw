@@ -1,6 +1,6 @@
 package org.jhotdraw8.geom.offsetline;
 
-import javafx.geometry.Point2D;
+import java.awt.geom.Point2D;
 
 /**
  * This is a struct.
@@ -16,5 +16,5 @@ public class IntrLineSeg2LineSeg2Result {
     LineSeg2LineSeg2IntrType intrType;
     double t0;
     double t1;
-    Point2D point;
+    Point2D.Double point;
 }

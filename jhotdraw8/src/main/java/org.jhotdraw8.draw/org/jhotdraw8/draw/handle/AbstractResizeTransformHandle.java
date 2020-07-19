@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.function.Function;
 
@@ -151,7 +151,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         pickLocation = p = t == null ? p : t.transform(p);

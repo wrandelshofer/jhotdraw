@@ -1,10 +1,11 @@
 package org.jhotdraw8.geom.offsetline;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points2D;
 
+import java.awt.geom.Point2D;
 import java.util.List;
 
 public class Utils {
@@ -29,7 +30,7 @@ public class Utils {
 
 
     /// Perpendicular dot product. Equivalent to dot(v0, perp(v1)).
-    public static double perpDot(final Point2D v0, final Point2D v1) {
+    public static double perpDot(final Point2D.Double v0, final Point2D.Double v1) {
         return v0.getX() * v1.getY() - v0.getY() * v1.getX();
     }
 
@@ -48,8 +49,8 @@ public class Utils {
     /**
      * Test if a point is within a arc sweep angle region defined by center, start, end, and bulge.
      */
-    static boolean pointWithinArcSweepAngle(final Point2D center, final Point2D arcStart,
-                                            final Point2D arcEnd, double bulge, final Point2D point) {
+    static boolean pointWithinArcSweepAngle(final Point2D.Double center, final Point2D.Double arcStart,
+                                            final Point2D.Double arcEnd, double bulge, final Point2D.Double point) {
         assert Math.abs(bulge) > Utils.realThreshold : "expected arc";
         assert Math.abs(bulge) <= 1.0 : "bulge should always be between -1 and 1";
 
@@ -65,13 +66,13 @@ public class Utils {
      * Returns true if point is left or fuzzy coincident with the line pointing in the direction of the
      * vector (p1 - p0).
      */
-    static boolean isLeftOrCoincident(final Point2D p0, final Point2D p1,
-                                      final Point2D point) {
+    static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
+                                      final Point2D.Double point) {
         return isLeftOrCoincident(p0, p1, point, realThreshold);
     }
 
-    static boolean isLeftOrCoincident(final Point2D p0, final Point2D p1,
-                                      final Point2D point, double epsilon) {
+    static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
+                                      final Point2D.Double point, double epsilon) {
         return (p1.getX() - p0.getX()) * (point.getY() - p0.getY()) - (p1.getY() - p0.getY()) * (point.getX() - p0.getX()) >
                 -epsilon;
     }
@@ -80,13 +81,13 @@ public class Utils {
      * Returns true if point is right or fuzzy coincident with the line pointing in the direction of
      * the vector (p1 - p0).
      */
-    static boolean isRightOrCoincident(final Point2D p0, final Point2D p1,
-                                       final Point2D point) {
+    static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
+                                       final Point2D.Double point) {
         return isRightOrCoincident(p0, p1, point, realThreshold);
     }
 
-    static boolean isRightOrCoincident(final Point2D p0, final Point2D p1,
-                                       final Point2D point, double epsilon) {
+    static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
+                                       final Point2D.Double point, double epsilon) {
         return (p1.getX() - p0.getX()) * (point.getY() - p0.getY()) - (p1.getY() - p0.getY()) * (point.getX() - p0.getX()) <
                 epsilon;
     }
@@ -116,14 +117,14 @@ public class Utils {
     /**
      * Return the point on the segment going from p0 to p1 at parametric value t.
      */
-    public static Point2D pointFromParametric(final Point2D p0, final Point2D p1, double t) {
-        return p0.add(p1.subtract(p0).multiply(t));
+    public static Point2D.Double pointFromParametric(final Point2D.Double p0, final Point2D.Double p1, double t) {
+        return Points2D.add(p0,Points2D.multiply(Points2D.subtract(p1,p0),t));
     }
 
     /**
      * Counter clockwise angle of the vector going from p0 to p1.
      */
-    public static double angle(final Point2D p0, final Point2D p1) {
+    public static double angle(final Point2D.Double p0, final Point2D.Double p1) {
         return Geom.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
     }
 
@@ -153,9 +154,9 @@ public class Utils {
     /**
      * Normalized perpendicular vector to v (rotating counter clockwise).
      */
-    public static Point2D unitPerp(Point2D v) {
-        Point2D result = new Point2D(-v.getY(), v.getX());
-        return result.normalize();
+    public static Point2D.Double unitPerp(Point2D.Double v) {
+        Point2D.Double result = new Point2D.Double(-v.getY(), v.getX());
+        return Points2D.normalize(result);
     }
 
     static <T> int nextWrappingIndex(int index, @NonNull List<T> container) {
@@ -196,23 +197,23 @@ public class Utils {
 
     /// Returns the closest point that lies on the line segment from p0 to p1 to the point given.
 
-    static Point2D closestPointOnLineSeg(Point2D p0, Point2D p1,
-                                         Point2D point) {
+    static Point2D.Double closestPointOnLineSeg(Point2D.Double p0, Point2D.Double p1,
+                                         Point2D.Double point) {
         // Dot product used to find angles
         // See: http://geomalgorithms.com/a02-_lines.html
-        Point2D v = p1.subtract(p0);
-        Point2D w = point.subtract(p0);
-        double c1 = w.dotProduct(v);
+        Point2D.Double v = Points2D.subtract(p1,p0);
+        Point2D.Double w = Points2D.subtract(point,p0);
+        double c1 = Points2D.dotProduct(w,v);
         if (c1 < realThreshold) {
             return p0;
         }
 
-        double c2 = v.dotProduct(v);
+        double c2 = Points2D.dotProduct(v,v);
         if (c2 < c1 + realThreshold) {
             return p1;
         }
 
         double b = c1 / c2;
-        return p0.add(v.multiply(b));
+        return Points2D.add(p0,Points2D.multiply(v,b));
     }
 }

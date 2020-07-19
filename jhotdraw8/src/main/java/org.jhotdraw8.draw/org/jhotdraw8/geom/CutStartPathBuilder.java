@@ -4,8 +4,10 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
+
 import org.jhotdraw8.annotation.NonNull;
+
+import java.awt.geom.Point2D;
 
 /**
  * Clips the start of the path on the specified circle.
@@ -51,7 +53,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
         switch (i.getStatus()) {
             case INTERSECTION:
                 double t = i.getLastT();
-                out.moveTo(i.getLastPoint());
+                out.moveTo(i.getLastPoint().getX(),i.getLastPoint().getY());
                 BezierCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
                 break;
             case NO_INTERSECTION_INSIDE:
@@ -124,7 +126,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
         switch (i.getStatus()) {
             case INTERSECTION:
                 double t = i.getLastT();
-                out.moveTo(i.getLastPoint());
+                out.moveTo(i.getLastPoint().getX(),i.getLastPoint().getY());
                 BezierCurves.splitQuadCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
                 state = State.CUT_DONE;
                 break;

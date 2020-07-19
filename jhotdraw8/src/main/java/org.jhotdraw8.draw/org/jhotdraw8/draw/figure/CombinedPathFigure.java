@@ -19,10 +19,10 @@ import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
@@ -68,7 +68,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         if (localToParent != null) {
-            AffineTransform ltpTx = Transforms.toAWT(localToParent);
+            AffineTransform ltpTx = FXTransforms.toAWT(localToParent);
             if (tx != null) {
                 childTx = (AffineTransform) tx.clone();
                 childTx.concatenate(ltpTx);
@@ -191,7 +191,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         // XXX if one ofCollection the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
-        Transform localTransform = Transforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
+        Transform localTransform = FXTransforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);
         }

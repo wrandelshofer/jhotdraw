@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.util.Resources;
 
 import java.util.Set;
@@ -52,7 +52,7 @@ public class AlignHorizontalAction extends AbstractDrawingViewAction {
         Point2D yPointInWorld = new Point2D(0, yInWorld);
         for (Figure f : figures) {
             if (f != lead && f.isEditable()) {
-                double desiredY = Transforms.transform(f.getWorldToParent(), yPointInWorld).getY();
+                double desiredY = FXTransforms.transform(f.getWorldToParent(), yPointInWorld).getY();
                 Bounds bounds = f.getLayoutBoundsInParent();
                 double actualY = bounds.getMinY() + bounds.getHeight() * 0.5;
                 double dy = desiredY - actualY;

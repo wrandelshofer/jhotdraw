@@ -22,8 +22,8 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import java.util.List;
 
@@ -97,7 +97,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
         if (pointIndex >= list.size()) {
             return;
@@ -105,9 +105,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         BezierNode bn = getBezierNode();
         BezierNode prev = list.get((pointIndex + list.size() - 1) % list.size());
         BezierNode next = list.get((pointIndex + 1) % list.size());
-        Point2D c0 = Transforms.transform(t, bn.getC0());
-        Point2D c1 = Transforms.transform(t, bn.getC1());
-        Point2D c2 = Transforms.transform(t, bn.getC2());
+        Point2D c0 = FXTransforms.transform(t, bn.getC0());
+        Point2D c1 = FXTransforms.transform(t, bn.getC1());
+        Point2D c2 = FXTransforms.transform(t, bn.getC2());
 
         Polyline node = getNode(view);
         List<Double> points = node.getPoints();

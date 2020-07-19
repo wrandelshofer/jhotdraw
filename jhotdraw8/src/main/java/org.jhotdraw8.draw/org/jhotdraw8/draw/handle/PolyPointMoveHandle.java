@@ -26,8 +26,8 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -112,7 +112,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
         if (event.isMetaDown()) {
             // meta snaps the location ofCollection the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = Transforms.transform(owner.getLocalToWorld(), loc);
+            oldPoint = FXTransforms.transform(owner.getLocalToWorld(), loc);
         }
 
         if (oldPoint.equals(newPoint)) {
@@ -162,7 +162,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = owner;
-        Transform t = Transforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);

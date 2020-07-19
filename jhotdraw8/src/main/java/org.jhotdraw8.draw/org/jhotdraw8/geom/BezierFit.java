@@ -90,22 +90,22 @@ public class BezierFit {
                         break;
                     case 1:
                         if (first) {
-                            builder.moveTo(seg.get(0));
+                            builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
                             first = false;
                         } else {
-                            builder.lineTo(seg.get(0));
+                            builder.lineTo(seg.get(0).getX(),seg.get(0).getY());
                         }
                         break;
                     case 2:
                         if (first) {
-                            builder.moveTo(seg.get(0));
+                            builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
                             first = false;
                         }
-                        builder.lineTo(seg.get(1));
+                        builder.lineTo(seg.get(1).getX(),seg.get(1).getY());
                         break;
                     default:
                         if (first) {
-                            builder.moveTo(seg.get(0));
+                            builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
                             first = false;
                         }
                         /*  Unit tangent vectors at endpoints */
@@ -394,9 +394,13 @@ public class BezierFit {
             Point2D bezCurve2 = v2Add(bezCurve3, tHat2 = v2Scale(tHat2, dist));
 
             builder.curveTo(
-                    bezCurve1,
-                    bezCurve2,
-                    bezCurve3);
+                    bezCurve1.getX(),
+                    bezCurve1.getY(),
+                    bezCurve2.getX(),
+                    bezCurve2.getY(),
+                    bezCurve3.getX(),
+                    bezCurve3.getY()
+            );
             return;
         }
 
@@ -453,7 +457,7 @@ public class BezierFit {
      * @param builder
      */
     private static void addCurveTo(@NonNull PathBuilder builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
-        Point2D lastNode = builder.getLastPoint();
+        java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
         if (connectsCorners && Geom.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)
                 && Geom.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {

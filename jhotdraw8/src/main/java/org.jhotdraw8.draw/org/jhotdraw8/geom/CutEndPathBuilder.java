@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.PathIterator;
@@ -42,7 +41,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doPathDone() {
-        Point2D currentPoint = getLastPoint();
+        java.awt.geom.Point2D.Double currentPoint = getLastPoint();
         cx = currentPoint.getX();
         cy = currentPoint.getY();
         double[] seg = new double[6];

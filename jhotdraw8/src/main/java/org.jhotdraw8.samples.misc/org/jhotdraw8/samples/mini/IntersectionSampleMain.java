@@ -16,7 +16,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -24,7 +35,11 @@ import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -533,7 +548,7 @@ public class IntersectionSampleMain extends Application {
             if (isect != null) {
                 double r = 3.5;
                 for (Intersection.IntersectionPoint entry : isect.getIntersections()) {
-                    Point2D p = entry.getPoint();
+                   java.awt.geom. Point2D p = entry.getPoint();
                     System.out.println("  p:" + p);
                     double x = p.getX();
                     double y = p.getY();

@@ -8,7 +8,11 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.transform.*;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -21,14 +25,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.isNaN;
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sqrt;
 
 /**
  * Transforms.
  *
  * @author Werner Randelshofer
  */
-public class Transforms {
+public class FXTransforms {
     /**
      * Immutable identity transform.
      */
@@ -81,7 +89,7 @@ public class Transforms {
         if (!Double.isNaN(scaleX) && !Double.isNaN(scaleY)
                 && !Double.isInfinite(scaleX) && !Double.isInfinite(scaleY)
                 && (scaleX != 1d || scaleY != 1d)) {
-            t = Transforms.concat(t, new Scale(scaleX, scaleY, sx, sy));
+            t = FXTransforms.concat(t, new Scale(scaleX, scaleY, sx, sy));
         }
         return t;
     }
@@ -212,7 +220,7 @@ public class Transforms {
      * @return a rotation matrix
      */
     private static Transform rotateRadians(double theta, double pivotX, double pivotY) {
-        return new PreciseRotate(theta * 180.0 / Math.PI, pivotX, pivotY);
+        return new FXPreciseRotate(theta * 180.0 / Math.PI, pivotX, pivotY);
     }
 
     /**

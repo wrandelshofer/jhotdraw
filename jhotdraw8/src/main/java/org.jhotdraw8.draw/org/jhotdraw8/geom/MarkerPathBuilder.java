@@ -72,8 +72,8 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
         }
         final double x0 = getLastX();
         final double y0 = getLastY();
-        final Transform tx = Transforms.rotate(x0 - x, y0 - y, 0, 0).createConcatenation(new Translate(x, y));
-        Shapes.buildFromPathIterator(out, marker.getPathIterator(Transforms.toAWT(tx)));
+        final Transform tx = FXTransforms.rotate(x0 - x, y0 - y, 0, 0).createConcatenation(new Translate(x, y));
+        Shapes.buildFromPathIterator(out, marker.getPathIterator(FXTransforms.toAWT(tx)));
     }
 
     private void doEndMarker() {
@@ -86,8 +86,8 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
             double y = getLastY();
             double x0 = tangentX;
             double y0 = tangentY;
-            Transform tx = Transforms.rotate(x0 - x, y0 - y, x, y).createConcatenation(new Translate(x, y));
-            Shapes.buildFromPathIterator(out, startMarker.getPathIterator(Transforms.toAWT(tx)));
+            Transform tx = FXTransforms.rotate(x0 - x, y0 - y, x, y).createConcatenation(new Translate(x, y));
+            Shapes.buildFromPathIterator(out, startMarker.getPathIterator(FXTransforms.toAWT(tx)));
         }
     }
 

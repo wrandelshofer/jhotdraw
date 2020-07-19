@@ -5,17 +5,10 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.BoundingBox;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Builder;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-
-import java.util.List;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -28,7 +21,10 @@ import static java.lang.Math.min;
 public class BoundingBoxBuilder extends AbstractPathBuilder
         implements Builder<BoundingBox> {
 
-    private double minx = Double.POSITIVE_INFINITY, miny = Double.POSITIVE_INFINITY, maxx = Double.NEGATIVE_INFINITY, maxy = Double.NEGATIVE_INFINITY;
+    private double minx = Double.POSITIVE_INFINITY,
+            miny = Double.POSITIVE_INFINITY,
+            maxx = Double.NEGATIVE_INFINITY,
+            maxy = Double.NEGATIVE_INFINITY;
 
     @Override
     protected void doClosePath() {
@@ -81,26 +77,8 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
-    @NonNull
-    public Path getPath() {
-        Path p = new Path();
-        addPathElementsTo(p.getElements());
-        return p;
-    }
-
     @Override
     protected void doPathDone() {
         // empty
-    }
-
-    public void addPathElementsTo(@NonNull List<PathElement> elements) {
-        if (Double.isNaN(minx)) {
-            return;
-        }
-        elements.add(new MoveTo(minx, miny));
-        elements.add(new LineTo(maxx, miny));
-        elements.add(new LineTo(maxx, maxy));
-        elements.add(new LineTo(minx, maxy));
-        elements.add(new ClosePath());
     }
 }

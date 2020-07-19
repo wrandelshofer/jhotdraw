@@ -34,8 +34,8 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.Transforms;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -152,7 +152,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(Transforms.createReshapeTransform(getLayoutBounds(), x, y, width, height));
+        reshapeInLocal(FXTransforms.createReshapeTransform(getLayoutBounds(), x, y, width, height));
     }
 
     @Override

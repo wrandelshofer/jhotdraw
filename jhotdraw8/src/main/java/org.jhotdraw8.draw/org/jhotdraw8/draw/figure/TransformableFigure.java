@@ -27,8 +27,8 @@ import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.PreciseRotate;
-import org.jhotdraw8.geom.Transforms;
+import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -179,7 +179,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
             try {
                 t = list.get(list.size() - 1).createInverse();
                 for (int i = list.size() - 2; i >= 0; i--) {
-                    t = Transforms.concat(t, list.get(i).createInverse());
+                    t = FXTransforms.concat(t, list.get(i).createInverse());
                 }
             } catch (NonInvertibleTransformException e) {
                 throw new InternalError(e);
@@ -209,18 +209,18 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(tx, ty);
-                l2p = Transforms.concat(l2p, tt);
+                l2p = FXTransforms.concat(l2p, tt);
             }
             if (r != 0) {
-                Rotate tr = new PreciseRotate(r, center.getX(), center.getY());
-                l2p = Transforms.concat(l2p, tr);
+                Rotate tr = new FXPreciseRotate(r, center.getX(), center.getY());
+                l2p = FXTransforms.concat(l2p, tr);
             }
             if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
                 Scale ts = new Scale(sx, sy, center.getX(), center.getY());
-                l2p = Transforms.concat(l2p, ts);
+                l2p = FXTransforms.concat(l2p, ts);
             }
             if (t != null && !t.isEmpty()) {
-                l2p = Transforms.concat(l2p, getTransform());
+                l2p = FXTransforms.concat(l2p, getTransform());
             }
             if (l2p == null) {
                 l2p = IDENTITY_TRANSFORM;
@@ -295,15 +295,15 @@ public interface TransformableFigure extends TransformCacheableFigure {
             }
             if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
                 Scale ts = new Scale(1.0 / sx, 1.0 / sy, center.getX(), center.getY());
-                p2l = Transforms.concat(p2l, ts);
+                p2l = FXTransforms.concat(p2l, ts);
             }
             if (r != 0) {
-                Rotate tr = new PreciseRotate(-r, center.getX(), center.getY());
-                p2l = Transforms.concat(p2l, tr);
+                Rotate tr = new FXPreciseRotate(-r, center.getX(), center.getY());
+                p2l = FXTransforms.concat(p2l, tr);
             }
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(-tx, -ty);
-                p2l = Transforms.concat(p2l, tt);
+                p2l = FXTransforms.concat(p2l, tt);
             }
             if (p2l == null) {
                 // KEEP IT NULL - muahaha
@@ -325,7 +325,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         } else {
             t = list.get(0);
             for (int i = 1, n = list.size(); i < n; i++) {
-                t = Transforms.concat(t, list.get(i));
+                t = FXTransforms.concat(t, list.get(i));
             }
         }
         return t;
@@ -377,7 +377,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 set(TRANSFORMS, ImmutableLists.of(transform));
             } else {
                 int last = ts.size() - 1;
-                Transform concatenatedWithLast = Transforms.concat(ts.get(last), transform);
+                Transform concatenatedWithLast = FXTransforms.concat(ts.get(last), transform);
                 if (concatenatedWithLast instanceof Affine) {
                     set(TRANSFORMS, ImmutableLists.add(ts, transform));
                 } else {
@@ -422,7 +422,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 }
             }
         } else {
-            reshapeInLocal(Transforms.concat(parentToLocal, transform));
+            reshapeInLocal(FXTransforms.concat(parentToLocal, transform));
         }
     }
 

@@ -4,19 +4,29 @@
  */
 package org.jhotdraw8.geom;
 
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
-import javafx.geometry.*;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * Some geometric utilities.
@@ -583,7 +593,17 @@ public class Geom {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
-
+    /**
+     * Linear interpolation from {@code a} to {@code b} at {@code t}.
+     *
+     * @param a a
+     * @param b b
+     * @param t a value in the range [0, 1]
+     * @return the interpolated value
+     */
+    public static double lerp(double a, double b, double t) {
+        return (b - a) * t + a;
+    }
     /**
      * Gets the bounds of the specified shape.
      *
@@ -1194,19 +1214,24 @@ public class Geom {
                 + r.getHeight());
     }
 
-    public static double squaredDistance(@NonNull Point2D p, @NonNull Point2D q) {
+    public static double distanceSq(@NonNull Point2D p, @NonNull Point2D q) {
+        double Δx = p.getX() - q.getX();
+        double Δy = p.getY() - q.getY();
+        return Δx * Δx + Δy * Δy;
+    }
+    public static double distanceSq(@NonNull java.awt.geom.Point2D p, @NonNull java.awt.geom.Point2D q) {
         double Δx = p.getX() - q.getX();
         double Δy = p.getY() - q.getY();
         return Δx * Δx + Δy * Δy;
     }
 
-    public static double squaredDistance(@NonNull Point2D p, double x, double y) {
+    public static double distanceSq(@NonNull Point2D p, double x, double y) {
         double Δx = p.getX() - x;
         double Δy = p.getY() - y;
         return Δx * Δx + Δy * Δy;
     }
 
-    public static double squaredDistance(double x1, double y1, double x2, double y2) {
+    public static double distanceSq(double x1, double y1, double x2, double y2) {
         double Δx = x1 - x2;
         double Δy = y1 - y2;
         return Δx * Δx + Δy * Δy;
@@ -1282,13 +1307,13 @@ public class Geom {
      * @return the interpolated or extrapolated value
      */
     @NonNull
-    public static Point2D lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
+    public static java.awt.geom.Point2D.Double lerp(@NonNull java.awt.geom.Point2D.Double start, @NonNull java.awt.geom.Point2D.Double end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 
     @NonNull
-    public static Point2D lerp(double x0, double y0, double x1, double y1, double t) {
-        return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
+    public static java.awt.geom.Point2D.Double lerp(double x0, double y0, double x1, double y1, double t) {
+        return new java.awt.geom.Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
     /**
@@ -1353,20 +1378,20 @@ public class Geom {
         return x * x + y * y;
     }
 
-    public static boolean almostEqual(Point2D v1, Point2D v2) {
+    public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2) {
         return almostEqual(v1, v2, REAL_THRESHOLD);
     }
 
-    public static boolean almostZero(Point2D v) {
+    public static boolean almostZero(java.awt.geom.Point2D.Double v) {
         return almostZero(v, REAL_THRESHOLD);
     }
 
-    public static boolean almostZero(Point2D v, double epsilon) {
-        return Geom.squaredMagnitude(v) < epsilon * epsilon;
+    public static boolean almostZero(java.awt.geom.Point2D.Double v, double epsilon) {
+        return Points2D.magnitudeSq(v) < epsilon * epsilon;
     }
 
-    public static boolean almostEqual(Point2D v1, Point2D v2, double epsilon) {
-        return Geom.squaredDistance(v1, v2) < epsilon * epsilon;
+    public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2, double epsilon) {
+        return Geom.distanceSq(v1, v2) < epsilon * epsilon;
     }
 
     public static boolean almostEqual(double x, double y) {

@@ -7,8 +7,13 @@ package org.jhotdraw8.geom;
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.FlatteningPathIterator;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,7 +179,7 @@ public class BezierNodePath implements Shape {
         if (isect.size() == 1) {
             int segment = (int) isect.getFirstT();
             final BezierNode middle;
-            javafx.geometry.Point2D p = isect.getPoints().get(0);
+           Point2D.Double p = isect.getPoints().get(0);
             final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
             BezierNode prev = nodes.get(prevSegment);
             BezierNode next = nodes.get(segment);

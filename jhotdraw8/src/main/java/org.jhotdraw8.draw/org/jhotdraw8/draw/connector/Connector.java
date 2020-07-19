@@ -9,10 +9,12 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Intersection;
 import org.jhotdraw8.geom.Intersections;
-import org.jhotdraw8.geom.Transforms;
+
+import java.awt.geom.Rectangle2D;
 
 /**
  * A <em>connector</em> encapsulates a strategy for locating a connection point
@@ -69,7 +71,7 @@ public interface Connector {
      */
     @NonNull
     default Point2D getPositionInParent(Figure connection, @NonNull Figure target) {
-        return Transforms.transform(target.getLocalToParent(), getPositionInLocal(connection, target));
+        return FXTransforms.transform(target.getLocalToParent(), getPositionInLocal(connection, target));
     }
 
     /**
@@ -81,7 +83,7 @@ public interface Connector {
      * @return A point on the target figure in world coordinates.
      */
     default Point2D getTangentInWorld(Figure connection, @NonNull Figure target) {
-        return Transforms.deltaTransform(target.getLocalToWorld(),
+        return FXTransforms.deltaTransform(target.getLocalToWorld(),
                 getTangentInLocal(connection, target));
     }
 
@@ -94,7 +96,7 @@ public interface Connector {
      * @return A point on the target figure in parent coordinates.
      */
     default Point2D getTangentInParent(Figure connection, @NonNull Figure target) {
-        return Transforms.deltaTransform(target.getLocalToParent(),
+        return FXTransforms.deltaTransform(target.getLocalToParent(),
                 getTangentInLocal(connection, target));
     }
 
@@ -128,8 +130,9 @@ public interface Connector {
      */
     default Intersection.IntersectionPoint chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Intersection.IntersectionPoint ip = intersect(ctx, connection, target, start, end);
-        return ip == null ? new Intersection.IntersectionPoint(start, 0, end.subtract(start), 0, end.subtract(start)) :
-                new Intersection.IntersectionPoint(Geom.lerp(start, end, ip.getT1()), ip.getT1(), ip.getTangent1(), ip.getT2(), ip.getTangent2());
+        Point2D tangent = end.subtract(start);
+        return ip == null ? new Intersection.IntersectionPoint(start.getX(),start.getY(), 0, tangent.getX(),tangent.getY(), 0, tangent.getX(),tangent.getY()) :
+                new Intersection.IntersectionPoint(Geom.lerp(start.getX(),start.getY(), end.getX(),end.getY(), ip.getT1()), ip.getT1(), ip.getTangent1(), ip.getT2(), ip.getTangent2());
     }
 
     /**
@@ -166,7 +169,10 @@ public interface Connector {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getLayoutBounds();
-        Intersection i = Intersections.intersectLineRectangle(s, e, b);
+        Intersection i = Intersections.intersectLineRectangle(
+                new java.awt.geom.Point2D.Double(s.getX(),s.getY()),
+                new java.awt.geom.Point2D.Double(e.getX(),e.getY()),
+                new Rectangle2D.Double(b.getMinX(),b.getMinY(),b.getWidth(),b.getHeight()));
         return i.getLastIntersectionPoint();
     }
 }

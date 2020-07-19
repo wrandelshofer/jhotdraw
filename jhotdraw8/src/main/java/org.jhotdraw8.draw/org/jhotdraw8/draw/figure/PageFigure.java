@@ -38,8 +38,8 @@ import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Transforms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -303,7 +303,7 @@ public class PageFigure extends AbstractCompositeFigure
         double x = pageX + (pageWidth - pageOverlapX) * px;
         double y = pageY + (pageHeight - pageOverlapY) * py;
 
-        return Transforms.concat(new Translate(x, y), new Scale(contentAreaFactor, contentAreaFactor));
+        return FXTransforms.concat(new Translate(x, y), new Scale(contentAreaFactor, contentAreaFactor));
     }
 
     @NonNull
