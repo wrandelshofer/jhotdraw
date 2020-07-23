@@ -7,7 +7,15 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
@@ -353,7 +361,9 @@ public class DoubleArrayList implements Iterable<Double> {
     @NonNull
     public double[] toArray() {
         double[] result = new double[size];
-        System.arraycopy(items, 0, result, 0, size);
+        if (size > 0) {
+            System.arraycopy(items, 0, result, 0, size);
+        }
         return result;
     }
 
@@ -367,7 +377,9 @@ public class DoubleArrayList implements Iterable<Double> {
      * Sorts the items in ascending order.
      */
     public void sort() {
-        Arrays.sort(items, 0, size);
+        if (size > 1) {
+            Arrays.sort(items, 0, size);
+        }
     }
 
     /**

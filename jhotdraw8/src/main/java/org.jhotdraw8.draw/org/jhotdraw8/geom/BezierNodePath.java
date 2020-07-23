@@ -6,6 +6,8 @@ package org.jhotdraw8.geom;
 
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.Intersections;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -165,21 +167,21 @@ public class BezierNodePath implements Shape {
     }
 
     public boolean pathIntersects(double x, double y, double tolerance) {
-        Intersection isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+        IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         return !isect.isEmpty();
     }
 
-    public Intersection pathIntersection(double x, double y, double tolerance) {
-        Intersection isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+    public IntersectionResult pathIntersection(double x, double y, double tolerance) {
+        IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         return isect;
     }
 
     public boolean split(double x, double y, double tolerance) {
-        Intersection isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+        IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         if (isect.size() == 1) {
             int segment = (int) isect.getFirstT();
             final BezierNode middle;
-           Point2D.Double p = isect.getPoints().get(0);
+            Point2D.Double p = isect.getPoints().get(0);
             final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
             BezierNode prev = nodes.get(prevSegment);
             BezierNode next = nodes.get(segment);

@@ -2,16 +2,24 @@
  * @(#)Polynomial.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.isect;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.geom.Geom;
 
-import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.cbrt;
+import static java.lang.Math.ceil;
+import static java.lang.Math.cos;
+import static java.lang.Math.log;
+import static java.lang.Math.max;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 public class Polynomial implements ToDoubleFunction<Double> {
 
@@ -66,7 +74,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *                              sorted from lowest do highest degree.
      * @param coefs                 will be referenced
      */
-    Polynomial(boolean highestToLowestDegree, @NonNull double... coefs) {
+    public Polynomial(boolean highestToLowestDegree, @NonNull double... coefs) {
         if (highestToLowestDegree) {
             this.coefs = new double[coefs.length];
             for (int i = 0; i < coefs.length; i++) {
@@ -500,8 +508,8 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @return a list of roots
      */
     @NonNull
-    public double[] getRootsInInterval(double min, double max) {
-        double[] roots = new double[getDegree()];
+    public DoubleArrayList getRootsInInterval(double min, double max) {
+        DoubleArrayList roots = new DoubleArrayList(getDegree());
         int numRoots = 0;
 
         switch (this.simplifiedDegree()) {
@@ -515,24 +523,24 @@ public class Polynomial implements ToDoubleFunction<Double> {
             for (int i = 0; i < allroots.length; i++) {
                 double root = allroots[i];
                 if (min <= root && root <= max) {
-                    roots[numRoots++] = root;
+                    roots.add(root);
                 }
-                Arrays.sort(roots, 0, numRoots);
             }
             break;
         }
         default: {
             // get roots of derivative
             Polynomial deriv = this.getDerivative();
-            double[] droots = deriv.getRootsInInterval(min, max);
+            DoubleArrayList droots = deriv.getRootsInInterval(min, max);
 
             roots = getRootsInInterval(this, droots, min, max);
-            numRoots = roots.length;
+            numRoots = roots.size();
             break;
         }
         }
 
-        return trim(numRoots, roots);
+        roots.sort();
+        return roots;
     }
 
     /**
@@ -546,39 +554,39 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @return a list of roots. The list if empty, if no roots have been found
      */
     @NonNull
-    public static double[] getRootsInInterval(@NonNull ToDoubleFunction<Double> func, @NonNull double[] droots, double min, double max) {
-        final double[] roots = new double[droots.length + 1];
+    public static DoubleArrayList getRootsInInterval(@NonNull ToDoubleFunction<Double> func, @NonNull DoubleArrayList droots, double min, double max) {
+        final DoubleArrayList roots = new DoubleArrayList(droots.size());
         int numRoots = 0;
 
-        if (droots.length > 0) {
+        if (droots.size() > 0) {
             // find root on [min, droots[0]]
-            Double root = bisection(func, min, droots[0]);
+            Double root = bisection(func, min, droots.get(0));
             if (root != null) {
-                roots[numRoots++] = root;
+                roots.add(root);
             }
 
             // find root on [droots[i],droots[i+1]] for 0 <= i <= count-2
-            for (int i = 0; i <= droots.length - 2; i++) {
-                root = bisection(func, droots[i], droots[i + 1]);
+            for (int i = 0; i <= droots.size() - 2; i++) {
+                root = bisection(func, droots.get(i), droots.get(i + 1));
                 if (root != null) {
-                    roots[numRoots++] = root;
+                    roots.add(root);
                 }
             }
 
             // find root on [droots[count-1],xmax]
-            root = bisection(func, droots[droots.length - 1], max);
+            root = bisection(func, droots.get(droots.size() - 1), max);
             if (root != null) {
-                roots[numRoots++] = root;
+                roots.add(root);
             }
         } else {
             // polynomial is monotone on [min,max], has at most one root
             Double root = bisection(func, min, max);
             if (root != null) {
-                roots[numRoots++] = root;
+                roots.add(root);
             }
         }
 
-        return trim(numRoots, roots);
+        return roots;
     }
 
     /**

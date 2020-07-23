@@ -24,8 +24,8 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.bezier2biarc.Bezier2BiArc;
-import org.jhotdraw8.geom.bezier2biarc.BiArc;
+import org.jhotdraw8.geom.biarc.Bezier2BiArc;
+import org.jhotdraw8.geom.biarc.BiArc;
 
 import java.awt.geom.CubicCurve2D;
 import java.util.List;

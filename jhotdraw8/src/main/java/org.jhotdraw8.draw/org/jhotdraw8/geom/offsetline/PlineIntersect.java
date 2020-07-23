@@ -4,7 +4,7 @@ package org.jhotdraw8.geom.offsetline;
 import java.awt.geom.Point2D;
 
 /**
- * Represents a non-coincident polyline intersect.
+ * Represents a non-coincident poly-arc-line intersect.
  */
 public class PlineIntersect {
     /**

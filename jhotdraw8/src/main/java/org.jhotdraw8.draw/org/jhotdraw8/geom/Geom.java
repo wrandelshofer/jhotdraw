@@ -1113,14 +1113,26 @@ public class Geom {
     }
 
     /**
-     * Gets a unit vector which is perpendicular to the given tangent vector.
+     * Gets the perpendicular vector to the given vector.
      *
-     * @param tangent tangent vector
-     * @return the perpendicular vector of length {@code 1}
+     * @param vector a vector
+     * @return the perpendicular vector
      */
     @NonNull
-    public static Point2D perp(@NonNull Point2D tangent) {
-        return new Point2D(tangent.getY(), -tangent.getX());
+    public static Point2D perp(@NonNull Point2D vector) {
+        return new Point2D(vector.getY(), -vector.getX());
+    }
+
+    /**
+     * Gets the perpendicular vector to the given vector.
+     *
+     * @param x the x value of the vector
+     * @param y the x value of the vector
+     * @return the perpendicular vector
+     */
+    @NonNull
+    public static java.awt.geom.Point2D.Double perp(double x, double y) {
+        return new java.awt.geom.Point2D.Double(y, -x);
     }
 
     /**
@@ -1394,20 +1406,20 @@ public class Geom {
         return Geom.distanceSq(v1, v2) < epsilon * epsilon;
     }
 
-    public static boolean almostEqual(double x, double y) {
-        return almostEqual(x, y, REAL_THRESHOLD);
+    public static boolean almostEqual(double a, double b) {
+        return almostEqual(a, b, REAL_THRESHOLD);
     }
 
-    public static boolean almostEqual(double x, double y, double epsilon) {
-        return Math.abs(x - y) < epsilon;
+    public static boolean almostEqual(double a, double b, double epsilon) {
+        return Math.abs(a - b) < epsilon;
     }
 
 
-    public static boolean almostZero(double x) {
-        return almostZero(x, REAL_THRESHOLD);
+    public static boolean almostZero(double a) {
+        return almostZero(a, REAL_THRESHOLD);
     }
 
-    public static boolean almostZero(double x, double epsilon) {
-        return Math.abs(x) < epsilon;
+    public static boolean almostZero(double a, double epsilon) {
+        return Math.abs(a) < epsilon;
     }
 }

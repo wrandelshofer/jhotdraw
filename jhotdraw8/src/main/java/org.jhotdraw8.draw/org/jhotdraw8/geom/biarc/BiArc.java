@@ -1,4 +1,4 @@
-package org.jhotdraw8.geom.bezier2biarc;
+package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;

@@ -2,9 +2,10 @@
  * Copyright (c) 2017 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.isect;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.DoubleArrayList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -72,12 +73,12 @@ public class PolynomialTest {
         System.out.println("getRootsInInterval");
         System.out.println(instance);
         Arrays.sort(expected);
-        double[] actual = instance.getRootsInInterval(from, to);
-        Arrays.sort(actual);
+        DoubleArrayList actual = instance.getRootsInInterval(from, to);
+        actual.sort();
         System.out.println("  expected: " + Arrays.toString(expected));
-        System.out.println("  actual    : " + Arrays.toString(actual));
+        System.out.println("  actual    : " + Arrays.toString(actual.toArray()));
         for (int i = 0; i < expected.length; i++) {
-            assertEquals(actual[i], expected[i], 1e-6, "root #" + i);
+            assertEquals(actual.get(i), expected[i], 1e-6, "root #" + i);
         }
     }
 

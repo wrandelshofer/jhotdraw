@@ -2,7 +2,7 @@
  * Copyright (c) 2017 The authors and contributors of JHotDraw.
  * You may only use this file in compliance with the accompanying license terms.
  */
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.isect;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
@@ -37,7 +37,28 @@ public class IntersectionsTest {
 
     @NonNull
     @TestFactory
-    public List<DynamicTest> testLinieEllipseFactory() {
+    public List<DynamicTest> testCircleCircleFactory() {
+        return Arrays.asList(
+                dynamicTest("2 intersections", () -> testIntersectCircleCircle_5args(
+                        100, 100, 100, 150, 100, 100, IntersectionResult.Status.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
+                dynamicTest("coincident", () -> testIntersectCircleCircle_5args(
+                        100, 100, 100, 100, 100, 100, IntersectionResult.Status.NO_INTERSECTION_COINCIDENT, new double[]{})),
+                dynamicTest("1 intersection", () -> testIntersectCircleCircle_5args(
+                        100, 100, 100, 300, 100, 100, IntersectionResult.Status.INTERSECTION, new double[]{0.0})),
+                dynamicTest("0 intersections shapes are separate from each other", () -> testIntersectCircleCircle_5args(
+                        100, 100, 100, 400, 100, 100, IntersectionResult.Status.NO_INTERSECTION_OUTSIDE, new double[]{})),
+                dynamicTest("0 intersections shape1 inside the other with different centers", () -> testIntersectCircleCircle_5args(
+                        100, 100, 10, 130, 100, 100, IntersectionResult.Status.NO_INTERSECTION_INSIDE, new double[]{})),
+                dynamicTest("0 intersections shape1 outside the other with same center", () -> testIntersectCircleCircle_5args(
+                        100, 100, 100, 100, 100, 10, IntersectionResult.Status.NO_INTERSECTION_OUTSIDE, new double[]{})),
+                dynamicTest("0 intersections shape1 inside the other at same center", () -> testIntersectCircleCircle_5args(
+                        100, 100, 10, 100, 100, 100, IntersectionResult.Status.NO_INTERSECTION_INSIDE, new double[]{}))
+        );
+    }
+
+    @NonNull
+    @TestFactory
+    public List<DynamicTest> testLineEllipseFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectLineEllipse_5args(
                         new Line(10, 40, 200, 40), new Ellipse(100, 100, 60, 60), new double[]{0.47368421052631576})),
@@ -67,7 +88,7 @@ public class IntersectionsTest {
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
         System.out.println("line->bezier2");
-        Intersection isec = Intersections.intersectLineQuadraticCurve(a1, a2, b1, b2, b3);
+        IntersectionResult isec = Intersections.intersectLineQuadraticCurve(a1, a2, b1, b2, b3);
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
@@ -79,9 +100,21 @@ public class IntersectionsTest {
         }
     }
 
-    /**
-     * Test of intersectLineBezier2 method, of class Intersection.
-     */
+    public static void testIntersectCircleCircle_5args(double c1x, double c1y, double r1, double c2x, double c2y, double r2,
+                                                       @NonNull IntersectionResult.Status expectedStatus, @NonNull double[] expected) {
+        System.out.println("intersectCircleCircle");
+        IntersectionResult isect = Intersections.intersectCircleCircle(c1x, c1y, r1, c2x, c2y, r2);
+        IntersectionResult.Status actualStatus = isect.getStatus();
+
+        assertEquals(expectedStatus, actualStatus);
+        List<IntersectionPoint> points = isect.getIntersections();
+        assertEquals(expected.length, points.size());
+        for (int i = 0; i < points.size(); i++) {
+            assertEquals(expected[i], points.get(i).getT1(), 1e-6);
+        }
+
+    }
+
     public static void testIntersectLineEllipse_5args(@NonNull Line a, @NonNull Ellipse b, @NonNull double[] expected) {
         System.out.println("intersectLineEllipse");
         Point2D bc = new Point2D.Double(b.getCenterX(), b.getCenterX());
@@ -89,7 +122,7 @@ public class IntersectionsTest {
         double bry = b.getRadiusY();
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
-        Intersection isec = Intersections.intersectLineEllipse(a1, a2, bc, brx, bry);
+        IntersectionResult isec = Intersections.intersectLineEllipse(a1, a2, bc, brx, bry);
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
@@ -109,7 +142,7 @@ public class IntersectionsTest {
         System.out.println("bezier3->point");
         System.out.println("a:" + a);
         System.out.println("b:" + b);
-        Intersection isec = Intersections.intersectCubicCurvePoint(
+        IntersectionResult isec = Intersections.intersectCubicCurvePoint(
                 a.getStartX(), a.getStartY(), a.getControlX1(), a.getControlY1(),
                 a.getControlX2(), a.getControlY2(), a.getEndX(), a.getEndY(),
                 b.getCenterX(), b.getCenterY(), b.getRadius());
@@ -139,7 +172,7 @@ public class IntersectionsTest {
      * Test of intersectLineBezier2 method, of class Intersection.
      */
     public static void testIntersectLineLine(@NonNull Line a, @NonNull Line b, @NonNull double[] expected) {
-        Intersection isec = Intersections.intersectLineLine(a.getStartX(), a.getStartY(),
+        IntersectionResult isec = Intersections.intersectLineLine(a.getStartX(), a.getStartY(),
                 a.getEndX(), a.getEndY(),
                 b.getStartX(), b.getStartY(), b.getEndX(), b.getEndY());
         double[] actual = new double[isec.size()];

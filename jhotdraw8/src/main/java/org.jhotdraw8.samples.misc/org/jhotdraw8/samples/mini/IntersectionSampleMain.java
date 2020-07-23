@@ -32,8 +32,9 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Intersection;
-import org.jhotdraw8.geom.Intersections;
+import org.jhotdraw8.geom.isect.IntersectionPoint;
+import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.Intersections;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -365,7 +366,7 @@ public class IntersectionSampleMain extends Application {
             Shape shape1 = entry1.getKey();
             print(shape0, "0");
             print(shape1, "1");
-            Intersection isect = null;
+            IntersectionResult isect = null;
 
             if (shape0.getClass() == Circle.class && shape1.getClass() == Circle.class) {
                 Circle l0 = (Circle) shape0;
@@ -457,6 +458,11 @@ public class IntersectionSampleMain extends Application {
                 Ellipse e1 = (Ellipse) shape1;
                 isect = Intersections.intersectEllipseEllipse(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         e1.getCenterX(), e1.getCenterY(), e1.getRadiusX(), e1.getRadiusY());
+            } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Rectangle.class) {
+                Ellipse e0 = (Ellipse) shape0;
+                Rectangle e1 = (Rectangle) shape1;
+                isect = Intersections.intersectEllipseRectangle(new java.awt.geom.Point2D.Double(e0.getCenterX(), e0.getCenterY()), e0.getRadiusX(), e0.getRadiusY(),
+                        new java.awt.geom.Point2D.Double(e1.getX(), e1.getY()), new java.awt.geom.Point2D.Double(e1.getX() + e1.getWidth(), e1.getY() + e1.getHeight()));
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Line.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 Line l1 = (Line) shape1;
@@ -547,8 +553,8 @@ public class IntersectionSampleMain extends Application {
 
             if (isect != null) {
                 double r = 3.5;
-                for (Intersection.IntersectionPoint entry : isect.getIntersections()) {
-                   java.awt.geom. Point2D p = entry.getPoint();
+                for (IntersectionPoint entry : isect.getIntersections()) {
+                    java.awt.geom.Point2D p = entry.getPoint();
                     System.out.println("  p:" + p);
                     double x = p.getX();
                     double y = p.getY();

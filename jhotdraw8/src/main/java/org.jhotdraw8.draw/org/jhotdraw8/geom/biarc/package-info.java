@@ -11,4 +11,4 @@
  *          Copyright © 2017 MIT License.
  *     <a href="https://github.com/domoszlai/bezier2biarc">github</a></li>
  */
-package org.jhotdraw8.geom.bezier2biarc;
+package org.jhotdraw8.geom.biarc;

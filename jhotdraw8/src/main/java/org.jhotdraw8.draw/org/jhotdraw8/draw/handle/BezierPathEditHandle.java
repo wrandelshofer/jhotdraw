@@ -17,7 +17,8 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
-import org.jhotdraw8.geom.Intersection;
+import org.jhotdraw8.geom.isect.IntersectionPoint;
+import org.jhotdraw8.geom.isect.IntersectionResult;
 
 public class BezierPathEditHandle extends PathIterableOutlineHandle {
     final private MapAccessor<ImmutableList<BezierNode>> pointKey;
@@ -41,9 +42,9 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
         addPoint.setOnAction(actionEvent -> {
             BezierNodePath path = new BezierNodePath(owner.get(pointKey));
             Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
-            Intersection intersection = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), 10.0);// / view.getZoomFactor());// FIXME tolerance not
-            if (!intersection.isEmpty()) {
-                Intersection.IntersectionPoint intersectionPoint = intersection.getIntersections().get(0);
+            IntersectionResult intersectionResult = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), 10.0);// / view.getZoomFactor());// FIXME tolerance not
+            if (!intersectionResult.isEmpty()) {
+                IntersectionPoint intersectionPoint = intersectionResult.getIntersections().get(0);
                 int segment = intersectionPoint.getSegment1();
                 path.getNodes().add(segment, new BezierNode(
                         pointInLocal));
