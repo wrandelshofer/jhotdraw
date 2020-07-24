@@ -10,6 +10,7 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.DoubleArrayList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -40,19 +41,19 @@ public class IntersectionsTest {
     public List<DynamicTest> testCircleCircleFactory() {
         return Arrays.asList(
                 dynamicTest("2 intersections", () -> testIntersectCircleCircle_5args(
-                        100, 100, 100, 150, 100, 100, IntersectionResult.Status.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
+                        100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
                 dynamicTest("coincident", () -> testIntersectCircleCircle_5args(
-                        100, 100, 100, 100, 100, 100, IntersectionResult.Status.NO_INTERSECTION_COINCIDENT, new double[]{})),
+                        100, 100, 100, 100, 100, 100, IntersectionStatus.NO_INTERSECTION_COINCIDENT, new double[]{})),
                 dynamicTest("1 intersection", () -> testIntersectCircleCircle_5args(
-                        100, 100, 100, 300, 100, 100, IntersectionResult.Status.INTERSECTION, new double[]{0.0})),
+                        100, 100, 100, 300, 100, 100, IntersectionStatus.INTERSECTION, new double[]{0.0})),
                 dynamicTest("0 intersections shapes are separate from each other", () -> testIntersectCircleCircle_5args(
-                        100, 100, 100, 400, 100, 100, IntersectionResult.Status.NO_INTERSECTION_OUTSIDE, new double[]{})),
+                        100, 100, 100, 400, 100, 100, IntersectionStatus.NO_INTERSECTION_OUTSIDE, new double[]{})),
                 dynamicTest("0 intersections shape1 inside the other with different centers", () -> testIntersectCircleCircle_5args(
-                        100, 100, 10, 130, 100, 100, IntersectionResult.Status.NO_INTERSECTION_INSIDE, new double[]{})),
+                        100, 100, 10, 130, 100, 100, IntersectionStatus.NO_INTERSECTION_INSIDE, new double[]{})),
                 dynamicTest("0 intersections shape1 outside the other with same center", () -> testIntersectCircleCircle_5args(
-                        100, 100, 100, 100, 100, 10, IntersectionResult.Status.NO_INTERSECTION_OUTSIDE, new double[]{})),
+                        100, 100, 100, 100, 100, 10, IntersectionStatus.NO_INTERSECTION_OUTSIDE, new double[]{})),
                 dynamicTest("0 intersections shape1 inside the other at same center", () -> testIntersectCircleCircle_5args(
-                        100, 100, 10, 100, 100, 100, IntersectionResult.Status.NO_INTERSECTION_INSIDE, new double[]{}))
+                        100, 100, 10, 100, 100, 100, IntersectionStatus.NO_INTERSECTION_INSIDE, new double[]{}))
         );
     }
 
@@ -92,7 +93,7 @@ public class IntersectionsTest {
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getTs().get(i);
+            actual[i] = isec.getAllParametersA().get(i);
         }
         Arrays.sort(actual);
         for (int i = 0; i < expected.length; i++) {
@@ -101,16 +102,16 @@ public class IntersectionsTest {
     }
 
     public static void testIntersectCircleCircle_5args(double c1x, double c1y, double r1, double c2x, double c2y, double r2,
-                                                       @NonNull IntersectionResult.Status expectedStatus, @NonNull double[] expected) {
+                                                       @NonNull IntersectionStatus expectedStatus, @NonNull double[] expected) {
         System.out.println("intersectCircleCircle");
         IntersectionResult isect = Intersections.intersectCircleCircle(c1x, c1y, r1, c2x, c2y, r2);
-        IntersectionResult.Status actualStatus = isect.getStatus();
+        IntersectionStatus actualStatus = isect.getStatus();
 
         assertEquals(expectedStatus, actualStatus);
         List<IntersectionPoint> points = isect.getIntersections();
         assertEquals(expected.length, points.size());
         for (int i = 0; i < points.size(); i++) {
-            assertEquals(expected[i], points.get(i).getT1(), 1e-6);
+            assertEquals(expected[i], points.get(i).getParameterA(), 1e-6);
         }
 
     }
@@ -126,7 +127,7 @@ public class IntersectionsTest {
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getTs().get(i);
+            actual[i] = isec.getAllParametersA().get(i);
         }
         Arrays.sort(actual);
         for (int i = 0; i < expected.length; i++) {
@@ -148,7 +149,7 @@ public class IntersectionsTest {
                 b.getCenterX(), b.getCenterY(), b.getRadius());
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getTs().get(i);
+            actual[i] = isec.getAllParametersA().get(i);
         }
         Arrays.sort(actual);
         Arrays.sort(expected);
@@ -163,28 +164,84 @@ public class IntersectionsTest {
     @TestFactory
     public List<DynamicTest> testIntersectLineLine() {
         return Arrays.asList(
-                dynamicTest("1", () -> testIntersectLineLine(new Line(0, 0.0, 10.0, 0), new Line(5.0, -5.0, 5.0, 5.0), new double[]{0.5})),
-                dynamicTest("2", () -> testIntersectLineLine(new Line(0, 0.0, 10.0, 0), new Line(50.0, -5.0, 5.0, 50.0), new double[]{}))
+                dynamicTest("intersection", () -> testIntersectLineLine(
+                        new Line(0, 0.0, 10.0, 0),
+                        new Line(5.0, -5.0, 5.0, 5.0),
+                        IntersectionStatus.INTERSECTION, new double[]{0.5}, new double[]{0.5})),
+                dynamicTest("coincident horizontal", () -> testIntersectLineLine(
+                        new Line(0, 0.0, 10.0, 0),
+                        new Line(2.0, 0.0, 12.0, 0),
+                        IntersectionStatus.NO_INTERSECTION_COINCIDENT,
+                        new double[]{0.2, 1.0}, new double[]{0.0, 0.8})),
+                dynamicTest("point after line", () -> testIntersectLineLine(
+                        new Line(15.0, 0.0, 15.0, 0),
+                        new Line(0.0, 0.0, 10.0, 0),
+                        IntersectionStatus.NO_INTERSECTION_PARALLEL,
+                        new double[]{}, new double[]{})),
+                dynamicTest("point away from line", () -> testIntersectLineLine(
+                        new Line(5.0, 5.0, 5.0, 5.0),
+                        new Line(0.0, 0.0, 10.0, 0),
+                        IntersectionStatus.NO_INTERSECTION_PARALLEL,
+                        new double[]{}, new double[]{})),
+                dynamicTest("point on line", () -> testIntersectLineLine(
+                        new Line(5.0, 0.0, 5.0, 0),
+                        new Line(0.0, 0.0, 10.0, 0),
+                        IntersectionStatus.INTERSECTION,
+                        new double[]{0}, new double[]{0.5})),
+                dynamicTest("line on point", () -> testIntersectLineLine(
+                        new Line(0.0, 0.0, 10.0, 0),
+                        new Line(5.0, 0.0, 5.0, 0),
+                        IntersectionStatus.INTERSECTION,
+                        new double[]{0.5}, new double[]{0.0})),
+                dynamicTest("coincident diagonal opposite direction test case", () -> testIntersectLineLine(
+                        new Line(214.94974746830584, 94.94974746830583, 209.8994949366117, 100.0),
+                        new Line(194.94974746830584, 114.94974746830583, 214.94974746830584, 94.94974746830583),
+                        IntersectionStatus.NO_INTERSECTION_COINCIDENT,
+                        new double[]{-0.0, 1.0}, new double[]{1.0, 0.7474873734152923})),
+                dynamicTest("coincident diagonal opposite direction", () -> testIntersectLineLine(
+                        new Line(100, 50, 50, 100.0),
+                        new Line(0, 150, 150, 0),
+                        IntersectionStatus.NO_INTERSECTION_COINCIDENT,
+                        new double[]{0.0, 1.0}, new double[]{0.6666666666666666, 0.3333333333333333})),
+                dynamicTest("parallel on same line", () -> testIntersectLineLine(
+                        new Line(0, 0.0, 10.0, 0),
+                        new Line(12.0, 0, 22.0, 0),
+                        IntersectionStatus.NO_INTERSECTION_PARALLEL,
+                        new double[]{}, new double[]{})),
+                dynamicTest("parallel on different lines", () -> testIntersectLineLine(
+                        new Line(0, 0.0, 10.0, 0),
+                        new Line(0, 10, 10.0, 10),
+                        IntersectionStatus.NO_INTERSECTION_PARALLEL,
+                        new double[]{}, new double[]{})),
+                dynamicTest("coincident diagonal", () -> testIntersectLineLine(
+                        new Line(0, 0.0, 10.0, 10.0),
+                        new Line(2.0, 2.0, 12.0, 12.0),
+                        IntersectionStatus.NO_INTERSECTION_COINCIDENT,
+                        new double[]{0.2, 1.0}, new double[]{0.0, 0.8}))
         );
     }
 
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectLineLine(@NonNull Line a, @NonNull Line b, @NonNull double[] expected) {
+    public static void testIntersectLineLine(@NonNull Line a, @NonNull Line b, @NonNull IntersectionStatus expectedStatus,
+                                             double[] expectedParamsA, double[] expectedParamsB) {
         IntersectionResult isec = Intersections.intersectLineLine(a.getStartX(), a.getStartY(),
                 a.getEndX(), a.getEndY(),
                 b.getStartX(), b.getStartY(), b.getEndX(), b.getEndY());
-        double[] actual = new double[isec.size()];
-        for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getTs().get(i);
-        }
-        Arrays.sort(actual);
-        Arrays.sort(expected);
-        System.out.println("  expected: " + Arrays.toString(expected));
-        System.out.println("  actual: " + Arrays.toString(actual));
-        for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i], actual[i], 1e-6, "root #" + i);
-        }
+
+        DoubleArrayList actualA = isec.getAllParametersA();
+        DoubleArrayList expectedA = DoubleArrayList.of(expectedParamsA);
+        System.out.println("  expected A: " + expectedA);
+        System.out.println("  actual A: " + actualA);
+        assertEquals(expectedA, actualA);
+
+        DoubleArrayList actualB = isec.getAllParametersB();
+        DoubleArrayList expectedB = DoubleArrayList.of(expectedParamsB);
+        System.out.println("  expected B: " + expectedB);
+        System.out.println("  actual B: " + actualB);
+        assertEquals(expectedB, actualB);
+
+        assertEquals(expectedStatus, isec.getStatus());
     }
 }

@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionStatus;
 import org.jhotdraw8.geom.isect.Intersections;
 
 import java.awt.geom.PathIterator;
@@ -56,12 +57,12 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                 break;
             case PathIterator.SEG_CUBICTO: {
                 IntersectionResult isect = Intersections.intersectCubicCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
-                if (isect.getStatus() == IntersectionResult.Status.NO_INTERSECTION_INSIDE) {
+                if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
                     // break Loop;
                 } else if (isect.isEmpty()) {
                     out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
                 } else {
-                    BezierCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastT(),
+                    BezierCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLastParameterA(),
                             out::curveTo, null);
                     //  break Loop;
                 }
@@ -71,12 +72,12 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
             }
             case PathIterator.SEG_LINETO: {
                 IntersectionResult isect = Intersections.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
-                if (isect.getStatus() == IntersectionResult.Status.NO_INTERSECTION_INSIDE) {
+                if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
                     //         break Loop;
                 } else if (isect.isEmpty()) {
                     out.lineTo(seg[0], seg[1]);
                 } else {
-                    Geom.splitLine(x, y, seg[0], seg[1], isect.getLastT(),
+                    Geom.splitLine(x, y, seg[0], seg[1], isect.getLastParameterA(),
                             out::lineTo, null);
                     //   break Loop;
                 }
@@ -92,12 +93,12 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
             }
             case PathIterator.SEG_QUADTO: {
                 IntersectionResult isect = Intersections.intersectQuadraticCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
-                if (isect.getStatus() == IntersectionResult.Status.NO_INTERSECTION_INSIDE) {
+                if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
                     //               break Loop;
                 } else if (isect.isEmpty()) {
                     out.quadTo(seg[0], seg[1], seg[2], seg[3]);
                 } else {
-                    BezierCurves.splitQuadCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastT(),
+                    BezierCurves.splitQuadCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLastParameterA(),
                             out::quadTo, null);
                     //   break Loop;
                 }

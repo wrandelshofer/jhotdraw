@@ -133,7 +133,7 @@ public interface Connector {
         IntersectionPoint ip = intersect(ctx, connection, target, start, end);
         Point2D tangent = end.subtract(start);
         return ip == null ? new IntersectionPoint(start.getX(), start.getY(), 0, tangent.getX(), tangent.getY(), 0, tangent.getX(), tangent.getY()) :
-                new IntersectionPoint(Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getT1()), ip.getT1(), ip.getTangent1(), ip.getT2(), ip.getTangent2());
+                new IntersectionPoint(Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getParameterA()), ip.getParameterA(), ip.getTangentA(), ip.getParameterB(), ip.getTangentB());
     }
 
     /**

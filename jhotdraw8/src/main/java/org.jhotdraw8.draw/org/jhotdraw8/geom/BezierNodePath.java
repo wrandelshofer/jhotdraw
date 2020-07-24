@@ -179,13 +179,13 @@ public class BezierNodePath implements Shape {
     public boolean split(double x, double y, double tolerance) {
         IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         if (isect.size() == 1) {
-            int segment = (int) isect.getFirstT();
+            int segment = (int) isect.getFirstParameterA();
             final BezierNode middle;
             Point2D.Double p = isect.getPoints().get(0);
             final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
             BezierNode prev = nodes.get(prevSegment);
             BezierNode next = nodes.get(segment);
-            double t = isect.getFirstT() - segment;
+            double t = isect.getFirstParameterA() - segment;
             boolean pc2 = prev.isC2();
             boolean nc1 = next.isC1();
             if (pc2) {

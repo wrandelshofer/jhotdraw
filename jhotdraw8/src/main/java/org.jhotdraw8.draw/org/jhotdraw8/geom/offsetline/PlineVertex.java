@@ -6,6 +6,7 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.isect.IntersectionResult;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 
@@ -261,13 +262,13 @@ public class PlineVertex implements Cloneable {
 
         if (pointWithinArcSweepAngle(arc.center, v1.pos(), v2.pos(), v1.bulge(), point)) {
             // closest point is on the arc
-            Point2D.Double vToPoint = Points2D.normalize(Points2D.subtract(point,arc.center));
-            return Points2D.add(Points2D.multiply(vToPoint,arc.radius),arc.center);
+            Point2D.Double vToPoint = Points2D.normalize(Points2D.subtract(point, arc.center));
+            return Points2D.add(Points2D.multiply(vToPoint, arc.radius), arc.center);
         }
 
         // else closest point is one of the ends
-        double dist1 = Geom.distanceSq(v1.pos(), point);
-        double dist2 = Geom.distanceSq(v2.pos(), point);
+        double dist1 = v1.pos().distanceSq(point);
+        double dist2 = v2.pos().distanceSq(point);
         if (dist1 < dist2) {
             return v1.pos();
         }
@@ -286,7 +287,7 @@ public class PlineVertex implements Cloneable {
                 processLineArcIntr = /*[&result]*/(Point2D.Double p0, Point2D.Double p1,
                                                    PlineVertex a1, PlineVertex a2) -> {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
-            IntrLineSeg2Circle2Result intrResult = Intersections.intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
+            IntrLineSeg2Circle2Result intrResult = ContourIntersections.intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
             Function<Double, OrderedPair<Boolean, Point2D.Double>> pointInSweep = (Double t) -> {
@@ -332,24 +333,24 @@ public class PlineVertex implements Cloneable {
         };
 
         if (vIsLine && uIsLine) {
-            IntrLineSeg2LineSeg2Result intrResult = Intersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
-            switch (intrResult.intrType) {
-                case None:
-                    result.intrType = PlineSegIntrType.NoIntersect;
-                    break;
-                case True:
-                    result.intrType = PlineSegIntrType.OneIntersect;
-                    result.point1 = intrResult.point;
-                    break;
-                case Coincident:
-                    result.intrType = PlineSegIntrType.SegmentOverlap;
-                    // build points from parametric parameters (using second segment as defined by the function)
-                    result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
-                    result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
-                    break;
-                case False:
-                    result.intrType = PlineSegIntrType.NoIntersect;
-                    break;
+            IntersectionResult intrResult = ContourIntersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            switch (intrResult.getStatus()) {
+            case NO_INTERSECTION_PARALLEL:
+                result.intrType = PlineSegIntrType.NoIntersect;
+                break;
+            case INTERSECTION:
+                result.intrType = PlineSegIntrType.OneIntersect;
+                result.point1 = intrResult.getFirstPoint();
+                break;
+            case NO_INTERSECTION:
+                result.intrType = PlineSegIntrType.SegmentOverlap;
+                // build points from parametric parameters (using second segment as defined by the function)
+                result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirstParameterA());
+                result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirstParameterB());
+                break;
+            case NO_INTERSECTION_COINCIDENT:
+                result.intrType = PlineSegIntrType.NoIntersect;
+                break;
             }
 
         } else if (vIsLine) {
@@ -371,7 +372,7 @@ public class PlineVertex implements Cloneable {
                         pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
             };
 
-            IntrCircle2Circle2Result intrResult = Intersections.intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
+            IntrCircle2Circle2Result intrResult = ContourIntersections.intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 
             switch (intrResult.intrType) {
                 case NoIntersect:

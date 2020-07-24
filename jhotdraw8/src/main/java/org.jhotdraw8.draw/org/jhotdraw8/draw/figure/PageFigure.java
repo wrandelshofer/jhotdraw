@@ -38,8 +38,8 @@ import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -265,7 +265,7 @@ public class PageFigure extends AbstractCompositeFigure
         double y = pageY + (pageHeight - pageOverlapY) * py;
 
 
-        Bounds b = Geom.intersection(getLayoutBounds(),
+        Bounds b = FXGeom.intersection(getLayoutBounds(),
                 new BoundingBox(x + insets.getLeft() * contentAreaFactor, y + insets.getTop() * contentAreaFactor,
                         pageWidth - (insets.getLeft() + insets.getRight()) * contentAreaFactor,
                         pageHeight - (insets.getTop() + insets.getBottom()) * contentAreaFactor));

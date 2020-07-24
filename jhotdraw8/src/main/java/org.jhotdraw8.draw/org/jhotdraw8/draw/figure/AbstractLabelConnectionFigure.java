@@ -21,13 +21,18 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LabelConnectorHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Geom;
 
 import java.util.ArrayList;
@@ -181,7 +186,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         if (labelConnector != null && labelTarget != null) {
             labeledLoc = labelConnector.getPositionInWorld(this, labelTarget);
             tangent = labelConnector.getTangentInWorld(this, labelTarget).normalize();
-            perp = Geom.perp(tangent);
+            perp = FXGeom.perp(tangent);
 
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
             Bounds b = getTextBounds(ctx);

@@ -428,11 +428,11 @@ public class IntersectionSampleMain extends Application {
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
 
                 if (isect.size() == 1) {
-                    System.out.println("  t:" + isect.getFirstT() + " ctrlPoint:" + isect.getLastPoint());
+                    System.out.println("  t:" + isect.getFirstParameterA() + " ctrlPoint:" + isect.getLastPoint());
                     double[] left = new double[6];
                     double[] right = new double[6];
                     BezierCurves.splitCubicCurve(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(),
-                            l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
+                            l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(), isect.getFirstParameterA(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
@@ -524,10 +524,10 @@ public class IntersectionSampleMain extends Application {
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
 
                 if (isect.size() == 1) {
-                    System.out.println("  t:" + isect.getFirstT() + " ctrlPoint:" + isect.getLastPoint());
+                    System.out.println("  t:" + isect.getFirstParameterA() + " ctrlPoint:" + isect.getLastPoint());
                     double[] left = new double[4];
                     double[] right = new double[4];
-                    BezierCurves.splitQuadCurveTo(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirstT(),
+                    BezierCurves.splitQuadCurveTo(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirstParameterA(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));

@@ -17,8 +17,8 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -80,7 +80,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
         // FIXME we should perform the grow in view coordinates on the transformed shape
         //            instead of growing in local
         double growInLocal = tinv.deltaTransform(new Point2D(growInView * invsqrt2, growInView * invsqrt2)).magnitude();
-        b = Geom.grow(b, growInLocal, growInLocal);
+        b = FXGeom.grow(b, growInLocal, growInLocal);
         points[0] = b.getMinX();
         points[1] = b.getMinY();
         points[2] = b.getMaxX();

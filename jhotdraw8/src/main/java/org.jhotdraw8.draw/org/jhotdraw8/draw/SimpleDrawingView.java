@@ -65,6 +65,7 @@ import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
@@ -347,14 +348,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                     widthFactor = 1;
                     break;
             }
-            if (Geom.grow(shape.getBoundsInParent(), tolerance, tolerance).contains(point)) {
+            if (FXGeom.grow(shape.getBoundsInParent(), tolerance, tolerance).contains(point)) {
                 return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
                         shape.getStrokeWidth() * widthFactor + toleranceInLocal);
             } else {
                 return false;
             }
         } else if (node instanceof Group) {
-            if (Geom.contains(node.getBoundsInLocal(), point, toleranceInLocal)) {
+            if (FXGeom.contains(node.getBoundsInLocal(), point, toleranceInLocal)) {
                 for (Node child : ((Group) node).getChildren()) {
                     if (contains(child, child.parentToLocal(point), tolerance)) {
                         return true;
@@ -363,7 +364,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
             return false;
         } else { // foolishly assumes that all other nodes are rectangular and opaque
-            return Geom.contains(node.getBoundsInLocal(), point, tolerance);
+            return FXGeom.contains(node.getBoundsInLocal(), point, tolerance);
         }
     }
 

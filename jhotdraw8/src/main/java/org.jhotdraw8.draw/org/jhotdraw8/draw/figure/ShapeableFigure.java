@@ -19,7 +19,6 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AWTPathBuilder;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPathBuilder;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.Shapes;
 
@@ -77,7 +76,7 @@ public interface ShapeableFigure extends Figure {
 
             javafx.geometry.Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
 
-            final Bounds srcBounds = shapeBounds == null || Geom.isEmpty(shapeBounds) ? FXGeom.getBounds(path) : Geom.getBounds(shapeBounds);
+            final Bounds srcBounds = shapeBounds == null || FXGeom.isEmpty(shapeBounds) ? FXGeom.getBounds(path) : FXGeom.getBounds(shapeBounds);
             Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
 
             FXPathBuilder builder2 = new FXPathBuilder();

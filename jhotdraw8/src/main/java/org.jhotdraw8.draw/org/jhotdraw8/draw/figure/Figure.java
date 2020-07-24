@@ -36,8 +36,8 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
@@ -270,7 +270,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 if (b == null) {
                     b = fb;
                 } else {
-                    b = Geom.union(b, fb);
+                    b = FXGeom.union(b, fb);
                 }
             } else {
                 for (Figure ff : f.preorderIterable()) {
@@ -291,12 +291,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     if (ff.get(CompositableFigure.EFFECT) != null) {
                         grow += 10.0;
                     }
-                    fb = Geom.grow(fb, grow, grow);
+                    fb = FXGeom.grow(fb, grow, grow);
                     fb = f.localToWorld(fb);
                     if (b == null) {
                         b = fb;
                     } else {
-                        b = Geom.union(b, fb);
+                        b = FXGeom.union(b, fb);
                     }
                 }
             }
@@ -583,7 +583,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @NonNull
     default Point2D getCenterInLocal() {
         Bounds b = getLayoutBounds();
-        return Geom.center(b);
+        return FXGeom.center(b);
     }
 
     /**
@@ -594,7 +594,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @NonNull
     default Point2D getCenterInParent() {
         Bounds b = getLayoutBoundsInParent();
-        return Geom.center(b);
+        return FXGeom.center(b);
     }
 
     /**

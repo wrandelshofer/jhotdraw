@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.isect.IntersectionPoint;
 
@@ -191,7 +191,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
                                     @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
-            double angle = Geom.angle(end, start);
+            double angle = FXGeom.angle(end, start);
             markerNode.getTransforms().setAll(
                     new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),
                     new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),
@@ -264,8 +264,8 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         }
         if (endConnector != null && endTarget != null) {
             IntersectionPoint intersectionPoint = endConnector.chopEnd(ctx, this, endTarget, start, end);
-            endTangent = new Point2D(intersectionPoint.getTangent2().getX(),intersectionPoint.getTangent2().getY());
-            end = worldToParent(intersectionPoint.getPoint().getX(),intersectionPoint.getPoint().getY());
+            endTangent = new Point2D(intersectionPoint.getTangentB().getX(), intersectionPoint.getTangentB().getY());
+            end = worldToParent(intersectionPoint.getPoint().getX(), intersectionPoint.getPoint().getY());
             set(END, new CssPoint2D(end));
         }
 
@@ -273,7 +273,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         // points.clear();
         CssSize elbowOffsetSize = getElbowOffset();
         UnitConverter unitConverter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
-        if (elbowOffset == 0 || endTangent == null || Geom.squaredMagnitude(endTangent) < 1e-7) {
+        if (elbowOffset == 0 || endTangent == null || FXGeom.squaredMagnitude(endTangent) < 1e-7) {
             points.addAll(start.getX(), start.getY());
             points.addAll(end.getX(), end.getY());
         } else {

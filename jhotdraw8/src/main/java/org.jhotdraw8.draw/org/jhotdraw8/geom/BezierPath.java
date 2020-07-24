@@ -7,7 +7,8 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.FlatteningPathIterator;
@@ -789,7 +790,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      */
     @NonNull
     public Point2D.Double chop(@NonNull Point2D.Double p) {
-        javafx.geometry.Point2D chopped = Geom.chop(this, new javafx.geometry.Point2D(p.x, p.y));
+        javafx.geometry.Point2D chopped = FXGeom.chop(this, new javafx.geometry.Point2D(p.x, p.y));
         return new Point2D.Double(chopped.getX(), chopped.getY());
     }
 

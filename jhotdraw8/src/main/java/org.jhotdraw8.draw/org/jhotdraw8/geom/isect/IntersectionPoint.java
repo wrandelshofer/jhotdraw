@@ -3,18 +3,18 @@ package org.jhotdraw8.geom.isect;
 import java.awt.geom.Point2D;
 
 /**
- * Describes an intersection point of two parametric functions.
+ * Describes an intersection point of two parametric functions 'a' and 'b'.
  */
 public class IntersectionPoint {
     /**
-     * @see #getT1()
+     * @see #getParameterA()
      */
-    private final double t1;
+    private final double parameterA;
 
     /**
-     * @see #getT2()
+     * @see #getParameterB()
      */
-    private final double t2;
+    private final double parameterB;
 
     /**
      * @see #getPoint()
@@ -22,85 +22,85 @@ public class IntersectionPoint {
     private final Point2D.Double point;
 
     /**
-     * @see #getTangent1()
+     * @see #getTangentA()
      */
-    private final Point2D.Double tangent1;
+    private final Point2D.Double tangentA;
 
     /**
-     * @see #getTangent2()
+     * @see #getTangentB()
      */
-    private final Point2D.Double tangent2;
+    private final Point2D.Double tangentB;
 
     /**
-     * @see #getSegment1()
+     * @see #getSegmentA()
      */
-    private final int segment1;
+    private final int segmentA;
 
     /**
-     * @see #getSegment2()
+     * @see #getSegmentB()
      */
-    private final int segment2;
+    private final int segmentB;
 
-    public IntersectionPoint(Point2D.Double point, double t1) {
-        this(point, t1, new Point2D.Double(1, 0), 0, new Point2D.Double(0, -1));
+    public IntersectionPoint(Point2D.Double point, double parameterA) {
+        this(point, parameterA, new Point2D.Double(1, 0), 0, new Point2D.Double(0, -1));
     }
 
-    public IntersectionPoint(Point2D.Double point, double t1, Point2D.Double tangent1, double t2, Point2D.Double tangent2) {
-        this(point, t1, tangent1, 0, t2, tangent2, 0);
+    public IntersectionPoint(Point2D.Double point, double parameterA, Point2D.Double tangentA, double parameterB, Point2D.Double tangentB) {
+        this(point, parameterA, tangentA, 0, parameterB, tangentB, 0);
     }
 
-    public IntersectionPoint(double px, double py, double t1, double tx1, double ty1, double t2, double tx2, double ty2) {
-        this(px, py, t1, tx1, ty1, 0, t2, tx2, ty2, 0);
+    public IntersectionPoint(double px, double py, double parameterA, double tangentAX, double tangentAY, double parameterB, double tangentBX, double tangentBY) {
+        this(px, py, parameterA, tangentAX, tangentAY, 0, parameterB, tangentBX, tangentBY, 0);
     }
 
-    public IntersectionPoint(Point2D.Double point, double t1, Point2D.Double tangent1, int segment1, double t2, Point2D.Double tangent2, int segment2) {
+    public IntersectionPoint(Point2D.Double point, double parameterA, Point2D.Double tangentA, int segmentA, double parameterB, Point2D.Double tangentB, int segmentB) {
         this.point = point;
-        this.t1 = t1;
-        this.tangent1 = tangent1;
-        this.t2 = t2;
-        this.tangent2 = tangent2;
-        this.segment1 = segment1;
-        this.segment2 = segment2;
+        this.parameterA = parameterA;
+        this.tangentA = tangentA;
+        this.parameterB = parameterB;
+        this.tangentB = tangentB;
+        this.segmentA = segmentA;
+        this.segmentB = segmentB;
     }
 
-    public IntersectionPoint(double px, double py, double t1, double tx1, double ty1, int segment1, double t2, double tx2, double ty2, int segment2) {
+    public IntersectionPoint(double px, double py, double parameterA, double tx1, double ty1, int segmentA, double t2, double tx2, double ty2, int segment2) {
         this.point = new Point2D.Double(px, py);
-        this.t1 = t1;
-        this.tangent1 = new Point2D.Double(tx1, ty1);
-        this.t2 = t2;
-        this.tangent2 = new Point2D.Double(tx2, ty2);
-        this.segment1 = segment1;
-        this.segment2 = segment2;
+        this.parameterA = parameterA;
+        this.tangentA = new Point2D.Double(tx1, ty1);
+        this.parameterB = t2;
+        this.tangentB = new Point2D.Double(tx2, ty2);
+        this.segmentA = segmentA;
+        this.segmentB = segment2;
     }
 
     /**
-     * If the first parametric function is a segment of a segmented function,
+     * If parametric function 'a' is a segment of a segmented function,
      * then this field is used to indicate to which segment the parametric
      * function belongs.
      * <p>
      * The index of the segment.
      */
-    public int getSegment1() {
-        return segment1;
+    public int getSegmentA() {
+        return segmentA;
     }
 
     /**
-     * If the second parametric function is a segment of a segmented function,
+     * If parametric function 'b' is a segment of a segmented function,
      * then this field is used to indicate to which segment the parametric
      * function belongs.
      * <p>
      * The index of the segment.
      */
-    public int getSegment2() {
-        return segment2;
+    public int getSegmentB() {
+        return segmentB;
     }
 
 
     /**
-     * The value of the argument 't' of the first parametric function at the intersection.
+     * The value of the argument of the parametric function 'a' at the intersection.
      */
-    public double getT1() {
-        return t1;
+    public double getParameterA() {
+        return parameterA;
     }
 
     /**
@@ -111,29 +111,42 @@ public class IntersectionPoint {
     }
 
     /**
-     * The tangent vector at the intersection of the first parametric function.
+     * The tangent vector at the intersection of the parametric function 'a'.
      * This vector is not normalized.
      */
-    public Point2D.Double getTangent1() {
-        return tangent1;
+    public Point2D.Double getTangentA() {
+        return tangentA;
     }
 
     /**
-     * The value of the argument 't' of the second parametric function at the intersection.
+     * The value of the argument of the parametric function 'b' at the intersection.
      */
-    public double getT2() {
-        return t2;
+    public double getParameterB() {
+        return parameterB;
     }
 
     /**
      * The tangent vector at the intersection of the second parametric function.
      * This vector is not normalized.
      */
-    public Point2D.Double getTangent2() {
-        return tangent2;
+    public Point2D.Double getTangentB() {
+        return tangentB;
     }
 
     public IntersectionPoint withSegment2(int segmentIndex) {
-        return new IntersectionPoint(this.point, this.t1, this.tangent1, this.segment1, this.t2, this.tangent2, segmentIndex);
+        return new IntersectionPoint(this.point, this.parameterA, this.tangentA, this.segmentA, this.parameterB, this.tangentB, segmentIndex);
+    }
+
+    @Override
+    public String toString() {
+        return "IntersectionPoint{" +
+                "t1=" + parameterA +
+                ", t2=" + parameterB +
+                ", point=" + point +
+                ", tangent1=" + tangentA +
+                ", tangent2=" + tangentB +
+                ", segment1=" + segmentA +
+                ", segment2=" + segmentB +
+                '}';
     }
 }

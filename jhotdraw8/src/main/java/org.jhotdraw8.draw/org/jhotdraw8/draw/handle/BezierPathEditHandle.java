@@ -45,7 +45,7 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
             IntersectionResult intersectionResult = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), 10.0);// / view.getZoomFactor());// FIXME tolerance not
             if (!intersectionResult.isEmpty()) {
                 IntersectionPoint intersectionPoint = intersectionResult.getIntersections().get(0);
-                int segment = intersectionPoint.getSegment1();
+                int segment = intersectionPoint.getSegmentA();
                 path.getNodes().add(segment, new BezierNode(
                         pointInLocal));
                 view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));

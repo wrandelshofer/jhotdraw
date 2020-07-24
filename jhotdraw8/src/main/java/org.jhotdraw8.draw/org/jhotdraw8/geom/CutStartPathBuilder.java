@@ -54,7 +54,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
         IntersectionResult i = Intersections.intersectCubicCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
-                double t = i.getLastT();
+                double t = i.getLastParameterA();
                 out.moveTo(i.getLastPoint().getX(),i.getLastPoint().getY());
                 BezierCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
                 break;
@@ -127,7 +127,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
         IntersectionResult i = Intersections.intersectQuadraticCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
-                double t = i.getLastT();
+                double t = i.getLastParameterA();
                 out.moveTo(i.getLastPoint().getX(),i.getLastPoint().getY());
                 BezierCurves.splitQuadCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
                 state = State.CUT_DONE;

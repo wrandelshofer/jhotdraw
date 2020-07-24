@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.isect.IntersectionPoint;
 import org.jhotdraw8.geom.isect.IntersectionResult;
 import org.jhotdraw8.geom.isect.Intersections;
@@ -41,7 +41,6 @@ public class EllipseConnector extends LocatorConnector {
         Point2D e = target.worldToLocal(end);
         Bounds bounds = target.getLayoutBounds();
 
-        // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
             double grow;
             switch (target.getStyledNonNull(STROKE_TYPE)) {
@@ -56,7 +55,7 @@ public class EllipseConnector extends LocatorConnector {
                 grow = 0d;
                 break;
             }
-            bounds = Geom.grow(bounds, grow, grow);
+            bounds = FXGeom.grow(bounds, grow, grow);
         }
 
         IntersectionResult i = Intersections.intersectLineEllipse(s.getX(), s.getY(), e.getX(), e.getY(),

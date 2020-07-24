@@ -1,5 +1,6 @@
 package org.jhotdraw8.geom.offsetline;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
@@ -7,10 +8,11 @@ import org.jhotdraw8.collection.OrderedPairNonNull;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.Intersections;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 import org.jhotdraw8.util.function.TriConsumer;
-import org.jhotdraw8.util.function.TriPredicate;
 
 import java.awt.geom.Point2D;
 import java.util.Deque;
@@ -27,12 +29,11 @@ import java.util.function.Supplier;
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.splitAtPoint;
-import static org.jhotdraw8.geom.offsetline.Utils.perpDot;
 import static org.jhotdraw8.geom.offsetline.Utils.pointFromParametric;
 import static org.jhotdraw8.geom.offsetline.Utils.pointWithinArcSweepAngle;
 
-public class Intersections {
-    private Intersections() {
+public class ContourIntersections {
+    private ContourIntersections() {
     }
 
     /**
@@ -43,8 +44,8 @@ public class Intersections {
         // Reference algorithm: http://paulbourke.net/geometry/circlesphere/
 
         IntrCircle2Circle2Result result = new IntrCircle2Circle2Result();
-        Point2D.Double cv = Points2D.subtract(center2,center1);
-        double d2 = Points2D.dotProduct(cv,cv);
+        Point2D.Double cv = Points2D.subtract(center2, center1);
+        double d2 = Points2D.dotProduct(cv, cv);
         double d = Math.sqrt(d2);
         if (d < Utils.realThreshold) {
             // same center position
@@ -62,7 +63,7 @@ public class Intersections {
                 double rad1Sq = radius1 * radius1;
                 double a = (rad1Sq - radius2 * radius2 + d2) / (2.0 * d);
                 Point2D.Double midPoint = Points2D.add(center1,
-                        Points2D.multiply(cv,a / d));
+                        Points2D.multiply(cv, a / d));
                 double diff = rad1Sq - a * a;
                 if (diff < 0.0) {
                     result.intrType = Circle2Circle2IntrType.OneIntersect;
@@ -90,125 +91,9 @@ public class Intersections {
         return result;
     }
 
-    public static IntrLineSeg2LineSeg2Result intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
-                                                                  final Point2D.Double v2) {
-        // This implementation works by processing the segments in parametric equation form and using
-        // perpendicular products
-        // see: http://geomalgorithms.com/a05-_intersect-1.html and
-        // http://mathworld.wolfram.com/PerpDotProduct.html
-
-        IntrLineSeg2LineSeg2Result result = new IntrLineSeg2LineSeg2Result();
-        Point2D.Double u = Points2D.subtract(u2,u1);
-        Point2D.Double v = Points2D.subtract(v2,v1);
-        double d = perpDot(u, v);
-
-        Point2D.Double w = Points2D.subtract(u1,v1);
-
-        // Test if point is inside a segment, NOTE: assumes points are aligned
-        TriPredicate<Point2D.Double, Point2D.Double, Point2D.Double> isInSegment = (final Point2D.Double pt, final Point2D.Double segStart,
-                                                               final Point2D.Double segEnd) -> {
-            if (Geom.almostEqual(segStart.getX(), segEnd.getX())) {
-                // vertical segment, test y coordinate
-                OrderedPair<Double, Double> minmax = Utils.minmax(segStart.getY(), segEnd.getY());
-                return Utils.fuzzyInRange(minmax.first(), pt.getY(), minmax.second());
-            }
-
-            // else just test x coordinate
-            OrderedPair<Double, Double> minmax = Utils.minmax(segStart.getX(), segEnd.getX());
-            return Utils.fuzzyInRange(minmax.first(), pt.getX(), minmax.second());
-        };
-
-        // threshold check here to avoid almost parallel lines resulting in very distant intersection
-        if (Math.abs(d) > Utils.realThreshold) {
-            // segments not parallel or collinear
-            result.t0 = perpDot(v, w) / d;
-            result.t1 = perpDot(u, w) / d;
-            result.point = Points2D.add(v1,Points2D.multiply(v,result.t1));
-            if (result.t0 + Utils.realThreshold < 0.0 ||
-                    result.t0 > 1.0 + Utils.realThreshold ||
-                    result.t1 + Utils.realThreshold < 0.0 ||
-                    result.t1 > 1.0 + Utils.realThreshold) {
-                result.intrType = LineSeg2LineSeg2IntrType.False;
-            } else {
-                result.intrType = LineSeg2LineSeg2IntrType.True;
-            }
-        } else {
-            // segments are parallel or collinear
-            double a = perpDot(u, w);
-            double b = perpDot(v, w);
-            // threshold check here, we consider almost parallel lines to be parallel
-            if (Math.abs(a) > Utils.realThreshold || Math.abs(b) > Utils.realThreshold) {
-                // parallel and not collinear so no intersect
-                result.intrType = LineSeg2LineSeg2IntrType.None;
-            } else {
-                // either collinear or degenerate (segments are single points)
-                boolean uIsPoint = Geom.almostEqual(u1, u2);
-                boolean vIsPoint = Geom.almostEqual(v1, v2);
-                if (uIsPoint && vIsPoint) {
-                    // both segments are just points
-                    if (Geom.almostEqual(u1, v1)) {
-                        // same point
-                        result.point = u1;
-                        result.intrType = LineSeg2LineSeg2IntrType.True;
-                    } else {
-                        // distinct points
-                        result.intrType = LineSeg2LineSeg2IntrType.None;
-                    }
-
-                } else if (uIsPoint) {
-                    if (isInSegment.test(u1, v1, v2)) {
-                        result.intrType = LineSeg2LineSeg2IntrType.True;
-                        result.point = u1;
-                    } else {
-                        result.intrType = LineSeg2LineSeg2IntrType.None;
-                    }
-
-                } else if (vIsPoint) {
-                    if (isInSegment.test(v1, u1, u2)) {
-                        result.intrType = LineSeg2LineSeg2IntrType.True;
-                        result.point = v1;
-                    } else {
-                        result.intrType = LineSeg2LineSeg2IntrType.None;
-                    }
-                } else {
-                    // neither segment is a point, check if they overlap
-                    Point2D.Double w2 = Points2D.subtract(u2,v1);
-                    if (Math.abs(v.getX()) < Utils.realThreshold) {
-                        result.t0 = w.getY() / v.getY();
-                        result.t1 = w2.getY() / v.getY();
-                    } else {
-                        result.t0 = w.getX() / v.getX();
-                        result.t1 = w2.getX() / v.getX();
-                    }
-
-                    if (result.t0 > result.t1) {
-                        double swap = result.t0;
-                        result.t0 = result.t1;
-                        result.t1 = swap;
-                    }
-
-                    // using threshold check here to make intersect "sticky" to prefer considering it an
-                    // intersect
-                    if (result.t0 > 1.0 + Utils.realThreshold ||
-                            result.t1 + Utils.realThreshold < 0.0) {
-                        // no overlap
-                        result.intrType = LineSeg2LineSeg2IntrType.None;
-                    } else {
-                        result.t0 = Math.max(result.t0, 0.0);
-                        result.t1 = Math.min(result.t1, 1.0);
-                        if (Math.abs(result.t1 - result.t0) < Utils.realThreshold) {
-                            // intersect is a single point (segments line up end to end)
-                            result.intrType = LineSeg2LineSeg2IntrType.True;
-                            result.point = Points2D.add(v1,Points2D.multiply(v,result.t0));
-                        } else {
-                            result.intrType = LineSeg2LineSeg2IntrType.Coincident;
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
+    public static @NonNull IntersectionResult intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
+                                                                   final Point2D.Double v2) {
+        return Intersections.intersectLineLine(u1, u2, v1, v2);
     }
 
 
@@ -278,8 +163,8 @@ public class Intersections {
 
         for (PlineCoincidentIntersect intr : coincidentIntrs) {
             Point2D.Double sp = pline1.get(intr.sIndex1).pos();
-            double dist1 = sp.distanceSq( intr.point1);
-            double dist2 = sp.distanceSq( intr.point2);
+            double dist1 = sp.distanceSq(intr.point1);
+            double dist2 = sp.distanceSq(intr.point2);
             if (dist1 > dist2) {
                 Point2D.Double swap = intr.point1;
                 intr.point1 = intr.point2;
@@ -293,8 +178,8 @@ public class Intersections {
             }
             // equal index so sort distance from start
             final Point2D.Double sp = pline1.get(intr1.sIndex1).pos();
-            double dist1 = sp.distanceSq( intr1.point1);
-            double dist2 = sp.distanceSq( intr2.point1);
+            double dist1 = sp.distanceSq(intr1.point1);
+            double dist2 = sp.distanceSq(intr2.point1);
             return Double.compare(dist1, dist2);
         });
 
@@ -706,22 +591,29 @@ public class Intersections {
         };
 
         if (vIsLine && uIsLine) {
-            IntrLineSeg2LineSeg2Result intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
-            switch (intrResult.intrType) {
-            case None:
+            IntersectionResult intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            switch (intrResult.getStatus()) {
+            case NO_INTERSECTION_PARALLEL:
                 result.intrType = PlineSegIntrType.NoIntersect;
                 break;
-            case True:
+            case INTERSECTION:
                 result.intrType = PlineSegIntrType.OneIntersect;
-                result.point1 = intrResult.point;
+                result.point1 = intrResult.getFirstPoint();
                 break;
-            case Coincident:
+            case NO_INTERSECTION_COINCIDENT:
                 result.intrType = PlineSegIntrType.SegmentOverlap;
                 // build points from parametric parameters (using second() segment as defined by the function)
-                result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
-                result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
+                double firstB = intrResult.get(0).getParameterB();
+                double secondB = intrResult.get(1).getParameterB();
+                if (firstB < secondB) {
+                    result.point1 = pointFromParametric(u1.pos(), u2.pos(), firstB);
+                    result.point2 = pointFromParametric(u1.pos(), u2.pos(), secondB);
+                } else {
+                    result.point1 = pointFromParametric(u1.pos(), u2.pos(), secondB);
+                    result.point2 = pointFromParametric(u1.pos(), u2.pos(), firstB);
+                }
                 break;
-            case False:
+            case NO_INTERSECTION:
                 result.intrType = PlineSegIntrType.NoIntersect;
                 break;
             }

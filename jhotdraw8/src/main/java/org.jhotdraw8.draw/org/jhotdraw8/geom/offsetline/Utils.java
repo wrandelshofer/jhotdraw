@@ -118,7 +118,8 @@ public class Utils {
      * Return the point on the segment going from p0 to p1 at parametric value t.
      */
     public static Point2D.Double pointFromParametric(final Point2D.Double p0, final Point2D.Double p1, double t) {
-        return Points2D.add(p0,Points2D.multiply(Points2D.subtract(p1,p0),t));
+        return Geom.lerp(p0, p1, t);
+        //return Points2D.add(p0,Points2D.multiply(Points2D.subtract(p1,p0),t));
     }
 
     /**

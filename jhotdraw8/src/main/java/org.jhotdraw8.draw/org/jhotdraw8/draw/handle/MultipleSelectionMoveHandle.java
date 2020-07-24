@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Geom;
 
 /**
@@ -155,7 +156,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             if (b == null) {
                 b = fb;
             } else {
-                b = Geom.add(b, fb);
+                b = FXGeom.add(b, fb);
             }
         }
         locationInDrawing = b == null ? null : new Point2D(b.getMinX() + relativeX * b.getWidth(), b.getMinY() + relativeY * b.getHeight());

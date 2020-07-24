@@ -42,6 +42,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 
@@ -239,7 +240,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             Point2D c0 = bn.getC0();
 
             // move control point and opposite control point on same line
-            double a = Math.PI + Geom.angle(c0, p);
+            double a = Math.PI + FXGeom.angle(c0, p);
             Point2D p2;
             if (controlPointMask == BezierNode.C1_MASK) {
                 p2 = bn.getC2();

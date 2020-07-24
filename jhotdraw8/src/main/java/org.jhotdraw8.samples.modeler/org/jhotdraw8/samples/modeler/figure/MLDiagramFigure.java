@@ -44,7 +44,7 @@ import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
@@ -175,7 +175,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
         diagramNameText.setX(modelElementNameText.getLayoutBounds().getMaxX() + (modelElementName == null || modelElementName.isEmpty() ? 0 : margin));
         diagramNameText.setY(y);
 
-        Bounds textBounds = Geom.union(
+        Bounds textBounds = FXGeom.union(
                 diagramKindText.getLayoutBounds(),
                 diagramNameText.getLayoutBounds(),
                 modelElementTypeText.getLayoutBounds(),

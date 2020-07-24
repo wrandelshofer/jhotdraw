@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.isect.IntersectionPoint;
 import org.jhotdraw8.geom.isect.IntersectionResult;
 import org.jhotdraw8.geom.isect.Intersections;
@@ -56,7 +56,7 @@ public class RectangleConnector extends LocatorConnector {
                 grow = 0d;
                 break;
             }
-            bounds = Geom.grow(bounds, grow, grow);
+            bounds = FXGeom.grow(bounds, grow, grow);
         }
 
         IntersectionResult i = Intersections.intersectLineAABB(s.getX(), s.getY(), e.getX(), e.getY(),

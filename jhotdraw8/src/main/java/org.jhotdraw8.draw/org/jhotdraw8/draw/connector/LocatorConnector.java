@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.isect.IntersectionPoint;
 
 /**
@@ -56,7 +56,7 @@ public class LocatorConnector extends AbstractConnector {
         Point2D direction = location.subtract(center);
         Point2D tangent1 = new Point2D(direction.getY(), -direction.getX());
         Point2D tangent2 = new Point2D(direction.getX(), direction.getY());
-        if (Geom.squaredMagnitude(tangent1) < 1e-6) {
+        if (FXGeom.squaredMagnitude(tangent1) < 1e-6) {
             tangent1 = new Point2D(1, 0);
             tangent2 = new Point2D(0, -1);
         }

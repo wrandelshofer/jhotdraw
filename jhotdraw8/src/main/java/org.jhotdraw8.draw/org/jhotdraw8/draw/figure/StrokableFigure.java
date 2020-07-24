@@ -26,9 +26,9 @@ import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.FXGeom;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -274,9 +274,9 @@ public interface StrokableFigure extends Figure {
         default:
             return layoutBounds;
         case OUTSIDE:
-            return Geom.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
+            return FXGeom.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
         case CENTERED:
-            return Geom.grow(layoutBounds, strokeWidth, strokeWidth);
+            return FXGeom.grow(layoutBounds, strokeWidth, strokeWidth);
         }
     }
 }

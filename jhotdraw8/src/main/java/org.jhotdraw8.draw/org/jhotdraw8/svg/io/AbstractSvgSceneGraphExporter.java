@@ -55,8 +55,8 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
@@ -1367,7 +1367,7 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         // The transforms are applied before translateX, translateY, scaleX,
         // scaleY and rotate transforms.
         List<Transform> txs = new ArrayList<>();
-        Point2D pivot = Geom.center(node.getBoundsInLocal());
+        Point2D pivot = FXGeom.center(node.getBoundsInLocal());
         if (node.getTranslateX() != 0.0 || node.getTranslateY() != 0.0) {
             txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
         }

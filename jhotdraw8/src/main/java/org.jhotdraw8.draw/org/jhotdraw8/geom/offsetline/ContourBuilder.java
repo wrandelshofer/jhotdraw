@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.isect.IntersectionResult;
 import org.jhotdraw8.util.function.QuintFunction;
 import org.jhotdraw8.util.function.TriConsumer;
 
@@ -30,12 +31,12 @@ import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
 import static org.jhotdraw8.geom.offsetline.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.offsetline.Intersections.allSelfIntersects;
-import static org.jhotdraw8.geom.offsetline.Intersections.findIntersects;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrCircle2Circle2;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2Circle2;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrLineSeg2LineSeg2;
-import static org.jhotdraw8.geom.offsetline.Intersections.intrPlineSegs;
+import static org.jhotdraw8.geom.offsetline.ContourIntersections.allSelfIntersects;
+import static org.jhotdraw8.geom.offsetline.ContourIntersections.findIntersects;
+import static org.jhotdraw8.geom.offsetline.ContourIntersections.intrCircle2Circle2;
+import static org.jhotdraw8.geom.offsetline.ContourIntersections.intrLineSeg2Circle2;
+import static org.jhotdraw8.geom.offsetline.ContourIntersections.intrLineSeg2LineSeg2;
+import static org.jhotdraw8.geom.offsetline.ContourIntersections.intrPlineSegs;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.closestPointOnSeg;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.offsetline.PlineVertex.segMidpoint;
@@ -125,15 +126,15 @@ public class ContourBuilder {
                                        Point2D.Double point, IntArrayDeque queryStack,
                                        double offsetTol) {
         final double absOffset = Math.abs(offset) - offsetTol;
-        final double minDist = absOffset * absOffset;
+        final double minDistSq = absOffset * absOffset;
 
         boolean[] pointValid = {true};
 
         IntPredicate visitor = (int i) -> {
             int j = Utils.nextWrappingIndex(i, pline);
             Point2D.Double closestPoint = closestPointOnSeg(pline.get(i), pline.get(j), point);
-            double dist = Geom.distanceSq(closestPoint, point);
-            pointValid[0] = dist > minDist;
+            double distSq = closestPoint.distanceSq(point);
+            pointValid[0] = distSq > minDistSq;
             return pointValid[0];
         };
 
@@ -231,8 +232,8 @@ public class ContourBuilder {
                 processIntersect.accept(intrResult.point1);
                 break;
             case TwoIntersects: {
-                double dist1 = Geom.distanceSq(intrResult.point1, s1.origV2Pos);
-                double dist2 = Geom.distanceSq(intrResult.point2, s1.origV2Pos);
+                double dist1 = intrResult.point1.distanceSq(s1.origV2Pos);
+                double dist2 = intrResult.point2.distanceSq(s1.origV2Pos);
                 if (dist1 < dist2) {
                     processIntersect.accept(intrResult.point1);
                 } else {
@@ -305,9 +306,9 @@ public class ContourBuilder {
             assert intrResult.numIntersects == 2 : "should have 2 intersects here";
             final Point2D.Double origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
             Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
-            double dist1 = Geom.distanceSq(i1, origPoint);
+            double dist1 = i1.distanceSq(origPoint);
             Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
-            double dist2 = Geom.distanceSq(i2, origPoint);
+            double dist2 = i2.distanceSq(origPoint);
 
             if (dist1 < dist2) {
                 processIntersect.accept(intrResult.t0, i1);
@@ -545,7 +546,7 @@ public class ContourBuilder {
         // sort intersects by distance from start vertex
         for (Map.Entry<Integer, List<Point2D.Double>> entry : intersectsLookup.entrySet()) {
             Point2D.Double startPos = rawOffsetPline.get(entry.getKey()).pos();
-            Comparator<Point2D.Double> cmp = Comparator.comparingDouble((Point2D.Double si) -> Geom.distanceSq(si, startPos));
+            Comparator<Point2D.Double> cmp = Comparator.comparingDouble((Point2D.Double si) -> si.distanceSq(startPos));
             entry.getValue().sort(cmp);
         }
 
@@ -883,9 +884,9 @@ public class ContourBuilder {
             assert intrResult.numIntersects == 2 : "should have 2 intersects here";
             // always use intersect closest to original point
             Point2D.Double i1 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t0);
-            double dist1 = Geom.distanceSq(i1, s1.origV2Pos);
+            double dist1 = i1.distanceSq(s1.origV2Pos);
             Point2D.Double i2 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t1);
-            double dist2 = Geom.distanceSq(i2, s1.origV2Pos);
+            double dist2 = i2.distanceSq(s1.origV2Pos);
 
             if (dist1 < dist2) {
                 processIntersect.accept(intrResult.t0, i1);
@@ -917,41 +918,41 @@ public class ContourBuilder {
             // connecting to/from collapsed arc, always connect using arc
             connectUsingArc.run();
         } else {
-            IntrLineSeg2LineSeg2Result intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntersectionResult intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
 
-            switch (intrResult.intrType) {
-                case None:
-                    // PATCH WR: If the path turns back on itself, we must join it
-                    //           with an arc, to prevent that the path slice is
-                    //           removed, because without the arc, the intersection
-                    //           point of the segment may lie inside the shape.
-                    if (true) {
-                        connectUsingArc.run();
-                    } else {
-                        // just join with straight line
-                        addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                        addOrReplaceIfSamePos(result, u1);
-                    }
-                    break;
-                case True:
-                    addOrReplaceIfSamePos(result, new PlineVertex(intrResult.point, 0.0));
-                    break;
-                case Coincident:
+            switch (intrResult.getStatus()) {
+            case NO_INTERSECTION_PARALLEL:
+                // PATCH WR: If the path turns back on itself, we must join it
+                //           with an arc, to prevent that the path slice is
+                //           removed, because without the arc, the intersection
+                //           point of the segment may lie inside the shape.
+                if (true) {
+                    connectUsingArc.run();
+                } else {
+                    // just join with straight line
                     addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                    break;
-                case False:
-                    // PATCH WR: If the path turns by more than 180 degrees, we must
-                    //           also join it with an arc, to prevent that the path
-                    //           segment is removed, because without the arc,
-                    //           the intersection point of the slice may lie
-                    //           inside the shape.
-                    if (true || intrResult.t0 > 1.0 && falseIntersect(intrResult.t1)) {
-                        // extend and join the lines together using an arc
-                        connectUsingArc.run();
-                    } else {
-                        addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                        addOrReplaceIfSamePos(result, u1);
-                    }
+                    addOrReplaceIfSamePos(result, u1);
+                }
+                break;
+            case INTERSECTION:
+                addOrReplaceIfSamePos(result, new PlineVertex(intrResult.getFirstPoint(), 0.0));
+                break;
+            case NO_INTERSECTION_COINCIDENT:
+                addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
+                break;
+            case NO_INTERSECTION:
+                // PATCH WR: If the path turns by more than 180 degrees, we must
+                //           also join it with an arc, to prevent that the path
+                //           segment is removed, because without the arc,
+                //           the intersection point of the slice may lie
+                //           inside the shape.
+                if (true || intrResult.getFirstParameterA() > 1.0 && falseIntersect(intrResult.getFirstParameterB())) {
+                    // extend and join the lines together using an arc
+                    connectUsingArc.run();
+                } else {
+                    addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
+                    addOrReplaceIfSamePos(result, u1);
+                }
                     break;
             }
         }
@@ -1108,7 +1109,7 @@ public class ContourBuilder {
         // sort intersects by distance from start vertex
         for (Map.Entry<Integer, List<Point2D.Double>> kvp : intersectsLookup.entrySet()) {
             Point2D.Double startPos = rawOffsetPline.get(kvp.getKey()).pos();
-            Comparator<Point2D.Double> cmp = Comparator.comparingDouble((Point2D.Double si) -> Geom.distanceSq(si, startPos));
+            Comparator<Point2D.Double> cmp = Comparator.comparingDouble((Point2D.Double si) -> si.distanceSq(startPos));
             kvp.getValue().sort(cmp);
         }
 
