@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.isect.IntersectionPoint;
+import org.jhotdraw8.geom.isect.IntersectionPointEx;
 
 /**
  * LocatorConnector uses a {@link Locator} to compute its position.
@@ -49,7 +49,7 @@ public class LocatorConnector extends AbstractConnector {
     }
 
     @Override
-    public IntersectionPoint chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
+    public IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
         final Bounds b = target.getLayoutBounds();
         Point2D center = new Point2D(b.getMinX() + b.getWidth() * 0.5, b.getMinY() + b.getHeight() * 0.5);
         Point2D location = locator.locate(target);
@@ -65,7 +65,7 @@ public class LocatorConnector extends AbstractConnector {
         Point2D targetP = target.localToWorld(location);
         Point2D t1p = localToWorld == null ? tangent1 : localToWorld.deltaTransform(tangent1);
         Point2D t2p = localToWorld == null ? tangent2 : localToWorld.deltaTransform(tangent2);
-        return new IntersectionPoint(
+        return new IntersectionPointEx(
                 targetP.getX(), targetP.getY(),
                 0, t1p.getX(), t1p.getY(),
                 0, t2p.getX(), t2p.getY());

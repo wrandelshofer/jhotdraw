@@ -9,6 +9,7 @@ import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.Intersections;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
@@ -91,9 +92,11 @@ public class ContourIntersections {
         return result;
     }
 
-    public static @NonNull IntersectionResult intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
-                                                                   final Point2D.Double v2) {
-        return Intersections.intersectLineLine(u1, u2, v1, v2);
+    public static final double REAL_THRESHOLD = 1e-8;
+
+    public static @NonNull IntersectionResultEx intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
+                                                                     final Point2D.Double v2) {
+        return Intersections.intersectLineLineEx(u1, u2, v1, v2, REAL_THRESHOLD);
     }
 
 
@@ -107,6 +110,26 @@ public class ContourIntersections {
     public static IntrLineSeg2Circle2Result intrLineSeg2Circle2(final Point2D.Double p0,
                                                                 final Point2D.Double p1, double radius,
                                                                 final Point2D.Double circleCenter) {
+        IntersectionResult r = Intersections.intersectLineCircle(p0, p1, circleCenter, radius, REAL_THRESHOLD);
+        IntrLineSeg2Circle2Result rr = intrLineSeg2Circle2_old(p0, p1, radius, circleCenter);
+        if (rr.numIntersects != r.size()) {
+            System.err.println("!same");
+            System.err.println("  r :" + r);
+            System.err.println("  rr:" + rr);
+        }
+        return rr;
+    }
+
+    /**
+     * Gets the intersect between a segment and a circle, returning the parametric solution t to the
+     * segment equation P(t) = v1 + t * (v2 - v1) for t = 0 to t = 1, if t < 0 or t > 1 then intersect
+     * occurs only when extending the segment out past the points given (if t < 0 intersect nearest v1,
+     * if t > 0 then intersect nearest v2), intersects are "sticky" and "snap" to tangent points, e.g. a
+     * segment very close to being a tangent will be returned as a single intersect point.
+     */
+    public static IntrLineSeg2Circle2Result intrLineSeg2Circle2_old(final Point2D.Double p0,
+                                                                    final Point2D.Double p1, double radius,
+                                                                    final Point2D.Double circleCenter) {
         // This function solves for t by substituting the parametric equations for the segment x = v1.X +
         // t * (v2.X - v1.X) and y = v1.Y + t * (v2.Y - v1.Y) for t = 0 to t = 1 into the circle equation
         // (x-h)^2 + (y-k)^2 = r^2 and then solving the resulting equation in the form a*t^2 + b*t + c = 0
@@ -153,7 +176,7 @@ public class ContourIntersections {
     }
 
     public static CoincidentSlicesResult
-    sortAndjoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
+    sortAndJoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
                                 PolyArcPath pline1, PolyArcPath pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();
 
@@ -591,20 +614,20 @@ public class ContourIntersections {
         };
 
         if (vIsLine && uIsLine) {
-            IntersectionResult intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntersectionResultEx intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             switch (intrResult.getStatus()) {
             case NO_INTERSECTION_PARALLEL:
                 result.intrType = PlineSegIntrType.NoIntersect;
                 break;
             case INTERSECTION:
                 result.intrType = PlineSegIntrType.OneIntersect;
-                result.point1 = intrResult.getFirstPoint();
+                result.point1 = intrResult.getFirst();
                 break;
             case NO_INTERSECTION_COINCIDENT:
                 result.intrType = PlineSegIntrType.SegmentOverlap;
                 // build points from parametric parameters (using second() segment as defined by the function)
-                double firstB = intrResult.get(0).getParameterB();
-                double secondB = intrResult.get(1).getParameterB();
+                double firstB = intrResult.get(0).getArgumentB();
+                double secondB = intrResult.get(1).getArgumentB();
                 if (firstB < secondB) {
                     result.point1 = pointFromParametric(u1.pos(), u2.pos(), firstB);
                     result.point2 = pointFromParametric(u1.pos(), u2.pos(), secondB);

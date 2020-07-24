@@ -10,7 +10,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.IntersectionStatus;
 import org.jhotdraw8.geom.isect.Intersections;
 
@@ -354,15 +354,15 @@ public class FXGeom {
                 coords[1] = moveToY;
                 break;
             }
-            IntersectionResult chop = Intersections.intersectLineLine(
+            IntersectionResultEx chop = Intersections.intersectLineLineEx(
                     prevX, prevY,
                     coords[0], coords[1],
                     p.getX(), p.getY(),
                     ctr.getX(), ctr.getY());
 
             if (chop.getStatus() == IntersectionStatus.INTERSECTION) {
-                double x = chop.getFirstPoint().getX();
-                double y = chop.getFirstPoint().getY();
+                double x = chop.getFirst().getX();
+                double y = chop.getFirst().getY();
                 double cl = Geom.lengthSquared(x, y, p.getX(), p.getY());
                 if (cl < len) {
                     len = cl;

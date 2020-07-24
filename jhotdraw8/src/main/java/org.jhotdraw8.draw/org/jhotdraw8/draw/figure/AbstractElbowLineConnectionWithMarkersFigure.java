@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.isect.IntersectionPoint;
+import org.jhotdraw8.geom.isect.IntersectionPointEx;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -258,14 +258,14 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
         Point2D endTangent = null;
         if (startConnector != null && startTarget != null) {
-            IntersectionPoint intersectionPoint = startConnector.chopStart(ctx, this, startTarget, start, end);
-            start = worldToParent(intersectionPoint.getPoint().getX(),intersectionPoint.getPoint().getY());
+            IntersectionPointEx intersectionPointEx = startConnector.chopStart(ctx, this, startTarget, start, end);
+            start = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(START, new CssPoint2D(start));
         }
         if (endConnector != null && endTarget != null) {
-            IntersectionPoint intersectionPoint = endConnector.chopEnd(ctx, this, endTarget, start, end);
-            endTangent = new Point2D(intersectionPoint.getTangentB().getX(), intersectionPoint.getTangentB().getY());
-            end = worldToParent(intersectionPoint.getPoint().getX(), intersectionPoint.getPoint().getY());
+            IntersectionPointEx intersectionPointEx = endConnector.chopEnd(ctx, this, endTarget, start, end);
+            endTangent = new Point2D(intersectionPointEx.getTangentB().getX(), intersectionPointEx.getTangentB().getY());
+            end = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(END, new CssPoint2D(end));
         }
 

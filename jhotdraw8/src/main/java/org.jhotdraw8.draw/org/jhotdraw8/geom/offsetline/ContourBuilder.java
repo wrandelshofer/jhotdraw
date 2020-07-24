@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.util.function.QuintFunction;
 import org.jhotdraw8.util.function.TriConsumer;
 
@@ -918,7 +918,7 @@ public class ContourBuilder {
             // connecting to/from collapsed arc, always connect using arc
             connectUsingArc.run();
         } else {
-            IntersectionResult intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntersectionResultEx intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
 
             switch (intrResult.getStatus()) {
             case NO_INTERSECTION_PARALLEL:
@@ -935,7 +935,7 @@ public class ContourBuilder {
                 }
                 break;
             case INTERSECTION:
-                addOrReplaceIfSamePos(result, new PlineVertex(intrResult.getFirstPoint(), 0.0));
+                addOrReplaceIfSamePos(result, new PlineVertex(intrResult.getFirst(), 0.0));
                 break;
             case NO_INTERSECTION_COINCIDENT:
                 addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
@@ -946,7 +946,7 @@ public class ContourBuilder {
                 //           segment is removed, because without the arc,
                 //           the intersection point of the slice may lie
                 //           inside the shape.
-                if (true || intrResult.getFirstParameterA() > 1.0 && falseIntersect(intrResult.getFirstParameterB())) {
+                if (true || intrResult.getFirst().getArgumentA() > 1.0 && falseIntersect(intrResult.getFirst().getArgumentB())) {
                     // extend and join the lines together using an arc
                     connectUsingArc.run();
                 } else {

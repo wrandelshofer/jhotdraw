@@ -12,8 +12,8 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.isect.IntersectionPoint;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionPointEx;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.Intersections;
 
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
@@ -36,7 +36,7 @@ public class RectangleConnector extends LocatorConnector {
     }
 
     @Override
-    public IntersectionPoint intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    public IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds bounds = target.getLayoutBounds();
@@ -59,8 +59,8 @@ public class RectangleConnector extends LocatorConnector {
             bounds = FXGeom.grow(bounds, grow, grow);
         }
 
-        IntersectionResult i = Intersections.intersectLineAABB(s.getX(), s.getY(), e.getX(), e.getY(),
+        IntersectionResultEx i = Intersections.intersectLineAABBEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
-        return i.getLastIntersectionPoint();
+        return i.getLast();
     }
 }

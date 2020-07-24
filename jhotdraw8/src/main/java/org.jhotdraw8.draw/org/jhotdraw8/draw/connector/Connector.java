@@ -11,8 +11,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.isect.IntersectionPoint;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionPointEx;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.Intersections;
 
 import java.awt.geom.Rectangle2D;
@@ -114,7 +114,7 @@ public interface Connector {
      * @param ey         y-coordinate at the end of the line
      * @return the new start point in world coordinates
      */
-    default IntersectionPoint chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double sx, double sy, double ex, double ey) {
+    default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double sx, double sy, double ex, double ey) {
         return chopStart(ctx, connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
     }
 
@@ -129,11 +129,11 @@ public interface Connector {
      * @param end        the end of the line, should be outside the target figure
      * @return the new start point in world coordinates
      */
-    default IntersectionPoint chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
-        IntersectionPoint ip = intersect(ctx, connection, target, start, end);
+    default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+        IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
         Point2D tangent = end.subtract(start);
-        return ip == null ? new IntersectionPoint(start.getX(), start.getY(), 0, tangent.getX(), tangent.getY(), 0, tangent.getX(), tangent.getY()) :
-                new IntersectionPoint(Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getParameterA()), ip.getParameterA(), ip.getTangentA(), ip.getParameterB(), ip.getTangentB());
+        return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, tangent.getX(), tangent.getY(), 0, tangent.getX(), tangent.getY()) :
+                new IntersectionPointEx(Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getTangentA(), ip.getArgumentB(), ip.getTangentB());
     }
 
     /**
@@ -147,7 +147,7 @@ public interface Connector {
      * @param end        the end of the line
      * @return the new end point in world coordinates
      */
-    default IntersectionPoint chopEnd(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default IntersectionPointEx chopEnd(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         return chopStart(ctx, connection, target, end, start);
     }
 
@@ -166,14 +166,14 @@ public interface Connector {
      * @return the intersection in the interval [0,1], null if no intersection.
      * In case of multiple intersections returns the largest value.
      */
-    default IntersectionPoint intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getLayoutBounds();
-        IntersectionResult i = Intersections.intersectLineRectangle(
+        IntersectionResultEx i = Intersections.intersectLineRectangleEx(
                 new java.awt.geom.Point2D.Double(s.getX(), s.getY()),
                 new java.awt.geom.Point2D.Double(e.getX(), e.getY()),
                 new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()));
-        return i.getLastIntersectionPoint();
+        return i.getLast();
     }
 }

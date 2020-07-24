@@ -89,11 +89,11 @@ public class IntersectionsTest {
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
         System.out.println("line->bezier2");
-        IntersectionResult isec = Intersections.intersectLineQuadraticCurve(a1, a2, b1, b2, b3);
+        IntersectionResultEx isec = Intersections.intersectLineQuadraticCurveEx(a1, a2, b1, b2, b3);
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getAllParametersA().get(i);
+            actual[i] = isec.getAllArgumentsA().get(i);
         }
         Arrays.sort(actual);
         for (int i = 0; i < expected.length; i++) {
@@ -104,14 +104,14 @@ public class IntersectionsTest {
     public static void testIntersectCircleCircle_5args(double c1x, double c1y, double r1, double c2x, double c2y, double r2,
                                                        @NonNull IntersectionStatus expectedStatus, @NonNull double[] expected) {
         System.out.println("intersectCircleCircle");
-        IntersectionResult isect = Intersections.intersectCircleCircle(c1x, c1y, r1, c2x, c2y, r2);
+        IntersectionResultEx isect = Intersections.intersectCircleCircleEx(c1x, c1y, r1, c2x, c2y, r2);
         IntersectionStatus actualStatus = isect.getStatus();
 
         assertEquals(expectedStatus, actualStatus);
-        List<IntersectionPoint> points = isect.getIntersections();
+        List<IntersectionPointEx> points = isect.asList();
         assertEquals(expected.length, points.size());
         for (int i = 0; i < points.size(); i++) {
-            assertEquals(expected[i], points.get(i).getParameterA(), 1e-6);
+            assertEquals(expected[i], points.get(i).getArgumentA(), 1e-6);
         }
 
     }
@@ -123,11 +123,11 @@ public class IntersectionsTest {
         double bry = b.getRadiusY();
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
-        IntersectionResult isec = Intersections.intersectLineEllipse(a1, a2, bc, brx, bry);
+        IntersectionResultEx isec = Intersections.intersectLineEllipseEx(a1, a2, bc, brx, bry);
         System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getAllParametersA().get(i);
+            actual[i] = isec.getAllArgumentsA().get(i);
         }
         Arrays.sort(actual);
         for (int i = 0; i < expected.length; i++) {
@@ -143,13 +143,13 @@ public class IntersectionsTest {
         System.out.println("bezier3->point");
         System.out.println("a:" + a);
         System.out.println("b:" + b);
-        IntersectionResult isec = Intersections.intersectCubicCurvePoint(
+        IntersectionResultEx isec = Intersections.intersectCubicCurvePointEx(
                 a.getStartX(), a.getStartY(), a.getControlX1(), a.getControlY1(),
                 a.getControlX2(), a.getControlY2(), a.getEndX(), a.getEndY(),
                 b.getCenterX(), b.getCenterY(), b.getRadius());
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
-            actual[i] = isec.getAllParametersA().get(i);
+            actual[i] = isec.getAllArgumentsA().get(i);
         }
         Arrays.sort(actual);
         Arrays.sort(expected);
@@ -162,7 +162,54 @@ public class IntersectionsTest {
 
     @NonNull
     @TestFactory
-    public List<DynamicTest> testIntersectLineLine() {
+    public List<DynamicTest> intersectLineCircleFactory() {
+        return Arrays.asList(
+                dynamicTest("intersection test case", () -> testIntersectLineCircle(
+                        new Line(226.4340152101264, 42.75743509005417, 196.4340152101264, 112.75743509005417),
+                        new Circle(191.48426774182056, 107.80768762174836, 7.000000000000003),
+                        1e-8,
+                        IntersectionStatus.INTERSECTION, new double[]{0.931727621126784, 1.0000000000000329}, new double[]{0.02438540917239233, 0.7853981633977785})),
+                dynamicTest("line inside circle", () -> testIntersectLineCircle(
+                        new Line(-5, 0, 5, 0),
+                        new Circle(0, 0, 10),
+                        1e-8,
+                        IntersectionStatus.NO_INTERSECTION_INSIDE, new double[]{}, new double[]{})),
+                dynamicTest("line outside circle", () -> testIntersectLineCircle(
+                        new Line(15, 0, 20, 0),
+                        new Circle(0, 0, 10),
+                        1e-8,
+                        IntersectionStatus.NO_INTERSECTION_OUTSIDE, new double[]{}, new double[]{})),
+                dynamicTest("horizontal line through circle", () -> testIntersectLineCircle(
+                        new Line(-20, 0, 20, 0),
+                        new Circle(0, 0, 10),
+                        1e-8,
+                        IntersectionStatus.INTERSECTION, new double[]{0.25, 0.75}, new double[]{3.141592653589793, 0.0})),
+                dynamicTest("horizontal line starts inside circle", () -> testIntersectLineCircle(
+                        new Line(0, 0, 20, 0),
+                        new Circle(0, 0, 10),
+                        1e-8,
+                        IntersectionStatus.INTERSECTION, new double[]{0.5}, new double[]{0.0})),
+                dynamicTest("horizontal line tangent to circle", () -> testIntersectLineCircle(
+                        new Line(-20, 10, 20, 10),
+                        new Circle(0, 0, 10),
+                        1e-8,
+                        IntersectionStatus.INTERSECTION, new double[]{0.5}, new double[]{1.5707963267948966}))
+        );
+    }
+
+    private void testIntersectLineCircle(Line line, Circle circle, double eps, IntersectionStatus expectedStatus, double[] expectedAs, double[] expectedBs) {
+        IntersectionResultEx isect = Intersections.intersectLineCircleEx(
+                line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(),
+                circle.getCenterX(), circle.getCenterY(), circle.getRadius(),
+                eps);
+        assertEquals(expectedStatus, isect.getStatus());
+        assertEquals(DoubleArrayList.of(expectedAs), isect.getAllArgumentsA());
+        assertEquals(DoubleArrayList.of(expectedBs), isect.getAllArgumentsB());
+    }
+
+    @NonNull
+    @TestFactory
+    public List<DynamicTest> intersectLineLineFactory() {
         return Arrays.asList(
                 dynamicTest("intersection", () -> testIntersectLineLine(
                         new Line(0, 0.0, 10.0, 0),
@@ -226,17 +273,17 @@ public class IntersectionsTest {
      */
     public static void testIntersectLineLine(@NonNull Line a, @NonNull Line b, @NonNull IntersectionStatus expectedStatus,
                                              double[] expectedParamsA, double[] expectedParamsB) {
-        IntersectionResult isec = Intersections.intersectLineLine(a.getStartX(), a.getStartY(),
+        IntersectionResultEx isec = Intersections.intersectLineLineEx(a.getStartX(), a.getStartY(),
                 a.getEndX(), a.getEndY(),
                 b.getStartX(), b.getStartY(), b.getEndX(), b.getEndY());
 
-        DoubleArrayList actualA = isec.getAllParametersA();
+        DoubleArrayList actualA = isec.getAllArgumentsA();
         DoubleArrayList expectedA = DoubleArrayList.of(expectedParamsA);
         System.out.println("  expected A: " + expectedA);
         System.out.println("  actual A: " + actualA);
         assertEquals(expectedA, actualA);
 
-        DoubleArrayList actualB = isec.getAllParametersB();
+        DoubleArrayList actualB = isec.getAllArgumentsB();
         DoubleArrayList expectedB = DoubleArrayList.of(expectedParamsB);
         System.out.println("  expected B: " + expectedB);
         System.out.println("  actual B: " + actualB);

@@ -2,7 +2,7 @@ package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.IntersectionStatus;
 import org.jhotdraw8.geom.isect.Intersections;
 
@@ -50,22 +50,22 @@ public class Bezier2BiArc {
             var C1 = bezier.getP1().equals(bezier.getCtrlP1()) ? bezier.getCtrlP2() : bezier.getCtrlP1();
             var C2 = bezier.getP2().equals(bezier.getCtrlP2()) ? bezier.getCtrlP1() : bezier.getCtrlP2();
 
-            IntersectionResult intersectionResult = Intersections.intersectRayRay(bezier.getP1(), C1, bezier.getP2(), C2);
+            IntersectionResultEx intersectionResultEx = Intersections.intersectRayRayEx(bezier.getP1(), C1, bezier.getP2(), C2);
 
             // Edge case: control lines are parallel
-            if (intersectionResult.getStatus() == IntersectionStatus.NO_INTERSECTION_PARALLEL) {
+            if (intersectionResultEx.getStatus() == IntersectionStatus.NO_INTERSECTION_PARALLEL) {
                 CubicCurve2D.Double first = new CubicCurve2D.Double();
                 CubicCurve2D.Double second = new CubicCurve2D.Double();
                 bezier.subdivide(first, second);
                 stack.push(second);
                 stack.push(first);
                 continue;
-            } else if (intersectionResult.getStatus() != IntersectionStatus.INTERSECTION) {
+            } else if (intersectionResultEx.getStatus() != IntersectionStatus.INTERSECTION) {
                 // Edge case: control lines are coincident
                 continue;
             }
 
-            var V = intersectionResult.getFirstPoint();
+            var V = intersectionResultEx.getFirst();
 
             Point2D.Double P1 = new Point2D.Double(bezier.getX1(), bezier.getY1());
             Point2D.Double P2 = new Point2D.Double(bezier.getX2(), bezier.getY2());

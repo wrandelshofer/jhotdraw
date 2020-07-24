@@ -8,8 +8,8 @@ public enum IntersectionStatus {
     /**
      * Shape 1 does not intersect with shape 2.
      * <p>
-     * Note that the {@link IntersectionResult} may contain
-     * {@link IntersectionPoint}s indicating "false" intersections
+     * Note that the {@link IntersectionResultEx} may contain
+     * {@link IntersectionPointEx}s indicating "false" intersections
      * of shape 1 with shape 2.
      */
     NO_INTERSECTION,

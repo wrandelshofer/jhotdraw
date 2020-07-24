@@ -6,7 +6,7 @@ package org.jhotdraw8.geom;
 
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.Intersections;
 
 import java.awt.Rectangle;
@@ -167,25 +167,25 @@ public class BezierNodePath implements Shape {
     }
 
     public boolean pathIntersects(double x, double y, double tolerance) {
-        IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+        IntersectionResultEx isect = Intersections.intersectPathIteratorPointEx(getPathIterator(null), x, y, tolerance);
         return !isect.isEmpty();
     }
 
-    public IntersectionResult pathIntersection(double x, double y, double tolerance) {
-        IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+    public IntersectionResultEx pathIntersection(double x, double y, double tolerance) {
+        IntersectionResultEx isect = Intersections.intersectPathIteratorPointEx(getPathIterator(null), x, y, tolerance);
         return isect;
     }
 
     public boolean split(double x, double y, double tolerance) {
-        IntersectionResult isect = Intersections.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+        IntersectionResultEx isect = Intersections.intersectPathIteratorPointEx(getPathIterator(null), x, y, tolerance);
         if (isect.size() == 1) {
-            int segment = (int) isect.getFirstParameterA();
+            int segment = (int) isect.getFirst().getArgumentA();
             final BezierNode middle;
-            Point2D.Double p = isect.getPoints().get(0);
+            Point2D.Double p = isect.get(0);
             final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
             BezierNode prev = nodes.get(prevSegment);
             BezierNode next = nodes.get(segment);
-            double t = isect.getFirstParameterA() - segment;
+            double t = isect.getFirst().getArgumentA() - segment;
             boolean pc2 = prev.isC2();
             boolean nc1 = next.isC1();
             if (pc2) {

@@ -18,7 +18,7 @@ import java.util.Spliterators;
  * @param <E> element type
  * @author Werner Randelshofer
  */
-public final class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
+public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
 
     final static ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(true, new Object[0]);
 

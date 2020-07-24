@@ -135,13 +135,13 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         }
 
         if (startConnector != null && startTarget != null) {
-            java.awt.geom.Point2D.Double chp = startConnector.chopStart(ctx, this, startTarget, start, end).getPoint();
-            final Point2D p = worldToParent(chp.getX(),chp.getY());
+            java.awt.geom.Point2D.Double chp = startConnector.chopStart(ctx, this, startTarget, start, end);
+            final Point2D p = worldToParent(chp.getX(), chp.getY());
             set(START, new CssPoint2D(p));
         }
         if (endConnector != null && endTarget != null) {
-            java.awt.geom.Point2D.Double chp = endConnector.chopEnd(ctx, this, endTarget, start, end).getPoint();
-            final Point2D p = worldToParent(chp.getX(),chp.getY());
+            java.awt.geom.Point2D.Double chp = endConnector.chopEnd(ctx, this, endTarget, start, end);
+            final Point2D p = worldToParent(chp.getX(), chp.getY());
             set(END, new CssPoint2D(p));
         }
 

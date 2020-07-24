@@ -30,7 +30,7 @@ import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.IntersectionStatus;
 import org.jhotdraw8.geom.isect.Intersections;
 
@@ -71,7 +71,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         if (FXGeom.contains(poly2.getBoundsInParent(), x, y, tolerance)) {
-            IntersectionResult i = Intersections.intersectPathIteratorPoint(
+            IntersectionResultEx i = Intersections.intersectPathIteratorPointEx(
                     Shapes.pathIteratorFromPointCoords(poly2.getPoints(), true, PathIterator.WIND_EVEN_ODD, null),
                     x, y, tolerance);
             return i.getStatus() == IntersectionStatus.INTERSECTION;
@@ -142,9 +142,9 @@ public class PolygonOutlineHandle extends AbstractHandle {
             Point2D p1 = points.get((n + i - 1) % n);
             Point2D p2 = points.get(i);
 
-            IntersectionResult result = Intersections.intersectLineCircle(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
-            if (result.getAllParametersA().size() == 2) {
-                insertLocation = FXGeom.lerp(p1, p2, (result.getFirstParameterA() + result.getLastParameterA()) / 2);
+            IntersectionResultEx result = Intersections.intersectLineCircleEx(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
+            if (result.getAllArgumentsA().size() == 2) {
+                insertLocation = FXGeom.lerp(p1, p2, (result.getFirst().getArgumentA() + result.getLast().getArgumentA()) / 2);
                 insertAt = i;
                 break;
             }

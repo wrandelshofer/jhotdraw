@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Spliterator;
 
@@ -27,6 +28,33 @@ import java.util.Spliterator;
 public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
 
     E get(int index);
+
+    /**
+     * Gets the first element of the list.
+     *
+     * @return the first element
+     * @throws java.util.NoSuchElementException if the list is empty
+     */
+    default E getFirst() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return get(0);
+    }
+
+    /**
+     * Gets the last element of the list.
+     *
+     * @return the last element
+     * @throws java.util.NoSuchElementException if the list is empty
+     */
+    default E getLast() {
+        int index = size() - 1;
+        if (index < 0) {
+            throw new NoSuchElementException();
+        }
+        return get(index);
+    }
 
     /**
      * Returns an iterator over elements of type {@code E}.

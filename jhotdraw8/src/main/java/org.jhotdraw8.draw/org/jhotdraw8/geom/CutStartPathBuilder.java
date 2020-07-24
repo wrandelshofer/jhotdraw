@@ -6,7 +6,7 @@ package org.jhotdraw8.geom;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.Intersections;
 
 import java.awt.geom.Point2D;
@@ -51,21 +51,21 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.curveTo(x1, y1, x2, y2, x3, y3);
             return;
         }
-        IntersectionResult i = Intersections.intersectCubicCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
+        IntersectionResultEx i = Intersections.intersectCubicCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
-            case INTERSECTION:
-                double t = i.getLastParameterA();
-                out.moveTo(i.getLastPoint().getX(),i.getLastPoint().getY());
-                BezierCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
-                break;
-            case NO_INTERSECTION_INSIDE:
-                cx = x3;
-                cy = y3;
-                break;
-            case NO_INTERSECTION_OUTSIDE:
-            case NO_INTERSECTION_TANGENT:
-            default:
-                out.moveTo(getLastX(), getLastY());
+        case INTERSECTION:
+            double t = i.getLast().getArgumentA();
+            out.moveTo(i.getLast().getX(), i.getLast().getY());
+            BezierCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
+            break;
+        case NO_INTERSECTION_INSIDE:
+            cx = x3;
+            cy = y3;
+            break;
+        case NO_INTERSECTION_OUTSIDE:
+        case NO_INTERSECTION_TANGENT:
+        default:
+            out.moveTo(getLastX(), getLastY());
                 state = State.CUT_DONE;
                 out.curveTo(x1, y1, x2, y2, x3, y3);
                 break;
@@ -84,10 +84,10 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.lineTo(x, y);
             return;
         }
-        IntersectionResult i = Intersections.intersectLineCircle(getLastX(), getLastY(), x, y, cx, cy, radius);
+        IntersectionResultEx i = Intersections.intersectLineCircleEx(getLastX(), getLastY(), x, y, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
-                Point2D p = i.getLastPoint();
+                Point2D p = i.getLast();
                 out.moveTo(p.getX(), p.getY());
                 out.lineTo(x, y);
                 state = State.CUT_DONE;
@@ -124,21 +124,21 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.quadTo(x1, y1, x2, y2);
             return;
         }
-        IntersectionResult i = Intersections.intersectQuadraticCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
+        IntersectionResultEx i = Intersections.intersectQuadraticCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
-            case INTERSECTION:
-                double t = i.getLastParameterA();
-                out.moveTo(i.getLastPoint().getX(),i.getLastPoint().getY());
-                BezierCurves.splitQuadCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
-                state = State.CUT_DONE;
-                break;
-            case NO_INTERSECTION_INSIDE:
-                cx = x2;
-                cy = y2;
-                break;
-            case NO_INTERSECTION_OUTSIDE:
-            case NO_INTERSECTION_TANGENT:
-            default:
+        case INTERSECTION:
+            double t = i.getLast().getArgumentA();
+            out.moveTo(i.getLast().getX(), i.getLast().getY());
+            BezierCurves.splitQuadCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
+            state = State.CUT_DONE;
+            break;
+        case NO_INTERSECTION_INSIDE:
+            cx = x2;
+            cy = y2;
+            break;
+        case NO_INTERSECTION_OUTSIDE:
+        case NO_INTERSECTION_TANGENT:
+        default:
                 out.moveTo(getLastX(), getLastY());
                 state = State.CUT_DONE;
                 out.quadTo(x1, y1, x2, y2);

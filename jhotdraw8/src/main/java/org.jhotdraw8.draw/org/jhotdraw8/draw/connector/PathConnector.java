@@ -11,8 +11,8 @@ import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.isect.IntersectionPoint;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionPointEx;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.geom.isect.Intersections;
 
 import java.awt.geom.PathIterator;
@@ -38,7 +38,7 @@ public class PathConnector extends LocatorConnector {
 
 
     @Override
-    public IntersectionPoint intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    public IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         if (!(target instanceof PathIterableFigure)) {
             return super.intersect(ctx, connection, target, start, end);
         }
@@ -60,15 +60,15 @@ public class PathConnector extends LocatorConnector {
                     // FIXME must stroke the path
                     pit = pif.getPathIterator(ctx, null);
                     break;
-                case INSIDE:
-                    pit = pif.getPathIterator(ctx, null);
-                    break;
+            case INSIDE:
+                pit = pif.getPathIterator(ctx, null);
+                break;
             }
         } else {
             pit = pif.getPathIterator(ctx, null);
         }
 
-        IntersectionResult i = Intersections.intersectLinePathIterator(s.getX(), s.getY(), e.getX(), e.getY(), pit);
-        return i.getLastIntersectionPoint();
+        IntersectionResultEx i = Intersections.intersectLinePathIteratorEx(s.getX(), s.getY(), e.getX(), e.getY(), pit);
+        return i.getLast();
     }
 }

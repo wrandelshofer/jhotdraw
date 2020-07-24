@@ -37,7 +37,7 @@ public class Geom {
      * The bitmask that indicates that a point lies above the rectangle.
      */
     public static final int OUT_TOP = 2;
-    public static final double REAL_THRESHOLD = 1e-8;
+    public static final double EPSILON = 1e-8;
 
     private Geom() {
     } // never instantiated
@@ -349,7 +349,7 @@ public class Geom {
     public static boolean lineContainsPoint(double x1, double y1,
                                             double x2, double y2,
                                             double px, double py) {
-        return lineContainsPoint(x1, y1, x2, y2, px, py, REAL_THRESHOLD);
+        return lineContainsPoint(x1, y1, x2, y2, px, py, EPSILON);
     }
 
     /**
@@ -466,7 +466,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2) {
-        return almostEqual(v1, v2, REAL_THRESHOLD);
+        return almostEqual(v1, v2, EPSILON);
     }
 
     public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2, double epsilon) {
@@ -474,7 +474,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1) {
-        return almostEqual(x0, y0, x1, y1, REAL_THRESHOLD);
+        return almostEqual(x0, y0, x1, y1, EPSILON);
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1, double epsilon) {
@@ -482,7 +482,7 @@ public class Geom {
     }
 
     public static boolean almostZero(java.awt.geom.Point2D.Double v) {
-        return almostZero(v, REAL_THRESHOLD);
+        return almostZero(v, EPSILON);
     }
 
     public static boolean almostZero(java.awt.geom.Point2D.Double v, double epsilon) {
@@ -490,7 +490,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(double a, double b) {
-        return almostEqual(a, b, REAL_THRESHOLD);
+        return almostEqual(a, b, EPSILON);
     }
 
     public static boolean almostEqual(double a, double b, double epsilon) {
@@ -499,7 +499,7 @@ public class Geom {
 
 
     public static boolean almostZero(double a) {
-        return almostZero(a, REAL_THRESHOLD);
+        return almostZero(a, EPSILON);
     }
 
     public static boolean almostZero(double a, double epsilon) {

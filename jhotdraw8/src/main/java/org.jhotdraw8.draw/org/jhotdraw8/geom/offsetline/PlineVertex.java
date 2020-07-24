@@ -6,7 +6,7 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.isect.IntersectionResult;
+import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 
@@ -333,20 +333,20 @@ public class PlineVertex implements Cloneable {
         };
 
         if (vIsLine && uIsLine) {
-            IntersectionResult intrResult = ContourIntersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
+            IntersectionResultEx intrResult = ContourIntersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             switch (intrResult.getStatus()) {
             case NO_INTERSECTION_PARALLEL:
                 result.intrType = PlineSegIntrType.NoIntersect;
                 break;
             case INTERSECTION:
                 result.intrType = PlineSegIntrType.OneIntersect;
-                result.point1 = intrResult.getFirstPoint();
+                result.point1 = intrResult.getFirst();
                 break;
             case NO_INTERSECTION:
                 result.intrType = PlineSegIntrType.SegmentOverlap;
                 // build points from parametric parameters (using second segment as defined by the function)
-                result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirstParameterA());
-                result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirstParameterB());
+                result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentA());
+                result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentB());
                 break;
             case NO_INTERSECTION_COINCIDENT:
                 result.intrType = PlineSegIntrType.NoIntersect;
