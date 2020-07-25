@@ -189,17 +189,20 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             perp = FXGeom.perp(tangent);
 
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
-            Bounds b = getTextBounds(ctx);
             double hposTranslate = 0;
             switch (getStyledNonNull(TEXT_HPOS)) {
-                case CENTER:
-                    hposTranslate = b.getWidth() * -0.5;
-                    break;
-                case LEFT:
-                    break;
-                case RIGHT:
-                    hposTranslate = -b.getWidth();
-                    break;
+            case CENTER: {
+                Bounds b = getTextBounds(ctx);
+                hposTranslate = b.getWidth() * -0.5;
+                break;
+            }
+            case LEFT:
+                break;
+            case RIGHT: {
+                Bounds b = getTextBounds(ctx);
+                hposTranslate = -b.getWidth();
+                break;
+            }
             }
 
             // FIXME must convert with current font size of label!!
@@ -212,25 +215,25 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             Rotate rotate = null;
             final boolean layoutTransforms;
             switch (getStyledNonNull(LABEL_AUTOROTATE)) {
-                case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
-                    final double theta = (Geom.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
-                    rotate = new Rotate(theta, origin.getX(), origin.getY());
-                    layoutTransforms = true;
-                    // set(ROTATE, theta);
-                }
+            case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
+                final double theta = (Geom.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+                rotate = new Rotate(theta, origin.getX(), origin.getY());
+                layoutTransforms = true;
+                // set(ROTATE, theta);
+            }
+            break;
+            case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
+                final double theta = (Geom.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+                final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
+                rotate = new Rotate(halfTheta, origin.getX(), origin.getY());
+                layoutTransforms = true;
+                // set(ROTATE, halfTheta);
+            }
+            break;
+            case OFF:
+            default:
+                layoutTransforms = false;
                 break;
-                case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
-                    final double theta = (Geom.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
-                    final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
-                    rotate = new Rotate(halfTheta, origin.getX(), origin.getY());
-                    layoutTransforms = true;
-                    // set(ROTATE, halfTheta);
-                }
-                break;
-                case OFF:
-                default:
-                    layoutTransforms = false;
-                    break;
             }        // FIXME add tx in angle of rotated label!
 //        origin=origin.add(tangent.multiply(hposTranslate));
             origin = origin.add(hposTranslate, 0);
