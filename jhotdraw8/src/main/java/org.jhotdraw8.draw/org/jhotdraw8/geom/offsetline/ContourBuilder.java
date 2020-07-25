@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.isect.IntersectionResult;
 import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.util.function.QuintFunction;
 import org.jhotdraw8.util.function.TriConsumer;
@@ -297,23 +298,24 @@ public class ContourBuilder {
             }
         };
 
-        IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(u1.pos(), u2.pos(), arc.radius, arc.center);
-        if (intrResult.numIntersects == 0) {
+        IntersectionResult intrResult = intrLineSeg2Circle2(u1.pos(), u2.pos(), arc.radius, arc.center);
+        if (intrResult.size() == 0) {
             connectUsingArc.run();
-        } else if (intrResult.numIntersects == 1) {
-            processIntersect.accept(intrResult.t0, pointFromParametric(u1.pos(), u2.pos(), intrResult.t0));
+        } else if (intrResult.size() == 1) {
+            processIntersect.accept(intrResult.getFirst().getArgument(),
+                    pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgument()));
         } else {
-            assert intrResult.numIntersects == 2 : "should have 2 intersects here";
+            assert intrResult.size() == 2 : "should have 2 intersects here";
             final Point2D.Double origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
-            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t0);
+            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgument());
             double dist1 = i1.distanceSq(origPoint);
-            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.t1);
+            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getLast().getArgument());
             double dist2 = i2.distanceSq(origPoint);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intrResult.t0, i1);
+                processIntersect.accept(intrResult.getFirst().getArgument(), i1);
             } else {
-                processIntersect.accept(intrResult.t1, i2);
+                processIntersect.accept(intrResult.getLast().getArgument(), i2);
             }
         }
     }
@@ -875,23 +877,24 @@ public class ContourBuilder {
             }
         };
 
-        IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(v1.pos(), v2.pos(), arc.radius, arc.center);
-        if (intrResult.numIntersects == 0) {
+        IntersectionResult intrResult = intrLineSeg2Circle2(v1.pos(), v2.pos(), arc.radius, arc.center);
+        if (intrResult.size() == 0) {
             connectUsingArc.run();
-        } else if (intrResult.numIntersects == 1) {
-            processIntersect.accept(intrResult.t0, pointFromParametric(v1.pos(), v2.pos(), intrResult.t0));
+        } else if (intrResult.size() == 1) {
+            processIntersect.accept(intrResult.getFirst().getArgument(),
+                    intrResult.getFirst());
         } else {
-            assert intrResult.numIntersects == 2 : "should have 2 intersects here";
+            assert intrResult.size() == 2 : "should have 2 intersects here";
             // always use intersect closest to original point
-            Point2D.Double i1 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t0);
+            Point2D.Double i1 = intrResult.getFirst();
             double dist1 = i1.distanceSq(s1.origV2Pos);
-            Point2D.Double i2 = pointFromParametric(v1.pos(), v2.pos(), intrResult.t1);
+            Point2D.Double i2 = intrResult.getLast();
             double dist2 = i2.distanceSq(s1.origV2Pos);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intrResult.t0, i1);
+                processIntersect.accept(intrResult.getFirst().getArgument(), i1);
             } else {
-                processIntersect.accept(intrResult.t1, i2);
+                processIntersect.accept(intrResult.getLast().getArgument(), i2);
             }
         }
     }
@@ -983,21 +986,24 @@ public class ContourBuilder {
             PlineVertex v1 = pline.get(sIndex);
             PlineVertex v2 = pline.get(sIndex + 1);
             if (v1.bulgeIsZero()) {
-                IntrLineSeg2Circle2Result intrResult =
+                IntersectionResult intrResult =
                         intrLineSeg2Circle2(v1.pos(), v2.pos(), circleRadius, circleCenter);
-                if (intrResult.numIntersects == 0) {
+                if (intrResult.size() == 0) {
                     continue;
-                } else if (intrResult.numIntersects == 1) {
-                    if (validLineSegIntersect.test(intrResult.t0)) {
-                        output.add(new OrderedPair<>(sIndex, Arrays.asList(pointFromParametric(v1.pos(), v2.pos(), intrResult.t0))));
+                } else if (intrResult.size() == 1) {
+                    if (validLineSegIntersect.test(intrResult.getFirst().getArgument())) {
+                        output.add(new OrderedPair<>(sIndex,
+                                Arrays.asList(intrResult.getFirst())));
                     }
                 } else {
-                    assert intrResult.numIntersects == 2 : "should be two intersects here";
-                    if (validLineSegIntersect.test(intrResult.t0)) {
-                        output.add(new OrderedPair<>(sIndex, Arrays.asList(pointFromParametric(v1.pos(), v2.pos(), intrResult.t0))));
+                    assert intrResult.size() == 2 : "should be two intersects here";
+                    if (validLineSegIntersect.test(intrResult.getFirst().getArgument())) {
+                        output.add(new OrderedPair<>(sIndex,
+                                Arrays.asList(intrResult.getFirst())));
                     }
-                    if (validLineSegIntersect.test(intrResult.t1)) {
-                        output.add(new OrderedPair<>(sIndex, Arrays.asList(pointFromParametric(v1.pos(), v2.pos(), intrResult.t1))));
+                    if (validLineSegIntersect.test(intrResult.getLast().getArgument())) {
+                        output.add(new OrderedPair<>(sIndex,
+                                Arrays.asList(intrResult.getLast())));
                     }
                 }
             } else {
@@ -1044,20 +1050,20 @@ public class ContourBuilder {
     /**
      * Creates the parallel offset polylines to the polyline given.
      *
-     * @param pline             input polyline
-     * @param offset            offset
-     * @param hasSelfIntersects true if the polyline may have self-intersects
+     * @param pline                 input polyline
+     * @param offset                offset
+     * @param mayHaveSelfIntersects true if the polyline may have self-intersects
      * @return list of offset polylines
      */
     @NonNull
     private List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset,
-                                             boolean hasSelfIntersects) {
+                                             boolean mayHaveSelfIntersects) {
 
         if (pline.size() < 2) {
             return new ArrayList<>();
         }
         PolyArcPath rawOffset = createRawOffsetPline(pline, offset);
-        if (pline.isClosed() && !hasSelfIntersects) {
+        if (pline.isClosed() && !mayHaveSelfIntersects) {
             List<OpenPolylineSlice> slices = slicesFromRawOffset(pline, rawOffset, offset);
             return stitchOffsetSlicesTogether(slices, pline.isClosed(), rawOffset.size() - 1);
         }

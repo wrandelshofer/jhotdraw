@@ -6,6 +6,7 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.isect.IntersectionResult;
 import org.jhotdraw8.geom.isect.IntersectionResultEx;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
@@ -287,7 +288,7 @@ public class PlineVertex implements Cloneable {
                 processLineArcIntr = /*[&result]*/(Point2D.Double p0, Point2D.Double p1,
                                                    PlineVertex a1, PlineVertex a2) -> {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
-            IntrLineSeg2Circle2Result intrResult = ContourIntersections.intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
+            IntersectionResult intrResult = ContourIntersections.intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
             Function<Double, OrderedPair<Boolean, Point2D.Double>> pointInSweep = (Double t) -> {
@@ -301,10 +302,10 @@ public class PlineVertex implements Cloneable {
                 return new OrderedPair<>(withinSweep, p);
             };
 
-            if (intrResult.numIntersects == 0) {
+            if (intrResult.size() == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
-            } else if (intrResult.numIntersects == 1) {
-                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.t0);
+            } else if (intrResult.size() == 1) {
+                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgument());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -312,9 +313,9 @@ public class PlineVertex implements Cloneable {
                     result.intrType = PlineSegIntrType.NoIntersect;
                 }
             } else {
-                assert intrResult.numIntersects == 2 : "shouldn't get here without 2 intersects";
-                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.t0);
-                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.t1);
+                assert intrResult.size() == 2 : "shouldn't get here without 2 intersects";
+                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgument());
+                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getFirst().getArgument());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;

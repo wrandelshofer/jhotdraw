@@ -107,73 +107,12 @@ public class ContourIntersections {
      * if t > 0 then intersect nearest v2), intersects are "sticky" and "snap" to tangent points, e.g. a
      * segment very close to being a tangent will be returned as a single intersect point.
      */
-    public static IntrLineSeg2Circle2Result intrLineSeg2Circle2(final Point2D.Double p0,
-                                                                final Point2D.Double p1, double radius,
-                                                                final Point2D.Double circleCenter) {
-        IntersectionResult r = Intersections.intersectLineCircle(p0, p1, circleCenter, radius, REAL_THRESHOLD);
-        IntrLineSeg2Circle2Result rr = intrLineSeg2Circle2_old(p0, p1, radius, circleCenter);
-        if (rr.numIntersects != r.size()) {
-            System.err.println("!same");
-            System.err.println("  r :" + r);
-            System.err.println("  rr:" + rr);
-        }
-        return rr;
+    public static IntersectionResult intrLineSeg2Circle2(final Point2D.Double p0,
+                                                         final Point2D.Double p1, double radius,
+                                                         final Point2D.Double circleCenter) {
+        return Intersections.intersectLineCircle(p0, p1, circleCenter, radius, REAL_THRESHOLD);
     }
 
-    /**
-     * Gets the intersect between a segment and a circle, returning the parametric solution t to the
-     * segment equation P(t) = v1 + t * (v2 - v1) for t = 0 to t = 1, if t < 0 or t > 1 then intersect
-     * occurs only when extending the segment out past the points given (if t < 0 intersect nearest v1,
-     * if t > 0 then intersect nearest v2), intersects are "sticky" and "snap" to tangent points, e.g. a
-     * segment very close to being a tangent will be returned as a single intersect point.
-     */
-    public static IntrLineSeg2Circle2Result intrLineSeg2Circle2_old(final Point2D.Double p0,
-                                                                    final Point2D.Double p1, double radius,
-                                                                    final Point2D.Double circleCenter) {
-        // This function solves for t by substituting the parametric equations for the segment x = v1.X +
-        // t * (v2.X - v1.X) and y = v1.Y + t * (v2.Y - v1.Y) for t = 0 to t = 1 into the circle equation
-        // (x-h)^2 + (y-k)^2 = r^2 and then solving the resulting equation in the form a*t^2 + b*t + c = 0
-        // using the quadratic formula
-        IntrLineSeg2Circle2Result result = new IntrLineSeg2Circle2Result();
-        double dx = p1.getX() - p0.getX();
-        double dy = p1.getY() - p0.getY();
-        double h = circleCenter.getX();
-        double k = circleCenter.getY();
-
-        double a = dx * dx + dy * dy;
-        if (Math.abs(a) < Utils.realThreshold) {
-            // v1 = v2, test if point is on the circle
-            double xh = p0.getX() - h;
-            double yk = p0.getY() - k;
-            if (Geom.almostEqual(xh * xh + yk * yk, radius * radius)) {
-                result.numIntersects = 1;
-                result.t0 = 0.0;
-            } else {
-                result.numIntersects = 0;
-            }
-        } else {
-            double b = 2.0 * (dx * (p0.getX() - h) + dy * (p0.getY() - k));
-            double c = (p0.getX() * p0.getX() - 2.0 * h * p0.getX() + h * h) +
-                    (p0.getY() * p0.getY() - 2.0 * k * p0.getY() + k * k) - radius * radius;
-            double discr = b * b - 4.0 * a * c;
-
-            if (Geom.almostZero(discr, Utils.realThreshold)) {
-                // 1 solution (tangent line)
-                result.numIntersects = 1;
-                result.t0 = -b / (2.0 * a);
-            } else if (discr < 0.0) {
-                result.numIntersects = 0;
-            } else {
-                result.numIntersects = 2;
-                OrderedPair<Double, Double> sols = Utils.quadraticSolutions(a, b, c, discr);
-                result.t0 = sols.first();
-                result.t1 = sols.second();
-            }
-        }
-
-        assert result.numIntersects >= 0 && result.numIntersects <= 2 : "invalid intersect count";
-        return result;
-    }
 
     public static CoincidentSlicesResult
     sortAndJoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
@@ -568,7 +507,7 @@ public class ContourIntersections {
                 = (final Point2D.Double p0, final Point2D.Double p1,
                    final PlineVertex a1, final PlineVertex a2) -> {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
-            IntrLineSeg2Circle2Result intrResult = intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
+            IntersectionResult intrResult = intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
             DoubleFunction<OrderedPairNonNull<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
@@ -582,10 +521,10 @@ public class ContourIntersections {
                 return new OrderedPairNonNull<>(withinSweep, p);
             };
 
-            if (intrResult.numIntersects == 0) {
+            if (intrResult.size() == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
-            } else if (intrResult.numIntersects == 1) {
-                OrderedPairNonNull<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.t0);
+            } else if (intrResult.size() == 1) {
+                OrderedPairNonNull<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgument());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -593,9 +532,9 @@ public class ContourIntersections {
                     result.intrType = PlineSegIntrType.NoIntersect;
                 }
             } else {
-                assert intrResult.numIntersects == 2 : "shouldn't get here without 2 intersects";
-                OrderedPairNonNull<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.t0);
-                OrderedPairNonNull<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.t1);
+                assert intrResult.size() == 2 : "shouldn't get here without 2 intersects";
+                OrderedPairNonNull<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgument());
+                OrderedPairNonNull<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getLast().getArgument());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;

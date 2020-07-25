@@ -17,7 +17,21 @@ public class IntersectionPoint extends Point2D.Double {
         this.argument = argument;
     }
 
+    public IntersectionPoint(Point2D p, double argument) {
+        super(p.getX(), p.getY());
+        this.argument = argument;
+    }
+
     public double getArgument() {
         return argument;
+    }
+
+    @Override
+    public String toString() {
+        return "IntersectionPoint{" +
+                "x=" + x +
+                ", y=" + y +
+                ", a=" + argument +
+                '}';
     }
 }

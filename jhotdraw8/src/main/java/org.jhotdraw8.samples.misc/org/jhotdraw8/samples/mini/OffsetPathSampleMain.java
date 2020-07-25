@@ -51,6 +51,7 @@ public class OffsetPathSampleMain extends Application {
             310, 200);
     private Path offsetPath1 = new Path();
     private Path offsetPath2 = new Path();
+    private Path offsetPath3 = new Path();
     StackPane canvas = new StackPane();
     private DoubleProperty offset = new SimpleDoubleProperty(0.0);
     private BooleanProperty closed = new SimpleBooleanProperty();
@@ -81,11 +82,18 @@ public class OffsetPathSampleMain extends Application {
         polyline.setManaged(false);
         offsetPath1.setManaged(false);
         offsetPath2.setManaged(false);
+        offsetPath3.setManaged(false);
+        offsetPath1.setMouseTransparent(true);
+        offsetPath2.setMouseTransparent(true);
+        offsetPath3.setMouseTransparent(true);
+        polyline.setMouseTransparent(true);
         offsetPath2.setStroke(Color.BLUE);
         offsetPath2.getStrokeDashArray().addAll(3.0, 3.0);
+        offsetPath3.setStroke(Color.PINK);
         polyline.setStroke(Color.LIGHTGRAY);
         canvas.getChildren().add(offsetPath1);
         canvas.getChildren().add(offsetPath2);
+        canvas.getChildren().add(offsetPath3);
         canvas.getChildren().add(polyline);
         offset.addListener(this::onPropertyChanged);
         closed.addListener(this::onPropertyChanged);
@@ -176,7 +184,7 @@ public class OffsetPathSampleMain extends Application {
     private void updatePath() {
 
         doOffsetPath(polyline, offsetPath1, offset.get());
-        //doOffsetPathWithOldAlgo(polyline,offsetPath2,-offset.get());
+        doOffsetPathWithOldAlgo(polyline, offsetPath3, -offset.get());
         // doRawOffsetPath(polyline,offsetPath2,offset.get());
         doOffsetPath(polyline, offsetPath2, -offset.get());
         offsetPath1.setStrokeWidth(3.0);

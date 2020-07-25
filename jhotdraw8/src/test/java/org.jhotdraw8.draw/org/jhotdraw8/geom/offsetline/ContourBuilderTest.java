@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestFactory;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -17,9 +18,10 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class OffsetPathBuilderTest {
+public class ContourBuilderTest {
     @NonNull
     @TestFactory
     public List<DynamicTest> offsetPathTestFactory() {
@@ -176,12 +178,21 @@ public class OffsetPathBuilderTest {
                         Shapes.buildFromPathIterator(b, input.getPathIterator(null));
                         g.draw(b.build());
 
+                        g.setColor(Color.CYAN);// expected offset line
+                        g.setStroke(new BasicStroke(3.0f));
+                        for (PolyArcPath p : expected) {
+                            b = new AWTPathBuilder();
+                            Shapes.buildFromPathIterator(b, p.getPathIterator(null));
+                            g.draw(b.build());
+                        }
+                        g.setStroke(new BasicStroke());
+
+
                         b = new AWTPathBuilder();
                         final PolyArcPath rawOffsetPline = pap.createRawOffsetPline(input, offset);
                         Shapes.buildFromPathIterator(b, rawOffsetPline.getPathIterator(null));
                         g.setColor(Color.PINK);// raw offset line
                         g.draw(b.build());
-
 
                         g.setColor(Color.MAGENTA);// final offset line
                         final List<OpenPolylineSlice> slices = pap.dualSliceAtIntersectsForOffset(input, pap.createRawOffsetPline(input, offset),
@@ -191,6 +202,7 @@ public class OffsetPathBuilderTest {
                             Shapes.buildFromPathIterator(b, s.pline.getPathIterator(null));
                             g.draw(b.build());
                         }
+
                     }
                 };
 
@@ -198,9 +210,10 @@ public class OffsetPathBuilderTest {
                 f.getContentPane().add(canvas);
                 f.setVisible(true);
             });
+
+            assertEquals(expected, actual);
         }
 
-        //assertEquals(expected, actual);
     }
 
     private void testOffsetLine(PolyArcPath input, boolean closed, double offset, PolyArcPath expected) throws Exception, InterruptedException {
