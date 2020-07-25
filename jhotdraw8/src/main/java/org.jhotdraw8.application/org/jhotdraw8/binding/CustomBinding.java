@@ -120,6 +120,7 @@ public class CustomBinding {
     public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>>
     void bindBidirectionalAndConvert(@NonNull PROPERTY_A propertyA, @NonNull PROPERTY_B propertyB, @NonNull Function<A, B> convertAtoB, @NonNull Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
+        propertyB.setValue(convertAtoB.apply(propertyA.getValue()));
         addFlaggedChangeListener(propertyB, propertyA, convertAtoB, alreadyCalled);
         addFlaggedChangeListener(propertyA, propertyB, convertBtoA, alreadyCalled);
     }

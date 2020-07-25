@@ -97,8 +97,8 @@
             <HBox VBox.vgrow="ALWAYS">
               <children>
                 <ListView fx:id="fontSizeList" prefHeight="200.0" prefWidth="200.0"/>
-                <Slider fx:id="fontSizeSlider" max="300.0" min="1.0" minorTickCount="1" orientation="VERTICAL"
-                        snapToTicks="true">
+                <Slider fx:id="fontSizeSlider" max="200.0" min="0.0" orientation="VERTICAL"
+                        snapToTicks="true" minorTickCount="0" majorTickUnit="1">
                   <HBox.margin>
                     <Insets bottom="8.0" left="4.0" right="4.0" top="4.0"/>
                   </HBox.margin>

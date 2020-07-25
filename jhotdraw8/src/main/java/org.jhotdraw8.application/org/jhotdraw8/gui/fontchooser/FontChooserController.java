@@ -12,6 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
+import org.jhotdraw8.binding.CustomBinding;
 
 public class FontChooserController extends FontFamilyChooserController {
 
@@ -35,7 +36,12 @@ public class FontChooserController extends FontFamilyChooserController {
 
     private void initFontSizeControls() {
         fontSizeList.getItems().addAll(9, 10, 11, 12, 13, 14, 18, 24, 36, 48, 64, 72, 96, 144, 288);
-        fontSizeSlider.valueProperty().bindBidirectional(fontSize);
+        //fontSizeSlider.valueProperty().bindBidirectional(fontSize);
+        CustomBinding.bindBidirectionalAndConvert(
+                fontSize,
+                fontSizeSlider.valueProperty(),
+                a -> fontSizeSlider.getMax() - a.doubleValue(),
+                b -> fontSizeSlider.getMax() - b.doubleValue());
         StringConverter<Number> converter = new NumberStringConverter();
         Bindings.bindBidirectional(fontSizeField.textProperty(), fontSize, converter);
         fontSizeList.setOnMouseClicked(event -> {
