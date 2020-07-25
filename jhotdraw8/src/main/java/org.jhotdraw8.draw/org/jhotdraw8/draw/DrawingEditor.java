@@ -315,7 +315,7 @@ public interface DrawingEditor {
      */
     default double getTolerance() {
         // handle size * 0.5 * sqrt(2).
-        return getHandleSize() * 0.71;
+        return getHandleSize();
     }
 
     /**

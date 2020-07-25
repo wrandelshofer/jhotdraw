@@ -1796,15 +1796,17 @@ public class Shapes {
      * @return true if contained within tolerance
      */
     public static boolean outlineContains(@NonNull Shape shape, @NonNull Point2D.Double p, double tolerance) {
+        AWTPathBuilder b = new AWTPathBuilder();
+
         double[] coords = new double[6];
         double prevX = 0, prevY = 0;
         double moveX = 0, moveY = 0;
         for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance + 0.1e-4)); !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    if (Geom.lineContainsPoint(
-                            prevX, prevY, moveX, moveY,
-                            p.x, p.y, tolerance)) {
+            case PathIterator.SEG_CLOSE:
+                if (Geom.lineContainsPoint(
+                        prevX, prevY, moveX, moveY,
+                        p.x, p.y, tolerance)) {
                         return true;
                     }
                     break;

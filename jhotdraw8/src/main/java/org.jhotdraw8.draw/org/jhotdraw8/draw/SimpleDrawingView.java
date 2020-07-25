@@ -72,6 +72,7 @@ import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 
+import java.awt.BasicStroke;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -103,6 +104,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public static final String CANVAS_PANE_ID = "canvasPane";
 
     private final static double INVSQRT2 = 1.0 / Math.sqrt(2);
+    private final static double SQRT2 = Math.sqrt(2);
     /**
      * The name of the margin property.
      */
@@ -327,7 +329,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * @return true if the node contains the point
      */
     private boolean contains(@NonNull Node node, @NonNull Point2D point, double tolerance) {
-        double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(1, 1).magnitude();
+        double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(SQRT2, SQRT2).magnitude();
 
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
@@ -349,8 +351,20 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                     break;
             }
             if (FXGeom.grow(shape.getBoundsInParent(), tolerance, tolerance).contains(point)) {
-                return Shapes.outlineContains(Shapes.awtShapeFromFX(shape), new java.awt.geom.Point2D.Double(point.getX(), point.getY()),
-                        shape.getStrokeWidth() * widthFactor + toleranceInLocal);
+                int cap = switch (shape.getStrokeLineCap()) {
+                    case SQUARE -> BasicStroke.CAP_SQUARE;
+                    case BUTT -> BasicStroke.CAP_BUTT;
+                    case ROUND -> BasicStroke.CAP_ROUND;
+                };
+                int join = switch (shape.getStrokeLineJoin()) {
+                    case MITER -> BasicStroke.JOIN_MITER;
+                    case BEVEL -> BasicStroke.JOIN_BEVEL;
+                    case ROUND -> BasicStroke.JOIN_ROUND;
+                };
+                return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
+                        cap, join, (float) shape.getStrokeMiterLimit()
+                ).createStrokedShape(Shapes.awtShapeFromFX(shape))
+                        .contains(new java.awt.geom.Point2D.Double(point.getX(), point.getY()));
             } else {
                 return false;
             }
@@ -456,7 +470,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
         Figure f = findFigureRecursive((Parent) getNode(dr), viewToWorld(vx, vy),
-                getViewToWorld().deltaTransform(getEditor().getTolerance(), getEditor().getTolerance()).getX());
+                getEditor().getTolerance());
+        //getViewToWorld().deltaTransform(getEditor().getTolerance(), getEditor().getTolerance()).getX());
         return f;
     }
 
@@ -506,6 +521,12 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return null;
     }
 
+    /**
+     * @param p
+     * @param pp
+     * @param tolerance tolerance in view coordinates
+     * @return
+     */
     @Nullable
     private Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance) {
         if (p == null) {
