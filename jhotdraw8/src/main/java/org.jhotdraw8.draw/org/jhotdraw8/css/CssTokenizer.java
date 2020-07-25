@@ -174,6 +174,12 @@ public interface CssTokenizer {
      */
     int nextNoSkip() throws IOException;
 
+    /**
+     * Skips the next token if it is of type {@code ttype}.
+     *
+     * @param ttype the token type t skip
+     * @throws IOException
+     */
     default void skipIfPresent(int ttype) throws IOException {
         if (next() != ttype) {
             pushBack();
