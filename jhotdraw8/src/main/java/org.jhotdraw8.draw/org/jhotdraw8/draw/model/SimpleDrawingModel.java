@@ -164,11 +164,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @SuppressWarnings("unchecked")
     private <T> void onPropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
-        if (!Objects.equals(oldValue, newValue)) {
-            fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
-                    key, oldValue, newValue));
-
-        }
+        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
+                key, oldValue, newValue));
     }
 
     private void markDirty(Figure figure, DirtyBits... bits) {
