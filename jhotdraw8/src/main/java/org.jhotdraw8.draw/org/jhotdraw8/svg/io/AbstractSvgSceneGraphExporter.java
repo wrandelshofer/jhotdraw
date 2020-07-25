@@ -438,12 +438,12 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             fillRule = FillRule.NON_ZERO;
         }
         switch (fillRule) {
-            case EVEN_ODD:
-                elem.setAttribute("fill-rule", "evenodd");
-                break;
-            case NON_ZERO:
-            default:
-                break;
+        case EVEN_ODD:
+            elem.setAttribute("fill-rule", "evenodd");
+            break;
+        case NON_ZERO:
+        default:
+            break;
         }
     }
 
@@ -629,17 +629,17 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             elem.setAttribute("gradientUnits", "userSpaceOnUse");
         }
         switch (g.getCycleMethod()) {
-            case NO_CYCLE:
-                elem.setAttribute("spreadMethod", "pad");
-                break;
-            case REFLECT:
-                elem.setAttribute("spreadMethod", "reflect");
-                break;
-            case REPEAT:
-                elem.setAttribute("spreadMethod", "repeat");
-                break;
-            default:
-                throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+        case NO_CYCLE:
+            elem.setAttribute("spreadMethod", "pad");
+            break;
+        case REFLECT:
+            elem.setAttribute("spreadMethod", "reflect");
+            break;
+        case REPEAT:
+            elem.setAttribute("spreadMethod", "repeat");
+            break;
+        default:
+            throw new IOException("unsupported cycle method:" + g.getCycleMethod());
         }
         for (Stop s : g.getStops()) {
             Element stopElem = createElement(doc, "stop");
@@ -674,17 +674,17 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             elem.setAttribute("gradientUnits", "userSpaceOnUse");
         }
         switch (g.getCycleMethod()) {
-            case NO_CYCLE:
-                elem.setAttribute("spreadMethod", "pad");
-                break;
-            case REFLECT:
-                elem.setAttribute("spreadMethod", "reflect");
-                break;
-            case REPEAT:
-                elem.setAttribute("spreadMethod", "repeat");
-                break;
-            default:
-                throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+        case NO_CYCLE:
+            elem.setAttribute("spreadMethod", "pad");
+            break;
+        case REFLECT:
+            elem.setAttribute("spreadMethod", "reflect");
+            break;
+        case REPEAT:
+            elem.setAttribute("spreadMethod", "repeat");
+            break;
+        default:
+            throw new IOException("unsupported cycle method:" + g.getCycleMethod());
         }
         for (Stop s : g.getStops()) {
             Element stopElem = createElement(doc, "stop");
@@ -900,12 +900,12 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         Element elem = createElement(doc, "path");
         elem.setAttribute("d", node.getContent());
         switch (node.getFillRule()) {
-            case NON_ZERO:
-                //    elem.setAttribute("fill-rule","nonzero");// default
-                break;
-            case EVEN_ODD:
-                elem.setAttribute("fill-rule", "evenodd");
-                break;
+        case NON_ZERO:
+            //    elem.setAttribute("fill-rule","nonzero");// default
+            break;
+        case EVEN_ODD:
+            elem.setAttribute("fill-rule", "evenodd");
+            break;
         }
         parent.appendChild(elem);
         return elem;
@@ -996,17 +996,17 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             // XXX this is currentl only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (shape.getStrokeType()) {
-                case INSIDE:
-                    elem.setAttribute("stroke-alignment", "inner");
-                    break;
-                case CENTERED:
-                    elem.setAttribute("stroke-alignment", "center");
-                    break;
-                case OUTSIDE:
-                    elem.setAttribute("stroke-alignment", "outer");
-                    break;
-                default:
-                    throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
+            case INSIDE:
+                elem.setAttribute("stroke-alignment", "inner");
+                break;
+            case CENTERED:
+                elem.setAttribute("stroke-alignment", "center");
+                break;
+            case OUTSIDE:
+                elem.setAttribute("stroke-alignment", "outer");
+                break;
+            default:
+                throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
             }
         }
     }
@@ -1039,17 +1039,17 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             // XXX this is currently only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (style.getType()) {
-                case INSIDE:
-                    elem.setAttribute("stroke-alignment", "inner");
-                    break;
-                case CENTERED:
-                    elem.setAttribute("stroke-alignment", "center");
-                    break;
-                case OUTSIDE:
-                    elem.setAttribute("stroke-alignment", "outer");
-                    break;
-                default:
-                    throw new InternalError("Unsupported stroke type " + style.getType());
+            case INSIDE:
+                elem.setAttribute("stroke-alignment", "inner");
+                break;
+            case CENTERED:
+                elem.setAttribute("stroke-alignment", "center");
+                break;
+            case OUTSIDE:
+                elem.setAttribute("stroke-alignment", "outer");
+                break;
+            default:
+                throw new InternalError("Unsupported stroke type " + style.getType());
             }
         }
     }
@@ -1094,42 +1094,8 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
 
     @NonNull
     private Element writeText(@NonNull Document doc, @NonNull Element parent, @NonNull Text node) {
-        Element elem = node.getWrappingWidth() > 0 ? writeWrappedText(doc, parent, node) : writeUnwrappedText(doc, parent, node);
+        Element elem = writeWrappedText(doc, parent, node);
         writeTextAttributes(elem, node);
-        return elem;
-    }
-
-    private Element writeUnwrappedText(@NonNull Document doc, @NonNull Element parent, @NonNull Text
-            node) {
-        Element elem = createElement(doc, "text");
-        parent.appendChild(elem);
-
-        String x = nb.toString(node.getX());
-
-        final double y = node.getLayoutBounds().getMinY() + node.getBaselineOffset();
-        elem.setAttribute("x", x);
-        elem.setAttribute("y", nb.toString(y));
-        double lineSpacing = node.getLineSpacing();
-        double fontSize = node.getFont().getSize() * 96 / 72;
-
-        String text = node.getText();
-        if (text != null) {
-            String[] lines = text.split("\n");
-            if (lines.length == 1) {
-                elem.appendChild(doc.createTextNode(lines[0]));
-            } else {
-                for (int i = 0; i < lines.length; i++) {
-                    Element tspan = createElement(doc, "tspan");
-                    tspan.appendChild(doc.createTextNode(lines[i]));
-                    tspan.setAttribute("x", x);
-                    if (i != 0) {
-                        tspan.setAttribute("dy", Double.toString(lineSpacing + fontSize));
-                    }
-                    elem.appendChild(tspan);
-                }
-            }
-        }
-
         return elem;
     }
 
@@ -1137,16 +1103,18 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             node) {
         Element elem = createElement(doc, "text");
         parent.appendChild(elem);
+        double lineSpacing = node.getLineSpacing();//+node.getFont().getSize()*0.15625;
         drawText(doc, elem, node.getText(), node.getLayoutBounds(), node.getFont(), 8,
-                node.isUnderline(), node.isStrikethrough(), node.getTextAlignment(), node.getLineSpacing());
+                node.isUnderline(), node.isStrikethrough(), node.getTextAlignment(), lineSpacing);
         return elem;
     }
 
-    private void drawText(@NonNull Document doc, @NonNull Element parent, @Nullable String str, @NonNull Bounds
-            textRect,
+    private void drawText(@NonNull Document doc, @NonNull Element parent, @Nullable String str,
+                          @NonNull Bounds textRect,
                           @NonNull Font tfont, int tabSize, boolean isUnderlined,
                           boolean isStrikethrough,
-                          @NonNull TextAlignment textAlignment, double lineSpacing) {
+                          @NonNull TextAlignment textAlignment,
+                          double lineSpacing) {
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
         java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
         float leftMargin = (float) textRect.getMinX();
@@ -1212,12 +1180,10 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
                                              @NonNull TextAlignment textAlignment, double lineSpacing) {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,
-
         // assume styledText is an AttributedCharacterIterator, and the number
         // of tabs in styledText is tabCount
 
         Rectangle2D.Double paragraphBounds = new Rectangle2D.Double(leftMargin, verticalPos, 0, 0);
-
         int[] tabLocations = new int[tabCount + 1];
 
         int i = 0;
@@ -1231,10 +1197,8 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         // Now tabLocations has an entry for every tab's offset in
         // the text.  For convenience, the last entry is tabLocations
         // is the offset of the last character in the text.
-
         LineBreakMeasurer measurer = new LineBreakMeasurer(styledText, frc);
         int currentTab = 0;
-
         int textIndex = 0;
         while (measurer.getPosition() < styledText.getEndIndex() && verticalPos <= maxVerticalPos) {
 
@@ -1275,7 +1239,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
                 }
 
                 lineContainsText = true;
-
                 if (measurer.getPosition() == tabLocations[currentTab] + 1) {
                     currentTab++;
                 }
@@ -1298,18 +1261,18 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             // drawing, then honor alignment
             if (first == layouts.size() - 1) {
                 switch (textAlignment) {
-                    case RIGHT:
-                        penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
-                        break;
-                    case CENTER:
-                        penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
-                        break;
-                    case JUSTIFY:
-                        // not supported
-                        break;
-                    case LEFT:
-                    default:
-                        break;
+                case RIGHT:
+                    penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
+                    break;
+                case CENTER:
+                    penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                    break;
+                case JUSTIFY:
+                    // not supported
+                    break;
+                case LEFT:
+                default:
+                    break;
                 }
             }
 
@@ -1338,6 +1301,7 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             }
 
             verticalPos += maxDescent + lineSpacing;
+            paragraphBounds.add(paragraphBounds.getX(), verticalPos);
         }
 
         return paragraphBounds;
