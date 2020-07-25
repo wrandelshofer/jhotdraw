@@ -19,19 +19,19 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class IntegerStyleableKey extends SimpleStyleableKey<Integer> implements WriteableStyleableMapAccessor<Integer> {
+public class NullableIntegerStyleableKey extends SimpleStyleableKey<Integer> implements WriteableStyleableMapAccessor<Integer> {
 
     private final static long serialVersionUID = 1L;
 
-    public IntegerStyleableKey(String key) {
+    public NullableIntegerStyleableKey(String key) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key));
     }
 
-    public IntegerStyleableKey(String key, String cssName) {
-        this(key, cssName, new CssIntegerConverter(false));
+    public NullableIntegerStyleableKey(String key, String cssName) {
+        this(key, cssName, new CssIntegerConverter(true));
     }
 
-    public IntegerStyleableKey(String key, String cssName, Converter<Integer> converter) {
+    public NullableIntegerStyleableKey(String key, String cssName, Converter<Integer> converter) {
         super(key, Integer.class, null, converter);
 
         Function<Styleable, StyleableProperty<Integer>> function = s -> {
