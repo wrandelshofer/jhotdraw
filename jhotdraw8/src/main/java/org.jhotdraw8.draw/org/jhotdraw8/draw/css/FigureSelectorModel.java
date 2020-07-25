@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -457,13 +458,19 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                         } else {
                             convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                         }
-                        elem.setStyled(origin, k, convertedValue);
+                        elem.setStyled(origin, k, intern(convertedValue));
                     } catch (IOException ex) {
                         LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
                     }
                 }
             }
         }
+    }
+
+    private final Map<Object, Object> inlinedValues = new ConcurrentHashMap<>();
+
+    private Object intern(Object convertedValue) {
+        return convertedValue == null ? null : inlinedValues.computeIfAbsent(convertedValue, k -> convertedValue);
     }
 
     /**
