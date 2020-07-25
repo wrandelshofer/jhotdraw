@@ -2,9 +2,9 @@ package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -50,7 +50,7 @@ public class Bezier2BiArc {
             var C1 = bezier.getP1().equals(bezier.getCtrlP1()) ? bezier.getCtrlP2() : bezier.getCtrlP1();
             var C2 = bezier.getP2().equals(bezier.getCtrlP2()) ? bezier.getCtrlP1() : bezier.getCtrlP2();
 
-            IntersectionResultEx intersectionResultEx = Intersections.intersectRayRayEx(bezier.getP1(), C1, bezier.getP2(), C2);
+            IntersectionResultEx intersectionResultEx = IntersectRayRay.intersectRayRayEx(bezier.getP1(), C1, bezier.getP2(), C2);
 
             // Edge case: control lines are parallel
             if (intersectionResultEx.getStatus() == IntersectionStatus.NO_INTERSECTION_PARALLEL) {

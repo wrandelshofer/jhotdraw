@@ -32,9 +32,30 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.BezierCurves;
+import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
+import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleEllipse;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectCirclePoint;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleRectangle;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveEllipse;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveLine;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurvePoint;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectEllipseEllipse;
+import org.jhotdraw8.geom.intersect.IntersectEllipseLine;
+import org.jhotdraw8.geom.intersect.IntersectEllipseQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectEllipseRectangle;
+import org.jhotdraw8.geom.intersect.IntersectLineLine;
+import org.jhotdraw8.geom.intersect.IntersectLinePoint;
+import org.jhotdraw8.geom.intersect.IntersectLineQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectPointQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectQuadraticCurveQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectRectangleRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -371,59 +392,59 @@ public class IntersectionSampleMain extends Application {
             if (shape0.getClass() == Circle.class && shape1.getClass() == Circle.class) {
                 Circle l0 = (Circle) shape0;
                 Circle l1 = (Circle) shape1;
-                isect = Intersections.intersectCircleCircleEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                isect = IntersectCircleCircle.intersectCircleCircleEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
             } else if (shape0.getClass() == Circle.class && shape1.getClass() == Ellipse.class) {
                 Circle l0 = (Circle) shape0;
                 Ellipse l1 = (Ellipse) shape1;
-                isect = Intersections.intersectCircleEllipseEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                isect = IntersectCircleEllipse.intersectCircleEllipseEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadiusX(), l1.getRadiusY());
             } else if (shape0.getClass() == Circle.class && shape1.getClass() == Line.class) {
                 Circle l0 = (Circle) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectCircleLineEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                isect = IntersectCircleLine.intersectCircleLineEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
                         l1.getStartX(), l1.getStartY(), l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == Circle.class && shape1.getClass() == Point.class) {
                 Circle l0 = (Circle) shape0;
                 Point l1 = (Point) shape1;
-                isect = Intersections.intersectCirclePointEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                isect = IntersectCirclePoint.intersectCirclePointEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
             } else if (shape0.getClass() == Circle.class && shape1.getClass() == Rectangle.class) {
                 Circle l0 = (Circle) shape0;
                 Rectangle l1 = (Rectangle) shape1;
-                isect = Intersections.intersectCircleRectangleEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
+                isect = IntersectCircleRectangle.intersectCircleRectangleEx(l0.getCenterX(), l0.getCenterY(), l0.getRadius(),
                         l1.getX(), l1.getY(), l1.getWidth(), l1.getHeight()
                 );
                 //
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Circle.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Circle l1 = (Circle) shape1;
-                isect = Intersections.intersectCubicCurveCircleEx(
+                isect = IntersectCircleCubicCurve.intersectCubicCurveCircleEx(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == CubicCurve.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 CubicCurve l1 = (CubicCurve) shape1;
-                isect = Intersections.intersectCubicCurveCubicCurveEx(
+                isect = IntersectCubicCurveCubicCurve.intersectCubicCurveCubicCurveEx(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX1(), l1.getControlY1(), l1.getControlX2(), l1.getControlY2(), l1.getEndX(), l1.getEndY()
                 );
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Ellipse.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Ellipse l1 = (Ellipse) shape1;
-                isect = Intersections.intersectCubicCurveEllipseEx(
+                isect = IntersectCubicCurveEllipse.intersectCubicCurveEllipseEx(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadiusX(), l1.getRadiusY());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Line.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectCubicCurveLineEx(
+                isect = IntersectCubicCurveLine.intersectCubicCurveLineEx(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == Point.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 Point l1 = (Point) shape1;
-                isect = Intersections.intersectCubicCurvePointEx(
+                isect = IntersectCubicCurvePoint.intersectCubicCurvePointEx(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
 
@@ -444,29 +465,29 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == CubicCurve.class && shape1.getClass() == QuadCurve.class) {
                 CubicCurve l0 = (CubicCurve) shape0;
                 QuadCurve l1 = (QuadCurve) shape1;
-                isect = Intersections.intersectCubicCurveQuadraticCurveEx(
+                isect = IntersectCubicCurveQuadraticCurve.intersectCubicCurveQuadraticCurveEx(
                         l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(), l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX(), l1.getControlY(), l1.getEndX(), l1.getEndY());
                 //
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Circle.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 Circle l1 = (Circle) shape1;
-                isect = Intersections.intersectEllipseCircleEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                isect = IntersectCircleEllipse.intersectEllipseCircleEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Ellipse.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 Ellipse e1 = (Ellipse) shape1;
-                isect = Intersections.intersectEllipseEllipseEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                isect = IntersectEllipseEllipse.intersectEllipseEllipseEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         e1.getCenterX(), e1.getCenterY(), e1.getRadiusX(), e1.getRadiusY());
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Rectangle.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 Rectangle e1 = (Rectangle) shape1;
-                isect = Intersections.intersectEllipseRectangleEx(new java.awt.geom.Point2D.Double(e0.getCenterX(), e0.getCenterY()), e0.getRadiusX(), e0.getRadiusY(),
+                isect = IntersectEllipseRectangle.intersectEllipseRectangleEx(new java.awt.geom.Point2D.Double(e0.getCenterX(), e0.getCenterY()), e0.getRadiusX(), e0.getRadiusY(),
                         new java.awt.geom.Point2D.Double(e1.getX(), e1.getY()), new java.awt.geom.Point2D.Double(e1.getX() + e1.getWidth(), e1.getY() + e1.getHeight()));
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Line.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectEllipseLineEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                isect = IntersectEllipseLine.intersectEllipseLineEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         l1.getStartX(), l1.getStartY(), l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == Point.class) {
                 Ellipse e0 = (Ellipse) shape0;
@@ -476,51 +497,51 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == Ellipse.class && shape1.getClass() == QuadCurve.class) {
                 Ellipse e0 = (Ellipse) shape0;
                 QuadCurve l1 = (QuadCurve) shape0;
-                isect = Intersections.intersectEllipseQuadraticCurveEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
+                isect = IntersectEllipseQuadraticCurve.intersectEllipseQuadraticCurveEx(e0.getCenterX(), e0.getCenterY(), e0.getRadiusX(), e0.getRadiusY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX(), l1.getControlY(), l1.getEndX(), l1.getEndY());
             } else if (shape0.getClass() == Line.class && shape1.getClass() == Circle.class) {
                 Line l0 = (Line) shape0;
                 Circle e1 = (Circle) shape1;
-                isect = Intersections.intersectLineCircleEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectCircleLine.intersectLineCircleEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
                         e1.getCenterX(), e1.getCenterY(), e1.getRadius());
             } else if (shape0.getClass() == Line.class && shape1.getClass() == Ellipse.class) {
                 Line l0 = (Line) shape0;
                 Ellipse e1 = (Ellipse) shape1;
-                isect = Intersections.intersectLineEllipseEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectEllipseLine.intersectLineEllipseEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
                         e1.getCenterX(), e1.getCenterY(), e1.getRadiusX(), e1.getRadiusY());
             } else if (shape0.getClass() == Line.class && shape1.getClass() == Point.class) {
                 Line l0 = (Line) shape0;
                 Point e1 = (Point) shape1;
-                isect = Intersections.intersectLinePointEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectLinePoint.intersectLinePointEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
                         e1.getCenterX(), e1.getCenterY(), e1.getRadius());
             } else if (shape0.getClass() == Line.class && shape1.getClass() == Line.class) {
                 Line l0 = (Line) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectLineLineEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectLineLine.intersectLineLineEx(l0.getStartX(), l0.getStartY(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getEndX(), l1.getEndY());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == QuadCurve.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 QuadCurve l1 = (QuadCurve) shape1;
-                isect = Intersections.intersectQuadraticCurveQuadraticCurveEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectQuadraticCurveQuadraticCurve.intersectQuadraticCurveQuadraticCurveEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getControlX(), l1.getControlY(), l1.getEndX(), l1.getEndY());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Circle.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Circle l1 = (Circle) shape1;
-                isect = Intersections.intersectQuadraticCurveCircleEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectCircleQuadraticCurve.intersectQuadraticCurveCircleEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Ellipse.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Ellipse l1 = (Ellipse) shape1;
-                isect = Intersections.intersectQuadraticCurveEllipseEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectEllipseQuadraticCurve.intersectQuadraticCurveEllipseEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadiusX(), l1.getRadiusY());
                 //
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Point.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Point l1 = (Point) shape1;
-                isect = Intersections.intersectQuadraticCurvePointEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectPointQuadraticCurve.intersectQuadraticCurvePointEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
 
                 if (isect.size() == 1) {
@@ -539,13 +560,13 @@ public class IntersectionSampleMain extends Application {
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Line.class) {
                 QuadCurve l0 = (QuadCurve) shape0;
                 Line l1 = (Line) shape1;
-                isect = Intersections.intersectQuadraticCurveLineEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
+                isect = IntersectLineQuadraticCurve.intersectQuadraticCurveLineEx(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(),
                         l1.getStartX(), l1.getStartY(), l1.getEndX(), l1.getEndY());
                 //
             } else if (shape0.getClass() == Rectangle.class && shape1.getClass() == Rectangle.class) {
                 Rectangle l0 = (Rectangle) shape0;
                 Rectangle l1 = (Rectangle) shape1;
-                isect = Intersections.intersectRectangleRectangleEx(
+                isect = IntersectRectangleRectangle.intersectRectangleRectangleEx(
                         l0.getX(), l0.getY(), l0.getWidth(), l0.getHeight(),
                         l1.getX(), l1.getY(), l1.getWidth(), l1.getHeight()
                 );

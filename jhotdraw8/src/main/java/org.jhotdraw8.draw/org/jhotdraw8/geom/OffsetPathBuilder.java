@@ -5,10 +5,10 @@
 package org.jhotdraw8.geom;
 
 
+import org.jhotdraw8.geom.intersect.IntersectLineLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             for (int j = n - 2; j >= i + 1; --j) {
                 Point2D.Double b1p = getXY(segments.get(j));
                 Point2D.Double b2p = getXY(segments.get(j + 1));
-                IntersectionResultEx inter = Intersections.intersectLineLineEx(a1p, a2p, b1p, b2p);
+                IntersectionResultEx inter = IntersectLineLine.intersectLineLineEx(a1p, a2p, b1p, b2p);
                 if (inter.getStatus() == IntersectionStatus.INTERSECTION) {
                     Point2D.Double p = inter.getFirst();
                     segments.set(j, new double[]{p.getX(), p.getY()});
@@ -184,14 +184,14 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             for (int j = 0, m = segments.size(); j < m - 1; j++) {
                 Point2D.Double b1p = getXY(segments.get(j));
                 Point2D.Double b2p = getXY(segments.get(j + 1));
-                IntersectionResultEx inter = Intersections.intersectLineLineEx(b1p, b2p, a1, a1p);
+                IntersectionResultEx inter = IntersectLineLine.intersectLineLineEx(b1p, b2p, a1, a1p);
                 if (inter.getStatus() == IntersectionStatus.INTERSECTION) {
                     if (inter.getFirst().getArgumentA() > 0.0 + eps && inter.getFirst().getArgumentA() < 1.0 - eps) {
                         b2p = inter.getFirst();
                         segments.set(j + 1, new double[]{b2p.getX(), b2p.getY()});
                     }
                 }
-                inter = Intersections.intersectLineLineEx(b1p, b2p, a2, a2p);
+                inter = IntersectLineLine.intersectLineLineEx(b1p, b2p, a2, a2p);
                 if (inter.getStatus() == IntersectionStatus.INTERSECTION) {
                     if (inter.getFirst().getArgumentA() > 0.0 + eps && inter.getFirst().getArgumentA() < 1.0 - eps) {
                         final IntersectionPointEx first = inter.getFirst();
@@ -229,7 +229,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             for (int j = n - 2; j >= i + 1; --j) {
                 Point2D.Double b1p = getXY(segments.get(j));
                 Point2D.Double b2p = getXY(segments.get(j + 1));
-                IntersectionResultEx inter = Intersections.intersectLineLineEx(a1p, a2p, b1p, b2p);
+                IntersectionResultEx inter = IntersectLineLine.intersectLineLineEx(a1p, a2p, b1p, b2p);
                 if (inter.getStatus() == IntersectionStatus.INTERSECTION) {
                     Point2D.Double p = inter.iterator().next();
                     //segments.set(i + 1, p);

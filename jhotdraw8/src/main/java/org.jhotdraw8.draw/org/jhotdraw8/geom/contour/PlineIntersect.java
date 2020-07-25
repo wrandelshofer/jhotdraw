@@ -4,7 +4,7 @@ package org.jhotdraw8.geom.contour;
 import java.awt.geom.Point2D;
 
 /**
- * Represents a non-coincident poly-arc-line intersect.
+ * Represents a non-coincident poly-arc-line intersection.
  */
 public class PlineIntersect {
     /**

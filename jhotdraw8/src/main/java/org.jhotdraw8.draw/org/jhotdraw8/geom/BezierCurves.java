@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.DoubleArrayList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
@@ -23,8 +23,6 @@ import static org.jhotdraw8.geom.Geom.lerp;
 
 /**
  * Provides utility methods for Bézier curves.
- * <p>
- * See {@link Intersections} intersection methods with bézier curves.
  *
  * @author Werner Randelshofer
  */
@@ -189,7 +187,7 @@ public class BezierCurves {
                                           final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
                                           double tolerance) {
         final Point2D.Double start = new Point2D.Double(x0, y0);
-        final IntersectionResultEx isect = Intersections.intersectRayRayEx(start, new Point2D.Double(x01, y01), new Point2D.Double(x2, y2), new Point2D.Double(x12, y12));
+        final IntersectionResultEx isect = IntersectRayRay.intersectRayRayEx(start, new Point2D.Double(x01, y01), new Point2D.Double(x2, y2), new Point2D.Double(x12, y12));
         if (isect.isEmpty()) {
             return null;
         }

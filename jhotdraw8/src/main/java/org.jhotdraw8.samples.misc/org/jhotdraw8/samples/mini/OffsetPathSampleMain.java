@@ -38,7 +38,7 @@ import org.jhotdraw8.geom.contour.PolyArcPath;
 import java.util.List;
 
 /**
- * CardinalSplineSampleMain.
+ * OffsetPathSampleMain.
  *
  * @author Werner Randelshofer
  */

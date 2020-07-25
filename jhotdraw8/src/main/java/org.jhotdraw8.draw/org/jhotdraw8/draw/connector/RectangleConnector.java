@@ -12,9 +12,9 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.intersect.IntersectAABBLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
@@ -59,7 +59,7 @@ public class RectangleConnector extends LocatorConnector {
             bounds = FXGeom.grow(bounds, grow, grow);
         }
 
-        IntersectionResultEx i = Intersections.intersectLineAABBEx(s.getX(), s.getY(), e.getX(), e.getY(),
+        IntersectionResultEx i = IntersectAABBLine.intersectLineAABBEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
         return i.getLast();
     }

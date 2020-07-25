@@ -11,9 +11,9 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.intersect.IntersectLineRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.Rectangle2D;
 
@@ -170,7 +170,7 @@ public interface Connector {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getLayoutBounds();
-        IntersectionResultEx i = Intersections.intersectLineRectangleEx(
+        IntersectionResultEx i = IntersectLineRectangle.intersectLineRectangleEx(
                 new java.awt.geom.Point2D.Double(s.getX(), s.getY()),
                 new java.awt.geom.Point2D.Double(e.getX(), e.getY()),
                 new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()));

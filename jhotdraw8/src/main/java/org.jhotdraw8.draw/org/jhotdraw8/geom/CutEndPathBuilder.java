@@ -5,9 +5,11 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadraticCurve;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.PathIterator;
 
@@ -56,7 +58,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                 out.closePath();
                 break;
             case PathIterator.SEG_CUBICTO: {
-                IntersectionResultEx isect = Intersections.intersectCubicCurveCircleEx(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
+                IntersectionResultEx isect = IntersectCircleCubicCurve.intersectCubicCurveCircleEx(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
                 if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
                     // break Loop;
                 } else if (isect.isEmpty()) {
@@ -71,7 +73,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                 break;
             }
             case PathIterator.SEG_LINETO: {
-                IntersectionResultEx isect = Intersections.intersectLineCircleEx(x, y, seg[0], seg[1], cx, cy, radius);
+                IntersectionResultEx isect = IntersectCircleLine.intersectLineCircleEx(x, y, seg[0], seg[1], cx, cy, radius);
                 if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
                     //         break Loop;
                 } else if (isect.isEmpty()) {
@@ -92,7 +94,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
                 break;
             }
             case PathIterator.SEG_QUADTO: {
-                IntersectionResultEx isect = Intersections.intersectQuadraticCurveCircleEx(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
+                IntersectionResultEx isect = IntersectCircleQuadraticCurve.intersectQuadraticCurveCircleEx(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
                 if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
                     //               break Loop;
                 } else if (isect.isEmpty()) {

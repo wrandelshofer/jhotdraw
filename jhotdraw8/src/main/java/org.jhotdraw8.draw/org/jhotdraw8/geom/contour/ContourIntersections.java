@@ -8,9 +8,12 @@ import org.jhotdraw8.collection.OrderedPairNonNull;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectLineLine;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 import org.jhotdraw8.util.function.TriConsumer;
@@ -40,8 +43,33 @@ public class ContourIntersections {
     /**
      * Find intersect between two circles in 2D.
      */
-    public static IntrCircle2Circle2Result intrCircle2Circle2(double radius1, final Point2D.Double center1,
-                                                              double radius2, final Point2D.Double center2) {
+    public static IntersectionResult intrCircle2Circle2(double radius1, final Point2D.Double center1,
+                                                        double radius2, final Point2D.Double center2) {
+        IntersectionResult r = IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Utils.realThreshold);
+        IntrCircle2Circle2Result rr = intrCircle2Circle2_old(radius1, center1, radius2, center2);
+        boolean same = switch (rr.intrType) {
+            case NoIntersect -> r.getStatus() != IntersectionStatus.INTERSECTION && r.getStatus() != IntersectionStatus.NO_INTERSECTION_COINCIDENT;
+            case OneIntersect -> r.getStatus() == IntersectionStatus.INTERSECTION && r.size() == 1;
+            case TwoIntersects -> r.getStatus() == IntersectionStatus.INTERSECTION && r.size() == 2
+                    && r.getFirst().equals(rr.point1) && r.getLast().equals(rr.point2);
+            case Coincident -> r.getStatus() == IntersectionStatus.NO_INTERSECTION_COINCIDENT;
+        };
+
+        if (!same) {
+            System.err.println("circle2circle !same");
+            System.err.println("  rr:" + rr);
+            System.err.println("  r :" + r);
+        }
+        return r;
+    }
+
+    /**
+     * Find intersect between two circles in 2D.
+     */
+    public static IntrCircle2Circle2Result intrCircle2Circle2_old(double radius1, final Point2D.Double center1,
+                                                                  double radius2, final Point2D.Double center2) {
+        IntersectionResult r = IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Utils.realThreshold);
+
         // Reference algorithm: http://paulbourke.net/geometry/circlesphere/
 
         IntrCircle2Circle2Result result = new IntrCircle2Circle2Result();
@@ -96,7 +124,7 @@ public class ContourIntersections {
 
     public static @NonNull IntersectionResultEx intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
                                                                      final Point2D.Double v2) {
-        return Intersections.intersectLineLineEx(u1, u2, v1, v2, REAL_THRESHOLD);
+        return IntersectLineLine.intersectLineLineEx(u1, u2, v1, v2, REAL_THRESHOLD);
     }
 
 
@@ -110,7 +138,7 @@ public class ContourIntersections {
     public static IntersectionResult intrLineSeg2Circle2(final Point2D.Double p0,
                                                          final Point2D.Double p1, double radius,
                                                          final Point2D.Double circleCenter) {
-        return Intersections.intersectLineCircle(p0, p1, circleCenter, radius, REAL_THRESHOLD);
+        return IntersectCircleLine.intersectLineCircle(p0, p1, circleCenter, radius, REAL_THRESHOLD);
     }
 
 
@@ -598,39 +626,41 @@ public class ContourIntersections {
                     pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), pt) &&
                             pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
 
-            IntrCircle2Circle2Result intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
+            IntersectionResult intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 
-            switch (intrResult.intrType) {
-            case NoIntersect:
+            switch (intrResult.getStatus()) {
+            case NO_INTERSECTION_OUTSIDE:
+            case NO_INTERSECTION_INSIDE:
                 result.intrType = PlineSegIntrType.NoIntersect;
                 break;
-            case OneIntersect:
-                if (bothArcsSweepPoint.test(intrResult.point1)) {
-                    result.intrType = PlineSegIntrType.OneIntersect;
-                    result.point1 = intrResult.point1;
+            case INTERSECTION:
+                if (intrResult.size() == 1) {
+                    if (bothArcsSweepPoint.test(intrResult.getFirst())) {
+                        result.intrType = PlineSegIntrType.OneIntersect;
+                        result.point1 = intrResult.getFirst();
+                    } else {
+                        result.intrType = PlineSegIntrType.NoIntersect;
+                    }
                 } else {
-                    result.intrType = PlineSegIntrType.NoIntersect;
-                }
-                break;
-            case TwoIntersects: {
-                final boolean pt1InSweep = bothArcsSweepPoint.test(intrResult.point1);
-                final boolean pt2InSweep = bothArcsSweepPoint.test(intrResult.point2);
-                if (pt1InSweep && pt2InSweep) {
-                    result.intrType = PlineSegIntrType.TwoIntersects;
-                    result.point1 = intrResult.point1;
-                    result.point2 = intrResult.point2;
-                } else if (pt1InSweep) {
-                    result.intrType = PlineSegIntrType.OneIntersect;
-                    result.point1 = intrResult.point1;
-                } else if (pt2InSweep) {
-                    result.intrType = PlineSegIntrType.OneIntersect;
-                    result.point1 = intrResult.point2;
-                } else {
+                    assert intrResult.size() == 2 : "there must be 2 intersections";
+                    final boolean pt1InSweep = bothArcsSweepPoint.test(intrResult.getFirst());
+                    final boolean pt2InSweep = bothArcsSweepPoint.test(intrResult.getLast());
+                    if (pt1InSweep && pt2InSweep) {
+                        result.intrType = PlineSegIntrType.TwoIntersects;
+                        result.point1 = intrResult.getFirst();
+                        result.point2 = intrResult.getLast();
+                    } else if (pt1InSweep) {
+                        result.intrType = PlineSegIntrType.OneIntersect;
+                        result.point1 = intrResult.getFirst();
+                    } else if (pt2InSweep) {
+                        result.intrType = PlineSegIntrType.OneIntersect;
+                        result.point1 = intrResult.getLast();
+                    } else {
                     result.intrType = PlineSegIntrType.NoIntersect;
                 }
             }
             break;
-            case Coincident:
+            case NO_INTERSECTION_COINCIDENT:
                 // determine if arcs overlap along their sweep
                 // start and sweep angles
                 OrderedPairNonNull<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());

@@ -224,27 +224,29 @@ public class ContourBuilder {
             }
         };
 
-        final IntrCircle2Circle2Result intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
-        switch (intrResult.intrType) {
-            case NoIntersect:
-                connectUsingArc.run();
-                break;
-            case OneIntersect:
-                processIntersect.accept(intrResult.point1);
-                break;
-            case TwoIntersects: {
-                double dist1 = intrResult.point1.distanceSq(s1.origV2Pos);
-                double dist2 = intrResult.point2.distanceSq(s1.origV2Pos);
+        final IntersectionResult intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
+        switch (intrResult.getStatus()) {
+        case NO_INTERSECTION_OUTSIDE:
+        case NO_INTERSECTION_INSIDE:
+            connectUsingArc.run();
+            break;
+        case INTERSECTION:
+            if (intrResult.size() == 1) {
+                processIntersect.accept(intrResult.getFirst());
+            } else {
+                assert intrResult.size() == 2 : "there must be 2 intersections";
+                double dist1 = intrResult.getFirst().distanceSq(s1.origV2Pos);
+                double dist2 = intrResult.getLast().distanceSq(s1.origV2Pos);
                 if (dist1 < dist2) {
-                    processIntersect.accept(intrResult.point1);
+                    processIntersect.accept(intrResult.getFirst());
                 } else {
-                    processIntersect.accept(intrResult.point2);
+                    processIntersect.accept(intrResult.getLast());
                 }
             }
             break;
-            case Coincident:
-                // same constant arc radius and center, just add the vertex (nothing to trim/extend)
-                addOrReplaceIfSamePos(result, u1);
+        case NO_INTERSECTION_COINCIDENT:
+            // same constant arc radius and center, just add the vertex (nothing to trim/extend)
+            addOrReplaceIfSamePos(result, u1);
                 break;
         }
     }
@@ -1008,26 +1010,30 @@ public class ContourBuilder {
                 }
             } else {
                 BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
-                IntrCircle2Circle2Result intrResult =
+                IntersectionResult intrResult =
                         intrCircle2Circle2(arc.radius, arc.center, circleRadius, circleCenter);
-                switch (intrResult.intrType) {
-                    case NoIntersect:
-                        break;
-                    case OneIntersect:
-                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
-                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
+                switch (intrResult.getStatus()) {
+                case NO_INTERSECTION_OUTSIDE:
+                case NO_INTERSECTION_INSIDE:
+                    break;
+                case INTERSECTION:
+                    if (intrResult.size() == 1) {
+                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.getFirst())) {
+                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.getFirst())));
                         }
-                        break;
-                    case TwoIntersects:
-                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point1)) {
-                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point1)));
+                    } else {
+                        assert intrResult.size() == 2 : "there must be 2 intersections";
+
+                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.getFirst())) {
+                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.getFirst())));
                         }
-                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.point2)) {
-                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.point2)));
+                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.getLast())) {
+                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.getLast())));
                         }
-                        break;
-                    case Coincident:
-                        break;
+                    }
+                    break;
+                case NO_INTERSECTION_COINCIDENT:
+                    break;
                 }
             }
         }

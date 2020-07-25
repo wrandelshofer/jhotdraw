@@ -6,8 +6,10 @@ package org.jhotdraw8.geom;
 
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadraticCurve;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.Point2D;
 
@@ -51,7 +53,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.curveTo(x1, y1, x2, y2, x3, y3);
             return;
         }
-        IntersectionResultEx i = Intersections.intersectCubicCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
+        IntersectionResultEx i = IntersectCircleCubicCurve.intersectCubicCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
         case INTERSECTION:
             double t = i.getLast().getArgumentA();
@@ -84,7 +86,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.lineTo(x, y);
             return;
         }
-        IntersectionResultEx i = Intersections.intersectLineCircleEx(getLastX(), getLastY(), x, y, cx, cy, radius);
+        IntersectionResultEx i = IntersectCircleLine.intersectLineCircleEx(getLastX(), getLastY(), x, y, cx, cy, radius);
         switch (i.getStatus()) {
             case INTERSECTION:
                 Point2D p = i.getLast();
@@ -124,7 +126,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.quadTo(x1, y1, x2, y2);
             return;
         }
-        IntersectionResultEx i = Intersections.intersectQuadraticCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
+        IntersectionResultEx i = IntersectCircleQuadraticCurve.intersectQuadraticCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
         case INTERSECTION:
             double t = i.getLast().getArgumentA();

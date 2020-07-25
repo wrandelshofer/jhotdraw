@@ -13,4 +13,13 @@ public class IntrCircle2Circle2Result {
     public Point2D.Double point1;
     // second intersect point if intrType is TwoIntersects, undefined otherwise
     public Point2D.Double point2;
+
+    @Override
+    public String toString() {
+        return "IntrCircle2Circle2Result{" +
+                "intrType=" + intrType +
+                ", point1=" + point1 +
+                ", point2=" + point2 +
+                '}';
+    }
 }

@@ -12,9 +12,9 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.intersect.IntersectEllipseLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Intersections;
 
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
 import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
@@ -58,7 +58,7 @@ public class EllipseConnector extends LocatorConnector {
             bounds = FXGeom.grow(bounds, grow, grow);
         }
 
-        IntersectionResultEx i = Intersections.intersectLineEllipseEx(s.getX(), s.getY(), e.getX(), e.getY(),
+        IntersectionResultEx i = IntersectEllipseLine.intersectLineEllipseEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX() + bounds.getWidth() * 0.5, bounds.getMinY() + bounds.getHeight() * 0.5, bounds.getWidth() * 0.5, bounds.getHeight() * 0.5);
         return i.getLast();
     }
