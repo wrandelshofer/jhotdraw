@@ -2,9 +2,9 @@ package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.isect.IntersectionResultEx;
-import org.jhotdraw8.geom.isect.IntersectionStatus;
-import org.jhotdraw8.geom.isect.Intersections;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;

@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.isect.IntersectionPointEx;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;

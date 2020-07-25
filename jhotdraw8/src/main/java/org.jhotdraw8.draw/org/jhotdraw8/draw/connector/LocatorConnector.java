@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.isect.IntersectionPointEx;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 /**
  * LocatorConnector uses a {@link Locator} to compute its position.

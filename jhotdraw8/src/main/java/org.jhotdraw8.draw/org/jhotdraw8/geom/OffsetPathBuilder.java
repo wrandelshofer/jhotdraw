@@ -5,10 +5,10 @@
 package org.jhotdraw8.geom;
 
 
-import org.jhotdraw8.geom.isect.IntersectionPointEx;
-import org.jhotdraw8.geom.isect.IntersectionResultEx;
-import org.jhotdraw8.geom.isect.IntersectionStatus;
-import org.jhotdraw8.geom.isect.Intersections;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

@@ -30,9 +30,9 @@ import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.isect.IntersectionResultEx;
-import org.jhotdraw8.geom.isect.IntersectionStatus;
-import org.jhotdraw8.geom.isect.Intersections;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.PathIterator;
 

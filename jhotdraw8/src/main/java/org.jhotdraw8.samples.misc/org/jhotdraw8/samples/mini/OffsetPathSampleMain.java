@@ -31,9 +31,9 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
-import org.jhotdraw8.geom.offsetline.ContourBuilder;
-import org.jhotdraw8.geom.offsetline.PlineVertex;
-import org.jhotdraw8.geom.offsetline.PolyArcPath;
+import org.jhotdraw8.geom.contour.ContourBuilder;
+import org.jhotdraw8.geom.contour.PlineVertex;
+import org.jhotdraw8.geom.contour.PolyArcPath;
 
 import java.util.List;
 

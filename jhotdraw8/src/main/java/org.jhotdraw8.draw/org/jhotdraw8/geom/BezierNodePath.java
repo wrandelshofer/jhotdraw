@@ -6,8 +6,8 @@ package org.jhotdraw8.geom;
 
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.isect.IntersectionResultEx;
-import org.jhotdraw8.geom.isect.Intersections;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.Rectangle;
 import java.awt.Shape;

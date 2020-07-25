@@ -11,9 +11,9 @@ import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.isect.IntersectionPointEx;
-import org.jhotdraw8.geom.isect.IntersectionResultEx;
-import org.jhotdraw8.geom.isect.Intersections;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.Intersections;
 
 import java.awt.geom.PathIterator;
 
