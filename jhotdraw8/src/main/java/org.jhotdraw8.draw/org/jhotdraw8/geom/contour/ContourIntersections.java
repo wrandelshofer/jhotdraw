@@ -7,13 +7,11 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.OrderedPairNonNull;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
 import org.jhotdraw8.geom.intersect.IntersectLineLine;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.QuadConsumer;
 import org.jhotdraw8.util.function.TriConsumer;
@@ -45,80 +43,9 @@ public class ContourIntersections {
      */
     public static IntersectionResult intrCircle2Circle2(double radius1, final Point2D.Double center1,
                                                         double radius2, final Point2D.Double center2) {
-        IntersectionResult r = IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Utils.realThreshold);
-        IntrCircle2Circle2Result rr = intrCircle2Circle2_old(radius1, center1, radius2, center2);
-        boolean same = switch (rr.intrType) {
-            case NoIntersect -> r.getStatus() != IntersectionStatus.INTERSECTION && r.getStatus() != IntersectionStatus.NO_INTERSECTION_COINCIDENT;
-            case OneIntersect -> r.getStatus() == IntersectionStatus.INTERSECTION && r.size() == 1;
-            case TwoIntersects -> r.getStatus() == IntersectionStatus.INTERSECTION && r.size() == 2
-                    && r.getFirst().equals(rr.point1) && r.getLast().equals(rr.point2);
-            case Coincident -> r.getStatus() == IntersectionStatus.NO_INTERSECTION_COINCIDENT;
-        };
-
-        if (!same) {
-            System.err.println("circle2circle !same");
-            System.err.println("  rr:" + rr);
-            System.err.println("  r :" + r);
-        }
-        return r;
+        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Utils.realThreshold);
     }
 
-    /**
-     * Find intersect between two circles in 2D.
-     */
-    public static IntrCircle2Circle2Result intrCircle2Circle2_old(double radius1, final Point2D.Double center1,
-                                                                  double radius2, final Point2D.Double center2) {
-        IntersectionResult r = IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Utils.realThreshold);
-
-        // Reference algorithm: http://paulbourke.net/geometry/circlesphere/
-
-        IntrCircle2Circle2Result result = new IntrCircle2Circle2Result();
-        Point2D.Double cv = Points2D.subtract(center2, center1);
-        double d2 = Points2D.dotProduct(cv, cv);
-        double d = Math.sqrt(d2);
-        if (d < Utils.realThreshold) {
-            // same center position
-            if (Geom.almostEqual(radius1, radius2)) {
-                result.intrType = Circle2Circle2IntrType.Coincident;
-            } else {
-                result.intrType = Circle2Circle2IntrType.NoIntersect;
-            }
-        } else {
-            // different center position
-            if (d > radius1 + radius2 + Utils.realThreshold ||
-                    d + Utils.realThreshold < Math.abs(radius1 - radius2)) {
-                result.intrType = Circle2Circle2IntrType.NoIntersect;
-            } else {
-                double rad1Sq = radius1 * radius1;
-                double a = (rad1Sq - radius2 * radius2 + d2) / (2.0 * d);
-                Point2D.Double midPoint = Points2D.add(center1,
-                        Points2D.multiply(cv, a / d));
-                double diff = rad1Sq - a * a;
-                if (diff < 0.0) {
-                    result.intrType = Circle2Circle2IntrType.OneIntersect;
-                    result.point1 = midPoint;
-                } else {
-                    double h = Math.sqrt(diff);
-                    double hOverD = h / d;
-                    double xTerm = hOverD * cv.getY();
-                    double yTerm = hOverD * cv.getX();
-                    double x1 = midPoint.getX() + xTerm;
-                    double y1 = midPoint.getY() - yTerm;
-                    double x2 = midPoint.getX() - xTerm;
-                    double y2 = midPoint.getY() + yTerm;
-                    result.point1 = new Point2D.Double(x1, y1);
-                    result.point2 = new Point2D.Double(x2, y2);
-                    if (Geom.almostEqual(result.point1, result.point2)) {
-                        result.intrType = Circle2Circle2IntrType.OneIntersect;
-                    } else {
-                        result.intrType = Circle2Circle2IntrType.TwoIntersects;
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
 
     public static final double REAL_THRESHOLD = 1e-8;
 
