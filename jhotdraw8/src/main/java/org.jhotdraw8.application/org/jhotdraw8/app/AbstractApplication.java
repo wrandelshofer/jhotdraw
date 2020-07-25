@@ -144,19 +144,21 @@ public abstract class AbstractApplication extends javafx.application.Application
         }
         recentUris.get().addListener((SetChangeListener.Change<? extends Map.Entry<URI, DataFormat>> change) -> {
             StringBuilder buf = new StringBuilder();
-            int skip = recentUris.size() - getMaxNumberOfRecentUris();
+            int count = 0;
             for (Map.Entry<URI, DataFormat> entry : recentUris) {
-                if (--skip > 0) {
-                    continue;
+                if (count++ > getMaxNumberOfRecentUris()) {
+                    break;
                 }
                 if (buf.length() != 0) {
                     buf.append('\n');
                 }
-                URI key = entry.getKey();
-                DataFormat value = entry.getValue();
-                if (key != null && value != null && value.getIdentifiers() != null && !value.getIdentifiers().isEmpty()) {
-                    String str = key.toString() + '\t' + value.getIdentifiers().iterator().next();
-                    buf.append(str);
+                URI uri = entry.getKey();
+                DataFormat format = entry.getValue();
+                if (uri != null) {
+                    buf.append(uri.toString());
+                    if (format != null && format.getIdentifiers() != null && !format.getIdentifiers().isEmpty()) {
+                        buf.append('\t').append(format.getIdentifiers().iterator().next());
+                    }
                 }
             }
             prefs.put(applicationId + RECENT_URIS, buf.toString());

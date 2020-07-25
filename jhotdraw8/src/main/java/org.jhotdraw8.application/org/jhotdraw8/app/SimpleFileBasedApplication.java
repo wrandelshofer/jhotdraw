@@ -99,6 +99,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
     private final static Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
     @NonNull
     public static final String WINDOW_MENU_ID = "window";
+    public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
     private Logger LOGGER = Logger.getLogger(SimpleFileBasedApplication.class.getName());
 
     /**
@@ -173,22 +174,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
         while (!todo.isEmpty()) {
             final Menu menu = todo.remove();
             if (WINDOW_MENU_ID.equals(menu.getId())) {
-                Map<Activity, CheckMenuItem> menuItemMap = new WeakHashMap<>();
-                CustomBinding.bindListContentToSet(menu.getItems(), getActivities(),
-                        v -> menuItemMap.computeIfAbsent(v, k -> {
-                            final CheckMenuItem menuItem = new CheckMenuItem();
-                            menuItem.textProperty().bind(v.titleProperty());
-                            menuItem.setOnAction(evt -> {
-                                final Stage s = v.get(STAGE_KEY);
-                                if (s != null) {
-                                    s.requestFocus();
-                                }
-                                menuItem.setSelected(v == activity);
-                            });
-                            menuItem.setSelected(v == activity);
-                            return menuItem;
-                        })
-                );
+                createWindowMenu(activity, menu);
                 continue;
             }
             for (MenuItem mi : menu.getItems()) {
@@ -226,6 +212,25 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
         }
 
         return mb;
+    }
+
+    private void createWindowMenu(@Nullable Activity activity, Menu menu) {
+        Map<Activity, CheckMenuItem> menuItemMap = new WeakHashMap<>();
+        CustomBinding.bindListContentToSet(menu.getItems(), getActivities(),
+                v -> menuItemMap.computeIfAbsent(v, k -> {
+                    final CheckMenuItem menuItem = new CheckMenuItem();
+                    menuItem.textProperty().bind(v.titleProperty());
+                    menuItem.setOnAction(evt -> {
+                        final Stage s = v.get(STAGE_KEY);
+                        if (s != null) {
+                            s.requestFocus();
+                        }
+                        menuItem.setSelected(v == activity);
+                    });
+                    menuItem.setSelected(v == activity);
+                    return menuItem;
+                })
+        );
     }
 
     private void disambiguateViews() {
@@ -583,7 +588,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
             for (Object mi : todo.remove()) {
                 if (mi instanceof Menu) {
                     Menu mmi = (Menu) mi;
-                    if ("file.openRecentMenu".equals(mmi.getId())) {
+                    if (FILE_OPEN_RECENT_MENU.equals(mmi.getId())) {
                         mmi.getItems().clear();
                         for (Map.Entry<URI, DataFormat> entry : recentUrisProperty()) {
                             URI uri = entry.getKey();
