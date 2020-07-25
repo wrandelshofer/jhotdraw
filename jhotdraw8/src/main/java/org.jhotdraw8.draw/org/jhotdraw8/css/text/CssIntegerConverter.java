@@ -35,7 +35,7 @@ public class CssIntegerConverter extends AbstractCssConverter<Integer> {
             case CssTokenType.TT_NUMBER:
                 return tt.currentNumberNonNull().intValue();
             default:
-                throw new ParseException("⟨Integer⟩: integer expected.", tt.getStartPosition());
+                throw tt.createParseException("⟨Integer⟩: integer expected.");
         }
     }
 
