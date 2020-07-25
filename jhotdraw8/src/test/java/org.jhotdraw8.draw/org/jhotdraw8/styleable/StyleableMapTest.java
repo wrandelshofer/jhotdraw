@@ -5,12 +5,20 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,13 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+public class StyleableMapTest {
 
-/**
- * @author werni
- */
-public class StyleableMapNGTest {
-
-    public StyleableMapNGTest() {
+    public StyleableMapTest() {
     }
 
     @Test
@@ -128,4 +132,57 @@ public class StyleableMapNGTest {
         System.out.println("---");
     }
 
+    @Test
+    public void concurrentUsageTest() {
+        ConcurrentHashMap<Character, Integer> sharedKeysMap = new ConcurrentHashMap<>() {
+            @NonNull
+            final AtomicInteger nextIndex = new AtomicInteger();
+
+            @Override
+            public Integer get(Object key) {
+                //return super.computeIfAbsent((Character) key, k ->size()); // this does not work
+                return super.computeIfAbsent((Character) key, k -> nextIndex.getAndIncrement());
+            }
+        };
+        ArrayList<SimpleStyleableMap<Character, Character>> list = new ArrayList<>();
+        int n = 1000;
+        for (int i = 0; i < n; i++)
+            list.add(new SimpleStyleableMap<>(sharedKeysMap));
+        list.stream().parallel().forEach(m -> {
+            ThreadLocalRandom prng = ThreadLocalRandom.current();
+            int numInserts = prng.nextInt(10, 37);
+            for (int i = 0; i < numInserts; i++) {
+                char chr = (char) prng.nextInt('a', 'z' + 1);
+                if (prng.nextInt(2) == 0) {
+                    chr = (char) prng.nextInt('A', 'Z' + 1);
+                }
+                m.put(StyleOrigin.USER, chr, chr);
+            }
+        });
+
+        // Check if the shared keys map is okay
+        System.out.println(sharedKeysMap);
+        ArrayList<Map.Entry<Character, Integer>> entries = new ArrayList<>(sharedKeysMap.entrySet());
+        entries.sort(Map.Entry.comparingByValue());
+        System.out.println(entries);
+        System.out.println(sharedKeysMap.size());
+        System.out.println(new LinkedHashSet<>(sharedKeysMap.values()).size());
+        assertEquals(sharedKeysMap.size(), new LinkedHashSet<>(sharedKeysMap.values()).size());
+
+        // Get stats about individual maps
+        System.out.println("avg: " + list.stream().mapToInt(SimpleStyleableMap::size).summaryStatistics().getAverage());
+
+        // Check if the individual maps are okay
+        List<SimpleStyleableMap<Character, Character>> badMaps = list.stream().filter(m -> {
+            for (Map.Entry<Character, Character> entry : m.entrySet()) {
+                if (entry.getKey() != entry.getValue()) {
+                    return true;
+                }
+            }
+            return false;
+        }).collect(Collectors.toList());
+
+        System.out.println("badMaps: " + badMaps);
+        assertTrue(badMaps.isEmpty());
+    }
 }

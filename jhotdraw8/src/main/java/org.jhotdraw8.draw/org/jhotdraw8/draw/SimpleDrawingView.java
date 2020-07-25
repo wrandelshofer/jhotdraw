@@ -979,6 +979,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (constrainer.get() != null) {
             constrainer.get().updateNode(SimpleDrawingView.this);
         }
+        repaint();
 
         // We have to wait until the scroll pane has finished layouting.
         CompletableFuture.runAsync(() -> {
@@ -1066,10 +1067,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void invalidateHandleNodes() {
-        for (Figure f : handles.keySet()) {
-            dirtyHandles.add(f);
-        }
-        repaint();
+        dirtyHandles.addAll(handles.keySet());
     }
 
     /**
@@ -1385,6 +1383,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 if (!f.isShowing() && !hasNode(f)
                         || !f.getBoundsInWorld().intersects(visibleRectInWorld)
                 ) {
+                    // wont be updated and thus remains dirty!
+                    dirtyFigureNodes.add(f);
                     continue;
                 }
                 Node node = getNode(f);

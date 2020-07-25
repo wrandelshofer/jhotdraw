@@ -15,11 +15,11 @@ import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -58,8 +58,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      * Creates a new instance.
      */
     public SimpleStyleableMap() {
-        //this(Collections.synchronizedMap(new LinkedHashMap<>()));
-        this(new ConcurrentHashMap<>());
+        this(new HashMap<>());
     }
 
     /**

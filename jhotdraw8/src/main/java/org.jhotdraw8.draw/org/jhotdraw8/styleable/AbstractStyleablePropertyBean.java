@@ -29,7 +29,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
      * Holds the properties.
      */
     protected final StyleableMap<Key<?>, Object> properties =
-            new SimpleStyleableMap<Key<?>, Object>(
+            new SimpleStyleableMap<>(
                     keyMaps.computeIfAbsent(getClass(), k -> {
                         ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
                             @NonNull
@@ -52,7 +52,6 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
                     AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
                     super.callObservers(origin, change);
                 }
-
             };
 
     /**
