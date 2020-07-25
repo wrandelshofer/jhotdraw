@@ -495,16 +495,21 @@ public class Shapes {
 
     @NonNull
     public static <T extends PathBuilder> T buildFromPathIterator(@NonNull T builder, @NonNull PathIterator iter) {
+        return buildFromPathIterator(builder, iter, true);
+    }
+
+    @NonNull
+    public static <T extends PathBuilder> T buildFromPathIterator(@NonNull T builder, @NonNull PathIterator iter, boolean doPathDone) {
         double[] coords = new double[6];
         boolean needsMoveTo = true;
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    builder.closePath();
-                    needsMoveTo = true;
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    if (needsMoveTo) {
+            case PathIterator.SEG_CLOSE:
+                builder.closePath();
+                needsMoveTo = true;
+                break;
+            case PathIterator.SEG_CUBICTO:
+                if (needsMoveTo) {
                         throw new IllegalStateException("Missing initial moveto in path definition.");
                     }
                     builder.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
@@ -521,15 +526,17 @@ public class Shapes {
                     }
                     builder.quadTo(coords[0], coords[1], coords[2], coords[3]);
                     break;
-                case PathIterator.SEG_MOVETO:
-                    builder.moveTo(coords[0], coords[1]);
-                    needsMoveTo = false;
-                    break;
-                default:
-                    throw new InternalError("unsupported segment type:" + iter.currentSegment(coords));
+            case PathIterator.SEG_MOVETO:
+                builder.moveTo(coords[0], coords[1]);
+                needsMoveTo = false;
+                break;
+            default:
+                throw new InternalError("unsupported segment type:" + iter.currentSegment(coords));
             }
         }
-        builder.pathDone();
+        if (doPathDone) {
+            builder.pathDone();
+        }
         return builder;
     }
 

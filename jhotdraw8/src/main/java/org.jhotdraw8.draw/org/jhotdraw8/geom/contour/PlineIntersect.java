@@ -11,9 +11,13 @@ public class PlineIntersect {
      * Index of the start vertex of the first segment.
      */
     int sIndex1;
-    /** Index of the start vertex of the second segment. */
+    /**
+     * Index of the start vertex of the second segment.
+     */
     int sIndex2;
-    /** Point of intersection. */
+    /**
+     * Point of intersection.
+     */
     Point2D.Double pos;
 
     PlineIntersect() {

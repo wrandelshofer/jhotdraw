@@ -3,7 +3,7 @@ package org.jhotdraw8.geom.contour;
 import java.awt.geom.Point2D;
 
 /**
- * Represents a coincident polyline intersect (stretch).
+ * Represents a coincident polyline intersection (stretch).
  */
 public class PlineCoincidentIntersect {
     /// Index of the start vertex of the first segment
