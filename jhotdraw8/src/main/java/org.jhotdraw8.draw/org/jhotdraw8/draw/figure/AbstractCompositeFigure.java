@@ -149,12 +149,16 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     @NonNull
     @Override
     public Bounds getBoundsInLocal() {
+        ObservableList<Figure> children = getChildren();
+        if (children.isEmpty()) {
+            return new BoundingBox(0, 0, 0, 0);
+        }
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
         double maxY = Double.NEGATIVE_INFINITY;
 
-        for (Figure child : getChildren()) {
+        for (Figure child : children) {
             Bounds b = child.getBoundsInParent();
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());

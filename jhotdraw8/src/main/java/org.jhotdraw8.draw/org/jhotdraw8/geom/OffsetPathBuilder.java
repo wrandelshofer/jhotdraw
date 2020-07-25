@@ -200,9 +200,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
                     }
                 }
             }
-
         }
-
 
         // Draw segments
         for (int i = 0, n = segments.size(); i < n; i++) {

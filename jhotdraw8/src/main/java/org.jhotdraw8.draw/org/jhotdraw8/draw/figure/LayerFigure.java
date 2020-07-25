@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.collections.ObservableList;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -93,6 +94,8 @@ public class LayerFigure extends AbstractCompositeFigure
         }
 
         ObservableList<Node> groupChildren = n.getChildren();
+        // Performance: setAll is extremely expensive, maybe we should add/remove
+        // each node individually instead.
         if (!groupChildren.equals(childNodes)) {
             groupChildren.setAll(childNodes);
         }
@@ -145,5 +148,16 @@ public class LayerFigure extends AbstractCompositeFigure
     @Override
     public String toString() {
         return "LayerFigure@" + Integer.toHexString(System.identityHashCode(this)) + "{" + getId() + "}";
+    }
+
+    /**
+     * A layer always has the following bounds [0,0,MAX_VALUE,MAX_VALUE].
+     *
+     * @return [0, 0, MAX_VALUE, MAX_VALUE].
+     */
+    @NonNull
+    @Override
+    public Bounds getBoundsInLocal() {
+        return new BoundingBox(0, 0, Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

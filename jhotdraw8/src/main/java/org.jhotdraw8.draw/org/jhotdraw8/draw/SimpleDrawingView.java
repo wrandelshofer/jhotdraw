@@ -1376,12 +1376,15 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void updateNodes() {
+        Bounds visibleRectInWorld = viewToWorld(getVisibleRect());
         if (!renderIntoImage) {
             // create copies of the lists to allow for concurrent modification
             Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
             dirtyFigureNodes.clear();
             for (Figure f : copyOfDirtyFigureNodes) {
-                if (!f.isShowing() && !hasNode(f)) {
+                if (!f.isShowing() && !hasNode(f)
+                        || !f.getBoundsInWorld().intersects(visibleRectInWorld)
+                ) {
                     continue;
                 }
                 Node node = getNode(f);
