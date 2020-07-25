@@ -22,17 +22,17 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class OffsetPathBuilderTest {
     @NonNull
     @TestFactory
-    public List<DynamicTest> offsetPathTests() {
+    public List<DynamicTest> offsetPathTestFactory() {
         return Arrays.asList(
                 dynamicTest("shape with coincident line - angle from seg 0 to 1 > 180°, angle from seg 1 to 2 = 360°", () -> doTest(
                         polylineOf(false, new double[][]{{220.0, 40.0, 0.0}, {190.0, 110.0, 0.0}, {210.0, 90.0, 0.0}, {200.0, 100.0, 0.0}, {280.0, 180.0, 0.0}}),
                         -7,
                         Arrays.asList(polylineOf(false, new double[][]{
-                                        {226.4340152101264, 42.75743509005417, 0.0}
-                                        , {209.16582399091348, 83.04988126821766, 0.7122671462660679}
-                                        , {214.94974746830584, 94.94974746830583, 0.0}
-                                        , {209.89949493661166, 100.00000000000001, 0.0}
-                                        , {284.9497474683058, 175.05025253169416, 0.0}
+                                {226.4340152101264, 42.75743509005417, 0.0}
+                                , {209.16582399091348, 83.04988126821766, 0.7122671462660679}
+                                , {214.94974746830584, 94.94974746830583, 0.0}
+                                , {209.89949493661166, 100.00000000000001, 0.0}
+                                , {284.9497474683058, 175.05025253169416, 0.0}
                                 })
                         )
                 )),

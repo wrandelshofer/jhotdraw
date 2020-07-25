@@ -121,7 +121,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doLineTo(double x, double y) {
         Point2D.Double shift =
-                Points2D.multiply(Points2D.normalize(new Point2D.Double(y - getLastY(), getLastX() - x)),offset);
+                Points2D.multiply(Points2D.normalize(new Point2D.Double(y - getLastY(), getLastX() - x)), offset);
         if (needsMoveTo) {
             segments.add(new double[]{getLastX() + shift.getX(), getLastY() + shift.getY()});
             needsMoveTo = false;
@@ -160,7 +160,7 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
                 Point2D.Double b2p = getXY(segments.get(j + 1));
                 IntersectionResultEx inter = Intersections.intersectLineLineEx(a1p, a2p, b1p, b2p);
                 if (inter.getStatus() == IntersectionStatus.INTERSECTION) {
-                    Point2D.Double p = inter.iterator().next();
+                    Point2D.Double p = inter.getFirst();
                     segments.set(j, new double[]{p.getX(), p.getY()});
                     // delete all points between i and j
                     if (j > i + 1) {
@@ -177,9 +177,9 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
             Point2D.Double a1p = getXY(originalSegments.get(i));
             Point2D.Double a2p = getXY(originalSegments.get(i + 1));
             Point2D.Double shift =
-                    Points2D.multiply(Points2D.normalize(new Point2D.Double(a2p.getY() - a1p.getY(), a1p.getX() - a2p.getX())),offset);
-            Point2D.Double a1 = Points2D.subtract(a1p,shift);
-            Point2D.Double a2 = Points2D.subtract(a2p,shift);
+                    Points2D.multiply(Points2D.normalize(new Point2D.Double(a2p.getY() - a1p.getY(), a1p.getX() - a2p.getX())), offset);
+            Point2D.Double a1 = Points2D.subtract(a1p, shift);
+            Point2D.Double a2 = Points2D.subtract(a2p, shift);
             final double eps = 1e-6;
             for (int j = 0, m = segments.size(); j < m - 1; j++) {
                 Point2D.Double b1p = getXY(segments.get(j));
@@ -208,9 +208,9 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
         for (int i = 0, n = segments.size(); i < n; i++) {
             Point2D.Double p = getXY(segments.get(i));
             if (i == 0) {
-                target.moveTo(p.getX(),p.getY());
+                target.moveTo(p.getX(), p.getY());
             } else {
-                target.lineTo(p.getX(),p.getY());
+                target.lineTo(p.getX(), p.getY());
             }
         }
 
@@ -250,9 +250,9 @@ public class OffsetPathBuilder extends AbstractPathBuilder {
         for (int i = 0, n = segments.size(); i < n; i++) {
             Point2D.Double p = getXY(segments.get(i));
             if (i == 0) {
-                target.moveTo(p.getX(),p.getY());
+                target.moveTo(p.getX(), p.getY());
             } else {
-                target.lineTo(p.getX(),p.getY());
+                target.lineTo(p.getX(), p.getY());
             }
         }
 

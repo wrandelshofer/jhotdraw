@@ -2504,7 +2504,8 @@ public class Intersections {
      */
     @NonNull
     public static IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
-        return intersectLineLineEx(a0.getX(), a1.getY(), b0.getX(), b0.getY(), b1.getX(), b1.getY(), 1.0, EPSILON);
+        return intersectLineLineEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(),
+                b0.getX(), b0.getY(), b1.getX(), b1.getY());
     }
 
     public static IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1, double epsilon) {
@@ -2596,7 +2597,7 @@ public class Intersections {
 
             // using threshold check here to make intersect "sticky" to prefer
             // considering it an intersection.
-            if (-EPSILON < ua && ua < maxT + EPSILON && -EPSILON < ub && ub < 1 + EPSILON) {
+            if (-epsilon < ua && ua < maxT + epsilon && -epsilon < ub && ub < 1 + epsilon) {
                 status = IntersectionStatus.INTERSECTION;
                 result.add(new IntersectionPointEx(
                         new Point2D.Double(a0x + ua * adx, a0y + ua * ady),
@@ -2667,7 +2668,7 @@ public class Intersections {
                         at1 = swap;
                     }
 
-                    if (at0 < maxT + EPSILON && at1 > -EPSILON) {
+                    if (at0 < maxT + epsilon && at1 > -epsilon) {
                         at0 = Geom.clamp(at0, 0.0, maxT);
                         at1 = Geom.clamp(at1, 0.0, maxT);
                         double bt0, bt1;
