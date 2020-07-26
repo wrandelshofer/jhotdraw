@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -46,21 +45,21 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
      */
     public final static String TYPE_SELECTOR = "Slice";
 
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
     public SliceFigure() {

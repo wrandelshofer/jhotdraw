@@ -34,9 +34,9 @@ public class EllipseFigure extends AbstractLeafFigure
         implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, ConnectableFigure, PathIterableFigure {
 
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
     @Nullable
     public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);

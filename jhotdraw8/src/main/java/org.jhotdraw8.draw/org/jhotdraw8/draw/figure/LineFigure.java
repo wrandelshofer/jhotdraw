@@ -44,13 +44,13 @@ public class LineFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Line";
 
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey START_Y = new CssSizeStyleableKey("startY", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey END_X = new CssSizeStyleableKey("endX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey END_Y = new CssSizeStyleableKey("endY", CssSize.ZERO);
     @Nullable
     public final static CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);

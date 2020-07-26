@@ -30,11 +30,11 @@ public class CssColor implements Paintable {
     @NonNull
     private final Color color;
 
-    @Nullable
+    @NonNull
     public final static CssColor BLACK = CssColor.valueOf("black");
-    @Nullable
+    @NonNull
     public final static CssColor WHITE = CssColor.valueOf("white");
-    @Nullable
+    @NonNull
     public final static CssColor TRANSPARENT = CssColor.valueOf("transparent");
 
     public CssColor(@NonNull Color color) {
@@ -133,7 +133,7 @@ public class CssColor implements Paintable {
         return "CssColor{" + getName() + '}';
     }
 
-    @Nullable
+    @NonNull
     public static CssColor valueOf(@NonNull String value) {
         return new CssColor(value);
     }

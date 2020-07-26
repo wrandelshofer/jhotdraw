@@ -43,11 +43,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         TextFontableFigure, TextLayoutableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
         PaddableFigure {
 
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
 
     @NonNull

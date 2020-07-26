@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.render;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
@@ -40,14 +41,14 @@ public interface RenderContext extends PropertyBean {
     /**
      * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
      */
-    @Nullable
+    @NonNull
     Key<Bounds> CLIP_BOUNDS = new ObjectKey<>("clipBounds", Bounds.class, null);
     /**
      * Number of nodes that can be rendered per layer in the drawing editor..
      */
     NonNullObjectKey<Integer> MAX_NODES_PER_LAYER = new NonNullObjectKey<>("maxNodesPerLayer", Integer.class, Integer.MAX_VALUE);
 
-    @Nullable
+    @NonNull
     Key<Page> RENDER_PAGE = new ObjectKey<>("renderPage", Page.class, null);
     Key<Integer> RENDER_PAGE_NUMBER = new ObjectKey<>("renderPageNumber", Integer.class, 0);
     Key<Integer> RENDER_NUMBER_OF_PAGES = new ObjectKey<>("renderNumberOfPages", Integer.class, 1);

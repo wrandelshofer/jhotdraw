@@ -33,9 +33,9 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
      */
     public final static String TYPE_SELECTOR = "Arc";
 
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
     public final static CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
     public final static CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);

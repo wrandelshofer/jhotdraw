@@ -13,8 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssRectangle2D;
-
-import java.util.ArrayList;
+import org.jhotdraw8.geom.FXTransforms;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -23,7 +22,6 @@ import static java.lang.Math.min;
  * This base class can be used to implement figures which support child figures.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Composite, Composite.
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
 
@@ -73,50 +71,9 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
 
     }
 
-    /**
-     * The name of the children property.
-     */
-    public final static String CHILDREN_PROPERTY = "children";
 
     private final ChildList children = new ChildList();
 
-    /*
-    {
-        children.addListener(new ListChangeListener<Figure>() {
-
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends Figure> c) {
-                while (c.next()) {
-                    if (c.wasRemoved()) {
-                        final List<? extends Figure> removedList = c.getRemoved();
-                        for (Figure removed : removedList) {
-                            removed.parentProperty().set(null);
-                        }
-                    }
-                    if (c.wasAdded()) {
-                        final ObservableList<? extends Figure> addedList = c.getList();
-                        for (int i = c.getFrom(), to = c.getTo(); i < to; i++) {
-                            Figure added = addedList.get(i);
-                            Figure oldParentOfAdded = added.getParent();
-                            if (oldParentOfAdded != null) {
-                                if (oldParentOfAdded == AbstractCompositeFigure.this) {
-                                    int lastIndex = children.lastIndexOf(added);
-                                    int firstIndex = children.indexOf(added);
-                                    if (lastIndex != firstIndex) {
-                                        children.removeChild(firstIndex == i ? lastIndex : firstIndex);
-                                    }
-                                } else {
-                                    System.out.println("AbstractCompositeFigure.oldParentOfAdded " + oldParentOfAdded);
-                                    oldParentOfAdded.removeChild(added);
-                                }
-                            }
-                            added.parentProperty().set(AbstractCompositeFigure.this);
-                        }
-                    }
-                }
-            }
-        });
-    }*/
     @NonNull
     @Override
     public ObservableList<Figure> getChildren() {
@@ -185,7 +142,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         Transform t = getLocalToParent();
 
         for (Figure child : getChildren()) {
-            Bounds b = t.transform(child.getLayoutBoundsInParent());
+            Bounds b = FXTransforms.transform(t, child.getLayoutBoundsInParent());
             minX = min(minX, b.getMinX());
             maxX = max(maxX, b.getMaxX());
             minY = min(minY, b.getMinY());
@@ -209,30 +166,5 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
             children.fireItemUpdated(children.indexOf(source));
         }
         super.firePropertyChangeEvent(source, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /**
-     * Replaces the children of this figure with the specified list of children.
-     * <p>
-     * This method is used for XML serialization using the Java XMLEncoder and
-     * XMLDecoder classes.
-     *
-     * @param newChildren the new children
-     */
-    public void setChildList(ArrayList<Figure> newChildren) {
-        getChildren().setAll(newChildren);
-    }
-
-    /**
-     * Returns a new list instance with all children of this figure.
-     * <p>
-     * This method is used for XML serialization using the Java XMLEncoder and
-     * XMLDecoder classes.
-     *
-     * @return a new list instance
-     */
-    @NonNull
-    public ArrayList<Figure> getChildList() {
-        return new ArrayList<>(getChildren());
     }
 }

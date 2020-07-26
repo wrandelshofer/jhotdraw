@@ -33,16 +33,6 @@ import java.nio.file.Paths;
  * {@link Layer}s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.</p>
  *
  * @author Werner Randelshofer
- * @design.pattern Drawing Framework, KeyAbstraction. The drawing framework
- * supports the creation of editors for structured drawings. The key
- * abstractions of the framework are: null {@link Drawing}, {@link Figure}, {@link org.jhotdraw8.draw.handle.Handle},
- * {@link org.jhotdraw8.draw.tool.Tool}, {@link org.jhotdraw8.draw.DrawingView},
- * {@link org.jhotdraw8.draw.DrawingEditor}, {@link org.jhotdraw8.draw.model.DrawingModel}.
- * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.
- * @design.pattern Drawing Strategy, Context.
- * {@link org.jhotdraw8.draw.io.InputFormat} and
- * {@link org.jhotdraw8.draw.io.OutputFormat} encapsulate the algorithms for
- * loading and saving a {@link Drawing}.
  */
 public interface Drawing extends Figure {
 
@@ -53,7 +43,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
+    @NonNull Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
     /**
      * Holds a list of author stylesheets. If the value is null, then no
@@ -68,7 +58,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListKey<URI>("authorStylesheets", URI.class);
+    @NonNull Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListKey<URI>("authorStylesheets", URI.class);
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -80,14 +70,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListKey<URI>("userAgentStylesheets", URI.class);
+    @NonNull Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListKey<URI>("userAgentStylesheets", URI.class);
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListKey<String>("inlineStylesheets", String.class);
+    @NonNull Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListKey<String>("inlineStylesheets", String.class);
     /**
      * Defines the canvas width.
      * <p>
@@ -99,7 +89,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", new CssSize(640.0));
+    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", new CssSize(640.0));
     /**
      * Defines the canvas height.
      * <p>
@@ -108,7 +98,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", new CssSize(480.0));
+    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", new CssSize(480.0));
     /**
      * Defines the canvas color.
      * <p>
@@ -120,7 +110,7 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    NullableCssColorStyleableKey BACKGROUND = new NullableCssColorStyleableKey("background", new CssColor("white", Color.WHITE));
+    @NonNull NullableCssColorStyleableKey BACKGROUND = new NullableCssColorStyleableKey("background", new CssColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.

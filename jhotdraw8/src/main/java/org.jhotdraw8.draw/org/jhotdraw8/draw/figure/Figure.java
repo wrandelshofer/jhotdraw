@@ -1044,7 +1044,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the parent property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
      */
-    @Nullable ObjectProperty<Figure> parentProperty();
+    @NonNull ObjectProperty<Figure> parentProperty();
 
     /**
      * Removes a child from the figure.

@@ -37,9 +37,9 @@ public class RectangleFigure extends AbstractLeafFigure
      */
     public final static String TYPE_SELECTOR = "Rectangle";
 
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
-    @Nullable
+    @NonNull
     public final static CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);
     @Nullable
     public final static SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);

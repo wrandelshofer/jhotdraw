@@ -87,7 +87,7 @@ public interface SecondStrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    @Nullable
+    @NonNull
     NullablePaintableStyleableKey SECOND_STROKE = new NullablePaintableStyleableKey("second-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.

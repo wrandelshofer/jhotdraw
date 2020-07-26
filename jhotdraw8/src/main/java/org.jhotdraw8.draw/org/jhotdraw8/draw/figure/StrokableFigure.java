@@ -52,7 +52,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    @Nullable CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", CssSize.ZERO);
+    @NonNull CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -61,7 +61,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new EnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
+    @NonNull EnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new EnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -71,7 +71,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    EnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
+    @NonNull EnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new EnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style.
      * <p>
@@ -82,7 +82,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", new CssSize(4.0));
+    @NonNull CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", new CssSize(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -92,13 +92,13 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("canvastext", Color.BLACK));
+    @NonNull NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("canvastext", Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    EnumStyleableKey<StrokeType> STROKE_TYPE = new EnumStyleableKey<>("stroke-type", StrokeType.class, StrokeType.CENTERED);
+    @NonNull EnumStyleableKey<StrokeType> STROKE_TYPE = new EnumStyleableKey<>("stroke-type", StrokeType.class, StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -109,7 +109,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", CssSize.ONE);
+    @NonNull CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", CssSize.ONE);
     /**
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
@@ -118,7 +118,7 @@ public interface StrokableFigure extends Figure {
      * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
      * Stroke Properties</a>
      */
-    ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray",
+    @NonNull ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray",
             CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**
@@ -210,7 +210,7 @@ public interface StrokableFigure extends Figure {
         CssSize cssSize = getStyledNonNull(STROKE_WIDTH);
         double width = ctx == null ? cssSize.getConvertedValue()
                 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
-        final StrokeLineCap cap = getStyled(STROKE_LINE_CAP);
+        final StrokeLineCap cap = getStyledNonNull(STROKE_LINE_CAP);
         final int basicCap;
         switch (cap) {
         case BUTT:
