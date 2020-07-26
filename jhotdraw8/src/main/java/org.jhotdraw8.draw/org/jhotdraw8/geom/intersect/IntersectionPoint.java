@@ -7,23 +7,45 @@ import java.awt.geom.Point2D;
  * function at an intersection point.
  * <p>
  * This class extends Point2D.Double rather than aggregating it to reduce
- * pointer chasing.
+ * pointer chasing. As a consequence, IntersectionPoint only uses the x and y
+ * coordinates for equals and hashCode.
  */
 public class IntersectionPoint extends Point2D.Double {
-    private final double argument;
+    protected final double argumentA;
+    protected final int segmentA;
 
-    public IntersectionPoint(double x, double y, double argument) {
+    public IntersectionPoint(double x, double y, double argumentA) {
+        this(x, y, argumentA, 0);
+    }
+
+    public IntersectionPoint(double x, double y, double argumentA, int segmentA) {
         super(x, y);
-        this.argument = argument;
+        this.argumentA = argumentA;
+        this.segmentA = segmentA;
     }
 
-    public IntersectionPoint(Point2D p, double argument) {
-        super(p.getX(), p.getY());
-        this.argument = argument;
+
+    public IntersectionPoint(Point2D p, double argumentA) {
+        this(p.getX(), p.getY(), argumentA, 0);
     }
 
-    public double getArgument() {
-        return argument;
+    public IntersectionPoint(Point2D p, double argumentA, int segmentA) {
+        this(p.getX(), p.getY(), argumentA, segmentA);
+    }
+
+    public double getArgumentA() {
+        return argumentA;
+    }
+
+    /**
+     * If parametric function 'a' is a segment of a segmented function,
+     * then this field is used to indicate to which segment the parametric
+     * function belongs.
+     * <p>
+     * The index of the segment.
+     */
+    public int getSegmentA() {
+        return segmentA;
     }
 
     @Override
@@ -31,7 +53,7 @@ public class IntersectionPoint extends Point2D.Double {
         return "IntersectionPoint{" +
                 "x=" + x +
                 ", y=" + y +
-                ", a=" + argument +
+                ", a=" + argumentA +
                 '}';
     }
 }

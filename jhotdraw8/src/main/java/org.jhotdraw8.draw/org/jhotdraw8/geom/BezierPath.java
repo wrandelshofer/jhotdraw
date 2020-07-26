@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -919,7 +920,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             v1 = get(i);
             v2 = get(i + 1);
             if (v1.mask == 0 && v2.mask == 0) {
-                if (Geom.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, flatness)) {
+                if (IntersectLinePoint.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, flatness)) {
                     relativeLen += Geom.length(v1.x[0], v1.y[0], find.x, find.y);
                     return relativeLen / len;
                 } else {
@@ -941,7 +942,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             v1 = get(size() - 1);
             v2 = get(0);
             if (v1.mask == 0 && v2.mask == 0) {
-                if (Geom.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, flatness)) {
+                if (IntersectLinePoint.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, flatness)) {
                     relativeLen += Geom.length(v1.x[0], v1.y[0], find.x, find.y);
                     return relativeLen / len;
                 }
@@ -977,7 +978,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             v1 = get(i);
             v2 = get(i + 1);
             if (v1.mask == 0 && v2.mask == 0) {
-                if (Geom.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, tolerance)) {
+                if (IntersectLinePoint.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, tolerance)) {
                     return i;
                 }
             } else {
@@ -993,7 +994,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             v1 = get(size() - 1);
             v2 = get(0);
             if (v1.mask == 0 && v2.mask == 0) {
-                if (Geom.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, tolerance)) {
+                if (IntersectLinePoint.lineContainsPoint(v1.x[0], v1.y[0], v2.x[0], v2.y[0], find.x, find.y, tolerance)) {
                     return size() - 1;
                 }
             } else {

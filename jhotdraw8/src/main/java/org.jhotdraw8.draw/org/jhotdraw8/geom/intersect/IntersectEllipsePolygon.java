@@ -20,18 +20,19 @@ public class IntersectEllipsePolygon {
      * @return computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectEllipsePolygonEx(@NonNull Point2D c, double rx, double ry, @NonNull List<Point2D.Double> points) {
-        List<IntersectionPointEx> result = new ArrayList<>();
+    public static IntersectionResult intersectEllipsePolygon(@NonNull Point2D c, double rx, double ry, @NonNull List<Point2D.Double> points) {
+        List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
             Point2D.Double b1 = points.get(i);
             Point2D.Double b2 = points.get((i + 1) % length);
-            IntersectionResultEx inter = IntersectEllipseLine.intersectEllipseLineEx(c, rx, ry, b1, b2);
+            IntersectionResult inter = IntersectEllipseLine.intersectEllipseLine(c, rx, ry, b1, b2);
 
             result.addAll(inter.asList());
         }
 
-        return new IntersectionResultEx(result);
+        return new IntersectionResult(result.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION,
+                result);
     }
 }

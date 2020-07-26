@@ -51,7 +51,7 @@ public class IntersectCirclePathIterator {
             case PathIterator.SEG_QUADTO:
                 x = seg[2];
                 y = seg[3];
-                inter = IntersectCircleQuadraticCurve.intersectQuadraticCurveCircleEx(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
+                inter = IntersectCircleQuadCurve.intersectQuadCurveCircleEx(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
                 // FIXME add segment number to t
                 result.addAll(inter.asList());
                 lastx = x;

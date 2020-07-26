@@ -73,9 +73,30 @@ public class BezierCurves {
         return new Point2D.Double(x0123, y0123);
     }
 
+    public static Point2D.Double evalCubicCurveTangent(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+                                                       double t) {
+        final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123;
+        x01 = lerp(x0, x1, t);
+        y01 = lerp(y0, y1, t);
+
+        x12 = lerp(x1, x2, t);
+        y12 = lerp(y1, y2, t);
+
+        x23 = lerp(x2, x3, t);
+        y23 = lerp(y2, y3, t);
+
+        x012 = lerp(x01, x12, t);
+        y012 = lerp(y01, y12, t);
+
+        x123 = lerp(x12, x23, t);
+        y123 = lerp(y12, y23, t);
+
+        return new Point2D.Double(x123 - x012, y123 - y012);
+    }
+
     @NonNull
     public static Point2D.Double evalCubicCurve(CubicCurve2D.Double c,
-                                         double t) {
+                                                double t) {
         return evalCubicCurve(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2, t);
     }
 
@@ -121,6 +142,18 @@ public class BezierCurves {
         y012 = lerp(y01, y12, t);
 
         return new Point2D.Double(x012, y012);
+    }
+
+    @NonNull
+    public static Point2D.Double evalQuadCurveTangent(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
+        final double x01, y01, x12, y12;
+        x01 = lerp(x0, x1, t);
+        y01 = lerp(y0, y1, t);
+
+        x12 = lerp(x1, x2, t);
+        y12 = lerp(y1, y2, t);
+
+        return new Point2D.Double(x12 - x01, y12 - y01);
     }
 
     /**
@@ -187,7 +220,10 @@ public class BezierCurves {
                                           final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
                                           double tolerance) {
         final Point2D.Double start = new Point2D.Double(x0, y0);
-        final IntersectionResultEx isect = IntersectRayRay.intersectRayRayEx(start, new Point2D.Double(x01, y01), new Point2D.Double(x2, y2), new Point2D.Double(x12, y12));
+        @NonNull Point2D b0 = new Point2D.Double(x2, y2);
+
+        final IntersectionResultEx isect = IntersectRayRay.intersectRayRayEx(start, Points2D.subtract(new Point2D.Double(x01, y01), start),
+                b0, Points2D.subtract(new Point2D.Double(x12, y12), b0));
         if (isect.isEmpty()) {
             return null;
         }

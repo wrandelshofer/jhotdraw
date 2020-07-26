@@ -8,7 +8,8 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectCircleQuadraticCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
@@ -53,7 +54,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.curveTo(x1, y1, x2, y2, x3, y3);
             return;
         }
-        IntersectionResultEx i = IntersectCircleCubicCurve.intersectCubicCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
+        IntersectionResult i = IntersectCircleCubicCurve.intersectCubicCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
         case INTERSECTION:
             double t = i.getLast().getArgumentA();
@@ -126,7 +127,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
             out.quadTo(x1, y1, x2, y2);
             return;
         }
-        IntersectionResultEx i = IntersectCircleQuadraticCurve.intersectQuadraticCurveCircleEx(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
+        IntersectionResult i = IntersectCircleQuadCurve.intersectQuadCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
         case INTERSECTION:
             double t = i.getLast().getArgumentA();

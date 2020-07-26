@@ -12,17 +12,18 @@ import java.util.List;
 import static org.jhotdraw8.geom.Geom.lerp;
 import static org.jhotdraw8.geom.intersect.IntersectLinePoint.argumentOnLine;
 
-public class IntersectCubicCurveLine {
-    private IntersectCubicCurveLine() {
+public class IntersectCubicCurveRay {
+    private IntersectCubicCurveRay() {
     }
 
     @NonNull
-    public static IntersectionResult intersectCubicCurveLine(
+    public static IntersectionResult intersectCubicCurveRay(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
-            double b0x, double b0y, double b1x, double b1y,
+            double box, double boy, double bdx, double bdy,
+            double maxT,
             double epsilon) {
-        return intersectCubicCurveLine(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(a3x, a3y),
-                new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), epsilon);
+        return intersectCubicCurveRay(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(a3x, a3y),
+                new Point2D.Double(box, boy), new Point2D.Double(bdx, bdy), maxT, epsilon);
     }
 
     /**
@@ -33,19 +34,19 @@ public class IntersectCubicCurveLine {
      * @param a1 control point P1 of 'p'
      * @param a2 control point P2 of 'p'
      * @param a3 control point P3 of 'p'
-     * @param b0 point 0 of 'a'
-     * @param b1 point 1 of 'a'
+     * @param bo point 0 of ray 'b'
+     * @param bd direction of ray 'b'
      * @return the computed intersection
      */
     @NonNull
-    public static IntersectionResult intersectCubicCurveLine(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D b0, @NonNull Point2D b1) {
-        return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Geom.REAL_THRESHOLD);
+    public static IntersectionResult intersectCubicCurveRay(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D bo, @NonNull Point2D bd) {
+        return intersectCubicCurveRay(a0, a1, a2, a3, bo, bd, Double.MAX_VALUE, Geom.REAL_THRESHOLD);
     }
 
-    public static IntersectionResult intersectCubicCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
-                                                             @NonNull Point2D a0, @NonNull Point2D a1, double epsilon) {
-        final Point2D.Double topLeft = Intersections.topLeft(a0, a1); // used to determine if point is on line segment
-        final Point2D.Double bottomRight = Intersections.bottomRight(a0, a1); // used to determine if point is on line segment
+    public static IntersectionResult intersectCubicCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
+                                                            @NonNull Point2D ao, @NonNull Point2D ad, double maxT, double epsilon) {
+        final Point2D.Double topLeft = Intersections.topLeft(ao, Points2D.add(ao, ad)); // used to determine if point is on line segment
+        final Point2D.Double bottomRight = Intersections.bottomRight(ao, Points2D.add(ao, ad)); // used to determine if point is on line segment
         List<IntersectionPoint> result = new ArrayList<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
@@ -64,20 +65,20 @@ public class IntersectCubicCurveLine {
         c1 = Points2D.add(Points2D.multiply(p0, -3), Points2D.multiply(p1, 3));
         c0 = p0;
 
-        final double a0x, a0y, a1x, a1y;
-        a0y = a0.getY();
-        a1y = a1.getY();
-        a1x = a1.getX();
-        a0x = a0.getX();
+        final double aox, aoy, a1x, a1y;
+        aoy = ao.getY();
+        a1y = aoy + ad.getY();
+        aox = ao.getX();
+        a1x = aox + ad.getX();
 
         // Convert line to normal form: ax + by + c = 0
         // Find normal to line: negative inverse of original line's slope
         final Point2D.Double n;                // normal for normal form of line
-        n = new Point2D.Double(a0y - a1y, a1x - a0x);
+        n = new Point2D.Double(ad.getY(), -ad.getX());
 
         // Determine new c coefficient
         final double cl;               // c coefficient for normal form of line
-        cl = a0x * a1y - a1x * a0y;
+        cl = aox * a1y - a1x * aoy;
 
         // ?Rotate each cubic coefficient using line for new coordinate system?
         // Find roots of rotated cubic
@@ -95,7 +96,7 @@ public class IntersectCubicCurveLine {
         for (int i = 0; i < roots.length; i++) {
             final double t = roots[i];
 
-            if (0 <= t && t <= 1) {
+            if (-epsilon < t && t < 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
                 final Point2D.Double p5, p6, p7, p8, p9, p10;
@@ -106,20 +107,9 @@ public class IntersectCubicCurveLine {
                 p9 = lerp(p6, p7, t);
                 p10 = lerp(p8, p9, t);
 
-                // See if point is on line segment
-                // Had to make special cases for vertical and horizontal lines due
-                // to slight errors in calculation of p10
-                if (Geom.almostEqual(a0x, a1x, epsilon)) {
-                    if (topLeft.getY() <= p10.getY() && p10.getY() <= bottomRight.getY()) {
-                        status = IntersectionStatus.INTERSECTION;
-                        result.add(new IntersectionPoint(p10, t));
-                    }
-                } else if (Geom.almostEqual(a0y, a1y, epsilon)) {
-                    if (topLeft.getX() <= p10.getX() && p10.getX() <= bottomRight.getX()) {
-                        status = IntersectionStatus.INTERSECTION;
-                        result.add(new IntersectionPoint(p10, t));
-                    }
-                } else if (Intersections.gte(p10, topLeft) && Intersections.lte(p10, bottomRight)) {
+                double rayT = IntersectPointRay.projectedPointOnRay(aox, aoy, ad.getX(), ad.getY(), p10.getX(), p10.getY());
+
+                if (-epsilon < rayT && rayT <= maxT) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p10, t));
                 }
@@ -148,8 +138,8 @@ public class IntersectCubicCurveLine {
      * @return the computed intersection
      */
     @NonNull
-    public static IntersectionResult intersectLineCubicCurve(
-            double a0x, double a0y, double a1x, double a1y,
+    public static IntersectionResult intersectRayCubicCurve(
+            double a0x, double a0y, double a1x, double a1y, double maxT,
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
             double epsilon) {
 
@@ -159,15 +149,15 @@ public class IntersectCubicCurveLine {
         Point2D.Double p1 = new Point2D.Double(p1x, p1y);
         Point2D.Double p2 = new Point2D.Double(p2x, p2y);
         Point2D.Double p3 = new Point2D.Double(p3x, p3y);
-        return intersectLineCubicCurve(a0, a1, p0, p1, p2, p3, Geom.REAL_THRESHOLD);
+        return intersectRayCubicCurve(a0, a1, maxT, p0, p1, p2, p3, Geom.REAL_THRESHOLD);
     }
 
     /**
      * Computes the intersection between cubic bezier curve 'p' and the line
      * 'a'.
      *
-     * @param a0      point 1 of 'a'
-     * @param a1      point 2 of 'a'
+     * @param ao      origin of ray 'a'
+     * @param ad      direction of ray 'a'
      * @param p0      control point P0 of 'p'
      * @param p1      control point P1 of 'p'
      * @param p2      control point P2 of 'p'
@@ -176,15 +166,13 @@ public class IntersectCubicCurveLine {
      * @return the computed intersection
      */
     @NonNull
-    public static IntersectionResult intersectLineCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, double epsilon) {
+    public static IntersectionResult intersectRayCubicCurve(@NonNull Point2D ao, @NonNull Point2D ad, double maxT, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, double epsilon) {
         final double a0x, a0y, a1x, a1y;
-        a0x = a0.getX();
-        a0y = a0.getY();
-        a1x = a1.getX();
-        a1y = a1.getY();
+        a0x = ao.getX();
+        a0y = ao.getY();
+        a1x = a0x + ad.getX();
+        a1y = a0y + ad.getY();
 
-        final Point2D.Double amin = Intersections.topLeft(a0, a1); // used to determine if point is on line segment
-        final Point2D.Double amax = Intersections.bottomRight(a0, a1); // used to determine if point is on line segment
         List<IntersectionPoint> result = new ArrayList<>();
 
         // Start with Bezier using Bernstein polynomials for weighting functions:
@@ -242,11 +230,9 @@ public class IntersectCubicCurveLine {
 
                 p10 = lerp(p8, p9, t);
 
-                // See if point is on line segment
-                // Had to make special cases for vertical and horizontal lines due
-                // to slight errors in calculation of p10
+                // See if point is on ray
                 double t1 = argumentOnLine(a0x, a0y, a1x, a1y, p10.getX(), p10.getY());
-                if (t1 > -epsilon && t1 < 1 + epsilon) {
+                if (-epsilon < t1 && t1 <= maxT) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p10, t1));
                 }
@@ -256,11 +242,12 @@ public class IntersectCubicCurveLine {
         return new IntersectionResult(status, result);
     }
 
-    public static IntersectionResultEx intersectLineCubicCurveEx(double a0x, double a0y, double a1x, double a1y,
-                                                                 double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
-                                                                 double epsilon) {
-        IntersectionResult result = intersectCubicCurveLine(
-                a0x, a0y, a1x, a1y, p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, epsilon);
+    public static IntersectionResultEx intersectRayCubicCurveEx(double aox, double aoy, double adx, double ady, double maxT,
+                                                                double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
+                                                                double epsilon) {
+        IntersectionResult result = intersectCubicCurveRay(
+                p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y,
+                aox, aoy, adx, ady, maxT, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
@@ -268,7 +255,7 @@ public class IntersectCubicCurveLine {
             Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, x, y), a1x - a0x, a1y - a0y,
+                    IntersectLinePoint.argumentOnLine(aox, aoy, adx, ady, x, y), adx, ady,
                     ip.getArgumentA(), tangentA.getX(), tangentA.getY()
             ));
         }
@@ -276,17 +263,19 @@ public class IntersectCubicCurveLine {
         return new IntersectionResultEx(result.getStatus(), list);
     }
 
-    public static IntersectionResultEx intersectLineCubicCurveEx(double a0x, double a0y, double a1x, double a1y, double lastx, double lasty, double v, double v1, double v2, double v3, double x, double y) {
-        return intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, v, v1, v2, v3, x, y, Geom.REAL_THRESHOLD);
+    public static IntersectionResultEx intersectRayCubicCurveEx(
+            double aox, double aoy, double adx, double ady, double maxT,
+            double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
+        return intersectRayCubicCurveEx(aox, aoy, adx, ady, maxT, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Geom.REAL_THRESHOLD);
     }
 
-    public static IntersectionResultEx intersectCubicCurveLineEx(
+    public static IntersectionResultEx intersectCubicCurveRayEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
-            double b0x, double b0y, double b1x, double b1y,
+            double b0x, double b0y, double b1x, double b1y, double maxT,
             double epsilon) {
-        IntersectionResult result = intersectCubicCurveLine(
+        IntersectionResult result = intersectCubicCurveRay(
                 a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y,
-                b0x, b0y, b1x, b1y,
+                b0x, b0y, b1x, b1y, maxT,
                 epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
@@ -303,9 +292,9 @@ public class IntersectCubicCurveLine {
         return new IntersectionResultEx(result.getStatus(), list);
     }
 
-    public static IntersectionResultEx intersectCubicCurveLineEx(
+    public static IntersectionResultEx intersectCubicCurveRayEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
-            double b0x, double b0y, double b1x, double b1y) {
-        return intersectCubicCurveLineEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, Geom.REAL_THRESHOLD);
+            double b0x, double b0y, double b1x, double b1y, double maxT) {
+        return intersectCubicCurveRayEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, maxT, Geom.REAL_THRESHOLD);
     }
 }

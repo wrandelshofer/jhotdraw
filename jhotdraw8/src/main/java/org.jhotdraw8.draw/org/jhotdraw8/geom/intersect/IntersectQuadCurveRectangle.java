@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IntersectQuadraticCurveRectangle {
+public class IntersectQuadCurveRectangle {
     /**
      * Computes the intersection between quadratic bezier curve 'p' and the
      * provided rectangle.
@@ -19,25 +19,25 @@ public class IntersectQuadraticCurveRectangle {
      * @return the computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectQuadraticCurveRectangleEx(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static IntersectionResult intersectQuadCurveRectangle(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D r0, @NonNull Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);
         bottomRight = Intersections.bottomRight(r0, r1);
         topRight = new Point2D.Double(bottomRight.getX(), topLeft.getY());
         bottomLeft = new Point2D.Double(topLeft.getX(), bottomRight.getY());
 
-        final IntersectionResultEx inter1, inter2, inter3, inter4;
-        inter1 = IntersectLineQuadraticCurve.intersectQuadraticCurveLineEx(p0, p1, p2, topLeft, topRight);
-        inter2 = IntersectLineQuadraticCurve.intersectQuadraticCurveLineEx(p0, p1, p2, topRight, bottomRight);
-        inter3 = IntersectLineQuadraticCurve.intersectQuadraticCurveLineEx(p0, p1, p2, bottomRight, bottomLeft);
-        inter4 = IntersectLineQuadraticCurve.intersectQuadraticCurveLineEx(p0, p1, p2, bottomLeft, topLeft);
+        final IntersectionResult inter1, inter2, inter3, inter4;
+        inter1 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, topLeft, topRight);
+        inter2 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, topRight, bottomRight);
+        inter3 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, bottomRight, bottomLeft);
+        inter4 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, bottomLeft, topLeft);
 
-        final List<IntersectionPointEx> result = new ArrayList<>();
+        final List<IntersectionPoint> result = new ArrayList<>();
         result.addAll(inter1.asList());
         result.addAll(inter2.asList());
         result.addAll(inter3.asList());
         result.addAll(inter4.asList());
 
-        return new IntersectionResultEx(result);
+        return new IntersectionResult(result);
     }
 }

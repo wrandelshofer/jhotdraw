@@ -1,10 +1,12 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.Geom;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class IntersectEllipseEllipse {
     private IntersectEllipseEllipse() {
@@ -22,8 +24,8 @@ public class IntersectEllipseEllipse {
      * @return computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectEllipseEllipseEx(@NonNull Point2D c1, double rx1, double ry1, @NonNull Point2D c2, double rx2, double ry2) {
-        return intersectEllipseEllipseEx(c1.getX(), c1.getY(), rx1, ry1, c2.getX(), c2.getY(), rx2, ry2);
+    public static IntersectionResult intersectEllipseEllipse(@NonNull Point2D c1, double rx1, double ry1, @NonNull Point2D c2, double rx2, double ry2) {
+        return intersectEllipseEllipse(c1.getX(), c1.getY(), rx1, ry1, c2.getX(), c2.getY(), rx2, ry2);
     }
 
     /**
@@ -40,7 +42,12 @@ public class IntersectEllipseEllipse {
      * @return computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectEllipseEllipseEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
+    public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
+        return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Geom.REAL_THRESHOLD);
+    }
+
+    @NonNull
+    public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
         double[] a = {
                 ry1 * ry1,
                 0,
@@ -62,7 +69,7 @@ public class IntersectEllipseEllipse {
         double[] yRoots = yPoly.getRoots();
         double norm0 = (a[0] * a[0] + 2 * a[1] * a[1] + a[2] * a[2]) * Intersections.EPSILON;
         double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * Intersections.EPSILON;
-        List<IntersectionPointEx> result = new ArrayList<>();
+        List<IntersectionPoint> result = new ArrayList<>();
 
         for (int y = 0; y < yRoots.length; y++) {
             Polynomial xPoly = new Polynomial(
@@ -80,12 +87,32 @@ public class IntersectEllipseEllipse {
                             + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
                     if (Math.abs(test) < norm1) {
                         // FIXME compute angle in radians
-                        result.add(new IntersectionPointEx(new Point2D.Double(xRoots[x], yRoots[y]), Double.NaN));
+                        result.add(new IntersectionPoint(new Point2D.Double(xRoots[x], yRoots[y]), Double.NaN));
                     }
                 }
             }
         }
 
-        return new IntersectionResultEx(result);
+        return new IntersectionResult(result.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION,
+                result);
+    }
+
+    public static IntersectionResultEx intersectEllipseEllipseEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
+        return intersectEllipseEllipseEx(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Geom.REAL_THRESHOLD);
+    }
+
+    public static IntersectionResultEx intersectEllipseEllipseEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
+        IntersectionResult result = intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, epsilon);
+        @NonNull List<IntersectionPointEx> list = new ArrayList<>();
+        for (IntersectionPoint ip : result) {
+            double px = ip.getX();
+            double py = ip.getY();
+            list.add(new IntersectionPointEx(px, py,
+                    ip.getArgumentA(), py - cy1, cx1 - px,
+                    Double.NaN, py - cy2, cx2 - px// FIXME compute angle in radians
+            ));
+        }
+
+        return new IntersectionResultEx(result.getStatus(), list);
     }
 }

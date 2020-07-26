@@ -43,7 +43,7 @@ public class ContourIntersections {
      */
     public static IntersectionResult intrCircle2Circle2(double radius1, final Point2D.Double center1,
                                                         double radius2, final Point2D.Double center2) {
-        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Utils.realThreshold);
+        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Geom.REAL_THRESHOLD);
     }
 
 
@@ -346,7 +346,7 @@ public class ContourIntersections {
             };
 
             spatialIndex.visitQuery(
-                    minX - Utils.realThreshold, minY - Utils.realThreshold, maxX + Utils.realThreshold, maxY + Utils.realThreshold,
+                    minX - Geom.REAL_THRESHOLD, minY - Geom.REAL_THRESHOLD, maxX + Geom.REAL_THRESHOLD, maxY + Geom.REAL_THRESHOLD,
                     indexVisitor, queryStack);
 
             // visit all pline indexes
@@ -466,8 +466,8 @@ public class ContourIntersections {
 
             // helper function to test and get point within arc sweep
             DoubleFunction<OrderedPairNonNull<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
-                if (t + Utils.realThreshold < 0.0 ||
-                        t > 1.0 + Utils.realThreshold) {
+                if (t + Geom.REAL_THRESHOLD < 0.0 ||
+                        t > 1.0 + Geom.REAL_THRESHOLD) {
                     return new OrderedPairNonNull<>(false, new Point2D.Double(0, 0));
                 }
 
@@ -479,7 +479,7 @@ public class ContourIntersections {
             if (intrResult.size() == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.size() == 1) {
-                OrderedPairNonNull<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgument());
+                OrderedPairNonNull<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgumentA());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -488,8 +488,8 @@ public class ContourIntersections {
                 }
             } else {
                 assert intrResult.size() == 2 : "shouldn't get here without 2 intersects";
-                OrderedPairNonNull<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgument());
-                OrderedPairNonNull<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getLast().getArgument());
+                OrderedPairNonNull<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgumentA());
+                OrderedPairNonNull<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getLast().getArgumentA());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;

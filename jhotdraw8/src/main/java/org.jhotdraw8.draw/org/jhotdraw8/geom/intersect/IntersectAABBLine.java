@@ -35,10 +35,18 @@ public class IntersectAABBLine {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
 
-        result.addAll(inter1.asList());
-        result.addAll(inter2.asList());
-        result.addAll(inter3.asList());
-        result.addAll(inter4.asList());
+        if (inter1.getStatus() == IntersectionStatus.INTERSECTION) {
+            result.addAll(inter1.asList());
+        }
+        if (inter2.getStatus() == IntersectionStatus.INTERSECTION) {
+            result.addAll(inter2.asList());
+        }
+        if (inter3.getStatus() == IntersectionStatus.INTERSECTION) {
+            result.addAll(inter3.asList());
+        }
+        if (inter4.getStatus() == IntersectionStatus.INTERSECTION) {
+            result.addAll(inter4.asList());
+        }
 
         return new IntersectionResultEx(result);
     }

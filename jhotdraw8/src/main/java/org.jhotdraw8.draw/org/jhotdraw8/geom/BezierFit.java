@@ -7,6 +7,7 @@ package org.jhotdraw8.geom;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -459,8 +460,8 @@ public class BezierFit {
     private static void addCurveTo(@NonNull PathBuilder builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
         java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
-        if (connectsCorners && Geom.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)
-                && Geom.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {
+        if (connectsCorners && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)
+                && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {
             builder.lineTo(
                     bezCurve[3].getX(), bezCurve[3].getY());
 

@@ -1,6 +1,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.Geom;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -23,8 +24,8 @@ public class IntersectEllipsePoint {
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     @NonNull
-    public static IntersectionResultEx intersectPointEllipseEx(@NonNull Point2D point, @NonNull Point2D center, double rx, double ry) {
-        List<IntersectionPointEx> result = new ArrayList<>();
+    public static IntersectionResult intersectPointEllipse(@NonNull Point2D point, @NonNull Point2D center, double rx, double ry) {
+        List<IntersectionPoint> result = new ArrayList<>();
 
         double px = point.getX();
         double py = point.getY();
@@ -33,15 +34,15 @@ public class IntersectEllipsePoint {
 
         double det = (px - cx) * (px - cx) / (rx * rx) + (py - py) * (py - py) / (ry * ry);
         IntersectionStatus status;
-        if (abs(det) - 1 == Intersections.EPSILON) {
+        if (abs(det) - 1 >= Geom.REAL_THRESHOLD) {
             status = IntersectionStatus.INTERSECTION;
-            result.add(new IntersectionPointEx(new Point2D.Double(px, py), 0.0));
+            result.add(new IntersectionPoint(new Point2D.Double(px, py), 0.0));
         } else if (det < 1) {
             status = IntersectionStatus.NO_INTERSECTION_INSIDE;
         } else {
             status = IntersectionStatus.NO_INTERSECTION_OUTSIDE;
         }
 
-        return new IntersectionResultEx(status, result);
+        return new IntersectionResult(status, result);
     }
 }

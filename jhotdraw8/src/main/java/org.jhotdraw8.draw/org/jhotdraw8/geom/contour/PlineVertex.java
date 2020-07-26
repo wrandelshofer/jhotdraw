@@ -292,8 +292,8 @@ public class PlineVertex implements Cloneable {
 
             // helper function to test and get point within arc sweep
             Function<Double, OrderedPair<Boolean, Point2D.Double>> pointInSweep = (Double t) -> {
-                if (t + Utils.realThreshold < 0.0 ||
-                        t > 1.0 + Utils.realThreshold) {
+                if (t + Geom.REAL_THRESHOLD < 0.0 ||
+                        t > 1.0 + Geom.REAL_THRESHOLD) {
                     return new OrderedPair<>(false, new Point2D.Double(0, 0));
                 }
 
@@ -305,7 +305,7 @@ public class PlineVertex implements Cloneable {
             if (intrResult.size() == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.size() == 1) {
-                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgument());
+                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgumentA());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -314,8 +314,8 @@ public class PlineVertex implements Cloneable {
                 }
             } else {
                 assert intrResult.size() == 2 : "shouldn't get here without 2 intersects";
-                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgument());
-                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getFirst().getArgument());
+                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgumentA());
+                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getFirst().getArgumentA());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;

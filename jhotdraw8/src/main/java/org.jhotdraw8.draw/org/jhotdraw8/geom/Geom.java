@@ -11,7 +11,6 @@ import org.jhotdraw8.util.function.Double2Consumer;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static java.lang.Math.sqrt;
 
 /**
@@ -37,7 +36,10 @@ public class Geom {
      * The bitmask that indicates that a point lies above the rectangle.
      */
     public static final int OUT_TOP = 2;
-    public static final double EPSILON = 1e-8;
+    /**
+     * Absolute threshold to be used for comparing reals generally.
+     */
+    public final static double REAL_THRESHOLD = 1e-8;
 
     private Geom() {
     } // never instantiated
@@ -346,49 +348,6 @@ public class Geom {
         return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
     }
 
-    public static boolean lineContainsPoint(double x1, double y1,
-                                            double x2, double y2,
-                                            double px, double py) {
-        return lineContainsPoint(x1, y1, x2, y2, px, py, EPSILON);
-    }
-
-    /**
-     * Tests if a point is inside a line segment.
-     *
-     * @param x1        the x coordinate of point 1 on the line
-     * @param y1        the y coordinate of point 1 on the line
-     * @param x2        the x coordinate of point 2 on the line
-     * @param y2        the y coordinate of point 2 on the line
-     * @param px        the x coordinate of the point
-     * @param py        the y coordinate of the point
-     * @param tolerance the maximal distance that the point may stray from the
-     *                  line
-     * @return true if the line contains the point within the given tolerance
-     */
-    public static boolean lineContainsPoint(double x1, double y1,
-                                            double x2, double y2,
-                                            double px, double py, double tolerance) {
-        if (!contains(min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1), px, py, tolerance)) {
-            return false;
-        }
-
-        double a, b, x, y;
-
-        if (x1 == x2) {
-            return (abs(px - x1) <= tolerance);
-        }
-        if (y1 == y2) {
-            return (abs(py - y1) <= tolerance);
-        }
-
-        a = (y1 - y2) / (x1 - x2);
-        b = y1 - a * x1;
-        x = (py - b) / a;
-        y = a * px + b;
-
-        return (min(abs(x - px), abs(y - py)) <= tolerance);
-    }
-
     /**
      * Gets the perpendicular vector to the given vector.
      *
@@ -420,27 +379,6 @@ public class Geom {
     }
 
     /**
-     * Given a point p on a line, computes the value of the argument 't'.
-     *
-     * @param x1 start of line
-     * @param y1 start of line
-     * @param x2 end of line
-     * @param y2 end of line
-     * @param px point
-     * @param py point
-     * @return argument 't' at point px,py on the line.
-     */
-    public static double argumentOnLine(double x1, double y1, double x2, double y2, double px, double py) {
-        double w = x2 - x1;
-        double h = y2 - y1;
-        if (Math.abs(w) > Math.abs(h)) {
-            return (px - x1) / w;
-        } else {
-            return (py - y1) / h;
-        }
-    }
-
-    /**
      * Splits the provided line into two parts.
      *
      * @param x0          point 1 of the line
@@ -466,7 +404,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2) {
-        return almostEqual(v1, v2, EPSILON);
+        return almostEqual(v1, v2, REAL_THRESHOLD);
     }
 
     public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2, double epsilon) {
@@ -474,7 +412,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1) {
-        return almostEqual(x0, y0, x1, y1, EPSILON);
+        return almostEqual(x0, y0, x1, y1, REAL_THRESHOLD);
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1, double epsilon) {
@@ -482,7 +420,7 @@ public class Geom {
     }
 
     public static boolean almostZero(java.awt.geom.Point2D.Double v) {
-        return almostZero(v, EPSILON);
+        return almostZero(v, REAL_THRESHOLD);
     }
 
     public static boolean almostZero(java.awt.geom.Point2D.Double v, double epsilon) {
@@ -490,7 +428,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(double a, double b) {
-        return almostEqual(a, b, EPSILON);
+        return almostEqual(a, b, REAL_THRESHOLD);
     }
 
     public static boolean almostEqual(double a, double b, double epsilon) {
@@ -499,7 +437,7 @@ public class Geom {
 
 
     public static boolean almostZero(double a) {
-        return almostZero(a, EPSILON);
+        return almostZero(a, REAL_THRESHOLD);
     }
 
     public static boolean almostZero(double a, double epsilon) {
@@ -519,5 +457,9 @@ public class Geom {
     @NonNull
     public static java.awt.geom.Point2D.Double lerp(@NonNull java.awt.geom.Point2D start, @NonNull java.awt.geom.Point2D end, double t) {
         return Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
+    }
+
+    public static double atan2Ellipse(double cx, double cy, double rx, double ry, double x, double y) {
+        return atan2(y, x);//FIXME implement me
     }
 }

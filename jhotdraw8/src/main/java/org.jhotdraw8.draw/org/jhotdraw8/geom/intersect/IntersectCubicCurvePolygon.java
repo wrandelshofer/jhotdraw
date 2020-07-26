@@ -22,18 +22,20 @@ public class IntersectCubicCurvePolygon {
      * @return the computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectCubicCurvePolygonEx(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull List<Point2D.Double> points) {
-        List<IntersectionPointEx> result = new ArrayList<>();
+    public static IntersectionResult intersectCubicCurvePolygon(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull List<Point2D.Double> points) {
+        List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 
         for (int i = 0; i < length; i++) {
             Point2D.Double a1 = points.get(i);
             Point2D.Double a2 = points.get((i + 1) % length);
-            IntersectionResultEx inter = IntersectCubicCurveLine.intersectCubicCurveLineEx(p0, p1, p2, p3, a1, a2);
+            IntersectionResult inter = IntersectCubicCurveLine.intersectCubicCurveLine(p0, p1, p2, p3, a1, a2);
 
             result.addAll(inter.asList());
         }
 
-        return new IntersectionResultEx(result);
+        return new IntersectionResult(
+                result.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION,
+                result);
     }
 }

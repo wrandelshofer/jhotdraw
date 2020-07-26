@@ -5,11 +5,7 @@ import java.awt.geom.Point2D;
 /**
  * Describes an intersection point of two parametric functions 'a' and 'b'.
  */
-public class IntersectionPointEx extends Point2D.Double {
-    /**
-     * @see #getArgumentA()
-     */
-    private final double argumentA;
+public class IntersectionPointEx extends IntersectionPoint {
 
     /**
      * @see #getArgumentB()
@@ -28,18 +24,9 @@ public class IntersectionPointEx extends Point2D.Double {
     private final Point2D.Double tangentB;
 
     /**
-     * @see #getSegmentA()
-     */
-    private final int segmentA;
-
-    /**
      * @see #getSegmentB()
      */
     private final int segmentB;
-
-    public IntersectionPointEx(Point2D.Double point, double argumentA) {
-        this(point, argumentA, new Point2D.Double(1, 0), 0, new Point2D.Double(0, -1));
-    }
 
     public IntersectionPointEx(Point2D.Double point, double argumentA, Point2D.Double tangentA, double argumentB, Point2D.Double tangentB) {
         this(point, argumentA, tangentA, 0, argumentB, tangentB, 0);
@@ -50,35 +37,21 @@ public class IntersectionPointEx extends Point2D.Double {
     }
 
     public IntersectionPointEx(Point2D.Double point, double argumentA, Point2D.Double tangentA, int segmentA, double argumentB, Point2D.Double tangentB, int segmentB) {
-        super(point.getX(), point.getY());
-        this.argumentA = argumentA;
+        super(point.getX(), point.getY(), argumentA, segmentA);
         this.tangentA = tangentA;
         this.argumentB = argumentB;
         this.tangentB = tangentB;
-        this.segmentA = segmentA;
         this.segmentB = segmentB;
     }
 
     public IntersectionPointEx(double px, double py, double argumentA, double tx1, double ty1, int segmentA, double t2, double tx2, double ty2, int segment2) {
-        super(px, py);
-        this.argumentA = argumentA;
+        super(px, py, argumentA, segmentA);
         this.tangentA = new Point2D.Double(tx1, ty1);
         this.argumentB = t2;
         this.tangentB = new Point2D.Double(tx2, ty2);
-        this.segmentA = segmentA;
         this.segmentB = segment2;
     }
 
-    /**
-     * If parametric function 'a' is a segment of a segmented function,
-     * then this field is used to indicate to which segment the parametric
-     * function belongs.
-     * <p>
-     * The index of the segment.
-     */
-    public int getSegmentA() {
-        return segmentA;
-    }
 
     /**
      * If parametric function 'b' is a segment of a segmented function,
@@ -91,13 +64,6 @@ public class IntersectionPointEx extends Point2D.Double {
         return segmentB;
     }
 
-
-    /**
-     * The value of the argument of the parametric function 'a' at the intersection.
-     */
-    public double getArgumentA() {
-        return argumentA;
-    }
 
 
     /**
@@ -139,4 +105,5 @@ public class IntersectionPointEx extends Point2D.Double {
                 ", segment2=" + segmentB +
                 '}';
     }
+
 }

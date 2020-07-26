@@ -193,6 +193,11 @@ public class IntersectCircleLine {
     }
 
     @NonNull
+    public static IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+        return intersectLineCircle(x0, y0, x1, y1, cx, cy, r, Geom.REAL_THRESHOLD);
+    }
+
+    @NonNull
     public static IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>(2);
         final double Δx, Δy;

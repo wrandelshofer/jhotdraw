@@ -1,13 +1,13 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points2D;
 
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import static java.lang.Math.abs;
 
 public class IntersectPathIteratorPoint {
     private IntersectPathIteratorPoint() {
@@ -15,77 +15,127 @@ public class IntersectPathIteratorPoint {
 
     /**
      * Intersects the given path iterator with the given point.
+     * <p>
+     * This method can produce the following {@link IntersectionStatus} codes:
+     * <dl>
+     *     <dt>{@link IntersectionStatus#INTERSECTION}</dt><dd>
+     *         The point intersects with a segment of the path within the
+     *         given tolerance radius.
+     *     </dd>
+     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_INSIDE}</dt><dd>
+     *         The point lies inside a path segment. The segment returned
+     *         by {@link IntersectionPointEx#getSegmentB()} points to the
+     *         segment that closes the path segment with
+     *         {@link PathIterator#SEG_CLOSE}.
+     *     </dd>
+     *     <dt>{@link IntersectionStatus#NO_INTERSECTION_OUTSIDE}</dt><dd>
+     *         The point lies outside the path.
+     *     </dd>
+     * </dl>
      *
      * @param pit       the path iterator
      * @param px        the x-coordinate of the point
      * @param py        the y-coordinate of the point
-     * @param tolerance radius around the point which counts as hit.
+     * @param tolerance radius around the point which counts as a hit.
      * @return the intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectPathIteratorPointEx(@NonNull PathIterator pit, double px, double py, double tolerance) {
-        List<IntersectionPointEx> result = new ArrayList<>();
-        IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
+    public static IntersectionResult intersectPathIteratorPoint(@NonNull PathIterator pit, double px, double py, double tolerance) {
+        List<IntersectionPoint> result = new ArrayList<>();
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
         double lastx = 0, lasty = 0;
         double x, y;
         int i = 0;
-        double closestDistance = Double.POSITIVE_INFINITY;
+        int windingRule = pit.getWindingRule();
+
+        // FIXME
+        // Count clockwise and counter clockwise crossings of a ray
+        // starting at px,py going to POSITIVE_INFINITY,py.
+        int globalClockwiseCrossings = 0;
+        int globalCounterCockwiseCrossings = 0;
+        int clockwiseCrossings = 0;
+        int counterClockwiseCrossings = 0;
+
         for (; !pit.isDone(); pit.next(), i++) {
-            IntersectionResultEx inter;
+            IntersectionResult boundaryCheck;
+            IntersectionResultEx rayCheck;
             switch (pit.currentSegment(seg)) {
             case PathIterator.SEG_CLOSE:
-                inter = IntersectLinePoint.intersectLinePointEx(lastx, lasty, firstx, firsty, px, py, tolerance);
+                boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
+                rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Geom.REAL_THRESHOLD);
+                globalClockwiseCrossings += clockwiseCrossings;
+                globalCounterCockwiseCrossings += counterClockwiseCrossings;
+                if (windingRule == PathIterator.WIND_NON_ZERO) {
+                    if (clockwiseCrossings > 0 || counterClockwiseCrossings > 0) {
+                        return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
+                    }
+                }
                 break;
             case PathIterator.SEG_CUBICTO:
                 x = seg[4];
                 y = seg[5];
-                inter = IntersectCubicCurvePoint.intersectCubicCurvePointEx(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
+                boundaryCheck = IntersectCubicCurvePoint.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
+                rayCheck = IntersectCubicCurveRay.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Geom.REAL_THRESHOLD);
+                //IntersectCubicCurveRa
                 lastx = x;
                 lasty = y;
                 break;
             case PathIterator.SEG_LINETO:
                 x = seg[0];
                 y = seg[1];
-                inter = IntersectLinePoint.intersectLinePointEx(lastx, lasty, x, y, px, py, tolerance);
+                boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
+                rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Geom.REAL_THRESHOLD);
                 lastx = x;
                 lasty = y;
                 break;
             case PathIterator.SEG_MOVETO:
                 lastx = firstx = seg[0];
                 lasty = firsty = seg[1];
-                inter = null;
+                clockwiseCrossings = 0;
+                counterClockwiseCrossings = 0;
+                boundaryCheck = null;
+                rayCheck = null;
                 break;
             case PathIterator.SEG_QUADTO:
                 x = seg[2];
                 y = seg[3];
-                inter = IntersectPointQuadraticCurve.intersectQuadraticCurvePointEx(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
+                boundaryCheck = IntersectPointQuadCurve.intersectQuadCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
+                rayCheck = IntersectQuadCurveRay.intersectRayQuadCurveEx(px, py, 1, 0, Double.MAX_VALUE,
+                        lastx, lasty, seg[0], seg[1], x, y, Geom.REAL_THRESHOLD);
                 lastx = x;
                 lasty = y;
                 break;
             default:
-                inter = null;
+                boundaryCheck = null;
+                rayCheck = null;
                 break;
             }
-            if (inter != null) {
-                for (IntersectionPointEx entry : inter.asList()) {
-                    final double dd = entry.distanceSq(px, py);
-                    IntersectionPointEx newPoint = new IntersectionPointEx(
-                            entry, entry.getArgumentA() + i, new Point2D.Double(0, 0), i, 0.0, new Point2D.Double(0, 0), 0);
-                    if (abs(dd - closestDistance) < Intersections.EPSILON) {
-                        result.add(newPoint);
-                    } else if (dd < closestDistance) {
-                        result.clear();
-                        closestDistance = dd;
-                        result.add(newPoint);
+
+            if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
+                result.add(boundaryCheck.getFirst());
+                break;
+            }
+            if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
+                for (IntersectionPointEx ip : rayCheck) {
+                    double theta = Points2D.dotProduct(ip.getTangentA(), Points2D.normalize(ip.getTangentB()));
+                    if (theta >= 0) {
+                        clockwiseCrossings++;
+                    } else {
+                        counterClockwiseCrossings++;
                     }
                 }
+
             }
 
         }
 
-        // FIXME the result should contain only one point
-        return new IntersectionResultEx(result);
+        if (windingRule == PathIterator.WIND_EVEN_ODD) {
+            if ((clockwiseCrossings > 0 || counterClockwiseCrossings > 0) && clockwiseCrossings != counterClockwiseCrossings) {
+                return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
+            }
+        }
+
+        return new IntersectionResult(result);
     }
 }

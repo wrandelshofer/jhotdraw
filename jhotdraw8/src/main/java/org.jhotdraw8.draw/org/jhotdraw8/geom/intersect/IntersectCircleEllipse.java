@@ -19,17 +19,25 @@ public class IntersectCircleEllipse {
      * @return computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectCircleEllipseEx(@NonNull Point2D cc, double r, @NonNull Point2D ec, double rx, double ry) {
-        return IntersectEllipseEllipse.intersectEllipseEllipseEx(cc, r, r, ec, rx, ry);
+    public static IntersectionResult intersectCircleEllipse(@NonNull Point2D cc, double r, @NonNull Point2D ec, double rx, double ry) {
+        return IntersectEllipseEllipse.intersectEllipseEllipse(cc, r, r, ec, rx, ry);
     }
 
     @NonNull
-    public static IntersectionResultEx intersectCircleEllipseEx(double cx1, double cy1, double r1, double cx2, double cy2, double rx2, double ry2) {
-        return IntersectEllipseEllipse.intersectEllipseEllipseEx(cx1, cy1, r1, r1, cx2, cy2, rx2, ry2);
+    public static IntersectionResult intersectCircleEllipse(double cx1, double cy1, double r1, double cx2, double cy2, double rx2, double ry2) {
+        return IntersectEllipseEllipse.intersectEllipseEllipse(cx1, cy1, r1, r1, cx2, cy2, rx2, ry2);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectEllipseCircleEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double r2) {
-        return IntersectEllipseEllipse.intersectEllipseEllipseEx(cx1, cy1, rx1, ry1, cx2, cy2, r2, r2);
+
+    public static IntersectionResultEx intersectCircleEllipseEx(double acx, double acy, double ar, double bcx, double bcy, double brx, double bry) {
+        return IntersectEllipseEllipse.intersectEllipseEllipseEx(acx, acy, ar, ar, bcx, bcy, brx, bry);
+    }
+
+    public static IntersectionResultEx intersectEllipseCircleEx(double acx, double acy, double arx, double ary, double bcx, double bcy, double br) {
+        return IntersectEllipseEllipse.intersectEllipseEllipseEx(acx, acy, arx, ary, bcx, bcy, br, br);
+    }
+
+    public static IntersectionResult intersectEllipseCircle(double acx, double acy, double arx, double ary, double bcx, double bcy, double br) {
+        return IntersectEllipseEllipse.intersectEllipseEllipse(acx, acy, arx, ary, bcx, bcy, br, br);
     }
 }

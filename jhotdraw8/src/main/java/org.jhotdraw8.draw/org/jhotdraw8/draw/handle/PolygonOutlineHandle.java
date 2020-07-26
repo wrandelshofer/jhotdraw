@@ -32,6 +32,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
@@ -72,7 +73,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         if (FXGeom.contains(poly2.getBoundsInParent(), x, y, tolerance)) {
-            IntersectionResultEx i = IntersectPathIteratorPoint.intersectPathIteratorPointEx(
+            IntersectionResult i = IntersectPathIteratorPoint.intersectPathIteratorPoint(
                     Shapes.pathIteratorFromPointCoords(poly2.getPoints(), true, PathIterator.WIND_EVEN_ODD, null),
                     x, y, tolerance);
             return i.getStatus() == IntersectionStatus.INTERSECTION;

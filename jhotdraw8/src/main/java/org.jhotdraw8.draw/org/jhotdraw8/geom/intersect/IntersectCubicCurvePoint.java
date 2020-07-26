@@ -2,6 +2,8 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.geom.BezierCurves;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
 
 import java.awt.geom.Point2D;
@@ -12,6 +14,35 @@ import static java.lang.Math.abs;
 
 public class IntersectCubicCurvePoint {
     private IntersectCubicCurvePoint() {
+    }
+
+
+    @NonNull
+    public static IntersectionResultEx intersectCubicCurvePointEx(
+            double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+            double cx, double cy) {
+        return intersectCubicCurvePointEx(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, Geom.REAL_THRESHOLD);
+    }
+
+    @NonNull
+    public static IntersectionResultEx intersectCubicCurvePointEx(
+            double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
+            double cx, double cy, double epsilon) {
+        IntersectionResult result = intersectCubicCurvePoint(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, cx, cy, epsilon);
+
+        ArrayList<IntersectionPointEx> list = new ArrayList<>();
+        for (IntersectionPoint ip : result) {
+            double x = ip.getX();
+            double y = ip.getY();
+            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            list.add(new IntersectionPointEx(
+                    x, y,
+                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    0, 1, 0
+            ));
+        }
+
+        return new IntersectionResultEx(result.getStatus(), list);
     }
 
     /**
@@ -71,13 +102,13 @@ public class IntersectCubicCurvePoint {
      * @param y3 y-coordinate of control point P3 of the bezier curve
      * @param cx x-coordinate of the point
      * @param cy y-coordinate of the point
-     * @param r  the tolerance radius
+     * @param epsilon  the tolerance radius
      * @return the intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectCubicCurvePointEx(
+    public static IntersectionResult intersectCubicCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
-            double cx, double cy, double r) {
+            double cx, double cy, double epsilon) {
         // Build polynomial
         final double c3x, c3y, c2x, c2y, c1x, c1y, c0x, c0y;
         c3x = -(x0 - 3 * x1 + 3 * x2 - x3);
@@ -106,13 +137,13 @@ public class IntersectCubicCurvePoint {
         roots.add(1.0);
 
         // Select roots with closest distance to point
-        final List<IntersectionPointEx> result = new ArrayList<>();
+        final List<IntersectionPoint> result = new ArrayList<>();
         final Point2D.Double p0, p1, p2, p3;
         p0 = new Point2D.Double(x0, y0);
         p1 = new Point2D.Double(x1, y1);
         p2 = new Point2D.Double(x2, y2);
         p3 = new Point2D.Double(x3, y3);
-        final double rr = r * r;
+        final double rr = epsilon * epsilon;
         double bestDistance = Double.POSITIVE_INFINITY;
         for (double t : roots) {
             final Point2D.Double p;
@@ -123,16 +154,18 @@ public class IntersectCubicCurvePoint {
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
-                if (abs(dd - bestDistance) < Intersections.EPSILON) {
-                    result.add(new IntersectionPointEx(p, t));
+                if (abs(dd - bestDistance) < Geom.REAL_THRESHOLD) {
+                    result.add(new IntersectionPoint(p, t));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;
                     result.clear();
-                    result.add(new IntersectionPointEx(p, t));
+                    result.add(new IntersectionPoint(p, t));
                 }
             }
         }
 
-        return new IntersectionResultEx(result);
+        return new IntersectionResult(
+                result.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION,
+                result);
     }
 }

@@ -33,6 +33,7 @@ import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
@@ -1811,16 +1812,16 @@ public class Shapes {
         for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance + 0.1e-4)); !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
             case PathIterator.SEG_CLOSE:
-                if (Geom.lineContainsPoint(
+                if (IntersectLinePoint.lineContainsPoint(
                         prevX, prevY, moveX, moveY,
                         p.x, p.y, tolerance)) {
-                        return true;
-                    }
+                    return true;
+                }
                     break;
                 case PathIterator.SEG_CUBICTO:
                     break;
                 case PathIterator.SEG_LINETO:
-                    if (Geom.lineContainsPoint(
+                    if (IntersectLinePoint.lineContainsPoint(
                             prevX, prevY, coords[0], coords[1],
                             p.x, p.y, tolerance)) {
                         return true;

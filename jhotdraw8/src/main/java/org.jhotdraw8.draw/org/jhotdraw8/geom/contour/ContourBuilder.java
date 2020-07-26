@@ -304,20 +304,20 @@ public class ContourBuilder {
         if (intrResult.size() == 0) {
             connectUsingArc.run();
         } else if (intrResult.size() == 1) {
-            processIntersect.accept(intrResult.getFirst().getArgument(),
-                    pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgument()));
+            processIntersect.accept(intrResult.getFirst().getArgumentA(),
+                    pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentA()));
         } else {
             assert intrResult.size() == 2 : "should have 2 intersects here";
             final Point2D.Double origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
-            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgument());
+            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentA());
             double dist1 = i1.distanceSq(origPoint);
-            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getLast().getArgument());
+            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getLast().getArgumentA());
             double dist2 = i2.distanceSq(origPoint);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intrResult.getFirst().getArgument(), i1);
+                processIntersect.accept(intrResult.getFirst().getArgumentA(), i1);
             } else {
-                processIntersect.accept(intrResult.getLast().getArgument(), i2);
+                processIntersect.accept(intrResult.getLast().getArgumentA(), i2);
             }
         }
     }
@@ -486,7 +486,7 @@ public class ContourBuilder {
 
             // collapsed arc, offset arc start and end points towards arc center and turn into line
             // handles case where offset vertexes are equal and simplifies path for clipping algorithm
-            boolean isCollapsedArc = radiusAfterOffset < Utils.realThreshold;
+            boolean isCollapsedArc = radiusAfterOffset < Geom.REAL_THRESHOLD;
 
             PlineOffsetSegment seg = new PlineOffsetSegment(
                     new PlineVertex(Points2D.add(Points2D.multiply(v1ToCenter,offs),v1.pos()),
@@ -883,7 +883,7 @@ public class ContourBuilder {
         if (intrResult.size() == 0) {
             connectUsingArc.run();
         } else if (intrResult.size() == 1) {
-            processIntersect.accept(intrResult.getFirst().getArgument(),
+            processIntersect.accept(intrResult.getFirst().getArgumentA(),
                     intrResult.getFirst());
         } else {
             assert intrResult.size() == 2 : "should have 2 intersects here";
@@ -894,9 +894,9 @@ public class ContourBuilder {
             double dist2 = i2.distanceSq(s1.origV2Pos);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intrResult.getFirst().getArgument(), i1);
+                processIntersect.accept(intrResult.getFirst().getArgumentA(), i1);
             } else {
-                processIntersect.accept(intrResult.getLast().getArgument(), i2);
+                processIntersect.accept(intrResult.getLast().getArgumentA(), i2);
             }
         }
     }
@@ -993,17 +993,17 @@ public class ContourBuilder {
                 if (intrResult.size() == 0) {
                     continue;
                 } else if (intrResult.size() == 1) {
-                    if (validLineSegIntersect.test(intrResult.getFirst().getArgument())) {
+                    if (validLineSegIntersect.test(intrResult.getFirst().getArgumentA())) {
                         output.add(new OrderedPair<>(sIndex,
                                 Arrays.asList(intrResult.getFirst())));
                     }
                 } else {
                     assert intrResult.size() == 2 : "should be two intersects here";
-                    if (validLineSegIntersect.test(intrResult.getFirst().getArgument())) {
+                    if (validLineSegIntersect.test(intrResult.getFirst().getArgumentA())) {
                         output.add(new OrderedPair<>(sIndex,
                                 Arrays.asList(intrResult.getFirst())));
                     }
-                    if (validLineSegIntersect.test(intrResult.getLast().getArgument())) {
+                    if (validLineSegIntersect.test(intrResult.getLast().getArgumentA())) {
                         output.add(new OrderedPair<>(sIndex,
                                 Arrays.asList(intrResult.getLast())));
                     }

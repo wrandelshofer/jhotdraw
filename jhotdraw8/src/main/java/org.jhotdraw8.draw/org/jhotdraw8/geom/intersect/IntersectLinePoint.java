@@ -1,11 +1,13 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.Geom;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -59,8 +61,8 @@ public class IntersectLinePoint {
      * @return computed intersection
      */
     @NonNull
-    public static IntersectionResultEx intersectLinePointEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
-        List<IntersectionPointEx> result = new ArrayList<>();
+    public static IntersectionResult intersectLinePoint(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+        List<IntersectionPoint> result = new ArrayList<>();
         // Build polynomial
         final double Δx, Δy, a, b;
         Δx = x1 - x0;
@@ -77,10 +79,96 @@ public class IntersectLinePoint {
             double y = y0 + t * Δy;
             double dd = (x - cx) * (x - cx) + (y - cy) * (y - cy);
             if (dd <= r * r) {
-                result.add(new IntersectionPointEx(new Point2D.Double(x, y), t));
+                result.add(new IntersectionPoint(new Point2D.Double(x, y), t));
             }
         }
 
-        return new IntersectionResultEx(result);
+        return new IntersectionResult(
+                result.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION,
+                result);
+    }
+
+    @NonNull
+    public static IntersectionResultEx intersectLinePointEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+        IntersectionResult result = intersectLinePoint(x0, y0, x1, y1, cx, cy, r);
+        ArrayList<IntersectionPointEx> list = new ArrayList<>();
+        for (IntersectionPoint ip : result) {
+            double x = ip.getX();
+            double y = ip.getY();
+            list.add(new IntersectionPointEx(
+                    x, y,
+                    ip.getArgumentA(), x1 - x0, y1 - y0,
+                    0, 1, 0
+            ));
+        }
+
+        return new IntersectionResultEx(result.getStatus(), list);
+    }
+
+    public static boolean lineContainsPoint(double x1, double y1,
+                                            double x2, double y2,
+                                            double px, double py) {
+        return lineContainsPoint(x1, y1, x2, y2, px, py, Geom.REAL_THRESHOLD);
+    }
+
+    /**
+     * Tests if a point is inside a line segment.
+     *
+     * @param x1        the x coordinate of point 1 on the line
+     * @param y1        the y coordinate of point 1 on the line
+     * @param x2        the x coordinate of point 2 on the line
+     * @param y2        the y coordinate of point 2 on the line
+     * @param px        the x coordinate of the point
+     * @param py        the y coordinate of the point
+     * @param tolerance the maximal distance that the point may stray from the
+     *                  line
+     * @return true if the line contains the point within the given tolerance
+     */
+    public static boolean lineContainsPoint(double x1, double y1,
+                                            double x2, double y2,
+                                            double px, double py, double tolerance) {
+        if (!Geom.contains(min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1), px, py, tolerance)) {
+            return false;
+        }
+
+        double a, b, x, y;
+
+        if (Geom.almostEqual(x1, x2, tolerance)) {
+            return (abs(px - x1) <= tolerance);
+        }
+        if (Geom.almostEqual(y1, y2, tolerance)) {
+            return (abs(py - y1) <= tolerance);
+        }
+
+        a = (y1 - y2) / (x1 - x2);
+        b = y1 - a * x1;
+        x = (py - b) / a;
+        y = a * px + b;
+
+        return (min(abs(x - px), abs(y - py)) <= tolerance);
+    }
+
+    /**
+     * Given a point p on a line, computes the value of the argument 't'.
+     * <p>
+     * If the point p is not on the line it is projected perpendicularly
+     * on the line. In this case 't' may be outside of the range [0,1].
+     *
+     * @param x1 start of line
+     * @param y1 start of line
+     * @param x2 end of line
+     * @param y2 end of line
+     * @param px point
+     * @param py point
+     * @return argument 't' at point px,py on the line.
+     */
+    public static double argumentOnLine(double x1, double y1, double x2, double y2, double px, double py) {
+        double w = x2 - x1;
+        double h = y2 - y1;
+        if (Math.abs(w) > Math.abs(h)) {
+            return (px - x1) / w;
+        } else {
+            return (py - y1) / h;
+        }
     }
 }

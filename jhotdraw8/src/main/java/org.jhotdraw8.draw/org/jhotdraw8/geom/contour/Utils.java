@@ -18,10 +18,6 @@ public class Utils {
      * absolute threshold to be used for joining slices together at end points
      */
     public final static double sliceJoinThreshold = 1e-4;
-    /**
-     * absolute threshold to be used for comparing reals generally.
-     */
-    public final static double realThreshold = 1e-8;
 
     public static final double tau = 2.0 * Math.PI;
     // absolute threshold to be used for pruning invalid slices for offset
@@ -39,7 +35,7 @@ public class Utils {
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue) {
-        return fuzzyInRange(minValue, value, maxValue, realThreshold);
+        return fuzzyInRange(minValue, value, maxValue, Geom.REAL_THRESHOLD);
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue, double epsilon) {
@@ -51,7 +47,7 @@ public class Utils {
      */
     static boolean pointWithinArcSweepAngle(final Point2D.Double center, final Point2D.Double arcStart,
                                             final Point2D.Double arcEnd, double bulge, final Point2D.Double point) {
-        assert Math.abs(bulge) > Utils.realThreshold : "expected arc";
+        assert Math.abs(bulge) > Geom.REAL_THRESHOLD : "expected arc";
         assert Math.abs(bulge) <= 1.0 : "bulge should always be between -1 and 1";
 
         if (bulge > 0.0) {
@@ -68,7 +64,7 @@ public class Utils {
      */
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                       final Point2D.Double point) {
-        return isLeftOrCoincident(p0, p1, point, realThreshold);
+        return isLeftOrCoincident(p0, p1, point, Geom.REAL_THRESHOLD);
     }
 
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
@@ -83,7 +79,7 @@ public class Utils {
      */
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                        final Point2D.Double point) {
-        return isRightOrCoincident(p0, p1, point, realThreshold);
+        return isRightOrCoincident(p0, p1, point, Geom.REAL_THRESHOLD);
     }
 
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
@@ -100,7 +96,7 @@ public class Utils {
         // that are very near each other in value.
         // See:
         // https://math.stackexchange.com/questions/311382/solving-a-quadratic-equation-with-precision-when-using-floating-point-variables
-        assert Geom.almostEqual(b * b - 4.0 * a * c, discr, realThreshold) : "discriminate is not correct";
+        assert Geom.almostEqual(b * b - 4.0 * a * c, discr, Geom.REAL_THRESHOLD) : "discriminate is not correct";
         double sqrtDiscr = Math.sqrt(discr);
         double denom = 2.0 * a;
         double sol1;
@@ -171,7 +167,7 @@ public class Utils {
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle) {
-        return angleIsWithinSweep(startAngle, sweepAngle, testAngle, realThreshold);
+        return angleIsWithinSweep(startAngle, sweepAngle, testAngle, Geom.REAL_THRESHOLD);
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle,
@@ -185,7 +181,7 @@ public class Utils {
     }
 
     static boolean angleIsBetween(double startAngle, double endAngle, double testAngle) {
-        return angleIsBetween(startAngle, endAngle, testAngle, realThreshold);
+        return angleIsBetween(startAngle, endAngle, testAngle, Geom.REAL_THRESHOLD);
     }
 
     static boolean angleIsBetween(double startAngle, double endAngle, double testAngle,
@@ -205,12 +201,12 @@ public class Utils {
         Point2D.Double v = Points2D.subtract(p1,p0);
         Point2D.Double w = Points2D.subtract(point,p0);
         double c1 = Points2D.dotProduct(w,v);
-        if (c1 < realThreshold) {
+        if (c1 < Geom.REAL_THRESHOLD) {
             return p0;
         }
 
         double c2 = Points2D.dotProduct(v,v);
-        if (c2 < c1 + realThreshold) {
+        if (c2 < c1 + Geom.REAL_THRESHOLD) {
             return p1;
         }
 
