@@ -96,7 +96,7 @@ public class IntersectCubicCurveRay {
         for (int i = 0; i < roots.length; i++) {
             final double t = roots[i];
 
-            if (-epsilon < t && t < 1 + epsilon) {
+            if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
                 final Point2D.Double p5, p6, p7, p8, p9, p10;
@@ -109,7 +109,7 @@ public class IntersectCubicCurveRay {
 
                 double rayT = IntersectPointRay.projectedPointOnRay(aox, aoy, ad.getX(), ad.getY(), p10.getX(), p10.getY());
 
-                if (-epsilon < rayT && rayT <= maxT) {
+                if (-epsilon <= rayT && rayT <= maxT) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p10, t));
                 }
@@ -217,7 +217,7 @@ public class IntersectCubicCurveRay {
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            if (-epsilon < t && t < 1 + epsilon) {
+            if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
                 final Point2D.Double p5, p6, p7, p8, p9, p10;
@@ -232,7 +232,7 @@ public class IntersectCubicCurveRay {
 
                 // See if point is on ray
                 double t1 = argumentOnLine(a0x, a0y, a1x, a1y, p10.getX(), p10.getY());
-                if (-epsilon < t1 && t1 <= maxT) {
+                if (-epsilon <= t1 && t1 <= maxT) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p10, t1));
                 }

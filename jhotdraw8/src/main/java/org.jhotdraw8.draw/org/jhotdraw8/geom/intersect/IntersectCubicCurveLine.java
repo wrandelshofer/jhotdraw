@@ -229,7 +229,7 @@ public class IntersectCubicCurveLine {
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            if (-epsilon < t && t < 1 + epsilon) {
+            if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
                 final Point2D.Double p5, p6, p7, p8, p9, p10;

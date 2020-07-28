@@ -64,4 +64,8 @@ public class Points2D {
     public static double dotProduct(Point2D a, Point2D b) {
         return a.getX() * b.getX() + a.getY() * b.getY();
     }
+
+    public static double dotProduct(Point2D a, double bx, double by) {
+        return a.getX() * bx + a.getY() * by;
+    }
 }

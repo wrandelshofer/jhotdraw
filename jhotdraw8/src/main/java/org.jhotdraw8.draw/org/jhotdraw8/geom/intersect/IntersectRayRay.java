@@ -121,7 +121,7 @@ public class IntersectRayRay {
 
             // using threshold check here to make intersect "sticky" to prefer
             // considering it an intersection.
-            if (-epsilon < ua && ua <= amax && -epsilon < ub && ub <= bmax) {
+            if (-epsilon <= ua && ua <= amax && -epsilon <= ub && ub <= bmax) {
                 status = IntersectionStatus.INTERSECTION;
                 result.add(new IntersectionPointEx(
                         new Point2D.Double(aox + ua * adx, aoy + ua * ady),

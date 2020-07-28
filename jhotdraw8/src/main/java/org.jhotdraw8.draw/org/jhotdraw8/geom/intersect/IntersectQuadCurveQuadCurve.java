@@ -151,7 +151,7 @@ public class IntersectQuadCurveQuadCurve {
         for (int i = 0; i < roots.length; i++) {
             double s = roots[i];
 
-            if (-epsilon < s && s < 1 + epsilon) {
+            if (-epsilon <= s && s <= 1 + epsilon) {
                 double[] xRoots = new Polynomial(
                         c12x, c11x,
                         c10x - c20x - s * c21x - s * s * c22x

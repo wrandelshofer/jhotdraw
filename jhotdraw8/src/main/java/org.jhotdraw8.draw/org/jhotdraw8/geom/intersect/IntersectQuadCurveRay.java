@@ -110,7 +110,7 @@ public class IntersectQuadCurveRay {
 
                 // See if point is on line segment
                 double t1 = argumentOnLine(aox, aoy, a1x, a1y, p6.getX(), p6.getY());
-                if (-epsilon < t1 && t1 <= maxT) {
+                if (-epsilon <= t1 && t1 <= maxT) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p6, t1));
                 }
@@ -182,7 +182,7 @@ public class IntersectQuadCurveRay {
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            if (-epsilon < t && t < 1 + epsilon) {
+            if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
                 final Point2D.Double p4, p5, p6;
@@ -192,7 +192,7 @@ public class IntersectQuadCurveRay {
 
                 // See if point is on ray
                 double t1 = argumentOnLine(a0x, a0y, a1x, a1y, p6.getX(), p6.getY());
-                if (-epsilon < t1 && t1 <= maxT) {
+                if (-epsilon <= t1 && t1 <= maxT) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p6, t));
                 }
@@ -225,7 +225,7 @@ public class IntersectQuadCurveRay {
     public static IntersectionResultEx intersectRayQuadCurveEx(double aox, double aoy, double adx, double ady, double maxT,
                                                                double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
                                                                double epsilon) {
-        IntersectionResult result = intersectQuadCurveRay(p0x, p0y, p1x, p1y, p2x, p2y, aox, aoy, adx, ady, epsilon);
+        IntersectionResult result = intersectQuadCurveRay(p0x, p0y, p1x, p1y, p2x, p2y, aox, aoy, adx, ady, maxT, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
             double px = ip.getX();

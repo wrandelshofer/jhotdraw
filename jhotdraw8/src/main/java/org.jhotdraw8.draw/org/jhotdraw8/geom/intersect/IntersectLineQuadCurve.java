@@ -108,7 +108,7 @@ public class IntersectLineQuadCurve {
 
                 // See if point is on line segment
                 double t1 = argumentOnLine(a0x, a0y, a1x, a1y, p6.getX(), p6.getY());
-                if (-epsilon < t1 && t1 < 1 + epsilon) {
+                if (-epsilon <= t1 && t1 <= 1 + epsilon) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p6, t1));
                 }
@@ -183,7 +183,7 @@ public class IntersectLineQuadCurve {
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            if (-epsilon < t && t < 1 + epsilon) {
+            if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
                 final Point2D.Double p4, p5, p6;

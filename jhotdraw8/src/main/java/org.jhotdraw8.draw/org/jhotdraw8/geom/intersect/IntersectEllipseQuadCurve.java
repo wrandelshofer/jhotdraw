@@ -109,7 +109,7 @@ public class IntersectEllipseQuadCurve {
         for (int i = 0; i < roots.length; i++) {
             double t = roots[i];
 
-            if (-epsilon < t && t < 1 + epsilon) {
+            if (-epsilon <= t && t <= 1 + epsilon) {
                 result.add(new IntersectionPoint(
                         Points2D.sum(Points2D.multiply(c2, t * t), Points2D.multiply(c1, t), c0), t));
             }

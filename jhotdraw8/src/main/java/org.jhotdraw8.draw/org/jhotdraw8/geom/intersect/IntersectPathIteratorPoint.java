@@ -2,9 +2,9 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
 
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,28 +49,21 @@ public class IntersectPathIteratorPoint {
         int i = 0;
         int windingRule = pit.getWindingRule();
 
-        // FIXME
         // Count clockwise and counter clockwise crossings of a ray
         // starting at px,py going to POSITIVE_INFINITY,py.
-        int globalClockwiseCrossings = 0;
-        int globalCounterCockwiseCrossings = 0;
+        int clockwiseCrossingsSum = 0;
+        int counterClockwiseCrossingsSum = 0;
         int clockwiseCrossings = 0;
         int counterClockwiseCrossings = 0;
 
         for (; !pit.isDone(); pit.next(), i++) {
             IntersectionResult boundaryCheck;
             IntersectionResultEx rayCheck;
-            switch (pit.currentSegment(seg)) {
+            int type = pit.currentSegment(seg);
+            switch (type) {
             case PathIterator.SEG_CLOSE:
                 boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
                 rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Geom.REAL_THRESHOLD);
-                globalClockwiseCrossings += clockwiseCrossings;
-                globalCounterCockwiseCrossings += counterClockwiseCrossings;
-                if (windingRule == PathIterator.WIND_NON_ZERO) {
-                    if (clockwiseCrossings > 0 || counterClockwiseCrossings > 0) {
-                        return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
-                    }
-                }
                 break;
             case PathIterator.SEG_CUBICTO:
                 x = seg[4];
@@ -92,8 +85,6 @@ public class IntersectPathIteratorPoint {
             case PathIterator.SEG_MOVETO:
                 lastx = firstx = seg[0];
                 lasty = firsty = seg[1];
-                clockwiseCrossings = 0;
-                counterClockwiseCrossings = 0;
                 boundaryCheck = null;
                 rayCheck = null;
                 break;
@@ -107,9 +98,7 @@ public class IntersectPathIteratorPoint {
                 lasty = y;
                 break;
             default:
-                boundaryCheck = null;
-                rayCheck = null;
-                break;
+                throw new UnsupportedOperationException("Unsupported segment type: " + type);
             }
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -118,20 +107,33 @@ public class IntersectPathIteratorPoint {
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 for (IntersectionPointEx ip : rayCheck) {
-                    double theta = Points2D.dotProduct(ip.getTangentA(), Points2D.normalize(ip.getTangentB()));
-                    if (theta >= 0) {
+                    Point2D.Double tangentB = ip.getTangentB();
+                    if (tangentB.getY() > 0) {
                         clockwiseCrossings++;
                     } else {
                         counterClockwiseCrossings++;
                     }
                 }
-
+            }
+            switch (type) {
+            case PathIterator.SEG_CLOSE:
+                clockwiseCrossingsSum += clockwiseCrossings;
+                counterClockwiseCrossingsSum += counterClockwiseCrossings;
+                clockwiseCrossings = counterClockwiseCrossings = 0;
+                break;
+            case PathIterator.SEG_MOVETO:
+                clockwiseCrossings = counterClockwiseCrossings = 0;
+                break;
             }
 
         }
 
         if (windingRule == PathIterator.WIND_EVEN_ODD) {
-            if ((clockwiseCrossings > 0 || counterClockwiseCrossings > 0) && clockwiseCrossings != counterClockwiseCrossings) {
+            if ((clockwiseCrossingsSum + counterClockwiseCrossingsSum) % 2 == 1) {
+                return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
+            }
+        } else if (windingRule == PathIterator.WIND_NON_ZERO) {
+            if (clockwiseCrossingsSum != counterClockwiseCrossingsSum) {
                 return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
             }
         }
