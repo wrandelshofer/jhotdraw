@@ -9,6 +9,7 @@ import javafx.collections.MapChangeListener;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssDefaulting;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -33,8 +34,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Werner Randelshofer
  */
 public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements StyleableMap<K, V> {
+    private final static class SpecialValue {
+    }
 
-    private final static Object NULL_VALUE = new Object();
+    private final static SpecialValue NULL_VALUE = new SpecialValue();
+    private final static SpecialValue NO_VALUE = new SpecialValue();
+    private final static SpecialValue INHERIT_VALUE = new SpecialValue();
+    private final static SpecialValue UNSET_VALUE = new SpecialValue();
+    private final static SpecialValue REVERT_VALUE = new SpecialValue();
+    private final static SpecialValue INITIAL_VALUE = new SpecialValue();
     private final static int numOrigins = 4;
     @Nullable
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
@@ -81,7 +89,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private SimpleStyleableMap(@NonNull SimpleStyleableMap<K, V> that, @Nullable StyleOrigin styleOrigin) {
         this.keyMap = that.keyMap;
         this.values = that.values;
-        this.origin = styleOrigin;
+        this.origin = (styleOrigin == null) ? that.origin : styleOrigin;
         this.originOrdinal = (styleOrigin == null) ? AUTO_ORIGIN : styleOrigin.ordinal();
         this.sizes = that.sizes;
         this.originalMap = that;
@@ -126,36 +134,25 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         removeAll(origin);
     }
 
-    @Override
-    public void clearAuthorAndInlineValues() {
-        int author = StyleOrigin.AUTHOR.ordinal();
-        int inline = StyleOrigin.INLINE.ordinal();
-        for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext(); ) {
-            Entry<K, Integer> e = i.next();
-            Integer index = e.getValue();
-            if (index < values.size()) {
-                removeValue(author, index, e.getKey());
-                removeValue(inline, index, e.getKey());
-            }
-        }
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(Object key) {
         return containsKey(origin, (K) key);
     }
 
-    public boolean containsKey(@Nullable StyleOrigin origin, K key) {
+    public boolean containsKey(@Nullable StyleOrigin origin, @NonNull K key) {
         Integer index = keyMap.get(key);
 
         if (origin == null) {
             return getStyleOrigin(key) != null;
         }
 
-        return index != null
-                && index * numOrigins + origin.ordinal() < values.size()
-                && values.get(index * numOrigins + origin.ordinal()) != null;
+        if (index != null
+                && index * numOrigins + origin.ordinal() < values.size()) {
+            Object rawValue = values.get(index * numOrigins + origin.ordinal());
+            return rawValue == NULL_VALUE || !(rawValue instanceof SpecialValue);
+        }
+        return false;
     }
 
     @Override
@@ -214,7 +211,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     @Nullable
-    public V get(@NonNull StyleOrigin origin, K key) {
+    public V get(@NonNull StyleOrigin origin, @NonNull K key) {
         return get(origin.ordinal(), key, null);
     }
 
@@ -226,13 +223,13 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     @NonNull
-    public Map<K, V> getMap(StyleOrigin origin) {
+    public Map<K, V> getMap(@NonNull StyleOrigin origin) {
         return (origin == this.origin) ? this : new SimpleStyleableMap<>(this, origin);
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public StyleOrigin getStyleOrigin(Object key) {
+    public StyleOrigin getStyleOrigin(@NonNull K key) {
         int index = ensureCapacity((K) key);
         for (int i = numOrigins - 1; i >= 0; i--) {
             final int arrayIndex = index * numOrigins + i;
@@ -242,6 +239,25 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             }
         }
         return null;
+    }
+
+    public @Nullable CssDefaulting getDefaulting(@NonNull StyleOrigin origin, @NonNull K key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void remove(@NonNull StyleOrigin origin, @NonNull K key, @Nullable CssDefaulting newValue) {
+        if (newValue == null) {
+            remove(origin, key);
+        } else {
+            SpecialValue specialValue = switch (newValue) {
+                case INITIAL -> INITIAL_VALUE;
+                case INHERIT -> INHERIT_VALUE;
+                case UNSET -> UNSET_VALUE;
+                case REVERT -> REVERT_VALUE;
+            };
+            setRawValue(origin.ordinal(), ensureCapacity(key), key, specialValue);
+        }
     }
 
     public @NonNull Map<K, V> getStyledMap() {
@@ -256,6 +272,14 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @Nullable
     @SuppressWarnings("unchecked")
     private V getValue(int ordinal, int index, K key, V defaultValue) {
+        Object value = getRawValue(ordinal, index, key, defaultValue);
+
+        return value instanceof SpecialValue ? null : (V) value;
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    private Object getRawValue(int ordinal, int index, K key, Object defaultValue) {
         Object value;
         if (ordinal == -1) {
             value = null;
@@ -272,7 +296,28 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             final int arrayIndex = index * numOrigins + ordinal;
             value = arrayIndex < values.size() ? values.get(arrayIndex) : null;
         }
-        return value == null ? defaultValue : (V) (value == NULL_VALUE ? null : value);
+        return value == null ? defaultValue : (V) (value instanceof SpecialValue ? null : value);
+    }
+
+    @Nullable
+    private CssDefaulting getDefaulting(int ordinal, int index, K key) {
+        Object value = getRawValue(ordinal, index, key, NO_VALUE);
+
+        CssDefaulting defaulting;
+        if (value == INHERIT_VALUE) {
+            defaulting = CssDefaulting.INHERIT;
+        } else if (value == UNSET_VALUE) {
+            defaulting = CssDefaulting.UNSET;
+        } else if (value == REVERT_VALUE) {
+            defaulting = CssDefaulting.REVERT;
+        } else if (value == INITIAL_VALUE) {
+            defaulting = CssDefaulting.INITIAL;
+        } else if (value == NO_VALUE) {
+            defaulting = (key instanceof InheritableKey) ? CssDefaulting.INHERIT : CssDefaulting.INITIAL;
+        } else {
+            defaulting = null;
+        }
+        return defaulting;
     }
 
     private boolean hasValue(int index) {
@@ -311,7 +356,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     @Nullable
-    public V put(@NonNull StyleOrigin styleOrigin, K key, V value) {
+    public V put(@NonNull StyleOrigin styleOrigin, @NonNull K key, V value) {
         int index = ensureCapacity(key);
         return setValue(styleOrigin.ordinal(), index, key, value);
     }
@@ -373,7 +418,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         } else {
             values.set(index * numOrigins + ordinal, null);
             sizes[ordinal]--;
-            V returnValue = oldValue == NULL_VALUE ? null : (V) oldValue;
+            V returnValue = oldValue instanceof SpecialValue ? null : (V) oldValue;
             if (origin == StyleOrigin.USER) {
                 @SuppressWarnings("unchecked")
                 ChangeEvent change = new ChangeEvent(key, returnValue, null, false, true);
@@ -388,24 +433,20 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @Nullable
     @SuppressWarnings("unchecked")
     private V setValue(int ordinal, int index, K key, @Nullable V newValue) {
+        Object oldRawValue = setRawValue(ordinal, index, key, newValue);
+        return oldRawValue instanceof SpecialValue ? null : (V) oldRawValue;
+    }
+
+    private Object setRawValue(int ordinal, int index, K key, @Nullable Object newValue) {
         if (ordinal == -1) {
             throw new UnsupportedOperationException("can not set styled value");
         }
-        V oldValue = (V) values.get(index * numOrigins + ordinal);
+        Object oldValue = values.get(index * numOrigins + ordinal);
         if (oldValue == null) {
             sizes[ordinal]++;
         }
         values.set(index * numOrigins + ordinal, newValue == null ? NULL_VALUE : newValue);
-
-        V returnValue = oldValue == NULL_VALUE ? null : oldValue;
-        if (!Objects.equals(returnValue, newValue)) {
-            if (origin == StyleOrigin.USER) {
-                ChangeEvent change = new ChangeEvent(key, returnValue, newValue, true, oldValue != null);
-                callObservers(this.origin, change);
-            }
-        }
-
-        return returnValue;
+        return oldValue;
     }
 
     public int getIdentityHash() {

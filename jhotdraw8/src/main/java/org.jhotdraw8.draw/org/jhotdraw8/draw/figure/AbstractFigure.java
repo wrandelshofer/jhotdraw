@@ -238,7 +238,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         Drawing d = getDrawing();
         if (d != null) {
             StylesheetsManager<Figure> styleManager = d.getStyleManager();
-            styleManager.applyStylesheetsTo(this);
+            if (styleManager != null) {
+                styleManager.applyStylesheetsTo(this);
+            }
         }
         invalidateTransforms();
     }

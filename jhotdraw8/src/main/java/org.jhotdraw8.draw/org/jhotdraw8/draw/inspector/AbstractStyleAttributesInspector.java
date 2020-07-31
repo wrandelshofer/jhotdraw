@@ -98,6 +98,26 @@ import java.util.prefs.Preferences;
  * @param <E>
  */
 public abstract class AbstractStyleAttributesInspector<E> {
+    /**
+     * This placeholder is displayed to indicate that no value has
+     * been specified for this property.
+     * <p>
+     * The placeholder should be a comment, e.g. "/* unspecified value * /",
+     * or white space, e.g. "  ", or one of the keywords
+     * {@link CssTokenType#IDENT_INITIAL},
+     * {@link CssTokenType#IDENT_INHERIT},
+     * {@link CssTokenType#IDENT_REVERT},
+     * {@link CssTokenType#IDENT_UNSET},
+     */
+    public static final String UNSPECIFIED_VALUE_PLACEHOLDER = "revert";//"/* unspecified value */";
+    /**
+     * This placeholder is displayed to indicate that multiple values have
+     * been specified for this property.
+     * <p>
+     * The placeholder should be a comment, e.g. "/* multiple values * /",
+     * or white space, e.g. "  ".
+     */
+    public static final String MULTIPLE_VALUES_PLACEHOLDER = "/* multiple values */";
     private final ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
     private final ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
@@ -673,7 +693,7 @@ updateTextArea();
                         continue;
                     }
                     String attribute = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
-                    attr.put(qname, attribute == null ? CssTokenType.IDENT_INITIAL : attribute);
+                    attr.put(qname, attribute == null ? UNSPECIFIED_VALUE_PLACEHOLDER : attribute);
                 }
             } else {
                 attr.keySet().retainAll(selectorModel.getAttributeNames(f));
@@ -685,10 +705,10 @@ updateTextArea();
                     if (oldAttrValue != null) {
                         String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
                         if (newAttrValue == null) {
-                            newAttrValue = CssTokenType.IDENT_INITIAL;
+                            newAttrValue = UNSPECIFIED_VALUE_PLACEHOLDER;
                         }
                         if (!oldAttrValue.equals(newAttrValue)) {
-                            attr.put(qname, "/* multiple values */");
+                            attr.put(qname, MULTIPLE_VALUES_PLACEHOLDER);
                         }
                     }
                 }

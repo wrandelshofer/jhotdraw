@@ -101,7 +101,7 @@ public class CssToken /*extends AST*/ {
         this.preferredQuoteChar = preferredQuoteChar;
     }
 
-    @Nullable
+    @NonNull
     public String getStringValueNonNull() {
         return Objects.requireNonNull(stringValue);
     }

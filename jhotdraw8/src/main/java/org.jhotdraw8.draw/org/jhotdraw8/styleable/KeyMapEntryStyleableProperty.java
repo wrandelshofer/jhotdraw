@@ -78,7 +78,8 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
     @Override
     public StyleOrigin getStyleOrigin() {
         //ARGH!!! this does not work!!
-        return map.getStyleOrigin(key);
+        //return map.getStyleOrigin(key);
+        return null;
     }
 
 }

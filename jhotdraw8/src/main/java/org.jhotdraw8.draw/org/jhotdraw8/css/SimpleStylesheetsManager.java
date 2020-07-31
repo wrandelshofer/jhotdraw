@@ -8,6 +8,7 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
@@ -141,30 +142,30 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private LinkedHashMap<Object, StylesheetEntry> getMap(@NonNull StyleOrigin origin) {
         switch (origin) {
-            case AUTHOR:
-                return authorList;
-            case USER_AGENT:
-                return userAgentList;
-            case INLINE:
-                return inlineList;
-            default:
-                throw new IllegalArgumentException("illegal origin:" + origin);
+        case AUTHOR:
+            return authorList;
+        case USER_AGENT:
+            return userAgentList;
+        case INLINE:
+            return inlineList;
+        default:
+            throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
     private void setMap(@NonNull StyleOrigin origin, LinkedHashMap<Object, StylesheetEntry> newValue) {
         switch (origin) {
-            case AUTHOR:
-                authorList = newValue;
-                break;
-            case USER_AGENT:
-                userAgentList = newValue;
-                break;
-            case INLINE:
-                inlineList = newValue;
-                break;
-            default:
-                throw new IllegalArgumentException("illegal origin:" + origin);
+        case AUTHOR:
+            authorList = newValue;
+            break;
+        case USER_AGENT:
+            userAgentList = newValue;
+            break;
+        case INLINE:
+            inlineList = newValue;
+            break;
+        default:
+            throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
@@ -182,7 +183,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 URI uri = (URI) t;
                 URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
                 StylesheetEntry old = oldMap.get(resolvedUri);
-                    newMap.put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
+                newMap.put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
             } else if (t instanceof String) {
                 StylesheetEntry old = oldMap.get(t);
                 if (old != null) {
@@ -331,8 +332,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * Collects all declarations in all specified stylesheets which are
      * applicable to the specified element.
      *
-     * @param elem          an element
-     * @param stylesheets   the stylesheets
+     * @param elem        an element
+     * @param stylesheets the stylesheets
      * @return list of applicable declarations
      */
     private List<Map.Entry<Stylesheet, Declaration>> collectApplicableDeclarations(E elem,
@@ -385,9 +386,26 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             Declaration d = entry.getValue().getValue();
             ImmutableList<CssToken> value = preprocessTerms(elem, processor, d.getTerms());
             try {
+
+                ReadOnlyList<CssToken> appliedValue;
+                CssToken first = value.size() == 0 ? null : value.getFirst();
+                if (first != null && first.getType() == CssTokenType.TT_IDENT) {
+                    switch (first.getStringValueNonNull()) {
+                    case CssTokenType.IDENT_INITIAL:
+                    case CssTokenType.IDENT_INHERIT:
+                    case CssTokenType.IDENT_REVERT:
+                    case CssTokenType.IDENT_UNSET:
+                        appliedValue = null;
+                        break;
+                    default:
+                        appliedValue = value;
+                        break;
+                    }
+                } else {
+                    appliedValue = value;
+                }
                 selectorModel.setAttribute(elem, styleOrigin, d.getNamespace(), d.getPropertyName(),
-                        value.size() == 1 && value.get(0).getType() == CssTokenType.TT_IDENT
-                                && CssTokenType.IDENT_INITIAL.equals(value.get(0).getStringValue()) ? null : value);
+                        appliedValue);
             } catch (ParseException e) {
                 if (suppressParseException) {
                     LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);

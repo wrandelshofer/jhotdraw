@@ -18,12 +18,37 @@ public class CssTokenType {
     public final static String IDENT_NONE = "none";
 
     /**
-     * The 'initial' keyword is used to reset a property.
+     * The 'initial' keyword is used to indicate that the property's
+     * specified value is its initial value.
      *
-     * <a href="https://www.w3.org/TR/css3-cascade/#initial">Resetting a
+     * <a href="https://www.w3.org/TR/css-cascade-4/#initial">Resetting a
      * Property: the 'initial' keyword.</a>
      */
     public final static String IDENT_INITIAL = "initial";
+    /**
+     * The 'inherit' keyword is used to indicate that the property's
+     * specified and computed values are the inherited value.
+     *
+     * <a href="https://www.w3.org/TR/css-cascade-4/#inherit">Resetting a
+     * Property: the 'initial' keyword.</a>
+     */
+    public final static String IDENT_INHERIT = "inherit";
+    /**
+     * The 'unset' keyword is used to indicate that the property's
+     * specified value should be taken from the previous origin level.
+     *
+     * <a href="https://www.w3.org/TR/css-cascade-4/#revert">Resetting a
+     * Property: the 'initial' keyword.</a>
+     */
+    public final static String IDENT_REVERT = "revert";
+    /**
+     * The 'revert' keyword is used to indicate 'inherit' if the property
+     * is inherited, and 'initial' if not.
+     *
+     * <a href="https://www.w3.org/TR/css-cascade-4/#unset">Resetting a
+     * Property: the 'initial' keyword.</a>
+     */
+    public final static String IDENT_UNSET = "unset";
 
     /**
      * Defines an at-keyword-token.
