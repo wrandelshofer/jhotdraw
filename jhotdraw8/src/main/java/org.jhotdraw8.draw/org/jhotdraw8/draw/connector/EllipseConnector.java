@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.connector;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
@@ -36,6 +37,7 @@ public class EllipseConnector extends LocatorConnector {
     }
 
     @Override
+    @Nullable
     public IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
@@ -60,6 +62,6 @@ public class EllipseConnector extends LocatorConnector {
 
         IntersectionResultEx i = IntersectEllipseLine.intersectLineEllipseEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX() + bounds.getWidth() * 0.5, bounds.getMinY() + bounds.getHeight() * 0.5, bounds.getWidth() * 0.5, bounds.getHeight() * 0.5);
-        return i.getLast();
+        return i.peekLast();
     }
 }

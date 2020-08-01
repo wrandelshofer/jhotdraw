@@ -4,6 +4,7 @@
 package org.jhotdraw8.styleable;
 
 
+import javafx.css.StyleOrigin;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,6 +79,38 @@ public class SimpleStyleableMapTest {
         // WHEN key is removed
         instance.remove(key);
         result = instance.containsKey(key);
+        // THEN must return default value
+        assertEquals(false, result);
+    }
+
+    /**
+     * Test of containsKey method, of class SimpleStyleableMap.
+     */
+    @Test
+    public void testContainsKeyAuthor() {
+        System.out.println("containsKey");
+
+        // GIVEN
+        SimpleStyleableMap<String, Object> instance = new SimpleStyleableMap<>();
+
+        // WHEN getOrDefault and no value has been put
+        String key = "dummyKey";
+        boolean result = instance.containsKey(StyleOrigin.AUTHOR, key);
+
+        // THEN must return false
+        assertEquals(false, result);
+
+        // WHEN getOrDefault and a value has been put
+        Object putValue = "putValue";
+        instance.put(StyleOrigin.AUTHOR, key, putValue);
+        result = instance.containsKey(StyleOrigin.AUTHOR, key);
+
+        // THEN must returnt rue
+        assertEquals(true, result);
+
+        // WHEN key is removed
+        instance.remove(StyleOrigin.AUTHOR, key);
+        result = instance.containsKey(StyleOrigin.AUTHOR, key);
         // THEN must return default value
         assertEquals(false, result);
     }

@@ -111,7 +111,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private boolean isValidating = false;
     private boolean valid = true;
     @NonNull
-    private Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
+    private final Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
     @Nullable
     private final ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
@@ -141,10 +141,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private void onRootChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (listenOnDrawing) {
             if (oldValue != null) {
-                oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
+                //     oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
             }
             if (newValue != null) {
-                newValue.getPropertyChangeListeners().add(propertyChangeHandler);
+                //      newValue.getPropertyChangeListeners().add(propertyChangeHandler);
             }
         }
         fireTreeModelEvent(TreeModelEvent.rootChanged(this, newValue));

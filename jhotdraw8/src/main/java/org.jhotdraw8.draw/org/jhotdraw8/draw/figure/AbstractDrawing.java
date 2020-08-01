@@ -13,6 +13,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -22,7 +24,9 @@ import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.render.RenderContext;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -103,10 +107,20 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     @Override
     public void updateStyleManager() {
         if (styleManager != null) {
-            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS).asList());
-            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS).asList());
-            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS).asList());
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), getList(USER_AGENT_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), getList(AUTHOR_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.INLINE, getStringList(INLINE_STYLESHEETS));
         }
+    }
+
+    private List<URI> getList(Key<ImmutableList<URI>> key) {
+        ImmutableList<URI> list = get(key);
+        return list == null ? Collections.emptyList() : list.asList();
+    }
+
+    private List<String> getStringList(Key<ImmutableList<String>> key) {
+        ImmutableList<String> list = get(key);
+        return list == null ? Collections.emptyList() : list.asList();
     }
 
     @Override
@@ -125,9 +139,9 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     @Override
     public void stylesheetNotify(@NonNull RenderContext ctx) {
         if (styleManager != null) {
-            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), get(USER_AGENT_STYLESHEETS).asList());
-            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), get(AUTHOR_STYLESHEETS).asList());
-            styleManager.setStylesheets(StyleOrigin.INLINE, get(INLINE_STYLESHEETS).asList());
+            styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), getList(USER_AGENT_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), getList(AUTHOR_STYLESHEETS));
+            styleManager.setStylesheets(StyleOrigin.INLINE, getStringList(INLINE_STYLESHEETS));
         }
         super.stylesheetNotify(ctx);
     }

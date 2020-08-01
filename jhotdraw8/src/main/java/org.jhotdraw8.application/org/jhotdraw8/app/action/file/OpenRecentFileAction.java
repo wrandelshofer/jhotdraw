@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
@@ -20,6 +21,7 @@ import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.concurrent.CancellationException;
 
 /**
@@ -73,6 +75,16 @@ public static final String ID = "file.openRecent";
     @Override
     protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
         {
+            // Check if there is already an activity with this URI.
+            for (Activity activity : app.getActivities()) {
+                FileBasedActivity fba = (FileBasedActivity) activity;
+                if (Objects.equals(uri, fba.getURI())) {
+                    fba.getNode().getScene().getWindow().requestFocus();
+                    return;
+                }
+            }
+
+
             // Search for an empty view
             FileBasedActivity emptyView;
             if (reuseEmptyViews) {
@@ -118,22 +130,29 @@ public static final String ID = "file.openRecent";
         final Application app = getApplication();
         WorkState workState = new SimpleWorkState(getLabel());
         v.addDisabler(workState);
+        URI oldUri = v.getURI();
+
+        v.setURI(uri); // tentatively set new URI so that other actions will not reuse this activity,
+        // nor other actions will create a new activity with this URI
 
         // Open the file
         try {
             v.read(uri, format, null, false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
+                    v.setURI(oldUri);
                 } else if (exception != null) {
                     v.removeDisabler(workState);
+                    v.setURI(oldUri);
                     onException(v, exception);
                 } else {
                     v.setURI(uri);
                     v.setDataFormat(actualFormat);
                     v.clearModified();
-                    v.setTitle(UriUtil.getName(uri));
                     v.removeDisabler(workState);
                 }
+                URI finalUri = v.getURI();
+                v.setTitle(finalUri == null ? null : UriUtil.getName(finalUri));
             });
         } catch (Throwable t) {
             v.removeDisabler(workState);

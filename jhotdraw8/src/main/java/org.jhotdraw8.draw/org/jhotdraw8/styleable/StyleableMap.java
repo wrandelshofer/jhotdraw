@@ -11,6 +11,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssDefaulting;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A map which stores its values in an array, and which can share its keys with
@@ -49,11 +50,10 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
      * Removes the specified key from the specified style origin
      * and puts the provided defaulting method for the key in place.
      *
-     * @param origin   the style origin
-     * @param key      the key
-     * @param newValue the defaulting method to use when the key is absent
+     * @param origin the style origin
+     * @param key    the key
      */
-    void remove(@NonNull StyleOrigin origin, @NonNull K key, @Nullable CssDefaulting newValue);
+    V removeKey(@NonNull StyleOrigin origin, @NonNull K key);
 
     @NonNull Map<K, V> getStyledMap();
 
@@ -62,4 +62,6 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
     void removeAll(@NonNull StyleOrigin origin);
 
     void resetStyledValues();
+
+    Set<Entry<K, V>> entrySet(@NonNull StyleOrigin origin);
 }

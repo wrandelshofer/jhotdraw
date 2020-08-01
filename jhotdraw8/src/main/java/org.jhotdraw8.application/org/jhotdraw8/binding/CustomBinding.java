@@ -4,12 +4,15 @@
  */
 package org.jhotdraw8.binding;
 
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -17,6 +20,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.function.BiConsumer;
+import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 
 /**
@@ -295,5 +299,25 @@ public class CustomBinding {
         };
         value.addListener(changeListener);
         changeListener.changed(value, !value.getValue(), value.getValue());
+    }
+
+    public static DoubleBinding compute(DoubleSupplier op, ObservableNumberValue... dependendies) {
+        return new DoubleBinding() {
+            {
+                super.bind(dependendies);
+            }
+
+            @Override
+            protected double computeValue() {
+                return op.getAsDouble();
+            }
+
+            @Override
+            public ObservableList<?> getDependencies() {
+                return FXCollections.observableArrayList(dependendies);
+            }
+
+        };
+
     }
 }

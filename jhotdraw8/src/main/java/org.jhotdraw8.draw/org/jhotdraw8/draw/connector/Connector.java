@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.connector;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
@@ -166,6 +167,7 @@ public interface Connector {
      * @return the intersection in the interval [0,1], null if no intersection.
      * In case of multiple intersections returns the largest value.
      */
+    @Nullable
     default IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
@@ -174,6 +176,6 @@ public interface Connector {
                 new java.awt.geom.Point2D.Double(s.getX(), s.getY()),
                 new java.awt.geom.Point2D.Double(e.getX(), e.getY()),
                 new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()));
-        return i.getLast();
+        return i.peekLast();
     }
 }

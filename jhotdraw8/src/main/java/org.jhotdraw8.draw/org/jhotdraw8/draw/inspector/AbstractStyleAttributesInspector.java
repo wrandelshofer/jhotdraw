@@ -202,6 +202,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
             StylesheetsManager<E> sm = getStyleManager();
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
+            // This must not be done in parallel, because we may have observers on
+            // the entities.
             for (E entity : getEntities()) {
                 if (sm.applyStylesheetTo(StyleOrigin.USER, stylesheet, entity, false)) {
                     fireInvalidated(entity);

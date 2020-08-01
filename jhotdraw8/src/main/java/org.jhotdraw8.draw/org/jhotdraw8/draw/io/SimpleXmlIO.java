@@ -48,6 +48,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -61,6 +62,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,12 +117,15 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     @Nullable
     protected List<String> comments;
     protected FigureFactory figureFactory;
+    /**
+     * Performance: This does not need to be a linked hash map, because we iterate in parallel over it.
+     */
     @NonNull
-    protected HashMap<Figure, Element> figureToElementMap = new HashMap<>();
+    protected Map<Figure, Element> figureToElementMap = new HashMap<>();
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    @Nullable
+    @NonNull
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
     private boolean doAddNotifyAndUpdateCss = true;
 
@@ -332,9 +337,9 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
                 switch (node.getNodeType()) {
-                    case Node.PROCESSING_INSTRUCTION_NODE:
-                        readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
-                        break;
+                case Node.PROCESSING_INSTRUCTION_NODE:
+                    readProcessingInstruction(drawingElement.getOwnerDocument(), (ProcessingInstruction) node, external);
+                    break;
                 }
             }
         }
@@ -390,25 +395,25 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         for (int i = 0, n = list.getLength(); i < n; i++) {
             Node node = list.item(i);
             switch (node.getNodeType()) {
-                case Node.COMMENT_NODE:
-                    comments.add(node.getTextContent());
-                    break;
-                case Node.ELEMENT_NODE:
-                    Figure f = readNodesRecursively(node);
-                    if (f instanceof Drawing) {
-                        external = (Drawing) f;
-                    } else if (f instanceof Clipping) {
-                        clipping = (Clipping) f;
-                    }
+            case Node.COMMENT_NODE:
+                comments.add(node.getTextContent());
+                break;
+            case Node.ELEMENT_NODE:
+                Figure f = readNodesRecursively(node);
+                if (f instanceof Drawing) {
+                    external = (Drawing) f;
+                } else if (f instanceof Clipping) {
+                    clipping = (Clipping) f;
+                }
             }
         }
         if (external != null) {
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
                 switch (node.getNodeType()) {
-                    case Node.PROCESSING_INSTRUCTION_NODE:
-                        readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
-                        break;
+                case Node.PROCESSING_INSTRUCTION_NODE:
+                    readProcessingInstruction(doc.getOwnerDocument(), (ProcessingInstruction) node, external);
+                    break;
                 }
             }
         }
@@ -424,10 +429,16 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             external.set(XML_EPILOG_COMMENT_KEY, comments);
         }
         try {
-            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
-                readElementAttributes(entry.getKey(), entry.getValue());
-                readElementNodeList(entry.getKey(), entry.getValue());
-            }
+            figureToElementMap.entrySet().stream()
+                    .parallel()
+                    .forEach((Map.Entry<Figure, Element> entry) -> {
+                        try {
+                            readElementAttributes(entry.getKey(), entry.getValue());
+                            readElementNodeList(entry.getKey(), entry.getValue());
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
         } finally {
             figureToElementMap.clear();
         }
@@ -502,7 +513,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
      * type of a map accessor.
      */
     @NonNull
-    Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new HashMap<>();
+    Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
 
     /**
      * Reads the children of the specified element as a node list.
@@ -598,32 +609,32 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     @Nullable
     protected Figure readNodesRecursively(@NonNull Node node) throws IOException {
         switch (node.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                Figure figure = readNode(node);
-                if (!comments.isEmpty()) {
-                    figure.set(XML_HEAD_COMMENT_KEY, comments);
-                    comments = new ArrayList<>();
-                }
-                NodeList list = node.getChildNodes();
-                for (int i = 0; i < list.getLength(); i++) {
-                    Figure child = readNodesRecursively(list.item(i));
-                    if (child != null) {
-                        if (!child.isSuitableParent(figure)) {
-                            throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
-                        }
-                        figure.addChild(child);
+        case Node.ELEMENT_NODE:
+            Figure figure = readNode(node);
+            if (!comments.isEmpty()) {
+                figure.set(XML_HEAD_COMMENT_KEY, comments);
+                comments = new ArrayList<>();
+            }
+            NodeList list = node.getChildNodes();
+            for (int i = 0; i < list.getLength(); i++) {
+                Figure child = readNodesRecursively(list.item(i));
+                if (child != null) {
+                    if (!child.isSuitableParent(figure)) {
+                        throw new IOException(list.item(i).getNodeName() + " is not a suitable child for " + ((Element) node).getTagName() + ".");
                     }
+                    figure.addChild(child);
                 }
-                if (!comments.isEmpty()) {
-                    figure.set(XML_BODY_COMMENT_KEY, comments);
-                    comments = new ArrayList<>();
-                }
-                return figure;
-            case Node.COMMENT_NODE:
-                comments.add(node.getTextContent());
-                return null;
-            default:
-                return null;
+            }
+            if (!comments.isEmpty()) {
+                figure.set(XML_BODY_COMMENT_KEY, comments);
+                comments = new ArrayList<>();
+            }
+            return figure;
+        case Node.COMMENT_NODE:
+            comments.add(node.getTextContent());
+            return null;
+        default:
+            return null;
         }
     }
 

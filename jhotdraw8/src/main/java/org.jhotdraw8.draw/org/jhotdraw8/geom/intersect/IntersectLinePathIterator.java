@@ -68,7 +68,7 @@ public class IntersectLinePathIterator {
                 break;
             }
 
-            if (inter != null) {
+            if (inter != null && inter.getStatus() == IntersectionStatus.INTERSECTION) {
                 result.addAll(inter.asList());
             }
 

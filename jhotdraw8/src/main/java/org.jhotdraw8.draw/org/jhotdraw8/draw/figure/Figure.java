@@ -278,14 +278,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     double grow = 0.0;
                     if (ff.get(StrokableFigure.STROKE) != null) {
                         switch (ff.getNonNull(StrokableFigure.STROKE_TYPE)) {
-                            case CENTERED:
-                                grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue() * 0.5;
-                                break;
-                            case INSIDE:
-                                break;
-                            case OUTSIDE:
-                                grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue();
-                                break;
+                        case CENTERED:
+                            grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue() * 0.5;
+                            break;
+                        case INSIDE:
+                            break;
+                        case OUTSIDE:
+                            grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue();
+                            break;
                         }
                     }
                     if (ff.get(CompositableFigure.EFFECT) != null) {
@@ -455,11 +455,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     default <T> void firePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (hasPropertyChangeListeners()) {
             firePropertyChangeEvent(new FigurePropertyChangeEvent(source, key, oldValue, newValue));
-        } else {
-            Figure parent = getParent();
-            if (parent != null) {
-                parent.firePropertyChangeEvent(source, key, oldValue, newValue);
-            }
+        }
+        Figure parent = getParent();
+        if (parent != null) {
+            parent.firePropertyChangeEvent(source, key, oldValue, newValue);
         }
     }
 
@@ -1231,6 +1230,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This figure does not keep track of changes that require CSS updates. Use
      * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
+     *
      * @param ctx
      */
     void updateCss(RenderContext ctx);
@@ -1309,10 +1309,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         final Transform wtp = getWorldToParent();
         return FXTransforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
     }
+
     @NonNull
     default Point2D worldToParent(double x, double y) {
         final Transform wtp = getWorldToParent();
-        return FXTransforms.isIdentityOrNull(wtp) ? new Point2D(x,y) : wtp.transform(x,y);
+        return FXTransforms.isIdentityOrNull(wtp) ? new Point2D(x, y) : wtp.transform(x, y);
     }
 
     /**

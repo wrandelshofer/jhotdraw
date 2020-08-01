@@ -235,8 +235,6 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         }
         getDrawing().updateStyleManager();
 
-        // FIXME calling updateAllCss and then fireLayoutInvalidated
-        //       is faster than calling fireStyleInvalidated.
         getDrawing().updateAllCss(subject);
         for (Figure f : getDrawing().preorderIterable()) {
             getDrawingModel().fireLayoutInvalidated(f);

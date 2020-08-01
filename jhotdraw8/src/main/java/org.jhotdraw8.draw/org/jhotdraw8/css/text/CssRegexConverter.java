@@ -66,9 +66,11 @@ public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
     @Override
     protected <TT extends RegexReplace> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_FUNCTION, "replace"));
-        out.accept(new CssToken(CssTokenType.TT_STRING, value.getFind()));
+        String find = value.getFind();
+        out.accept(new CssToken(CssTokenType.TT_STRING, find == null ? "" : find));
         out.accept(new CssToken(CssTokenType.TT_COMMA));
-        out.accept(new CssToken(CssTokenType.TT_STRING, value.getReplace()));
+        String replace = value.getReplace();
+        out.accept(new CssToken(CssTokenType.TT_STRING, replace == null ? "" : replace));
         out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
     }
 

@@ -69,6 +69,6 @@ public class PathConnector extends LocatorConnector {
         }
 
         IntersectionResultEx i = IntersectLinePathIterator.intersectLinePathIteratorEx(s.getX(), s.getY(), e.getX(), e.getY(), pit);
-        return i.getLast();
+        return i.peekLast();
     }
 }

@@ -18,7 +18,7 @@ import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -96,7 +96,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         if (startTarget == null && endTarget == null) {
             return ImmutableSets.emptySet();
         }
-        Set<Figure> ctf = new HashSet<>();
+        Set<Figure> ctf = new LinkedHashSet<>();
         if (startTarget != null) {
             ctf.add(startTarget);
         }

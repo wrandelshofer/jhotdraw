@@ -16,14 +16,13 @@ import java.util.function.Consumer;
 public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Spliterator<E> {
     private final ReadOnlyList<E> list;
     private int index;
-    @Nullable
-    final Integer size;
+    final int size;
 
     public ReadOnlyListIterator(@NonNull ReadOnlyList<E> list) {
-        this(list, 0, null);
+        this(list, 0, list.size());
     }
 
-    public ReadOnlyListIterator(ReadOnlyList<E> list, int index, @Nullable Integer size) {
+    public ReadOnlyListIterator(@NonNull ReadOnlyList<E> list, int index, int size) {
         this.list = list;
         this.size = size;
         this.index = index;
@@ -35,7 +34,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>, Sp
     }
 
     private int getSize() {
-        return size == null ? list.size() : size;
+        return size;
     }
 
     @Override

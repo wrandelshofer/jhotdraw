@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,6 +55,27 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
             throw new NoSuchElementException();
         }
         return get(index);
+    }
+
+    /**
+     * Peeks the first element of the list.
+     *
+     * @return the first element or null if the list is empty
+     */
+    @Nullable
+    default E peekFirst() {
+        return isEmpty() ? null : get(0);
+    }
+
+    /**
+     * Peeks the last element of the list.
+     *
+     * @return the last element or null if the list is empty
+     */
+    @Nullable
+    default E peekLast() {
+        int index = size() - 1;
+        return index < 0 ? null : get(index);
     }
 
     /**

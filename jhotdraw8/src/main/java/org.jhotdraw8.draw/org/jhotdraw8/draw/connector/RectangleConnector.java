@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.connector;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
@@ -36,6 +37,7 @@ public class RectangleConnector extends LocatorConnector {
     }
 
     @Override
+    @Nullable
     public IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
@@ -61,6 +63,6 @@ public class RectangleConnector extends LocatorConnector {
 
         IntersectionResultEx i = IntersectAABBLine.intersectLineAABBEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
-        return i.getLast();
+        return i.peekLast();
     }
 }
