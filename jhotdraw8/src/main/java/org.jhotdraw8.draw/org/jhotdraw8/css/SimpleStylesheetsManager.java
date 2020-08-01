@@ -42,7 +42,9 @@ import java.util.stream.StreamSupport;
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
+    @NonNull
     private final CssParser parser = new CssParser();
+    @NonNull
     private SelectorModel<E> selectorModel;
     /**
      * Cache for parsed user agent stylesheets.
@@ -50,30 +52,34 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * The key is either an URI or a literal CSS String for which we cache the
      * data. The value contains the parsed stylesheet entry.
      */
+    @NonNull
     private LinkedHashMap<Object, StylesheetEntry> userAgentList = new LinkedHashMap<>();
     /**
      * @see #userAgentList
      */
+    @NonNull
     private LinkedHashMap<Object, StylesheetEntry> authorList = new LinkedHashMap<>();
     /**
      * @see #userAgentList
      */
+    @NonNull
     private LinkedHashMap<Object, StylesheetEntry> inlineList = new LinkedHashMap<>();
     @NonNull
-    private Executor executor = Executors.newCachedThreadPool();
+    private final Executor executor = Executors.newCachedThreadPool();
     @Nullable
     private Map<String, ImmutableList<CssToken>> cachedAuthorCustomProperties;
     @Nullable
     private Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
     @Nullable
     private Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
+    @NonNull
     private final static Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
 
-    public SimpleStylesheetsManager(SelectorModel<E> selectorModel) {
+    public SimpleStylesheetsManager(@NonNull SelectorModel<E> selectorModel) {
         this(selectorModel, Collections.emptyList());
     }
 
-    public SimpleStylesheetsManager(SelectorModel<E> selectorModel, @Nullable List<CssFunction<E>> functions) {
+    public SimpleStylesheetsManager(@NonNull SelectorModel<E> selectorModel, @NonNull List<CssFunction<E>> functions) {
         this.selectorModel = selectorModel;
         this.functions = functions;
     }
@@ -94,12 +100,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    public void getSelectorModel(SelectorModel<E> newValue) {
+    public void setSelectorModel(SelectorModel<E> newValue) {
         selectorModel = newValue;
     }
 
     @Override
-    public SelectorModel<E> getSelectorModel() {
+    public @NonNull SelectorModel<E> getSelectorModel() {
         return selectorModel;
     }
 
@@ -422,13 +428,14 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
 
+    @NonNull
     private List<CssFunction<E>> functions = new ArrayList<>();
 
-    public List<CssFunction<E>> getFunctions() {
+    public @NonNull List<CssFunction<E>> getFunctions() {
         return functions;
     }
 
-    public void setFunctions(List<CssFunction<E>> functions) {
+    public void setFunctions(@NonNull List<CssFunction<E>> functions) {
         this.functions = functions;
     }
 
@@ -489,14 +496,15 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
         @Nullable
         private final URI uri;
-        private StyleOrigin origin;
+        @NonNull
+        private final StyleOrigin origin;
         @Nullable
         private FutureTask<Stylesheet> future;
         @Nullable
         private Stylesheet stylesheet;
 
 
-        public StylesheetEntry(StyleOrigin origin, @NonNull URI uri) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri) {
             this.origin = origin;
             this.uri = uri;
             this.future = new FutureTask<>(() -> {
@@ -534,6 +542,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
+        @NonNull
         public StyleOrigin getOrigin() {
             return origin;
         }

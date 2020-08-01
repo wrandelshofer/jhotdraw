@@ -142,9 +142,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     private Node node;
     @NonNull
-    private Map<QualifiedName, String> helpTexts = new HashMap<>();
+    private final Map<QualifiedName, String> helpTexts = new HashMap<>();
     @NonNull
-    private List<LookupEntry> lookupTable = new ArrayList<>();
+    private final List<LookupEntry> lookupTable = new ArrayList<>();
     @FXML
     private Button applyButton;
     @FXML

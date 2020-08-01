@@ -105,6 +105,7 @@ public interface StylesheetsManager<E> {
      *
      * @return the selector model
      */
+    @NonNull
     SelectorModel<E> getSelectorModel();
 
     /**
