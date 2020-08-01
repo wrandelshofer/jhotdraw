@@ -5,11 +5,11 @@
 package org.jhotdraw8.binding;
 
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableNumberValue;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import javafx.collections.FXCollections;
@@ -22,6 +22,7 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Provides bindings with conversion functions.
@@ -301,7 +302,7 @@ public class CustomBinding {
         changeListener.changed(value, !value.getValue(), value.getValue());
     }
 
-    public static DoubleBinding compute(DoubleSupplier op, ObservableNumberValue... dependendies) {
+    public static DoubleBinding computeDouble(DoubleSupplier op, ObservableValue<?>... dependendies) {
         return new DoubleBinding() {
             {
                 super.bind(dependendies);
@@ -310,6 +311,26 @@ public class CustomBinding {
             @Override
             protected double computeValue() {
                 return op.getAsDouble();
+            }
+
+            @Override
+            public ObservableList<?> getDependencies() {
+                return FXCollections.observableArrayList(dependendies);
+            }
+
+        };
+
+    }
+
+    public static <T> ObjectBinding<T> compute(Supplier<T> op, ObservableValue<?>... dependendies) {
+        return new ObjectBinding<T>() {
+            {
+                super.bind(dependendies);
+            }
+
+            @Override
+            protected T computeValue() {
+                return op.get();
             }
 
             @Override

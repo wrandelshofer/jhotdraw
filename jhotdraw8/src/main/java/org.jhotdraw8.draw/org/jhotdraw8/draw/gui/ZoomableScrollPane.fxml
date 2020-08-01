@@ -9,7 +9,7 @@
 <?import javafx.scene.SubScene?>
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0"
           xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="org.jhotdraw8.draw.gui.ScrollableSubscenePanel">
+          fx:controller="org.jhotdraw8.draw.gui.ZoomableScrollPane">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
         <ColumnConstraints hgrow="NEVER" minWidth="10.0"/>
@@ -24,13 +24,13 @@
         <StackPane fx:id="viewportPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                    minHeight="0.0" minWidth="0.0">
             <children>
-                <StackPane fx:id="backgroundPane"/>
+                <StackPane fx:id="background"/>
                 <SubScene fx:id="subScene" height="200.0" width="200.0">
                     <root>
                         <Region/>
                     </root>
                 </SubScene>
-                <StackPane fx:id="foregroundPane"/>
+                <StackPane fx:id="foreground"/>
             </children>
         </StackPane>
     </children>

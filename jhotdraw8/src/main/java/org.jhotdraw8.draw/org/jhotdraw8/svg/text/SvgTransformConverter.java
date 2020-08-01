@@ -6,6 +6,7 @@ package org.jhotdraw8.svg.text;
 
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
@@ -31,7 +32,9 @@ import static java.lang.Math.tan;
  * <pre>
  * Transform     = ( Matrix | Translate | Scale | Rotate | SkewX | SkewY ) ;
  *
- * Matrix        = "matrix(" , [S] , a , C , b , C , c , C , d , C , e , C , f , [S], ")" ;
+ * Matrix        = "matrix(" ,
+ *                 [S] , a , C , b , C , c , C , d , C , e , C , f , [S],
+ *                 ")" ;
  * Translate     = "translate(" , [S] , tx , [ C , ty ] , [S], ")" ;
  * Scale         = "scale(" , [S] , sx , [ C , sy ] , [S], ")" ;
  * Rotate        = "rotate(" , [S] , rotate-angle , [ C , cs, C , cy ] , [S], ")" ;
@@ -39,7 +42,7 @@ import static java.lang.Math.tan;
  * SkewY         = "skewY(" , [S] , skew-angle , [S], ")" ;
  *
  * C             = ( S , { S } | { S } , "," , { S } ) ;
- * S             = (* white space *)
+ * S             = (* white space *) ;
  * </pre>
  * <p>
  * References:
@@ -64,7 +67,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTy()));
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-/*        } else if (tx instanceof Scale) {
+        } else if (tx instanceof Scale) {
             Scale ts = (Scale) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "scale"));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getX()));
@@ -76,7 +79,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                 System.err.println("SvgTransformConverter pivot not implemented yet");
             }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-*/
+
         } else if (tx instanceof Rotate) {
             Rotate tr = (Rotate) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "rotate"));

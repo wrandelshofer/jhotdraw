@@ -141,8 +141,7 @@ public class Geom {
     public static double clamp(double value, double min, double max) {
         if (Double.isNaN(value) || value < min) {
             return min;
-        }
-        if (value > max) {
+        } else if (value > max) {
             return max;
         }
         return value;

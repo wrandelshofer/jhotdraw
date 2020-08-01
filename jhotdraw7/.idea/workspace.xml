@@ -24,9 +24,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
+      <change afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.samples.misc/org/jhotdraw8/samples/mini/ZoomableScrollPaneSampleMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/AbstractDrawingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/AbstractDrawingView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/io/SimpleXmlIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/io/SimpleXmlIO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/binding/CustomBinding.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/binding/CustomBinding.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ScrollableSubscenePanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ScrollableSubscenePanel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/geom/Geom.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/geom/Geom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/text/SvgTransformConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/text/SvgTransformConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.samples.misc/org/jhotdraw8/samples/mini/ScrollableSubscenePanelSampleMain.java" beforeDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -65,6 +71,8 @@
     <property name="Downloaded.Files.Path.Enabled" value="true" />
     <property name="Repository.Attach.JavaDocs" value="true" />
     <property name="Repository.Attach.Sources" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -95,53 +103,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.SVG">
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <module name="org.jhotdraw7.nanoxml" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
-      <module name="org.jhotdraw7.nanoxml" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -151,6 +112,53 @@
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="org.jhotdraw7.nanoxml" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="org.jhotdraw7.nanoxml" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
