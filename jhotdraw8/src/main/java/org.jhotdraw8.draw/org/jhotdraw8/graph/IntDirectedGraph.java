@@ -158,5 +158,4 @@ public interface IntDirectedGraph {
         }
         return new MySpliterator(vidx, 0, getNextCount(vidx));
     }
-
 }

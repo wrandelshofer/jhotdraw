@@ -65,7 +65,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     @NonNull
     private HashMap<WriteableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new HashMap<>();
     @NonNull
-    private Map<Class<? extends Figure>, Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>>> figureToMetaMap = new HashMap<>();
+    private ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
 
 
     @Override
@@ -139,12 +139,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public boolean hasAttribute(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
-        for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if (key.getName().equals(attributeName) && (key instanceof WriteableStyleableMapAccessor)) {
-                return true;
-            }
-        }
-        return false;
+        return getMetaMap(element).containsKey(new QualifiedName(namespace, attributeName));
     }
 
     @Override
@@ -404,11 +399,8 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     private Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> getMetaMap(@NonNull Figure elem) {
-
-        Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = figureToMetaMap.get(elem.getClass());
-        if (metaMap == null) {
-            metaMap = new HashMap<>();
-            figureToMetaMap.put(elem.getClass(), metaMap);
+        return figureToMetaMap.computeIfAbsent(elem.getClass(), klass -> {
+            Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
             for (MapAccessor<?> k : elem.getSupportedKeys()) {
                 if (k instanceof WriteableStyleableMapAccessor) {
@@ -421,8 +413,9 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     }
                 }
             }
-        }
-        return metaMap;
+
+            return metaMap;
+        });
     }
 
     @Override
@@ -474,7 +467,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     /**
-     * XXX All selector models must treat the keyword "initial"!
+     * XXX All selector models must treat the keywords "initial","inherit","revert","unset".
      *
      * @param value the token
      * @return true if the value is "initial".

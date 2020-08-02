@@ -26,26 +26,35 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
         StringBuilder buf = new StringBuilder();
         List<CssToken> temp = new ArrayList<>();
 
+        int count = 0;
+
+        // skip white space
+        while (tt.next() == CssTokenType.TT_S) {
+        }
+        tt.pushBack();
+
         functionProcessor.processToken(element, tt, temp::add);
         for (CssToken t : temp) {
             switch (t.getType()) {
             case CssTokenType.TT_STRING:
             case CssTokenType.TT_URL:
                 buf.append(t.getStringValue());
+                count++;
                 break;
             case CssTokenType.TT_NUMBER:
             case CssTokenType.TT_DIMENSION:
             case CssTokenType.TT_PERCENTAGE:
                 buf.append(t.fromToken());
-                break;
-            case CssTokenType.TT_S:
-            case CssTokenType.TT_IDENT:
-                // skip
+                count++;
                 break;
             default:
                 throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
             }
         }
+        if (count == 0) {
+            throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", tt.getStartPosition());
+        }
+
         return buf.toString();
     }
 

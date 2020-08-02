@@ -104,7 +104,6 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     protected void callObservers(StyleOrigin origin, MapChangeListener.Change<K, V> change) {
-
         if (origin == StyleOrigin.USER) {
             if (originalMap.changeListenerList != null) {
                 for (MapChangeListener<? super K, ? super V> l : originalMap.changeListenerList) {

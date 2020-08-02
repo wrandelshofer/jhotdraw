@@ -115,9 +115,15 @@ public class VertexPath<V> {
     }
 
     @NonNull
-    public VertexPath<V> joinedPath(@NonNull VertexPath<V> nextPath) {
+    public VertexPath<V> appendPath(@NonNull VertexPath<V> nextPath) {
         if (isEmpty()) {
             return nextPath;
+        }
+        if (nextPath.isEmpty()) {
+            return this;
+        }
+        if (!getLastVertex().equals(nextPath.getFirstVertex())) {
+            throw new IllegalArgumentException("Cannot join paths. This last vertex: " + this.getLastVertex() + " next first vertex: " + nextPath.getFirstVertex());
         }
         return new VertexPath<V>(ImmutableLists.addAll(this.vertices.subList(0, numOfVertices() - 1), nextPath.vertices));
     }

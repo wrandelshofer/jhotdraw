@@ -8,7 +8,6 @@ package org.jhotdraw8.tree;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.ObservableMixin;
 import org.jhotdraw8.event.Listener;
 
@@ -46,7 +45,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @return the root
      */
-    @Nullable
+    @NonNull
     ObjectProperty<N> rootProperty();
 
     /**

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.graph;
 
+import java.util.Arrays;
+
 /**
  * AbstractBidiGraphBuilder.
  *
@@ -73,13 +75,9 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder imple
     @Override
     protected void buildAddArrow(int vidxa, int vidxb) {
         if (prevArrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
-            int[] tmpArrowHeads = prevArrowHeads;
-            prevArrowHeads = new int[prevArrowHeads.length * ARROWS_NUM_FIELDS];
-            System.arraycopy(tmpArrowHeads, 0, prevArrowHeads, 0, tmpArrowHeads.length);
+            prevArrowHeads = Arrays.copyOf(prevArrowHeads, arrowCount * ARROWS_NUM_FIELDS * 2);
         }
-
         doAddArrow(vidxb, vidxa, prevArrowHeads, prevLastArrow);
-
         super.buildAddArrow(vidxa, vidxb);
     }
 
@@ -102,7 +100,6 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder imple
         if (xi == -1) {
             throw new RuntimeException("programming error");
         }
-
         buildRemoveArrow(x, xi, prevLastArrow, prevArrowHeads, arrowCount);
         super.buildRemoveArrow(vidx, i);
     }

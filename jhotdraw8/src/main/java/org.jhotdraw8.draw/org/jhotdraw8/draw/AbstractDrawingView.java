@@ -170,7 +170,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
 
     @Override
-    public ReadOnlySetProperty<Figure> selectedFiguresProperty() {
+    public @NonNull ReadOnlySetProperty<Figure> selectedFiguresProperty() {
         return selectedFigures;
     }
 

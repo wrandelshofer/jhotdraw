@@ -9,6 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.event.Listener;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,28 +84,51 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         return item.getValue();
     }
 
-    protected void onNodeAdded(N f, N parentE, int index) {
-        TreeItem<N> item = items.computeIfAbsent(f, TreeItem::new);
-        TreeItem<N> newParent = items.get(parentE);
+    protected void onNodeAdded(N node, N parentE, int index) {
+        TreeItem<N> item = items.computeIfAbsent(node, TreeItem::new);
+        TreeItem<N> parentItem = items.get(parentE);
         if (reversed) {
-            newParent.getChildren().add(newParent.getChildren().size() - index, item);
+            parentItem.getChildren().add(parentItem.getChildren().size() - index, item);
         } else {
-            newParent.getChildren().add(index, item);
+            parentItem.getChildren().add(index, item);
         }
     }
 
-    protected void onNodeAddedToTree(N f, N parent, int index) {
+    protected void onNodeAddedToTreeOld(N node, N parent, int index) {
         TreeModel<N> m = getTreeModel();
-        TreeItem<N> item = new TreeItem<>(f);
+        TreeItem<N> item = new TreeItem<>(node);
         item.setExpanded(false);
-        items.put(f, item);
+        items.put(node, item);
         int childIndex = 0;
-        for (int i = 0, n = m.getChildCount(f); i < n; i++) {
-            N child = m.getChild(f, i);
-            onNodeAddedToTree(child, f, childIndex);
-            onNodeAdded(child, f, childIndex);
+        for (int i = 0, n = m.getChildCount(node); i < n; i++) {
+            N child = m.getChild(node, i);
+            onNodeAddedToTree(child, node, childIndex);
+            onNodeAdded(child, node, childIndex);
             childIndex++;
         }
+    }
+
+    protected void onNodeAddedToTree(N node, N parent, int index) {
+        TreeModel<N> m = getTreeModel();
+        TreeItem<N> item = new TreeItem<>(node);
+        item.setExpanded(false);
+        items.put(node, item);
+        int childIndex = 0;
+        Deque<TreeItem<N>> deque = new ArrayDeque<>();
+        for (int i = 0, n = m.getChildCount(node); i < n; i++) {
+            N child = m.getChild(node, i);
+            onNodeAddedToTree(child, node, childIndex);
+            // Performance: this is extremely slow
+            TreeItem<N> childItem = items.computeIfAbsent(child, TreeItem::new);
+            if (reversed) {
+                deque.addFirst(childItem);
+            } else {
+                deque.addLast(childItem);
+            }
+            childIndex++;
+        }
+        // instead of calling onNodeAdded for every child, we this instead
+        item.getChildren().addAll(deque);
     }
 
     protected void onNodeInvalidated(N f) {

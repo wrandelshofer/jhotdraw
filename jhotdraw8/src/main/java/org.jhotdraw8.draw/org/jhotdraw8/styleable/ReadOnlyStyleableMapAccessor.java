@@ -37,7 +37,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
     CssMetaData<@NonNull ? extends @NonNull Styleable, T> getCssMetaData();
 
     /**
-     * FIXME this is horribly inefficient since we have already parsed the CSS.
+     * Gets the converter.
      *
      * @return the converter
      */

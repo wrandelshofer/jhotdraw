@@ -471,7 +471,7 @@ public class GraphSearch {
 
 
     /**
-     * Returns all stronlgy connected components in the specified graph.
+     * Returns all strongly connected components in the specified graph.
      *
      * @param graph the graph
      * @param <V>   the vertex type

@@ -59,9 +59,8 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<E> rootProperty() {
+    public @NonNull ObjectProperty<E> rootProperty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

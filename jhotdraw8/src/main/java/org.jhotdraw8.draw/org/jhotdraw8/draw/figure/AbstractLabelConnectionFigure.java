@@ -10,6 +10,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -183,6 +184,12 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         Connector labelConnector = get(LABEL_CONNECTOR);
         final Point2D perp;
         final Point2D tangent;
+
+        Text textNode = new Text();
+
+        updateTextNode(ctx, textNode);
+        Bounds textNodeLayoutBounds = textNode.getLayoutBounds();
+
         if (labelConnector != null && labelTarget != null) {
             labeledLoc = labelConnector.getPositionInWorld(this, labelTarget);
             tangent = labelConnector.getTangentInWorld(this, labelTarget).normalize();
@@ -192,15 +199,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             double hposTranslate = 0;
             switch (getStyledNonNull(TEXT_HPOS)) {
             case CENTER: {
-                Bounds b = getTextBounds(ctx);
-                hposTranslate = b.getWidth() * -0.5;
+                hposTranslate = textNodeLayoutBounds.getWidth() * -0.5;
                 break;
             }
             case LEFT:
                 break;
             case RIGHT: {
-                Bounds b = getTextBounds(ctx);
-                hposTranslate = -b.getWidth();
+                hposTranslate = -textNodeLayoutBounds.getWidth();
                 break;
             }
             }
@@ -246,11 +251,11 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 transforms.add(rotate);
             }
             if (layoutTransforms) {
-                setTransforms(transforms.toArray(new Transform[transforms.size()]));
+                setTransforms(transforms.toArray(new Transform[0]));
             }
         }
 
-        Bounds bconnected = computeLayoutBounds();
+        Bounds bconnected = computeLayoutBounds(ctx, textNode);
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
         invalidateTransforms();
     }

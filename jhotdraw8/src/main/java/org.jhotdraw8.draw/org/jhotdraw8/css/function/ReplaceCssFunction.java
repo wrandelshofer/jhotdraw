@@ -75,7 +75,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
 
     @Override
     public String getHelpText() {
-        return getName() + "(⟨string⟩, ⟨regex⟩, ⟨replacement⟩)"
-                + "\n    Replaces matches of ⟨regex⟩ by ⟨replacement⟩ in the given ⟨string⟩.";
+        return getName() + "(〈string〉, 〈regex〉, 〈replacement〉)"
+                + "\n    Replaces matches of 〈regex〉 by 〈replacement〉 in the given 〈string〉.";
     }
 }

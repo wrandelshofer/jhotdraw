@@ -86,12 +86,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private void doSetAttribute(@NonNull SelectorModel<E> selectorModel1, @NonNull E elem, @NonNull StyleOrigin styleOrigin,
                                 @Nullable String namespace, @NonNull String name, @Nullable ImmutableList<CssToken> value,
-                                Map<String, ImmutableList<CssToken>> customProperties) throws ParseException {
+                                Map<String, ImmutableList<CssToken>> customProperties,
+                                @Nullable CssFunctionProcessor<E> functionProcessor) throws ParseException {
         if (value == null) {
             selectorModel1.setAttribute(elem, styleOrigin, namespace, name, null);
         } else {
-            if (!functions.isEmpty()) {
-                final CssFunctionProcessor<E> functionProcessor = createCssFunctionProcessor(selectorModel1, customProperties);
+            if (functionProcessor != null) {
                 ImmutableList<CssToken> processed = preprocessTerms(elem, functionProcessor, value);
                 selectorModel1.setAttribute(elem, styleOrigin, namespace, name, processed);
             } else {
@@ -230,6 +230,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
         // Compute custom properties
         Map<String, ImmutableList<CssToken>> customProperties = computeCustomProperties();
+        final CssFunctionProcessor<E> functionProcessor = functions.isEmpty() ? null : createCssFunctionProcessor(selectorModel, customProperties);
 
         StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
                 .stream()
@@ -242,7 +243,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
                         try {
                             Declaration d = entry.getValue();
-                            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties);
+                            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
                         }
@@ -255,7 +256,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
                         try {
                             Declaration d = entry.getValue();
-                            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties);
+                            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
                         }
@@ -265,7 +266,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
                         try {
                             Declaration d = entry.getValue();
-                            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties);
+                            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
                         }
@@ -291,7 +292,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         Map<String, ImmutableList<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
                         for (Map.Entry<QualifiedName, ImmutableList<CssToken>> entry : inlineDeclarations.entrySet()) {
                             try {
-                                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties);
+                                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
                             } catch (ParseException e) {
                                 LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
                             }
@@ -483,7 +484,6 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     @NonNull
     private ImmutableList<CssToken> preprocessTerms(E elem, @NonNull CssFunctionProcessor<E> processor, @NonNull ImmutableList<CssToken> terms) {
-        String value;
         try {
             return processor.process(elem, terms);
         } catch (ParseException e) {

@@ -51,7 +51,7 @@ public class CssStringConverter extends AbstractCssConverter<String> {
     @Override
     public String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
-            throw new ParseException("Css String expected." + tt.getToken(), tt.getStartPosition());
+            throw new ParseException("Css String expected. " + tt.getToken(), tt.getStartPosition());
         }
         return tt.currentStringNonNull();
     }

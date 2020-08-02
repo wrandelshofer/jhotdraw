@@ -25,11 +25,10 @@ public class RegexReplace {
     private transient Pattern pattern;
 
     public RegexReplace() {
-        this.find = null;
-        this.replace = null;
+        this(null, null);
     }
 
-    public RegexReplace(String find, String replace) {
+    public RegexReplace(@Nullable String find, @Nullable String replace) {
         this.find = find;
         this.replace = replace;
     }

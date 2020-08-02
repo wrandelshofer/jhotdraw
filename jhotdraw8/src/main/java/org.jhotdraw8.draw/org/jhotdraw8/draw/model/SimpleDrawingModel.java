@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.BiFunction;
 
 /**
@@ -113,7 +115,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @NonNull
     private final Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
-    @Nullable
+    @NonNull
     private final ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
         public void set(@Nullable Drawing newValue) {
@@ -141,10 +143,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private void onRootChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (listenOnDrawing) {
             if (oldValue != null) {
-                //     oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
+                     oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
             }
             if (newValue != null) {
-                //      newValue.getPropertyChangeListeners().add(propertyChangeHandler);
+                newValue.getPropertyChangeListeners().add(propertyChangeHandler);
             }
         }
         fireTreeModelEvent(TreeModelEvent.rootChanged(this, newValue));
@@ -180,16 +182,14 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         dirties.remove(figure);
     }
 
-    @Nullable
     @Override
-    public ObjectProperty<Drawing> drawingProperty() {
+    public @NonNull ObjectProperty<Drawing> drawingProperty() {
         return root;
     }
 
-    @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    public ObjectProperty<Figure> rootProperty() {
+    public @NonNull ObjectProperty<Figure> rootProperty() {
         return (ObjectProperty<Figure>) (ObjectProperty<?>) root;
     }
 
@@ -444,7 +444,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform) && visited.add(f)) {
-                    for (Figure a : f.preorderIterable()) {
+                    for (Enumerator<Figure> i = f.preorderSpliterator(); i.moveNext(); ) {
+                        final Figure a = i.current();
                         if (visited.add(a)) {
                             if (a instanceof TransformableFigure) {
                                 markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
@@ -495,8 +496,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
                 if (visited.add(f)) {
                     if (dm.intersects(dmLayout)) {
-                        for (Figure a : f.preorderIterable()) {
-                            todo.add(a);
+                        //noinspection StatementWithEmptyBody
+                        for (Spliterator<Figure> i = f.preorderSpliterator(); i.tryAdvance(todo::add); ) {
+                            // empty
                         }
                     } else if (dm.intersects(dmLayoutObservers)) {
                         todo.addAll(f.getLayoutObservers());

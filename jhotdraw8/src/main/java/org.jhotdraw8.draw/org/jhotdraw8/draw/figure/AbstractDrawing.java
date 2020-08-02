@@ -61,6 +61,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setManaged(false);
+        g.setAutoSizeChildren(false);
         Rectangle background = new Rectangle();
         background.setId("background");
         g.getProperties().put("background", background);

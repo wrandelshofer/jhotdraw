@@ -93,19 +93,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         }
     }
 
-    private final static int MAX_RECURSION_DEPTH = 4;
-    private int recursion;
-
     public final void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
-        if (++recursion > MAX_RECURSION_DEPTH) {
-            recursion = 0;
-            throw new ParseException("Max recursion depth exceeded", tt.getStartPosition());
-        }
-        try {
             doProcessToken(element, tt, out);
-        } finally {
-            --recursion;
-        }
     }
 
     protected void doProcessToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException {

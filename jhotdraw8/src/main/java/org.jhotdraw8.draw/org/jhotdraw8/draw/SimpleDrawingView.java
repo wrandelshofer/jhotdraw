@@ -47,6 +47,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
@@ -135,7 +136,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * The drawingProperty holds the drawing that is presented by this drawing
      * view.
      */
-    @Nullable
+    @NonNull
     private final NonNullProperty<DrawingModel> drawingModel //
             = new NonNullProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
         @Nullable
@@ -456,7 +457,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    public ReadOnlyObjectProperty<Drawing> drawingProperty() {
+    public @NonNull ReadOnlyObjectProperty<Drawing> drawingProperty() {
         return drawing.getReadOnlyProperty();
     }
 
@@ -736,7 +737,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    public ReadOnlyBooleanProperty focusedProperty() {
+    public @NonNull ReadOnlyBooleanProperty focusedProperty() {
         return focused.getReadOnlyProperty();
     }
 
@@ -872,7 +873,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         drawingPane.getChildren().clear();
         activeParent.set(null);
         Drawing d = getModel().getDrawing();
-        drawing.set(d);
+       // drawing.set(d);
         if (d != null) {
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
@@ -925,7 +926,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             oldValue.removeTreeModelListener(treeModelHandler);
             oldValue.removeDrawingModelListener(drawingModelHandler);
             oldValue.removeListener(modelInvalidationListener);
-            drawing.setValue(null);
         }
         if (newValue != null) {
             newValue.addDrawingModelListener(drawingModelHandler);
@@ -1049,6 +1049,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         node.sceneProperty().addListener(this::updateScrollPaneListeners);
 
         set(SYSTEM_COLOR_CONVERTER_KEY, new MacOSSystemColorConverter());
+
+        CustomBinding.bind(drawing, drawingModel, DrawingModel::drawingProperty);
+
     }
 
     private void invalidateConstrainerNode() {
@@ -1129,9 +1132,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         return margin;
     }
 
-    @Nullable
     @Override
-    public NonNullProperty<DrawingModel> modelProperty() {
+    public @NonNull NonNullProperty<DrawingModel> modelProperty() {
         return drawingModel;
     }
 

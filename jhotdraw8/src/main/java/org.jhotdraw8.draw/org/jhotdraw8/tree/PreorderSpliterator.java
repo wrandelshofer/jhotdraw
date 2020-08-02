@@ -4,14 +4,12 @@
  */
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.Spliterators.AbstractSpliterator;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -20,7 +18,7 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class PreorderSpliterator<T> extends AbstractSpliterator<T> {
+public class PreorderSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
     private final Function<T, Iterable<T>> getChildrenFunction;
     private final Deque<Iterator<T>> stack = new ArrayDeque<>();
 
@@ -31,21 +29,20 @@ public class PreorderSpliterator<T> extends AbstractSpliterator<T> {
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super T> consumer) {
+    public boolean moveNext() {
         Iterator<T> iter = stack.peek();
         if (iter == null) {
             return false;
         }
 
-        T node = iter.next();
+        current = iter.next();
         if (!iter.hasNext()) {
             stack.pop();
         }
-        Iterator<T> children = getChildrenFunction.apply(node).iterator();
+        Iterator<T> children = getChildrenFunction.apply(current).iterator();
         if (children.hasNext()) {
             stack.push(children);
         }
-        consumer.accept(node);
         return true;
     }
 }

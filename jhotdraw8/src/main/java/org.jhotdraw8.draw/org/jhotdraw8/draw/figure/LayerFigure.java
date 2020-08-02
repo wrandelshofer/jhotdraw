@@ -105,6 +105,8 @@ public class LayerFigure extends AbstractCompositeFigure
     @Override
     public Node createNode(RenderContext ctx) {
         Group n = new Group();
+        n.setManaged(false);
+        n.setAutoSizeChildren(false);
         return n;
     }
 

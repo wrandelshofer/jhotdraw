@@ -252,6 +252,18 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
+     * Returns a spliterator which can iterate through this figure and all its
+     * descendants in preorder sequence.
+     *
+     * @return the iterable
+     */
+    @NonNull
+    default PreorderSpliterator<T> preorderSpliterator() {
+        @SuppressWarnings("unchecked") T t = (T) this;
+        return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
+    }
+
+    /**
      * @param <T> the type of the tree nodes
      */
     class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {

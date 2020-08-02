@@ -32,7 +32,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLineConnectionFigure() {
-        this(0, 0, 1, 1);
+        this(0, 0, 0, 0);
     }
 
     public AbstractLineConnectionFigure(@NonNull Point2D start, @NonNull Point2D end) {
@@ -40,8 +40,10 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     public AbstractLineConnectionFigure(double startX, double startY, double endX, double endY) {
-        set(START, new CssPoint2D(startX, startY));
-        set(END, new CssPoint2D(endX, endY));
+        set(START_X, new CssSize(startX));
+        set(START_Y, new CssSize(startY));
+        set(END_X, new CssSize(endX));
+        set(END_Y, new CssSize(endY));
     }
 
     @Override

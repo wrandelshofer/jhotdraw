@@ -109,13 +109,9 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      */
     protected void buildAddArrow(int a, int b) {
         if (nextArrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
-            int[] tmpArrowHeads = nextArrowHeads;
-            nextArrowHeads = new int[nextArrowHeads.length * ARROWS_NUM_FIELDS];
-            System.arraycopy(tmpArrowHeads, 0, nextArrowHeads, 0, tmpArrowHeads.length);
+            nextArrowHeads = Arrays.copyOf(nextArrowHeads, arrowCount * ARROWS_NUM_FIELDS * 2);
         }
-
         doAddArrow(a, b, nextArrowHeads, nextLastArrow);
-
         arrowCount++;
     }
 
@@ -145,9 +141,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     protected void buildAddVertex() {
         vertexCount++;
         if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
-            int[] tmp = nextLastArrow;
-            nextLastArrow = new int[nextLastArrow.length * 2 * LASTARROW_NUM_FIELDS];
-            System.arraycopy(tmp, 0, nextLastArrow, 0, tmp.length);
+            nextLastArrow = Arrays.copyOf(nextLastArrow, vertexCount * LASTARROW_NUM_FIELDS * 2);
         }
     }
 
@@ -168,9 +162,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         }
         vertexCount = newValue;
         if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
-            int[] tmp = nextLastArrow;
-            nextLastArrow = new int[nextLastArrow.length * LASTARROW_NUM_FIELDS];
-            System.arraycopy(tmp, 0, nextLastArrow, 0, tmp.length);
+            nextLastArrow = Arrays.copyOf(nextLastArrow, vertexCount * LASTARROW_NUM_FIELDS * 2);
         }
 
     }

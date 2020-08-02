@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -34,7 +33,7 @@ public class LabelFigure extends AbstractLabelFigure
         this(position.getX(), position.getY(), text);
     }
 
-    public LabelFigure(double x, double y, String text, @Nullable Object... keyValues) {
+    public LabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {

@@ -49,7 +49,7 @@ import java.util.ResourceBundle;
  *     .viewport
  *     ..background
  *     ..subScene
- *     ......content
+ *     ...content
  *     ..foreground
  * </pre>
  */

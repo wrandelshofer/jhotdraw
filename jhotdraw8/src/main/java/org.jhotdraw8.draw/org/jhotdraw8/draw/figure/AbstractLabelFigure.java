@@ -69,6 +69,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public Node createNode(RenderContext drawingView) {
         Group g = new Group();
+        g.setManaged(false);
         g.setAutoSizeChildren(false);
         Path p = new Path();
         Text text = new Text();
@@ -104,8 +105,12 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      */
     @NonNull
     public Bounds computeLayoutBounds() {
-        Text textNode = new Text();
-        updateTextNode(new SimpleRenderContext(), textNode);
+        return computeLayoutBounds(new SimpleRenderContext(), new Text());
+    }
+
+    @NonNull
+    protected Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
+        updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = getStyledNonNull(PADDING).getConvertedValue();
 
@@ -153,7 +158,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     @Override
     public void layout(@NonNull RenderContext ctx) {
-        Bounds b = computeLayoutBounds();
+        Bounds b = computeLayoutBounds(ctx, new Text());
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, b);
     }
 
@@ -207,7 +212,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
         // We must set the font before we set the text, so that JavaFx does not need to retrieve
         // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
-        tn.setText(getText(null));
         final String text = getText(ctx);
         if (!Objects.equals(text, tn.getText())) {
             tn.setText(text);

@@ -89,7 +89,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @return the root
      */
-    @Nullable ObjectProperty<Drawing> drawingProperty();
+    @NonNull ObjectProperty<Drawing> drawingProperty();
 
     /**
      * Adds a listener for {@code DrawingModelEvent}s.

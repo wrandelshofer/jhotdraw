@@ -24,15 +24,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
-      <change afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.samples.misc/org/jhotdraw8/samples/mini/ZoomableScrollPaneSampleMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/binding/CustomBinding.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/binding/CustomBinding.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ScrollableSubscenePanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ScrollableSubscenePanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/geom/Geom.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/geom/Geom.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/text/SvgTransformConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/svg/text/SvgTransformConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.samples.misc/org/jhotdraw8/samples/mini/ScrollableSubscenePanelSampleMain.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.java" afterDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -173,12 +166,12 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Teddy" />
-      <item itemvalue="Application.Pert" />
       <item itemvalue="Application.Draw" />
       <item itemvalue="Application.Net" />
-      <item itemvalue="Application.ODG" />
+      <item itemvalue="Application.Pert" />
       <item itemvalue="Application.SVG" />
+      <item itemvalue="Application.ODG" />
+      <item itemvalue="Application.Teddy" />
     </list>
   </component>
   <component name="StructureViewFactory">

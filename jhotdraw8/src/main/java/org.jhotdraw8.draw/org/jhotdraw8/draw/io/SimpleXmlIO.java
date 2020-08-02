@@ -55,7 +55,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -114,14 +113,14 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
      */
     public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-    @Nullable
+
     protected List<String> comments;
     protected FigureFactory figureFactory;
     /**
      * Performance: This does not need to be a linked hash map, because we iterate in parallel over it.
      */
     @NonNull
-    protected Map<Figure, Element> figureToElementMap = new HashMap<>();
+    protected Map<Figure, Element> figureToElementMap = new ConcurrentHashMap<>();
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
@@ -173,10 +172,11 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
 
     @Nullable
     private String getAttribute(@NonNull Element elem, String unqualifiedName) {
+        String value;
         if (namespaceURI == null) {
             return elem.getAttribute(unqualifiedName);
-        } else if (elem.hasAttributeNS(namespaceURI, unqualifiedName)) {
-            return elem.getAttributeNS(namespaceURI, unqualifiedName);
+        } else if (!(value = elem.getAttributeNS(namespaceURI, unqualifiedName)).isEmpty()) {
+            return value;
         } else if (elem.isDefaultNamespace(namespaceURI)) {
             return elem.getAttribute(unqualifiedName);
         }
@@ -467,7 +467,8 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         NamedNodeMap attrs = elem.getAttributes();
         for (int i = 0, n = attrs.getLength(); i < n; i++) {
             Attr attr = (Attr) attrs.item(i);
-            if (attr.getNamespaceURI() != null && !attr.getNamespaceURI().equals(namespaceURI)) {
+            String namespaceURI = attr.getNamespaceURI();
+            if (namespaceURI != null && !namespaceURI.equals(this.namespaceURI)) {
                 continue;
             }
 
@@ -564,7 +565,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     }
 
     /**
-     * Creates a figure but does not process the getProperties.
+     * Creates a figure but does not process the properties.
      *
      * @param node the node, which defines the figure
      * @return the created figure
@@ -600,7 +601,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     }
 
     /**
-     * Creates a figure but does not process the getProperties.
+     * Creates a figure but does not process the properties.
      *
      * @param node a node
      * @return a figure

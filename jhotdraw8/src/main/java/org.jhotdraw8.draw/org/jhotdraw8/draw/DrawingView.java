@@ -126,21 +126,21 @@ public interface DrawingView extends RenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    @Nullable NonNullProperty<DrawingModel> modelProperty();
+    @NonNull NonNullProperty<DrawingModel> modelProperty();
 
     /**
      * The drawing model.
      *
      * @return the drawing model property
      */
-    ReadOnlyObjectProperty<Drawing> drawingProperty();
+    @NonNull ReadOnlyObjectProperty<Drawing> drawingProperty();
 
     /**
      * The drawing editor.
      *
      * @return the editor property
      */
-    ObjectProperty<DrawingEditor> editorProperty();
+    @NonNull ObjectProperty<DrawingEditor> editorProperty();
 
     /**
      * The active layer of the drawing.
@@ -198,7 +198,7 @@ public interface DrawingView extends RenderContext {
      * @return the focused property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code FOCUSED_PROPERTY}.
      */
-    ReadOnlyBooleanProperty focusedProperty();
+    @NonNull ReadOnlyBooleanProperty focusedProperty();
 
     /**
      * The selected figures.
@@ -208,7 +208,7 @@ public interface DrawingView extends RenderContext {
      *
      * @return a list of the selected figures
      */
-    ReadOnlySetProperty<Figure> selectedFiguresProperty();
+    @NonNull ReadOnlySetProperty<Figure> selectedFiguresProperty();
 
     /**
      * The active handle.

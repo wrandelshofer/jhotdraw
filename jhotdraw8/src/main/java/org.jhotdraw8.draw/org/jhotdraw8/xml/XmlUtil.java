@@ -278,8 +278,6 @@ public class XmlUtil {
     }
 
     private static class LocationFilter extends XMLFilterImpl {
-
-        @Nullable
         private Locator locator = null;
 
         LocationFilter(XMLReader xmlReader) {
