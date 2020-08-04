@@ -7,7 +7,8 @@ package org.jhotdraw8.xml.text;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
     @Override
-    public <TT extends ImmutableList<String>> void toString(Appendable out, IdFactory idFactory, @Nullable TT value) throws IOException {
+    public <TT extends ImmutableList<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
@@ -65,7 +66,7 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<String> fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (buf == null) {
             return ImmutableLists.emptyList();
         }

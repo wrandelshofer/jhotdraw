@@ -12,7 +12,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -51,7 +52,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
 
     @Override
-    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
@@ -86,7 +87,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
     @Nullable
     @Override
-    public CssColor parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssColor parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CssColor color = null;
 
         if (nullable) {

@@ -10,7 +10,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -38,7 +39,7 @@ public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
 
     @NonNull
     @Override
-    public BoundingBox parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public BoundingBox parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, width, height;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
@@ -56,7 +57,7 @@ public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
     }
 
     @Override
-    protected <TT extends BoundingBox> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends BoundingBox> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));

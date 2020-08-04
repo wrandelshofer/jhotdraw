@@ -7,6 +7,8 @@ package org.jhotdraw8.text;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.nio.CharBuffer;
 import java.text.Format;
@@ -38,12 +40,12 @@ public class ConverterFormatAdapter implements Converter<Object> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Object value) {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, Object value) {
         throw new UnsupportedOperationException("Not supported yet." + format); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException {
+    public Object fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         int pos = buf.position();
         String str = buf.toString();
         ParsePosition pp = new ParsePosition(0);

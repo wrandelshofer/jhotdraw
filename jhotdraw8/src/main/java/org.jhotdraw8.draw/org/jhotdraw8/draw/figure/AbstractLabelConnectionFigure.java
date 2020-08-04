@@ -6,8 +6,10 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
@@ -255,7 +257,15 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             }
         }
 
-        Bounds bconnected = computeLayoutBounds(ctx, textNode);
+        textNode.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
+        textNode.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());
+        Bounds b = textNode.getLayoutBounds();
+        Insets i = getStyledNonNull(PADDING).getConvertedValue();
+        Bounds bconnected = new BoundingBox(
+                b.getMinX() - i.getLeft(),
+                b.getMinY() - i.getTop(),
+                b.getWidth() + i.getLeft() + i.getRight(),
+                textNode.getBaselineOffset() + i.getTop() + i.getBottom());
         setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
         invalidateTransforms();
     }

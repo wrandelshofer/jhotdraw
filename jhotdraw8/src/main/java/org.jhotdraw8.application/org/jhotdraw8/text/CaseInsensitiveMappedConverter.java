@@ -6,7 +6,8 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -31,7 +32,7 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
 
     @Nullable
     @Override
-    public E fromString(@Nullable CharBuffer in, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public E fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (in == null) {
             throw new ParseException("Illegal value=null", 0);
         }
@@ -51,7 +52,7 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
     }
 
     @Override
-    public <TT extends E> void toString(@NonNull Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException {
+    public <TT extends E> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             throw new IOException("Illegal value=null.");
         }

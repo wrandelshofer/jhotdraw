@@ -10,7 +10,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -40,17 +41,17 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
 
     @NonNull
     @Override
-    public Insets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Insets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<Number> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
-                case CssTokenType.TT_NUMBER:
-                    list.add(tt.currentNumberNonNull());
-                    break;
-                case CssTokenType.TT_COMMA:
-                    break;
-                default:
-                    tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                list.add(tt.currentNumberNonNull());
+                break;
+            case CssTokenType.TT_COMMA:
+                break;
+            default:
+                tt.pushBack();
                     break;
             }
         }
@@ -81,7 +82,7 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
     }
 
     @Override
-    protected <TT extends Insets> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Insets> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {

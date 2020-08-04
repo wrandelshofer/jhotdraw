@@ -6,7 +6,8 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ import java.text.ParseException;
 public class CssWordConverter implements Converter<String> {
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull String value) throws IOException {
         for (char ch : value.toCharArray()) {
             if (Character.isWhitespace(ch)) {
                 break;
@@ -32,7 +33,7 @@ public class CssWordConverter implements Converter<String> {
 
     @NonNull
     @Override
-    public String fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

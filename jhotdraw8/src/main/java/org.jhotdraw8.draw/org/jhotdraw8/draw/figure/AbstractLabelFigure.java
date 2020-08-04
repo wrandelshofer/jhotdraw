@@ -210,8 +210,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         applyTextFontableFigureProperties(ctx, tn);
         applyTextLayoutableFigureProperties(ctx, tn);
 
-        // We must set the font before we set the text, so that JavaFx does not need to retrieve
-        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
+        // We must set the font before we set the text, so that JavaFx does not
+        // need to retrieve the system default font, which on Windows requires
+        // that the JavaFx Toolkit is launched.
         final String text = getText(ctx);
         if (!Objects.equals(text, tn.getText())) {
             tn.setText(text);

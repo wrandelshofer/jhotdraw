@@ -6,7 +6,8 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -34,14 +35,14 @@ public class DefaultConverter implements Converter<Object> {
 
     @Nullable
     @Override
-    public Object fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Object fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String str = buf.toString();
         buf.position(buf.limit());
         return "null".equals(str) ? null : str;
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Object value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable Object value) throws IOException {
         out.append(value == null ? "null" : value.toString());
     }
 

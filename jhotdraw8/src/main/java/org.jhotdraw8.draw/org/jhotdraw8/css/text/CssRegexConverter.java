@@ -9,7 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.RegexReplace;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
 
     @NonNull
     @Override
-    public RegexReplace parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public RegexReplace parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨replace⟩: function expected.");
         if (!"replace".equals(tt.currentStringNonNull())) {
             throw tt.createParseException("⟨replace⟩: replace() function expected.");
@@ -64,7 +65,7 @@ public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
     }
 
     @Override
-    protected <TT extends RegexReplace> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends RegexReplace> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_FUNCTION, "replace"));
         String find = value.getFind();
         out.accept(new CssToken(CssTokenType.TT_STRING, find == null ? "" : find));

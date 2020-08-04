@@ -11,7 +11,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
     private final static String PORTRAIT = "portrait";
 
     @Nullable
-    private CssPoint2D parsePageSize(@NonNull CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
+    private CssPoint2D parsePageSize(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
             CssPoint2D paperSize = paperSizes.get(tt.currentString());
             if (paperSize == null) {
@@ -78,9 +79,9 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
             }
             if (tt.next() == CssTokenType.TT_IDENT) {
                 switch (tt.currentString()) {
-                    case LANDSCAPE:
-                        paperSize = new CssPoint2D(paperSize.getY(), paperSize.getX());
-                        break;
+                case LANDSCAPE:
+                    paperSize = new CssPoint2D(paperSize.getY(), paperSize.getX());
+                    break;
                     case PORTRAIT:
                         break;
                     default:
@@ -92,14 +93,14 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
             return paperSize;
         } else {
             tt.pushBack();
-            CssSize x = sizeConverter.parse(tt, idFactory);
-            CssSize y = sizeConverter.parse(tt, idFactory);
+            CssSize x = sizeConverter.parse(tt, idResolver);
+            CssSize y = sizeConverter.parse(tt, idResolver);
             return new CssPoint2D(x, y);
         }
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull CssPoint2D value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull CssPoint2D value) throws IOException {
         String paper = sizePapers.get(value);
         if (paper != null) {
             out.append(paper);
@@ -112,9 +113,9 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
 
     @Nullable
     @Override
-    public CssPoint2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public CssPoint2D fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CssTokenizer tt = new StreamCssTokenizer(buf);
-        return parsePageSize(tt, idFactory);
+        return parsePageSize(tt, idResolver);
 
     }
 

@@ -11,7 +11,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -41,17 +42,17 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
 
     @NonNull
     @Override
-    public CssInsets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssInsets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<CssSize> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
-                case CssTokenType.TT_NUMBER:
-                    list.add(new CssSize(tt.currentNumberNonNull().doubleValue()));
-                    break;
-                case CssTokenType.TT_DIMENSION:
-                    list.add(new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentString()));
-                    break;
-                case CssTokenType.TT_COMMA:
+            case CssTokenType.TT_NUMBER:
+                list.add(new CssSize(tt.currentNumberNonNull().doubleValue()));
+                break;
+            case CssTokenType.TT_DIMENSION:
+                list.add(new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentString()));
+                break;
+            case CssTokenType.TT_COMMA:
                     break;
                 default:
                     tt.pushBack();
@@ -85,7 +86,7 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
     }
 
     @Override
-    protected <TT extends CssInsets> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssInsets> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         CssSize top = value.getTop();
         CssSize right = value.getRight();
         CssSize bottom = value.getBottom();

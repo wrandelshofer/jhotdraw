@@ -11,7 +11,8 @@ import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -38,7 +39,7 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
 
     @NonNull
     @Override
-    public Locator parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Locator parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "Locator: function 'relative(' expected.");
         if (!RELATIVE_FUNCTION.equals(tt.currentStringNonNull())) {
             throw tt.createParseException("Locator: function 'relative(' expected.");
@@ -46,9 +47,9 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
 
         double x, y;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                x = tt.currentNumberNonNull().doubleValue();
-                break;
+        case CssTokenType.TT_NUMBER:
+            x = tt.currentNumberNonNull().doubleValue();
+            break;
             case CssTokenType.TT_PERCENTAGE:
                 x = tt.currentNumberNonNull().doubleValue() / 100.0;
                 break;
@@ -84,7 +85,7 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
     }
 
     @Override
-    protected <TT extends Locator> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Locator> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value instanceof BoundsLocator) {
             BoundsLocator rl = (BoundsLocator) value;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, RELATIVE_FUNCTION));

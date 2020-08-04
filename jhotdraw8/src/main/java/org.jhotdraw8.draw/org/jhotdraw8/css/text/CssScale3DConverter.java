@@ -10,7 +10,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -31,7 +32,7 @@ public class CssScale3DConverter extends AbstractCssConverter<Point3D> {
 
     @NonNull
     @Override
-    public Point3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Point3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, z;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Translate3D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
@@ -54,7 +55,7 @@ public class CssScale3DConverter extends AbstractCssConverter<Point3D> {
     }
 
     @Override
-    protected <TT extends Point3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Point3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value.getZ() == 1.0) {
             if (value.getX() == value.getY()) {
                 out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));

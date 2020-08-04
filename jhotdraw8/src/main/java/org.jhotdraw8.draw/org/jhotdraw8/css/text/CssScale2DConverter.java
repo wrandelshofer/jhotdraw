@@ -7,7 +7,8 @@ package org.jhotdraw8.css.text;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.PatternConverter;
 
@@ -27,25 +28,25 @@ public class CssScale2DConverter implements Converter<Point2D> {
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, @NonNull Point2D value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @NonNull Point2D value) throws IOException {
         if (value.getX() == value.getY()) {
-            formatter.toStr(out, idFactory, 1, value.getX());
+            formatter.toStr(out, idSupplier, 1, value.getX());
         } else {
-            formatter.toStr(out, idFactory, 2, value.getX(), value.getY());
+            formatter.toStr(out, idSupplier, 2, value.getX(), value.getY());
         }
     }
 
     @NonNull
     @Override
-    public Point2D fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Point2D fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
-            case 1:
-                return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue());
-            case 2:
-                return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue());
-            default:
-                throw new ParseException("Scale with 1 to 2 values expected.", buf.position());
+        case 1:
+            return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue());
+        case 2:
+            return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue());
+        default:
+            throw new ParseException("Scale with 1 to 2 values expected.", buf.position());
         }
     }
 

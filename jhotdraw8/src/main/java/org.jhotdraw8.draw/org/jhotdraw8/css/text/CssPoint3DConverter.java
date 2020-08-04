@@ -12,7 +12,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -40,7 +41,7 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
 
     @NonNull
     @Override
-    public CssPoint3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssPoint3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, z;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -65,7 +66,7 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
     }
 
     @Override
-    protected <TT extends CssPoint3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssPoint3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         CssSize x = value.getX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
         if (withComma) {

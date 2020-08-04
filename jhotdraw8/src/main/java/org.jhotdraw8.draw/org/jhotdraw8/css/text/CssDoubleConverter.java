@@ -9,7 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,17 +31,17 @@ public class CssDoubleConverter extends AbstractCssConverter<Double> {
 
     @NonNull
     @Override
-    public Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                return tt.currentNumberNonNull().doubleValue();
-            case CssTokenType.TT_IDENT: {
-                double value;
-                switch (tt.currentStringNonNull()) {
-                    case "INF":
-                        value = Double.POSITIVE_INFINITY;
-                        break;
-                    case "-INF":
+        case CssTokenType.TT_NUMBER:
+            return tt.currentNumberNonNull().doubleValue();
+        case CssTokenType.TT_IDENT: {
+            double value;
+            switch (tt.currentStringNonNull()) {
+            case "INF":
+                value = Double.POSITIVE_INFINITY;
+                break;
+            case "-INF":
                         value = Double.NEGATIVE_INFINITY;
                         break;
                     case "NaN":
@@ -57,7 +58,7 @@ public class CssDoubleConverter extends AbstractCssConverter<Double> {
     }
 
     @Override
-    public <TT extends Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    public <TT extends Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         double v = value;
         if (value.isInfinite()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, (v > 0) ? "INF" : "-INF"));

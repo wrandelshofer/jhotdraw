@@ -13,7 +13,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.text.AbstractCssConverter;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
 
     @NonNull
     @Override
-    public MLCompartmentalizedData parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public MLCompartmentalizedData parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         LinkedHashMap<String, ImmutableList<String>> map = new LinkedHashMap<>();
         tt.requireNextToken(CssTokenType.TT_LEFT_CURLY_BRACKET, "Left curly bracket expected.");
         List<String> items = new ArrayList<>();
@@ -87,7 +88,7 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
     }
 
     @Override
-    protected <TT extends MLCompartmentalizedData> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends MLCompartmentalizedData> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_LEFT_CURLY_BRACKET));
         ReadOnlySet<Map.Entry<String, ImmutableList<String>>> entries = value.getMap().entrySet();
         if (!entries.isEmpty()) {

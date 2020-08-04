@@ -12,7 +12,8 @@ import org.jhotdraw8.css.CssLinearGradient;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -55,7 +56,7 @@ public class CssLinearGradientConverter extends AbstractCssConverter<CssLinearGr
     }
 
     @Override
-    protected <TT extends CssLinearGradient> void produceTokensNonNull(@NonNull TT lg, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssLinearGradient> void produceTokensNonNull(@NonNull TT lg, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_FUNCTION, LINEAR_GRADIENT_FUNCTION));
         final boolean proportional = lg.isProportional();
         final double startX = lg.getStartX();
@@ -201,7 +202,7 @@ public class CssLinearGradientConverter extends AbstractCssConverter<CssLinearGr
                     out.accept(new CssToken(CssTokenType.TT_COMMA));
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
-                colorConverter.produceTokens(stop.getColor(), idFactory, out);
+                colorConverter.produceTokens(stop.getColor(), idSupplier, out);
                 if (stop.getOffset() != null) {
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                     out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, stop.getOffset() * 100.0));
@@ -214,13 +215,13 @@ public class CssLinearGradientConverter extends AbstractCssConverter<CssLinearGr
 
     @NonNull
     @Override
-    public CssLinearGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssLinearGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨LinearGradient⟩: \"linear-gradient(\"  expected");
         switch (tt.currentStringNonNull()) {
-            case LINEAR_GRADIENT_FUNCTION:
-                break;
-            default:
-                throw new ParseException("⟨LinearGradient⟩: \"linear-gradient\" expected, found: " + tt.currentString(), tt.getStartPosition());
+        case LINEAR_GRADIENT_FUNCTION:
+            break;
+        default:
+            throw new ParseException("⟨LinearGradient⟩: \"linear-gradient\" expected, found: " + tt.currentString(), tt.getStartPosition());
         }
 
         PointToPoint fromTo;

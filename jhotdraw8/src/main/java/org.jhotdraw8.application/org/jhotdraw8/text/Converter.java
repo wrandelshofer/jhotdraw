@@ -6,7 +6,8 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -36,7 +37,7 @@ public interface Converter<T> {
      *                  treated as read only! The position of the char buffer denotes the
      *                  beginning of the string when this method is invoked. After completion of
      *                  this method, the position is set after the last consumed character.
-     * @param idFactory The factory for looking up object ids. Nullable for some
+     * @param idResolver The factory for looking up object ids. Nullable for some
      *                  converters.
      * @return The value. Nullable.
      * @throws ParseException      if conversion failed. The error offset field is
@@ -45,7 +46,7 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
-    T fromString(@Nullable CharBuffer in, @Nullable IdFactory idFactory) throws ParseException, IOException;
+    T fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
 
     /**
@@ -145,14 +146,14 @@ public interface Converter<T> {
      * <p>
      * This method does not change the state of the converter.
      *
-     * @param <TT>      the value type
-     * @param out       The appendable
-     * @param idFactory The factory for creating object ids. Nullable for some
-     *                  converters.
-     * @param value     The value. Nullable.
+     * @param <TT>       the value type
+     * @param out        The appendable
+     * @param idSupplier The factory for creating object ids. Nullable for some
+     *                   converters.
+     * @param value      The value. Nullable.
      * @throws java.io.IOException thrown by Appendable
      */
-    <TT extends T> void toString(Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException;
+    <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException;
     // ----
     // convenience methods
     // ----

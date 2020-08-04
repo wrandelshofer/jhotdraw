@@ -16,7 +16,8 @@ import org.jhotdraw8.css.CssRadialGradient;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -52,8 +53,8 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
 
     @NonNull
     @Override
-    public Paint parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        Paintable p = paintableConverter.parseNonNull(tt, idFactory);
+    public Paint parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        Paintable p = paintableConverter.parseNonNull(tt, idResolver);
         if (p.getPaint() == null) {
             throw new ParseException("paint is null", 0);
         }
@@ -66,7 +67,7 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
     }
 
     @Override
-    protected <TT extends Paint> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Paint> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
         Paintable p;
         if (value instanceof Color) {
             p = new CssColor((Color) value);
@@ -77,6 +78,6 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
         } else {
             throw new UnsupportedOperationException("unsupported value:" + value);
         }
-        paintableConverter.produceTokensNonNull(p, idFactory, out);
+        paintableConverter.produceTokensNonNull(p, idSupplier, out);
     }
 }

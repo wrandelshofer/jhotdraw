@@ -6,7 +6,8 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.StreamPosTokenizer;
 
@@ -135,8 +136,8 @@ public class PatternConverter implements Converter<Object[]> {
         this.factory = factory;
     }
 
-    public void toStr(Appendable out, IdFactory idFactory, Object... value) throws IOException {
-        toString(out, idFactory, value);
+    public void toStr(Appendable out, IdSupplier idSupplier, Object... value) throws IOException {
+        toString(out, idSupplier, value);
     }
 
     @NonNull
@@ -151,7 +152,7 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     @Override
-    public void toString(Appendable out, IdFactory idFactory, Object[] value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, Object[] value) throws IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;
@@ -161,7 +162,7 @@ public class PatternConverter implements Converter<Object[]> {
 
     @NonNull
     @Override
-    public Object[] fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Object[] fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;

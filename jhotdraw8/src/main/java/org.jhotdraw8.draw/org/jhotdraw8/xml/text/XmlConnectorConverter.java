@@ -17,7 +17,8 @@ import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @Nullable Connector value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable Connector value) throws IOException {
         if (value == null) {
             out.append("none");
         }
@@ -67,16 +68,16 @@ public class XmlConnectorConverter implements Converter<Connector> {
         if (value instanceof LocatorConnector) {
             out.append(" ");
             LocatorConnector lc = (LocatorConnector) value;
-            locatorConverter.toString(out, idFactory, lc.getLocator());
+            locatorConverter.toString(out, idSupplier, lc.getLocator());
         }
     }
 
     @Nullable
     @Override
-    public Connector fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public Connector fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Connector c;
         CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
-        c = parseConnector(tt, idFactory);
+        c = parseConnector(tt, idResolver);
 
         if (!buf.toString().trim().isEmpty()) {
             throw new ParseException("Locator: End expected, found:" + buf.toString(), buf.position());
@@ -93,23 +94,24 @@ public class XmlConnectorConverter implements Converter<Connector> {
     /**
      * Parses a Locator.
      *
-     * @param tt the tokenizer
+     * @param tt         the tokenizer
+     * @param idResolver
      * @return the parsed color
      * @throws ParseException if parsing fails
      * @throws IOException    if IO fails
      */
     @Nullable
-    public Connector parseConnector(@NonNull CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
+    public Connector parseConnector(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         Locator locator = null;
         Function<Locator, Connector> supplier;
 
         switch (tt.next()) {
-            case CssTokenType.TT_IDENT:
-                if ("none".equals(tt.currentString())) {
-                    return null;
-                }
+        case CssTokenType.TT_IDENT:
+            if ("none".equals(tt.currentString())) {
+                return null;
+            }
 
-                supplier = choiceToConnectorMap.get(tt.currentString());
+            supplier = choiceToConnectorMap.get(tt.currentString());
 
                 if (supplier == null) {
                     throw new ParseException("Connector: unsupported connector, found:" + tt.currentValue(), tt.getStartPosition());
@@ -119,7 +121,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
                 throw new ParseException("Connector: identifier expected, found:" + tt.currentValue(), tt.getStartPosition());
         }
 
-        locator = locatorConverter.parseNonNull(tt, idFactory);
+        locator = locatorConverter.parseNonNull(tt, idResolver);
 
         return supplier.apply(locator);
     }

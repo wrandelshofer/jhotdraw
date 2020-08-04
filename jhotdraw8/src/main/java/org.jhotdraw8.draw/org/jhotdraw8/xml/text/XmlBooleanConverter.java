@@ -6,7 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -39,13 +40,13 @@ public class XmlBooleanConverter implements Converter<Boolean> {
     }
 
     @Override
-    public void toString(@NonNull Appendable buf, IdFactory idFactory, Boolean value) throws IOException {
+    public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, Boolean value) throws IOException {
         buf.append(value ? trueString : falseString);
     }
 
     @NonNull
     @Override
-    public Boolean fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException {
+    public Boolean fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
@@ -53,9 +54,9 @@ public class XmlBooleanConverter implements Converter<Boolean> {
         }
         String str = out.toString();
         switch (str) {
-            case trueString:
-            case oneString:
-                return true;
+        case trueString:
+        case oneString:
+            return true;
             case falseString:
             case zeroString:
                 return false;

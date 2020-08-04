@@ -10,6 +10,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -31,28 +33,28 @@ public interface CssConverter<T> extends Converter<T> {
      * Parses from the given tokenizer and moves the tokenizer
      * to the next token past the value.
      *
-     * @param tt        tokenizer positioned on the token
-     * @param idFactory the id factory
+     * @param tt         tokenizer positioned on the token
+     * @param idResolver the id factory
      * @return the parsed value
      * @throws ParseException on parse exception
      * @throws IOException    on io exception
      */
     @Nullable
-    T parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException;
+    T parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
     /**
      * Parses from the given tokenizer and moves the tokenizer
      * to the next token past the value.
      *
-     * @param tt        tokenizer positioned on the token
-     * @param idFactory the id factory
+     * @param tt         tokenizer positioned on the token
+     * @param idResolver the id factory
      * @return the parsed value
      * @throws ParseException on parse exception
      * @throws IOException    on io exception
      */
     @NonNull
-    default T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        T value = parse(tt, idFactory);
+    default T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        T value = parse(tt, idResolver);
         if (value == null) {
             throw new ParseException("Value expected.", tt.getStartPosition());
         }
@@ -62,17 +64,17 @@ public interface CssConverter<T> extends Converter<T> {
     /**
      * Produces tokens for the specified value.
      *
-     * @param <TT>      the value type
-     * @param value     the value
-     * @param idFactory the id factory
-     * @param out       the consumer for the tokens
+     * @param <TT>       the value type
+     * @param value      the value
+     * @param idSupplier the id factory
+     * @param out        the consumer for the tokens
      */
-    <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out);
+    <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException;
 
     @NonNull
-    default <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdFactory idFactory) {
+    default <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdSupplier idSupplier) throws IOException {
         List<CssToken> list = new ArrayList<>();
-        produceTokens(value, idFactory, list::add);
+        produceTokens(value, idSupplier, list::add);
         return list;
     }
 
@@ -99,12 +101,17 @@ public interface CssConverter<T> extends Converter<T> {
     @NonNull
     default <TT extends T> String toString(@Nullable TT value, @Nullable IdFactory idFactory) {
         StringBuilder buf = new StringBuilder();
-        produceTokens(value, idFactory, buf::append);
+        try {
+            produceTokens(value, idFactory, buf::append);
+        } catch (IOException e) {
+            // toString cannot throw, if we get an exception, there is a programming error.
+            throw new UncheckedIOException(e);
+        }
         return buf.toString();
     }
 
     @Override
-    default <TT extends T> void toString(@NonNull Appendable out, IdFactory idFactory, TT value) throws IOException {
+    default <TT extends T> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, TT value) throws IOException {
         Consumer<CssToken> consumer = token -> {
             try {
                 out.append(token.fromToken());
@@ -113,18 +120,18 @@ public interface CssConverter<T> extends Converter<T> {
             }
         };
         try {
-            produceTokens(value, idFactory, consumer);
+            produceTokens(value, idSupplier, consumer);
         } catch (UncheckedIOException e) {
             throw e.getCause();
         }
     }
 
 
-    default T fromString(@NonNull CharBuffer buf, IdFactory idFactory) throws ParseException {
+    default T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         try {
             int startPos = buf.position();
             StreamCssTokenizer tt = new StreamCssTokenizer(buf);
-            T value = parse(tt, idFactory);
+            T value = parse(tt, idResolver);
             buf.position(startPos + tt.getNextPosition());
             return value;
         } catch (IOException e) {

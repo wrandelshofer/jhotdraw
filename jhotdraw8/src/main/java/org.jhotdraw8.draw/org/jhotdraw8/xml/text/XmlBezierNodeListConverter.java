@@ -15,7 +15,8 @@ import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Nullable
     @Override
-    public ImmutableList<BezierNode> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<BezierNode> fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String input = buf.toString();
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
 
@@ -64,7 +65,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
     }
 
     @Override
-    public <TT extends ImmutableList<BezierNode>> void toString(@NonNull Appendable out, IdFactory idFactory,
+    public <TT extends ImmutableList<BezierNode>> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier,
                                                                 @Nullable TT value) throws IOException {
         if (value == null) {
             if (!nullable) {

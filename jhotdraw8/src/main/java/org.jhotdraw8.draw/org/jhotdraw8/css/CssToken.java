@@ -106,6 +106,11 @@ public class CssToken /*extends AST*/ {
         return Objects.requireNonNull(stringValue);
     }
 
+    @NonNull
+    public Number getNumericValueNonNull() {
+        return Objects.requireNonNull(numericValue);
+    }
+
     @Nullable
     @Override
     public String toString() {

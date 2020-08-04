@@ -6,7 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -39,24 +40,24 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
     }
 
     @Override
-    public <TT extends T> void toString(@NonNull Appendable out, @Nullable IdFactory idFactory, @Nullable TT value) throws IOException {
-        if (idFactory == null) {
+    public <TT extends T> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+        if (idSupplier == null) {
             throw new UnsupportedOperationException("idFactory is required for this converter");
         }
-        out.append(value == null ? "none" : idFactory.getId(value));
+        out.append(value == null ? "none" : idSupplier.getId(value));
     }
 
     @Nullable
     @Override
-    public T fromString(@Nullable CharBuffer buf, @Nullable IdFactory idFactory) throws ParseException, IOException {
-        if (idFactory == null) {
+    public T fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        if (idResolver == null) {
             throw new UnsupportedOperationException("idFactory is required for this converter");
         }
         String str = buf == null ? "none" : buf.toString();
         if ("none".equals(str)) {
             return null;
         }
-        Object obj = idFactory.getObject(str);
+        Object obj = idResolver.getObject(str);
         if (obj == null) {
             LOGGER.fine("Could not find an object with this id. id=\"" + str + "\".");
         }

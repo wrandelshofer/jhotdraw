@@ -24,7 +24,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -102,11 +103,11 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private CssColorConverter colorConverter = new CssColorConverter(false);
 
     @Override
-    public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value instanceof Blend) {
             Blend fx = (Blend) value;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, BLEND));
-            blendModeConverter.produceTokens(fx.getMode(), idFactory, out);
+            blendModeConverter.produceTokens(fx.getMode(), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             //FIXME
             /* if (fx.getInput() != null) {
@@ -119,7 +120,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getThreshold() * 100));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof BoxBlur) {
             BoxBlur fx = (BoxBlur) value;
@@ -132,7 +133,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof ColorAdjust) {
             ColorAdjust fx = (ColorAdjust) value;
@@ -190,14 +191,14 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof DropShadow) {
             DropShadow fx = (DropShadow) value;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DROP_SHADOW));
-            blurTypeConverter.produceTokens(fx.getBlurType(), idFactory, out);
+            blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_COMMA));
-            colorConverter.produceTokens(new CssColor(fx.getColor()), idFactory, out);
+            colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_COMMA));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
             out.accept(new CssToken(CssTokenType.TT_COMMA));
@@ -209,7 +210,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof GaussianBlur) {
             GaussianBlur fx = (GaussianBlur) value;
@@ -218,7 +219,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof Glow) {
             Glow fx = (Glow) value;
@@ -227,14 +228,14 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof InnerShadow) {
             InnerShadow fx = (InnerShadow) value;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, INNER_SHADOW));
-            blurTypeConverter.produceTokens(fx.getBlurType(), idFactory, out);
+            blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_COMMA));
-            colorConverter.produceTokens(new CssColor(fx.getColor()), idFactory, out);
+            colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_COMMA));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
             out.accept(new CssToken(CssTokenType.TT_COMMA));
@@ -246,20 +247,20 @@ public class CssEffectConverter implements CssConverter<Effect> {
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else if (value instanceof Shadow) {
             Shadow fx = (Shadow) value;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, SHADOW));
-            blurTypeConverter.produceTokens(fx.getBlurType(), idFactory, out);
+            blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_COMMA));
-            colorConverter.produceTokens(new CssColor(fx.getColor()), idFactory, out);
+            colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
             out.accept(new CssToken(CssTokenType.TT_COMMA));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idFactory, out);
+                produceTokens(fx.getInput(), idSupplier, out);
             }
         } else {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
@@ -269,7 +270,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
 
     @Nullable
     @Override
-    public Effect parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Effect parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.nextIsIdentNone()) {
             return null;
         }

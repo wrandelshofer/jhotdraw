@@ -323,17 +323,18 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         Converter<Object> converter = key.getConverter();
         if (converter instanceof CssConverter) {// FIXME this is questionable
             CssConverter<Object> c = (CssConverter<Object>) converter;
-            for (CssToken t : c.toTokens(element.getStyled(origin, key), null)) {
-                switch (t.getType()) {
+            try {
+                for (CssToken t : c.toTokens(element.getStyled(origin, key), null)) {
+                    switch (t.getType()) {
                     case CssTokenType.TT_NUMBER:
-                        buf.append(t.getNumericValue().toString());
+                        buf.append(t.getNumericValueNonNull().toString());
                         break;
                     case CssTokenType.TT_PERCENTAGE:
-                        buf.append(t.getNumericValue().toString());
+                        buf.append(t.getNumericValueNonNull().toString());
                         buf.append('%');
                         break;
                     case CssTokenType.TT_DIMENSION:
-                        buf.append(t.getNumericValue().toString());
+                        buf.append(t.getNumericValueNonNull().toString());
                         if (t.getStringValue() != null) {
                             buf.append(t.getStringValue());
                         }
@@ -341,7 +342,10 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     default:
                         buf.append(t.getStringValue());
                         break;
+                    }
                 }
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Could not produce tokens for key: " + key + " value: " + element.getStyled(origin, key), e);
             }
         } else {
             buf.append(converter.toString(element.getStyled(origin, key)));// XXX THIS IS WRONG!!)
@@ -373,7 +377,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         }
         Converter<Object> converter = key.getConverter();
         if (converter instanceof CssConverter) {
-            return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin, key), null);
+            try {
+                return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin, key), null);
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Could not produce tokens for key: " + key + " value: " + element.getStyled(origin, key), e);
+                return null;
+            }
         } else {
             try {
                 CssTokenizer tt = new StreamCssTokenizer(converter.toString(element.getStyled(origin, key)));

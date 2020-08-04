@@ -8,7 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.PatternConverter;
 
@@ -51,7 +52,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
             Normalizer.normalize(o2, Normalizer.Form.NFD));
 
     @Override
-    public <TT extends ImmutableSet<String>> void toString(Appendable out, IdFactory idFactory, @NonNull TT value) throws IOException {
+    public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @NonNull TT value) throws IOException {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
         tokens.addAll(value.asSet());
         Object[] v = new Object[tokens.size() + 1];
@@ -61,7 +62,7 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableSet<String> fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         ImmutableSet<String> l = ImmutableSets.ofArray(v, 1, (int) v[0]);
         return l;

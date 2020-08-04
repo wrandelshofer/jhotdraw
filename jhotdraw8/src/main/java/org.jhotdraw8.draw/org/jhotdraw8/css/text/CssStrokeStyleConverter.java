@@ -17,7 +17,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -62,7 +63,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
 
     @NonNull
     @Override
-    public CssStrokeStyle parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssStrokeStyle parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StrokeType type = StrokeType.CENTERED;
         StrokeLineCap lineCap = StrokeLineCap.BUTT;
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
@@ -83,13 +84,13 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
                     lineJoin = parseLineJoin(tt);
                     break;
                 case MITERLIMIT:
-                    miterLimit = parseNumericFunction(MITERLIMIT, new CssSize(10), tt, idFactory);
+                    miterLimit = parseNumericFunction(MITERLIMIT, new CssSize(10), tt, idResolver);
                     break;
                 case DASHOFFSET:
-                    dashOffset = parseNumericFunction(DASHOFFSET, new CssSize(0), tt, idFactory);
+                    dashOffset = parseNumericFunction(DASHOFFSET, new CssSize(0), tt, idResolver);
                     break;
                 case DASHARRAY:
-                    dashArray = parseDashArray(tt, idFactory);
+                    dashArray = parseDashArray(tt, idResolver);
                     break;
                 default:
                     throw new ParseException("⟨StrokeStyle⟩:: Unsupported function: " + tt.currentStringNonNull(), tt.getStartPosition());
@@ -172,7 +173,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @NonNull
-    private ImmutableList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    private ImmutableList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩: Function " + DASHARRAY + "() expected.", tt.getStartPosition());
         }
@@ -180,7 +181,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         List<CssSize> list = new ArrayList<>();
         while (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_DIMENSION) {
             tt.pushBack();
-            list.add(parseSize(DASHARRAY, null, tt, idFactory));
+            list.add(parseSize(DASHARRAY, null, tt, idResolver));
             if (tt.next() != CssTokenType.TT_COMMA) {
                 tt.pushBack();
             }
@@ -190,28 +191,28 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         return ImmutableLists.ofCollection(list);
     }
 
-    private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !functionName.equals(tt.currentStringNonNull())) {
             throw new ParseException("Function " + functionName + "() expected.", tt.getStartPosition());
         }
 
         CssSize value;
-        value = parseSize(functionName, defaultValue, tt, idFactory);
+        value = parseSize(functionName, defaultValue, tt, idResolver);
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩: ⟨" + functionName + "⟩ right bracket expected.");
         return value;
     }
 
-    private CssSize parseSize(String name, CssSize defaultValue, @NonNull CssTokenizer tt, IdFactory idFactory) throws ParseException, IOException {
+    private CssSize parseSize(String name, CssSize defaultValue, @NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         CssSize value;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                value = new CssSize(tt.currentNumberNonNull().doubleValue());
-                break;
-            case CssTokenType.TT_DIMENSION:
-                value = new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
-                break;
-            default:
-                value = defaultValue;
+        case CssTokenType.TT_NUMBER:
+            value = new CssSize(tt.currentNumberNonNull().doubleValue());
+            break;
+        case CssTokenType.TT_DIMENSION:
+            value = new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+            break;
+        default:
+            value = defaultValue;
                 tt.pushBack();
         }
         return value;
@@ -233,7 +234,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
 
 
     @Override
-    protected <TT extends CssStrokeStyle> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssStrokeStyle> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         final StrokeType type = value.getType();
         if (printAllValues || type != StrokeType.CENTERED) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, TYPE));

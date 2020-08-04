@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.Nullable;
  *
  * @author Werner Randelshofer
  */
-public interface IdFactory {
+public interface IdFactory extends IdResolver, IdSupplier {
 
     /**
      * Creates an id for the specified object. If the object already has an id,
@@ -22,8 +22,7 @@ public interface IdFactory {
      */
     @Nullable
     default String createId(Object object) {
-        String id = createId(object, "");
-        return id;
+        return createId(object, "");
     }
 
     /**
@@ -47,24 +46,6 @@ public interface IdFactory {
      * @return the id
      */
     @Nullable String createId(Object object, @Nullable String prefix, String id);
-
-    /**
-     * Gets an id for the specified object. Returns null if the object has no
-     * id.
-     *
-     * @param object the object
-     * @return the id
-     */
-    @Nullable String getId(Object object);
-
-    /**
-     * Gets the object for the specified id. Returns null if the id has no
-     * object.
-     *
-     * @param id the id
-     * @return the object
-     */
-    @Nullable Object getObject(String id);
 
     /**
      * Puts an id for the specified object. If the object already has an id, the

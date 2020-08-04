@@ -6,7 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -22,13 +23,13 @@ import java.text.ParseException;
 public class XmlUrlConverter implements Converter<URL> {
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull URL value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull URL value) throws IOException {
         out.append(value.toString());
     }
 
     @NonNull
     @Override
-    public URL fromString(@Nullable CharBuffer in, IdFactory idFactory) throws ParseException, IOException {
+    public URL fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         URL value = new URL(in.toString());
         in.position(in.limit());
         return value;

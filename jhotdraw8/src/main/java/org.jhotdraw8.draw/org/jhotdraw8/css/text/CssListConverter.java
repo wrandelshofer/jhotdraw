@@ -12,7 +12,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -119,7 +120,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     @Override
-    public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return ImmutableLists.emptyList();
         } else {
@@ -145,7 +146,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                     break Loop;
                 default:
                     tt.pushBack();
-                    T elem = elementConverter.parse(tt, idFactory);
+                    T elem = elementConverter.parse(tt, idResolver);
                     if (elem != null) {
                         list.add(elem);
                     }
@@ -161,7 +162,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
@@ -188,7 +189,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                         out.accept(t);
                     }
                 }
-                elementConverter.produceTokens(elem, idFactory, out);
+                elementConverter.produceTokens(elem, idSupplier, out);
             }
             for (CssToken t : suffix) {
                 out.accept(t);

@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 
 import java.util.Map;
@@ -22,7 +22,7 @@ public class XmlUmlCompartmentalizedDataConverter extends CssUmlCompartmentalize
     }
 
     @Override
-    protected <TT extends MLCompartmentalizedData> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends MLCompartmentalizedData> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_LEFT_CURLY_BRACKET));
         ReadOnlySet<Map.Entry<String, ImmutableList<String>>> entries = value.getMap().entrySet();
         boolean firstKey = true;

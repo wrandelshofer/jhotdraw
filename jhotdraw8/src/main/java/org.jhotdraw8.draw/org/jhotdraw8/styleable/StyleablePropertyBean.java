@@ -74,7 +74,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param origin The style origin
      * @return The styled value.
      */
-    @Nullable <T> T getStyled(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key);
+    @Nullable <T> T getStyled(@Nullable StyleOrigin origin, @NonNull MapAccessor<T> key);
 
     /**
      * Removes all styled values on all origins except on the USER origin.

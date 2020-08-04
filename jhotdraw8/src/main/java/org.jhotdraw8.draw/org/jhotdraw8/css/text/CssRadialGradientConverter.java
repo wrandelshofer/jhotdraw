@@ -12,7 +12,8 @@ import org.jhotdraw8.css.CssRadialGradient;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -54,7 +55,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
     }
 
     @Override
-    protected <TT extends CssRadialGradient> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssRadialGradient> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_FUNCTION, RADIAL_GRADIENT_FUNCTION));
         CssRadialGradient lg = value;
         final boolean proportional = lg.isProportional();
@@ -142,7 +143,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
                     out.accept(new CssToken(CssTokenType.TT_COMMA));
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
-                colorConverter.produceTokens(stop.getColor(), idFactory, out);
+                colorConverter.produceTokens(stop.getColor(), idSupplier, out);
                 if (stop.getOffset() != null) {
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                     out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, stop.getOffset() * 100.0));
@@ -155,13 +156,13 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
 
     @NonNull
     @Override
-    public CssRadialGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssRadialGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨RadialGradient⟩: \"radial-gradient(\"  expected");
         switch (tt.currentStringNonNull()) {
-            case RADIAL_GRADIENT_FUNCTION:
-                break;
-            default:
-                throw new ParseException("⟨RadialGradient⟩: \"radial-gradient\" expected, found: " + tt.getToken(), tt.getStartPosition());
+        case RADIAL_GRADIENT_FUNCTION:
+            break;
+        default:
+            throw new ParseException("⟨RadialGradient⟩: \"radial-gradient\" expected, found: " + tt.getToken(), tt.getStartPosition());
         }
 
         double focusAngle = 0;
@@ -297,7 +298,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         List<CssStop> stops = new ArrayList<>();
         while (tt.next() != ')' && tt.current() != CssTokenType.TT_EOF) {
             tt.pushBack();
-            stops.add(parseColorStop(tt, idFactory));
+            stops.add(parseColorStop(tt, idResolver));
             if (tt.next() != ',') {
                 tt.pushBack();
             }
@@ -314,18 +315,18 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
     }
 
     @NonNull
-    private CssStop parseColorStop(@NonNull CssTokenizer tt, IdFactory idFactory) throws IOException, ParseException {
-        CssColor color = colorConverter.parse(tt, idFactory);
+    private CssStop parseColorStop(@NonNull CssTokenizer tt, IdResolver idResolver) throws IOException, ParseException {
+        CssColor color = colorConverter.parse(tt, idResolver);
         Double offset = null;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                offset = tt.currentNumberNonNull().doubleValue();
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                offset = tt.currentNumberNonNull().doubleValue() / 100.0;
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            offset = tt.currentNumberNonNull().doubleValue();
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            offset = tt.currentNumberNonNull().doubleValue() / 100.0;
+            break;
+        default:
+            tt.pushBack();
         }
         return new CssStop(offset, color);
     }

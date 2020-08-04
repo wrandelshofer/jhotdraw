@@ -15,7 +15,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.text.AbstractCssConverter;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -59,7 +60,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    protected <TT extends Transform> void produceTokensNonNull(@NonNull TT tx, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Transform> void produceTokensNonNull(@NonNull TT tx, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (tx instanceof Translate) {
             Translate tr = (Translate) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "translate"));
@@ -126,7 +127,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 
     @NonNull
     @Override
-    public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
         String func = tt.currentStringNonNull();
         int funcPos = tt.getStartPosition();

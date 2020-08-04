@@ -13,7 +13,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -53,7 +54,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
     }
 
     @Override
-    public <TT extends CssFont> void produceTokensNonNull(@NonNull TT font, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    public <TT extends CssFont> void produceTokensNonNull(@NonNull TT font, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         CssSize fontSize = font.getSize();
         String fontFamily = font.getFamily();
         final FontPosture posture = font.getPosture();
@@ -62,8 +63,8 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
         if (posture != null) {
             switch (font.getPosture()) {
-                case ITALIC:
-                    out.accept(new CssToken(CssTokenType.TT_IDENT, ITALIC_STYLE));
+            case ITALIC:
+                out.accept(new CssToken(CssTokenType.TT_IDENT, ITALIC_STYLE));
                     needsSpace = true;
                     break;
                 case REGULAR:
@@ -117,7 +118,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
     @NonNull
     @Override
-    public CssFont parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssFont parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         CssSize fontSize = new CssSize(12.0);
@@ -126,8 +127,8 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         // parse FontStyle
         if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonNull().toLowerCase()) {
-                case NORMAL_STYLE:
-                    fontPosture = FontPosture.REGULAR;
+            case NORMAL_STYLE:
+                fontPosture = FontPosture.REGULAR;
                     break;
                 case ITALIC_STYLE:
                 case OBLIQUE_STYLE:

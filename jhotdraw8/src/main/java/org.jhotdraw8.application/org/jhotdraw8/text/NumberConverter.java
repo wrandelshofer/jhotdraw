@@ -6,7 +6,8 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -229,7 +230,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public void toString(@NonNull Appendable buf, IdFactory idFactory, @Nullable Number value) throws IOException {
+    public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, @Nullable Number value) throws IOException {
         if (value == null && allowsNullValue) {
             return;
         }
@@ -309,7 +310,7 @@ public class NumberConverter implements Converter<Number> {
 
     @Nullable
     @Override
-    public Number fromString(@Nullable CharBuffer str, IdFactory idFactory) throws ParseException {
+    public Number fromString(@Nullable CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }

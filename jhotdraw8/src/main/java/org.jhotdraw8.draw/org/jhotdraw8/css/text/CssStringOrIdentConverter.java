@@ -9,7 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
 
     @Nullable
     @Override
-    public String fromString(@Nullable CharBuffer buf, IdFactory idFactory) throws ParseException, IOException {
+    public String fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
             throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
@@ -34,17 +35,17 @@ public class CssStringOrIdentConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, IdFactory idFactory, @NonNull String value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull String value) throws IOException {
         StringBuffer buf = new StringBuffer();
         boolean isIdent = true;
         buf.append('"');
         for (char ch : value.toCharArray()) {
             switch (ch) {
-                case '"':
-                    buf.append('\\');
-                    buf.append('"');
-                    isIdent = false;
-                    break;
+            case '"':
+                buf.append('\\');
+                buf.append('"');
+                isIdent = false;
+                break;
                 case ' ':
                     buf.append(ch);
                     isIdent = false;

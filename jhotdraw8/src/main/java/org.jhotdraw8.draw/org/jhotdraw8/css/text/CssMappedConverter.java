@@ -9,7 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -43,7 +44,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
     @Nullable
-    public E parse(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());
         }
@@ -83,7 +84,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
     @Override
-    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> consumer) {
+    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("Value is not nullable.");

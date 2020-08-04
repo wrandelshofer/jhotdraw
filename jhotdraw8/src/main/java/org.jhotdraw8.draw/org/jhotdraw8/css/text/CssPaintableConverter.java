@@ -13,7 +13,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -51,16 +52,16 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
         if (value instanceof CssColor) {
             CssColor c = (CssColor) value;
-            colorConverter.produceTokens(c, idFactory, out);
+            colorConverter.produceTokens(c, idSupplier, out);
         } else if (value instanceof CssLinearGradient) {
             CssLinearGradient lg = (CssLinearGradient) value;
-            linearGradientConverter.produceTokens(lg, idFactory, out);
+            linearGradientConverter.produceTokens(lg, idSupplier, out);
         } else if (value instanceof CssRadialGradient) {
             CssRadialGradient lg = (CssRadialGradient) value;
-            radialGradientConverter.produceTokens(lg, idFactory, out);
+            radialGradientConverter.produceTokens(lg, idSupplier, out);
         } else {
             throw new UnsupportedOperationException("not yet implemented for " + value);
         }
@@ -68,21 +69,21 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
 
     @NonNull
     @Override
-    public Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_FUNCTION) {
             switch (tt.currentStringNonNull()) {
-                case CssLinearGradientConverter.LINEAR_GRADIENT_FUNCTION:
-                    tt.pushBack();
-                    return linearGradientConverter.parseNonNull(tt, idFactory);
-                case CssRadialGradientConverter.RADIAL_GRADIENT_FUNCTION:
-                    tt.pushBack();
-                    return radialGradientConverter.parseNonNull(tt, idFactory);
-                default:
-                    break;
+            case CssLinearGradientConverter.LINEAR_GRADIENT_FUNCTION:
+                tt.pushBack();
+                return linearGradientConverter.parseNonNull(tt, idResolver);
+            case CssRadialGradientConverter.RADIAL_GRADIENT_FUNCTION:
+                tt.pushBack();
+                return radialGradientConverter.parseNonNull(tt, idResolver);
+            default:
+                break;
             }
         }
         tt.pushBack();
-        return colorConverter.parseNonNull(tt, idFactory);
+        return colorConverter.parseNonNull(tt, idResolver);
     }
 
     @NonNull

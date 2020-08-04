@@ -11,7 +11,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.io.IdResolver;
+import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -39,7 +40,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
 
     @NonNull
     @Override
-    public CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdFactory idFactory) throws ParseException, IOException {
+    public CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, width, height;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -76,7 +77,7 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     }
 
     @Override
-    protected <TT extends CssRectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdFactory idFactory, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssRectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         CssSize minX = value.getMinX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, minX.getValue(), minX.getUnits()));
         if (withComma) {
