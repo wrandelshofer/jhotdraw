@@ -1,5 +1,5 @@
 /*
- * @(#)DockPane.java
+ * @(#)DockRoot.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.dock;
@@ -10,11 +10,17 @@ import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.Activity;
 
 import java.util.function.Predicate;
 
-public interface DockPane extends Dock {
-
+/**
+ * The root node of a docking hierarchy.
+ * <p>
+ * The root node manages drag and drop of {@link DraggableDockChild} nodes, and
+ * creates or destroys {@link Dock} nodes that hold the {@link DraggableDockChild}s.
+ */
+public interface DockRoot extends DockParent {
     /**
      * Data format used for dragging a DockItem with the drag board.
      * The value of this data format is the {@link System#identityHashCode(Object)}
@@ -25,37 +31,40 @@ public interface DockPane extends Dock {
      * We store the dragged item here, because we move the <i>reference</i>
      * of a DockItem with the drag board rather than a value of the DockItem.
      */
-    ObjectProperty<Dockable> draggedDockable = new SimpleObjectProperty<>();
+    ObjectProperty<DraggableDockChild> draggedDockable = new SimpleObjectProperty<>();
 
     @NonNull
-    static ObjectProperty<Dockable> draggedDockableProperty() {
+    static ObjectProperty<DraggableDockChild> draggedDockableProperty() {
         return draggedDockable;
     }
 
     @Nullable
-    static Dockable getDraggedDockable() {
+    static DraggableDockChild getDraggedDockable() {
         return draggedDockable.get();
     }
 
-    static void setDraggedDockable(@Nullable Dockable value) {
+    static void setDraggedDockable(@Nullable DraggableDockChild value) {
         draggedDockable.set(value);
     }
 
 
     /**
-     * Only {@link Dockable}s accepted by this filter can be docked.
+     * Only {@link DraggableDockChild}s accepted by this filter can be docked.
+     * <p>
+     * This can be used to restrict docking to dockables that belong
+     * to the same {@link Activity}.
      *
-     * @return filter for accepting {@link Dockable}s
+     * @return filter for accepting {@link DraggableDockChild}s
      */
     @NonNull
-    ObjectProperty<Predicate<Dockable>> dockablePredicateProperty();
+    ObjectProperty<Predicate<DraggableDockChild>> dockablePredicateProperty();
 
     @NonNull
-    default Predicate<Dockable> getDockablePredicate() {
+    default Predicate<DraggableDockChild> getDockablePredicate() {
         return dockablePredicateProperty().get();
     }
 
-    default void setDockablePredicate(@NonNull Predicate<Dockable> value) {
+    default void setDockablePredicate(@NonNull Predicate<DraggableDockChild> value) {
         dockablePredicateProperty().set(value);
     }
 

@@ -1,5 +1,5 @@
 /*
- * @(#)SimpleDockPane.java
+ * @(#)SimpleDockRoot.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.dock;
@@ -20,27 +20,28 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.gui.RectangleTransition;
 
 import java.util.ArrayDeque;
 import java.util.function.Supplier;
 
 /**
- * A simple implementation of the {@link DockPane} interface.
+ * A simple implementation of the {@link DockRoot} interface.
  * <p>
  * This DockPane only shows the first child dock.
  * <p>
- * FIXME DockPane should allow to select which child that it shows.
+ * FIXME DockPane should allow to select which child that it shows, like a card pane.
  */
-public class SimpleDockPane
-        extends AbstractDockPane {
+public class SimpleDockRoot
+        extends AbstractDockRoot {
 
     @NonNull
     private final static Insets rootDrawnDropZoneInsets = new Insets(10, 10, 10, 10);
     @NonNull
-    private final static Insets dockDropZoneInsets = new Insets(40, 40, 40, 40);
+    private final static Insets dockSensedDropZoneInsets = new Insets(40, 40, 40, 40);
     @NonNull
-    private final static Insets rootDropZoneInsets = new Insets(20, 20, 20, 20);
+    private final static Insets rootSensedDropZoneInsets = new Insets(20, 20, 20, 20);
     @NonNull
     private final static Insets dockDrawnDropZoneInsets = new Insets(20, 20, 20, 20);
     @NonNull
@@ -62,7 +63,7 @@ public class SimpleDockPane
     @NonNull
     private Supplier<Dock> zSupplier = TabPaneDock::new;
 
-    public SimpleDockPane() {
+    public SimpleDockRoot() {
         stackPane.getChildren().add(contentPane);
         getChildren().add(stackPane);
         dropRect.setOpacity(0.4);
@@ -73,6 +74,8 @@ public class SimpleDockPane
         setOnDragExited(this::onDragExit);
         setOnDragDropped(this::onDragDrop);
         dockChildren.addListener(this::onRootChanged);
+        CustomBinding.bindElements(getDockChildren(), DockChild::showingProperty, showingProperty());
+        showingProperty().bind(sceneProperty().isNotNull());
     }
 
     @NonNull
@@ -85,14 +88,14 @@ public class SimpleDockPane
         );
     }
 
-    private Dock createDock(@NonNull DockAxis zoneAxis, @Nullable Dock parent) {
+    private Dock createDock(@NonNull DockAxis zoneAxis, @Nullable DockParent parent, boolean isRootPicked) {
         Supplier<Dock> supplier;
         switch (zoneAxis) {
         case X:
-            supplier = rootXSupplier;
+            supplier = isRootPicked ? rootXSupplier : subXSupplier;
             break;
         case Y:
-            supplier = rootYSupplier;
+            supplier = isRootPicked ? rootYSupplier : subYSupplier;
             break;
         case Z:
             supplier = zSupplier;
@@ -104,13 +107,13 @@ public class SimpleDockPane
     }
 
 
-    private boolean addToParent(@NonNull Dockable dockable, @NonNull Dock parent, @NonNull DropZone zone) {
-        DockNode child;
+    private boolean addToParent(@NonNull DraggableDockChild dockable, @NonNull DockParent parent, @NonNull DropZone zone, boolean isRootPicked) {
+        DockChild child;
         DockAxis zoneAxis = getZoneAxis(zone);
 
         // Make sure that the parent of the dockable is a z-axis dock
-        if ((parent instanceof DockPane) || zoneAxis != DockAxis.Z) {
-            child = createDock(DockAxis.Z, parent);
+        if ((parent instanceof DockRoot) || zoneAxis != DockAxis.Z) {
+            child = createDock(DockAxis.Z, parent, isRootPicked);
             ((Dock) child).getDockChildren().add(dockable);
         } else {
             child = dockable;
@@ -123,15 +126,15 @@ public class SimpleDockPane
         }
 
         // Add to grand parent if grand parent's axis match
-        Dock grandParent = parent.getDockParent();
+        DockParent grandParent = parent.getDockParent();
         if (grandParent != null && grandParent.getDockAxis() == zoneAxis) {
             addToZoneInParent(child, grandParent, zone, grandParent.getDockChildren().indexOf(parent));
             return true;
         }
         // Add to new grand parent
-        Dock newGrandParent = createDock(zoneAxis, grandParent);
+        Dock newGrandParent = createDock(zoneAxis, grandParent, isRootPicked);
         if (grandParent == null) {
-            DockNode removed = getDockChildren().set(0, newGrandParent);
+            DockChild removed = getDockChildren().set(0, newGrandParent);
             if (removed != null) {
                 addToZoneInParent(removed, newGrandParent, zone, -1);
             }
@@ -143,13 +146,13 @@ public class SimpleDockPane
         return true;
     }
 
-    private void addToZoneInParent(DockNode child, @NonNull Dock parent, @NonNull DropZone zone, int insertionIndex) {
-        Dock oldParent = child.getDockParent();
+    private void addToZoneInParent(DockChild child, @NonNull DockParent parent, @NonNull DropZone zone, int insertionIndex) {
+        DockParent oldParent = child.getDockParent();
         if (oldParent != null) {
             oldParent.getDockChildren().remove(child);
         }
 
-        ObservableList<DockNode> children = parent.getDockChildren();
+        ObservableList<DockChild> children = parent.getDockChildren();
         switch (zone) {
         case TOP:
         case LEFT:
@@ -165,15 +168,16 @@ public class SimpleDockPane
     private DragData computeDragData(@NonNull DragEvent e) {
         Bounds bounds = getBoundsInLocal();
 
-        Dock pickedDock;
-        if (subtractInsets(bounds, rootDropZoneInsets).contains(e.getX(), e.getY())) {
+        DockParent pickedDock;
+        boolean isRootPicked = true;
+        if (subtractInsets(bounds, rootSensedDropZoneInsets).contains(e.getX(), e.getY())) {
             PickResult pick = e.getPickResult();
             Node pickedNode = pick.getIntersectedNode();
             while (pickedNode != this && pickedNode != null
                     && !(pickedNode instanceof Dock)) {
                 pickedNode = pickedNode.getParent();
             }
-            pickedDock = (pickedNode instanceof Dock) ? (Dock) pickedNode : null;
+            pickedDock = (pickedNode instanceof Dock) || pickedNode == this ? (DockParent) pickedNode : null;
         } else {
             pickedDock = this;
         }
@@ -184,15 +188,16 @@ public class SimpleDockPane
             if (getDockChildrenReadOnly().isEmpty()) {
                 zone = DropZone.CENTER;
             } else {
-                zone = getZone(e.getX(), e.getY(), getBoundsInLocal(), rootDropZoneInsets);
+                zone = getZone(e.getX(), e.getY(), getBoundsInLocal(), rootSensedDropZoneInsets);
                 if (zone == DropZone.CENTER) {
                     zone = null;
                 }
             }
         } else if (pickedDock != null) {
+            isRootPicked = false;
             insets = dockDrawnDropZoneInsets;
             bounds = sceneToLocal(pickedDock.getNode().localToScene(pickedDock.getNode().getBoundsInLocal()));
-            zone = getZone(e.getX(), e.getY(), bounds, dockDropZoneInsets);
+            zone = getZone(e.getX(), e.getY(), bounds, dockSensedDropZoneInsets);
             if (zone == DropZone.CENTER && (!pickedDock.isEditable()
                     || pickedDock.getDockAxis() != DockAxis.Z)) {
                 zone = null;
@@ -200,21 +205,7 @@ public class SimpleDockPane
         } else {
             insets = null;
         }
-        return new DragData(pickedDock, zone, bounds, insets);
-    }
-
-    private void dumpTree(DockNode node, int indent) {
-        if (node != null) {
-            for (int i = 0; i < indent; i++) {
-                System.out.print('.');
-            }
-            System.out.println(node);
-            for (DockNode child : node.getDockChildrenReadOnly()) {
-                dumpTree(child, indent + 1);
-            }
-
-
-        }
+        return new DragData(pickedDock, zone, bounds, insets, isRootPicked);
     }
 
     @Override
@@ -252,8 +243,8 @@ public class SimpleDockPane
     }
 
     private boolean isAcceptable(@NonNull DragEvent e) {
-        Dockable draggedItem = DockPane.getDraggedDockable();
-        return e.getDragboard().getContentTypes().contains(DockPane.DOCKABLE_DATA_FORMAT)
+        DraggableDockChild draggedItem = DockRoot.getDraggedDockable();
+        return e.getDragboard().getContentTypes().contains(DockRoot.DOCKABLE_DATA_FORMAT)
                 //    && e.getGestureSource() != null
                 && draggedItem != null
                 && (getDockablePredicate().test(draggedItem));
@@ -264,28 +255,21 @@ public class SimpleDockPane
         return true;
     }
 
-    private void onDockableDropped(@Nullable Dock dropTarget, @NonNull Dockable dockable, @NonNull DropZone zone) {
-        DockPane leafRoot = dockable.getDockPane();
-        Dock dragSource = dockable.getDockParent();
+    private void onDockableDropped(@NonNull DraggableDockChild dropped, DragData dragData) {
+        DockRoot droppedRoot = dropped.getDockRoot();
+        DockParent dragSource = dropped.getDockParent();
         if (dragSource == null
-                || dropTarget == null
-                || (dropTarget instanceof DockPane) && (dropTarget != this)) {
+                || dragData.pickedDock == null
+                || (dragData.pickedDock instanceof DockRoot) && (dragData.pickedDock != this)) {
             return; // can't do dnd
         }
-        int index = dragSource.getDockChildren().indexOf(dockable);
+        int index = dragSource.getDockChildren().indexOf(dropped);
         dragSource.getDockChildren().remove(index);
-        if (!addToParent(dockable, dropTarget, zone)) {
+        if (!addToParent(dropped, dragData.pickedDock, dragData.zone, dragData.isRootPicked)) {
             // failed to add revert to previous state
-            dragSource.getDockChildren().add(index, dockable);
+            dragSource.getDockChildren().add(index, dropped);
         } else {
-            System.out.println("-----add-----");
-            dumpTree(this, 0);
-            System.out.println("-----cleanup-----");
             removeUnusedDocks(dragSource);
-            dumpTree(this, 0);
-            if (leafRoot != this) {
-                dumpTree(leafRoot, 0);
-            }
         }
     }
 
@@ -296,13 +280,11 @@ public class SimpleDockPane
             return;
         }
 
-        Dockable droppedTab = DockPane.getDraggedDockable();
-
-
+        DraggableDockChild droppedTab = DockRoot.getDraggedDockable();
         DragData dragData = computeDragData(e);
         if (dragData.zone != null) {
             e.acceptTransferModes(TransferMode.MOVE);
-            onDockableDropped(dragData.pickedDock, droppedTab, dragData.zone);
+            onDockableDropped(droppedTab, dragData);
 
         }
         e.consume();
@@ -318,7 +300,7 @@ public class SimpleDockPane
         }
 
         DragData dragData = computeDragData(e);
-        updateDropRect(dragData.zone, dragData.bounds, dragData.insets);
+        updateDropRect(dragData);
 
         if (dragData.zone != null) {
             e.acceptTransferModes(TransferMode.MOVE);
@@ -326,7 +308,7 @@ public class SimpleDockPane
         }
     }
 
-    protected void onRootChanged(ListChangeListener.Change<? extends DockNode> c) {
+    protected void onRootChanged(ListChangeListener.Change<? extends DockItem> c) {
         contentPane.centerProperty().unbind();
         if (c.getList().isEmpty()) {
             contentPane.centerProperty().set(null);
@@ -336,18 +318,18 @@ public class SimpleDockPane
 
     }
 
-    private void removeUnusedDocks(Dock node) {
-        DockPane root = node.getDockPane();
+    private void removeUnusedDocks(DockParent node) {
+        DockRoot root = node.getDockRoot();
         if (root == null) {
             return;
         }
 
-        ArrayDeque<Dock> todo = new ArrayDeque<>();
+        ArrayDeque<DockParent> todo = new ArrayDeque<>();
         todo.add(node);
 
         while (!todo.isEmpty()) {
-            Dock dock = todo.remove();
-            Dock parent = dock.getDockParent();
+            DockParent dock = todo.remove();
+            DockParent parent = dock.getDockParent();
             if (parent != null) {
                 if (dock.getDockChildrenReadOnly().isEmpty()) {
                     // Remove composite if it has zero children
@@ -355,7 +337,7 @@ public class SimpleDockPane
                     todo.add(parent);
                 } else if (dock.getDockAxis() != DockAxis.Z && dock.getDockChildren().size() == 1) {
                     // Replace xy composite with its child if xy composite has one child
-                    DockNode onlyChild = dock.getDockChildren().remove(0);
+                    DockChild onlyChild = dock.getDockChildren().remove(0);
                     parent.getDockChildren().set(parent.getDockChildren().indexOf(dock), onlyChild);
                     todo.add(parent);
                 }
@@ -363,24 +345,26 @@ public class SimpleDockPane
         }
     }
 
-    private void updateDropRect(@Nullable final DropZone zone, @NonNull Bounds bounds, @NonNull Insets ins) {
-        if (zone == null) {
+    private void updateDropRect(DragData dragData) {
+        if (dragData.zone == null) {
             dropRect.setVisible(false);
             return;
         }
         if (dropRect.getParent() == null) {
             stackPane.getChildren().add(dropRect);
         }
+        Bounds bounds = dragData.bounds;
         double x = bounds.getMinX(),
                 y = bounds.getMinY(),
                 w = bounds.getWidth(),
                 h = bounds.getHeight();
+        Insets ins = dragData.insets;
         double btm = ins.getBottom(),
                 lft = ins.getLeft(),
                 rgt = ins.getRight(),
                 top = ins.getTop();
         BoundingBox rect;
-        switch (zone) {
+        switch (dragData.zone) {
         case BOTTOM:
             rect = new BoundingBox(x, y + h - btm, w, btm);
             break;
@@ -417,16 +401,18 @@ public class SimpleDockPane
     }
 
     private static class DragData {
-        final Dock pickedDock;
+        final DockParent pickedDock;
         final DropZone zone;
         final Bounds bounds;
         final Insets insets;
+        final boolean isRootPicked;
 
-        public DragData(Dock pickedDock, DropZone zone, Bounds bounds, Insets insets) {
+        public DragData(DockParent pickedDock, DropZone zone, Bounds bounds, Insets insets, boolean isRootPicked) {
             this.pickedDock = pickedDock;
             this.zone = zone;
             this.bounds = bounds;
             this.insets = insets;
+            this.isRootPicked = isRootPicked;
         }
     }
 

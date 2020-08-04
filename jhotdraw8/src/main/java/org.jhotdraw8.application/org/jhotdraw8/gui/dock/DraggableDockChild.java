@@ -1,5 +1,5 @@
 /*
- * @(#)Dockable.java
+ * @(#)DraggableDockChild.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.dock;
@@ -9,13 +9,17 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 
-public interface Dockable extends DockNode {
+/**
+ * Represents a dock child that the user can drag from one {@code Dock} to
+ * another {@code Dock}.
+ */
+public interface DraggableDockChild extends DockChild {
     /**
-     * The style class for the dockable icon.
+     * The style class for the graphic object.
      * <p>
-     * Value: {@value #DOCKABLE_ICON_STYLE_CLASS}.
+     * Value: {@value #DRAGGABLE_DOCK_CHILD_GRAPHIC_STYLE_CLASS}.
      */
-    String DOCKABLE_ICON_STYLE_CLASS = "dockable-icon";
+    String DRAGGABLE_DOCK_CHILD_GRAPHIC_STYLE_CLASS = "draggable-dock-child-graphic";
 
     @NonNull
     ObjectProperty<Node> graphicProperty();

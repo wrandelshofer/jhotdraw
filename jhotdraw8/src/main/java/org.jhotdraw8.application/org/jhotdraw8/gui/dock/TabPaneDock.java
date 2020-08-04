@@ -4,8 +4,9 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -13,67 +14,85 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 
-import java.util.Map;
-import java.util.WeakHashMap;
+public class TabPaneDock extends AbstractDockParent implements Dock {
 
-public class TabPaneDock extends AbstractDock {
-
-    private final Map<DockNode, Tab> tabMap = new WeakHashMap<>();
     private final TabPane tabPane = new TabPane();
     @NonNull
     private ResizePane resizePane = new ResizePane();
 
+    static class MyTab extends Tab {
+        private final DockableDragHandler dockableDragHandler;
+        @NonNull
+        private DockChild dockChild;
+
+        MyTab(@NonNull DockChild dockChild, @Nullable String text, @Nullable Node graphic) {
+            super(text, graphic);
+            this.dockChild = dockChild;
+            if (dockChild instanceof DraggableDockChild) {
+                dockableDragHandler = new DockableDragHandler((DraggableDockChild) dockChild);
+            } else {
+                dockableDragHandler = null;
+            }
+        }
+
+        BooleanProperty showingProperty() {
+            return dockChild.showingProperty();
+        }
+
+        void dispose() {
+            if (dockableDragHandler != null) {
+                dockableDragHandler.dispose();
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "MyTab@" + Integer.toHexString(hashCode()) + "{" +
+                    dockChild +
+                    '}';
+        }
+    }
+
     public TabPaneDock() {
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         getChildren().add(resizePane);
         resizePane.setContent(tabPane);
-        CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
-                k -> tabMap.computeIfAbsent(k, this::makeTab));
-        dockParentProperty().addListener(onParentChanged());
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.NEVER);
         HBox.setHgrow(this, Priority.NEVER);
+
+
+        dockParentProperty().addListener(onParentChanged());
+        CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
+                this::makeTab, k -> ((MyTab) k).dispose());
+        CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(),
+                t -> ((MyTab) t).showingProperty(), showingProperty(),
+                false);
     }
 
     @NonNull
-    protected ChangeListener<Dock> onParentChanged() {
+    protected ChangeListener<DockParent> onParentChanged() {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
             resizePane.setResizeAxis(newv == null ? DockAxis.Y : newv.getDockAxis());
-            boolean hasRootPane = newv != null && newv.getDockPane() != null;
-            ObservableList<DockNode> dockChildren = getDockChildren();
-            for (int i = 0, n = dockChildren.size(); i < n; i++) {
-                Tab tab = tabPane.getTabs().get(i);
-                tab.graphicProperty().unbind();
-                DockNode dockNode = dockChildren.get(i);
-                if (hasRootPane && (dockNode instanceof Dockable)) {
-                    tab.graphicProperty().bind(((Dockable) dockNode).graphicProperty());
-                } else {
-                    tab.setGraphic(null);
-                }
-            }
         };
     }
 
     @NonNull
-    private Tab makeTab(DockNode c) {
-        if (c instanceof Dockable) {
-            Dockable k = (Dockable) c;
-            Tab tab = new Tab(k.getText(), k.getNode());
-            if (getDockPane() != null) {
-                tab.graphicProperty().bind(k.graphicProperty());
-            }
+    private MyTab makeTab(DockChild c) {
+        if (c instanceof DraggableDockChild) {
+            DraggableDockChild k = (DraggableDockChild) c;
+            MyTab tab = new MyTab(k, k.getText(), k.getNode());
+            tab.graphicProperty().bind(CustomBinding.<Node>compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;
         } else {
-            return new Tab("-", c.getNode());
+            return new MyTab(c, "-", c.getNode());
         }
     }
 
-    @Override
-    public boolean isEditable() {
-        return true;
-    }
 
     @NonNull
     @Override

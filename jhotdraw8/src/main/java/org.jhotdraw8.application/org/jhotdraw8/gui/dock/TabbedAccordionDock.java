@@ -4,13 +4,14 @@
  */
 package org.jhotdraw8.gui.dock;
 
+import javafx.beans.binding.Binding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
@@ -21,18 +22,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.binding.CustomBinding;
 
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 
 import static java.lang.Double.max;
 
-public class TabbedAccordionDock extends AbstractDock {
+public class TabbedAccordionDock extends AbstractDockParent implements Dock {
 
-    private final Map<DockNode, Tab> tabMap = new WeakHashMap<>();
-    private final BooleanProperty rotated = new SimpleBooleanProperty(true);
+    private final BooleanProperty rotated = new SimpleBooleanProperty(false);
     private final TabPane tabPane = new TabPane();
     @NonNull
     private final Accordion accordion = new Accordion();
@@ -82,6 +81,7 @@ public class TabbedAccordionDock extends AbstractDock {
     };
 
     public TabbedAccordionDock() {
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         accordion.getPanes().add(titlePane);
         accordion.setExpandedPane(titlePane);
         titlePane.setContent(stackPane);
@@ -92,35 +92,46 @@ public class TabbedAccordionDock extends AbstractDock {
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.NEVER);
         HBox.setHgrow(this, Priority.NEVER);
-        dockChildren.addListener((ListChangeListener<? super DockNode>) change -> onDockChildrenChanged());
-
         accordion.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
         titlePane.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
+
+        dockParentProperty().addListener(onParentChanged());
+        dockChildren.addListener((ListChangeListener<? super DockItem>) change -> onDockChildrenChanged());
+        CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
+                this::makeTab, k -> ((TabPaneDock.MyTab) k).dispose());
+        Binding<Boolean> expandedAndShowing = showingProperty().and(accordion.expandedPaneProperty().isNotNull());
+        CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(), t -> ((TabPaneDock.MyTab) t).showingProperty(), expandedAndShowing, false);
     }
 
     @NonNull
-    private Tab makeTab(DockNode c) {
-        if (c instanceof Dockable) {
-            Dockable k = (Dockable) c;
-            Tab tab = new Tab(k.getText(), k.getNode());
-            if (getDockPane() != null) {
-                tab.graphicProperty().bind(k.graphicProperty());
-            }
+    private TabPaneDock.MyTab makeTab(DockChild c) {
+        if (c instanceof DraggableDockChild) {
+            DraggableDockChild k = (DraggableDockChild) c;
+            TabPaneDock.MyTab tab = new TabPaneDock.MyTab(c, k.getText(), k.getNode());
+            tab.graphicProperty().bind(CustomBinding.<Node>compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;
         } else {
-            return new Tab("-", c.getNode());
+            return new TabPaneDock.MyTab(c, "-", c.getNode());
         }
     }
 
+    @NonNull
+    protected ChangeListener<DockParent> onParentChanged() {
+        return (o, oldv, newv) -> {
+            resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
+            resizePane.setResizeAxis(newv == null ? DockAxis.Y : newv.getDockAxis());
+            // setRotated(newv != null&&newv.getDockAxis()==DockAxis.X);
+        };
+    }
+
     private void onDockChildrenChanged() {
-        List<Dockable> dockables = dockChildren.stream()
-                .filter(d -> d instanceof Dockable)
-                .map(d -> (Dockable) d)
+        List<DraggableDockChild> dockables = dockChildren.stream()
+                .filter(d -> d instanceof DraggableDockChild)
+                .map(d -> (DraggableDockChild) d)
                 .collect(Collectors.toList());
         switch (dockables.size()) {
         case 0: {
             resizePane.setCenter(null);
-            tabPane.getTabs().clear();
             titlePane.setText(null);
             titlePane.setGraphic(null);
             titlePane.setContent(null);
@@ -128,10 +139,12 @@ public class TabbedAccordionDock extends AbstractDock {
             break;
         }
         case 1: {
-            tabPane.getTabs().clear();
-            Dockable i = dockables.get(0);
+            DraggableDockChild i = dockables.get(0);
             titlePane.setText(i.getText());
+
+            // this detaches the graphics from the tab!
             titlePane.setGraphic(i.getGraphic());
+
             stackPane.getChildren().clear();
             stackPane.getChildren().add(resizePane);
             titlePane.setContent(stackPane);
@@ -139,16 +152,14 @@ public class TabbedAccordionDock extends AbstractDock {
             break;
         }
         default: {
-            resizePane.setCenter(tabPane);
+            // The tabPane will reattach the graphics by itself, but the
+            // titlePane needs an explicit detach.
             titlePane.setGraphic(null);
-            List<Tab> tabs = dockChildren.stream()
-                    .map(d -> tabMap.computeIfAbsent(d, this::makeTab))
-                    .collect(Collectors.toList());
-            tabMap.keySet().retainAll(dockables);
-            tabPane.getTabs().setAll(tabs);
+
+            resizePane.setCenter(tabPane);
             StringBuilder b = new StringBuilder();
             double minHeight = 0;
-            for (Dockable i : dockables) {
+            for (DraggableDockChild i : dockables) {
                 Node content = i.getNode();
                 if (content instanceof Region) {
                     minHeight = max(minHeight, content.minHeight(-1));
@@ -168,10 +179,6 @@ public class TabbedAccordionDock extends AbstractDock {
         }
     }
 
-    @Override
-    public boolean isEditable() {
-        return true;
-    }
 
     @NonNull
     @Override

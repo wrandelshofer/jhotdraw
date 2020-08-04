@@ -10,6 +10,9 @@ import javafx.collections.SetChangeListener;
 
 import java.util.function.Function;
 
+/**
+ * Binds the content of a list to a set.
+ */
 class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
     private final ObservableList<D> dest;
     private final ObservableSet<S> source;

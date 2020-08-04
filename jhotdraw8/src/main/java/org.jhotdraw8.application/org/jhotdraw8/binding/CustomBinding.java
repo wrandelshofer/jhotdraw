@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.binding;
 
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
@@ -18,8 +19,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -56,32 +59,97 @@ public class CustomBinding {
                 propertyA.bindBidirectional(propertyB.apply(newv));
             }
         };
-        changeListener.changed(mediator, null, null);
+        changeListener.changed(mediator, null, mediator.getValue());
         mediator.addListener(changeListener);
     }
 
     /**
-     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+     * Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
+     * <p>
+     * When 'a' is unbound from 'b', its value is set to null.
      *
      * @param <T>       the type of properties 'a' and 'b'
      * @param <M>       the type of the mediator property
      * @param propertyA property 'a'
-     * @param mediator  the mediator property
+     * @param mediatorB the mediator property
      * @param propertyB property 'b'
      */
     public static <T, M> void bind(
-            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, ObservableValue<T>> propertyB) {
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediatorB, @NonNull Function<M, ObservableValue<T>> propertyB) {
+        bind(propertyA, mediatorB, propertyB, null);
+    }
+
+    /**
+     * Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
+     * <p>
+     * When 'a' is unbound from 'b', its value is set to 'unboundValue'.
+     *
+     * @param <T>          the type of properties 'a' and 'b'
+     * @param <M>          the type of the mediator property
+     * @param propertyA    property 'a'
+     * @param mediatorB    the mediator property
+     * @param propertyB    property 'b'
+     * @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
+     */
+    public static <T, M> void bind(
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediatorB, @NonNull Function<M, ObservableValue<T>> propertyB, T unboundValue) {
 
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
                 propertyA.unbind();
+                propertyA.setValue(unboundValue);
             }
             if (newv != null) {
                 propertyA.bind(propertyB.apply(newv));
             }
         };
-        changeListener.changed(mediator, null, null);
-        mediator.addListener(changeListener);
+        changeListener.changed(mediatorB, null, mediatorB.getValue());
+        mediatorB.addListener(changeListener);
+    }
+
+    /**
+     * Binds property 'a' to property 'b'. Property 'a' is provided by 'mediatorA'.
+     * <p>
+     * When 'a' is unbound from 'b', its value is set to 'null'.
+     *
+     * @param <T>       the type of properties 'a' and 'b'
+     * @param <M>       the type of the mediator property
+     * @param propertyA property 'a'
+     * @param mediatorA the mediator property
+     * @param propertyB property 'b'
+     */
+    public static <T, M> void bind(@NonNull ObservableValue<M> mediatorA,
+                                   @NonNull Function<M, Property<T>> propertyA, @NonNull ObservableValue<T> propertyB) {
+        bind(mediatorA, propertyA, propertyB, null);
+    }
+
+    /**
+     * Binds property 'a' to property 'b'. Property 'a' is provided by 'mediatorA'.
+     * <p>
+     * When 'a' is unbound from 'b', its value is set to 'unboundValue'.
+     *
+     * @param <T>          the type of properties 'a' and 'b'
+     * @param <M>          the type of the mediator property
+     * @param propertyA    property 'a'
+     * @param mediatorA    the mediator property
+     * @param propertyB    property 'b'
+     * @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
+     */
+    public static <T, M> void bind(@NonNull ObservableValue<M> mediatorA,
+                                   @NonNull Function<M, Property<T>> propertyA, @NonNull ObservableValue<T> propertyB, T unboundValue) {
+
+        final ChangeListener<M> changeListener = (o, oldv, newv) -> {
+            if (oldv != null) {
+                Property<T> mediatedA = propertyA.apply(oldv);
+                mediatedA.unbind();
+                mediatedA.setValue(unboundValue);
+            }
+            if (newv != null) {
+                propertyA.apply(newv).bind(propertyB);
+            }
+        };
+        changeListener.changed(mediatorA, null, mediatorA.getValue());
+        mediatorA.addListener(changeListener);
     }
 
     /**
@@ -184,8 +252,23 @@ public class CustomBinding {
      * @param <D>    the type of list dest
      * @param <S>    the type of list source
      */
-    public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
-        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest);
+    public static <D, S> void bindContent(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> src, @NonNull Function<S, D> toDest) {
+        bindContent(dest, src, toDest, null);
+    }
+
+    /**
+     * Binds list dest to list source.
+     * The binding can be removed by calling {@link #unbindContent};
+     *
+     * @param dest         list dest
+     * @param src          list source
+     * @param toDest       mapping function to dest
+     * @param destOnRemove this consumer is called when an element is removed from the dest list
+     * @param <D>          the type of list dest
+     * @param <S>          the type of list source
+     */
+    public static <D, S> void bindContent(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> src, @NonNull Function<S, D> toDest, @Nullable Consumer<D> destOnRemove) {
+        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, destOnRemove);
         src.addListener(binding);
     }
 
@@ -213,7 +296,7 @@ public class CustomBinding {
      * @param <S>  the type of list source
      */
     public static <D, S> void unbindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
-        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, (a) -> null);
+        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, (a) -> null, null);
         src.removeListener(binding);
     }
 
@@ -232,6 +315,25 @@ public class CustomBinding {
      * @param <T>      the property type
      */
     public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property) {
+        bindElements(list, getter, property, null);
+    }
+
+    /**
+     * Binds the specified property of all list elements to the given property.
+     * <p>
+     * If an element is added, its property is bound.
+     * <p>
+     * If an element is removed, its property is unbound and the property value
+     * is set to {@code unboundValue}.
+     *
+     * @param list         the list
+     * @param getter       the getter for the element property
+     * @param property     the property to which the element properties shall be bound
+     * @param unboundValue the value to that is set when the property is unbound.
+     * @param <E>          the element type
+     * @param <T>          the property type
+     */
+    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property, T unboundValue) {
         for (E elem : list) {
             Property<T> p = getter.apply(elem);
             p.unbind();
@@ -242,12 +344,66 @@ public class CustomBinding {
                 for (E removed : change.getRemoved()) {
                     Property<T> p = getter.apply(removed);
                     p.unbind();
-                    p.setValue(null);
+                    p.setValue(unboundValue);
                 }
                 for (E added : change.getAddedSubList()) {
                     Property<T> p = getter.apply(added);
                     p.unbind();
                     p.bind(property);
+                }
+            }
+        });
+    }
+
+    /**
+     * Binds the specified property of all list elements to the given binding.
+     * <p>
+     * If an element is added, its property is bound.
+     * <p>
+     * If an element is removed, its property is unbound and the property value
+     * is set to null.
+     *
+     * @param list    the list
+     * @param getter  the getter for the element property
+     * @param binding the binding to which the element properties shall be bound
+     * @param <E>     the element type
+     * @param <T>     the property type
+     */
+    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Binding<T> binding) {
+        bindElements(list, getter, binding, null);
+    }
+
+    /**
+     * Binds the specified property of all list elements to the given binding.
+     * <p>
+     * If an element is added, its property is bound.
+     * <p>
+     * If an element is removed, its property is unbound and the property value
+     * is set to {@code unboundValue}.
+     *
+     * @param list    the list
+     * @param getter  the getter for the element property
+     * @param binding the binding to which the element properties shall be bound
+     * @param <E>     the element type
+     * @param <T>     the property type
+     */
+    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Binding<T> binding, T unboundValue) {
+        for (E elem : list) {
+            Property<T> p = getter.apply(elem);
+            p.unbind();
+            p.bind(binding);
+        }
+        list.addListener((ListChangeListener.Change<? extends E> change) -> {
+            while (change.next()) {
+                for (E removed : change.getRemoved()) {
+                    Property<T> p = getter.apply(removed);
+                    p.unbind();
+                    p.setValue(unboundValue);
+                }
+                for (E added : change.getAddedSubList()) {
+                    Property<T> p = getter.apply(added);
+                    p.unbind();
+                    p.bind(binding);
                 }
             }
         });
@@ -302,6 +458,16 @@ public class CustomBinding {
         changeListener.changed(value, !value.getValue(), value.getValue());
     }
 
+    /**
+     * Creates a binding with a computed value.
+     * <p>
+     * If the value of one of the dependencies changes, the binding is marked as
+     * invalid.
+     *
+     * @param op           the operation that computes the value
+     * @param dependendies the depencies that invalidate the computed value
+     * @return a new binding
+     */
     public static DoubleBinding computeDouble(DoubleSupplier op, ObservableValue<?>... dependendies) {
         return new DoubleBinding() {
             {
@@ -322,6 +488,17 @@ public class CustomBinding {
 
     }
 
+    /**
+     * Creates a binding with a computed value.
+     * <p>
+     * If the value of one of the dependencies changes, the binding is marked as
+     * invalid.
+     *
+     * @param op           the operation that computes the value
+     * @param dependendies the depencies that invalidate the computed value
+     * @param <T>          the type of the value
+     * @return a new binding
+     */
     public static <T> ObjectBinding<T> compute(Supplier<T> op, ObservableValue<?>... dependendies) {
         return new ObjectBinding<T>() {
             {

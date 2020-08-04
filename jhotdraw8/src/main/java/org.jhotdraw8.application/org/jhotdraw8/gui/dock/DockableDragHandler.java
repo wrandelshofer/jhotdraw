@@ -15,14 +15,14 @@ import javafx.scene.input.TransferMode;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import static org.jhotdraw8.gui.dock.DockPane.DOCKABLE_DATA_FORMAT;
+import static org.jhotdraw8.gui.dock.DockRoot.DOCKABLE_DATA_FORMAT;
 
-public class DockableDragHandler {
+class DockableDragHandler {
 
-    private final Dockable dockable;
+    private final DraggableDockChild dockable;
     private final ChangeListener<Node> graphicChangedListener = this::onGraphicChanged;
 
-    public DockableDragHandler(Dockable dockable) {
+    public DockableDragHandler(DraggableDockChild dockable) {
         this.dockable = dockable;
         dockable.graphicProperty().addListener(graphicChangedListener);
         onGraphicChanged(dockable.graphicProperty(), null, dockable.getGraphic());
@@ -41,16 +41,16 @@ public class DockableDragHandler {
     }
 
     private void onDragDone(DragEvent e) {
-        DockPane.setDraggedDockable(null);
+        DockRoot.setDraggedDockable(null);
     }
 
     private void onDragDetected(@NonNull MouseEvent e) {
-        if (dockable.getDockPane() == null) {
+        if (dockable.getDockRoot() == null) {
             return;
         }
 
         Node graphic = dockable.getGraphic();
-        DockPane.setDraggedDockable(dockable);
+        DockRoot.setDraggedDockable(dockable);
         Dragboard db = graphic.startDragAndDrop(TransferMode.MOVE);
 
         db.setDragView(
@@ -63,5 +63,13 @@ public class DockableDragHandler {
         e.consume();
     }
 
+    public void dispose() {
+        dockable.graphicProperty().removeListener(graphicChangedListener);
+        Node oldv = dockable.getGraphic();
+        if (oldv != null) {
+            oldv.setOnDragDetected(null);
+            oldv.setOnDragDone(null);
+        }
+    }
 }
 

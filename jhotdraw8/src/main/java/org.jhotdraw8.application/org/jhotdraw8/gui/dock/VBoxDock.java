@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
-public class VBoxDock extends AbstractDock {
+public class VBoxDock extends AbstractDockParent implements Dock {
     private ScrollPane scrollPane = new ScrollPane();
     private final VBox vbox = new VBox();
 
@@ -20,12 +20,8 @@ public class VBoxDock extends AbstractDock {
         scrollPane.setFitToWidth(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         CustomBinding.bindContent(vbox.getChildren(), getDockChildren(),
-                DockNode::getNode);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return true;
+                DockItem::getNode);
+        CustomBinding.bindElements(getDockChildren(), DockChild::showingProperty, showingProperty());
     }
 
     @Override

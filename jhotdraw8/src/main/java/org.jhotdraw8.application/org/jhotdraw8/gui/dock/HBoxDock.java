@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
-public class HBoxDock extends AbstractDock {
+public class HBoxDock extends AbstractDockParent implements Dock {
     private ScrollPane scrollPane = new ScrollPane();
     private final HBox hbox = new HBox();
 
@@ -20,7 +20,8 @@ public class HBoxDock extends AbstractDock {
         scrollPane.setFitToWidth(false);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         CustomBinding.bindContent(hbox.getChildren(), getDockChildren(),
-                DockNode::getNode);
+                DockItem::getNode);
+        CustomBinding.bindElements(getDockChildren(), DockChild::showingProperty, showingProperty());
     }
 
     @Override

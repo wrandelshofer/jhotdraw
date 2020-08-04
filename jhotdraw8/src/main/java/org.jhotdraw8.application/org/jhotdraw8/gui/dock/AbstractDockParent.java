@@ -1,12 +1,14 @@
 /*
- * @(#)AbstractDock.java
+ * @(#)AbstractDockParent.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.dock;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -17,26 +19,30 @@ import javafx.scene.control.Control;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.gui.CustomSkin;
 
-public abstract class AbstractDock
+/**
+ * Abstract base class for implementations of {@link DockParent}.
+ */
+public abstract class AbstractDockParent
         extends Control
-        implements Dock {
-    protected final ObjectProperty<Dock> dockParent = new SimpleObjectProperty<>();
-    protected final ObservableList<DockNode> dockChildren = FXCollections.observableArrayList();
-    private final ReadOnlyObjectProperty<Node> node = new ReadOnlyObjectWrapper<>((Node) this).getReadOnlyProperty();
+        implements DockParent {
+    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
+    protected final BooleanProperty editable = new SimpleBooleanProperty(this, EDITABLE_PROPERTY, true);
+    protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
+    protected final ObservableList<DockChild> dockChildren = FXCollections.observableArrayList();
+    private final ReadOnlyObjectProperty<Node> node = new ReadOnlyObjectWrapper<Node>(this, NODE_PROPERTY, this).getReadOnlyProperty();
 
-    public AbstractDock() {
+    public AbstractDockParent() {
         setSkin(new CustomSkin<>(this));
-        //CustomBinding.bindElements(dockChildren,DockNode::setDockParent,this);
-        dockChildren.addListener((ListChangeListener.Change<? extends DockNode> change) -> {
+        dockChildren.addListener((ListChangeListener.Change<? extends DockItem> change) -> {
             while (change.next()) {
-                for (DockNode removed : change.getRemoved()) {
+                for (DockItem removed : change.getRemoved()) {
                     removed.setDockParent(null);
                 }
-                for (DockNode added : change.getAddedSubList()) {
+                for (DockItem added : change.getAddedSubList()) {
                     if (added.getDockParent() != null) {
                         throw new IllegalStateException("Added still has parent " + added);
                     }
-                    if (added instanceof DockPane) {
+                    if (added instanceof DockRoot) {
                         throw new IllegalStateException("Added DockPane cannot have parent " + added);
                     }
                     added.setDockParent(this);
@@ -50,13 +56,13 @@ public abstract class AbstractDock
     }
 
     @Override
-    public @NonNull ObjectProperty<Dock> dockParentProperty() {
+    public @NonNull ObjectProperty<DockParent> dockParentProperty() {
         return dockParent;
     }
 
 
     @Override
-    public @NonNull ObservableList<DockNode> getDockChildren() {
+    public @NonNull ObservableList<DockChild> getDockChildren() {
         return dockChildren;
     }
 
@@ -84,4 +90,13 @@ public abstract class AbstractDock
         return this;
     }
 
+    @Override
+    public @NonNull BooleanProperty showingProperty() {
+        return showing;
+    }
+
+    @Override
+    public @NonNull BooleanProperty editableProperty() {
+        return editable;
+    }
 }

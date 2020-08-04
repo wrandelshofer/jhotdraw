@@ -11,14 +11,15 @@ import org.jhotdraw8.binding.CustomBinding;
 
 
 public class SplitPaneDock
-        extends AbstractDock {
+        extends AbstractDockParent implements Dock {
     private final SplitPane splitPane = new SplitPane();
 
     public SplitPaneDock(Orientation orientation) {
         splitPane.setOrientation(orientation);
         getChildren().add(splitPane);
         CustomBinding.bindContent(splitPane.getItems(), getDockChildren(),
-                DockNode::getNode);
+                DockItem::getNode);
+        CustomBinding.bindElements(getDockChildren(), DockChild::showingProperty, showingProperty());
     }
 
 
