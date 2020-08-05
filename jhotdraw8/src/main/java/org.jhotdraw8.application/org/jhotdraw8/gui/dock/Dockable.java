@@ -10,17 +10,26 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Represents a dock child that the user can drag from one {@code Dock} to
- * another {@code Dock}.
+ * Represents a dock child that the user can drag from one {@link Track} to
+ * another {@link Track}.
  */
 public interface Dockable extends DockChild {
     /**
-     * The style class for the graphic object.
-     * <p>
-     * Value: {@value #DRAGGABLE_DOCK_CHILD_GRAPHIC_STYLE_CLASS}.
+     * The name of the {@link #graphicProperty()} ()}.
      */
-    String DRAGGABLE_DOCK_CHILD_GRAPHIC_STYLE_CLASS = "draggable-dock-child-graphic";
+    String GRAPHIC_PROPERTY = "graphic";
+    /**
+     * The name of the {@link #textProperty()} ()}.
+     */
+    String TEXT_PROPERTY = "text";
 
+    /**
+     * The graphic of this dockable.
+     * <p>
+     * The user uses the graphic to drag and drop the dockable.
+     *
+     * @return the graphic
+     */
     @NonNull
     ObjectProperty<Node> graphicProperty();
 
@@ -32,6 +41,13 @@ public interface Dockable extends DockChild {
         graphicProperty().set(value);
     }
 
+    /**
+     * The text of this dockable.
+     * <p>
+     * The user uses the text to identify the dockable.
+     *
+     * @return the graphic
+     */
     @NonNull
     StringProperty textProperty();
 
@@ -42,17 +58,4 @@ public interface Dockable extends DockChild {
     default void setText(String value) {
         textProperty().set(value);
     }
-
-    @NonNull
-    StringProperty idProperty();
-
-    default String getId() {
-        return idProperty().get();
-    }
-
-    default void setId(String value) {
-        idProperty().set(value);
-    }
-
-
 }

@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
 /**
  * Represents a dock item that can be docked to a {@code DockParent}.
  */
-public interface DockChild extends DockItem {
+public interface DockChild extends DockNode {
     /**
      * The name of the {@link #showingProperty()} ()}.
      */

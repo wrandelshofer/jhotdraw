@@ -12,6 +12,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
@@ -24,11 +25,19 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.Double.max;
 
+/**
+ * This track stacks {@link Dockable}s on the Z-axis into a tab pane inside
+ * an accordion.
+ * <p>
+ * If this track has only one {@link Dockable}, it is added directly to
+ * the accordion without a tab pane in between.
+ */
 public class TabbedAccordionTrack extends AbstractDockParent implements Track {
 
     private final BooleanProperty rotated = new SimpleBooleanProperty(false);
@@ -55,28 +64,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
                     child.getTransforms().setAll(translate, rotate);
                     child.resizeRelocate(0, 0, getHeight(), getWidth());
                 }
-
             }
-        }
-
-        @Override
-        protected double computeMaxWidth(double height) {
-            return isRotated() ? super.computeMaxHeight(height) : super.computeMaxWidth(height);
-        }
-
-        @Override
-        protected double computeMaxHeight(double width) {
-            return isRotated() ? super.computeMaxWidth(width) : super.computeMaxHeight(width);
-        }
-
-        @Override
-        protected double computePrefWidth(double height) {
-            return isRotated() ? super.computePrefHeight(height) : super.computePrefWidth(height);
-        }
-
-        @Override
-        protected double computePrefHeight(double width) {
-            return isRotated() ? super.computePrefWidth(width) : super.computePrefHeight(width);
         }
     };
 
@@ -84,22 +72,22 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         accordion.getPanes().add(titlePane);
         accordion.setExpandedPane(titlePane);
         titlePane.setContent(stackPane);
+        titlePane.setBorder(null);
         stackPane.getChildren().add(resizePane);
+        stackPane.setBorder(null);
 
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         getChildren().add(accordion);
-        resizePane.setContent(tabPane);
+        resizePane.setCenter(tabPane);
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.NEVER);
         HBox.setHgrow(this, Priority.NEVER);
-        accordion.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
-        titlePane.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-padding:0;");
+        getStyleClass().add("track");
 
         dockParentProperty().addListener(onParentChanged());
-        dockChildren.addListener((ListChangeListener<? super DockItem>) change -> onDockChildrenChanged());
-        CustomBinding.bindContentBidirectional(tabPane.getTabs(), getDockChildren(),
-                this::makeTab, k -> ((TabPaneTrack.MyTab) k).dispose(),
-                tab -> ((TabPaneTrack.MyTab) tab).dockChild, null);
+        dockChildren.addListener((ListChangeListener<? super DockNode>) change -> onDockChildrenChanged());
+        CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
+                this::makeTab, k -> ((TabPaneTrack.MyTab) k).dispose());
         Binding<Boolean> expandedAndShowing = showingProperty().and(accordion.expandedPaneProperty().isNotNull());
         CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(), t -> ((TabPaneTrack.MyTab) t).showingProperty(), expandedAndShowing, false);
     }
@@ -121,7 +109,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
             resizePane.setResizeAxis(newv == null ? TrackAxis.Y : newv.getDockAxis());
-            // setRotated(newv != null&&newv.getDockAxis()==DockAxis.X);
+            setRotated(newv != null && newv.getDockAxis() == TrackAxis.X);
         };
     }
 
@@ -143,19 +131,23 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
             Dockable i = dockables.get(0);
             titlePane.setText(i.getText());
 
-            // this detaches the graphics from the tab!
+
+            // this detaches the graphics and the content from the tab!
             titlePane.setGraphic(i.getGraphic());
+            resizePane.setCenter(i.getNode());
 
             stackPane.getChildren().clear();
             stackPane.getChildren().add(resizePane);
             titlePane.setContent(stackPane);
-            resizePane.setCenter(i.getNode());
             break;
         }
         default: {
-            // The tabPane will reattach the graphics by itself, but the
-            // titlePane needs an explicit detach.
+            // The tabPane will reattach the graphics and the content by itself - hopefully
             titlePane.setGraphic(null);
+            resizePane.setCenter(null);
+            ArrayList<Tab> col = new ArrayList<>(tabPane.getTabs());
+            tabPane.getTabs().clear();
+            tabPane.getTabs().setAll(col);
 
             resizePane.setCenter(tabPane);
             StringBuilder b = new StringBuilder();

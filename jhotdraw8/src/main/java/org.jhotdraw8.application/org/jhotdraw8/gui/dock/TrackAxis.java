@@ -4,6 +4,9 @@
  */
 package org.jhotdraw8.gui.dock;
 
+/**
+ * Defines the axis of a {@link Track}.
+ */
 public enum TrackAxis {
     X, Y, Z
 }

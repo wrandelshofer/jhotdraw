@@ -446,10 +446,10 @@ public class CustomBinding {
      *
      * @param set     a set
      * @param element an element that is added on true and removed on false
-     * @param value   the value
+     * @param value   the boolean value
      * @param <E>     the element type
      */
-    public static <E> void bindAddRemoveElementToBoolean(ObservableSet<E> set, E element, ObservableValue<Boolean> value) {
+    public static <E> void bindMembershipToBoolean(ObservableSet<E> set, E element, ObservableValue<Boolean> value) {
         ChangeListener<Boolean> changeListener = (o, oldv, newv) -> {
             if (newv) {
                 set.add(element);

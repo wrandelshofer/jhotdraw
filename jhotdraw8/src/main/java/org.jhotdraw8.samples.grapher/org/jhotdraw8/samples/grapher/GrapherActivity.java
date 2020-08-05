@@ -6,7 +6,6 @@ package org.jhotdraw8.samples.grapher;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -120,13 +119,15 @@ import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.TextCreationTool;
 import org.jhotdraw8.draw.tool.TextEditingTool;
 import org.jhotdraw8.draw.tool.Tool;
-import org.jhotdraw8.gui.dockold.Dock;
-import org.jhotdraw8.gui.dockold.DockItem;
-import org.jhotdraw8.gui.dockold.DockRoot;
-import org.jhotdraw8.gui.dockold.ScrollableVBoxTrack;
-import org.jhotdraw8.gui.dockold.SingleItemDock;
-import org.jhotdraw8.gui.dockold.SplitPaneTrack;
-import org.jhotdraw8.gui.dockold.TabbedAccordionDock;
+import org.jhotdraw8.gui.dock.DockChild;
+import org.jhotdraw8.gui.dock.DockRoot;
+import org.jhotdraw8.gui.dock.Dockable;
+import org.jhotdraw8.gui.dock.SimpleDockRoot;
+import org.jhotdraw8.gui.dock.SimpleDockable;
+import org.jhotdraw8.gui.dock.SplitPaneTrack;
+import org.jhotdraw8.gui.dock.TabbedAccordionTrack;
+import org.jhotdraw8.gui.dock.Track;
+import org.jhotdraw8.gui.dock.VBoxTrack;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
 import org.jhotdraw8.svg.io.SvgTinySceneGraphExporter;
@@ -135,9 +136,11 @@ import org.jhotdraw8.util.Resources;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -183,12 +186,10 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @NonNull
-    private DockItem addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
+    private Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
-        DockItem dockItem = new DockItem();
-        dockItem.setText(r.getString(id + ".toolbar"));
-        dockItem.setContent(inspector.getNode());
-        dockItem.getProperties().put("inspector", inspector);
+        Dockable dockItem = new SimpleDockable(r.getString(id + ".toolbar"), inspector.getNode());
+        inspector.getNode().getProperties().put("inspector", inspector);
         return dockItem;
     }
 
@@ -385,53 +386,57 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
 
     private void initInspectors(ScrollPane viewScrollPane, Supplier<Layer> layerFactory) {
         // set up the docking framework
-        dockRoot = new DockRoot();
-        dockRoot.setDockFactory(TabbedAccordionDock::new);
-        dockRoot.setVerticalInnerTrackFactory(ScrollableVBoxTrack::new);
-        dockRoot.setHorizontalTrackFactory(SplitPaneTrack::createHorizontalTrack);
-        dockRoot.getVerticalTrackFactoryMap().put(SingleItemDock.class, SplitPaneTrack::createVerticalTrack);
-        dockRoot.setVerticalRootTrackFactory(SplitPaneTrack::createVerticalTrack);
-        DockItem dockItem = new DockItem(null, viewScrollPane);
-        SingleItemDock singleItemDock = new SingleItemDock(dockItem);
-        dockRoot.addDock(singleItemDock);
+        SimpleDockRoot root = new SimpleDockRoot();
+        this.dockRoot = root;
+        root.setZSupplier(TabbedAccordionTrack::new);
+        root.setSubYSupplier(VBoxTrack::new);
+        root.setRootXSupplier(SplitPaneTrack::createHorizontalTrack);
+        root.setRootYSupplier(SplitPaneTrack::createVerticalTrack);
+        root.setSubYSupplier(SplitPaneTrack::createVerticalTrack);
+        Dockable viewScrollPaneDockItem = new SimpleDockable(null, viewScrollPane);
+        root.getDockChildren().add(viewScrollPaneDockItem);
 
-        contentPane.setCenter(dockRoot);
+        contentPane.setCenter(this.dockRoot.getNode());
 
         FXWorker.supply(() -> {
-            Set<Dock> d = new LinkedHashSet<>();
-            Dock dock = new TabbedAccordionDock();
-            dock.getItems().add(addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS));
-            dock.getItems().add(addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER));
-            dock.getItems().add(addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS));
-            d.add(dock);
-            dock = new TabbedAccordionDock();
-            dock.getItems().add(addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS));
-            dock.getItems().add(addInspector(new HierarchyInspector(), "figureHierarchy", Priority.ALWAYS));
-            d.add(dock);
-            dock = new TabbedAccordionDock();
-            dock.getItems().add(addInspector(new DrawingInspector(), "drawing", Priority.NEVER));
-            dock.getItems().add(addInspector(new GridInspector(), "grid", Priority.NEVER));
-            dock.getItems().add(addInspector(new HandlesInspector(), "handles", Priority.NEVER));
-            dock.getItems().add(addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
-            d.add(dock);
+            List<Track> d = new ArrayList<>();
+            Track track = new TabbedAccordionTrack();
+            track.getDockChildren().addAll(addInspector(new StyleAttributesInspector(), "styleAttributes", Priority.ALWAYS),
+                    addInspector(new StyleClassesInspector(), "styleClasses", Priority.NEVER),
+                    addInspector(new StylesheetsInspector(), "styleSheets", Priority.ALWAYS));
+            d.add(track);
+            track = new TabbedAccordionTrack();
+            track.getDockChildren().addAll(addInspector(new LayersInspector(layerFactory), "layers", Priority.ALWAYS),
+                    addInspector(new HierarchyInspector(), "figureHierarchy", Priority.ALWAYS));
+            d.add(track);
+            track = new TabbedAccordionTrack();
+            track.getDockChildren().addAll(addInspector(new DrawingInspector(), "drawing", Priority.NEVER),
+                    addInspector(new GridInspector(), "grid", Priority.NEVER),
+                    addInspector(new HandlesInspector(), "handles", Priority.NEVER),
+                    addInspector(new HelpTextInspector(), "helpText", Priority.NEVER));
+            d.add(track);
             return d;
         }).whenComplete((list, e) -> {
             if (e == null) {
-                ScrollableVBoxTrack vtrack = new ScrollableVBoxTrack();
-                Set<DockItem> items = new LinkedHashSet<>();
-                for (Dock dock : list) {
-                    for (DockItem n : dock.getItems()) {
-                        items.add(n);
-                        @SuppressWarnings("unchecked")
-                        Inspector<DrawingView> i = (Inspector<DrawingView>) n.getProperties().get("inspector");
-                        i.setSubject(drawingView);
+                VBoxTrack vtrack = new VBoxTrack();
+                Set<Dockable> items = new LinkedHashSet<>();
+                for (Track track : list) {
+                    for (DockChild n : track.getDockChildren()) {
+                        if (n instanceof Dockable) {
+                            Dockable dd = (Dockable) n;
+                            items.add(dd);
+                            @SuppressWarnings("unchecked")
+                            Inspector<DrawingView> i = (Inspector<DrawingView>) dd.getNode().getProperties().get("inspector");
+                            i.setSubject(drawingView);
+                        }
                     }
-                    vtrack.getItems().add(dock.getNode());
+                    vtrack.getDockChildren().add(track);
                 }
                 SplitPaneTrack htrack = SplitPaneTrack.createHorizontalTrack();
-                htrack.getItems().add(vtrack.getNode());
-                dockRoot.addTrack(htrack);
-                dockRoot.setDockableItems(FXCollections.observableSet(items));
+                htrack.getDockChildren().add(viewScrollPaneDockItem);
+                htrack.getDockChildren().add(vtrack);
+                this.dockRoot.getDockChildren().setAll(htrack);
+                this.dockRoot.setDockablePredicate(items::contains);
             } else {
                 e.printStackTrace();
             }

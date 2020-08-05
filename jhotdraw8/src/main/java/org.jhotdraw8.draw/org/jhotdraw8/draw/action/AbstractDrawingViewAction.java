@@ -43,7 +43,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
         // we add the editor as a disabler to this action.
         SimpleBooleanProperty editorHasNoDrawingViewOrDrawingViewIsDisabledProperty = new SimpleBooleanProperty();
         CustomBinding.bind(editorHasNoDrawingViewOrDrawingViewIsDisabledProperty, editor.activeDrawingViewProperty(), drawingView -> drawingView == null ? new SimpleBooleanProperty(true) : drawingView.getNode().disableProperty());
-        CustomBinding.bindAddRemoveElementToBoolean(disablers(), editor, editorHasNoDrawingViewOrDrawingViewIsDisabledProperty);
+        CustomBinding.bindMembershipToBoolean(disablers(), new Object(), editorHasNoDrawingViewOrDrawingViewIsDisabledProperty);
     }
 
     /**

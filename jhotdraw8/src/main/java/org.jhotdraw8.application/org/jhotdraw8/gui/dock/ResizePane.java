@@ -7,7 +7,6 @@ package org.jhotdraw8.gui.dock;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import org.jhotdraw8.annotation.NonNull;
 
@@ -57,13 +56,4 @@ public class ResizePane extends BorderPane {
     public BooleanProperty userResizableProperty() {
         return userResizable;
     }
-
-    public void setContent(Node n) {
-        setCenter(n);
-    }
-
-    public Node getContent() {
-        return getCenter();
-    }
-
 }

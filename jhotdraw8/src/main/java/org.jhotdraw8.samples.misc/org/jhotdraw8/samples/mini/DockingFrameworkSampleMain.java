@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.SpliteratorIterable;
 import org.jhotdraw8.gui.dock.DockChild;
-import org.jhotdraw8.gui.dock.DockItem;
+import org.jhotdraw8.gui.dock.DockNode;
 import org.jhotdraw8.gui.dock.DockParent;
 import org.jhotdraw8.gui.dock.DockRoot;
 import org.jhotdraw8.gui.dock.SimpleDockRoot;
@@ -55,17 +55,17 @@ public class DockingFrameworkSampleMain extends Application {
         roots.add(root);
         TabPaneTrack zComp = new TabPaneTrack();
 
-        zComp.getDockChildren().add(new SimpleDockable("Label 1", new Label("The quick brown fox 1")));
-        zComp.getDockChildren().add(new SimpleDockable("Label 2", new Label("The quick brown fox 2")));
-        zComp.getDockChildren().add(new SimpleDockable("Label 3", new Label("The quick brown fox 3")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 1", new Label("The quick brown fox\njumps over the lazy dog\n1")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 2", new Label("The quick brown fox\njumps over the lazy dog\n2")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 3", new Label("The quick brown fox\njumps over the lazy dog\n3")));
         root.getDockChildren().add(zComp);
 
         root = initStage("DockRoot initially 3 tabs", new Stage());
         roots.add(root);
         zComp = new TabPaneTrack();
-        zComp.getDockChildren().add(new SimpleDockable("Label 4", new Label("The quick brown fox 4")));
-        zComp.getDockChildren().add(new SimpleDockable("Label 5", new Label("The quick brown fox 5")));
-        zComp.getDockChildren().add(new SimpleDockable("Label 6", new Label("The quick brown fox 6")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 4", new Label("The quick brown fox\njumps over the lazy dog\n4")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 5", new Label("The quick brown fox\njumps over the lazy dog\n5")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 6", new Label("The quick brown fox\njumps over the lazy dog\n6")));
         root.getDockChildren().add(zComp);
 
 
@@ -84,7 +84,7 @@ public class DockingFrameworkSampleMain extends Application {
             willDumpRoots[0] = false;
             System.out.println("-------");
             for (DockRoot r : roots) {
-                for (DockChild dockChild : new SpliteratorIterable<>(() -> new PreorderSpliterator<>(DockItem::getDockChildrenReadOnly, r))) {
+                for (DockChild dockChild : new SpliteratorIterable<>(() -> new PreorderSpliterator<>(DockNode::getDockChildrenReadOnly, r))) {
                     for (DockParent dockParent = dockChild.getDockParent(); dockParent != null; dockParent = dockParent.getDockParent()) {
                         System.out.print('.');
                     }
@@ -103,7 +103,7 @@ public class DockingFrameworkSampleMain extends Application {
             }
         };
         for (DockRoot r : roots) {
-            for (DockChild dockChild : new SpliteratorIterable<>(() -> new PreorderSpliterator<>(DockItem::getDockChildrenReadOnly, r))) {
+            for (DockChild dockChild : new SpliteratorIterable<>(() -> new PreorderSpliterator<>(DockNode::getDockChildrenReadOnly, r))) {
                 dockChild.dockParentProperty().addListener(invalidationListener);
             }
         }

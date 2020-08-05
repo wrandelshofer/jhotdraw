@@ -17,6 +17,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 
+/**
+ * This track stacks its children on the Z-axis into a tab pane.
+ */
 public class TabPaneTrack extends AbstractDockParent implements Track {
 
     private final TabPane tabPane = new TabPane();
@@ -57,7 +60,7 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
 
     public TabPaneTrack() {
         getChildren().add(resizePane);
-        resizePane.setContent(tabPane);
+        resizePane.setCenter(tabPane);
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.NEVER);
         HBox.setHgrow(this, Priority.NEVER);

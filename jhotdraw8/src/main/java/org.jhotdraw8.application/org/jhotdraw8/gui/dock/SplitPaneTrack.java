@@ -9,6 +9,8 @@ import javafx.scene.control.SplitPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
+import static javafx.geometry.Orientation.VERTICAL;
+
 
 public class SplitPaneTrack
         extends AbstractDockParent implements Track {
@@ -16,9 +18,10 @@ public class SplitPaneTrack
 
     public SplitPaneTrack(Orientation orientation) {
         splitPane.setOrientation(orientation);
+        getStyleClass().add("track");
         getChildren().add(splitPane);
         CustomBinding.bindContent(splitPane.getItems(), getDockChildren(),
-                DockItem::getNode);
+                DockNode::getNode);
         CustomBinding.bindElements(getDockChildren(), DockChild::showingProperty, showingProperty());
     }
 
@@ -33,5 +36,15 @@ public class SplitPaneTrack
     @Override
     public boolean isResizesDockChildren() {
         return true;
+    }
+
+    @NonNull
+    public static SplitPaneTrack createVerticalTrack() {
+        return new SplitPaneTrack(VERTICAL);
+    }
+
+    @NonNull
+    public static SplitPaneTrack createHorizontalTrack() {
+        return new SplitPaneTrack(Orientation.HORIZONTAL);
     }
 }

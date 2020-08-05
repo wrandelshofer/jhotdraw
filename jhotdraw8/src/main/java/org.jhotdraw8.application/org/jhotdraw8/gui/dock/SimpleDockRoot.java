@@ -15,7 +15,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.PickResult;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
@@ -37,17 +36,15 @@ public class SimpleDockRoot
         extends AbstractDockRoot {
 
     @NonNull
-    private final static Insets rootDrawnDropZoneInsets = new Insets(10, 10, 10, 10);
+    private final static Insets rootDrawnDropZoneInsets = new Insets(10);
     @NonNull
-    private final static Insets dockSensedDropZoneInsets = new Insets(40, 40, 40, 40);
+    private final static Insets dockSensedDropZoneInsets = new Insets(30);
     @NonNull
-    private final static Insets rootSensedDropZoneInsets = new Insets(20, 20, 20, 20);
+    private final static Insets rootSensedDropZoneInsets = new Insets(20);
     @NonNull
-    private final static Insets dockDrawnDropZoneInsets = new Insets(20, 20, 20, 20);
+    private final static Insets dockDrawnDropZoneInsets = new Insets(20);
     @NonNull
     private final Rectangle dropRect = new Rectangle(0, 0, 0, 0);
-    @NonNull
-    private final StackPane stackPane = new StackPane();
     @NonNull
     private final BorderPane contentPane = new BorderPane();
     @Nullable
@@ -64,18 +61,19 @@ public class SimpleDockRoot
     private Supplier<Track> zSupplier = TabPaneTrack::new;
 
     public SimpleDockRoot() {
-        stackPane.getChildren().add(contentPane);
-        getChildren().add(stackPane);
+        getChildren().add(contentPane);
         dropRect.setOpacity(0.4);
         dropRect.setManaged(false);
         dropRect.setMouseTransparent(true);
         dropRect.setVisible(false);
-        setOnDragOver(this::onDragOver);
-        setOnDragExited(this::onDragExit);
-        setOnDragDropped(this::onDragDrop);
+
         dockChildren.addListener(this::onRootChanged);
         CustomBinding.bindElements(getDockChildren(), DockChild::showingProperty, showingProperty());
         showingProperty().bind(sceneProperty().isNotNull());
+
+        setOnDragOver(this::onDragOver);
+        setOnDragExited(this::onDragExit);
+        setOnDragDropped(this::onDragDrop);
     }
 
     @NonNull
@@ -198,9 +196,14 @@ public class SimpleDockRoot
             insets = dockDrawnDropZoneInsets;
             bounds = sceneToLocal(pickedDock.getNode().localToScene(pickedDock.getNode().getBoundsInLocal()));
             zone = getZone(e.getX(), e.getY(), bounds, dockSensedDropZoneInsets);
-            if (zone == DropZone.CENTER && (!pickedDock.isEditable()
-                    || pickedDock.getDockAxis() != TrackAxis.Z)) {
+            if (!pickedDock.isEditable()) {
                 zone = null;
+            }
+            if (zone == DropZone.CENTER) {
+                switch (pickedDock.getDockAxis()) {
+                case X -> zone = DropZone.RIGHT;
+                case Y -> zone = DropZone.BOTTOM;
+                }
             }
         } else {
             insets = null;
@@ -308,12 +311,12 @@ public class SimpleDockRoot
         }
     }
 
-    protected void onRootChanged(ListChangeListener.Change<? extends DockItem> c) {
+    protected void onRootChanged(ListChangeListener.Change<? extends DockNode> c) {
         contentPane.centerProperty().unbind();
         if (c.getList().isEmpty()) {
             contentPane.centerProperty().set(null);
         } else {
-            contentPane.centerProperty().bind(c.getList().get(0).nodeProperty());
+            contentPane.setCenter((c.getList().get(0).getNode()));
         }
 
     }
@@ -351,9 +354,10 @@ public class SimpleDockRoot
             return;
         }
         if (dropRect.getParent() == null) {
-            stackPane.getChildren().add(dropRect);
+            getChildren().add(dropRect);
         }
         Bounds bounds = dragData.bounds;
+
         double x = bounds.getMinX(),
                 y = bounds.getMinY(),
                 w = bounds.getWidth(),
@@ -422,5 +426,37 @@ public class SimpleDockRoot
 
     public void setZSupplier(Supplier<Track> zSupplier) {
         this.zSupplier = zSupplier;
+    }
+
+    public @NonNull Supplier<Track> getRootXSupplier() {
+        return rootXSupplier;
+    }
+
+    public void setRootXSupplier(@NonNull Supplier<Track> rootXSupplier) {
+        this.rootXSupplier = rootXSupplier;
+    }
+
+    public @NonNull Supplier<Track> getRootYSupplier() {
+        return rootYSupplier;
+    }
+
+    public void setRootYSupplier(@NonNull Supplier<Track> rootYSupplier) {
+        this.rootYSupplier = rootYSupplier;
+    }
+
+    public @NonNull Supplier<Track> getSubXSupplier() {
+        return subXSupplier;
+    }
+
+    public void setSubXSupplier(@NonNull Supplier<Track> subXSupplier) {
+        this.subXSupplier = subXSupplier;
+    }
+
+    public @NonNull Supplier<Track> getSubYSupplier() {
+        return subYSupplier;
+    }
+
+    public void setSubYSupplier(@NonNull Supplier<Track> subYSupplier) {
+        this.subYSupplier = subYSupplier;
     }
 }
