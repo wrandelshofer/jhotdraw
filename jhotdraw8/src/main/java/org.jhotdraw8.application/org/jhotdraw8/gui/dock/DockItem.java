@@ -65,5 +65,4 @@ public interface DockItem {
 
     @NonNull
     ReadOnlyObjectProperty<Node> nodeProperty();
-
 }

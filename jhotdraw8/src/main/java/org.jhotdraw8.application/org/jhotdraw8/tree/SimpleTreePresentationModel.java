@@ -34,29 +34,29 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
             try {
                 N f = event.getNode();
                 switch (event.getEventType()) {
-                    case NODE_ADDED_TO_PARENT:
-                        onNodeAdded(f, event.getParent(), event.getIndex());
-                        break;
-                    case NODE_REMOVED_FROM_PARENT:
-                        onNodeRemoved(f, event.getParent(), event.getIndex());
-                        break;
-                    case NODE_ADDED_TO_TREE:
-                        onNodeAddedToTree(f, event.getParent(), event.getIndex());
-                        break;
-                    case NODE_REMOVED_FROM_TREE:
-                        onNodeRemovedFromTree(f);
-                        break;
-                    case NODE_CHANGED:
-                        onNodeInvalidated(f);
-                        break;
-                    case ROOT_CHANGED:
-                        onRootChanged();
-                        break;
-                    case SUBTREE_NODES_CHANGED:
-                        break;
-                    default:
-                        throw new UnsupportedOperationException(event.getEventType()
-                                + " not supported");
+                case NODE_ADDED_TO_PARENT:
+                    onNodeAdded(f, event.getParent(), event.getIndex());
+                    break;
+                case NODE_REMOVED_FROM_PARENT:
+                    onNodeRemoved(f, event.getParent(), event.getIndex());
+                    break;
+                case NODE_ADDED_TO_TREE:
+                    onNodeAddedToTree(f, event.getParent(), event.getIndex());
+                    break;
+                case NODE_REMOVED_FROM_TREE:
+                    onNodeRemovedFromTree(f);
+                    break;
+                case NODE_CHANGED:
+                    onNodeInvalidated(f);
+                    break;
+                case ROOT_CHANGED:
+                    onRootChanged();
+                    break;
+                case SUBTREE_NODES_CHANGED:
+                    break;
+                default:
+                    throw new UnsupportedOperationException(event.getEventType()
+                            + " not supported");
                 }
             } finally {
                 updating--;

@@ -9,11 +9,11 @@ import javafx.scene.layout.HBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
-public class HBoxDock extends AbstractDockParent implements Dock {
+public class HBoxTrack extends AbstractDockParent implements Track {
     private ScrollPane scrollPane = new ScrollPane();
     private final HBox hbox = new HBox();
 
-    public HBoxDock() {
+    public HBoxTrack() {
         getChildren().add(scrollPane);
         scrollPane.setContent(hbox);
         scrollPane.setFitToHeight(true);
@@ -25,8 +25,8 @@ public class HBoxDock extends AbstractDockParent implements Dock {
     }
 
     @Override
-    public @NonNull DockAxis getDockAxis() {
-        return DockAxis.X;
+    public @NonNull TrackAxis getDockAxis() {
+        return TrackAxis.X;
     }
 
     public boolean isResizesDockChildren() {

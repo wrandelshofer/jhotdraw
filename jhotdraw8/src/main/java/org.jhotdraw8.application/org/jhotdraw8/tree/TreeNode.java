@@ -61,7 +61,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 () -> {
                     @SuppressWarnings("unchecked")
                     T t = (T) this;
-                    return new TreeBreadthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
+                    return new TreeBreadthFirstSpliterator<>(TreeNode<T>::getChildren, t);
                 });
     }
 
@@ -231,7 +231,7 @@ public interface TreeNode<T extends TreeNode<T>> {
                 () -> {
                     @SuppressWarnings("unchecked")
                     T t = (T) this;
-                    return new TreeDepthFirstSpliterator<>(TreeNode<T>::getChildren, t, n -> true);
+                    return new TreeDepthFirstSpliterator<>(TreeNode<T>::getChildren, t);
                 });
     }
 

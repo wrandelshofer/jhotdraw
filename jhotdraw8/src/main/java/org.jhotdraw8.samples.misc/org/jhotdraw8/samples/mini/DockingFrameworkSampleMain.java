@@ -5,16 +5,27 @@
 package org.jhotdraw8.samples.mini;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.SpliteratorIterable;
+import org.jhotdraw8.gui.dock.DockChild;
+import org.jhotdraw8.gui.dock.DockItem;
+import org.jhotdraw8.gui.dock.DockParent;
 import org.jhotdraw8.gui.dock.DockRoot;
 import org.jhotdraw8.gui.dock.SimpleDockRoot;
-import org.jhotdraw8.gui.dock.SimpleDraggableDockChild;
-import org.jhotdraw8.gui.dock.TabPaneDock;
-import org.jhotdraw8.gui.dock.TabbedAccordionDock;
+import org.jhotdraw8.gui.dock.SimpleDockable;
+import org.jhotdraw8.gui.dock.TabPaneTrack;
+import org.jhotdraw8.gui.dock.TabbedAccordionTrack;
+import org.jhotdraw8.tree.PreorderSpliterator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DockingFrameworkSampleMain extends Application {
 
@@ -22,7 +33,7 @@ public class DockingFrameworkSampleMain extends Application {
     public DockRoot initStage(String title,
                               @NonNull Stage primaryStage) {
         SimpleDockRoot root = new SimpleDockRoot();
-        root.setZSupplier(TabbedAccordionDock::new);
+        root.setZSupplier(TabbedAccordionTrack::new);
         Scene scene = new Scene(root.getNode(), 300, 250);
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
@@ -36,30 +47,68 @@ public class DockingFrameworkSampleMain extends Application {
 
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> e.printStackTrace());
 
-        DockRoot dock = initStage("DockRoot initially empty", primaryStage);
+        List<DockRoot> roots = new ArrayList<>();
+        DockRoot root = initStage("DockRoot initially empty", primaryStage);
+        roots.add(root);
 
-        dock = initStage("DockRoot initially 3 tabs", new Stage());
-        TabPaneDock zComp = new TabPaneDock();
+        root = initStage("DockRoot initially 3 tabs", new Stage());
+        roots.add(root);
+        TabPaneTrack zComp = new TabPaneTrack();
 
-        zComp.getDockChildren().add(new SimpleDraggableDockChild("Label 1", new Label("The quick brown fox 1")));
-        zComp.getDockChildren().add(new SimpleDraggableDockChild("Label 2", new Label("The quick brown fox 2")));
-        zComp.getDockChildren().add(new SimpleDraggableDockChild("Label 3", new Label("The quick brown fox 3")));
-        dock.getDockChildren().add(zComp);
+        zComp.getDockChildren().add(new SimpleDockable("Label 1", new Label("The quick brown fox 1")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 2", new Label("The quick brown fox 2")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 3", new Label("The quick brown fox 3")));
+        root.getDockChildren().add(zComp);
 
-        dock = initStage("DockRoot initially 3 tabs", new Stage());
-        zComp = new TabPaneDock();
-        zComp.getDockChildren().add(new SimpleDraggableDockChild("Label 4", new Label("The quick brown fox 4")));
-        zComp.getDockChildren().add(new SimpleDraggableDockChild("Label 5", new Label("The quick brown fox 5")));
-        zComp.getDockChildren().add(new SimpleDraggableDockChild("Label 6", new Label("The quick brown fox 6")));
-        dock.getDockChildren().add(zComp);
+        root = initStage("DockRoot initially 3 tabs", new Stage());
+        roots.add(root);
+        zComp = new TabPaneTrack();
+        zComp.getDockChildren().add(new SimpleDockable("Label 4", new Label("The quick brown fox 4")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 5", new Label("The quick brown fox 5")));
+        zComp.getDockChildren().add(new SimpleDockable("Label 6", new Label("The quick brown fox 6")));
+        root.getDockChildren().add(zComp);
 
 
-        dock = initStage("DockRoot initially central view", new Stage());
+        root = initStage("DockRoot initially central view", new Stage());
+        roots.add(root);
         final TextArea textArea = new TextArea();
         textArea.setText("This is a text area\nin a dock leaf directly added to the Dock.");
-        SimpleDraggableDockChild leaf = new SimpleDraggableDockChild(textArea);
-        dock.getDockChildren().add(leaf);
+        SimpleDockable leaf = new SimpleDockable(textArea);
+        root.getDockChildren().add(leaf);
         //dp.getVerticalTrackFactoryMap().put(SingleItemDock.class, () -> new SplitPaneTrack(Orientation.VERTICAL));
+
+
+        // Dump all roots after a change for debugging.
+        boolean[] willDumpRoots = new boolean[1];
+        Runnable dumpRoots = () -> {
+            willDumpRoots[0] = false;
+            System.out.println("-------");
+            for (DockRoot r : roots) {
+                for (DockChild dockChild : new SpliteratorIterable<>(() -> new PreorderSpliterator<>(DockItem::getDockChildrenReadOnly, r))) {
+                    for (DockParent dockParent = dockChild.getDockParent(); dockParent != null; dockParent = dockParent.getDockParent()) {
+                        System.out.print('.');
+                    }
+                    System.out.println(dockChild);
+                }
+            }
+
+        };
+        InvalidationListener invalidationListener = new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                if (willDumpRoots[0] == false) {
+                    willDumpRoots[0] = true;
+                    Platform.runLater(dumpRoots);
+                }
+            }
+        };
+        for (DockRoot r : roots) {
+            for (DockChild dockChild : new SpliteratorIterable<>(() -> new PreorderSpliterator<>(DockItem::getDockChildrenReadOnly, r))) {
+                dockChild.dockParentProperty().addListener(invalidationListener);
+            }
+        }
+
+
     }
 
     /**

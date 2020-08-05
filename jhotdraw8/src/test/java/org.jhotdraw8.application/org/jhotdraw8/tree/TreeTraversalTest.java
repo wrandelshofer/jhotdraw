@@ -85,7 +85,7 @@ public class TreeTraversalTest {
     @Test
     public void testBreadthFirstTraversal() throws Exception {
         SimpleTreeNode<String> root = createTree();
-        TreeBreadthFirstSpliterator<SimpleTreeNode<String>> instance = new TreeBreadthFirstSpliterator<>(SimpleTreeNode::getChildren, root, n -> true);
+        TreeBreadthFirstSpliterator<SimpleTreeNode<String>> instance = new TreeBreadthFirstSpliterator<>(SimpleTreeNode::getChildren, root);
 
         StringBuilder buf = new StringBuilder();
         instance.forEachRemaining(node -> buf.append(node.getValue()));
@@ -101,7 +101,7 @@ public class TreeTraversalTest {
     @Test
     public void testDepthFirstTraversal() throws Exception {
         SimpleTreeNode<String> root = createTree();
-        TreeDepthFirstSpliterator<SimpleTreeNode<String>> instance = new TreeDepthFirstSpliterator<>(SimpleTreeNode::getChildren, root, n -> true);
+        TreeDepthFirstSpliterator<SimpleTreeNode<String>> instance = new TreeDepthFirstSpliterator<>(SimpleTreeNode::getChildren, root);
 
         StringBuilder buf = new StringBuilder();
         instance.forEachRemaining(node -> buf.append(node.getValue()));

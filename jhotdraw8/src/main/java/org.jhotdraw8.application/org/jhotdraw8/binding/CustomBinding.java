@@ -244,7 +244,6 @@ public class CustomBinding {
 
     /**
      * Binds list dest to list source.
-     * The binding can be removed by calling {@link #unbindContent};
      *
      * @param dest   list dest
      * @param src    list source
@@ -258,7 +257,6 @@ public class CustomBinding {
 
     /**
      * Binds list dest to list source.
-     * The binding can be removed by calling {@link #unbindContent};
      *
      * @param dest         list dest
      * @param src          list source
@@ -268,13 +266,31 @@ public class CustomBinding {
      * @param <S>          the type of list source
      */
     public static <D, S> void bindContent(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> src, @NonNull Function<S, D> toDest, @Nullable Consumer<D> destOnRemove) {
-        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, destOnRemove);
-        src.addListener(binding);
+        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, null, destOnRemove, null);
+        src.addListener(binding.getSourceChangeListener());
+    }
+
+    /**
+     * Binds list dest to list source bidirectionally.
+     *
+     * @param dest         list dest
+     * @param src          list source
+     * @param toDest       mapping function to dest
+     * @param destOnRemove this consumer is called when an element is removed from the dest list
+     * @param <D>          the type of list dest
+     * @param <S>          the type of list source
+     */
+    public static <D, S> void bindContentBidirectional(
+            @NonNull ObservableList<D> dest, @NonNull ObservableList<S> src,
+            @NonNull Function<S, D> toDest, @Nullable Consumer<D> destOnRemove,
+            @NonNull Function<D, S> toSource, @Nullable Consumer<S> sourceOnRemove) {
+        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, toSource, destOnRemove, sourceOnRemove);
+        src.addListener(binding.getSourceChangeListener());
+        dest.addListener(binding.getDestChangeListener());
     }
 
     /**
      * Binds list dest to set source.
-     * The binding can be removed by calling {@link #unbindContent};
      *
      * @param dest   list dest
      * @param src    list source
@@ -285,19 +301,6 @@ public class CustomBinding {
     public static <D, S> void bindListContentToSet(ObservableList<D> dest, ObservableSet<S> src, Function<S, D> toDest) {
         ListToSetTransformContentBinding<D, S> binding = new ListToSetTransformContentBinding<>(dest, src, toDest);
         src.addListener(binding);
-    }
-
-    /**
-     * Unbinds the specified content binding.
-     *
-     * @param dest list dest
-     * @param src  list source
-     * @param <D>  the type of list dest
-     * @param <S>  the type of list source
-     */
-    public static <D, S> void unbindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
-        ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, (a) -> null, null);
-        src.removeListener(binding);
     }
 
     /**

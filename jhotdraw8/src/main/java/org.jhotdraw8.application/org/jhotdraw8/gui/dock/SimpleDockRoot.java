@@ -53,15 +53,15 @@ public class SimpleDockRoot
     @Nullable
     private RectangleTransition transition;
     @NonNull
-    private Supplier<Dock> rootXSupplier = () -> new SplitPaneDock(Orientation.HORIZONTAL);
+    private Supplier<Track> rootXSupplier = () -> new SplitPaneTrack(Orientation.HORIZONTAL);
     @NonNull
-    private Supplier<Dock> rootYSupplier = () -> new SplitPaneDock(Orientation.VERTICAL);
+    private Supplier<Track> rootYSupplier = () -> new SplitPaneTrack(Orientation.VERTICAL);
     @NonNull
-    private Supplier<Dock> subXSupplier = HBoxDock::new;
+    private Supplier<Track> subXSupplier = HBoxTrack::new;
     @NonNull
-    private Supplier<Dock> subYSupplier = VBoxDock::new;
+    private Supplier<Track> subYSupplier = VBoxTrack::new;
     @NonNull
-    private Supplier<Dock> zSupplier = TabPaneDock::new;
+    private Supplier<Track> zSupplier = TabPaneTrack::new;
 
     public SimpleDockRoot() {
         stackPane.getChildren().add(contentPane);
@@ -88,8 +88,8 @@ public class SimpleDockRoot
         );
     }
 
-    private Dock createDock(@NonNull DockAxis zoneAxis, @Nullable DockParent parent, boolean isRootPicked) {
-        Supplier<Dock> supplier;
+    private Track createDock(@NonNull TrackAxis zoneAxis, @Nullable DockParent parent, boolean isRootPicked) {
+        Supplier<Track> supplier;
         switch (zoneAxis) {
         case X:
             supplier = isRootPicked ? rootXSupplier : subXSupplier;
@@ -107,14 +107,14 @@ public class SimpleDockRoot
     }
 
 
-    private boolean addToParent(@NonNull DraggableDockChild dockable, @NonNull DockParent parent, @NonNull DropZone zone, boolean isRootPicked) {
+    private boolean addToParent(@NonNull Dockable dockable, @NonNull DockParent parent, @NonNull DropZone zone, boolean isRootPicked) {
         DockChild child;
-        DockAxis zoneAxis = getZoneAxis(zone);
+        TrackAxis zoneAxis = getZoneAxis(zone);
 
         // Make sure that the parent of the dockable is a z-axis dock
-        if ((parent instanceof DockRoot) || zoneAxis != DockAxis.Z) {
-            child = createDock(DockAxis.Z, parent, isRootPicked);
-            ((Dock) child).getDockChildren().add(dockable);
+        if ((parent instanceof DockRoot) || zoneAxis != TrackAxis.Z) {
+            child = createDock(TrackAxis.Z, parent, isRootPicked);
+            ((Track) child).getDockChildren().add(dockable);
         } else {
             child = dockable;
         }
@@ -132,7 +132,7 @@ public class SimpleDockRoot
             return true;
         }
         // Add to new grand parent
-        Dock newGrandParent = createDock(zoneAxis, grandParent, isRootPicked);
+        Track newGrandParent = createDock(zoneAxis, grandParent, isRootPicked);
         if (grandParent == null) {
             DockChild removed = getDockChildren().set(0, newGrandParent);
             if (removed != null) {
@@ -174,10 +174,10 @@ public class SimpleDockRoot
             PickResult pick = e.getPickResult();
             Node pickedNode = pick.getIntersectedNode();
             while (pickedNode != this && pickedNode != null
-                    && !(pickedNode instanceof Dock)) {
+                    && !(pickedNode instanceof Track)) {
                 pickedNode = pickedNode.getParent();
             }
-            pickedDock = (pickedNode instanceof Dock) || pickedNode == this ? (DockParent) pickedNode : null;
+            pickedDock = (pickedNode instanceof Track) || pickedNode == this ? (DockParent) pickedNode : null;
         } else {
             pickedDock = this;
         }
@@ -199,7 +199,7 @@ public class SimpleDockRoot
             bounds = sceneToLocal(pickedDock.getNode().localToScene(pickedDock.getNode().getBoundsInLocal()));
             zone = getZone(e.getX(), e.getY(), bounds, dockSensedDropZoneInsets);
             if (zone == DropZone.CENTER && (!pickedDock.isEditable()
-                    || pickedDock.getDockAxis() != DockAxis.Z)) {
+                    || pickedDock.getDockAxis() != TrackAxis.Z)) {
                 zone = null;
             }
         } else {
@@ -209,8 +209,8 @@ public class SimpleDockRoot
     }
 
     @Override
-    public @NonNull DockAxis getDockAxis() {
-        return DockAxis.Z;
+    public @NonNull TrackAxis getDockAxis() {
+        return TrackAxis.Z;
     }
 
     @Nullable
@@ -228,22 +228,22 @@ public class SimpleDockRoot
         }
     }
 
-    private DockAxis getZoneAxis(DropZone zone) {
+    private TrackAxis getZoneAxis(DropZone zone) {
         switch (zone) {
         case TOP:
         case BOTTOM:
-            return DockAxis.Y;
+            return TrackAxis.Y;
         case LEFT:
         case RIGHT:
-            return DockAxis.X;
+            return TrackAxis.X;
         case CENTER:
         default:
-            return DockAxis.Z;
+            return TrackAxis.Z;
         }
     }
 
     private boolean isAcceptable(@NonNull DragEvent e) {
-        DraggableDockChild draggedItem = DockRoot.getDraggedDockable();
+        Dockable draggedItem = DockRoot.getDraggedDockable();
         return e.getDragboard().getContentTypes().contains(DockRoot.DOCKABLE_DATA_FORMAT)
                 //    && e.getGestureSource() != null
                 && draggedItem != null
@@ -255,7 +255,7 @@ public class SimpleDockRoot
         return true;
     }
 
-    private void onDockableDropped(@NonNull DraggableDockChild dropped, DragData dragData) {
+    private void onDockableDropped(@NonNull Dockable dropped, DragData dragData) {
         DockRoot droppedRoot = dropped.getDockRoot();
         DockParent dragSource = dropped.getDockParent();
         if (dragSource == null
@@ -280,7 +280,7 @@ public class SimpleDockRoot
             return;
         }
 
-        DraggableDockChild droppedTab = DockRoot.getDraggedDockable();
+        Dockable droppedTab = DockRoot.getDraggedDockable();
         DragData dragData = computeDragData(e);
         if (dragData.zone != null) {
             e.acceptTransferModes(TransferMode.MOVE);
@@ -335,7 +335,7 @@ public class SimpleDockRoot
                     // Remove composite if it has zero children
                     parent.getDockChildren().remove(dock);
                     todo.add(parent);
-                } else if (dock.getDockAxis() != DockAxis.Z && dock.getDockChildren().size() == 1) {
+                } else if (dock.getDockAxis() != TrackAxis.Z && dock.getDockChildren().size() == 1) {
                     // Replace xy composite with its child if xy composite has one child
                     DockChild onlyChild = dock.getDockChildren().remove(0);
                     parent.getDockChildren().set(parent.getDockChildren().indexOf(dock), onlyChild);
@@ -416,11 +416,11 @@ public class SimpleDockRoot
         }
     }
 
-    public Supplier<Dock> getZSupplier() {
+    public Supplier<Track> getZSupplier() {
         return zSupplier;
     }
 
-    public void setZSupplier(Supplier<Dock> zSupplier) {
+    public void setZSupplier(Supplier<Track> zSupplier) {
         this.zSupplier = zSupplier;
     }
 }

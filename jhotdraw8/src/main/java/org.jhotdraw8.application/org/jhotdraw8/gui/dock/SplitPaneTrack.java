@@ -10,11 +10,11 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
 
-public class SplitPaneDock
-        extends AbstractDockParent implements Dock {
+public class SplitPaneTrack
+        extends AbstractDockParent implements Track {
     private final SplitPane splitPane = new SplitPane();
 
-    public SplitPaneDock(Orientation orientation) {
+    public SplitPaneTrack(Orientation orientation) {
         splitPane.setOrientation(orientation);
         getChildren().add(splitPane);
         CustomBinding.bindContent(splitPane.getItems(), getDockChildren(),
@@ -25,8 +25,8 @@ public class SplitPaneDock
 
     @NonNull
     @Override
-    public DockAxis getDockAxis() {
-        return splitPane.getOrientation() == Orientation.HORIZONTAL ? DockAxis.X : DockAxis.Y;
+    public TrackAxis getDockAxis() {
+        return splitPane.getOrientation() == Orientation.HORIZONTAL ? TrackAxis.X : TrackAxis.Y;
     }
 
 

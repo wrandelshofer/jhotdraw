@@ -17,7 +17,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 
-public class TabPaneDock extends AbstractDockParent implements Dock {
+public class TabPaneTrack extends AbstractDockParent implements Track {
 
     private final TabPane tabPane = new TabPane();
     @NonNull
@@ -25,14 +25,13 @@ public class TabPaneDock extends AbstractDockParent implements Dock {
 
     static class MyTab extends Tab {
         private final DockableDragHandler dockableDragHandler;
-        @NonNull
-        private DockChild dockChild;
+        @NonNull DockChild dockChild;
 
         MyTab(@NonNull DockChild dockChild, @Nullable String text, @Nullable Node graphic) {
             super(text, graphic);
             this.dockChild = dockChild;
-            if (dockChild instanceof DraggableDockChild) {
-                dockableDragHandler = new DockableDragHandler((DraggableDockChild) dockChild);
+            if (dockChild instanceof Dockable) {
+                dockableDragHandler = new DockableDragHandler((Dockable) dockChild);
             } else {
                 dockableDragHandler = null;
             }
@@ -56,18 +55,18 @@ public class TabPaneDock extends AbstractDockParent implements Dock {
         }
     }
 
-    public TabPaneDock() {
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+    public TabPaneTrack() {
         getChildren().add(resizePane);
         resizePane.setContent(tabPane);
         SplitPane.setResizableWithParent(this, Boolean.FALSE);
         VBox.setVgrow(this, Priority.NEVER);
         HBox.setHgrow(this, Priority.NEVER);
 
-
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         dockParentProperty().addListener(onParentChanged());
-        CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
-                this::makeTab, k -> ((MyTab) k).dispose());
+        CustomBinding.bindContentBidirectional(tabPane.getTabs(), getDockChildren(),
+                this::makeTab, k -> ((MyTab) k).dispose(),
+                tab -> ((MyTab) tab).dockChild, null);
         CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(),
                 t -> ((MyTab) t).showingProperty(), showingProperty(),
                 false);
@@ -77,14 +76,14 @@ public class TabPaneDock extends AbstractDockParent implements Dock {
     protected ChangeListener<DockParent> onParentChanged() {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
-            resizePane.setResizeAxis(newv == null ? DockAxis.Y : newv.getDockAxis());
+            resizePane.setResizeAxis(newv == null ? TrackAxis.Y : newv.getDockAxis());
         };
     }
 
     @NonNull
     private MyTab makeTab(DockChild c) {
-        if (c instanceof DraggableDockChild) {
-            DraggableDockChild k = (DraggableDockChild) c;
+        if (c instanceof Dockable) {
+            Dockable k = (Dockable) c;
             MyTab tab = new MyTab(k, k.getText(), k.getNode());
             tab.graphicProperty().bind(CustomBinding.<Node>compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;
@@ -96,8 +95,8 @@ public class TabPaneDock extends AbstractDockParent implements Dock {
 
     @NonNull
     @Override
-    public DockAxis getDockAxis() {
-        return DockAxis.Z;
+    public TrackAxis getDockAxis() {
+        return TrackAxis.Z;
     }
 
     @Override

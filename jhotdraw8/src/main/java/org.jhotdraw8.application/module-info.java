@@ -43,4 +43,5 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.macos;
     exports org.jhotdraw8.app.action.app;
     exports org.jhotdraw8.fxml;
+    exports org.jhotdraw8.tree;
 }

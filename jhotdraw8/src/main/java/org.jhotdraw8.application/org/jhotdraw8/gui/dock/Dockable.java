@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  * Represents a dock child that the user can drag from one {@code Dock} to
  * another {@code Dock}.
  */
-public interface DraggableDockChild extends DockChild {
+public interface Dockable extends DockChild {
     /**
      * The style class for the graphic object.
      * <p>

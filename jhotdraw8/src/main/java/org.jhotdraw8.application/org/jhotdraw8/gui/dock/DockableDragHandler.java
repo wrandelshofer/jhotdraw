@@ -19,10 +19,10 @@ import static org.jhotdraw8.gui.dock.DockRoot.DOCKABLE_DATA_FORMAT;
 
 class DockableDragHandler {
 
-    private final DraggableDockChild dockable;
+    private final Dockable dockable;
     private final ChangeListener<Node> graphicChangedListener = this::onGraphicChanged;
 
-    public DockableDragHandler(DraggableDockChild dockable) {
+    public DockableDragHandler(Dockable dockable) {
         this.dockable = dockable;
         dockable.graphicProperty().addListener(graphicChangedListener);
         onGraphicChanged(dockable.graphicProperty(), null, dockable.getGraphic());

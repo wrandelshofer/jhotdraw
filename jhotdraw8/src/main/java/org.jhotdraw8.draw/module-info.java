@@ -50,7 +50,6 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.styleable;
     exports org.jhotdraw8.draw.gui;
     exports org.jhotdraw8.svg.io;
-    exports org.jhotdraw8.tree;
     exports org.jhotdraw8.geom.contour;
     exports org.jhotdraw8.geom.biarc;
     exports org.jhotdraw8.geom.intersect;

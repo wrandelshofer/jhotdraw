@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.ReadOnlyListWrapper;
  * A DockParent provides screen space for one or more {@link DockChild}ren.
  * <p>
  * The DockParent lays out the screen space along an implementation-specific
- * {@link DockAxis}.
+ * {@link TrackAxis}.
  */
 public interface DockParent extends DockChild {
     /**
@@ -58,7 +58,7 @@ public interface DockParent extends DockChild {
     }
 
     @NonNull
-    DockAxis getDockAxis();
+    TrackAxis getDockAxis();
 
     /**
      * Returns true if this parent dock resizes the items. If this method returns

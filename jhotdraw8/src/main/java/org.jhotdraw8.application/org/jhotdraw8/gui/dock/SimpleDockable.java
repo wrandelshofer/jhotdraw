@@ -16,19 +16,19 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 
-public class SimpleDraggableDockChild extends Tab implements DraggableDockChild {
+public class SimpleDockable extends Tab implements Dockable {
     protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>();
     protected final BooleanProperty showing = new SimpleBooleanProperty();
 
-    public SimpleDraggableDockChild(Node content) {
+    public SimpleDockable(Node content) {
         this(null, null, content);
     }
 
-    public SimpleDraggableDockChild(String text, Node content) {
+    public SimpleDockable(String text, Node content) {
         this(text, text, content);
     }
 
-    public SimpleDraggableDockChild(String id, String text, Node content) {
+    public SimpleDockable(String id, String text, Node content) {
         super(text, content);
         setId(id);
         final Text textualIcon = new Text("❏");

@@ -17,8 +17,8 @@ import java.util.function.Predicate;
 /**
  * The root node of a docking hierarchy.
  * <p>
- * The root node manages drag and drop of {@link DraggableDockChild} nodes, and
- * creates or destroys {@link Dock} nodes that hold the {@link DraggableDockChild}s.
+ * The root node manages drag and drop of {@link Dockable} nodes, and
+ * creates or destroys {@link Track} nodes that hold the {@link Dockable}s.
  */
 public interface DockRoot extends DockParent {
     /**
@@ -31,44 +31,43 @@ public interface DockRoot extends DockParent {
      * We store the dragged item here, because we move the <i>reference</i>
      * of a DockItem with the drag board rather than a value of the DockItem.
      */
-    ObjectProperty<DraggableDockChild> draggedDockable = new SimpleObjectProperty<>();
+    ObjectProperty<Dockable> draggedDockable = new SimpleObjectProperty<>();
 
     @NonNull
-    static ObjectProperty<DraggableDockChild> draggedDockableProperty() {
+    static ObjectProperty<Dockable> draggedDockableProperty() {
         return draggedDockable;
     }
 
     @Nullable
-    static DraggableDockChild getDraggedDockable() {
+    static Dockable getDraggedDockable() {
         return draggedDockable.get();
     }
 
-    static void setDraggedDockable(@Nullable DraggableDockChild value) {
+    static void setDraggedDockable(@Nullable Dockable value) {
         draggedDockable.set(value);
     }
 
 
     /**
-     * Only {@link DraggableDockChild}s accepted by this filter can be docked.
+     * Only {@link Dockable}s accepted by this filter can be docked.
      * <p>
      * This can be used to restrict docking to dockables that belong
      * to the same {@link Activity}.
      *
-     * @return filter for accepting {@link DraggableDockChild}s
+     * @return filter for accepting {@link Dockable}s
      */
     @NonNull
-    ObjectProperty<Predicate<DraggableDockChild>> dockablePredicateProperty();
+    ObjectProperty<Predicate<Dockable>> dockablePredicateProperty();
 
     @NonNull
-    default Predicate<DraggableDockChild> getDockablePredicate() {
+    default Predicate<Dockable> getDockablePredicate() {
         return dockablePredicateProperty().get();
     }
 
-    default void setDockablePredicate(@NonNull Predicate<DraggableDockChild> value) {
+    default void setDockablePredicate(@NonNull Predicate<Dockable> value) {
         dockablePredicateProperty().set(value);
     }
 
     @NonNull
     Parent getNode();
-
 }

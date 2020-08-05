@@ -28,7 +28,7 @@ public class ResizePane extends BorderPane {
         rb.visibleProperty().bind(userResizable);
     }
 
-    public void setResizeAxis(DockAxis axis) {
+    public void setResizeAxis(TrackAxis axis) {
         switch (axis) {
         case X:
             rb.setCursor(Cursor.H_RESIZE);

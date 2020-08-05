@@ -9,11 +9,11 @@ import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
-public class VBoxDock extends AbstractDockParent implements Dock {
-    private ScrollPane scrollPane = new ScrollPane();
+public class VBoxTrack extends AbstractDockParent implements Track {
+    private final ScrollPane scrollPane = new ScrollPane();
     private final VBox vbox = new VBox();
 
-    public VBoxDock() {
+    public VBoxTrack() {
         getChildren().add(scrollPane);
         scrollPane.setContent(vbox);
         scrollPane.setFitToHeight(false);
@@ -25,8 +25,8 @@ public class VBoxDock extends AbstractDockParent implements Dock {
     }
 
     @Override
-    public @NonNull DockAxis getDockAxis() {
-        return DockAxis.Y;
+    public @NonNull TrackAxis getDockAxis() {
+        return TrackAxis.Y;
     }
 
     public boolean isResizesDockChildren() {

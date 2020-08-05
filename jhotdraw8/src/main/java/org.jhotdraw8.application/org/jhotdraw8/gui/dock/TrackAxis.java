@@ -4,6 +4,6 @@
  */
 package org.jhotdraw8.gui.dock;
 
-public enum DockAxis {
+public enum TrackAxis {
     X, Y, Z
 }
