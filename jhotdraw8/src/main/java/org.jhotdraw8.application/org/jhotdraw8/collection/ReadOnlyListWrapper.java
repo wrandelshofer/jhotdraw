@@ -79,7 +79,7 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
     }
 
     @NonNull
-    public ReadOnlyList<E> subList(int fromIndex, int toIndex) {
+    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ReadOnlyListWrapper<>(backingList.subList(fromIndex, toIndex));
     }
 }

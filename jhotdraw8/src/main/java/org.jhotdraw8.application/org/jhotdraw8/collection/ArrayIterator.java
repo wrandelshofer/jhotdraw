@@ -13,18 +13,19 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
-        Spliterator<E>, Enumerator<E>, Consumer<E> {
-    private final ReadOnlyList<E> list;
+public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Spliterator<E>,
+        Enumerator<E>, Consumer<E> {
+    private final Object[] list;
     private int index;
-    private final int size;
+    final int size;
+
     private E current;
 
-    public ReadOnlyListIterator(@NonNull ReadOnlyList<E> list) {
-        this(list, 0, list.size());
+    public ArrayIterator(@NonNull Object[] list) {
+        this(list, 0, list.length);
     }
 
-    public ReadOnlyListIterator(@NonNull ReadOnlyList<E> list, int index, int size) {
+    public ArrayIterator(@NonNull Object[] list, int index, int size) {
         this.list = list;
         this.size = size;
         this.index = index;
@@ -39,9 +40,10 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E next() {
-        return current = list.get(index++);
+        return current = (E) list[index++];
     }
 
     @Override
@@ -49,9 +51,10 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
         return index > 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E previous() {
-        return current = list.get(--index);
+        return current = (E) list[--index];
     }
 
     @Override
@@ -84,11 +87,12 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
         throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
         Objects.requireNonNull(action, "action is null");
         if (index >= 0 && index < getSize()) {
-            action.accept(current = list.get(index++));
+            action.accept(current = (E) list[index++]);
             return true;
         }
         return false;
@@ -100,7 +104,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
         int lo = index, mid = (lo + getSize()) >>> 1;
         return (lo >= mid)
                 ? null
-                : new ReadOnlyListIterator<>(list, lo, index = mid);
+                : new ArrayIterator<>(list, lo, index = mid);
     }
 
     @Override
@@ -114,11 +118,6 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
     }
 
     @Override
-    public void accept(E e) {
-        current = e;
-    }
-
-    @Override
     public boolean moveNext() {
         return tryAdvance(this);
     }
@@ -126,5 +125,10 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
     @Override
     public E current() {
         return current;
+    }
+
+    @Override
+    public void accept(E e) {
+        current = e;
     }
 }

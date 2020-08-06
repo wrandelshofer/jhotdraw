@@ -6,10 +6,12 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleSetProperty;
@@ -99,6 +101,35 @@ import java.util.prefs.Preferences;
  */
 public abstract class AbstractStyleAttributesInspector<E> {
     /**
+     * The name of the {@link #showingProperty}.
+     */
+    public final static String SHOWING_PROPERTY = "showing";
+
+    @NonNull
+    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
+
+    {
+        showing.addListener((o, oldv, newv) -> {
+            if (newv) {
+                Platform.runLater(this::validateTextArea);
+            }
+        });
+    }
+
+    @NonNull
+    public BooleanProperty showingProperty() {
+        return showing;
+    }
+
+    public boolean isShowing() {
+        return showingProperty().get();
+    }
+
+    public void setShowing(boolean newValue) {
+        showingProperty().set(newValue);
+    }
+
+    /**
      * This placeholder is displayed to indicate that no value has
      * been specified for this property.
      * <p>
@@ -127,7 +158,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     {
         SetChangeListener<E> listener = change -> {
-            textAreaInvalidated(selection);
+            invalidateTextArea(selection);
         };
         selection.addListener((o, oldv, newv) -> {
             if (oldv != null) {
@@ -135,7 +166,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
             if (newv != null) {
                 newv.addListener(listener);
-                textAreaInvalidated(selection);
+                invalidateTextArea(selection);
             }
         });
     }
@@ -317,6 +348,12 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return pseudoStyles;
     }
 
+    /**
+     * This method is invoked when this inspector has changed properties of
+     * the specified element.
+     *
+     * @param f an element
+     */
     protected abstract void fireInvalidated(E f);
 
     @Nullable
@@ -431,9 +468,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         applyButton.setOnAction(this::apply);
         selectButton.setOnAction(this::select);
-        composeAttributesCheckBox.setOnAction(event -> updateTextArea());
-        node.visibleProperty().addListener(this::textAreaInvalidated);
-
+        composeAttributesCheckBox.setOnAction(event -> invalidateTextArea(null));
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
         EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
@@ -563,7 +598,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                                 AbstractStyleAttributesInspector.this.remove(f, finalSelectedAccessor);
                             }
                         }
-updateTextArea();
+                        invalidateTextArea(null);
                     };
                     picker.show(getTextArea(), screenX, screenY,
                             initialValue, lambda);
@@ -575,14 +610,29 @@ updateTextArea();
 
     private boolean isApplying;
 
+    /**
+     * This method shows the selection in the drawing view, by scrolling
+     * the selected elements into the view and "jiggling" the handles.
+     * <p>
+     * This method is called when the user hits the "select" button.
+     */
     protected abstract void showSelection();
 
-    protected void textAreaInvalidated(Observable observable) {
-        if (!isApplying && textAreaValid) {
+    protected void invalidateTextArea(Observable observable) {
+        if (!isApplying && textAreaValid && updateContentsCheckBox.isSelected()) {
             textAreaValid = false;
-            if (updateContentsCheckBox.isSelected()) {
-                Platform.runLater(this::updateTextArea);
+            if (isShowing()) {
+                Platform.runLater(this::validateTextArea);
             }
+        }
+    }
+
+    private void validateTextArea() {
+        if (!textAreaValid) {
+            if (updateContentsCheckBox.isSelected()) {
+                updateTextArea();
+            }
+            textAreaValid = true;
         }
     }
 
@@ -615,13 +665,11 @@ updateTextArea();
         }
         prefs.put("shownValues", origin);
 
-        updateTextArea();
+        invalidateTextArea(null);
     }
 
     protected void updateTextArea() {
         final boolean decompose = !composeAttributesCheckBox.isSelected();
-        textAreaValid = true;
-
 
         // handling of emptyness must be consistent with code in apply() method
         Set<E> selectedOrRoot = new LinkedHashSet<>(getSelection());

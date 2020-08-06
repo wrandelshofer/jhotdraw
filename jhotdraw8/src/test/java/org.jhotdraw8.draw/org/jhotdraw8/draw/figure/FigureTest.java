@@ -62,8 +62,7 @@ public class FigureTest {
         public void removeAllLayoutSubjects() {
         }
 
-        @Nullable
-        public ObjectProperty<Figure> parentProperty() {
+        public @NonNull ObjectProperty<Figure> parentProperty() {
             return null;
         }
 
@@ -132,8 +131,7 @@ public class FigureTest {
         public void removeNotify(Drawing drawing) {
         }
 
-        @Nullable
-        public ObservableList<Figure> getChildren() {
+        public @NonNull ObservableList<Figure> getChildren() {
             return null;
         }
 

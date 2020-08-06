@@ -15,5 +15,5 @@ import org.jhotdraw8.annotation.NonNull;
 public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E> {
     @NonNull
     @Override
-    ImmutableList<E> subList(int fromIndex, int toIndex);
+    ImmutableList<E> readOnlySubList(int fromIndex, int toIndex);
 }

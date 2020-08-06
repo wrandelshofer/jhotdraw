@@ -101,6 +101,16 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
     }
 
     /**
+     * Returns a spliterator over elements of type {@code E}.
+     *
+     * @return an iterator.
+     */
+    @NonNull
+    default Enumerator<E> enumerator() {
+        return new ReadOnlyListIterator<>(this);
+    }
+
+    /**
      * Returns a list iterator over elements of type {@code E}.
      *
      * @return a list iterator.
@@ -158,7 +168,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      * @param toIndex   the to index (exclusive)
      * @return the sub list
      */
-    ReadOnlyList<E> subList(int fromIndex, int toIndex);
+    ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex);
 
     /**
      * Returns the index of the first occurrence of the specified element

@@ -43,7 +43,11 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
+    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+        if (recursionDepth > 1) {
+            throw new ParseException("〈var〉: Recursion not allowed.", tt.getStartPosition());
+        }
+
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈var〉: function var() expected.");
         if (!getName().equals(tt.currentString())) {
             throw new ParseException("〈var〉: function var() expected.", tt.getStartPosition());
@@ -70,9 +74,9 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
         }
         ReadOnlyList<CssToken> customValue = functionProcessor.getCustomProperties().get(customPropertyName);
         if (customValue == null) {
-            functionProcessor.process(element, new ListCssTokenizer(attrFallback), out);
+            functionProcessor.process(element, new ListCssTokenizer(attrFallback), out, recursionDepth + 1);
         } else {
-            functionProcessor.process(element, new ListCssTokenizer(customValue), out);
+            functionProcessor.process(element, new ListCssTokenizer(customValue), out, recursionDepth + 1);
         }
     }
 

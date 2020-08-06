@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.min;
@@ -47,9 +47,9 @@ public class ReversedObservableList<E> extends TransformationList<E, E> {
                 }
             } else {
                 if (c.wasRemoved()) {
-                    LinkedList<E> reversed = new LinkedList<>();
-                    for (E e : c.getRemoved()) {
-                        reversed.addFirst(e);
+                    List<E> reversed = new ArrayList<>(c.getRemoved());
+                    for (int i = 0, n = c.getRemovedSize(); i < n; i++) {
+                        reversed.set(n - i - 1, c.getRemoved().get(i));
                     }
                     size = size - c.getRemovedSize();
                     // c.getTo() is not always correctly filled in by the underlying list!

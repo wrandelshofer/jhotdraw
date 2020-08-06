@@ -9,11 +9,15 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -32,16 +36,18 @@ import static java.lang.Math.min;
  */
 public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
 
+    private static final Object[] EMPTY_ARRAY = new Object[0];
     /**
      * The underlying list.
      */
-    private final List<E> list;
+    private Object[] data;
+    private int size;
 
     /**
-     * Creates a new instance which is backed by an array list.
+     * Creates a new instance.
      */
     public IndexedSet() {
-        this(new ArrayList<>(), null);
+        data = EMPTY_ARRAY;
     }
 
     /**
@@ -51,22 +57,8 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
      * @param col A collection.
      */
     public IndexedSet(Collection<? extends E> col) {
-        this(new ArrayList<>(), col);
-    }
-
-    /**
-     * Creates a new instance with the specified backing list, clears the
-     * backing list and the adds all elements of the specified collection to it.
-     *
-     * @param backingList the backing list
-     * @param col         A collection.
-     */
-    public IndexedSet(List<E> backingList, @Nullable Collection<? extends E> col) {
-        list = backingList;
-        list.clear();
-        if (col != null) {
-            addAll(col);
-        }
+        this.size = col.size();
+        data = Arrays.copyOf(col.toArray(), size, Object[].class);
     }
 
     @Override
@@ -85,8 +77,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public boolean addAll(@NonNull Collection<? extends E> c) {
         beginChange();
         try {
-            boolean res = super.addAll(c);
-            return res;
+            return super.addAll(c);
         } finally {
             endChange();
         }
@@ -96,18 +87,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public boolean addAll(int index, @NonNull Collection<? extends E> c) {
         beginChange();
         try {
-            boolean res = super.addAll(index, c);
-            return res;
-        } finally {
-            endChange();
-        }
-    }
-
-    @Override
-    protected void removeRange(int fromIndex, int toIndex) {
-        beginChange();
-        try {
-            super.removeRange(fromIndex, toIndex);
+            return super.addAll(index, c);
         } finally {
             endChange();
         }
@@ -153,7 +133,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             return;
         }
         beginChange();
-        list.set(newIndex, list.set(oldIndex, list.get(newIndex)));
+        doSet(newIndex, doSet(oldIndex, doGet(newIndex)));
         int from = min(oldIndex, newIndex);
         int to = max(oldIndex, newIndex) + 1;
         int[] perm = new int[to - from];
@@ -167,11 +147,23 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     }
 
+    @SuppressWarnings("unchecked")
+    E elementData(int index) {
+        return (E) data[index];
+    }
+
+    private E doSet(int index, E newValue) {
+        Objects.checkIndex(index, size);
+        E oldValue = elementData(index);
+        data[index] = newValue;
+        return oldValue;
+    }
+
     protected boolean doAdd(int index, E element, boolean checkForDuplicates) {
-        int oldIndex = checkForDuplicates ? list.indexOf(element) : -1; // linear search!
+        int oldIndex = checkForDuplicates ? indexOf(element) : -1; // linear search!
         int clampedIndex = min(index, size() - 1);
         if (oldIndex == -1) {
-            list.add(index, element);
+            dataDoAdd(index, element);
             beginChange();
             nextAdd(index, index + 1);
             onAdded(element);
@@ -183,10 +175,10 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         } else {
             // the old element is moved from the old index to the desired index
             beginChange();
-            list.remove(oldIndex);
+            dataDoRemove(oldIndex);
             nextRemove(oldIndex, element);
             int addIndex = oldIndex < index ? index - 1 : index;
-            list.add(addIndex, element);
+            dataDoAdd(addIndex, element);
             nextAdd(addIndex, addIndex + 1);
             ++modCount;
             endChange();
@@ -194,12 +186,33 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
     }
 
+    private void dataDoAdd(int index, E element) {
+        Objects.checkIndex(index, size + 1);
+        ensureCapacity(size + 1);
+        System.arraycopy(data, index,
+                data, index + 1,
+                size - index);
+        data[index] = element;
+        size++;
+    }
+
+    private void ensureCapacity(int minCapacity) {
+        int oldCapacity = data.length;
+        if (minCapacity > oldCapacity) {
+            int newCapacity = max(minCapacity + 1, oldCapacity + oldCapacity);
+            if (newCapacity < 0) {
+                throw new IllegalStateException("Array too large.");
+            }
+            data = Arrays.copyOf(data, max(16, newCapacity));
+        }
+    }
+
     @Override
     public E set(int index, E element) {
-        int oldIndex = list.indexOf(element);
+        int oldIndex = indexOf(element);
         if (oldIndex == -1) {
             beginChange();
-            E old = list.set(index, element);
+            E old = doSet(index, element);
             onRemoved(old);
             nextSet(index, old);
             onAdded(element);
@@ -211,7 +224,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         } else {
             // the element at the index is removed
             beginChange();
-            E old = list.remove(index);
+            E old = dataDoRemove(index);
             nextRemove(index, old);
             onRemoved(old);
             // the old element is permuted
@@ -224,9 +237,36 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         }
     }
 
+    private E dataDoRemove(int index) {
+        Objects.checkIndex(index, size);
+        E oldValue = elementData(index);
+        System.arraycopy(data, index + 1, data, index, size - index - 1);
+        data[--size] = null;
+        return oldValue;
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
+        Objects.checkFromToIndex(fromIndex, toIndex, size);
+        int removedCount = toIndex - fromIndex;
+        ArrayList<E> removed = new ArrayList<>(removedCount);
+        if (removedCount > 0) {
+            for (int i = fromIndex; i < toIndex; i++) {
+                removed.add((E) data[i]);
+            }
+            System.arraycopy(data, fromIndex, data, toIndex, size - fromIndex - 1);
+            for (int i = size - removedCount; i < size; i++) {
+                data[i] = null;
+            }
+            size -= removedCount;
+        }
+        return removed;
+    }
+
+
     @Override
     public boolean contains(Object o) {
-        return list.contains(o); // linear time!
+        return indexOf(o) >= 0; // linear time!
     }
 
     @Override
@@ -241,13 +281,24 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public E remove(int index) {
-        E old = list.remove(index);
+        E old = dataDoRemove(index);
         beginChange();
         nextRemove(index, old);
         ++modCount;
         onRemoved(old);
         endChange();
         return old;
+    }
+
+    @Override
+    public void removeRange(int fromIndex, int toIndex) {
+        List<E> removed = dataDoRemoveRange(fromIndex, toIndex);
+        beginChange();
+        nextRemove(fromIndex, removed);
+        ++modCount;
+        for (E old : removed)
+            onRemoved(old);
+        endChange();
     }
 
     @NonNull
@@ -258,12 +309,17 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public E get(int index) {
-        return list.get(index);
+        return doGet(index);
+    }
+
+    private E doGet(int index) {
+        Objects.checkIndex(index, size);
+        return elementData(index);
     }
 
     @Override
     public int size() {
-        return list.size();
+        return size;
     }
 
     @Override
@@ -401,88 +457,123 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     private class ObservableListIterator implements ListIterator<E> {
 
-        private ListIterator<E> iter;
         private E lastReturned;
-        private int nextIndex;
+        private int index;
+        private final int from;
+        private int to;
+
+        private int expectedModCount;
 
         public ObservableListIterator(int index) {
-            this.iter = list.listIterator(index);
-            this.nextIndex = index;
+            this.index = index;
+            from = 0;
+            to = size;
+            expectedModCount = modCount;
         }
 
         @Override
         public boolean hasNext() {
-            return iter.hasNext();
+            checkModCount();
+            return index < from;
+        }
+
+        private void checkModCount() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
         }
 
         @Override
         public E next() {
-            lastReturned = iter.next();
-            nextIndex++;
+            checkModCount();
+            lastReturned = iterGet(index);
+            index++;
             return lastReturned;
         }
 
         @Override
         public boolean hasPrevious() {
-            return iter.hasPrevious();
+            checkModCount();
+            return index > to;
         }
 
         @Override
         public E previous() {
-            lastReturned = iter.previous();
-            nextIndex--;
+            checkModCount();
+            lastReturned = iterGet(index - 1);
+            index--;
             return lastReturned;
+        }
+
+        private E iterGet(int index) {
+            checkModCount();
+            if (index < from || index >= to) {
+                throw new NoSuchElementException("index out of bounds:" + index);
+            }
+            return doGet(index);
         }
 
         @Override
         public int nextIndex() {
-            return iter.nextIndex();
+            checkModCount();
+            return index;
         }
 
         @Override
         public int previousIndex() {
-            return iter.previousIndex();
+            checkModCount();
+            return index - 1;
         }
 
         @Override
         public void remove() {
-            iter.remove();
-            beginChange();
-            nextRemove(nextIndex - 1, lastReturned);
-            onRemoved(lastReturned);
-            endChange();
+            checkModCount();
+            IndexedSet.this.remove(index - 1);
+            index--;
+            to--;
+            expectedModCount = modCount;
         }
 
         @Override
         public void set(E e) {
+            checkModCount();
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
             }
-            E oldValue = lastReturned;
-            lastReturned = e;
-            iter.set(e);
-            beginChange();
-            nextSet(nextIndex - 1, oldValue);
-            endChange();
+            IndexedSet.this.set(index - 1, e);
+            expectedModCount = modCount;
         }
 
         @Override
         public void add(E e) {
+            checkModCount();
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
             }
-            iter.add(e);
-            nextIndex++;
-            beginChange();
-            nextAdd(nextIndex, nextIndex + 1);
-            onAdded(e);
-            endChange();
+            IndexedSet.this.add(index, e);
+            index++;
+            to++;
+            expectedModCount = modCount;
         }
 
     }
 
     public int indexOf(Object o) {
-        return list.indexOf(o);
+        int start = 0, end = size;
+        if (o == null) {
+            for (int i = start; i < end; i++) {
+                if (data[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = start; i < end; i++) {
+                if (o.equals(data[i])) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -507,12 +598,12 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @Override
     public final E getFirst() {
-        return list.get(0);
+        return doGet(0);
     }
 
     @Override
     public E getLast() {
-        return list.get(list.size() - 1);
+        return doGet(size - 1);
     }
 
     @Override

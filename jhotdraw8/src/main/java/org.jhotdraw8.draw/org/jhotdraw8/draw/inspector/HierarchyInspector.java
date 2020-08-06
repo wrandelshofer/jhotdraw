@@ -289,11 +289,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
         visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
         lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
-        treeView.setRoot(model.getRoot());
-        model.getRoot().setExpanded(true);
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treeView.getSelectionModel().getSelectedCells().addListener(treeSelectionHandler);
-
         treeView.setRowFactory(tv -> {
             TreeTableRow<Figure> row = new TreeTableRow<>();
             row.setOnMouseClicked(event -> {
@@ -304,6 +301,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             });
             return row;
         });
+
+        //treeView.setFixedCellSize(22);
+
+        treeView.setRoot(model.getRoot());
+        model.getRoot().setExpanded(true);
     }
 
     @Override

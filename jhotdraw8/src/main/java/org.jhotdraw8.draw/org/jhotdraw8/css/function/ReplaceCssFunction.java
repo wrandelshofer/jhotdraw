@@ -40,7 +40,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
+    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈replace〉: replace() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
             throw new ParseException("〈replace〉: replace() function expected.", tt.getStartPosition());

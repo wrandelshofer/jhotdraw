@@ -127,28 +127,21 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
-     * Sets the child with the specified index from the node.
-     *
-     * @param index    the index
-     * @param newChild the new child
-     * @return the old child
-     */
-    default T setChild(int index, T newChild) {
-        return getChildren().set(index, newChild);
-    }
-
-    /**
      * Returns the children of the tree node.
      * <p>
-     * In order to keep the tree structure consistent, the following rules must
-     * be followed:
+     * In order to keep the tree structure consistent, implementations
+     * of this interface must implement the following behavior:
      * <ul>
-     * <li>If a child is added to this list, then it must be removed from its
-     * former parent, and this this tree node must be set as the parent of the
-     * child.</li>
+     * <li>A child can only be added if the child is a suitable child for
+     * this node, and this node is a suitable parent for the child.
+     * See {@link #isSuitableChild(TreeNode)},
+     * {@link #isSuitableParent(TreeNode)}.</li>
+     * <li>If a child is added to this list, then this tree node removes it
+     * from its former parent, and this tree node then sets itself
+     * as the parent of the* child.</li>
      * <li>
-     * If a child is removed from this tree node, then the parent of the child
-     * must be set to null.</li>
+     * If a child is removed from this tree node, then this tree node sets
+     * the parent of the child to null.</li>
      * </ul>
      *
      * @return the children
@@ -187,6 +180,17 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @Nullable
     T getParent();
+
+    /**
+     * Sets the parent of the tree.
+     * <p>
+     * Note that - by convention - the parent property is changed only by a
+     * parent tree node.
+     *
+     * @param newValue the new parent
+     */
+    void setParent(@Nullable T newValue);
+
 
     /**
      * Returns the path to this node.
@@ -295,6 +299,32 @@ public interface TreeNode<T extends TreeNode<T>> {
         public void remove() {
             throw new UnsupportedOperationException("Not supported.");
         }
+    }
+
+    /**
+     * This method returns whether the provided node is a suitable parent for this
+     * node.
+     * <p>
+     * The default implementation returns always true.
+     *
+     * @param newParent The new parent node.
+     * @return true if {@code newParent} is an acceptable parent
+     */
+    default boolean isSuitableParent(@NonNull T newParent) {
+        return true;
+    }
+
+    /**
+     * This method returns whether the provided node is a suitable child for this
+     * node.
+     * <p>
+     * The default implementation returns always true.
+     *
+     * @param newChild The new child node.
+     * @return true if {@code newChild} is an acceptable child
+     */
+    default boolean isSuitableChild(@NonNull T newChild) {
+        return true;
     }
 
 }

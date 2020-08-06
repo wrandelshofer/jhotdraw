@@ -192,9 +192,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         return propertyChangeListeners != null && !propertyChangeListeners.isEmpty();
     }
 
-    @Nullable
     @Override
-    public ObjectProperty<Figure> parentProperty() {
+    public @NonNull ObjectProperty<Figure> parentProperty() {
         return parent;
     }
 

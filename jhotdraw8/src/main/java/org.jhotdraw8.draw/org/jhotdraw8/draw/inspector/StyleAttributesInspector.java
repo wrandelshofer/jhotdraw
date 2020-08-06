@@ -6,9 +6,7 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,24 +33,17 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     @NonNull
     protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
-    @NonNull
-    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
 
     @NonNull
     public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }
 
-    @NonNull
-    public BooleanProperty showingProperty() {
-        return showing;
-    }
-
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
 
         @Override
         public void invalidated(Observable observable) {
-            textAreaInvalidated(observable);
+            invalidateTextArea(observable);
         }
 
     };
@@ -154,7 +145,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         if (newValue != null) {
             newValue.modelProperty().addListener(modelChangeHandler);
             modelChangeHandler.changed(newValue.modelProperty(), null, newValue.getModel());
-            textAreaInvalidated(observable);
+            invalidateTextArea(observable);
             selectionProperty().bind(newValue.selectedFiguresProperty());
         }
     }

@@ -45,7 +45,7 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
 
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out) throws IOException, ParseException {
+    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈concat〉: concat() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
             throw new ParseException("〈concat〉: concat() function expected.", tt.getStartPosition());

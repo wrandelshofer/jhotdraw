@@ -54,7 +54,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     public void process(@NonNull T element, @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out) throws IOException, ParseException {
+                        @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
             throw tt.createParseException("〈" + getName() + "〉: function " + getName() + "() expected.");
@@ -230,7 +230,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         }
         functionProcessor.processToken(element, new ListCssTokenizer(
                         attrFallback.isEmpty() ? Collections.singletonList(new CssToken(CssTokenType.TT_IDENT, "none")) : attrFallback),
-                out);
+                out, recursionDepth + 1);
 
     }
 

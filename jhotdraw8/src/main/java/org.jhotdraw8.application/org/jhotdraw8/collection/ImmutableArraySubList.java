@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Spliterator;
-import java.util.Spliterators;
 
 /**
  * An immutable sub list.
@@ -118,12 +118,17 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
 
     @NonNull
     public Spliterator<E> spliterator() {
-        return Spliterators.spliterator(array, offset, offset + size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+        return new ArrayIterator<>(array, offset, offset + size);
+    }
+
+    @NonNull
+    public Iterator<E> iterator() {
+        return new ArrayIterator<>(array, offset, offset + size);
     }
 
     @NonNull
     @Override
-    public ImmutableList<E> subList(int fromIndex, int toIndex) {
+    public ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
         if (fromIndex < 0) {
             throw new IndexOutOfBoundsException("fromIndex = " + fromIndex);
         }

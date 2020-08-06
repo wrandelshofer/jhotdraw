@@ -235,6 +235,6 @@ public class ImmutableLists {
 
     @NonNull
     public static <E> ImmutableList<E> subList(@NonNull ReadOnlyList<E> list, int fromIndex, int toIndex) {
-        return new ImmutableArrayList<>(true, list.subList(fromIndex, toIndex).toArray());
+        return new ImmutableArrayList<>(true, list.readOnlySubList(fromIndex, toIndex).toArray());
     }
 }

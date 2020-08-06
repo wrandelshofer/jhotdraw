@@ -125,7 +125,7 @@ public class VertexPath<V> {
         if (!getLastVertex().equals(nextPath.getFirstVertex())) {
             throw new IllegalArgumentException("Cannot join paths. This last vertex: " + this.getLastVertex() + " next first vertex: " + nextPath.getFirstVertex());
         }
-        return new VertexPath<V>(ImmutableLists.addAll(this.vertices.subList(0, numOfVertices() - 1), nextPath.vertices));
+        return new VertexPath<V>(ImmutableLists.addAll(this.vertices.readOnlySubList(0, numOfVertices() - 1), nextPath.vertices));
     }
 
 }

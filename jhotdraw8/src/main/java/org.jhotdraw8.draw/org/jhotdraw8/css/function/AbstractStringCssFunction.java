@@ -33,7 +33,7 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
         }
         tt.pushBack();
 
-        functionProcessor.processToken(element, tt, temp::add);
+        functionProcessor.processToken(element, tt, temp::add, 0);
         for (CssToken t : temp) {
             switch (t.getType()) {
             case CssTokenType.TT_STRING:

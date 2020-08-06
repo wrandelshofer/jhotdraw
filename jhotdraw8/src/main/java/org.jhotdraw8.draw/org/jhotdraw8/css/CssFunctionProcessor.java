@@ -35,24 +35,25 @@ public interface CssFunctionProcessor<T> {
     /**
      * Processes all tokens.
      *
-     * @param element an element of the DOM
-     * @param tt      the tokenizer providing input tokens
-     * @param out     a consumer for the processed tokens
+     * @param element        an element of the DOM
+     * @param tt             the tokenizer providing input tokens
+     * @param out            a consumer for the processed tokens
+     * @param recursionDepth
      * @throws IOException    in case of IO failure
      * @throws ParseException in case of a parsing failure
      */
-    void process(T element, CssTokenizer tt, Consumer<CssToken> out) throws IOException, ParseException;
+    void process(T element, CssTokenizer tt, Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException;
 
     /**
      * Processes the next token(s).
      */
-    void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out) throws IOException, ParseException;
+    void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException;
 
 
     /**
      * Convenience method for processing tokens.
      * <p>
-     * The default implementation calls {@link #process(Object, CssTokenizer, Consumer)}.
+     * The default implementation calls {@link #process(Object, CssTokenizer, Consumer, int)}.
      *
      * @param element an element of the DOM
      * @param in      the input tokens
@@ -64,7 +65,7 @@ public interface CssFunctionProcessor<T> {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
-            process(element, tt, out::add);
+            process(element, tt, out::add, 0);
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception.", e);
         }

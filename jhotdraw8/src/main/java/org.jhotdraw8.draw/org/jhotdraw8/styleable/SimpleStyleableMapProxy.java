@@ -64,4 +64,9 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
             return target.removeKey(origin, (K) key);
         }
     }
+
+    @Override
+    public int size() {
+        return target.size(origin);
+    }
 }

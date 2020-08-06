@@ -12,7 +12,6 @@ import java.util.function.IntFunction;
  * Iterates over the children of a tree node.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
  */
 public class ChildIterator<T> implements Iterator<T> {
 

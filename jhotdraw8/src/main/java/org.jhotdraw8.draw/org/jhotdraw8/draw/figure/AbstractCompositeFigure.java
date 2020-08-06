@@ -10,10 +10,10 @@ import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IndexedSet;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.tree.ChildList;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -24,59 +24,10 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
+    private final ChildList<Figure> children = new ChildList<>(this);
 
-    private class ChildList extends IndexedSet<Figure> {
-
-        @Override
-        public int indexOf(Object o) {
-            if ((o instanceof Figure) && ((Figure) o).getParent() == AbstractCompositeFigure.this) {
-                return super.indexOf(o);// linear search!
-            }
-            return -1;
-        }
-
-        @Override
-        public boolean contains(Object o) {
-            return ((o instanceof Figure) && ((Figure) o).getParent() == AbstractCompositeFigure.this);
-        }
-
-        @Override
-        protected void onAdded(@NonNull Figure e) {
-            Figure oldParent = e.getParent();
-            if (oldParent != null && oldParent != AbstractCompositeFigure.this) {
-                oldParent.removeChild(e);
-            }
-            e.parentProperty().set(AbstractCompositeFigure.this);
-        }
-
-        @Override
-        protected void onRemoved(@NonNull Figure e) {
-            e.parentProperty().set(null);
-        }
-
-        @Override
-        protected boolean doAdd(int index, @NonNull Figure element, boolean checkForDuplicates) {
-            if (AbstractCompositeFigure.this.isSuitableChild(element) &&
-                    element.isSuitableParent(AbstractCompositeFigure.this)) {
-                Figure oldParent = element.getParent();
-                if (oldParent != AbstractCompositeFigure.this) {
-                    return super.doAdd(index, element, false);
-                } else {
-                    return super.doAdd(index, element, true);// linear search!
-                }
-            } else {
-                return false;
-            }
-        }
-
-    }
-
-
-    private final ChildList children = new ChildList();
-
-    @NonNull
     @Override
-    public ObservableList<Figure> getChildren() {
+    public @NonNull ObservableList<Figure> getChildren() {
         return children;
     }
 

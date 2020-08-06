@@ -26,7 +26,7 @@ public interface CssFunction<T> {
                  @NonNull CssTokenizer tt,
                  @NonNull SelectorModel<T> model,
                  @NonNull CssFunctionProcessor<T> functionProcessor,
-                 @NonNull Consumer<CssToken> out) throws IOException, ParseException;
+                 @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException;
 
 
     /**

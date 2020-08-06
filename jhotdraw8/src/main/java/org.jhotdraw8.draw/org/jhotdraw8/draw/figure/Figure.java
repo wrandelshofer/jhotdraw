@@ -611,6 +611,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the children
      */
     @Override
+    @NonNull
     ObservableList<Figure> getChildren();
 
     /**
@@ -679,6 +680,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @Nullable
     default Figure getParent() {
         return parentProperty().get();
+    }
+
+    @Override
+    default void setParent(@Nullable Figure newValue) {
+        parentProperty().set(newValue);
     }
 
     /**
@@ -902,7 +908,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * figure.
      *
      * @param newChild The new child figure.
-     * @return true if {@code newParent} is an acceptable child
+     * @return true if {@code newChild} is an acceptable child
      */
     boolean isSuitableChild(@NonNull Figure newChild);
 

@@ -38,7 +38,7 @@ import static java.lang.Integer.max;
  */
 public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements StyleableMap<K, V> {
     public Set<Entry<K, V>> entrySet(@Nullable StyleOrigin origin) {
-        return new EntrySet(origin == null ? AUTO_ORIGIN : origin.ordinal());
+        return new EntrySet(origin);
     }
 
 
@@ -187,7 +187,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return new EntrySet(AUTO_ORIGIN);
+        return new EntrySet(null);
     }
 
     @Nullable
@@ -245,7 +245,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @SuppressWarnings("unchecked")
     @Override
     public V removeKey(@NonNull StyleOrigin origin, @NonNull K key) {
-        Object oldRawValue = setRawValue(originOrdinal, ensureCapacity(key), key, null);
+        Object oldRawValue = setRawValue(origin.ordinal(), ensureCapacity(key), key, NO_VALUE);
         return rawValueToValue(oldRawValue);
     }
 
@@ -456,6 +456,14 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return new ValueCollection();
     }
 
+    public int size(@Nullable StyleOrigin origin) {
+        if (origin == null) {
+            return sizes[originOrdinal];
+        } else {
+            return sizes[origin.ordinal()];
+        }
+    }
+
     private class ChangeEvent extends MapChangeListener.Change<K, V> {
 
         private final K key;
@@ -509,10 +517,12 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     private class EntrySet extends AbstractSet<Entry<K, V>> {
         @Nullable
+        private final StyleOrigin origin;
         private final int originOrdinal;
 
-        public EntrySet(int originOrdinal) {
-            this.originOrdinal = originOrdinal;
+        public EntrySet(@Nullable StyleOrigin origin) {
+            this.origin = origin;
+            this.originOrdinal = origin == null ? AUTO_ORIGIN : origin.ordinal();
         }
 
         @Override
@@ -522,7 +532,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         @Override
         public int size() {
-            return SimpleStyleableMap.this.size();
+            return SimpleStyleableMap.this.size(origin);
         }
 
         @Override

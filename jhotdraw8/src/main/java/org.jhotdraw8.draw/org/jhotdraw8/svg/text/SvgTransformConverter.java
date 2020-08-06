@@ -77,7 +77,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                 out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getY()));
             }
             if (ts.getPivotX() != 0 || ts.getPivotY() != 0) {
-                System.err.println("SvgTransformConverter pivot not implemented yet");
+              //  System.err.println("SvgTransformConverter pivot not implemented yet");
             }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
 

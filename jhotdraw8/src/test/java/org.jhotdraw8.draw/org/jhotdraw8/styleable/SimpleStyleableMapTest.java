@@ -105,14 +105,20 @@ public class SimpleStyleableMapTest {
         instance.put(StyleOrigin.AUTHOR, key, putValue);
         result = instance.containsKey(StyleOrigin.AUTHOR, key);
 
-        // THEN must returnt rue
+        // THEN must return rue
         assertEquals(true, result);
+        assertEquals(0, instance.size());
+        assertEquals(1, instance.getMap(StyleOrigin.AUTHOR).size());
+        assertEquals(1, instance.getMap(StyleOrigin.AUTHOR).entrySet().size());
 
         // WHEN key is removed
-        instance.remove(StyleOrigin.AUTHOR, key);
+        instance.removeKey(StyleOrigin.AUTHOR, key);
         result = instance.containsKey(StyleOrigin.AUTHOR, key);
         // THEN must return default value
         assertEquals(false, result);
+        assertEquals(0, instance.size());
+        assertEquals(0, instance.getMap(StyleOrigin.AUTHOR).size());
+        assertEquals(0, instance.getMap(StyleOrigin.AUTHOR).entrySet().size());
     }
 
 

@@ -7,12 +7,10 @@ package org.jhotdraw8.tree;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
-    private List<SimpleTreeNode<V>> children;
+    private ChildList<SimpleTreeNode<V>> children;
     @Nullable
     private SimpleTreeNode<V> parent;
     private V value;
@@ -28,10 +26,7 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         if (child.parent != null) {
             child.parent.removeChild(child);
         }
-        if (children == null) {
-            children = new ArrayList<>();
-        }
-        children.add(child);
+        getChildren().add(child);
         child.parent = this;
     }
 
@@ -45,13 +40,21 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
     @NonNull
     @Override
     public List<SimpleTreeNode<V>> getChildren() {
-        return children == null ? Collections.emptyList() : Collections.unmodifiableList(children);
+        if (children == null) {
+            children = new ChildList<>(this);
+        }
+        return children;
     }
 
     @Nullable
     @Override
     public SimpleTreeNode<V> getParent() {
         return null;
+    }
+
+    @Override
+    public void setParent(@Nullable SimpleTreeNode<V> newValue) {
+        this.parent = newValue;
     }
 
     public V getValue() {

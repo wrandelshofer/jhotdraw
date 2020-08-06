@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Spliterator;
-import java.util.Spliterators;
 
 /**
  * An immutable list.
@@ -92,15 +92,24 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         return a;
     }
 
+    @Override
+    public @NonNull Iterator<E> iterator() {
+        return new ArrayIterator<>(array);
+    }
 
     @NonNull
     public Spliterator<E> spliterator() {
-        return Spliterators.spliterator(array, 0, array.length, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+        return new ArrayIterator<>(array);
+    }
+
+    @NonNull
+    public Enumerator<E> enumerator() {
+        return new ArrayIterator<>(array);
     }
 
     @NonNull
     @Override
-    public ImmutableList<E> subList(int fromIndex, int toIndex) {
+    public ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ImmutableArraySubList<E>(true, this.array, fromIndex, toIndex);
     }
 

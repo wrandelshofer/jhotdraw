@@ -54,7 +54,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                         @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out) throws IOException, ParseException {
+                        @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
         CssSize dim = parseCalcFunction(element, tt, functionProcessor);
@@ -170,7 +170,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
             String name = tt.currentString();
             tt.pushBack();
             List<CssToken> list = new ArrayList<>();
-            functionProcessor.processToken(element, tt, list::add);
+            functionProcessor.processToken(element, tt, list::add, 0);
             if (list.size() != 1) {
                 throw new ParseException("〈calc-value〉: function " + name + "() must return single value.", tt.getStartPosition());
             }

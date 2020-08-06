@@ -51,7 +51,7 @@ abstract class AbstractCssFunctionProcessorTest {
         CssFunctionProcessor<Element> instance = createInstance(model, customProperties);
 
         try {
-            instance.process(elem, tt, consumer);
+            instance.process(elem, tt, consumer, 0);
             if (expected == null) {
                 fail("must throw ParseException");
             }
