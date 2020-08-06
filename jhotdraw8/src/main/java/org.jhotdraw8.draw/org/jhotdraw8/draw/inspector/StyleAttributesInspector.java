@@ -6,7 +6,9 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,7 +33,21 @@ import org.jhotdraw8.text.Converter;
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {
 
-    final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
+    @NonNull
+    protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
+    @NonNull
+    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
+
+    @NonNull
+    public ObjectProperty<DrawingView> subjectProperty() {
+        return subject;
+    }
+
+    @NonNull
+    public BooleanProperty showingProperty() {
+        return showing;
+    }
+
     private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
 
         @Override
@@ -170,10 +186,4 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
             drawingView.jiggleHandles();
         }
     }
-
-    @NonNull
-    public ObjectProperty<DrawingView> subjectProperty() {
-        return subject;
-    }
-
 }

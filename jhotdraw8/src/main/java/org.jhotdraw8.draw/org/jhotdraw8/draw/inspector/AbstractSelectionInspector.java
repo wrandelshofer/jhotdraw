@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
@@ -24,24 +22,20 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractSelectionInspector implements Inspector<DrawingView> {
-    final protected ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
+public abstract class AbstractSelectionInspector extends AbstractInspector<DrawingView> {
 
     {
         subject.addListener(this::onDrawingViewChanged);
     }
 
-    @NonNull
-    public ObjectProperty<DrawingView> subjectProperty() {
-        return subject;
-    }
-
     protected Drawing getDrawing() {
-        return getSubject().getDrawing();
+        DrawingView subject = getSubject();
+        return subject == null ? null : subject.getDrawing();
     }
 
     protected DrawingModel getModel() {
-        return getSubject().getModel();
+        DrawingView subject = getSubject();
+        return subject == null ? null : subject.getModel();
     }
 
 

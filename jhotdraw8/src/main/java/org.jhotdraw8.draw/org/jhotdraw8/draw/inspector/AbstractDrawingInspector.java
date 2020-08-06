@@ -4,11 +4,8 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -19,10 +16,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractDrawingInspector implements Inspector<DrawingView> {
-
-    @NonNull
-    protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>();
+public abstract class AbstractDrawingInspector extends AbstractInspector<DrawingView> {
     @Nullable
     protected DrawingModel drawingModel;
     @Nullable
@@ -34,12 +28,6 @@ public abstract class AbstractDrawingInspector implements Inspector<DrawingView>
     {
         subject.addListener(this::onDrawingViewChanged);
     }
-
-    @NonNull
-    public ObjectProperty<DrawingView> subjectProperty() {
-        return subject;
-    }
-
 
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Drawing oldDrawing = drawing;

@@ -188,9 +188,10 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     @NonNull
     private Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
-        Dockable dockItem = new SimpleDockable(r.getString(id + ".toolbar"), inspector.getNode());
+        Dockable dockable = new SimpleDockable(r.getString(id + ".toolbar"), inspector.getNode());
+        inspector.showingProperty().bind(dockable.showingProperty());
         inspector.getNode().getProperties().put("inspector", inspector);
-        return dockItem;
+        return dockable;
     }
 
     @NonNull
