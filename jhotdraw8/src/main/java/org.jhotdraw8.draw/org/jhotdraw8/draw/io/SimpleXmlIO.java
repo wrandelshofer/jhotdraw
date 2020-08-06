@@ -104,9 +104,9 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     /**
      * Comments which can not be associated to a figure, or which appear in the
-     * epilog of an XML file, are associated to the drawing.
+     * epilog of an XML file.
      */
-    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlTailComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
+    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlEpilogComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     /**
      * Comments which appear before an XML element of a figure are associated to
      * the figure as a comment.
@@ -352,7 +352,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         }
         if (external != null) {
             //external.set(Drawing.DOCUMENT_HOME, getExternalHome());
-            external.set(XML_EPILOG_COMMENT_KEY, comments);
+            //external.set(XML_EPILOG_COMMENT_KEY, comments);
         }
         try {
             for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
@@ -426,7 +426,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         }
         if (external != null) {
             external.set(Drawing.DOCUMENT_HOME, documentHome);
-            external.set(XML_EPILOG_COMMENT_KEY, comments);
+            //external.set(XML_EPILOG_COMMENT_KEY, comments);
         }
         try {
             figureToElementMap.entrySet().stream()
@@ -613,7 +613,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         case Node.ELEMENT_NODE:
             Figure figure = readNode(node);
             if (!comments.isEmpty()) {
-                figure.set(XML_HEAD_COMMENT_KEY, comments);
+                //figure.set(XML_HEAD_COMMENT_KEY, comments);
                 comments = new ArrayList<>();
             }
             NodeList list = node.getChildNodes();
@@ -627,7 +627,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
                 }
             }
             if (!comments.isEmpty()) {
-                figure.set(XML_BODY_COMMENT_KEY, comments);
+                //figure.set(XML_BODY_COMMENT_KEY, comments);
                 comments = new ArrayList<>();
             }
             return figure;
@@ -709,20 +709,22 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         Element docElement = doc.getDocumentElement();
 
         writeProcessingInstructions(doc, external);
+        /*
         for (String string : external.get(XML_HEAD_COMMENT_KEY)) {
             doc.insertBefore(doc.createComment(string), docElement);
-        }
+        }*/
         writeElementAttributes(docElement, external);
         String linebreak = "\n";
         for (Figure child : external.getChildren()) {
             writeNodeRecursively(doc, docElement, child);
         }
+        /*
         for (String string : external.get(XML_BODY_COMMENT_KEY)) {
             docElement.appendChild(doc.createComment(string));
         }
         for (String string : external.get(XML_EPILOG_COMMENT_KEY)) {
             doc.appendChild(doc.createComment(string));
-        }
+        }*/
         return doc;
     }
 
@@ -804,20 +806,20 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             Element elem = createElement(doc, elementName);
             writeElementAttributes(elem, figure);
             writeElementNodeList(doc, elem, figure);
-
+            /*
             for (String string : figure.get(XML_HEAD_COMMENT_KEY)) {
 
                 parent.appendChild(doc.createComment(string));
-            }
+            }*/
             for (Figure child : figure.getChildren()) {
                 if (figureFactory.figureToName(child) != null) {
                     writeNodeRecursively(doc, elem, child);
                 }
             }
-            boolean hasNoElementNodes = figureFactory.figureNodeListKeys(figure).isEmpty();
+            /*
             for (String string : figure.get(XML_BODY_COMMENT_KEY)) {
                 elem.appendChild(doc.createComment(string));
-            }
+            }*/
             parent.appendChild(elem);
         } catch (IOException e) {
             throw new IOException("Error writing figure " + figure, e);

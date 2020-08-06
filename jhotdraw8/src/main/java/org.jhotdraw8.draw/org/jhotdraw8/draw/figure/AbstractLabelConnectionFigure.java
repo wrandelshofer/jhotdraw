@@ -266,7 +266,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 b.getMinY() - i.getTop(),
                 b.getWidth() + i.getLeft() + i.getRight(),
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
-        setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, bconnected);
+        setCachedLayoutBounds(bconnected);
         invalidateTransforms();
     }
 

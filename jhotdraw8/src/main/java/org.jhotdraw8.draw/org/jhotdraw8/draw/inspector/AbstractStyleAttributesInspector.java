@@ -91,6 +91,8 @@ import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Intentionally does not implement the inspector interface, so
@@ -681,16 +683,18 @@ public abstract class AbstractStyleAttributesInspector<E> {
         ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
         Set<E> fs = new LinkedHashSet<>(selectedOrRoot);
         pseudoStyles.put("selected", fs);
-        List<E> matchedFigures = new ArrayList<>();
         StylesheetsManager<E> sm = getStyleManager();
         SelectorModel<E> selectorModel = sm.getSelectorModel();
         selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
         SelectorGroup selector = updateSelector(selectedOrRoot, selectorModel);
 
-        for (E entity : getEntities()) {
-            if (selector.matches(selectorModel, entity)) {
-                matchedFigures.add(entity);
-            }
+        List<E> matchedFigures;
+        if (updateSelectorCheckBox.isSelected()) {
+            matchedFigures = new ArrayList<>(getSelection());
+        } else {
+            matchedFigures =
+                    StreamSupport.stream(getEntities().spliterator(), true).filter(entity ->
+                            selector.matches(selectorModel, entity)).collect(Collectors.toList());
         }
 
 

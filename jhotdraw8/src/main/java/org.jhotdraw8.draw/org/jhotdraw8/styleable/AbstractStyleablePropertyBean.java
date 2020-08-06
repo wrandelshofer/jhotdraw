@@ -23,36 +23,46 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Werner Randelshofer
  */
 public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
-    private final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
+    protected final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
 
     /**
      * Holds the properties.
      */
     protected final StyleableMap<Key<?>, Object> properties =
-            new SimpleStyleableMap<>(
-                    keyMaps.computeIfAbsent(getClass(), k -> {
-                        ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
-                            @NonNull
-                            final AtomicInteger nextIndex = new AtomicInteger();
+            createStyleableMap();
 
-                            @Override
-                            public Integer get(Object key) {
-                                return super.computeIfAbsent((Key<?>) key, k -> nextIndex.getAndIncrement());
-                            }
-                        };
+    @NonNull
+    private SimpleStyleableMap<Key<?>, Object> createStyleableMap() {
+        return new SimpleStyleableMap<>(createIndexMap()) {
+            @Override
+            @SuppressWarnings("unchecked")
+            protected void callObservers(StyleOrigin origin, @NonNull MapChangeListener.Change<Key<?>, Object> change) {
+                changed((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
+                AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
+                super.callObservers(origin, change);
+            }
+        };
+    }
 
-                        return m;
-                    })
-            ) {
+    /**
+     * This method is called from within the constructor.
+     */
+    @NonNull
+    protected Map<Key<?>, Integer> createIndexMap() {
+        return keyMaps.computeIfAbsent(getClass(), k -> {
+            ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
+                @NonNull
+                final AtomicInteger nextIndex = new AtomicInteger();
 
                 @Override
-                @SuppressWarnings("unchecked")
-                protected void callObservers(StyleOrigin origin, @NonNull MapChangeListener.Change<Key<?>, Object> change) {
-                    changed((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
-                    AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
-                    super.callObservers(origin, change);
+                public Integer get(Object key) {
+                    return super.computeIfAbsent((Key<?>) key, k1 -> nextIndex.getAndIncrement());
                 }
             };
+
+            return m;
+        });
+    }
 
     /**
      * Returns the user properties.

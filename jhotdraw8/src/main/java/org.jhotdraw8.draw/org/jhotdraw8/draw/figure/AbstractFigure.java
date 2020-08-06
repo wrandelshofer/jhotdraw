@@ -5,15 +5,16 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.ModifiableObservableSet;
 import org.jhotdraw8.collection.SharedKeysMap;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -24,6 +25,7 @@ import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,38 +39,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
 
     @NonNull
-    private static Map<Key<?>, Integer> cachedValuesKeyMap = Collections.synchronizedMap(new HashMap<>());
+    private final static Map<Key<?>, Integer> cachedValuesKeyMap = Collections.synchronizedMap(new HashMap<>());
 
     private transient Map<Key<?>, Object> cachedValues;
-    private ObservableSet<Figure> dependentFigures;
+    private ObservableSet<Figure> layoutObservers;
     @Nullable
     private Drawing drawing;
     @Nullable
-    private final ObjectProperty<Figure> parent = new ObjectPropertyBase<Figure>() {
-
-        @Override
-        protected void fireValueChangedEvent() {
-            final Figure figure = get();
-            if (figure != null && !isSuitableParent(figure)) {
-                throw new IllegalArgumentException(figure + " is not a suitable parent for this figure. this=" + this);
-            }
-            super.fireValueChangedEvent();
-        }
-
-        @NonNull
-        @Override
-        public Object getBean() {
-            return AbstractFigure.this;
-        }
-
-        @NonNull
-        @Override
-        public String getName() {
-            return PARENT_PROPERTY;
-        }
-
-    };
+    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
+    private volatile Transform cachedLocalToWorld;
 
     /**
      * This method calls {@link #doAddNotify}.
@@ -127,10 +107,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     @Override
     public final ObservableSet<Figure> getLayoutObservers() {
-        if (dependentFigures == null) {
-            dependentFigures = new ModifiableObservableSet<>();
+        if (layoutObservers == null) {
+            layoutObservers = FXCollections.synchronizedObservableSet(
+                    FXCollections.observableSet(new LinkedHashSet<>()));
         }
-        return dependentFigures;
+        return layoutObservers;
     }
 
     @Override
@@ -222,6 +203,23 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
     final public void removeNotify(Drawing drawing) {
         this.drawing = null;
         doRemoveNotify(drawing);
+    }
+
+    /**
+     * This method fits into {@link org.jhotdraw8.draw.figure.TransformCacheableFigure#getCachedLocalToWorld()} .
+     */
+    @Nullable
+    public Transform getCachedLocalToWorld() {
+        return cachedLocalToWorld;
+    }
+
+    /**
+     * This method fits into {@link org.jhotdraw8.draw.figure.TransformCacheableFigure#setCachedLocalToWorld} .
+     */
+    public Transform setCachedLocalToWorld(@Nullable Transform newValue) {
+        Transform oldValue = this.cachedLocalToWorld;
+        this.cachedLocalToWorld = newValue;
+        return oldValue;
     }
 
     @Override

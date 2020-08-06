@@ -22,9 +22,11 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.geom.FXGeom;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * LayerFigure.
@@ -57,19 +59,19 @@ public class LayerFigure extends AbstractCompositeFigure
         applyStyleableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
 
-        List<Node> childNodes = new ArrayList<>(getChildren().size());
 
+        List<Node> childNodes;
         int maxNodesPerLayer = ctx.getNonNull(RenderContext.MAX_NODES_PER_LAYER);
         Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
         if (renderingIntent == RenderingIntent.EDITOR
                 && clipBounds != null /* && getChildren().size() > maxNodesPerLayer*/) {
-
-            for (Figure child : getChildren()) {
-                if (child.getLayoutBoundsInWorld().intersects(clipBounds)) {
-                    Node childNode = ctx.getNode(child);
-                    childNodes.add(childNode);
-                }
-            }
+            Bounds intersectBounds = FXGeom.grow(clipBounds, 8, 8);
+            childNodes = getChildren().stream().parallel().filter(child ->
+                    child.getLayoutBoundsInWorld().intersects(intersectBounds)
+            )
+                    .collect(Collectors.toList()).stream()
+                    .map(ctx::getNode)// cannot be done in parallel
+                    .collect(Collectors.toList());
 
             if (childNodes.size() > maxNodesPerLayer) {
                 Text text = new Text();
@@ -88,6 +90,7 @@ public class LayerFigure extends AbstractCompositeFigure
                 childNodes.add(text);
             }
         } else {
+            childNodes = new ArrayList<>();
             for (Figure child : getChildren()) {
                 childNodes.add(ctx.getNode(child));
             }

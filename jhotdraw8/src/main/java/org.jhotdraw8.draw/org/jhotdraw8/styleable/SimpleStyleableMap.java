@@ -166,7 +166,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         // try get first, because an unmodifiable map, will not support compute if absent
         Integer indexNullable = keyMap.get(key);
         if (indexNullable == null) {
-            indexNullable = keyMap.computeIfAbsent(key, k -> keyMap.size());
+            try {
+                indexNullable = keyMap.computeIfAbsent(key, k -> keyMap.size());
+            } catch (UnsupportedOperationException e) {
+                throw new UnsupportedOperationException("Could not add key " + key + " to map: " + keyMap);
+            }
         }
         int index = indexNullable;
         int n = (1 + index) * numOrigins;
@@ -176,6 +180,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             }
             values = Arrays.copyOf(values, max(values.length, n));
         }
+
         return index;
     }
 
@@ -356,7 +361,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         final int userOrdinal = StyleOrigin.USER.ordinal();
         for (int i = 0, n = values.length; i < n; i++) {
             if (i % numOrigins != userOrdinal) {
-                values[i] = null;
+                values[i] = NO_VALUE;
             }
         }
     }

@@ -39,16 +39,25 @@ public interface TransformCacheableFigure extends CacheableFigure {
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
+    @Nullable
+    default Transform getCachedLocalToWorld() {
+        return getCachedValue(LOCAL_TO_WORLD);
+    }
+
+    default Transform setCachedLocalToWorld(@Nullable Transform newValue) {
+        return setCachedValue(LOCAL_TO_WORLD, newValue);
+    }
+
     @Override
     @Nullable
     default Transform getLocalToWorld() {
-        Transform t = CACHE ? getCachedValue(LOCAL_TO_WORLD) : null;
+        Transform t = CACHE ? getCachedLocalToWorld() : null;
         if (t == null) {
             t = getLocalToParent();
             final Figure parent = getParent();
             t = parent == null ? t : FXTransforms.concat(parent.getLocalToWorld(), t);
             if (CACHE) {
-                setCachedValue(LOCAL_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
+                setCachedLocalToWorld(t == null ? IDENTITY_TRANSFORM : t);
             }
         }
         return t == IDENTITY_TRANSFORM ? null : t;
@@ -89,7 +98,7 @@ public interface TransformCacheableFigure extends CacheableFigure {
 
         // intentional use of long-circuit or-expressions!!
         return null != setCachedValue(PARENT_TO_WORLD, null)
-                | null != setCachedValue(LOCAL_TO_WORLD, null)
+                | null != setCachedLocalToWorld(null)
                 | null != setCachedValue(WORLD_TO_LOCAL, null)
                 | null != setCachedValue(WORLD_TO_PARENT, null);
     }

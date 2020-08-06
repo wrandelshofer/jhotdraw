@@ -626,6 +626,10 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * changes of an observed figure into a smaller number of layout calls on
      * the observers. {@code DrawingModel} can also detect cyclic layout
      * dependencies and prevent endless update loops.
+     * <p>
+     * This set must be synchronized, because it is accessed by other figures,
+     * when there properties are changed.
+     *
      *
      * @return a list of dependent figures
      */

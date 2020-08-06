@@ -940,7 +940,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void onNodeChanged(Figure f) {
         invalidateFigureNode(f);
         if (f == getDrawing()) {
-            updateLayout();
+            revalidateLayout();
             if (constrainer.get() != null) {
                 onConstrainerInvalidated(constrainer.get());
             }
@@ -1033,7 +1033,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // We use a change listener instead of an invalidation listener here,
         // because we only want to update the layout, when the new value is
         // different from the old value!
-        drawingPane.layoutBoundsProperty().addListener(observer -> updateLayout());
+        drawingPane.layoutBoundsProperty().addListener(observer -> revalidateLayout());
 
         drawingModel.get().setRoot(new SimpleDrawing());
         onNewDrawingModel(null, drawingModel.get());
@@ -1052,6 +1052,15 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
         CustomBinding.bind(drawing, drawingModel, DrawingModel::drawingProperty);
 
+    }
+
+    private boolean isLayoutValid = true;
+
+    private void revalidateLayout() {
+        if (isLayoutValid) {
+            isLayoutValid = false;
+            Platform.runLater(this::updateLayout);
+        }
     }
 
     private void invalidateConstrainerNode() {
@@ -1367,6 +1376,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
         invalidateWorldViewTransforms();
         invalidateHandleNodes();
+        isLayoutValid = true;
     }
 
     private void updateRenderContext() {

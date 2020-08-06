@@ -15,8 +15,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -49,9 +47,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public final static CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
     @NonNull
     public final static CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
-
-    @NonNull
-    public final static Key<Bounds> BOUNDS_IN_LOCAL_CACHE_KEY = new ObjectKey<>("boundsInLocal", Bounds.class, null, true, true, null);
+    @Nullable
+    private volatile Bounds cachedLayoutBounds;
 
     public AbstractLabelFigure() {
         this(0, 0);
@@ -84,10 +81,22 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
+    @Nullable
+    protected Bounds getCachedLayoutBounds() {
+        return cachedLayoutBounds;
+    }
+
+    @Nullable
+    protected Bounds setCachedLayoutBounds(Bounds newValue) {
+        Bounds oldValue = cachedLayoutBounds;
+        cachedLayoutBounds = newValue;
+        return oldValue;
+    }
+
     @NonNull
     @Override
     public Bounds getLayoutBounds() {
-        Bounds boundsInLocal = getCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY);
+        Bounds boundsInLocal = getCachedLayoutBounds();
         return boundsInLocal == null ? computeLayoutBounds() : boundsInLocal;
     }
 
@@ -159,7 +168,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public void layout(@NonNull RenderContext ctx) {
         Bounds b = computeLayoutBounds(ctx, new Text());
-        setCachedValue(BOUNDS_IN_LOCAL_CACHE_KEY, b);
+        setCachedLayoutBounds(b);
     }
 
     @Override
