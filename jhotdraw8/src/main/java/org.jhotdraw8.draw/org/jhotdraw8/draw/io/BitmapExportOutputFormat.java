@@ -53,7 +53,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
+import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
 /**
  * BitmapExportOutputFormat.

@@ -1,25 +1,33 @@
 
 package org.jhotdraw8.draw.gui;
 
+import javafx.beans.Observable;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.SubScene;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -27,6 +35,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.geom.Geom;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,9 +65,8 @@ import java.util.ResourceBundle;
  */
 @NonNull
 public class ZoomableScrollPane {
-    private final DoubleProperty scaleFactor = new SimpleDoubleProperty(this, "scaleFactor", 1.0);
-    private final DoubleProperty viewRectX = new SimpleDoubleProperty(this, "viewX", 0);
-    private final DoubleProperty viewRectY = new SimpleDoubleProperty(this, "viewY", 0);
+    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "scaleFactor", 1.0);
+    private ObjectProperty<Bounds> viewRect = new SimpleObjectProperty<>(this, "viewRect");
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -76,7 +85,8 @@ public class ZoomableScrollPane {
 
     @FXML // fx:id="subScene"
     private SubScene subScene; // Value injected by FXMLLoader
-
+    @FXML // fx:id="gridPane"
+    private GridPane gridPane; // Value injected by FXMLLoader
 
     private StackPane content;
     @FXML // fx:id="foregroundPane"
@@ -91,6 +101,7 @@ public class ZoomableScrollPane {
         assert subScene != null : "fx:id=\"subScene\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
         assert foreground != null : "fx:id=\"foregroundPane\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
         assert viewportPane != null : "fx:id=\"viewportPane\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
+        assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
 
         // Initialize the layout
         // ---------------------
@@ -111,35 +122,12 @@ public class ZoomableScrollPane {
         verticalScrollBar.setUnitIncrement(20);
 
         // - Try to keep the center of the viewRect fixed when zooming.
-        scaleFactor.addListener((o, oldv, newv) -> {
-            double oldvv = oldv.doubleValue(),
-                    newvv = newv.doubleValue(),
-                    sf = oldvv / newvv,
-                    hmin = horizontalScrollBar.getMin(),
-                    hmax = horizontalScrollBar.getMax(),
-                    hvalue = horizontalScrollBar.getValue(),
-                    hvisible = horizontalScrollBar.getVisibleAmount(),
-                    holdmax = hmax * sf,
-                    holdmin = hmin * sf,
-                    vmin = verticalScrollBar.getMin(),
-                    vmax = verticalScrollBar.getMax(),
-                    vvalue = verticalScrollBar.getValue(),
-                    vvisible = verticalScrollBar.getVisibleAmount(),
-                    voldmax = vmax * sf,
-                    voldmin = vmin * sf;
-
-            double osf = 1 / oldvv;
-            double oldx = ((holdmax - hvisible) * (hvalue - holdmin) / (holdmax - holdmin)) * osf;
-            double oldy = ((voldmax - vvisible) * (vvalue - voldmin) / (voldmax - voldmin)) * osf;
-            double oldw = hvisible * osf;
-            double oldh = vvisible * osf;
-            scrollContentRectToVisible(oldx, oldy, oldw, oldh);
-        });
+        zoomFactor.addListener(this::onZoomFactorChanged);
 
         // - Scroll on scroll event.
         viewportPane.addEventHandler(ScrollEvent.SCROLL, event -> {
-            onScrollEvent(event, horizontalScrollBar, event.getDeltaX(), viewportPane.getWidth());
-            onScrollEvent(event, verticalScrollBar, event.getDeltaY(), viewportPane.getHeight());
+            onScrollEvent(event, horizontalScrollBar, event.getDeltaX());
+            onScrollEvent(event, verticalScrollBar, event.getDeltaY());
         });
 
         // FIXME Zoom on zoom event.
@@ -149,13 +137,54 @@ public class ZoomableScrollPane {
 
     }
 
+    @NonNull
+    private void onZoomFactorChanged(Observable o, Number oldv, Number newv) {
+        double oldvv = oldv.doubleValue(),
+                newvv = newv.doubleValue(),
+                sf = oldvv / newvv,
+                hmin = horizontalScrollBar.getMin(),
+                hmax = horizontalScrollBar.getMax(),
+                hvalue = horizontalScrollBar.getValue(),
+                hvisible = horizontalScrollBar.getVisibleAmount(),
+                holdmax = hmax * sf,
+                holdmin = hmin * sf,
+                vmin = verticalScrollBar.getMin(),
+                vmax = verticalScrollBar.getMax(),
+                vvalue = verticalScrollBar.getValue(),
+                vvisible = verticalScrollBar.getVisibleAmount(),
+                voldmax = vmax * sf,
+                voldmin = vmin * sf;
+
+        double osf = 1 / oldvv;
+        double oldx = ((holdmax - hvisible) * (hvalue - holdmin) / (holdmax - holdmin)) * osf;
+        double oldy = ((voldmax - vvisible) * (vvalue - voldmin) / (voldmax - voldmin)) * osf;
+        double oldw = hvisible * osf;
+        double oldh = vvisible * osf;
+
+        scrollContentRectToVisible(oldx, oldy, oldw, oldh);
+    }
+
     private void initBindings() {
         // - Translate the viewRect and the background + foreground panes when
         //   the scrollbars are moved.
         DoubleBinding translateXBinding = createTranslateBinding(horizontalScrollBar);
         DoubleBinding translateYBinding = createTranslateBinding(verticalScrollBar);
-        viewRectX.bind(translateXBinding.negate());
-        viewRectY.bind(translateYBinding.negate());
+
+        viewRect.bind(CustomBinding.compute(() -> {
+                    double invf = 1 / zoomFactor.get();
+                    return new BoundingBox(
+                            -translateXBinding.get() * invf,
+                            -translateYBinding.get() * invf,
+                            horizontalScrollBar.getVisibleAmount() * invf,
+                            verticalScrollBar.getVisibleAmount() * invf
+                    );
+                },
+                translateXBinding,
+                translateYBinding,
+                horizontalScrollBar.visibleAmountProperty(),
+                verticalScrollBar.visibleAmountProperty(),
+                zoomFactor));
+
         background.translateXProperty().bind(translateXBinding);
         background.translateYProperty().bind(translateYBinding);
         foreground.translateXProperty().bind(translateXBinding);
@@ -170,7 +199,7 @@ public class ZoomableScrollPane {
         Scale scale = new Scale();
         scale.setPivotX(0);
         scale.setPivotY(0);
-        scaleFactor.addListener((o, oldv, newv) -> {
+        zoomFactor.addListener((o, oldv, newv) -> {
             scale.setX(newv.doubleValue());
             scale.setY(newv.doubleValue());
         });
@@ -184,14 +213,35 @@ public class ZoomableScrollPane {
         content.getTransforms().addAll(translate, scale);
 
         // - Adjust the scrollbar max, when the subScene is resized.
-        horizontalScrollBar.maxProperty().bind(contentWidthProperty().multiply(scaleFactor));
-        verticalScrollBar.maxProperty().bind(contentHeightProperty().multiply(scaleFactor));
+        horizontalScrollBar.maxProperty().bind(contentWidthProperty().multiply(zoomFactor));
+        verticalScrollBar.maxProperty().bind(contentHeightProperty().multiply(zoomFactor));
 
         // - Adjust the scrollbar visibleAmount whe the viewport is resized.
         horizontalScrollBar.visibleAmountProperty().bind(viewportWidthProperty());
         verticalScrollBar.visibleAmountProperty().bind(viewportHeightProperty());
         horizontalScrollBar.blockIncrementProperty().bind(viewportWidthProperty());
         verticalScrollBar.blockIncrementProperty().bind(viewportHeightProperty());
+
+        // - Only show the scrollbars if their visible amount is less than their
+        //   extent (we can use the max value here, because we let min=0).
+        onlyShowScrollBarIfNeeded(horizontalScrollBar, gridPane.getRowConstraints().get(1));
+        onlyShowScrollBarIfNeeded(verticalScrollBar, gridPane.getColumnConstraints().get(1));
+    }
+
+    private void onlyShowScrollBarIfNeeded(ScrollBar scrollBar, RowConstraints rowConstraints) {
+        BooleanBinding visibilityBinding;
+        visibilityBinding = scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty());
+        scrollBar.visibleProperty().bind(visibilityBinding);
+        rowConstraints.prefHeightProperty().bind(
+                CustomBinding.convert(visibilityBinding, b -> b ? ScrollBar.USE_COMPUTED_SIZE : 0));
+    }
+
+    private void onlyShowScrollBarIfNeeded(ScrollBar scrollBar, ColumnConstraints colConstraints) {
+        BooleanBinding visibilityBinding;
+        visibilityBinding = scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty());
+        scrollBar.visibleProperty().bind(visibilityBinding);
+        colConstraints.prefWidthProperty().bind(
+                CustomBinding.convert(visibilityBinding, b -> b ? ScrollBar.USE_COMPUTED_SIZE : 0));
     }
 
     private void initLayout() {
@@ -211,16 +261,18 @@ public class ZoomableScrollPane {
         content.setBackground(null);
     }
 
-    private void onScrollEvent(ScrollEvent event, ScrollBar scrollBar, double viewDelta, double viewExtent) {
-        final double min = scrollBar.getMin();
-        final double max = scrollBar.getMax();
-        final double value = scrollBar.getValue();
-        final double visible = scrollBar.getVisibleAmount();
+    private void onScrollEvent(ScrollEvent event, ScrollBar scrollBar, double delta) {
+        double
+                min = scrollBar.getMin(),
+                max = scrollBar.getMax(),
+                value = scrollBar.getValue(),
+                visible = scrollBar.getVisibleAmount();
 
-        final double extent = max - min - visible;
-        final double delta = viewDelta * extent / viewExtent / getScaleFactor();
-        scrollBar.setValue(Geom.clamp(value - delta, min, max));
-        event.consume();
+        // we only consume if we can scroll
+        if (visible < max - min) {
+            scrollBar.setValue(Geom.clamp(value - delta, min, max));
+            event.consume();
+        }
     }
 
     @NonNull
@@ -235,7 +287,7 @@ public class ZoomableScrollPane {
                     if (visible > max) {
                         return Math.round((visible - max) * 0.5);
                     }
-                    return -Geom.clamp(Math.round((max - visible) * (value - min) / (max - min)), min, max);
+                    return -Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)), min, max);
                 },
                 scrollBar.valueProperty(),
                 scrollBar.minProperty(),
@@ -260,13 +312,13 @@ public class ZoomableScrollPane {
 
 
     @NonNull
-    public final DoubleProperty scaleFactorProperty() {
-        return scaleFactor;
+    public final DoubleProperty zoomFactorProperty() {
+        return zoomFactor;
     }
 
     @NonNull
-    public double getScaleFactor() {
-        return scaleFactor.get();
+    public double getZoomFactor() {
+        return zoomFactor.get();
     }
 
 
@@ -280,34 +332,12 @@ public class ZoomableScrollPane {
         return verticalScrollBar.maxProperty();
     }
 
-    @NonNull
-    public final ReadOnlyDoubleProperty viewRectXProperty() {
-        return viewRectX;
-    }
-
-    @NonNull
-    public final ReadOnlyDoubleProperty viewRectYProperty() {
-        return viewRectY;
-    }
-
-    @NonNull
     public double getViewportWidth() {
         return viewportWidthProperty().getValue();
     }
 
-    @NonNull
     public double getViewportHeight() {
         return viewportHeightProperty().getValue();
-    }
-
-    @NonNull
-    public double getViewRectWidth() {
-        return horizontalScrollBar.visibleAmountProperty().getValue();
-    }
-
-    @NonNull
-    public double getViewRectHeight() {
-        return verticalScrollBar.visibleAmountProperty().getValue();
     }
 
     @NonNull
@@ -325,32 +355,22 @@ public class ZoomableScrollPane {
         return foreground.getChildren();
     }
 
+
     @NonNull
     public Bounds getViewRect() {
-        return new BoundingBox(getViewRectX(), getViewRectY(), getViewRectWidth(), getViewRectHeight());
+        return viewRect.get();
     }
 
-    @NonNull
-    public Bounds getVisibleContentRect() {
-        double sf = 1 / getScaleFactor();
-        return new BoundingBox(getViewRectX() * sf, getViewRectY() * sf, getViewRectWidth() * sf, getViewRectHeight() * sf);
-    }
-
-    @NonNull
-    public double getViewRectX() {
-        return viewRectX.get();
-    }
-
-    private double getViewRectY() {
-        return viewRectY.get();
+    public ReadOnlyObjectProperty<Bounds> viewRectProperty() {
+        return viewRect;
     }
 
 
     @FXML // fx:id="viewportPane"
     private StackPane viewportPane; // Value injected by FXMLLoader
 
-    public void setScaleFactor(double newValue) {
-        scaleFactor.set(newValue);
+    public void setZoomFactor(double newValue) {
+        zoomFactor.set(newValue);
     }
 
     @NonNull
@@ -379,13 +399,13 @@ public class ZoomableScrollPane {
                 hvalue = cx * (hmax - hmin) / (hmax - hvisible) + hmin,
                 vvalue = cy * (vmax - vmin) / (vmax - vvisible) + vmin;
 
-        horizontalScrollBar.setValue(hvalue);
-        verticalScrollBar.setValue(vvalue);
+        horizontalScrollBar.setValue(Geom.clamp(hvalue, horizontalScrollBar.getMin(), horizontalScrollBar.getMax()));
+        verticalScrollBar.setValue(Geom.clamp(vvalue, verticalScrollBar.getMin(), verticalScrollBar.getMax()));
 
     }
 
     public void scrollContentRectToVisible(double x, double y, double w, double h) {
-        double sf = getScaleFactor();
+        double sf = getZoomFactor();
         scrollViewRectToVisible(x * sf, y * sf, w * sf, h * sf);
     }
 
@@ -397,8 +417,14 @@ public class ZoomableScrollPane {
 
     @NonNull
     public Transform getContentToView() {
-        double sf = getScaleFactor();
-        return new Affine(sf, 0, 0, 0, sf, 0);
+        double sf = getZoomFactor();
+        return new Scale(sf, sf, 0, 0);
+    }
+
+    @NonNull
+    public Transform getViewToContent() {
+        double sf = 1 / getZoomFactor();
+        return new Scale(sf, sf, 0, 0);
     }
 
     private Property<Transform> worldToView;
@@ -408,7 +434,7 @@ public class ZoomableScrollPane {
         if (worldToView == null) {
             worldToView = new SimpleObjectProperty<>(this, "contentToView");
             worldToView.bind(CustomBinding.compute(this::getContentToView,
-                    scaleFactor));
+                    zoomFactor));
         }
         return worldToView;
     }
@@ -425,23 +451,63 @@ public class ZoomableScrollPane {
 
     public void setContentSize(double w, double h) {
         setContentWidth(w);
-        setContentHeight(w);
+        setContentHeight(h);
     }
 
-    private void setContentWidth(double w) {
+    public void setContentWidth(double w) {
         contentWidthProperty().set(w);
     }
 
-    private void setContentHeight(double w) {
+    public void setContentHeight(double w) {
         contentHeightProperty().set(w);
     }
 
-    private double getContentWidth() {
+    public double getContentWidth() {
         return contentWidthProperty().get();
     }
 
-    private double getContentHeight() {
+    public double getContentHeight() {
         return contentHeightProperty().get();
     }
+
+    public String getSubSceneUserAgentStylesheet() {
+        return subScene.getUserAgentStylesheet();
+    }
+
+    public void setSubSceneUserAgentStylesheet(String newValue) {
+        subScene.setUserAgentStylesheet(newValue);
+    }
+
+    public ObjectProperty<String> subSceneUserAgentStylesheetProperty() {
+        return subScene.userAgentStylesheetProperty();
+    }
+
+    public Node getNode() {
+        return gridPane;
+    }
+
+    public static ZoomableScrollPane create() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(ZoomableScrollPane.getFxmlResource());
+        loader.setResources(null);
+        try {
+            loader.load();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        Parent scrollableSubScenePanel = loader.getRoot();
+        ZoomableScrollPane p = loader.getController();
+        return p;
+    }
+
+    public ReadOnlyDoubleProperty viewRectWidthProperty() {
+        return horizontalScrollBar.visibleAmountProperty();
+    }
+
+    public ReadOnlyDoubleProperty viewRectHeightProperty() {
+        return verticalScrollBar.visibleAmountProperty();
+    }
 }
+
+
 

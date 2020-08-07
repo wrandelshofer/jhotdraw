@@ -30,7 +30,7 @@ public class ZoomToolbar extends BorderPane {
 
     private final double LOG2 = log(2.0);
 
-    private final double zoomPowerIncrement = 0.25;
+    private final double zoomPowerIncrement = 0.5;
 
     @FXML
     private Slider zoomSlider;

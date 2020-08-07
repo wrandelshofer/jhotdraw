@@ -2,7 +2,7 @@
  * @(#)SimpleDrawingRenderer.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw;
+package org.jhotdraw8.draw.render;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -12,7 +12,6 @@ import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.render.RenderContext;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,7 +28,7 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
     // ---
     // Field declarations
     // ---
-    protected final HashMap<Figure, Node> figureToNodeMap = new HashMap<>();
+    protected final Map<Figure, Node> figureToNodeMap = new HashMap<>();
 
     // ---
     // Behavior

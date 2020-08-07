@@ -12,13 +12,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.draw.SimpleDrawingRenderer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
+import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
 /**
  * AbstractExportOutputFormat.

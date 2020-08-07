@@ -145,7 +145,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         protected void fireValueChangedEvent() {
             DrawingModel newValue = get();
             super.fireValueChangedEvent();
-            onNewDrawingModel(oldValue, newValue);
+            onDrawingModelChanged(oldValue, newValue);
             oldValue = newValue;
         }
     };
@@ -179,11 +179,13 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * Figure is represented by multiple nodes. Then only the parent of these
      * nodes is associated with the figure.
      */
+    @NonNull
     private final Map<Figure, Node> figureToNodeMap = new HashMap<>();
     /**
      * This is just a wrapper around the focusedProperty of the JavaFX Node
      * which is used to render this view.
      */
+    @NonNull
     private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
     private Group gridPane;
     /**
@@ -237,21 +239,23 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private final Listener<TreeModelEvent<Figure>> treeModelHandler = (TreeModelEvent<Figure> event) -> {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-            case NODE_ADDED_TO_PARENT:
-                onFigureAdded(f);
-                break;
-            case NODE_REMOVED_FROM_PARENT:
-                onFigureRemoved(f);
-                break;
-            case NODE_ADDED_TO_TREE:
-                onFigureRemovedFromDrawing(f);
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                for (Figure d : f.preorderIterable()) {
-                    getSelectedFigures().remove(d);
-                }
-                repaint();
-                break;
+        case NODE_ADDED_TO_PARENT:
+            onFigureAdded(f);
+            break;
+        case NODE_REMOVED_FROM_PARENT:
+            onFigureRemoved(f);
+            break;
+        case NODE_ADDED_TO_TREE:
+            onFigureRemovedFromDrawing(f);
+            break;
+        case NODE_REMOVED_FROM_TREE:
+            // FIXME we should not do this, since the figure is
+            //      is still in the drawing
+            for (Figure d : f.preorderIterable()) {
+                getSelectedFigures().remove(d);
+            }
+            repaint();
+            break;
         case NODE_CHANGED:
             onNodeChanged(f);
             break;
@@ -919,7 +923,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         }
     }
 
-    private void onNewDrawingModel(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    private void onDrawingModelChanged(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             clearSelection();
             oldValue.removeTreeModelListener(treeModelHandler);
@@ -945,8 +949,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         repaint();
     }
 
-    private void onSubtreeNodesChanged(@NonNull Figure figures) {
-        for (Figure f : figures.preorderIterable()) {
+    private void onSubtreeNodesChanged(@NonNull Figure figure) {
+        for (Figure f : figure.preorderIterable()) {
             dirtyFigureNodes.add(f);
             dirtyHandles.add(f);
         }
@@ -1034,7 +1038,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         //drawingPane.layoutBoundsProperty().addListener(observer -> repaint());
 
         drawingModel.get().setRoot(new SimpleDrawing());
-        onNewDrawingModel(null, drawingModel.get());
+        onDrawingModelChanged(null, drawingModel.get());
 
         // Set stylesheet
         rootPane.getStylesheets().add(SimpleDrawingView.class.getResource("SimpleDrawingView.css").toString());
@@ -1424,8 +1428,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 }
             }
         }
-
-
     }
 
     private void updateScrollPaneListeners(Observable o) {
@@ -1451,7 +1453,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    protected void updateTool(@Nullable Tool oldValue, @Nullable Tool newValue) {
+    protected void onToolChanged(Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue) {
         if (oldValue != null) {
             Tool t = oldValue;
             toolPane.setCenter(null);
@@ -1464,20 +1466,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             t.setDrawingView(this);
             focused.bind(t.getNode().focusedProperty());
         }
-    }
-
-    private void updateTreeStructure(@NonNull Figure parent) {
-        // Since we don't know which figures have been removed from
-        // the drawing, we have to get rid of them on ourselves.
-        // XXX This is a really slow operation. If each figure would store a
-        // reference to its drawing it would perform better.
-        Drawing d = getDrawing();
-        for (Figure f : new ArrayList<>(figureToNodeMap.keySet())) {
-            if (f.getRoot() != d) {
-                removeNode(f);
-            }
-        }
-        onSubtreeNodesChanged(parent);
     }
 
     /**

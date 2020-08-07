@@ -57,19 +57,18 @@ public class ZoomableScrollPaneSampleMain extends Application {
         s.setSnapToTicks(true);
         s.setShowTickMarks(true);
         s.setShowTickLabels(true);
-        Rectangle bb = new Rectangle();
+        Rectangle storedBounds = new Rectangle();
         Button b = new Button("storeRect");
         b.setOnAction(evt -> {
-            Bounds w = p.getVisibleContentRect();
-            bb.setX(w.getMinX());
-            bb.setY(w.getMinY());
-            bb.setWidth(w.getWidth());
-            bb.setHeight(w.getHeight());
-            //p.scrollViewRectToVisible(p.getViewRect());
+            Bounds w = p.getViewRect();
+            storedBounds.setX(w.getMinX());
+            storedBounds.setY(w.getMinY());
+            storedBounds.setWidth(w.getWidth());
+            storedBounds.setHeight(w.getHeight());
         });
         Button b2 = new Button("scrollToRect");
         b2.setOnAction(evt -> {
-            p.scrollContentRectToVisible(bb.getBoundsInLocal());
+            p.scrollContentRectToVisible(storedBounds.getBoundsInLocal());
         });
         hbox.getChildren().add(s);
         hbox.getChildren().add(b);
@@ -79,14 +78,11 @@ public class ZoomableScrollPaneSampleMain extends Application {
         Scene scene = new Scene(borderPane, 300, 250);
         Label label = new Label("-");
         borderPane.setBottom(label);
-        label.textProperty().bind(
-                CustomBinding.compute(() -> FXGeom.toString(p.getViewRect()), p.viewRectXProperty(),
-                        p.viewRectYProperty(), p.viewWidthProperty(),
-                        p.viewHeightProperty()));
+        label.textProperty().bind(CustomBinding.convert(p.viewRectProperty(), FXGeom::toString));
 
         primaryStage.setScene(scene);
 
-        p.setContentSize(800, 600);
+        p.setContentSize(80_000, 600);
 
         Rectangle bg = new Rectangle(10, 10, 780, 580);
         bg.setFill(Color.BLUE);
@@ -133,11 +129,20 @@ public class ZoomableScrollPaneSampleMain extends Application {
         sr5.setFill(null);
         sr5.setStroke(Color.LIGHTGREEN);
         sr5.setManaged(false);
-        p.getContentChildren().addAll(sr, sr2, sr3, sr4, sr5);
 
-        p.scaleFactorProperty().bind(
+        Button button = new Button("Button without stylesheet!");
+        button.setManaged(false);
+        button.resizeRelocate(20, 20, 200, 40);
+
+        p.setSubSceneUserAgentStylesheet(getClass().getResource("empty.css").toString());
+
+        p.getContentChildren().addAll(sr, sr2, sr3, sr4, sr5, button);
+
+        p.zoomFactorProperty().bind(
                 CustomBinding.computeDouble(() -> Math.pow(2, s.getValue()), s.valueProperty())
         );
+
+
         //p.worldScaleFactorProperty().bind(s.valueProperty().);
 
 

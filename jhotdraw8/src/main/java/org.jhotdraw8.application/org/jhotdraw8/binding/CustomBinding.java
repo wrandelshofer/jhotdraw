@@ -198,20 +198,6 @@ public class CustomBinding {
         addFlaggedChangeListener(propertyA, propertyB, convertBtoA, alreadyCalled);
     }
 
-    /**
-     * Binds writable value A to observable value B using the conversion
-     * function updateA.
-     *
-     * @param <B>       the type of observable value A
-     * @param <A>       the type of observable value B
-     * @param propertyB property A
-     * @param propertyA property B
-     * @param updateA   converts a value from B to A
-     */
-    public static <A, B> void bindAndConvert(@NonNull WritableValue<A> propertyA, @NonNull ObservableValue<B> propertyB, @NonNull Function<B, A> updateA) {
-        boolean[] alreadyCalled = new boolean[1];
-        addFlaggedChangeListener(propertyA, propertyB, updateA, alreadyCalled);
-    }
 
     private static <Y, X> void addFlaggedChangeListener(@NonNull WritableValue<X> propertyX, @NonNull ObservableValue<Y> propertyY, @NonNull Function<Y, X> updateX,
                                                         boolean[] alreadyCalled) {
@@ -498,14 +484,14 @@ public class CustomBinding {
      * invalid.
      *
      * @param op           the operation that computes the value
-     * @param dependendies the depencies that invalidate the computed value
+     * @param dependencies the depencies that invalidate the computed value
      * @param <T>          the type of the value
      * @return a new binding
      */
-    public static <T> ObjectBinding<T> compute(Supplier<T> op, ObservableValue<?>... dependendies) {
+    public static <T> ObjectBinding<T> compute(Supplier<T> op, ObservableValue<?>... dependencies) {
         return new ObjectBinding<T>() {
             {
-                super.bind(dependendies);
+                super.bind(dependencies);
             }
 
             @Override
@@ -515,7 +501,39 @@ public class CustomBinding {
 
             @Override
             public ObservableList<?> getDependencies() {
-                return FXCollections.observableArrayList(dependendies);
+                return FXCollections.observableArrayList(dependencies);
+            }
+
+        };
+
+    }
+
+    /**
+     * Creates a binding with a converted value.
+     * <p>
+     * If the value of one of the dependencies changes, the binding is marked as
+     * invalid.
+     *
+     * @param a       the property A
+     * @param convert the conversion function from A to B
+     * @param <A>     the type of the value
+     * @param <B>     the type of the converted binding
+     * @return a new binding
+     */
+    public static <A, B> ObjectBinding<B> convert(@NonNull ObservableValue<A> a, @NonNull Function<A, B> convert) {
+        return new ObjectBinding<B>() {
+            {
+                super.bind(a);
+            }
+
+            @Override
+            protected B computeValue() {
+                return convert.apply(a.getValue());
+            }
+
+            @Override
+            public ObservableList<?> getDependencies() {
+                return FXCollections.singletonObservableList(a);
             }
 
         };

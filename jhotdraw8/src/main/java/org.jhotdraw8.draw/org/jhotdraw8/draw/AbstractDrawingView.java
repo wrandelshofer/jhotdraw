@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.ReadOnlySetWrapper;
@@ -56,7 +57,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
     private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
 
     {
-        tool.addListener((observable, oldValue, newValue) -> updateTool(oldValue, newValue));
+        tool.addListener(this::onToolChanged);
     }
 
     {
@@ -178,6 +179,6 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     protected abstract void repaint();
 
-    protected abstract void updateTool(Tool oldValue, Tool newValue);
+    protected abstract void onToolChanged(Observable observable, Tool oldValue, Tool newValue);
 
 }

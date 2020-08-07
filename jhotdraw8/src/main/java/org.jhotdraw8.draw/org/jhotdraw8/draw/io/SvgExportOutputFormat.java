@@ -59,7 +59,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static org.jhotdraw8.draw.SimpleDrawingRenderer.toNode;
+import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
 /**
  * Exports a JavaFX scene graph to SVG.

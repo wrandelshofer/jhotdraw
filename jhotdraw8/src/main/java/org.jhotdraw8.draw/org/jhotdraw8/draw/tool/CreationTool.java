@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
@@ -92,11 +91,10 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
         createdFigure.reshapeInLocal(
-                anchorX == 0 ? c.getX() : c.getX().subtract(new CssSize(defaultWidth).multiply(anchorX)),
-                anchorY == 0 ? c.getY() : c.getY().subtract(new CssSize(defaultHeight).multiply(anchorY)),
-                new CssSize(defaultWidth), new CssSize(defaultHeight));
+                anchorX == 0 ? c.getX() : c.getX().subtract(new CssSize(1).multiply(anchorX)),
+                anchorY == 0 ? c.getY() : c.getY().subtract(new CssSize(1).multiply(anchorY)),
+                new CssSize(1), new CssSize(1));
         DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getDrawing();
 
         Figure parent = getOrCreateParent(view, createdFigure);
         view.setActiveParent(parent);

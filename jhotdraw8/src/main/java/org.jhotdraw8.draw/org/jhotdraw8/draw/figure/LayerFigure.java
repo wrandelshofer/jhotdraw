@@ -72,61 +72,16 @@ public class LayerFigure extends AbstractCompositeFigure
         int maxNodesPerLayer = ctx.getNonNull(RenderContext.MAX_NODES_PER_LAYER);
         Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
         if (renderingIntent == RenderingIntent.EDITOR
-                && clipBounds != null /* && getChildren().size() > maxNodesPerLayer*/) {
-            Bounds intersectBounds = FXGeom.grow(clipBounds, 8, 8);
+                && clipBounds != null) {
             childNodes = getChildren().stream().parallel().filter(child ->
-                    child.getLayoutBoundsInWorld().intersects(intersectBounds)
+                    child.getLayoutBoundsInWorld().intersects(clipBounds)
             )
                     .collect(Collectors.toList()).stream()
                     .map(ctx::getNode)// cannot be done in parallel
                     .collect(Collectors.toList());
 
             if (childNodes.size() > maxNodesPerLayer) {
-                Drawing drawing = getDrawing();
-                Bounds b = (drawing != null) ? drawing.getLayoutBounds() : new BoundingBox(0, 0, 100, 100);
-                Rectangle r = new Rectangle(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
-                UnitConverter unitConverter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
-                double delta = unitConverter.convert(1, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT);
-                Color red = new Color(1, 0, 0, 0.1);
-
-                Text text = new Text();
-                // We must set the font before we set the text, so that JavaFx does not need to retrieve
-                // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
-                double fontSize = unitConverter.convert(1.6, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT);
-                text.setFont(CssFont.font("Arial", FontWeight.NORMAL, FontPosture.REGULAR,
-                        fontSize).getFont());
-                text.setText("Layer \"" + getId() + "\" has too many children: " + getChildren().size() + ".");
-                text.setFill(Color.RED);
-                text.setStroke(Color.WHITE);
-                text.setStrokeWidth(unitConverter.convert(0.2, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT));
-                text.setStrokeType(StrokeType.OUTSIDE);
-                text.setX(max(fontSize, clipBounds.getMinX() + fontSize));
-                if (getParent() != null) {
-                    int countVisibleLayersBeforeMe = 0;
-                    for (Figure child : getParent().getChildren()) {
-                        if (Boolean.TRUE.equals(child.get(HideableFigure.VISIBLE))) {
-                            countVisibleLayersBeforeMe++;
-                        }
-                        if (child == this) {
-                            break;
-                        }
-                    }
-
-                    text.setY(max(0, clipBounds.getMinY()) + text.getLayoutBounds().getHeight() * 1.2 * (1 + countVisibleLayersBeforeMe));
-                } else {
-                    text.setY(max(0, clipBounds.getMinY()) + text.getLayoutBounds().getHeight() * 1.2);
-                }
-                Bounds tb = text.getLayoutBounds();
-                tb = FXGeom.grow(tb, unitConverter.convert(0.1, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT));
-                r.setX(tb.getMinX());
-                r.setY(tb.getMinY());
-                r.setWidth(tb.getWidth());
-                r.setHeight(tb.getHeight());
-                Color transparent = Color.TRANSPARENT;
-                r.setFill(new LinearGradient(r.getX(), r.getY(), r.getX() + delta, r.getY() + delta, false, CycleMethod.REPEAT, new Stop(0.5, red), new Stop(0.5, transparent)));
-                childNodes.clear();
-                childNodes.add(r);
-                childNodes.add(text);
+                updateNodeWithErrorMessage(ctx, childNodes, clipBounds);
             }
         } else {
             childNodes = new ArrayList<>();
@@ -141,6 +96,55 @@ public class LayerFigure extends AbstractCompositeFigure
         if (!groupChildren.equals(childNodes)) {
             groupChildren.setAll(childNodes);
         }
+    }
+
+    public void updateNodeWithErrorMessage(@NonNull RenderContext ctx, List<Node> childNodes, Bounds clipBounds) {
+        Drawing drawing = getDrawing();
+        Bounds b = (drawing != null) ? drawing.getLayoutBounds() : new BoundingBox(0, 0, 100, 100);
+        Rectangle r = new Rectangle(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+        UnitConverter unitConverter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        double delta = unitConverter.convert(1, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT);
+        Color red = new Color(1, 0, 0, 0.1);
+
+        Text text = new Text();
+        // We must set the font before we set the text, so that JavaFx does not need to retrieve
+        // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
+        double fontSize = unitConverter.convert(1.6, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT);
+        text.setFont(CssFont.font("Arial", FontWeight.NORMAL, FontPosture.REGULAR,
+                fontSize).getFont());
+        text.setText("Layer \"" + getId() + "\" has too many children: " + getChildren().size() + ".");
+        text.setFill(Color.RED);
+        text.setStroke(Color.WHITE);
+        text.setStrokeWidth(unitConverter.convert(0.2, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT));
+        text.setStrokeType(StrokeType.OUTSIDE);
+        text.setX(max(fontSize, clipBounds.getMinX() + fontSize));
+        if (getParent() != null) {
+            int countVisibleLayersBeforeMe = 0;
+            for (Figure child : getParent().getChildren()) {
+                if (Boolean.TRUE.equals(child.get(HideableFigure.VISIBLE))) {
+                    countVisibleLayersBeforeMe++;
+                }
+                if (child == this) {
+                    break;
+                }
+            }
+            text.setY(max(0, clipBounds.getMinY()) + text.getLayoutBounds().getHeight() * 1.2 * (1 + countVisibleLayersBeforeMe));
+        } else {
+            text.setY(max(0, clipBounds.getMinY()) + text.getLayoutBounds().getHeight() * 1.2);
+        }
+
+        Bounds tb = text.getLayoutBounds();
+        tb = FXGeom.grow(tb, unitConverter.convert(0.1, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT));
+        r.setX(tb.getMinX());
+        r.setY(tb.getMinY());
+        r.setWidth(tb.getWidth());
+        r.setHeight(tb.getHeight());
+        Color transparent = Color.TRANSPARENT;
+        r.setFill(new LinearGradient(r.getX(), r.getY(), r.getX() + delta, r.getY() + delta, false, CycleMethod.REPEAT, new Stop(0.5, red), new Stop(0.5, transparent)));
+
+        childNodes.clear();
+        childNodes.add(r);
+        childNodes.add(text);
     }
 
     @NonNull
