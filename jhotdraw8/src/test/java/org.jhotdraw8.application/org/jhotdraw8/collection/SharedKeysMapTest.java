@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -166,6 +167,83 @@ public class SharedKeysMapTest {
         instance.remove("two");
         instance.put("three", 33);
 
+        // THEN
         assertEquals(5, count[0]);
+    }
+
+    @Test
+    public void testValuesIterator() {
+        // GIVEN
+        Map<String, Integer> keyMap = new LinkedHashMap<>();
+        SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
+
+        // WHEN
+        instance.put("one", 1);
+        instance.put("two", 2);
+        instance.put("three", 3);
+        instance.put("four", 4);
+        // THEN
+        Iterator<Integer> it = instance.values().iterator();
+        assertEquals(1, it.next());
+        assertEquals(2, it.next());
+        assertEquals(3, it.next());
+        assertEquals(4, it.next());
+
+        // WHEN
+        instance.remove("two");
+        // THEN
+        it = instance.values().iterator();
+        assertEquals(1, it.next());
+        assertEquals(3, it.next());
+        assertEquals(4, it.next());
+
+        // WHEN
+        it = instance.values().iterator();
+        assertEquals(1, it.next());
+        assertEquals(3, it.next());
+        it.remove();
+        assertEquals(4, it.next());
+        // THEN
+        it = instance.values().iterator();
+        assertEquals(1, it.next());
+        assertEquals(4, it.next());
+    }
+
+    @Test
+    public void testKeysIterator() {
+        // GIVEN
+        Map<String, Integer> keyMap = new LinkedHashMap<>();
+        SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
+
+        // WHEN
+        instance.put("one", 1);
+        instance.put("two", 2);
+        instance.put("three", 3);
+        instance.put("four", 4);
+        // THEN
+        Iterator<String> it = instance.keySet().iterator();
+        assertEquals("one", it.next());
+        assertEquals("two", it.next());
+        assertEquals("three", it.next());
+        assertEquals("four", it.next());
+
+        // WHEN
+        instance.remove("two");
+        // THEN
+        it = instance.keySet().iterator();
+        assertEquals("one", it.next());
+        assertEquals("three", it.next());
+        assertEquals("four", it.next());
+
+        // WHEN
+        it = instance.keySet().iterator();
+        assertEquals("one", it.next());
+        assertEquals("three", it.next());
+        it.remove();
+        assertEquals("four", it.next());
+        // THEN
+        it = instance.keySet().iterator();
+        assertEquals("one", it.next());
+        assertEquals("four", it.next());
     }
 }
