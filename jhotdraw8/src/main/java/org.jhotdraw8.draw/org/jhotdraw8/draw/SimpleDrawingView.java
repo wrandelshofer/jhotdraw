@@ -49,7 +49,6 @@ import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonNullProperty;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.ReversedList;
-import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.MacOSSystemColorConverter;
 import org.jhotdraw8.draw.constrain.Constrainer;
@@ -253,21 +252,22 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
                 }
                 repaint();
                 break;
-            case NODE_CHANGED:
-                onNodeChanged(f);
-                break;
-            case ROOT_CHANGED:
-                onDrawingChanged();
-                updateLayout();
-                repaint();
-                break;
-            case SUBTREE_NODES_CHANGED:
-                onSubtreeNodesChanged(f);
-                repaint();
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+        case NODE_CHANGED:
+            onNodeChanged(f);
+            break;
+        case ROOT_CHANGED:
+            onDrawingChanged();
+            invalidateLayerNodes();
+            revalidateLayout();
+            repaint();
+            break;
+        case SUBTREE_NODES_CHANGED:
+            onSubtreeNodesChanged(f);
+            repaint();
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + " not supported");
         }
     };
     @Nullable
@@ -285,7 +285,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     {
-        margin.addListener(observable -> updateLayout());
+        margin.addListener(observable -> revalidateLayout());
     }
 
     {
@@ -877,9 +877,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (d != null) {
             drawingPane.getChildren().add(getNode(d));
             dirtyFigureNodes.add(d);
-            updateLayout();
-            //handleSubtreeNodesChanged(d);
-            repaint();
 
             for (int i = d.getChildren().size() - 1; i >= 0; i--) {
                 Figure child = d.getChild(i);
@@ -896,6 +893,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
         invalidateConstrainerNode();
+        revalidateLayout();
+        repaint();
     }
 
     private void onFigureAdded(@NonNull Figure figure) {
@@ -932,8 +931,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             newValue.addTreeModelListener(treeModelHandler);
             newValue.addListener(modelInvalidationListener);
             onDrawingChanged();
-            updateLayout();
-            repaint();
         }
     }
 
@@ -1033,7 +1030,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         // We use a change listener instead of an invalidation listener here,
         // because we only want to update the layout, when the new value is
         // different from the old value!
-        drawingPane.layoutBoundsProperty().addListener(observer -> revalidateLayout());
+        //scrollPane.viewportBoundsProperty().addListener(o->repaint());
+        //drawingPane.layoutBoundsProperty().addListener(observer -> repaint());
 
         drawingModel.get().setRoot(new SimpleDrawing());
         onNewDrawingModel(null, drawingModel.get());
@@ -1059,7 +1057,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void revalidateLayout() {
         if (isLayoutValid) {
             isLayoutValid = false;
-            Platform.runLater(this::updateLayout);
+            Platform.runLater(this::validateLayout);
+        }
+    }
+
+    private void validateLayout() {
+        if (!isLayoutValid) {
+            updateLayout();
+            isLayoutValid = true;
         }
     }
 
@@ -1070,6 +1075,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void invalidateFigureNode(Figure f) {
         dirtyFigureNodes.add(f);
         if (handles.containsKey(f)) {
+            handlesAreValid = false;
             dirtyHandles.add(f);
         }
     }
@@ -1079,6 +1085,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void invalidateHandleNodes() {
+        handlesAreValid = false;
         dirtyHandles.addAll(handles.keySet());
     }
 
@@ -1202,13 +1209,21 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     public void repaint() {
         if (repainter == null) {
             repainter = () -> {
+                repainter = null;// must be set at the beginning, because we may need to repaint again
                 updateRenderContext();
                 getModel().validate(this);
                 updateNodes();
                 validateHandles();
-                repainter = null;
+                validateConstrainer();
             };
             Platform.runLater(repainter);
+        }
+    }
+
+    private void validateConstrainer() {
+        if (!constrainerNodeValid) {
+            updateConstrainerNode();
+            constrainerNodeValid = true;
         }
     }
 
@@ -1274,7 +1289,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     private void updateConstrainerNode() {
-        constrainerNodeValid = true;
         Constrainer c = getConstrainer();
         if (c != null) {
             c.updateNode(this);
@@ -1296,21 +1310,36 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
             createHandles(handles);
             recreateHandles = false;
-        }
 
-        Bounds visibleRect = getVisibleRect();
 
-        for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
-            //dirtyHandles.addChild(entry.getKey());
-            for (Handle handle : entry.getValue()) {
-                Node n = handle.getNode(this);
-                handle.updateNode(this);
-                if (visibleRect.intersects(n.getBoundsInParent())) {
+            // Bounds visibleRect = getVisibleRect();
+
+            for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
+                for (Handle handle : entry.getValue()) {
+                    Node n = handle.getNode(this);
+                    handle.updateNode(this);
+                    //  if (visibleRect.intersects(n.getBoundsInParent())) {
                     if (nodeToHandleMap.put(n, handle) == null) {
                         handlesPane.getChildren().add(n);
                     }
+                    //  }
                 }
             }
+        } else {
+            Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[0]);
+            dirtyHandles.clear();
+            for (Figure f : copyOfDirtyHandles) {
+                List<Handle> hh = handles.get(f);
+                if (hh != null) {
+                    for (Handle h : hh) {
+                        h.updateNode(this);
+                    }
+                }
+            }
+        }
+
+        for (Handle h : secondaryHandles) {
+            h.updateNode(this);
         }
     }
 
@@ -1327,12 +1356,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         if (d == null) {
             return;
         }
-        CssSize cssWidth = d.get(Drawing.WIDTH);
-        CssSize cssHeight = d.get(Drawing.HEIGHT);
-        double dw = cssWidth == null ? 0.0 : cssWidth.getConvertedValue();
-        double dh = cssHeight == null ? 0.0 : cssHeight.getConvertedValue();
-
-        Bounds bounds = drawingPane.getLayoutBounds();
+        Bounds bounds = d.getLayoutBounds();
+        double dw = bounds.getWidth();
+        double dh = bounds.getHeight();
         double x = bounds.getMinX() * f;
         double y = bounds.getMinY() * f;
         double w = bounds.getWidth() * f;
@@ -1343,13 +1369,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             return;
         }
         previousScaledBounds = scaledBounds;
-
-        if (d != null) {
-            canvasPane.setTranslateX(max(0, -x));
-            canvasPane.setTranslateY(max(0, -y));
-            canvasPane.setWidth(dw * f);
-            canvasPane.setHeight(dh * f);
-        }
+        canvasPane.resizeRelocate(max(0, -x), max(0, -y), w, h);
 
         final Insets margin = getMargin();
         final double marginL = margin.getLeft();
@@ -1368,13 +1388,14 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
         toolPane.layout();
 
         overlaysPane.setClip(new Rectangle(0, 0, lw + marginL + marginR, lh + marginT + marginB));
+        overlaysPane.resize(lw + marginL + marginR, lh + marginT + marginB);
 
         rootPane.setPrefSize(lw + marginL + marginR, lh + marginT + marginB);
         rootPane.setMaxSize(lw + marginL + marginR, lh + marginT + marginB);
 
         invalidateWorldViewTransforms();
         invalidateHandleNodes();
-        isLayoutValid = true;
+        invalidateLayerNodes();
     }
 
     private void updateRenderContext() {
@@ -1404,25 +1425,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             }
         }
 
-        if (!recreateHandles) {
-            Figure[] copyOfDirtyHandles = dirtyHandles.toArray(new Figure[0]);
-            dirtyHandles.clear();
-            for (Figure f : copyOfDirtyHandles) {
-                List<Handle> hh = handles.get(f);
-                if (hh != null) {
-                    for (Handle h : hh) {
-                        h.updateNode(this);
-                    }
-                }
-            }
-        }
-        for (Handle h : secondaryHandles) {
-            h.updateNode(this);
-        }
 
-        if (!constrainerNodeValid) {
-            updateConstrainerNode();
-        }
     }
 
     private void updateScrollPaneListeners(Observable o) {
@@ -1483,12 +1486,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     private void validateHandles() {
         // Validate handles only, if they are invalid/*, and if
         // the DrawingView has a DrawingEditor.*/
-        if (!handlesAreValid /*
-         * && getEditor() != null
-         */) {
+        if (!handlesAreValid) {
             handlesAreValid = true;
             updateHandles();
-            updateLayout();
         }
     }
 

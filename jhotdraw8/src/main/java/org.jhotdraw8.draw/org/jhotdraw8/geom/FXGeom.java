@@ -155,6 +155,20 @@ public class FXGeom {
                 r.getHeight() + v * 2d);
     }
 
+    /**
+     * Resizes the <code>Bounds</code> both horizontally and vertically.
+     *
+     * @param r  the bounds
+     * @param hv the horizontal and vertical expansion
+     * @return the new rectangle
+     * @see #grow(Bounds, double, double)
+     */
+    @NonNull
+    public static Bounds grow(@NonNull Bounds r, double hv) {
+        return grow(r, hv, hv);
+
+    }
+
     @NonNull
     public static Bounds union(@NonNull Bounds a, @NonNull Bounds... bs) {
         double minx = a.getMinX();

@@ -161,9 +161,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         page.setHeight(bounds.getHeight());
         CssColor cclr = getStyled(BACKGROUND);
         page.setFill(Paintable.getPaint(cclr, ctx));
-        if (g.getClip() == null || !g.getClip().getBoundsInLocal().equals(bounds)) {
-            g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
-        }
+        g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
         nodes.add(page);

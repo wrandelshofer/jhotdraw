@@ -46,7 +46,7 @@ public interface RenderContext extends PropertyBean {
     /**
      * Number of nodes that can be rendered per layer in the drawing editor..
      */
-    NonNullObjectKey<Integer> MAX_NODES_PER_LAYER = new NonNullObjectKey<>("maxNodesPerLayer", Integer.class, Integer.MAX_VALUE);
+    NonNullObjectKey<Integer> MAX_NODES_PER_LAYER = new NonNullObjectKey<>("maxNodesPerLayer", Integer.class, 10_000);
 
     @NonNull
     Key<Page> RENDER_PAGE = new ObjectKey<>("renderPage", Page.class, null);
