@@ -10,10 +10,6 @@ import org.jhotdraw8.geom.FXTransforms;
 
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.CACHE;
 import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRANSFORM;
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.LOCAL_TO_WORLD;
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.PARENT_TO_WORLD;
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.WORLD_TO_LOCAL;
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.WORLD_TO_PARENT;
 
 /**
  * TransformCachingFigure.
@@ -24,29 +20,43 @@ import static org.jhotdraw8.draw.figure.FigureImplementationDetails.WORLD_TO_PAR
  * @author Werner Randelshofer
  * @design.pattern Figure Mixin, Traits.
  */
-public interface TransformCacheableFigure extends CacheableFigure {
+public interface TransformCachingFigure extends Figure {
+
+    @Nullable
+    Transform getCachedLocalToWorld();
+
+    void setCachedLocalToWorld(@Nullable Transform newValue);
+
+    @Nullable
+    Transform getCachedParentToWorld();
+
+    void setCachedParentToWorld(@Nullable Transform newValue);
+
+
+    @Nullable
+    Transform getCachedWorldToLocal();
+
+    void setCachedWorldToLocal(@Nullable Transform newValue);
+
+
+    @Nullable
+    Transform getCachedWorldToParent();
+
+    void setCachedWorldToParent(@Nullable Transform newValue);
 
     @Override
     @Nullable
     default Transform getParentToWorld() {
-        Transform t = CACHE ? getCachedValue(PARENT_TO_WORLD) : null;
+        Transform t = CACHE ? getCachedParentToWorld() : null;
         if (t == null) {
             t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getLocalToWorld();
             if (CACHE) {
-                setCachedValue(PARENT_TO_WORLD, t == null ? IDENTITY_TRANSFORM : t);
+                setCachedParentToWorld(t == null ? IDENTITY_TRANSFORM : t);
             }
         }
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
-    @Nullable
-    default Transform getCachedLocalToWorld() {
-        return getCachedValue(LOCAL_TO_WORLD);
-    }
-
-    default Transform setCachedLocalToWorld(@Nullable Transform newValue) {
-        return setCachedValue(LOCAL_TO_WORLD, newValue);
-    }
 
     @Override
     @Nullable
@@ -66,12 +76,12 @@ public interface TransformCacheableFigure extends CacheableFigure {
     @Override
     @Nullable
     default Transform getWorldToLocal() {
-        Transform t = getCachedValue(WORLD_TO_LOCAL);
+        Transform t = getCachedWorldToLocal();
         if (t == null) {
             t = getParentToLocal();
             final Figure parent = getParent();
             t = parent == null ? t : FXTransforms.concat(t, parent.getWorldToLocal());
-            setCachedValue(WORLD_TO_LOCAL, t == null ? IDENTITY_TRANSFORM : t);
+            setCachedWorldToLocal(t == null ? IDENTITY_TRANSFORM : t);
         }
         return t == IDENTITY_TRANSFORM ? null : t;
     }
@@ -79,27 +89,34 @@ public interface TransformCacheableFigure extends CacheableFigure {
     @Override
     @Nullable
     default Transform getWorldToParent() {
-        Transform t = CACHE ? getCachedValue(WORLD_TO_PARENT) : null;
+        Transform t = CACHE ? getCachedWorldToParent() : null;
         if (t == null) {
             final Figure parent = getParent();
             t = parent == null ? IDENTITY_TRANSFORM : parent.getWorldToLocal();
             if (CACHE) {
-                setCachedValue(WORLD_TO_PARENT, t == null ? IDENTITY_TRANSFORM : t);
+                setCachedWorldToParent(t == null ? IDENTITY_TRANSFORM : t);
             }
         }
         return t == IDENTITY_TRANSFORM ? null : t;
     }
 
-    @Override
-    default boolean invalidateTransforms() {
-        if (!CACHE) {
-            return false;
-        }
+    @Nullable
+    Transform getCachedLocalToParent();
 
-        // intentional use of long-circuit or-expressions!!
-        return null != setCachedValue(PARENT_TO_WORLD, null)
-                | null != setCachedLocalToWorld(null)
-                | null != setCachedValue(WORLD_TO_LOCAL, null)
-                | null != setCachedValue(WORLD_TO_PARENT, null);
+    void setCachedLocalToParent(@Nullable Transform newValue);
+
+    @Nullable
+    Transform getCachedParentToLocal();
+
+    void setCachedParentToLocal(@Nullable Transform newValue);
+
+    @Override
+    default void invalidateTransforms() {
+        setCachedWorldToLocal(null);
+        setCachedWorldToParent(null);
+        setCachedLocalToWorld(null);
+        setCachedParentToWorld(null);
+        setCachedParentToLocal(null);
+        setCachedLocalToParent(null);
     }
 }

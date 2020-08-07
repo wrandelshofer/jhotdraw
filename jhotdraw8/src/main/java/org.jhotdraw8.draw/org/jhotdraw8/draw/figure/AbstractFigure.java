@@ -15,7 +15,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.SharedKeysMap;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
@@ -36,19 +35,23 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractFigure extends AbstractStyleablePropertyBean implements Figure, CacheableFigure {
+public abstract class AbstractFigure extends AbstractStyleablePropertyBean
+        implements Figure, TransformCachingFigure {
 
     @NonNull
     private final static Map<Key<?>, Integer> cachedValuesKeyMap = Collections.synchronizedMap(new HashMap<>());
-
-    private transient Map<Key<?>, Object> cachedValues;
     private ObservableSet<Figure> layoutObservers;
     @Nullable
     private Drawing drawing;
     @Nullable
     private final ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
-    private volatile Transform cachedLocalToWorld;
+    private Transform cachedLocalToWorld;
+    private Transform cachedWorldToParent;
+    private Transform cachedParentToWorld;
+    private Transform cachedParentToLocal;
+    private Transform cachedLocalToParent;
+    private Transform cachedWorldToLocal;
 
     /**
      * This method calls {@link #doAddNotify}.
@@ -79,10 +82,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
 
     }
 
-    @Override
-    public <T> T getCachedValue(@NonNull Key<T> key) {
-        return (cachedValues == null) ? key.getDefaultValue() : key.get(cachedValues);
-    }
 
     @NonNull
     @Override
@@ -205,30 +204,72 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean imple
         doRemoveNotify(drawing);
     }
 
-    /**
-     * This method fits into {@link org.jhotdraw8.draw.figure.TransformCacheableFigure#getCachedLocalToWorld()} .
-     */
+    @Override
     @Nullable
     public Transform getCachedLocalToWorld() {
         return cachedLocalToWorld;
     }
 
-    /**
-     * This method fits into {@link org.jhotdraw8.draw.figure.TransformCacheableFigure#setCachedLocalToWorld} .
-     */
-    public Transform setCachedLocalToWorld(@Nullable Transform newValue) {
-        Transform oldValue = this.cachedLocalToWorld;
+    @Override
+    public void setCachedLocalToWorld(@Nullable Transform newValue) {
         this.cachedLocalToWorld = newValue;
-        return oldValue;
     }
 
     @Override
-    public <T> T setCachedValue(@NonNull Key<T> key, @Nullable T value) {
-        if (cachedValues == null) {
-            cachedValues = new SharedKeysMap<>(cachedValuesKeyMap);
-        }
-        return (value == null) ? key.remove(cachedValues) : key.put(cachedValues, value);
+    @Nullable
+    public Transform getCachedWorldToParent() {
+        return cachedWorldToParent;
     }
+
+    @Override
+    public void setCachedWorldToParent(@Nullable Transform newValue) {
+        this.cachedWorldToParent = newValue;
+    }
+
+    @Override
+    @Nullable
+    public Transform getCachedParentToLocal() {
+        return cachedParentToLocal;
+    }
+
+    @Override
+    public void setCachedParentToLocal(@Nullable Transform newValue) {
+        this.cachedParentToLocal = newValue;
+    }
+
+    @Override
+    @Nullable
+    public Transform getCachedLocalToParent() {
+        return cachedLocalToParent;
+    }
+
+    @Override
+    public void setCachedLocalToParent(@Nullable Transform newValue) {
+        this.cachedLocalToParent = newValue;
+    }
+
+    @Override
+    @Nullable
+    public Transform getCachedWorldToLocal() {
+        return cachedWorldToLocal;
+    }
+
+    @Override
+    public void setCachedWorldToLocal(@Nullable Transform newValue) {
+        this.cachedWorldToLocal = newValue;
+    }
+
+    @Override
+    @Nullable
+    public Transform getCachedParentToWorld() {
+        return cachedParentToWorld;
+    }
+
+    @Override
+    public void setCachedParentToWorld(@Nullable Transform newValue) {
+        this.cachedParentToWorld = newValue;
+    }
+
 
     @Override
     public void updateCss(RenderContext ctx) {

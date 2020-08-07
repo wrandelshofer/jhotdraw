@@ -232,7 +232,7 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public boolean invalidateTransforms() {
+        public void invalidateTransforms() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }

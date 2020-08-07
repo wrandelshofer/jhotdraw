@@ -48,7 +48,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @NonNull
     public final static CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
     @Nullable
-    private volatile Bounds cachedLayoutBounds;
+    private Bounds cachedLayoutBounds;
 
     public AbstractLabelFigure() {
         this(0, 0);

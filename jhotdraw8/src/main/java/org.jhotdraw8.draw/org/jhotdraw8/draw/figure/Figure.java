@@ -828,10 +828,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * on a figure and all its descendants, after you have performed a change
      * which invalidated the transform matrices of the figure.
      *
-     * @return true if the transformation matrices of the child figures must be
-     * invalidated as well
      */
-    boolean invalidateTransforms();
+    void invalidateTransforms();
 
     /**
      * Whether children may be added to this figure.
@@ -1227,11 +1225,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method calls
      * {@link #invalidateTransforms}.
-     *
-     * @return true if the transforms were valid
      */
-    default boolean transformNotify() {
-        return invalidateTransforms();
+    default void transformNotify() {
+        invalidateTransforms();
     }
 
     /**

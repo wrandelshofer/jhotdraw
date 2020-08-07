@@ -57,63 +57,80 @@ import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRA
  * change.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
-public interface TransformableFigure extends TransformCacheableFigure {
+public interface TransformableFigure extends TransformCachingFigure {
 
     /**
      * Defines the angle of rotation around the center of the figure in degrees.
      * <p>
      * Default value: {@code 0}.
      */
+    @NonNull
     DoubleStyleableKey ROTATE = new DoubleStyleableKey("rotate", 0.0);
     /**
      * Defines the rotation axis used.
      * <p>
      * Default value: {@code Rotate.Z_AXIS}.
      */
+    @NonNull
     ObjectFigureKey<Point3D> ROTATION_AXIS = new ObjectFigureKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
+    @NonNull
     DoubleStyleableKey SCALE_X = new DoubleStyleableKey("scaleX", 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
+    @NonNull
     DoubleStyleableKey SCALE_Y = new DoubleStyleableKey("scaleY", 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
+    @NonNull
     DoubleStyleableKey SCALE_Z = new DoubleStyleableKey("scaleZ", 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the axes
      * about the center ofCollection the figure.
      */
+    @NonNull
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
+    @NonNull
     TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", ImmutableLists.emptyList());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
      */
+    @NonNull
     DoubleStyleableKey TRANSLATE_X = new DoubleStyleableKey("translateX", 0.0);
     /**
      * Defines the translation on the y axis about the center of the figure.
      * Default value: {@code 0}.
      */
+    @NonNull
     DoubleStyleableKey TRANSLATE_Y = new DoubleStyleableKey("translateY", 0.0);
     /**
      * Defines the translation on the z axis about the center of the figure.
      * Default value: {@code 0}.
      */
+    @NonNull
     DoubleStyleableKey TRANSLATE_Z = new DoubleStyleableKey("translateZ", 0.0);
     /**
      * Defines the translation on the axes about the center ofCollection the
      * figure.
      */
+    @NonNull
     Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverterOLD(false));
+
+    @NonNull
+    static Set<Key<?>> getDeclaredKeys() {
+        Set<Key<?>> keys = new LinkedHashSet<>();
+        Figure.getDeclaredKeys(TransformableFigure.class, keys);
+        return keys;
+    }
 
     /**
      * Updates a figure node with all transformation properties defined in this
@@ -169,6 +186,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
+
     @Nullable
     default Transform getInverseTransform() {
         ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
@@ -196,7 +214,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     @Nullable
     default Transform getLocalToParent(boolean styled) {
-        Transform l2p = CACHE && styled ? getCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT) : null;
+        Transform l2p = CACHE && styled ? getCachedLocalToParent() : null;
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
@@ -226,7 +244,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 l2p = IDENTITY_TRANSFORM;
             }
             if (CACHE && styled) {
-                setCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT, l2p);
+                setCachedLocalToParent(l2p);
             }
         }
         return l2p;
@@ -279,7 +297,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
      */
     @Nullable
     default Transform getParentToLocal(boolean styled) {
-        Transform p2l = CACHE ? getCachedValue(FigureImplementationDetails.PARENT_TO_LOCAL) : null;
+        Transform p2l = CACHE ? getCachedParentToLocal() : null;
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
@@ -310,7 +328,7 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 //p2l = IDENTITY_TRANSFORM;
             }
             if (CACHE) {
-                setCachedValue(FigureImplementationDetails.PARENT_TO_LOCAL, p2l);
+                setCachedParentToLocal(p2l);
             }
         }
         return p2l;
@@ -331,20 +349,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
         return t;
     }
 
-    /**
-     * Convenience method for setting a new value for the {@link #TRANSFORMS}
-     * property.
-     *
-     * @param transforms new value
-     */
-    default void setTransforms(@NonNull Transform... transforms) {
-        if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, ImmutableLists.emptyList());
-        } else {
-            set(TRANSFORMS, ImmutableLists.of(transforms));
-        }
-    }
-
     default boolean hasCenterTransforms() {
         double sx = getStyledNonNull(SCALE_X);
         double sy = getStyledNonNull(SCALE_Y);
@@ -356,17 +360,6 @@ public interface TransformableFigure extends TransformCacheableFigure {
 
     default boolean hasTransforms() {
         return !getNonNull(TRANSFORMS).isEmpty();
-    }
-
-    @Override
-    default boolean invalidateTransforms() {
-        if (!CACHE) {
-            return false;
-        }
-        // intentional use ofCollection long-circuit or-expressions!!
-        return TransformCacheableFigure.super.invalidateTransforms()
-                | null != setCachedValue(FigureImplementationDetails.PARENT_TO_LOCAL, null)
-                | null != setCachedValue(FigureImplementationDetails.LOCAL_TO_PARENT, null);
     }
 
     @Override
@@ -426,6 +419,20 @@ public interface TransformableFigure extends TransformCacheableFigure {
         }
     }
 
+    /**
+     * Convenience method for setting a new value for the {@link #TRANSFORMS}
+     * property.
+     *
+     * @param transforms new value
+     */
+    default void setTransforms(@NonNull Transform... transforms) {
+        if (transforms.length == 1 && transforms[0].isIdentity()) {
+            set(TRANSFORMS, ImmutableLists.emptyList());
+        } else {
+            set(TRANSFORMS, ImmutableLists.of(transforms));
+        }
+    }
+
     @Override
     default void transformInLocal(Transform t) {
         flattenTransforms();
@@ -461,12 +468,5 @@ public interface TransformableFigure extends TransformCacheableFigure {
                 set(TRANSFORMS, ImmutableLists.add(transforms, 0, t));
             }
         }
-    }
-
-    @NonNull
-    static Set<Key<?>> getDeclaredKeys() {
-        Set<Key<?>> keys = new LinkedHashSet<>();
-        Figure.getDeclaredKeys(TransformableFigure.class, keys);
-        return keys;
     }
 }

@@ -1204,10 +1204,9 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
             repainter = () -> {
                 updateRenderContext();
                 getModel().validate(this);
-                repainter = null;
                 updateNodes();
                 validateHandles();
-                //dump(getNode(getDrawing()),0);
+                repainter = null;
             };
             Platform.runLater(repainter);
         }
@@ -1370,7 +1369,6 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
         overlaysPane.setClip(new Rectangle(0, 0, lw + marginL + marginR, lh + marginT + marginB));
 
-// drawingPane.setClip(new Rectangle(0,0,lw,lh));
         rootPane.setPrefSize(lw + marginL + marginR, lh + marginT + marginB);
         rootPane.setMaxSize(lw + marginL + marginR, lh + marginT + marginB);
 

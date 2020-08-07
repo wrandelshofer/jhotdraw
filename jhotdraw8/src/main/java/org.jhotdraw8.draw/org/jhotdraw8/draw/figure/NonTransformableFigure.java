@@ -16,7 +16,7 @@ import org.jhotdraw8.geom.FXTransforms;
  * @author Werner Randelshofer
  * @design.pattern Figure Mixin, Traits.
  */
-public interface NonTransformableFigure extends TransformCacheableFigure {
+public interface NonTransformableFigure extends TransformCachingFigure {
 
     @Override
     default void transformInParent(Transform transform) {

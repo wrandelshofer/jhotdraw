@@ -169,8 +169,8 @@ public class FigureTest {
             return null;
         }
 
-        public boolean invalidateTransforms() {
-            return false;
+        public void invalidateTransforms() {
+
         }
 
         @Nullable
