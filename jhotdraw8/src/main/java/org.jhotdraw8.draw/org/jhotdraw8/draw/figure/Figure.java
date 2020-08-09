@@ -501,6 +501,15 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
+     * The bounds that should be used for clipping and intersection tests
+     * of this figure.
+     */
+    @NonNull
+    default Bounds getVisualBounds() {
+        return getLayoutBounds();
+    }
+
+    /**
      * The bounds of this figure in local coordinates,
      * including space required for a non-zero stroke.
      *
@@ -563,7 +572,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Returns the bounds of the figure in world coordinates, including
+     * Returns the layout bounds of the figure in world coordinates, including
      * space required for non-zero strokkes.
      *
      * @return the bounds in world coordinates
@@ -571,6 +580,17 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     @NonNull
     default Bounds getLayoutBoundsInWorld() {
         return FXTransforms.transformedBoundingBox(getLocalToWorld(), getLayoutBounds());
+    }
+
+    /**
+     * Returns the visal bounds of the figure in world coordinates, including
+     * space required for non-zero strokkes.
+     *
+     * @return the bounds in world coordinates
+     */
+    @NonNull
+    default Bounds getVisualBoundsInWorld() {
+        return FXTransforms.transformedBoundingBox(getLocalToWorld(), getVisualBounds());
     }
 
 

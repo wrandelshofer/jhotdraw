@@ -22,12 +22,13 @@ import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -38,8 +39,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         implements Figure, TransformCachingFigure {
 
-    @NonNull
-    private final static Map<Key<?>, Integer> cachedValuesKeyMap = Collections.synchronizedMap(new HashMap<>());
     private ObservableSet<Figure> layoutObservers;
     @Nullable
     private Drawing drawing;
@@ -52,6 +51,24 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     private Transform cachedParentToLocal;
     private Transform cachedLocalToParent;
     private Transform cachedWorldToLocal;
+
+
+    @NonNull
+    protected Map<Key<?>, Integer> createKeyMap() {
+        return keyMaps.computeIfAbsent(getClass(), k -> {
+            int index = 0;
+
+            Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
+            IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
+
+            for (MapAccessor<?> accessor : accessors) {
+                if (accessor instanceof Key<?>) {
+                    m.put((Key<?>) accessor, index++);
+                }
+            }
+            return m;
+        });
+    }
 
     /**
      * This method calls {@link #doAddNotify}.

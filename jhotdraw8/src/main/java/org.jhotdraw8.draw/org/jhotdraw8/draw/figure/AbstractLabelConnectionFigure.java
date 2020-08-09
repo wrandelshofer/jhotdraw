@@ -241,7 +241,8 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             default:
                 layoutTransforms = false;
                 break;
-            }        // FIXME add tx in angle of rotated label!
+            }
+            // FIXME add tx in angle of rotated label!
 //        origin=origin.add(tangent.multiply(hposTranslate));
             origin = origin.add(hposTranslate, 0);
 

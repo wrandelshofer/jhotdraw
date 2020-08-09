@@ -74,7 +74,7 @@ public class LayerFigure extends AbstractCompositeFigure
         if (renderingIntent == RenderingIntent.EDITOR
                 && clipBounds != null) {
             childNodes = getChildren().stream().parallel().filter(child ->
-                    child.getLayoutBoundsInWorld().intersects(clipBounds)
+                    child.getVisualBoundsInWorld().intersects(clipBounds)
             )
                     .collect(Collectors.toList()).stream()
                     .map(ctx::getNode)// cannot be done in parallel

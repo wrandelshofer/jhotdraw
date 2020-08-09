@@ -8,6 +8,8 @@ import javafx.css.StyleOrigin;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author werni
@@ -26,18 +28,18 @@ public class SimpleStyleableMapTest {
         System.out.println("getOrDefault");
 
         // GIVEN
-        SimpleStyleableMap instance = new SimpleStyleableMap();
+        SimpleStyleableMap<String, String> instance = new SimpleStyleableMap<>();
 
         // WHEN getOrDefault and no value has been put
-        Object key = "dummyKey";
-        Object defaultValue = "defaultValue";
+        String key = "dummyKey";
+        String defaultValue = "defaultValue";
         Object result = instance.getOrDefault(key, defaultValue);
 
         // THEN must return default value
         assertEquals(defaultValue, result);
 
         // WHEN getOrDefault and a value has been put
-        Object putValue = "putValue";
+        String putValue = "putValue";
         instance.put(key, putValue);
         result = instance.getOrDefault(key, defaultValue);
 
@@ -59,28 +61,28 @@ public class SimpleStyleableMapTest {
         System.out.println("containsKey");
 
         // GIVEN
-        SimpleStyleableMap instance = new SimpleStyleableMap();
+        SimpleStyleableMap<String, Object> instance = new SimpleStyleableMap<>();
 
-        // WHEN getOrDefault and no value has been put
-        Object key = "dummyKey";
+        // WHEN no value has been put
+        String key = "dummyKey";
         boolean result = instance.containsKey(key);
 
         // THEN must return false
-        assertEquals(false, result);
+        assertFalse(result);
 
-        // WHEN getOrDefault and a value has been put
-        Object putValue = "putValue";
+        // WHEN a value has been put
+        String putValue = "putValue";
         instance.put(key, putValue);
         result = instance.containsKey(key);
 
-        // THEN must returnt rue
-        assertEquals(true, result);
+        // THEN must return rue
+        assertTrue(result);
 
         // WHEN key is removed
         instance.remove(key);
         result = instance.containsKey(key);
         // THEN must return default value
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     /**
@@ -98,7 +100,7 @@ public class SimpleStyleableMapTest {
         boolean result = instance.containsKey(StyleOrigin.AUTHOR, key);
 
         // THEN must return false
-        assertEquals(false, result);
+        assertFalse(result);
 
         // WHEN getOrDefault and a value has been put
         Object putValue = "putValue";
@@ -106,7 +108,7 @@ public class SimpleStyleableMapTest {
         result = instance.containsKey(StyleOrigin.AUTHOR, key);
 
         // THEN must return rue
-        assertEquals(true, result);
+        assertTrue(result);
         assertEquals(0, instance.size());
         assertEquals(1, instance.getMap(StyleOrigin.AUTHOR).size());
         assertEquals(1, instance.getMap(StyleOrigin.AUTHOR).entrySet().size());
@@ -115,7 +117,7 @@ public class SimpleStyleableMapTest {
         instance.removeKey(StyleOrigin.AUTHOR, key);
         result = instance.containsKey(StyleOrigin.AUTHOR, key);
         // THEN must return default value
-        assertEquals(false, result);
+        assertFalse(result);
         assertEquals(0, instance.size());
         assertEquals(0, instance.getMap(StyleOrigin.AUTHOR).size());
         assertEquals(0, instance.getMap(StyleOrigin.AUTHOR).entrySet().size());

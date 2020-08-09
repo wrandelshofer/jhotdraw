@@ -4,7 +4,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Geom;
 
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,8 +106,10 @@ public class IntersectPathIteratorPoint {
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 for (IntersectionPointEx ip : rayCheck) {
-                    Point2D.Double tangentB = ip.getTangentB();
-                    if (tangentB.getY() > 0) {
+                    double ty = ip.getTangentB().getY();
+                    if (Geom.almostZero(ty)) {
+                        // intersection point is tangential to ray - no crossing
+                    } else if (ty > 0) {
                         clockwiseCrossings++;
                     } else {
                         counterClockwiseCrossings++;

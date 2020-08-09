@@ -33,7 +33,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
 
     @NonNull
     private SimpleStyleableMap<Key<?>, Object> createStyleableMap() {
-        return new SimpleStyleableMap<>(createIndexMap()) {
+        return new SimpleStyleableMap<>(createKeyMap()) {
             @Override
             @SuppressWarnings("unchecked")
             protected void callObservers(StyleOrigin origin, @NonNull MapChangeListener.Change<Key<?>, Object> change) {
@@ -45,10 +45,14 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     /**
-     * This method is called from within the constructor.
+     * Creates a key map for the {@link SimpleStyleableMap} that
+     * is used to store the properties of this object.
+     * <p>
+     * This implementation creates one key map for this class, and shares
+     * it with all instances of this class.
      */
     @NonNull
-    protected Map<Key<?>, Integer> createIndexMap() {
+    protected Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
                 @NonNull

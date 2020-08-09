@@ -64,23 +64,49 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     final static int AUTO_ORIGIN = -1;
 
     /**
-     * Creates a new instance.
+     * Creates a new instance which supports insertion of
+     * new keys.
      */
     public SimpleStyleableMap() {
-        this(new HashMap<>());
+        this(new HashMap<K, Integer>() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public Integer get(Object key) {
+                return super.computeIfAbsent((K) key, k1 -> size());
+            }
+        });
     }
 
     /**
-     * Creates a new instance.
+     * Creates a new instance which uses the provided key map.
+     * <p>
+     * The key map can be shared with other instances, provided that
+     * either the key map is immutable, or the key map is mutable and
+     * the only allowed mutation is the insertion of new entries.
+     * <p>
+     * All entries in the key map must contain distinct integer
+     * values in the range [0, keyMap.size() - 1].
+     * <p>
+     * A shared mutable implementation of {@code keyMap} could be implemented
+     * as follows:
+     * <pre>
+     * Map<K>, V> keyMap = new ConcurrentHashMap<K>, V>() {
+     *
+     *     final AtomicInteger nextIndex = new AtomicInteger();
+     *
+     *     public Integer get(Object key) {
+     *         return super.computeIfAbsent((K) key, k -> nextIndex.getAndIncrement());
+     *     }
+     * };
+     * </pre>
+     * </p>
      *
      * @param keyMap a map which maps from keys to indices. The indices must be
-     *               in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
-     *               the keyMap if necessary, and assign {@code keyMap.size()} to each new
-     *               key. Keys may be added to this map, but may never be removed.
+     *               in the range {@code [0,keyMap.size()-1]}.
      */
     public SimpleStyleableMap(@NonNull Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
-        this.values = new Object[32];//*/ new Object[keyMap.size() * numOrigins];
+        this.values = new Object[keyMap.size() * numOrigins];
         this.origin = StyleOrigin.USER;
         this.originOrdinal = origin.ordinal();
         this.sizes = new int[numOrigins];
@@ -162,26 +188,33 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         }
         return false;
     }
+
     private int ensureCapacity(K key) {
-        // try get first, because an unmodifiable map, will not support compute if absent
         Integer indexNullable = keyMap.get(key);
         if (indexNullable == null) {
-            try {
-                indexNullable = keyMap.computeIfAbsent(key, k -> keyMap.size());
-            } catch (UnsupportedOperationException e) {
-                throw new UnsupportedOperationException("Could not add key " + key + " to map: " + keyMap);
-            }
+            throw new UnsupportedOperationException("Could not retrieve key " + key + " from keyMap: " + keyMap);
         }
         int index = indexNullable;
-        int n = (1 + index) * numOrigins;
-        if (values.length < n) {
-            if (n != highestOneBit(n)) {
-                n = highestOneBit(n) << 1;
-            }
-            values = Arrays.copyOf(values, max(values.length, n));
+        int minCapacity = (1 + index) * numOrigins;
+        if (values.length < minCapacity) {
+            int newCapacity = nextPowerOfTwoUp(1 + index) * numOrigins;
+            values = Arrays.copyOf(values, max(values.length, newCapacity));
         }
 
         return index;
+    }
+
+    /**
+     * Returns the next power of two that is equal or greater than the specified
+     * value.
+     *
+     * @param value a value in the range [0,1<<29].
+     * @return nextUp with nextUp @gt;= value && nextUp == highestOneBit(nextUp).
+     */
+    private int nextPowerOfTwoUp(int value) {
+        Objects.checkIndex(value, 1 << 29);
+        int highestOneBit = highestOneBit(value);
+        return (value == highestOneBit) ? value : highestOneBit << 1;
     }
 
     private int indexIfPresent(K key) {
@@ -232,7 +265,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @Nullable
     @SuppressWarnings("unchecked")
     public StyleOrigin getStyleOrigin(@NonNull K key) {
-        int index = ensureCapacity((K) key);
+        Integer indexNullable = keyMap.get(key);
+        if (indexNullable == null) {
+            return null;
+        }
+        int index = indexNullable;
         for (int i = numOrigins - 1; i >= 0; i--) {
             final int arrayIndex = index * numOrigins + i;
             Object value = arrayIndex < values.length ? values[arrayIndex] : null;
@@ -346,12 +383,23 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     public void removeAll(@NonNull StyleOrigin origin) {
-        int ordinal = origin.ordinal();
-        for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext(); ) {
-            Entry<K, Integer> e = i.next();
-            Integer index = e.getValue();
-            if (index < values.length) {
-                removeValue(ordinal, index, e.getKey());
+        if (origin == StyleOrigin.USER) {
+            // We have to fire change events, so we need the keys.
+            int ordinal = origin.ordinal();
+            for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext(); ) {
+                Entry<K, Integer> e = i.next();
+                Integer index = e.getValue();
+                if (index < values.length) {
+                    removeValue(ordinal, index, e.getKey());
+                }
+            }
+        } else {
+            // We do not fire change events
+            int ordinal = origin.ordinal();
+            for (int i = 0, n = values.length; i < n; i++) {
+                if (i % numOrigins == ordinal) {
+                    values[i] = NO_VALUE;
+                }
             }
         }
     }
