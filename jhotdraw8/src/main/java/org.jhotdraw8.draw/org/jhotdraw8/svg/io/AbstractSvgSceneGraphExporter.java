@@ -5,6 +5,7 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -13,8 +14,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BorderImage;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
@@ -64,17 +63,19 @@ import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.xml.XmlUtil;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
-import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -100,21 +101,20 @@ import java.util.function.Function;
 public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean implements SvgSceneGraphExporter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";
     public final static String SVG_NS = "http://www.w3.org/2000/svg";
-    protected final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
     protected final static String XLINK_NS = "http://www.w3.org/1999/xlink";
     protected final static String XLINK_Q = "xlink";
-    @NonNull
-    protected IdFactory idFactory = new SimpleIdFactory();
-    private final Object imageUriKey;
-    @Nullable
-    private String namespaceQualifier = null;
     protected final XmlNumberConverter nb = new XmlNumberConverter();
+    private final Object imageUriKey;
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
     private final Object skipKey;
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
-    @Nullable
+    @NonNull
+    protected IdFactory idFactory = new SimpleIdFactory();
+
+    @NonNull
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
+    private boolean prettyPrint = false;
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -126,1035 +126,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
     public AbstractSvgSceneGraphExporter(Object imageUriKey, Object skipKey) {
         this.imageUriKey = imageUriKey;
         this.skipKey = skipKey;
-    }
-
-    @Nullable
-    private String createFileComment() {
-        return null;
-    }
-
-    @Nullable
-    public Function<URI, URI> getUriResolver() {
-        return uriResolver;
-    }
-
-    public void setUriResolver(Function<URI, URI> uriResolver) {
-        this.uriResolver = uriResolver;
-    }
-
-    private void initIdFactoryRecursively(@NonNull javafx.scene.Node node) throws IOException {
-        String id = node.getId();
-        if (id != null && idFactory.getObject(id) == null) {
-            idFactory.putId(id, node);
-        } else {
-            idFactory.createId(node, node.getTypeSelector().toLowerCase());
-        }
-
-        if (node instanceof Parent) {
-            Parent pp = (Parent) node;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                initIdFactoryRecursively(child);
-            }
-        }
-    }
-
-    public boolean isExportInvisibleElements() {
-        return getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY);
-    }
-
-    public void setExportInvisibleElements(boolean newValue) {
-        this.setNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY, newValue);
-    }
-
-    private boolean isSkipNode(@NonNull Node node) {
-        if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
-            return true;
-        }
-        if (!isExportInvisibleElements()) {
-            if (!node.isVisible()) {
-                return true;
-            }
-            if (node instanceof Shape) {
-                Shape s = (Shape) node;
-                if ((s.getFill() == null || ((s.getFill() instanceof Color) && ((Color) s.getFill()).getOpacity() == 0))
-                        && (s.getStroke() == null || ((s.getStroke() instanceof Color) && ((Color) s.getStroke()).getOpacity() == 0))
-                ) {
-                    return true;
-                }
-                if (node instanceof Path) {
-                    Path p = (Path) node;
-                    return p.getElements().isEmpty();
-                } else if (node instanceof Polyline) {
-                    Polyline p = (Polyline) node;
-                    return p.getPoints().isEmpty();
-                } else if (node instanceof Polygon) {
-                    Polygon p = (Polygon) node;
-                    return p.getPoints().isEmpty();
-                }
-            } else if (node instanceof Group) {
-                Group g = (Group) node;
-                return g.getChildren().isEmpty();
-            }
-        }
-        return false;
-    }
-
-    @Nullable
-    public String getNamespaceQualifier() {
-        return namespaceQualifier;
-    }
-
-    public void setNamespaceQualifier(@Nullable String namespaceQualifier) {
-        this.namespaceQualifier = namespaceQualifier;
-    }
-
-    public Document toDocument(@NonNull javafx.scene.Node drawingNode) throws IOException {
-        try {
-            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-            Document doc;
-            builderFactory.setNamespaceAware(true);
-            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-            // We do not want that the builder creates a socket connection!
-            builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
-            DOMImplementation domImpl = builder.getDOMImplementation();
-            doc = domImpl.createDocument(SVG_NS, getQualifiedName("svg"), null);
-
-            Element docElement = doc.getDocumentElement();
-
-            writeProcessingInstructions(doc, drawingNode);
-            String commentText = createFileComment();
-            if (commentText != null) {
-                docElement.getParentNode().insertBefore(doc.createComment(commentText), docElement);
-            }
-
-            idFactory.reset();
-            initIdFactoryRecursively(drawingNode);
-            Element defsElement = createElement(doc, "defs");
-            writeDefsRecursively(doc, defsElement, drawingNode);
-            if (defsElement.getChildNodes().getLength() > 0) {
-                docElement.appendChild(defsElement);
-            }
-            writeDocumentElementAttributes(docElement, drawingNode);
-            writeNodeRecursively(doc, docElement, drawingNode);
-
-            return doc;
-        } catch (ParserConfigurationException ex) {
-            throw new IOException(ex);
-        }
-    }
-
-    @NonNull
-    public String getQualifiedName(@NonNull String unqualifiedName) {
-        return namespaceQualifier == null ? unqualifiedName : namespaceQualifier + ":" + unqualifiedName;
-    }
-
-    public void write(OutputStream out, @NonNull javafx.scene.Node drawing) throws IOException {
-        Document doc = toDocument(drawing);
-        XmlUtil.write(out, doc);
-    }
-
-    public void write(Writer out, @NonNull javafx.scene.Node drawing) throws IOException {
-        Document doc = toDocument(drawing);
-        XmlUtil.write(out, doc);
-    }
-
-    private Element writeArc(@NonNull Document doc, @NonNull Element parent, @NonNull Arc node) {
-        Element elem = createElement(doc, "path");
-        parent.appendChild(elem);
-        StringBuilder buf = new StringBuilder();
-        double centerX = node.getCenterX();
-        double centerY = node.getCenterY();
-        double radiusX = node.getRadiusX();
-        double radiusY = node.getRadiusY();
-        double startAngle = Math.toRadians(-node.getStartAngle());
-        double endAngle = Math.toRadians(-node.getStartAngle() - node.getLength());
-        double length = node.getLength();
-
-        double startX = radiusX * Math.cos(startAngle);
-        double startY = radiusY * Math.sin(startAngle);
-
-        double endX = centerX + radiusX * Math.cos(endAngle);
-        double endY = centerY + radiusY * Math.sin(endAngle);
-
-        int xAxisRot = 0;
-        boolean largeArc = (length > 180);
-        boolean sweep = (length < 0);
-
-        buf.append('M')
-                .append(nb.toString(centerX))
-                .append(',')
-                .append(nb.toString(centerY))
-                .append(' ');
-
-        if (ArcType.ROUND == node.getType()) {
-            buf.append('l')
-                    .append(startX)
-                    .append(',')
-                    .append(startY).append(' ');
-        }
-
-        buf.append('A')
-                .append(nb.toString(radiusX))
-                .append(',')
-                .append(nb.toString(radiusY))
-                .append(',')
-                .append(nb.toString(xAxisRot))
-                .append(',')
-                .append(largeArc ? '1' : '0')
-                .append(',')
-                .append(sweep ? '1' : '0')
-                .append(',')
-                .append(nb.toString(endX))
-                .append(',')
-                .append(nb.toString(endY))
-                .append(',');
-
-        if (ArcType.CHORD == node.getType()
-                || ArcType.ROUND == node.getType()) {
-            buf.append('Z');
-        }
-        elem.setAttribute("d", buf.toString());
-        return elem;
-    }
-
-    private Element writeCircle(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Circle node) {
-        Element elem = createElement(doc, "circle");
-        if (node.getCenterX() != 0.0) {
-            elem.setAttribute("cx", nb.toString(node.getCenterX()));
-        }
-        if (node.getCenterY() != 0.0) {
-            elem.setAttribute("cy", nb.toString(node.getCenterY()));
-        }
-        if (node.getRadius() != 0.0) {
-            elem.setAttribute("r", nb.toString(node.getRadius()));
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    protected abstract void writeClipAttributes(@NonNull Element elem, @NonNull Node node);
-
-    protected abstract void writeClipPathDefs(@NonNull Document doc, @NonNull Element
-            defsNode, @NonNull Node node) throws IOException;
-
-    protected abstract void writeCompositingAttributes(@NonNull Element elem, @NonNull Node
-            node);
-
-    private Element writeCubicCurve(@NonNull Document doc, @NonNull Element
-            parent, @NonNull CubicCurve node) {
-        Element elem = createElement(doc, "path");
-        parent.appendChild(elem);
-        final StringBuilder buf = new StringBuilder();
-        buf.append('M')
-                .append(nb.toString(node.getStartX()))
-                .append(',')
-                .append(nb.toString(node.getStartY()))
-                .append(' ')
-                .append('C')
-                .append(nb.toString(node.getControlX1()))
-                .append(',')
-                .append(nb.toString(node.getControlY1()))
-                .append(',')
-                .append(nb.toString(node.getControlX2()))
-                .append(',')
-                .append(nb.toString(node.getControlY2()))
-                .append(',')
-                .append(nb.toString(node.getEndX()))
-                .append(',')
-                .append(nb.toString(node.getEndY()));
-        elem.setAttribute("d", buf.substring(0));
-        return elem;
-    }
-
-    private void writeDefsRecursively(@NonNull Document doc, @NonNull Element
-            defsNode, @NonNull javafx.scene.Node node) throws IOException {
-        if (isSkipNode(node)) {
-            return;
-        }
-
-        writeClipPathDefs(doc, defsNode, node);
-
-        if (node instanceof Shape) {
-            Shape shape = (Shape) node;
-            writePaintDefs(doc, defsNode, shape.getFill());
-            writePaintDefs(doc, defsNode, shape.getStroke());
-        }
-
-        if (node instanceof Parent) {
-            Parent pp = (Parent) node;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeDefsRecursively(doc, defsNode, child);
-            }
-        }
-    }
-
-    protected abstract void writeDocumentElementAttributes(@NonNull Element
-                                                                   docElement, javafx.scene.Node drawingNode);
-
-    private Element writeEllipse(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Ellipse node) {
-        Element elem = createElement(doc, "ellipse");
-        if (node.getCenterX() != 0.0) {
-            elem.setAttribute("cx", nb.toString(node.getCenterX()));
-        }
-        if (node.getCenterY() != 0.0) {
-            elem.setAttribute("cy", nb.toString(node.getCenterY()));
-        }
-        if (node.getRadiusX() != 0.0) {
-            elem.setAttribute("rx", nb.toString(node.getRadiusX()));
-        }
-        if (node.getRadiusY() != 0.0) {
-            elem.setAttribute("ry", nb.toString(node.getRadiusY()));
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private void writeFillAttributes(@NonNull Element elem, @NonNull Shape node) {
-        Paint fill = node.getFill();
-        String id = idFactory.getId(fill);
-        if (id != null) {
-            elem.setAttribute("fill", "url(#" + id + ")");
-        } else {
-            elem.setAttribute("fill", paintConverter.toString(fill));
-            if (fill instanceof Color) {
-                Color c = (Color) fill;
-                if (!c.isOpaque()) {
-                    elem.setAttribute("fill-opacity", nb.toString(c.getOpacity()));
-                }
-            }
-        }
-
-
-        final FillRule fillRule;
-        if (node instanceof Path) {
-            Path path = (Path) node;
-            fillRule = path.getFillRule();
-        } else if (node instanceof SVGPath) {
-            SVGPath path = (SVGPath) node;
-            fillRule = path.getFillRule();
-        } else {
-            fillRule = FillRule.NON_ZERO;
-        }
-        switch (fillRule) {
-        case EVEN_ODD:
-            elem.setAttribute("fill-rule", "evenodd");
-            break;
-        case NON_ZERO:
-        default:
-            break;
-        }
-    }
-
-    /**
-     * Writes a group.
-     * If the group is suppressed but its children shall be written, returns parent.
-     *
-     * @param doc
-     * @param parent
-     * @param node
-     * @return the element created for the group or the parent element
-     */
-    protected Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
-            node) {
-        Element elem = createElement(doc, "g");
-        writeClipAttributes(elem, node);
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private Element createElement(@NonNull Document doc, @NonNull String unqualifiedName) {
-        return namespaceQualifier == null
-                ? doc.createElement(unqualifiedName)
-                : doc.createElementNS(SVG_NS, namespaceQualifier + ":" + unqualifiedName);
-    }
-
-    private Element writeImageView(@NonNull Document doc, @NonNull Element parent, @NonNull ImageView
-            node) throws IOException {
-        Element elem = createElement(doc, "image");
-        parent.appendChild(elem);
-
-        elem.setAttribute("x", nb.toString(node.getX()));
-        elem.setAttribute("y", nb.toString(node.getY()));
-        elem.setAttribute("width", nb.toString(node.getFitWidth()));
-        elem.setAttribute("height", nb.toString(node.getFitHeight()));
-        elem.setAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
-
-        URI uri = (URI) node.getProperties().get(imageUriKey);
-        String href = null;
-        if (uri != null) {
-            href = uriResolver.apply(uri).toString();
-        } else {
-            if (node.getImage() != null) {
-                ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
-                bout.close();
-                byte[] imageData = bout.toByteArray();
-
-                href = "data:image;base64," + Base64.getEncoder().encodeToString(imageData);
-            }
-        }
-        if (href != null) {
-            elem.setAttributeNS(XLINK_NS, XLINK_Q + ":href", href);
-        }
-        return elem;
-    }
-
-    private Element writeLine(@NonNull Document doc, @NonNull Element parent, @NonNull Line
-            node) {
-        Element elem = createElement(doc, "line");
-        if (node.getStartX() != 0.0) {
-            elem.setAttribute("x1", nb.toString(node.getStartX()));
-        }
-        if (node.getStartY() != 0.0) {
-            elem.setAttribute("y1", nb.toString(node.getStartY()));
-        }
-        if (node.getEndX() != 0.0) {
-            elem.setAttribute("x2", nb.toString(node.getEndX()));
-        }
-        if (node.getEndY() != 0.0) {
-            elem.setAttribute("y2", nb.toString(node.getEndY()));
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    protected void writeNodeRecursively(@NonNull Document doc, @NonNull Element
-            parent, @NonNull javafx.scene.Node node) throws IOException {
-        if (isSkipNode(node)) {
-            return;
-        }
-        Element elem = null;
-        if (node instanceof Shape) {
-            elem = writeShape(doc, parent, (Shape) node);
-            if (elem != null) {
-                writeFillAttributes(elem, (Shape) node);
-                writeStrokeAttributes(elem, (Shape) node);
-                writeClipAttributes(elem, node);
-            }
-        } else if (node instanceof Group) {
-            // a group can be omitted if it does not have any children
-            Group g = (Group) node;
-            boolean omitGroup = !isExportInvisibleElements() && g.getChildren().isEmpty();
-            if (!omitGroup) {
-                elem = writeGroup(doc, parent, (Group) node);
-            }
-        } else if (node instanceof Region) {
-            elem = writeRegion(doc, parent, (Region) node);
-        } else if (node instanceof ImageView) {
-            elem = writeImageView(doc, parent, (ImageView) node);
-        } else {
-            throw new UnsupportedOperationException("not yet implemented for " + node);
-        }
-
-        if (elem != null && elem != parent) {
-            writeMetadataAttributes(doc, elem, node);
-            writeStyleAttributes(elem, node);
-            writeTransformAttributes(elem, node);
-            writeCompositingAttributes(elem, node);
-        }
-
-        if (node instanceof Parent) {
-            final Parent pp = (Parent) node;
-            final Element parentElement = elem == null ? parent : elem;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
-                writeNodeRecursively(doc, parentElement, child);
-            }
-        }
-
-    }
-
-    private void writeMetadataAttributes(@NonNull Document doc, @NonNull Element elem, Node node) {
-        writeTitleElement(doc, elem, node);
-        writeDescElement(doc, elem, node);
-    }
-
-    protected void writeTitleElement(@NonNull Document doc, @NonNull Element elem, @NonNull Node node) {
-        Object titleObj = node.getProperties().get(TITLE_PROPERTY_NAME);
-        if ((titleObj instanceof String)) {
-            String title = ((String) titleObj).trim();
-            if (!title.isEmpty()) {
-                Element titleElem = createElement(doc, "title");
-                titleElem.appendChild(doc.createTextNode(title));
-                elem.appendChild(titleElem);
-            }
-        }
-    }
-
-    protected void writeDescElement(@NonNull Document doc, @NonNull Element elem, @NonNull Node node) {
-        Object descObj = node.getProperties().get(DESC_PROPERTY_NAME);
-        if ((descObj instanceof String)) {
-            String desc = ((String) descObj).trim();
-            if (!desc.isEmpty()) {
-                Element titleElem = createElement(doc, "desc");
-                titleElem.appendChild(doc.createTextNode(desc));
-                elem.appendChild(titleElem);
-            }
-        }
-    }
-
-    private void writePaintDefs(@NonNull Document doc, @NonNull Element
-            defsNode, Paint paint) throws IOException {
-        if (idFactory.getId(paint) == null) {
-            if (paint instanceof LinearGradient) {
-                LinearGradient g = (LinearGradient) paint;
-                writeLinearGradientDef(doc, defsNode, g);
-            } else if (paint instanceof RadialGradient) {
-                RadialGradient g = (RadialGradient) paint;
-                writeRadialGradientDef(doc, defsNode, g);
-            }
-        }
-    }
-
-    private void writeRadialGradientDef(@NonNull Document doc, @NonNull Element defsNode, RadialGradient g) throws IOException {
-        String id = idFactory.createId(g, "radialGradient");
-        Element elem = createElement(doc, "radialGradient");
-        defsNode.appendChild(doc.createTextNode("\n"));
-        elem.setAttribute("id", id);
-        if (g.isProportional()) {
-            elem.setAttribute("cx", nb.toString(g.getCenterX() * 100) + "%");
-            elem.setAttribute("cy", nb.toString(g.getCenterY() * 100) + "%");
-            elem.setAttribute("r", nb.toString(g.getRadius() * 100) + "%");
-            elem.setAttribute("fx", nb.toString((g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
-            elem.setAttribute("fy", nb.toString((g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
-            elem.setAttribute("gradientUnits", "objectBoundingBox");
-
-        } else {
-            elem.setAttribute("cx", nb.toString(g.getCenterX()));
-            elem.setAttribute("cy", nb.toString(g.getCenterY()));
-            elem.setAttribute("r", nb.toString(g.getRadius()));
-            elem.setAttribute("fx", nb.toString(g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
-            elem.setAttribute("fy", nb.toString(g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
-            elem.setAttribute("gradientUnits", "userSpaceOnUse");
-        }
-        switch (g.getCycleMethod()) {
-        case NO_CYCLE:
-            elem.setAttribute("spreadMethod", "pad");
-            break;
-        case REFLECT:
-            elem.setAttribute("spreadMethod", "reflect");
-            break;
-        case REPEAT:
-            elem.setAttribute("spreadMethod", "repeat");
-            break;
-        default:
-            throw new IOException("unsupported cycle method:" + g.getCycleMethod());
-        }
-        for (Stop s : g.getStops()) {
-            Element stopElem = createElement(doc, "stop");
-            stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
-            Color c = s.getColor();
-            stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
-            if (!c.isOpaque()) {
-                stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
-            }
-            elem.appendChild(stopElem);
-        }
-        defsNode.appendChild(elem);
-    }
-
-    private void writeLinearGradientDef(@NonNull Document doc, @NonNull Element defsNode, LinearGradient g) throws IOException {
-        String id = idFactory.createId(g, "linearGradient");
-        Element elem = createElement(doc, "linearGradient");
-        defsNode.appendChild(doc.createTextNode("\n"));
-        elem.setAttribute("id", id);
-        if (g.isProportional()) {
-            elem.setAttribute("x1", nb.toString(g.getStartX() * 100) + "%");
-            elem.setAttribute("y1", nb.toString(g.getStartY() * 100) + "%");
-            elem.setAttribute("x2", nb.toString(g.getEndX() * 100) + "%");
-            elem.setAttribute("y2", nb.toString(g.getEndY() * 100) + "%");
-            elem.setAttribute("gradientUnits", "objectBoundingBox");
-
-        } else {
-            elem.setAttribute("x1", nb.toString(g.getStartX()));
-            elem.setAttribute("y1", nb.toString(g.getStartY()));
-            elem.setAttribute("x2", nb.toString(g.getEndX()));
-            elem.setAttribute("y2", nb.toString(g.getEndY()));
-            elem.setAttribute("gradientUnits", "userSpaceOnUse");
-        }
-        switch (g.getCycleMethod()) {
-        case NO_CYCLE:
-            elem.setAttribute("spreadMethod", "pad");
-            break;
-        case REFLECT:
-            elem.setAttribute("spreadMethod", "reflect");
-            break;
-        case REPEAT:
-            elem.setAttribute("spreadMethod", "repeat");
-            break;
-        default:
-            throw new IOException("unsupported cycle method:" + g.getCycleMethod());
-        }
-        for (Stop s : g.getStops()) {
-            Element stopElem = createElement(doc, "stop");
-            stopElem.setAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
-            Color c = s.getColor();
-            stopElem.setAttribute("stop-color", this.paintConverter.toString(c));
-            if (!c.isOpaque()) {
-                stopElem.setAttribute("stop-opacity", nb.toString(c.getOpacity()));
-            }
-            elem.appendChild(stopElem);
-        }
-        defsNode.appendChild(elem);
-    }
-
-    @Nullable
-    protected Element writePath(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Path node) {
-        if (node.getElements().isEmpty()) {
-            return null;
-        }
-        Element elem = createElement(doc, "path");
-        parent.appendChild(elem);
-        String d;
-        if (isRelativizePaths()) {
-            d = Shapes.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements()).getPathIterator(null));
-        } else {
-            d = Shapes.doubleSvgStringFromElements(node.getElements());
-        }
-        elem.setAttribute("d", d);
-        return elem;
-    }
-
-    private Element writePolygon(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Polygon node) {
-        Element elem = createElement(doc, "polygon");
-        StringBuilder buf = new StringBuilder();
-        List<Double> ps = node.getPoints();
-        for (int i = 0, n = ps.size(); i < n; i += 2) {
-            if (i != 0) {
-                buf.append(' ');
-            }
-            buf.append(nb.toString(ps.get(i)))
-                    .append(',')
-                    .append(nb.toString(ps.get(i + 1)));
-        }
-        elem.setAttribute("points", buf.toString());
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private Element writePolyline(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Polyline node) {
-        Element elem = createElement(doc, "polyline");
-        StringBuilder buf = new StringBuilder();
-        List<Double> ps = node.getPoints();
-        for (int i = 0, n = ps.size(); i < n; i += 2) {
-            if (i != 0) {
-                buf.append(' ');
-            }
-            buf.append(nb.toString(ps.get(i)))
-                    .append(',')
-                    .append(nb.toString(ps.get(i + 1)));
-        }
-        elem.setAttribute("points", buf.toString());
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private void writeProcessingInstructions(Document
-                                                     doc, javafx.scene.Node external) {
-        // empty
-    }
-
-    private Element writeQuadCurve(@NonNull Document doc, @NonNull Element parent, @NonNull QuadCurve
-            node) {
-        Element elem = createElement(doc, "path");
-        parent.appendChild(elem);
-        final StringBuilder buf = new StringBuilder();
-        buf.append('M')
-                .append(nb.toString(node.getStartX()))
-                .append(',')
-                .append(nb.toString(node.getStartY()))
-                .append(' ')
-                .append('Q')
-                .append(nb.toString(node.getControlX()))
-                .append(',')
-                .append(nb.toString(node.getControlY()))
-                .append(',')
-                .append(nb.toString(node.getEndX()))
-                .append(',')
-                .append(nb.toString(node.getEndY()));
-        elem.setAttribute("d", buf.substring(0));
-        return elem;
-    }
-
-    private Element writeRectangle(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Rectangle node) {
-        Element elem = createElement(doc, "rect");
-        if (node.getX() != 0.0) {
-            elem.setAttribute("x", nb.toString(node.getX()));
-        }
-        if (node.getY() != 0.0) {
-            elem.setAttribute("y", nb.toString(node.getY()));
-        }
-        if (node.getWidth() != 0.0) {
-            elem.setAttribute("width", nb.toString(node.getWidth()));
-        }
-        if (node.getHeight() != 0.0) {
-            elem.setAttribute("height", nb.toString(node.getHeight()));
-        }
-        if (node.getArcWidth() != 0.0) {
-            elem.setAttribute("rx", nb.toString(node.getArcWidth()));
-        }
-        if (node.getArcHeight() != 0.0) {
-            elem.setAttribute("ry", nb.toString(node.getArcHeight()));
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    private Element writeRegion(@NonNull Document doc, @NonNull Element parent, @NonNull Region region) throws IOException {
-        Element elem = createElement(doc, "g");
-        parent.appendChild(elem);
-
-        double x = region.getLayoutX();
-        double y = region.getLayoutY();
-        double width = region.getWidth();
-        double height = region.getHeight();
-
-        if ((region.getBackground() != null && !region.getBackground().isEmpty())
-                || (region.getBorder() != null && !region.getBorder().isEmpty())) {
-            // compute the shape 's' of the region
-            Shape s = region.getShape();
-            Bounds sb = (s != null) ? s.getLayoutBounds() : null;
-
-            // All BackgroundFills are drawn first, followed by
-            // BackgroundImages, BorderStrokes, and finally BorderImages
-            if (region.getBackground() != null) {
-                for (BackgroundFill bgf : region.getBackground().getFills()) {
-                    Paint fill = bgf.getFill() == null ? Color.TRANSPARENT : bgf.getFill();
-                    CornerRadii radii = bgf.getRadii() == null ? CornerRadii.EMPTY : bgf.getRadii();
-                    Insets insets = bgf.getInsets() == null ? Insets.EMPTY : bgf.getInsets();
-
-                    Shape bgs = null;
-                    if (s != null) {
-                        if (region.isScaleShape()) {
-
-                            java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
-                            Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                            tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                            tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                            bgs = Shapes.fxShapeFromAWT(awtShape, tx);
-                        } else {
-                            bgs = s;
-                        }
-                    } else if (radii != CornerRadii.EMPTY) {
-                        throw new UnsupportedOperationException("radii not yet implemented");
-                    } else {
-                        bgs = new Rectangle(x + insets.getLeft(), y + insets.getTop(), width - insets.getLeft() - insets.getRight(), height - insets.getTop() - insets.getBottom());
-                    }
-                    bgs.setFill(fill);
-                    Element bgsElement = writeShape(doc, elem, bgs);
-                    writeFillAttributes(bgsElement, bgs);
-                    bgsElement.setAttribute("stroke", "none");
-                    elem.appendChild(bgsElement);
-                }
-                for (BackgroundImage bgi : region.getBackground().getImages()) {
-                    throw new UnsupportedOperationException("background image not yet implemented");
-                }
-            }
-            if (region.getBorder() != null) {
-                if (region.getBorder().getImages().isEmpty() || s == null) {
-                    for (BorderStroke bs : region.getBorder().getStrokes()) {
-                        Insets insets = bs.getInsets();
-                        CornerRadii radii = bs.getRadii() == null ? CornerRadii.EMPTY : bs.getRadii();
-
-                        Shape bgs = null;
-                        if (s != null) {
-                            if (region.isScaleShape()) {
-                                java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
-
-                                Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
-                                tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
-                                tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                                bgs = Shapes.fxShapeFromAWT(awtShape, tx);
-                            } else {
-                                bgs = s;
-                            }
-                        } else if (radii != CornerRadii.EMPTY) {
-                            throw new UnsupportedOperationException("radii not yet implemented");
-                        } else {
-                            bgs = new Rectangle(x + insets.getLeft(), y + insets.getTop(), width - insets.getLeft() - insets.getRight(), height - insets.getTop() - insets.getBottom());
-                        }
-
-                        Element bgsElement = writeShape(doc, elem, bgs);
-                        writeStrokeAttributes(bgsElement, bs);
-                        bgsElement.setAttribute("fill", "none");
-                        elem.appendChild(bgsElement);
-                    }
-                }
-                if (s != null) {
-                    for (BorderImage bi : region.getBorder().getImages()) {
-                        throw new UnsupportedOperationException("border image not yet implemented");
-                    }
-                }
-            }
-        }
-        return elem;
-    }
-
-    private Element writeSVGPath(@NonNull Document doc, @NonNull Element
-            parent, @NonNull SVGPath node) {
-        Element elem = createElement(doc, "path");
-        elem.setAttribute("d", node.getContent());
-        switch (node.getFillRule()) {
-        case NON_ZERO:
-            //    elem.setAttribute("fill-rule","nonzero");// default
-            break;
-        case EVEN_ODD:
-            elem.setAttribute("fill-rule", "evenodd");
-            break;
-        }
-        parent.appendChild(elem);
-        return elem;
-    }
-
-    /**
-     * Writes a shape if it has a visual representation.
-     *
-     * @param doc    the document
-     * @param parent the parent element
-     * @param node   the shape
-     * @return the created element or null if the shape has no visual representation (e.g. a path without path elements)
-     * @throws IOException
-     */
-    @Nullable
-    private Element writeShape(@NonNull Document doc, @NonNull Element
-            parent, Shape node) throws IOException {
-        Element elem = null;
-        if (node instanceof Arc) {
-            elem = writeArc(doc, parent, (Arc) node);
-        } else if (node instanceof Circle) {
-            elem = writeCircle(doc, parent, (Circle) node);
-        } else if (node instanceof CubicCurve) {
-            elem = writeCubicCurve(doc, parent, (CubicCurve) node);
-        } else if (node instanceof Ellipse) {
-            elem = writeEllipse(doc, parent, (Ellipse) node);
-        } else if (node instanceof Line) {
-            elem = writeLine(doc, parent, (Line) node);
-        } else if (node instanceof Path) {
-            elem = writePath(doc, parent, (Path) node);
-        } else if (node instanceof Polygon) {
-            elem = writePolygon(doc, parent, (Polygon) node);
-        } else if (node instanceof Polyline) {
-            elem = writePolyline(doc, parent, (Polyline) node);
-        } else if (node instanceof QuadCurve) {
-            elem = writeQuadCurve(doc, parent, (QuadCurve) node);
-        } else if (node instanceof Rectangle) {
-            elem = writeRectangle(doc, parent, (Rectangle) node);
-        } else if (node instanceof SVGPath) {
-            elem = writeSVGPath(doc, parent, (SVGPath) node);
-        } else if (node instanceof Text) {
-            elem = writeText(doc, parent, (Text) node);
-        } else {
-            throw new IOException("unknown shape type " + node);
-        }
-        return elem;
-    }
-
-    private void writeStrokeAttributes(@NonNull Element elem, @NonNull Shape shape) {
-        Paint stroke = shape.getStroke();
-        if (stroke == null) {
-            return;
-        }
-
-
-        String id = idFactory.getId(stroke);
-        if (id != null) {
-            elem.setAttribute("stroke", "url(#" + id + ")");
-        } else {
-            elem.setAttribute("stroke", paintConverter.toString(stroke));
-            if (stroke instanceof Color) {
-                Color c = (Color) stroke;
-                if (!c.isOpaque()) {
-                    elem.setAttribute("stroke-opacity", nb.toString(c.getOpacity()));
-                }
-            }
-        }
-
-        if (shape.getStrokeWidth() != 1) {
-            elem.setAttribute("stroke-width", nb.toString(shape.getStrokeWidth()));
-        }
-        if (shape.getStrokeLineCap() != StrokeLineCap.BUTT) {
-            elem.setAttribute("stroke-linecap", shape.getStrokeLineCap().toString().toLowerCase());
-        }
-        if (shape.getStrokeLineJoin() != StrokeLineJoin.MITER) {
-            elem.setAttribute("stroke-linejoin", shape.getStrokeLineJoin().toString().toLowerCase());
-        }
-        if (shape.getStrokeMiterLimit() != 4) {
-            elem.setAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
-        }
-        if (!shape.getStrokeDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(shape.getStrokeDashArray())));
-        }
-        if (shape.getStrokeDashOffset() != 0) {
-            elem.setAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
-        }
-        if (shape.getStrokeType() != StrokeType.CENTERED) {
-            // XXX this is currentl only a proposal for SVG 2
-            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
-            switch (shape.getStrokeType()) {
-            case INSIDE:
-                elem.setAttribute("stroke-alignment", "inner");
-                break;
-            case CENTERED:
-                elem.setAttribute("stroke-alignment", "center");
-                break;
-            case OUTSIDE:
-                elem.setAttribute("stroke-alignment", "outer");
-                break;
-            default:
-                throw new InternalError("Unsupported stroke type " + shape.getStrokeType());
-            }
-        }
-    }
-
-    private void writeStrokeAttributes(@NonNull Element elem, @NonNull BorderStroke shape) {
-        if (shape.getTopStroke() != null) {
-            elem.setAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
-        }
-        if (shape.getWidths().getTop() != 1) {
-            elem.setAttribute("stroke-width", nb.toString(shape.getWidths().getTop()));
-        }
-        BorderStrokeStyle style = shape.getTopStyle();
-        // FIXME support top/right/bottom/left style!!
-        if (style.getLineCap() != StrokeLineCap.BUTT) {
-            elem.setAttribute("stroke-linecap", style.getLineCap().toString().toLowerCase());
-        }
-        if (style.getLineJoin() != StrokeLineJoin.MITER) {
-            elem.setAttribute("stroke-linejoin", style.getLineJoin().toString().toLowerCase());
-        }
-        if (style.getMiterLimit() != 4) {
-            elem.setAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
-        }
-        if (!style.getDashArray().isEmpty()) {
-            elem.setAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(style.getDashArray())));
-        }
-        if (style.getDashOffset() != 0) {
-            elem.setAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
-        }
-        if (style.getType() != StrokeType.CENTERED) {
-            // XXX this is currently only a proposal for SVG 2
-            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
-            switch (style.getType()) {
-            case INSIDE:
-                elem.setAttribute("stroke-alignment", "inner");
-                break;
-            case CENTERED:
-                elem.setAttribute("stroke-alignment", "center");
-                break;
-            case OUTSIDE:
-                elem.setAttribute("stroke-alignment", "outer");
-                break;
-            default:
-                throw new InternalError("Unsupported stroke type " + style.getType());
-            }
-        }
-    }
-
-    protected abstract List<String> getAdditionalNodeClasses(@NonNull Element elem, @NonNull Node node);
-
-    protected void writeStyleAttributes(@NonNull Element elem, @NonNull Node node) {
-        writeIdAttribute(elem, node);
-        writeClassAttribute(elem, node);
-        writeVisibleAttribute(elem, node);
-    }
-
-    private void writeVisibleAttribute(@NonNull Element elem, @NonNull Node node) {
-        if (!node.isVisible()) {
-            //elem.setAttribute("visibility", "hidden");
-            elem.setAttribute("display", "none");
-        }
-    }
-
-    private void writeClassAttribute(@NonNull Element elem, @NonNull Node node) {
-        List<String> styleClass = new ArrayList<>(node.getStyleClass());
-        styleClass.addAll(getAdditionalNodeClasses(elem, node));
-
-        if (!styleClass.isEmpty()) {
-            StringBuffer buf = new StringBuffer();
-            for (String clazz : styleClass) {
-                if (buf.length() != 0) {
-                    buf.append(' ');
-                }
-                buf.append(clazz);
-            }
-            elem.setAttribute("class", buf.toString());
-        }
-    }
-
-    protected void writeIdAttribute(@NonNull Element elem, @NonNull Node node) {
-        String id = node.getId();
-        if (id != null && !id.isEmpty()) {
-            elem.setAttribute("id", id);
-        }
-    }
-
-    @NonNull
-    private Element writeText(@NonNull Document doc, @NonNull Element parent, @NonNull Text node) {
-        Element elem = writeWrappedText(doc, parent, node);
-        writeTextAttributes(elem, node);
-        return elem;
-    }
-
-    private Element writeWrappedText(@NonNull Document doc, @NonNull Element parent, @NonNull Text
-            node) {
-        Element elem = createElement(doc, "text");
-        parent.appendChild(elem);
-        double lineSpacing = node.getLineSpacing();//+node.getFont().getSize()*0.15625;
-        drawText(doc, elem, node.getText(), node.getLayoutBounds(), node.getFont(), 8,
-                node.isUnderline(), node.isStrikethrough(), node.getTextAlignment(), lineSpacing);
-        return elem;
-    }
-
-    private void drawText(@NonNull Document doc, @NonNull Element parent, @Nullable String str,
-                          @NonNull Bounds textRect,
-                          @NonNull Font tfont, int tabSize, boolean isUnderlined,
-                          boolean isStrikethrough,
-                          @NonNull TextAlignment textAlignment,
-                          double lineSpacing) {
-        FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
-        java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
-        float leftMargin = (float) textRect.getMinX();
-        float rightMargin = (float) Math.max(leftMargin + 1, textRect.getMinX() + textRect.getWidth() + 1);
-        float verticalPos = (float) textRect.getMinY();
-        float maxVerticalPos = (float) (textRect.getMinY() + textRect.getHeight());
-        if (leftMargin < rightMargin) {
-            //float tabWidth = (float) (getTabSize() * g.getFontMetrics(font).charWidth('m'));
-            float tabWidth = (float) (tabSize * font.getStringBounds("m", frc).getWidth());
-            float[] tabStops = new float[(int) (textRect.getWidth() / tabWidth)];
-            for (int i = 0; i < tabStops.length; i++) {
-                tabStops[i] = (float) (textRect.getMinX() + (int) (tabWidth * (i + 1)));
-            }
-
-            if (str != null) {
-                String[] paragraphs = str.split("\n");
-
-                for (int i = 0; i < paragraphs.length; i++) {
-                    if (paragraphs[i].length() == 0) {
-                        paragraphs[i] = " ";
-                    }
-                    AttributedString as = new AttributedString(paragraphs[i]);
-                    as.addAttribute(TextAttribute.FONT, font);
-                    if (isUnderlined) {
-                        as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
-                    }
-                    if (isStrikethrough) {
-                        as.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
-                    }
-                    int tabCount = paragraphs[i].split("\t").length - 1;
-                    Rectangle2D.Double paragraphBounds = drawParagraph(doc, parent, frc,
-                            paragraphs[i], as.getIterator(), verticalPos, maxVerticalPos, leftMargin, rightMargin, tabStops, tabCount, textAlignment,
-                            lineSpacing);
-                    verticalPos = (float) (paragraphBounds.y + paragraphBounds.height + lineSpacing);
-                    if (verticalPos > maxVerticalPos) {
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -1172,12 +143,12 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
      * @return Returns the actual bounds of the paragraph.
      */
     @NonNull
-    private Rectangle2D.Double drawParagraph(@NonNull Document doc, @NonNull Element parent,
+    private Rectangle2D.Double drawParagraph(@NonNull XMLStreamWriter w,
                                              FontRenderContext frc, @NonNull String
                                                      paragraph, @NonNull AttributedCharacterIterator styledText,
                                              float verticalPos, float maxVerticalPos, float leftMargin,
                                              float rightMargin, @NonNull float[] tabStops, int tabCount,
-                                             @NonNull TextAlignment textAlignment, double lineSpacing) {
+                                             @NonNull TextAlignment textAlignment, double lineSpacing) throws XMLStreamException {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,
         // assume styledText is an AttributedCharacterIterator, and the number
@@ -1200,7 +171,8 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         LineBreakMeasurer measurer = new LineBreakMeasurer(styledText, frc);
         int currentTab = 0;
         int textIndex = 0;
-        while (measurer.getPosition() < styledText.getEndIndex() && verticalPos <= maxVerticalPos) {
+        while (measurer.getPosition() < styledText.getEndIndex()
+                && verticalPos <= maxVerticalPos) {
 
             // Lay out and draw each line.  All segments on a line
             // must be computed before any drawing can occur, since
@@ -1221,7 +193,7 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
 
             while (!lineComplete && verticalPos <= maxVerticalPos) {
                 float wrappingWidth = rightMargin - horizontalPos;
-                TextLayout layout = null;
+                TextLayout layout;
                 layout = measurer.nextLayout(wrappingWidth,
                         tabLocations[currentTab] + 1,
                         lineContainsText);
@@ -1284,12 +256,12 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             for (TextLayout nextLayout : layouts) {
                 float nextPosition = positionEnum.next();
 
-                Element tspan = createElement(doc, "tspan");
+                w.writeStartElement("tspan");
                 int characterCount = nextLayout.getCharacterCount();
-                tspan.appendChild(doc.createTextNode(paragraph.substring(textIndex, textIndex + characterCount)));
-                tspan.setAttribute("x", nb.toString(nextPosition));
-                tspan.setAttribute("y", nb.toString(verticalPos));
-                parent.appendChild(tspan);
+                w.writeAttribute("x", nb.toString(nextPosition));
+                w.writeAttribute("y", nb.toString(verticalPos));
+                w.writeCharacters(paragraph.substring(textIndex, textIndex + characterCount));
+                w.writeEndElement();
 
                 Rectangle2D layoutBounds = nextLayout.getBounds();
                 paragraphBounds.add(new Rectangle2D.Double(layoutBounds.getX() + nextPosition,
@@ -1307,26 +279,1048 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         return paragraphBounds;
     }
 
-    private void writeTextAttributes(@NonNull Element elem, @NonNull Text node) {
-        Font ft = node.getFont();
-        elem.setAttribute("font-family", (ft.getFamily().equals(ft.getName())) ? "'" + ft.getName() + "'" : "'" + ft.getName() + "', '" + ft.getFamily() + "'");
-        elem.setAttribute("font-size", nb.toString(ft.getSize()));
-        final String style = ft.getStyle().contains("Italic") ? "italic" : "normal";
-        if (!style.equals("normal")) {
-            elem.setAttribute("font-style", style);
-        }
-        final String weight = ft.getStyle().contains("Bold") || ft.getName().toLowerCase().contains("bold") ? "bold" : "normal";
-        if (!weight.equals("normal")) {
-            elem.setAttribute("font-weight", weight);
-        }
-        if (node.isUnderline()) {
-            elem.setAttribute("text-decoration", "underline");
-        } else if (node.isStrikethrough()) {
-            elem.setAttribute("text-decoration", "line-through ");
+    private void drawText(@NonNull XMLStreamWriter w, @Nullable String str,
+                          @NonNull Bounds textRect,
+                          @NonNull Font tfont, int tabSize, boolean isUnderlined,
+                          boolean isStrikethrough,
+                          @NonNull TextAlignment textAlignment,
+                          double lineSpacing) throws XMLStreamException {
+        FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
+        java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
+        float leftMargin = (float) textRect.getMinX();
+        float rightMargin = (float) Math.max(leftMargin + 1, textRect.getMinX() + textRect.getWidth() + 1);
+        float verticalPos = (float) textRect.getMinY();
+        float maxVerticalPos = (float) (textRect.getMinY() + textRect.getHeight());
+        if (leftMargin < rightMargin) {
+            //float tabWidth = (float) (getTabSize() * g.getFontMetrics(font).charWidth('m'));
+            float tabWidth = (float) (tabSize * font.getStringBounds("m", frc).getWidth());
+            float[] tabStops = new float[(int) (textRect.getWidth() / tabWidth)];
+            for (int i = 0; i < tabStops.length; i++) {
+                tabStops[i] = (float) (textRect.getMinX() + (int) (tabWidth * (i + 1)));
+            }
+
+            if (str != null) {
+                String[] paragraphs = str.split("\n");
+
+                for (int i = 0; i < paragraphs.length; i++) {
+                    if (paragraphs[i].length() == 0) {
+                        paragraphs[i] = " ";
+                    }
+                    AttributedString as = new AttributedString(paragraphs[i]);
+                    as.addAttribute(TextAttribute.FONT, font);
+                    if (isUnderlined) {
+                        as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+                    }
+                    if (isStrikethrough) {
+                        as.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+                    }
+                    int tabCount = paragraphs[i].split("\t").length - 1;
+                    Rectangle2D.Double paragraphBounds = drawParagraph(w, frc,
+                            paragraphs[i], as.getIterator(), verticalPos, maxVerticalPos, leftMargin, rightMargin, tabStops, tabCount, textAlignment,
+                            lineSpacing);
+                    verticalPos = (float) (paragraphBounds.y + paragraphBounds.height + lineSpacing);
+                    if (verticalPos > maxVerticalPos) {
+                        break;
+                    }
+                }
+            }
         }
     }
 
-    private void writeTransformAttributes(@NonNull Element elem, @NonNull Node node) {
+    protected abstract List<String> getAdditionalNodeClasses(@NonNull Node node);
+
+    protected abstract String getSvgBaseProfile();
+
+    protected abstract String getSvgVersion();
+
+    @Nullable
+    public Function<URI, URI> getUriResolver() {
+        return uriResolver;
+    }
+
+    public void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
+        this.uriResolver = uriResolver;
+    }
+
+    private void initIdFactoryRecursively(@NonNull javafx.scene.Node node) throws IOException {
+        String id = node.getId();
+        if (id != null && idFactory.getObject(id) == null) {
+            idFactory.putId(id, node);
+        } else {
+            idFactory.createId(node, node.getTypeSelector().toLowerCase());
+        }
+
+        if (node instanceof Parent) {
+            Parent pp = (Parent) node;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                initIdFactoryRecursively(child);
+            }
+        }
+    }
+
+    public boolean isExportInvisibleElements() {
+        return getNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY);
+    }
+
+    public void setExportInvisibleElements(boolean newValue) {
+        this.setNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY, newValue);
+    }
+
+    public boolean isPrettyPrint() {
+        return prettyPrint;
+    }
+
+    public void setPrettyPrint(boolean prettyPrint) {
+        this.prettyPrint = prettyPrint;
+    }
+
+    public boolean isRelativizePaths() {
+        return getNonNull(RELATIVIZE_PATHS_KEY);
+    }
+
+    public void setRelativizePaths(boolean relativizePaths) {
+        this.setNonNull(RELATIVIZE_PATHS_KEY, relativizePaths);
+    }
+
+    private boolean shouldWriteDefs(Node drawingNode) {
+        return shouldWriteDefsRecursively(drawingNode);
+    }
+
+    private boolean shouldWriteDefsRecursively(Node node) {
+        if (shouldWriteNode(node)) {
+            if (node.getClip() != null) {
+                return true;
+            }
+
+            if (node instanceof Shape) {
+                Shape shape = (Shape) node;
+                Paint fill = shape.getFill();
+                Paint stroke = shape.getStroke();
+                return fill instanceof LinearGradient
+                        || fill instanceof RadialGradient
+                        || stroke instanceof LinearGradient
+                        || stroke instanceof RadialGradient;
+            }
+
+            if (node instanceof Parent) {
+                Parent pp = (Parent) node;
+                for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                    if (shouldWriteDefsRecursively(child)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean shouldWriteNode(@NonNull Node node) {
+        if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
+            return false;
+        }
+        if (!isExportInvisibleElements()) {
+            if (!node.isVisible()) {
+                return false;
+            }
+            if (node instanceof Shape) {
+                Shape s = (Shape) node;
+                if ((s.getFill() == null || ((s.getFill() instanceof Color) && ((Color) s.getFill()).getOpacity() == 0))
+                        && (s.getStroke() == null || ((s.getStroke() instanceof Color) && ((Color) s.getStroke()).getOpacity() == 0))
+                ) {
+                    return false;
+                }
+                if (node instanceof Path) {
+                    Path p = (Path) node;
+                    return !p.getElements().isEmpty();
+                } else if (node instanceof Polyline) {
+                    Polyline p = (Polyline) node;
+                    return p.getPoints().isEmpty();
+                } else if (node instanceof Polygon) {
+                    Polygon p = (Polygon) node;
+                    return !p.getPoints().isEmpty();
+                }
+            } else if (node instanceof Group) {
+                Group g = (Group) node;
+                return !g.getChildren().isEmpty();
+            }
+        }
+        return true;
+    }
+
+    public Document toDocument(@NonNull javafx.scene.Node drawingNode) throws IOException {
+        try {
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setNamespaceAware(true);
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            // We do not want that the builder creates a socket connection!
+            builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
+            Document doc = builder.newDocument();
+            DOMResult result = new DOMResult(doc);
+            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+            writeDocument(w, drawingNode);
+            w.close();
+            return doc;
+        } catch (XMLStreamException | ParserConfigurationException e) {
+            throw new IOException("Error writing to DOM.", e);
+        }
+    }
+
+    public void write(OutputStream out, @NonNull Node drawingNode) throws IOException {
+        StreamResult result = new StreamResult(out);
+        try {
+            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+            writeDocument(w, drawingNode);
+            w.flush();
+        } catch (XMLStreamException e) {
+            throw new IOException("Error writing to OutputStream.", e);
+        }
+    }
+
+    public void write(Writer out, @NonNull javafx.scene.Node drawingNode) throws IOException {
+        StreamResult result = new StreamResult(out);
+        try {
+            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+            writeDocument(w, drawingNode);
+            w.flush();
+        } catch (XMLStreamException e) {
+            throw new IOException("Error writing to Writer.", e);
+        }
+    }
+
+    private void writeArcStartElement(@NonNull XMLStreamWriter w, @NonNull Arc node) throws XMLStreamException {
+        w.writeStartElement("path");
+
+        StringBuilder buf = new StringBuilder();
+        double centerX = node.getCenterX();
+        double centerY = node.getCenterY();
+        double radiusX = node.getRadiusX();
+        double radiusY = node.getRadiusY();
+        double startAngle = Math.toRadians(-node.getStartAngle());
+        double endAngle = Math.toRadians(-node.getStartAngle() - node.getLength());
+        double length = node.getLength();
+
+        double startX = radiusX * Math.cos(startAngle);
+        double startY = radiusY * Math.sin(startAngle);
+
+        double endX = centerX + radiusX * Math.cos(endAngle);
+        double endY = centerY + radiusY * Math.sin(endAngle);
+
+        int xAxisRot = 0;
+        boolean largeArc = (length > 180);
+        boolean sweep = (length < 0);
+
+        buf.append('M')
+                .append(nb.toString(centerX))
+                .append(',')
+                .append(nb.toString(centerY))
+                .append(' ');
+
+        if (ArcType.ROUND == node.getType()) {
+            buf.append('l')
+                    .append(startX)
+                    .append(',')
+                    .append(startY).append(' ');
+        }
+
+        buf.append('A')
+                .append(nb.toString(radiusX))
+                .append(',')
+                .append(nb.toString(radiusY))
+                .append(',')
+                .append(nb.toString(xAxisRot))
+                .append(',')
+                .append(largeArc ? '1' : '0')
+                .append(',')
+                .append(sweep ? '1' : '0')
+                .append(',')
+                .append(nb.toString(endX))
+                .append(',')
+                .append(nb.toString(endY))
+                .append(',');
+
+        if (ArcType.CHORD == node.getType()
+                || ArcType.ROUND == node.getType()) {
+            buf.append('Z');
+        }
+        w.writeAttribute("d", buf.toString());
+    }
+
+    private void writeCircleStartElement(@NonNull XMLStreamWriter w, @NonNull Circle node) throws XMLStreamException {
+        w.writeStartElement("circle");
+        if (node.getCenterX() != 0.0) {
+            w.writeAttribute("cx", nb.toString(node.getCenterX()));
+        }
+        if (node.getCenterY() != 0.0) {
+            w.writeAttribute("cy", nb.toString(node.getCenterY()));
+        }
+        if (node.getRadius() != 0.0) {
+            w.writeAttribute("r", nb.toString(node.getRadius()));
+        }
+    }
+
+    private void writeClassAttribute(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+        List<String> styleClass = new ArrayList<>(node.getStyleClass());
+        styleClass.addAll(getAdditionalNodeClasses(node));
+
+        if (!styleClass.isEmpty()) {
+            StringBuilder buf = new StringBuilder();
+            for (String clazz : styleClass) {
+                if (buf.length() != 0) {
+                    buf.append(' ');
+                }
+                buf.append(clazz);
+            }
+            w.writeAttribute("class", buf.toString());
+        }
+    }
+
+    protected abstract void writeClipAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException;
+
+    protected abstract void writeClipPathDefs(XMLStreamWriter w, Node node) throws XMLStreamException, IOException;
+
+    protected abstract void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
+            node) throws XMLStreamException;
+
+    private void writeCubicCurveStartElement(@NonNull XMLStreamWriter w, @NonNull CubicCurve node) throws XMLStreamException {
+        w.writeStartElement("path");
+        final StringBuilder buf = new StringBuilder();
+        buf.append('M')
+                .append(nb.toString(node.getStartX()))
+                .append(',')
+                .append(nb.toString(node.getStartY()))
+                .append(' ')
+                .append('C')
+                .append(nb.toString(node.getControlX1()))
+                .append(',')
+                .append(nb.toString(node.getControlY1()))
+                .append(',')
+                .append(nb.toString(node.getControlX2()))
+                .append(',')
+                .append(nb.toString(node.getControlY2()))
+                .append(',')
+                .append(nb.toString(node.getEndX()))
+                .append(',')
+                .append(nb.toString(node.getEndY()));
+        w.writeAttribute("d", buf.substring(0));
+    }
+
+    private void writeDefs(XMLStreamWriter w, Node drawingNode) throws XMLStreamException, IOException {
+        w.writeStartElement("defs");
+        writeDefsRecursively(w, drawingNode);
+        w.writeEndElement();
+    }
+
+    private void writeDefsRecursively(XMLStreamWriter w, Node node) throws IOException, XMLStreamException {
+        if (!shouldWriteNode(node)) {
+            return;
+        }
+
+        writeClipPathDefs(w, node);
+
+        if (node instanceof Shape) {
+            Shape shape = (Shape) node;
+            writePaintDefs(w, shape.getFill());
+            writePaintDefs(w, shape.getStroke());
+        }
+
+        if (node instanceof Parent) {
+            Parent pp = (Parent) node;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                writeDefsRecursively(w, child);
+            }
+        }
+
+    }
+
+    protected void writeDescElement(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+        Object descObj = node.getProperties().get(DESC_PROPERTY_NAME);
+        if ((descObj instanceof String)) {
+            String desc = ((String) descObj).trim();
+            if (!desc.isEmpty()) {
+                w.writeStartElement("desc");
+                w.writeCharacters(desc);
+                w.writeEndElement();
+            }
+        }
+    }
+
+    private void writeDocument(XMLStreamWriter w, Node drawingNode) throws XMLStreamException, IOException {
+        idFactory.reset();
+        initIdFactoryRecursively(drawingNode);
+
+        w.writeStartDocument();
+        w.setDefaultNamespace(SVG_NS);
+        w.writeStartElement("svg");
+        w.writeDefaultNamespace(SVG_NS);
+        w.writeNamespace(XLINK_Q, XLINK_NS);
+        writeDocumentElementAttributes(w, drawingNode);
+        if (shouldWriteDefs(drawingNode)) {
+            writeDefs(w, drawingNode);
+        }
+        writeNodeRecursively(w, drawingNode, 1);
+        if (prettyPrint) {
+            w.writeCharacters("\n");
+        }
+        w.writeEndElement();
+        w.writeEndDocument();
+    }
+
+    protected abstract void writeDocumentElementAttributes(@NonNull XMLStreamWriter
+                                                                   w, Node drawingNode) throws XMLStreamException;
+
+    private void writeEllipseStartElement(@NonNull XMLStreamWriter w, @NonNull Ellipse node) throws XMLStreamException {
+        w.writeStartElement("ellipse");
+        if (node.getCenterX() != 0.0) {
+            w.writeAttribute("cx", nb.toString(node.getCenterX()));
+        }
+        if (node.getCenterY() != 0.0) {
+            w.writeAttribute("cy", nb.toString(node.getCenterY()));
+        }
+        if (node.getRadiusX() != 0.0) {
+            w.writeAttribute("rx", nb.toString(node.getRadiusX()));
+        }
+        if (node.getRadiusY() != 0.0) {
+            w.writeAttribute("ry", nb.toString(node.getRadiusY()));
+        }
+    }
+
+    private void writeFillAttributes(@NonNull XMLStreamWriter w, @NonNull Shape node) throws XMLStreamException {
+        Paint fill = node.getFill();
+        String id = idFactory.getId(fill);
+        if (id != null) {
+            w.writeAttribute("fill", "url(#" + id + ")");
+        } else {
+            w.writeAttribute("fill", paintConverter.toString(fill));
+            if (fill instanceof Color) {
+                Color c = (Color) fill;
+                if (!c.isOpaque()) {
+                    w.writeAttribute("fill-opacity", nb.toString(c.getOpacity()));
+                }
+            }
+        }
+
+
+        final FillRule fillRule;
+        if (node instanceof Path) {
+            Path path = (Path) node;
+            fillRule = path.getFillRule();
+        } else if (node instanceof SVGPath) {
+            SVGPath path = (SVGPath) node;
+            fillRule = path.getFillRule();
+        } else {
+            fillRule = FillRule.NON_ZERO;
+        }
+        switch (fillRule) {
+        case EVEN_ODD:
+            w.writeAttribute("fill-rule", "evenodd");
+            break;
+        case NON_ZERO:
+        default:
+            break;
+        }
+    }
+
+    protected void writeGroupStartElement(@NonNull XMLStreamWriter w, @NonNull Group
+            node) throws XMLStreamException {
+        w.writeStartElement("g");
+        writeClipAttributes(w, node);
+    }
+
+    protected void writeIdAttribute(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+        String id = node.getId();
+        if (id != null && !id.isEmpty()) {
+            w.writeAttribute("id", id);
+        }
+    }
+
+    private void writeImageViewStartElement(@NonNull XMLStreamWriter w, @NonNull ImageView
+            node) throws IOException, XMLStreamException {
+        w.writeStartElement("image");
+
+        w.writeAttribute("x", nb.toString(node.getX()));
+        w.writeAttribute("y", nb.toString(node.getY()));
+        w.writeAttribute("width", nb.toString(node.getFitWidth()));
+        w.writeAttribute("height", nb.toString(node.getFitHeight()));
+        w.writeAttribute("preserveAspectRatio", node.isPreserveRatio() ? "xMidYMid" : "none");
+
+        URI uri = (URI) node.getProperties().get(imageUriKey);
+        String href = null;
+        if (uri != null) {
+            href = uriResolver.apply(uri).toString();
+        } else {
+            if (node.getImage() != null) {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
+                bout.close();
+                byte[] imageData = bout.toByteArray();
+
+                href = "data:image;base64," + Base64.getEncoder().encodeToString(imageData);
+            }
+        }
+        if (href != null) {
+            w.writeAttribute(XLINK_NS, XLINK_Q + ":href", href);
+        }
+    }
+
+    private void writeLineBreakAndIndentation(@NonNull XMLStreamWriter w, int depth) throws XMLStreamException {
+        if (prettyPrint) {
+            StringBuilder indent = new StringBuilder(depth * 2 + 1);
+            indent.append('\n');
+            for (int i = 0; i < depth; i++) {
+                indent.append("  ");
+            }
+            w.writeCharacters(indent.toString());
+        }
+    }
+
+    private void writeLineStartElement(@NonNull XMLStreamWriter w, @NonNull Line
+            node) throws XMLStreamException {
+        w.writeStartElement("line");
+        if (node.getStartX() != 0.0) {
+            w.writeAttribute("x1", nb.toString(node.getStartX()));
+        }
+        if (node.getStartY() != 0.0) {
+            w.writeAttribute("y1", nb.toString(node.getStartY()));
+        }
+        if (node.getEndX() != 0.0) {
+            w.writeAttribute("x2", nb.toString(node.getEndX()));
+        }
+        if (node.getEndY() != 0.0) {
+            w.writeAttribute("y2", nb.toString(node.getEndY()));
+        }
+
+    }
+
+    private void writeLinearGradientDef(@NonNull XMLStreamWriter w, LinearGradient g) throws IOException, XMLStreamException {
+        String id = idFactory.createId(g, "linearGradient");
+        w.writeStartElement("linearGradient");
+
+        w.writeAttribute("id", id);
+        if (g.isProportional()) {
+            w.writeAttribute("x1", nb.toString(g.getStartX() * 100) + "%");
+            w.writeAttribute("y1", nb.toString(g.getStartY() * 100) + "%");
+            w.writeAttribute("x2", nb.toString(g.getEndX() * 100) + "%");
+            w.writeAttribute("y2", nb.toString(g.getEndY() * 100) + "%");
+            w.writeAttribute("gradientUnits", "objectBoundingBox");
+
+        } else {
+            w.writeAttribute("x1", nb.toString(g.getStartX()));
+            w.writeAttribute("y1", nb.toString(g.getStartY()));
+            w.writeAttribute("x2", nb.toString(g.getEndX()));
+            w.writeAttribute("y2", nb.toString(g.getEndY()));
+            w.writeAttribute("gradientUnits", "userSpaceOnUse");
+        }
+        switch (g.getCycleMethod()) {
+        case NO_CYCLE:
+            w.writeAttribute("spreadMethod", "pad");
+            break;
+        case REFLECT:
+            w.writeAttribute("spreadMethod", "reflect");
+            break;
+        case REPEAT:
+            w.writeAttribute("spreadMethod", "repeat");
+            break;
+        default:
+            throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+        }
+        for (Stop s : g.getStops()) {
+            w.writeStartElement("stop");
+            w.writeAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
+            Color c = s.getColor();
+            w.writeAttribute("stop-color", this.paintConverter.toString(c));
+            if (!c.isOpaque()) {
+                w.writeAttribute("stop-opacity", nb.toString(c.getOpacity()));
+            }
+            w.writeEndElement();
+        }
+        w.writeEndElement();
+    }
+
+    private void writeMetadataAttributes(@NonNull XMLStreamWriter w, Node node) throws XMLStreamException {
+        writeTitleElement(w, node);
+        writeDescElement(w, node);
+    }
+
+    protected void writeNodeRecursively(@NonNull XMLStreamWriter w, @NonNull Node node, int depth) throws IOException, XMLStreamException {
+        if (!shouldWriteNode(node)) {
+            return;
+        }
+
+        writeLineBreakAndIndentation(w, depth);
+        if (node instanceof Shape) {
+            writeShapeStartElement(w, (Shape) node);
+            writeFillAttributes(w, (Shape) node);
+            writeStrokeAttributes(w, (Shape) node);
+            writeClipAttributes(w, node);
+            writeShapeChildElements(w, (Shape) node);
+
+        } else if (node instanceof Group) {
+            writeGroupStartElement(w, (Group) node);
+        } else if (node instanceof Region) {
+            writeRegion(w, (Region) node);
+        } else if (node instanceof ImageView) {
+            writeImageViewStartElement(w, (ImageView) node);
+        } else {
+            throw new IOException("not yet implemented for " + node);
+        }
+
+
+        writeMetadataAttributes(w, node);
+        writeStyleAttributes(w, node);
+        writeTransformAttributes(w, node);
+        writeCompositingAttributes(w, node);
+
+
+        if (node instanceof Parent) {
+            final Parent pp = (Parent) node;
+            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                writeNodeRecursively(w, child, depth + 1);
+            }
+        }
+        w.writeEndElement();
+    }
+
+    private void writePaintDefs(@NonNull XMLStreamWriter w, Paint paint) throws IOException, XMLStreamException {
+        if (idFactory.getId(paint) == null) {
+            if (paint instanceof LinearGradient) {
+                LinearGradient g = (LinearGradient) paint;
+                writeLinearGradientDef(w, g);
+            } else if (paint instanceof RadialGradient) {
+                RadialGradient g = (RadialGradient) paint;
+                writeRadialGradientDef(w, g);
+            }
+        }
+    }
+
+    protected void writePathStartElement(@NonNull XMLStreamWriter w, @NonNull Path node) throws XMLStreamException {
+        w.writeStartElement("path");
+        String d;
+        if (isRelativizePaths()) {
+            d = Shapes.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements()).getPathIterator(null));
+        } else {
+            d = Shapes.doubleSvgStringFromElements(node.getElements());
+        }
+        w.writeAttribute("d", d);
+    }
+
+    private void writePolygonStartElement(@NonNull XMLStreamWriter w, @NonNull Polygon node) throws XMLStreamException {
+        w.writeStartElement("polygon");
+        StringBuilder buf = new StringBuilder();
+        List<Double> ps = node.getPoints();
+        for (int i = 0, n = ps.size(); i < n; i += 2) {
+            if (i != 0) {
+                buf.append(' ');
+            }
+            buf.append(nb.toString(ps.get(i)))
+                    .append(',')
+                    .append(nb.toString(ps.get(i + 1)));
+        }
+        w.writeAttribute("points", buf.toString());
+
+    }
+
+    private void writePolylineStartElement(@NonNull XMLStreamWriter w, @NonNull Polyline node) throws XMLStreamException {
+        w.writeStartElement("polyline");
+        StringBuilder buf = new StringBuilder();
+        List<Double> ps = node.getPoints();
+        for (int i = 0, n = ps.size(); i < n; i += 2) {
+            if (i != 0) {
+                buf.append(' ');
+            }
+            buf.append(nb.toString(ps.get(i)))
+                    .append(',')
+                    .append(nb.toString(ps.get(i + 1)));
+        }
+        w.writeAttribute("points", buf.toString());
+    }
+
+    private void writeQuadCurveStartElement(@NonNull XMLStreamWriter w, @NonNull QuadCurve
+            node) throws XMLStreamException {
+        w.writeStartElement("path");
+        final StringBuilder buf = new StringBuilder();
+        buf.append('M')
+                .append(nb.toString(node.getStartX()))
+                .append(',')
+                .append(nb.toString(node.getStartY()))
+                .append(' ')
+                .append('Q')
+                .append(nb.toString(node.getControlX()))
+                .append(',')
+                .append(nb.toString(node.getControlY()))
+                .append(',')
+                .append(nb.toString(node.getEndX()))
+                .append(',')
+                .append(nb.toString(node.getEndY()));
+        w.writeAttribute("d", buf.substring(0));
+    }
+
+    private void writeRadialGradientDef(@NonNull XMLStreamWriter w, RadialGradient g) throws IOException, XMLStreamException {
+        String id = idFactory.createId(g, "radialGradient");
+        w.writeStartElement("radialGradient");
+        w.writeAttribute("id", id);
+        if (g.isProportional()) {
+            w.writeAttribute("cx", nb.toString(g.getCenterX() * 100) + "%");
+            w.writeAttribute("cy", nb.toString(g.getCenterY() * 100) + "%");
+            w.writeAttribute("r", nb.toString(g.getRadius() * 100) + "%");
+            w.writeAttribute("fx", nb.toString((g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
+            w.writeAttribute("fy", nb.toString((g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()) * 100) + "%");
+            w.writeAttribute("gradientUnits", "objectBoundingBox");
+
+        } else {
+            w.writeAttribute("cx", nb.toString(g.getCenterX()));
+            w.writeAttribute("cy", nb.toString(g.getCenterY()));
+            w.writeAttribute("r", nb.toString(g.getRadius()));
+            w.writeAttribute("fx", nb.toString(g.getCenterX() + Math.cos(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
+            w.writeAttribute("fy", nb.toString(g.getCenterY() + Math.sin(g.getFocusAngle() / 180 * Math.PI) * g.getFocusDistance() * g.getRadius()));
+            w.writeAttribute("gradientUnits", "userSpaceOnUse");
+        }
+        switch (g.getCycleMethod()) {
+        case NO_CYCLE:
+            w.writeAttribute("spreadMethod", "pad");
+            break;
+        case REFLECT:
+            w.writeAttribute("spreadMethod", "reflect");
+            break;
+        case REPEAT:
+            w.writeAttribute("spreadMethod", "repeat");
+            break;
+        default:
+            throw new IOException("unsupported cycle method:" + g.getCycleMethod());
+        }
+        for (Stop s : g.getStops()) {
+            w.writeStartElement("stop");
+            w.writeAttribute("offset", nb.toString(s.getOffset() * 100) + "%");
+            Color c = s.getColor();
+            w.writeAttribute("stop-color", this.paintConverter.toString(c));
+            if (!c.isOpaque()) {
+                w.writeAttribute("stop-opacity", nb.toString(c.getOpacity()));
+            }
+            w.writeEndElement();
+        }
+        w.writeEndElement();
+    }
+
+    private void writeRectangleStartElement(@NonNull XMLStreamWriter w, @NonNull Rectangle node) throws XMLStreamException {
+        w.writeStartElement("rect");
+        if (node.getX() != 0.0) {
+            w.writeAttribute("x", nb.toString(node.getX()));
+        }
+        if (node.getY() != 0.0) {
+            w.writeAttribute("y", nb.toString(node.getY()));
+        }
+        if (node.getWidth() != 0.0) {
+            w.writeAttribute("width", nb.toString(node.getWidth()));
+        }
+        if (node.getHeight() != 0.0) {
+            w.writeAttribute("height", nb.toString(node.getHeight()));
+        }
+        if (node.getArcWidth() != 0.0) {
+            w.writeAttribute("rx", nb.toString(node.getArcWidth()));
+        }
+        if (node.getArcHeight() != 0.0) {
+            w.writeAttribute("ry", nb.toString(node.getArcHeight()));
+        }
+    }
+
+    private void writeRegion(@NonNull XMLStreamWriter w, @NonNull Region region) throws IOException, XMLStreamException {
+        w.writeStartElement("g");
+
+        double x = region.getLayoutX();
+        double y = region.getLayoutY();
+        double width = region.getWidth();
+        double height = region.getHeight();
+
+        if ((region.getBackground() != null && !region.getBackground().isEmpty())
+                || (region.getBorder() != null && !region.getBorder().isEmpty())) {
+            // compute the shape 's' of the region
+            Shape s = region.getShape();
+            Bounds sb = (s != null) ? s.getLayoutBounds() : null;
+
+            // All BackgroundFills are drawn first, followed by
+            // BackgroundImages, BorderStrokes, and finally BorderImages
+            if (region.getBackground() != null) {
+                for (BackgroundFill bgf : region.getBackground().getFills()) {
+                    Paint fill = bgf.getFill() == null ? Color.TRANSPARENT : bgf.getFill();
+                    CornerRadii radii = bgf.getRadii() == null ? CornerRadii.EMPTY : bgf.getRadii();
+                    Insets insets = bgf.getInsets() == null ? Insets.EMPTY : bgf.getInsets();
+
+                    Shape bgs;
+                    if (s != null) {
+                        if (region.isScaleShape()) {
+
+                            java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+                            Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
+                            tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                            tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                            bgs = Shapes.fxShapeFromAWT(awtShape, tx);
+                        } else {
+                            bgs = s;
+                        }
+                    } else if (radii != CornerRadii.EMPTY) {
+                        throw new IOException("radii not yet implemented");
+                    } else {
+                        bgs = new Rectangle(x + insets.getLeft(), y + insets.getTop(), width - insets.getLeft() - insets.getRight(), height - insets.getTop() - insets.getBottom());
+                    }
+                    bgs.setFill(fill);
+                    writeShapeStartElement(w, bgs);
+                    writeFillAttributes(w, bgs);
+                    w.writeAttribute("stroke", "none");
+                    w.writeEndElement();
+                }
+                if (!region.getBackground().getImages().isEmpty()) {
+                    throw new IOException("background image not yet implemented");
+                }
+            }
+            if (region.getBorder() != null) {
+                if (region.getBorder().getImages().isEmpty() || s == null) {
+                    for (BorderStroke bs : region.getBorder().getStrokes()) {
+                        Insets insets = bs.getInsets();
+                        CornerRadii radii = bs.getRadii() == null ? CornerRadii.EMPTY : bs.getRadii();
+
+                        Shape bgs = null;
+                        if (s != null) {
+                            if (region.isScaleShape()) {
+                                java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+
+                                Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
+                                tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
+                                tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
+                                bgs = Shapes.fxShapeFromAWT(awtShape, tx);
+                            } else {
+                                bgs = s;
+                            }
+                        } else if (radii != CornerRadii.EMPTY) {
+                            throw new IOException("radii not yet implemented");
+                        } else {
+                            bgs = new Rectangle(x + insets.getLeft(), y + insets.getTop(), width - insets.getLeft() - insets.getRight(), height - insets.getTop() - insets.getBottom());
+                        }
+
+                        writeShapeStartElement(w, bgs);
+                        writeStrokeAttributes(w, bs);
+                        w.writeAttribute("fill", "none");
+                        w.writeEndElement();
+                    }
+                }
+                if (s != null) {
+                    if (!region.getBorder().getImages().isEmpty()) {
+                        throw new IOException("border image not yet implemented");
+                    }
+                }
+            }
+        }
+        w.writeEndElement();
+    }
+
+    private void writeSVGPathStartElement(@NonNull XMLStreamWriter w, @NonNull SVGPath node) throws XMLStreamException {
+        w.writeStartElement("path");
+        w.writeAttribute("d", node.getContent());
+        switch (node.getFillRule()) {
+        case NON_ZERO:
+            //    w.writeAttribute("fill-rule","nonzero");// default
+            break;
+        case EVEN_ODD:
+            w.writeAttribute("fill-rule", "evenodd");
+            break;
+        }
+    }
+
+    private void writeShapeChildElements(@NonNull XMLStreamWriter w, Shape node) throws IOException, XMLStreamException {
+        if (node instanceof Text) {
+            writeTextChildElements(w, (Text) node);
+        }
+    }
+
+    private void writeShapeStartElement(@NonNull XMLStreamWriter w, Shape node) throws IOException, XMLStreamException {
+        if (node instanceof Arc) {
+            writeArcStartElement(w, (Arc) node);
+        } else if (node instanceof Circle) {
+            writeCircleStartElement(w, (Circle) node);
+        } else if (node instanceof CubicCurve) {
+            writeCubicCurveStartElement(w, (CubicCurve) node);
+        } else if (node instanceof Ellipse) {
+            writeEllipseStartElement(w, (Ellipse) node);
+        } else if (node instanceof Line) {
+            writeLineStartElement(w, (Line) node);
+        } else if (node instanceof Path) {
+            writePathStartElement(w, (Path) node);
+        } else if (node instanceof Polygon) {
+            writePolygonStartElement(w, (Polygon) node);
+        } else if (node instanceof Polyline) {
+            writePolylineStartElement(w, (Polyline) node);
+        } else if (node instanceof QuadCurve) {
+            writeQuadCurveStartElement(w, (QuadCurve) node);
+        } else if (node instanceof Rectangle) {
+            writeRectangleStartElement(w, (Rectangle) node);
+        } else if (node instanceof SVGPath) {
+            writeSVGPathStartElement(w, (SVGPath) node);
+        } else if (node instanceof Text) {
+            writeTextStartElement(w, (Text) node);
+        } else {
+            throw new IOException("unknown shape type " + node);
+        }
+    }
+
+    private void writeStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException, IOException {
+        Paint stroke = shape.getStroke();
+        if (stroke == null) {
+            return;
+        }
+
+
+        String id = idFactory.getId(stroke);
+        if (id != null) {
+            w.writeAttribute("stroke", "url(#" + id + ")");
+        } else {
+            w.writeAttribute("stroke", paintConverter.toString(stroke));
+            if (stroke instanceof Color) {
+                Color c = (Color) stroke;
+                if (!c.isOpaque()) {
+                    w.writeAttribute("stroke-opacity", nb.toString(c.getOpacity()));
+                }
+            }
+        }
+
+        if (shape.getStrokeWidth() != 1) {
+            w.writeAttribute("stroke-width", nb.toString(shape.getStrokeWidth()));
+        }
+        if (shape.getStrokeLineCap() != StrokeLineCap.BUTT) {
+            w.writeAttribute("stroke-linecap", shape.getStrokeLineCap().toString().toLowerCase());
+        }
+        if (shape.getStrokeLineJoin() != StrokeLineJoin.MITER) {
+            w.writeAttribute("stroke-linejoin", shape.getStrokeLineJoin().toString().toLowerCase());
+        }
+        if (shape.getStrokeMiterLimit() != 4) {
+            w.writeAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
+        }
+        if (!shape.getStrokeDashArray().isEmpty()) {
+            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(shape.getStrokeDashArray())));
+        }
+        if (shape.getStrokeDashOffset() != 0) {
+            w.writeAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
+        }
+        if (shape.getStrokeType() != StrokeType.CENTERED) {
+            // XXX this is currentl only a proposal for SVG 2
+            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
+            switch (shape.getStrokeType()) {
+            case INSIDE:
+                w.writeAttribute("stroke-alignment", "inner");
+                break;
+            case CENTERED:
+                w.writeAttribute("stroke-alignment", "center");
+                break;
+            case OUTSIDE:
+                w.writeAttribute("stroke-alignment", "outer");
+                break;
+            default:
+                throw new IOException("Unsupported stroke type " + shape.getStrokeType());
+            }
+        }
+    }
+
+    private void writeStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull BorderStroke shape) throws XMLStreamException, IOException {
+        if (shape.getTopStroke() != null) {
+            w.writeAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
+        }
+        if (shape.getWidths().getTop() != 1) {
+            w.writeAttribute("stroke-width", nb.toString(shape.getWidths().getTop()));
+        }
+        BorderStrokeStyle style = shape.getTopStyle();
+        // FIXME support top/right/bottom/left style!!
+        if (style.getLineCap() != StrokeLineCap.BUTT) {
+            w.writeAttribute("stroke-linecap", style.getLineCap().toString().toLowerCase());
+        }
+        if (style.getLineJoin() != StrokeLineJoin.MITER) {
+            w.writeAttribute("stroke-linejoin", style.getLineJoin().toString().toLowerCase());
+        }
+        if (style.getMiterLimit() != 4) {
+            w.writeAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
+        }
+        if (!style.getDashArray().isEmpty()) {
+            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(style.getDashArray())));
+        }
+        if (style.getDashOffset() != 0) {
+            w.writeAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
+        }
+        if (style.getType() != StrokeType.CENTERED) {
+            // XXX this is currently only a proposal for SVG 2
+            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
+            switch (style.getType()) {
+            case INSIDE:
+                w.writeAttribute("stroke-alignment", "inner");
+                break;
+                /*
+            case CENTERED:
+                w.writeAttribute("stroke-alignment", "center");
+                break;*/
+            case OUTSIDE:
+                w.writeAttribute("stroke-alignment", "outer");
+                break;
+            default:
+                throw new IOException("Unsupported stroke type " + style.getType());
+            }
+        }
+    }
+
+    protected void writeStyleAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+        writeIdAttribute(w, node);
+        writeClassAttribute(w, node);
+        writeVisibleAttribute(w, node);
+    }
+
+    private void writeTextAttributes(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
+        Font ft = node.getFont();
+        w.writeAttribute("font-family", (ft.getFamily().equals(ft.getName())) ? "'" + ft.getName() + "'" : "'" + ft.getName() + "', '" + ft.getFamily() + "'");
+        w.writeAttribute("font-size", nb.toString(ft.getSize()));
+        final String style = ft.getStyle().contains("Italic") ? "italic" : "normal";
+        if (!style.equals("normal")) {
+            w.writeAttribute("font-style", style);
+        }
+        final String weight = ft.getStyle().contains("Bold") || ft.getName().toLowerCase().contains("bold") ? "bold" : "normal";
+        if (!weight.equals("normal")) {
+            w.writeAttribute("font-weight", weight);
+        }
+        if (node.isUnderline()) {
+            w.writeAttribute("text-decoration", "underline");
+        } else if (node.isStrikethrough()) {
+            w.writeAttribute("text-decoration", "line-through ");
+        }
+    }
+
+    private void writeTextChildElements(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
+        double lineSpacing = node.getLineSpacing();//+node.getFont().getSize()*0.15625;
+        Bounds textRect = node.getLayoutBounds();
+        if (node.getWrappingWidth() <= 0) {
+            // If the text has no wrapping width, we create a wider
+            // textRect, so that our code does not introduce line breaks.
+            // Alternatively, we could implement a different drawText method,
+            // that does not create line breaks.
+            textRect = new BoundingBox(textRect.getMinX(), textRect.getMinY(),
+                    textRect.getWidth() * 2,
+                    textRect.getHeight());
+        }
+        drawText(w, node.getText(), textRect, node.getFont(), 8,
+                node.isUnderline(), node.isStrikethrough(),
+                node.getTextAlignment(), lineSpacing);
+    }
+
+    private void writeTextStartElement(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
+        w.writeStartElement("text");
+        writeTextAttributes(w, node);
+    }
+
+    protected void writeTitleElement(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+        Object titleObj = node.getProperties().get(TITLE_PROPERTY_NAME);
+        if ((titleObj instanceof String)) {
+            String title = ((String) titleObj).trim();
+            if (!title.isEmpty()) {
+                w.writeStartElement("title");
+                w.writeCharacters(title);
+                w.writeEndElement();
+            }
+        }
+    }
+
+    private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
 
         // The transforms are applied before translateX, translateY, scaleX,
         // scaleY and rotate transforms.
@@ -1342,30 +1336,24 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));
         }
         txs.addAll(node.getTransforms());
-        writeTransformAttributes(elem, txs);
+        writeTransformAttributes(w, txs);
     }
 
-    private void writeTransformAttributes(@NonNull Element
-                                                  elem, @NonNull List<Transform> txs) {
+    private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull List<Transform> txs) throws XMLStreamException {
 
         if (txs.size() > 0) {
             String value = tx.toString(ImmutableLists.ofCollection(txs));
             if (!value.isEmpty()) {
-                elem.setAttribute("transform", value);
+                w.writeAttribute("transform", value);
             }
         }
     }
 
-    public boolean isRelativizePaths() {
-        return getNonNull(RELATIVIZE_PATHS_KEY);
+    private void writeVisibleAttribute(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+        if (!node.isVisible()) {
+            //w.writeAttribute("visibility", "hidden");
+            w.writeAttribute("display", "none");
+        }
     }
-
-    public void setRelativizePaths(boolean relativizePaths) {
-        this.setNonNull(RELATIVIZE_PATHS_KEY, relativizePaths);
-    }
-
-    protected abstract String getSvgVersion();
-
-    protected abstract String getSvgBaseProfile();
 
 }

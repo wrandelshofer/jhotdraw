@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.svg.io;
 
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
@@ -13,6 +12,8 @@ import org.jhotdraw8.geom.Shapes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -48,37 +49,26 @@ public class SvgTinySceneGraphExporter extends AbstractSvgSceneGraphExporter {
         return SVG_BASE_PROFILE;
     }
 
-    protected void writeDocumentElementAttributes(@NonNull Element
-                                                          docElement, javafx.scene.Node drawingNode) {
-        docElement.setAttribute("version", getSvgVersion());
-        docElement.setAttribute("baseProfile", getSvgBaseProfile());
+    protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
+                                                          w, Node drawingNode) throws XMLStreamException {
+        w.writeAttribute("version", getSvgVersion());
+        w.writeAttribute("baseProfile", getSvgBaseProfile());
     }
 
     @Override
-    protected void writeClipAttributes(@NonNull Element elem, @NonNull Node node) {
+    protected void writeClipAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) {
         // do not write clip attributes
     }
 
     @Override
-    protected void writeClipPathDefs(@NonNull Document doc,
-                                     @NonNull Element defsNode, @NonNull Node node) throws IOException {
+    protected void writeClipPathDefs(@NonNull XMLStreamWriter w, @NonNull Node node) throws IOException {
 
         // do not write clip node defs
     }
 
-    protected void writeCompositingAttributes(@NonNull Element elem, @NonNull Node
+    protected void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
             node) {
         // do not write compositing attributes
-    }
-
-    protected Element writeGroup(@NonNull Document doc, @NonNull Element parent, @NonNull Group
-            node) {
-        if (isSuppressGroups() && node.getTransforms().isEmpty()) {
-            return parent;
-        } else {
-            return super.writeGroup(doc, parent, node);
-        }
-
     }
 
     private boolean isSuppressGroups() {
@@ -104,7 +94,7 @@ public class SvgTinySceneGraphExporter extends AbstractSvgSceneGraphExporter {
     }
 
     @Override
-    protected List<String> getAdditionalNodeClasses(@NonNull Element elem, @NonNull Node node) {
+    protected List<String> getAdditionalNodeClasses(@NonNull Node node) {
         return Collections.emptyList();
     }
 

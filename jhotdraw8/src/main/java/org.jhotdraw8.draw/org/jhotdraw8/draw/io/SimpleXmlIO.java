@@ -43,6 +43,13 @@ import org.w3c.dom.ProcessingInstruction;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.dom.DOMResult;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -698,7 +705,50 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         return doc;
     }
 
-    public Document toDocument(URI documentHome, Drawing internal) throws IOException {
+    public Document toDocument(@NonNull URI documentHome, @NonNull Drawing internal) throws IOException {
+        try {
+            setUriResolver(new UriResolver(null, documentHome));
+
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setNamespaceAware(true);
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            // We do not want that the builder creates a socket connection!
+            builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
+            Document doc = builder.newDocument();
+            DOMResult result = new DOMResult(doc);
+            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+            writeDocument(w, documentHome, internal);
+            w.close();
+            return doc;
+        } catch (XMLStreamException | ParserConfigurationException e) {
+            throw new IOException("Error writing to DOM.", e);
+        }
+    }
+
+    protected void writeDocument(@NonNull XMLStreamWriter w, @NonNull URI documentHome, @NonNull Drawing internal) throws XMLStreamException, IOException {
+        setUriResolver(new UriResolver(null, documentHome));
+        Drawing external = figureFactory.toExternalDrawing(internal);
+        idFactory.reset();
+        final String docElemName = figureFactory.figureToName(external);
+
+        w.writeStartDocument();
+        w.writeStartElement(docElemName);
+        /*
+        w.writeNamespace("", SVG_NS);
+        w.writeNamespace(XLINK_Q, XLINK_NS);
+        writeDocumentElementAttributes(w, drawingNode);
+        if (shouldWriteDefs(drawingNode)) {
+            writeDefs(w, drawingNode);
+        }
+        writeNodeRecursively(w, drawingNode, 1);
+        if (prettyPrint) {
+            w.writeCharacters("\n");
+        }*/
+        w.writeEndElement();
+        w.writeEndDocument();
+    }
+
+    public Document toDocumentOld(URI documentHome, @NonNull Drawing internal) throws IOException {
         setUriResolver(new UriResolver(null, documentHome));
         Drawing external = figureFactory.toExternalDrawing(internal);
 
@@ -709,22 +759,10 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         Element docElement = doc.getDocumentElement();
 
         writeProcessingInstructions(doc, external);
-        /*
-        for (String string : external.get(XML_HEAD_COMMENT_KEY)) {
-            doc.insertBefore(doc.createComment(string), docElement);
-        }*/
         writeElementAttributes(docElement, external);
-        String linebreak = "\n";
         for (Figure child : external.getChildren()) {
             writeNodeRecursively(doc, docElement, child);
         }
-        /*
-        for (String string : external.get(XML_BODY_COMMENT_KEY)) {
-            docElement.appendChild(doc.createComment(string));
-        }
-        for (String string : external.get(XML_EPILOG_COMMENT_KEY)) {
-            doc.appendChild(doc.createComment(string));
-        }*/
         return doc;
     }
 
@@ -806,20 +844,11 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             Element elem = createElement(doc, elementName);
             writeElementAttributes(elem, figure);
             writeElementNodeList(doc, elem, figure);
-            /*
-            for (String string : figure.get(XML_HEAD_COMMENT_KEY)) {
-
-                parent.appendChild(doc.createComment(string));
-            }*/
             for (Figure child : figure.getChildren()) {
                 if (figureFactory.figureToName(child) != null) {
                     writeNodeRecursively(doc, elem, child);
                 }
             }
-            /*
-            for (String string : figure.get(XML_BODY_COMMENT_KEY)) {
-                elem.appendChild(doc.createComment(string));
-            }*/
             parent.appendChild(elem);
         } catch (IOException e) {
             throw new IOException("Error writing figure " + figure, e);

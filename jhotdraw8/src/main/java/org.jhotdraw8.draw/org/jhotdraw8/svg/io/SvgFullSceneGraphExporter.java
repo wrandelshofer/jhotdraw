@@ -7,9 +7,9 @@ package org.jhotdraw8.svg.io;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -36,11 +36,10 @@ public class SvgFullSceneGraphExporter extends AbstractSvgSceneGraphExporter {
         super(imageUriKey, skipKey);
     }
 
-    protected void writeDocumentElementAttributes(@NonNull Element
-                                                          docElement, javafx.scene.Node drawingNode) {
-        docElement.setAttributeNS(XMLNS_NS, "xmlns:" + XLINK_Q, XLINK_NS);
-        docElement.setAttribute("version", getSvgVersion());
-        docElement.setAttribute("baseProfile", getSvgBaseProfile());
+    protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
+                                                          w, Node drawingNode) throws XMLStreamException {
+        w.writeAttribute("version", getSvgVersion());
+        w.writeAttribute("baseProfile", getSvgBaseProfile());
     }
 
     protected String getSvgVersion() {
@@ -52,7 +51,7 @@ public class SvgFullSceneGraphExporter extends AbstractSvgSceneGraphExporter {
     }
 
     @Override
-    protected void writeClipAttributes(@NonNull Element elem, @NonNull Node node) {
+    protected void writeClipAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
         Node clip = node.getClip();
         if (clip == null) {
             return;
@@ -60,15 +59,14 @@ public class SvgFullSceneGraphExporter extends AbstractSvgSceneGraphExporter {
 
         String id = idFactory.getId(clip);
         if (id != null) {
-            elem.setAttribute("clip-path", "url(#" + id + ")");
+            w.writeAttribute("clip-path", "url(#" + id + ")");
         } else {
-            System.err.println("WARNING SvgExporter does not supported recursive clips!");
+            System.err.println("WARNING SvgExporter does not support recursive clips!");
         }
     }
 
     @Override
-    protected void writeClipPathDefs(@NonNull Document doc, @NonNull Element
-            defsNode, @NonNull Node node) throws IOException {
+    protected void writeClipPathDefs(@NonNull XMLStreamWriter w, @NonNull Node node) throws IOException, XMLStreamException {
         // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
         Node clip = node.getClip();
         if (clip == null) {
@@ -76,17 +74,17 @@ public class SvgFullSceneGraphExporter extends AbstractSvgSceneGraphExporter {
         }
         if (idFactory.getId(clip) == null) {
             String id = idFactory.createId(clip, "clipPath");
-            Element elem = doc.createElement("clipPath");
-            writeNodeRecursively(doc, elem, clip);
-            elem.setAttribute("id", id);
-            defsNode.appendChild(elem);
+            w.writeStartElement("clipPath");
+            writeNodeRecursively(w, clip, 2);
+            w.writeAttribute("id", id);
+            w.writeEndElement();
         }
     }
 
-    protected void writeCompositingAttributes(@NonNull Element elem, @NonNull Node
-            node) {
+    protected void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
+            node) throws XMLStreamException {
         if (node.getOpacity() != 1.0) {
-            elem.setAttribute("opacity", nb.toString(node.getOpacity()));
+            w.writeAttribute("opacity", nb.toString(node.getOpacity()));
         }
         /*
         if (node.getBlendMode() != null && node.getBlendMode() != BlendMode.SRC_OVER) {
@@ -104,7 +102,7 @@ public class SvgFullSceneGraphExporter extends AbstractSvgSceneGraphExporter {
     }
 
     @Override
-    protected List<String> getAdditionalNodeClasses(@NonNull Element elem, @NonNull Node node) {
+    protected List<String> getAdditionalNodeClasses(@NonNull Node node) {
         String typeSelector = (String) node.getProperties().get(StyleableFigure.TYPE_SELECTOR_NODE_KEY);
         if (typeSelector != null) {
             return Collections.singletonList(typeSelector);
