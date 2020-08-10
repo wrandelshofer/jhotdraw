@@ -10,9 +10,10 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -114,14 +115,13 @@ public interface FigureFactory {
      * The node list may not contain elements with a name that conflicts with
      * the names returned by {@link #figureToName}.
      *
-     * @param key      the key
-     * @param value    the value
-     * @param document the document for creating the node list.
-     * @return the mapped attribute value
+     * @param key   the key
+     * @param value the value
+     * @param w     the writer for creating the node list.
      * @throws java.io.IOException if the factory does not support a mapping for
      *                             the specified key
      */
-    @NonNull List<Node> valueToNodeList(MapAccessor<?> key, Object value, Document document) throws IOException;
+    void valueToNodeList(MapAccessor<?> key, Object value, XMLStreamWriter w) throws IOException, XMLStreamException;
 
     /**
      * Maps a XML node list to a value.

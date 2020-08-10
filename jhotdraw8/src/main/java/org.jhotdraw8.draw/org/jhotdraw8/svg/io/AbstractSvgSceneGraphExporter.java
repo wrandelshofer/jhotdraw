@@ -63,6 +63,7 @@ import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -114,7 +115,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
 
     @NonNull
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
-    private boolean prettyPrint = false;
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -366,14 +366,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         this.setNonNull(EXPORT_INVISIBLE_ELEMENTS_KEY, newValue);
     }
 
-    public boolean isPrettyPrint() {
-        return prettyPrint;
-    }
-
-    public void setPrettyPrint(boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
-    }
-
     public boolean isRelativizePaths() {
         return getNonNull(RELATIVIZE_PATHS_KEY);
     }
@@ -477,6 +469,14 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
     }
 
     public void write(Writer out, @NonNull javafx.scene.Node drawingNode) throws IOException {
+        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
+        try {
+            writeDocument(w, drawingNode);
+            w.flush();
+        } catch (XMLStreamException e) {
+            throw new IOException("Error writing to Writer.", e);
+        }
+        /*
         StreamResult result = new StreamResult(out);
         try {
             XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
@@ -484,7 +484,7 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             w.flush();
         } catch (XMLStreamException e) {
             throw new IOException("Error writing to Writer.", e);
-        }
+        }*/
     }
 
     private void writeArcStartElement(@NonNull XMLStreamWriter w, @NonNull Arc node) throws XMLStreamException {
@@ -658,9 +658,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             writeDefs(w, drawingNode);
         }
         writeNodeRecursively(w, drawingNode, 1);
-        if (prettyPrint) {
-            w.writeCharacters("\n");
-        }
         w.writeEndElement();
         w.writeEndDocument();
     }
@@ -762,17 +759,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
         }
     }
 
-    private void writeLineBreakAndIndentation(@NonNull XMLStreamWriter w, int depth) throws XMLStreamException {
-        if (prettyPrint) {
-            StringBuilder indent = new StringBuilder(depth * 2 + 1);
-            indent.append('\n');
-            for (int i = 0; i < depth; i++) {
-                indent.append("  ");
-            }
-            w.writeCharacters(indent.toString());
-        }
-    }
-
     private void writeLineStartElement(@NonNull XMLStreamWriter w, @NonNull Line
             node) throws XMLStreamException {
         w.writeStartElement("line");
@@ -846,7 +832,6 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
             return;
         }
 
-        writeLineBreakAndIndentation(w, depth);
         if (node instanceof Shape) {
             writeShapeStartElement(w, (Shape) node);
             writeFillAttributes(w, (Shape) node);
@@ -1077,7 +1062,7 @@ public abstract class AbstractSvgSceneGraphExporter extends AbstractPropertyBean
                         Insets insets = bs.getInsets();
                         CornerRadii radii = bs.getRadii() == null ? CornerRadii.EMPTY : bs.getRadii();
 
-                        Shape bgs = null;
+                        Shape bgs;
                         if (s != null) {
                             if (region.isScaleShape()) {
                                 java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);

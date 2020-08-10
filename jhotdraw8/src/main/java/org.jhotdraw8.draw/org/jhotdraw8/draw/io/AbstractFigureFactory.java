@@ -10,10 +10,10 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.text.Converter;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.Text;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -539,14 +539,10 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    @NonNull
     @Override
-    public List<Node> valueToNodeList(@NonNull MapAccessor<?> key, Object value, @NonNull Document document) throws IOException {
+    public void valueToNodeList(@NonNull MapAccessor<?> key, Object value, @NonNull XMLStreamWriter w) throws IOException, XMLStreamException {
         if (key.getValueType() == String.class) {
-            Text node = document.createTextNode((String) value);
-            List<Node> list = new ArrayList<>();
-            list.add(node);
-            return list;
+            w.writeCharacters((String) value);
         } else {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }

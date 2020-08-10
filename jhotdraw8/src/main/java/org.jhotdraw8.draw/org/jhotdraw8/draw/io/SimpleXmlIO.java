@@ -32,6 +32,7 @@ import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.util.Exceptions;
+import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -50,13 +51,18 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.io.Writer;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -92,18 +98,7 @@ import java.util.regex.Pattern;
  *
  * @author Werner Randelshofer
  */
-public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, OutputFormat, XmlOutputFormatMixin, ClipboardOutputFormat, ClipboardInputFormat {
-    /**
-     * Holds the current options.
-     */
-    @NonNull
-    private Map<? super Key<?>, Object> options = Collections.emptyMap();
-
-    @Override
-    public void putAll(@Nullable Map<Key<?>, Object> options) {
-        this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
-    }
-
+public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, OutputFormat, ClipboardOutputFormat, ClipboardInputFormat {
     /**
      * Comments which appear inside an XML element, that can not be associated
      * to as a head comment.
@@ -120,7 +115,6 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
      */
     public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-
     protected List<String> comments;
     protected FigureFactory figureFactory;
     /**
@@ -131,6 +125,17 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
+    /**
+     * This is a cache which checks if Figure.class is assignable from the value
+     * type of a map accessor.
+     */
+    @NonNull
+    Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
+    /**
+     * Holds the current options.
+     */
+    @NonNull
+    private Map<? super Key<?>, Object> options = Collections.emptyMap();
     @NonNull
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
     private boolean doAddNotifyAndUpdateCss = true;
@@ -146,18 +151,16 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         this.namespaceQualifier = namespaceQualifier;
     }
 
-    public void setDoAddNotifyAndUpdateCss(boolean doAddNotifyAndUpdateCss) {
-        this.doAddNotifyAndUpdateCss = doAddNotifyAndUpdateCss;
-    }
-
-    protected Element createElement(@NonNull Document doc, String unqualifiedName) throws IOException {
-        if (namespaceURI == null) {
-            return doc.createElement(unqualifiedName);
-        }
-        if (namespaceQualifier == null) {
-            return doc.createElementNS(namespaceURI, unqualifiedName);
+    private IOException createIOException(@NonNull Element elem, IOException ex) {
+        Locator locator = XmlUtil.getLocator(elem);
+        if (locator == null) {
+            return ex;
         } else {
-            return doc.createElementNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName);
+            return new IOException(
+                    "In " + ((locator.getSystemId() == null) ? "" : "file: \"" + locator.getSystemId() + "\", ")
+                            + "line: " + locator.getLineNumber()
+                            + ", column: " + locator.getColumnNumber() + ".",
+                    ex);
         }
     }
 
@@ -208,14 +211,6 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         return f;
     }
 
-    public void setFigureFactory(FigureFactory figureFactory) {
-        this.figureFactory = figureFactory;
-    }
-
-    public void setNamespaceURI(String namespaceURI) {
-        this.namespaceURI = namespaceURI;
-    }
-
     @Nullable
     private Function<URI, URI> getUriResolver() {
         return uriResolver;
@@ -233,6 +228,11 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
 
     public boolean isNamespaceAware() {
         return namespaceURI != null;
+    }
+
+    @Override
+    public void putAll(@Nullable Map<Key<?>, Object> options) {
+        this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 
     @NonNull
@@ -503,26 +503,6 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         }
     }
 
-    private IOException createIOException(@NonNull Element elem, IOException ex) {
-        Locator locator = XmlUtil.getLocator(elem);
-        if (locator == null) {
-            return ex;
-        } else {
-            return new IOException(
-                    "In " + ((locator.getSystemId() == null) ? "" : "file: \"" + locator.getSystemId() + "\", ")
-                            + "line: " + locator.getLineNumber()
-                            + ", column: " + locator.getColumnNumber() + ".",
-                    ex);
-        }
-    }
-
-    /**
-     * This is a cache which checks if Figure.class is assignable from the value
-     * type of a map accessor.
-     */
-    @NonNull
-    Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
-
     /**
      * Reads the children of the specified element as a node list.
      *
@@ -665,50 +645,48 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         }
     }
 
-    protected void setAttribute(@NonNull Element elem, String unqualifiedName, String value) throws IOException {
-        if (namespaceURI == null || namespaceQualifier == null) {
-            if (!elem.hasAttribute(unqualifiedName)) {
-                elem.setAttribute(unqualifiedName, value);
-            }
-        } else {
-            if (!elem.hasAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName)) {
-                elem.setAttributeNS(namespaceURI, namespaceQualifier + ":" + unqualifiedName, value);
-            }
-        }
+    public void setDoAddNotifyAndUpdateCss(boolean doAddNotifyAndUpdateCss) {
+        this.doAddNotifyAndUpdateCss = doAddNotifyAndUpdateCss;
     }
 
-    public Document toDocument(URI documentHome, @NonNull Drawing internal, @NonNull Collection<Figure> selection) throws IOException {
-        setUriResolver(new UriResolver(null, documentHome));
+    public void setFigureFactory(FigureFactory figureFactory) {
+        this.figureFactory = figureFactory;
+    }
+
+    public void setNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
+    }
+
+    public Document toDocument(@Nullable URI documentHome, @NonNull Drawing internal, @NonNull Collection<Figure> selection) throws IOException {
         if (selection.isEmpty() || selection.contains(internal)) {
             return toDocument(documentHome, internal);
         }
 
-        // bring selection in z-order
-        Set<Figure> s = new HashSet<>(selection);
-        ArrayList<Figure> ordered = new ArrayList<>(selection.size());
-        for (Figure f : internal.preorderIterable()) {
-            if (s.contains(f)) {
-                ordered.add(f);
-            }
+        try {
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            builderFactory.setNamespaceAware(true);
+            DocumentBuilder builder = null;
+            builder = builderFactory.newDocumentBuilder();
+            // We do not want that the builder creates a socket connection!
+            builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
+            Document doc = builder.newDocument();
+            DOMResult result = new DOMResult(doc);
+            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+
+            setUriResolver(new UriResolver(null, documentHome));
+            writeClipping(w, internal, selection);
+
+            w.close();
+            return doc;
+        } catch (ParserConfigurationException | XMLStreamException e) {
+            throw new IOException("Could not create document builder.", e);
         }
 
-        Clipping external = new ClippingFigure();
-
-        idFactory.reset();
-        final String docElemName = figureFactory.figureToName(external);
-        Document doc = XmlUtil.createDocument(namespaceURI, namespaceQualifier, docElemName);
-
-        Element docElement = doc.getDocumentElement();
-        for (Figure child : ordered) {
-            writeNodeRecursively(doc, docElement, child);
-        }
-        return doc;
     }
 
-    public Document toDocument(@NonNull URI documentHome, @NonNull Drawing internal) throws IOException {
+    public Document toDocument(@Nullable URI documentHome, @NonNull Drawing internal) throws IOException {
         try {
             setUriResolver(new UriResolver(null, documentHome));
-
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setNamespaceAware(true);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
@@ -725,57 +703,109 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         }
     }
 
-    protected void writeDocument(@NonNull XMLStreamWriter w, @NonNull URI documentHome, @NonNull Drawing internal) throws XMLStreamException, IOException {
-        setUriResolver(new UriResolver(null, documentHome));
-        Drawing external = figureFactory.toExternalDrawing(internal);
-        idFactory.reset();
-        final String docElemName = figureFactory.figureToName(external);
-
-        w.writeStartDocument();
-        w.writeStartElement(docElemName);
-        /*
-        w.writeNamespace("", SVG_NS);
-        w.writeNamespace(XLINK_Q, XLINK_NS);
-        writeDocumentElementAttributes(w, drawingNode);
-        if (shouldWriteDefs(drawingNode)) {
-            writeDefs(w, drawingNode);
-        }
-        writeNodeRecursively(w, drawingNode, 1);
-        if (prettyPrint) {
-            w.writeCharacters("\n");
-        }*/
-        w.writeEndElement();
-        w.writeEndDocument();
+    @Override
+    public void write(URI documentHome, OutputStream out, Drawing drawing, WorkState workState) throws IOException {
+        write(documentHome, new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8)),
+                drawing, workState);
     }
 
-    public Document toDocumentOld(URI documentHome, @NonNull Drawing internal) throws IOException {
-        setUriResolver(new UriResolver(null, documentHome));
-        Drawing external = figureFactory.toExternalDrawing(internal);
-
-        idFactory.reset();
-        final String docElemName = figureFactory.figureToName(external);
-        Document doc = XmlUtil.createDocument(namespaceURI, namespaceQualifier, docElemName);
-
-        Element docElement = doc.getDocumentElement();
-
-        writeProcessingInstructions(doc, external);
-        writeElementAttributes(docElement, external);
-        for (Figure child : external.getChildren()) {
-            writeNodeRecursively(doc, docElement, child);
+    protected void write(URI documentHome, Writer out, Drawing drawing, WorkState workState) throws IOException {
+        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
+        try {
+            writeDocument(w, documentHome, drawing);
+            w.flush();
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
         }
-        return doc;
     }
 
     @Override
     public void write(@NonNull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
-        write(null, sw, drawing, selection);
+        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
+        try {
+            if (selection == null || selection.isEmpty()) {
+                writeDocument(w, null, drawing);
+            } else {
+                writeClipping(w, drawing, selection);
+            }
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+
         out.put(getDataFormat(), sw.toString());
     }
 
-    protected void writeElementAttributes(@NonNull Element elem, @NonNull Figure figure) throws IOException {
+    protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection) throws IOException, XMLStreamException {
+        // bring selection in z-order
+        Set<Figure> s = new HashSet<>(selection);
+        ArrayList<Figure> ordered = new ArrayList<>(selection.size());
+        for (Figure f : internal.preorderIterable()) {
+            if (s.contains(f)) {
+                ordered.add(f);
+            }
+        }
+        Clipping external = new ClippingFigure();
+        idFactory.reset();
+        final String docElemName = figureFactory.figureToName(external);
+        w.writeStartDocument();
+        w.setDefaultNamespace(namespaceURI);
+        w.writeStartElement(docElemName);
+        for (Figure child : ordered) {
+            writeNodeRecursively(w, child, 1);
+        }
+        w.writeEndElement();
+        w.writeEndDocument();
+    }
+
+    protected void writeDocument(@NonNull XMLStreamWriter w, @Nullable URI documentHome, @NonNull Drawing internal) throws XMLStreamException {
+        try {
+            setUriResolver(new UriResolver(null, documentHome));
+            Drawing external = figureFactory.toExternalDrawing(internal);
+            idFactory.reset();
+            final String docElemName = figureFactory.figureToName(external);
+            w.writeStartDocument();
+            w.setDefaultNamespace(namespaceURI);
+            writeProcessingInstructions(w, external);
+            w.writeStartElement(docElemName);
+            w.writeDefaultNamespace(namespaceURI);
+            writeElementAttributes(w, external);
+            for (Figure child : external.getChildren()) {
+                writeNodeRecursively(w, child, 1);
+            }
+            w.writeEndElement();
+            w.writeEndDocument();
+        } catch (IOException e) {
+            throw new XMLStreamException(e);
+        }
+    }
+
+    private void writeElementAttribute(@NonNull XMLStreamWriter w, @NonNull Figure figure, MapAccessor<Object> k) throws IOException, XMLStreamException {
+        Object value = figure.get(k);
+        if (value instanceof URI) {
+            try {
+                value = uriResolver.apply((URI) value);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!k.isTransient() && !figureFactory.isDefaultValue(figure, k, value)) {
+            String name = figureFactory.keyToName(figure, k);
+            if (figureFactory.getObjectIdAttribute().equals(name)) {
+                return;
+            }
+            if (Figure.class.isAssignableFrom(k.getValueType())) {
+                w.writeAttribute(name, idFactory.createId(value));
+            } else {
+                w.writeAttribute(name, figureFactory.valueToString(k, value));
+            }
+        }
+    }
+
+    protected void writeElementAttributes(@NonNull XMLStreamWriter w, @NonNull Figure figure) throws IOException, XMLStreamException {
         String id = idFactory.createId(figure);
-        setAttribute(elem, figureFactory.getObjectIdAttribute(), id);
+        String objectIdAttribute = figureFactory.getObjectIdAttribute();
+        w.writeAttribute(objectIdAttribute, id);
         final Set<MapAccessor<?>> keys = figureFactory.figureAttributeKeys(figure);
         Set<MapAccessor<?>> done = new HashSet<>(keys.size());
 
@@ -786,95 +816,69 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
                 if (!k.isTransient()) {
                     @SuppressWarnings("unchecked") CompositeMapAccessor<Object> cmap = (CompositeMapAccessor<Object>) k;
                     done.addAll(cmap.getSubAccessors());
-                    writeElementAttribute(elem, figure, cmap);
+                    writeElementAttribute(w, figure, cmap);
                 }
             }
         }
         for (MapAccessor<?> k : keys) {
             if (!k.isTransient() && !done.contains(k)) {
                 @SuppressWarnings("unchecked") MapAccessor<Object> cmap = (MapAccessor<Object>) k;
-                writeElementAttribute(elem, figure, cmap);
+                writeElementAttribute(w, figure, cmap);
             }
         }
     }
 
-    private void writeElementAttribute(@NonNull Element elem, @NonNull Figure figure, MapAccessor<Object> k) throws IOException {
-        @SuppressWarnings("unchecked")
-        MapAccessor<Object> key = k;
-        Object value = figure.get(key);
-
-        if (value instanceof URI) {
-            try {
-                value = uriResolver.apply((URI) value);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (!key.isTransient() /*&& figure.containsKey(StyleOrigin.USER, key)*/ && !figureFactory.isDefaultValue(figure, key, value)) {
-            String name = figureFactory.keyToName(figure, key);
-            if (Figure.class.isAssignableFrom(key.getValueType())) {
-                setAttribute(elem, name, idFactory.createId(value));
-            } else {
-                setAttribute(elem, name, figureFactory.valueToString(key, value));
-            }
-        }
-    }
-
-    private void writeElementNodeList(Document document, @NonNull Element elem, @NonNull Figure figure) throws IOException {
+    private void writeElementNodeList(@NonNull XMLStreamWriter w, @NonNull Figure figure) throws IOException, XMLStreamException {
         for (MapAccessor<?> k : figureFactory.figureNodeListKeys(figure)) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
             if (!key.isTransient() && figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
-                for (Node node : figureFactory.valueToNodeList(key, value, document)) {
-                    elem.appendChild(node);
-                }
+                figureFactory.valueToNodeList(key, value, w);
             }
         }
     }
 
-    protected void writeNodeRecursively(@NonNull Document doc, @NonNull Element parent, @NonNull Figure figure) throws IOException {
+    protected void writeNodeRecursively(@NonNull XMLStreamWriter w, @NonNull Figure figure, int depth) throws IOException {
         try {
             String elementName = figureFactory.figureToName(figure);
             if (elementName == null) {
                 // => the figureFactory decided that we should skip the figure
                 return;
             }
-            Element elem = createElement(doc, elementName);
-            writeElementAttributes(elem, figure);
-            writeElementNodeList(doc, elem, figure);
+            w.writeStartElement(elementName);
+            writeElementAttributes(w, figure);
+            writeElementNodeList(w, figure);
             for (Figure child : figure.getChildren()) {
                 if (figureFactory.figureToName(child) != null) {
-                    writeNodeRecursively(doc, elem, child);
+                    writeNodeRecursively(w, child, depth + 1);
                 }
             }
-            parent.appendChild(elem);
-        } catch (IOException e) {
+            w.writeEndElement();
+        } catch (IOException | XMLStreamException e) {
             throw new IOException("Error writing figure " + figure, e);
         }
     }
 
     // XXX maybe this should not be in SimpleXmlIO?
-    private void writeProcessingInstructions(@NonNull Document doc, @NonNull Drawing external) {
-        Element docElement = doc.getDocumentElement();
-        if (figureFactory.getStylesheetsKey() != null && external.get(figureFactory.getStylesheetsKey()) != null) {
-            for (Object stylesheet : external.get(figureFactory.getStylesheetsKey())) {
-                if (stylesheet instanceof URI) {
-                    stylesheet = uriResolver.apply((URI) stylesheet);
+    protected void writeProcessingInstructions(@NonNull XMLStreamWriter w, @NonNull Drawing external) throws XMLStreamException {
+        if (figureFactory.getStylesheetsKey() != null) {
+            ImmutableList<URI> stylesheets = external.get(figureFactory.getStylesheetsKey());
+            if (stylesheets != null) {
+                for (Object stylesheet : stylesheets) {
+                    if (stylesheet instanceof URI) {
+                        stylesheet = uriResolver.apply((URI) stylesheet);
 
-                    String stylesheetString = stylesheet.toString();
-                    String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
-                    if ("text/".equals(type)) {
-                        type = "text/css";
+                        String stylesheetString = stylesheet.toString();
+                        String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
+                        if ("text/".equals(type)) {
+                            type = "text/css";
+                        }
+                        w.writeProcessingInstruction("xml-stylesheet", //
+                                "type=\"" + type + "\" href=\"" + stylesheet + "\"");
                     }
-                    ProcessingInstruction pi = doc.createProcessingInstruction("xml-stylesheet", //
-                            "type=\"" + type + "\" href=\"" + stylesheet + "\"");
-                    doc.insertBefore(pi, docElement);
                 }
             }
         }
-
     }
-
 }
