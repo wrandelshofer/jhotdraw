@@ -98,6 +98,8 @@ public interface Tool extends PropertyBean, Disableable {
      */
     Key<Node> LARGE_ICON_KEY = new ObjectKey<>("SwingLargeIconKey", Node.class);
 
+    Key<String> STYLE_CLASS_KEY = new StringKey("StyleClass");
+
     // ---
     // Properties
     // ----

@@ -88,7 +88,7 @@ import java.util.Map;
  *
  * </pre> This parser parses the following syntax:
  * <pre>
- * stylesheet   = { S | CDO | CDC | qualified_rule | style_rule} ;
+ * stylesheet   = { S | CDO | CDC | qualified_rule | style_rule } ;
  *
  * operator     = ( '/' | ',' ) , { S } ;
  *

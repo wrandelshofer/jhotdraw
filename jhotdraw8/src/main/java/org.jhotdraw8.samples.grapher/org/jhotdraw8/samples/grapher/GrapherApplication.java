@@ -9,14 +9,16 @@ import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.SimpleFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.collection.NonNullBooleanKey;
+import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.macos.MacOSPreferences;
 import org.jhotdraw8.samples.grapher.action.GrapherAboutAction;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
-import org.jhotdraw8.svg.io.SvgTinySceneGraphExporter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
+import org.jhotdraw8.svg.io.SvgTinySceneGraphWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +72,8 @@ public class GrapherApplication extends SimpleFileBasedApplication {
         put(LICENSE_KEY, "MIT License.");
 
         List<URIExtensionFilter> exportExtensions = new ArrayList<>();
-        exportExtensions.add(new URIExtensionFilter("SVG Full", registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
-        exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(SvgTinySceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
+        exportExtensions.add(new URIExtensionFilter("SVG Full", registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
+        exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(SvgTinySceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
         exportExtensions.add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
         put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, exportExtensions));
@@ -82,13 +84,20 @@ public class GrapherApplication extends SimpleFileBasedApplication {
         setResources(GrapherLabels.getResources());
     }
 
+    @NonNull
+    public final static NonNullBooleanKey DARK_MODE_KEY = new NonNullBooleanKey("darkMode", false);
+
     @Override
     protected void startUserAgentStylesheet() {
         final Object value = MacOSPreferences.get(MacOSPreferences.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
         if ("Dark".equals(value)) {
+            set(DARK_MODE_KEY, true);
             getStylesheets().add(getClass().getResource("dark-theme.css").toString());
         } else {
+            set(DARK_MODE_KEY, false);
             getStylesheets().add(getClass().getResource("light-theme.css").toString());
         }
+        getStylesheets().add(DrawStylesheets.getInspectorsStylesheet());
+
     }
 }

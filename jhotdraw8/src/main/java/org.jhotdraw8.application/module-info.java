@@ -3,6 +3,7 @@
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
 import org.jhotdraw8.app.spi.ApplicationResourceBundleProvider;
+import org.jhotdraw8.app.spi.NodeReaderProvider;
 
 module org.jhotdraw8.application {
     requires transitive javafx.graphics;
@@ -36,12 +37,15 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.event;
     exports org.jhotdraw8.gui.fontchooser;
     exports org.jhotdraw8.text;
-
-    uses java.util.spi.ResourceBundleProvider;
-    provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
-    opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
     exports org.jhotdraw8.macos;
     exports org.jhotdraw8.app.action.app;
     exports org.jhotdraw8.fxml;
     exports org.jhotdraw8.tree;
+
+    uses java.util.spi.ResourceBundleProvider;
+    provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
+    opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
+
+    uses NodeReaderProvider;
+    provides NodeReaderProvider with org.jhotdraw8.app.spi.FxmlNodeReaderProvider, org.jhotdraw8.app.spi.ImageNodeReaderProvider;
 }

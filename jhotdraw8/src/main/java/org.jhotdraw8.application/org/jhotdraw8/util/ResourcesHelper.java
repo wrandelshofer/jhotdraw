@@ -5,15 +5,25 @@
 package org.jhotdraw8.util;
 
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.spi.NodeReader;
+import org.jhotdraw8.app.spi.NodeReaderRegistry;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.logging.Logger;
 
 class ResourcesHelper {
@@ -87,16 +97,19 @@ class ResourcesHelper {
                 }
             }
 
+
             if (r.getModule() != null) {
                 try {
                     Object module = r.getModule();
-
-                    InputStream resourceAsStream = (InputStream) module.getClass().getMethod("getRsourcesAsStream", String.class)
-                            .invoke(module, rsrcName);
-                    if (resourceAsStream != null) {
-                        return new ImageView(new Image(resourceAsStream));
+                    NodeReader reader = NodeReaderRegistry.getNodeReader(rsrcName);
+                    if (reader != null) {
+                        InputStream resourceAsStream = (InputStream) module.getClass().getMethod("getResourceAsStream", String.class)
+                                .invoke(module, rsrcName);
+                        if (resourceAsStream != null) {
+                            return reader.read(resourceAsStream);
+                        }
                     }
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException e) {
                     // we retry with baseClass
                 }
             }
@@ -104,9 +117,12 @@ class ResourcesHelper {
             URL url = baseClass.getResource(rsrcName);
             if (url == null) {
                 ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" resource:" + rsrcName + " not found.");
+                return null;
             }
-            return (url == null) ? null : new ImageView(url.toString());
-        } catch (MissingResourceException e) {
+            NodeReader reader = NodeReaderRegistry.getNodeReader(url);
+            return reader == null ? null : reader.read(url);
+
+        } catch (MissingResourceException | IOException e) {
             ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" not found.");
             return null;
         }

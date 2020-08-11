@@ -11,8 +11,12 @@ import org.jhotdraw8.annotation.Nullable;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
@@ -247,6 +251,16 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     public IndentingXMLStreamWriter(Writer w) {
         this.w = w;
         this.encoder = StandardCharsets.UTF_8.newEncoder();
+        stack.push(new Element("", "", "<root>", false));
+    }
+
+    public IndentingXMLStreamWriter(OutputStream out) {
+        this(out, StandardCharsets.UTF_8);
+    }
+
+    public IndentingXMLStreamWriter(OutputStream out, Charset charset) {
+        this.w = new BufferedWriter(new OutputStreamWriter(out, charset));
+        this.encoder = charset.newEncoder();
         stack.push(new Element("", "", "<root>", false));
     }
 
@@ -610,12 +624,12 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeStartDocument() throws XMLStreamException {
-        writeStartDocument(UTF_8, DEFAULT_XML_VERSION);
+        writeStartDocument(encoder.charset().name(), DEFAULT_XML_VERSION);
     }
 
     @Override
     public void writeStartDocument(@NonNull String version) throws XMLStreamException {
-        writeStartDocument(UTF_8, version);
+        writeStartDocument(encoder.charset().name(), version);
     }
 
     @Override

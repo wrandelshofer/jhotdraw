@@ -2,7 +2,10 @@
  * @(#)module-info.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
+
+import org.jhotdraw8.app.spi.NodeReaderProvider;
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
+import org.jhotdraw8.draw.spi.SvgImageReaderProvider;
 
 module org.jhotdraw8.draw {
     requires transitive javafx.graphics;
@@ -37,6 +40,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.input;
     exports org.jhotdraw8.draw.io;
     exports org.jhotdraw8.draw.tool;
+    exports org.jhotdraw8.draw.spi;
     exports org.jhotdraw8.svg;
     exports org.jhotdraw8.draw.model;
     exports org.jhotdraw8.graph;
@@ -55,4 +59,6 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.geom.intersect;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
+    provides NodeReaderProvider with SvgImageReaderProvider;
+
 }

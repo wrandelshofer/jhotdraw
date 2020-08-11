@@ -27,9 +27,9 @@ import org.jhotdraw8.draw.tool.Tool;
 public class ToolsToolbar extends GridPane {
 
     @NonNull
-    private ToggleGroup group = new ToggleGroup();
+    private final ToggleGroup group = new ToggleGroup();
     @NonNull
-    private ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, "editor");
+    private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, "editor");
 
     {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -44,7 +44,7 @@ public class ToolsToolbar extends GridPane {
     }
 
     @NonNull
-    private ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
+    private final ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
             if (button.getUserData() == newValue) {
@@ -91,6 +91,10 @@ public class ToolsToolbar extends GridPane {
             }
         } else {
             button.setText(tool.getName());
+        }
+        String styleClass = tool.get(Tool.STYLE_CLASS_KEY);
+        if (styleClass != null) {
+            button.getStyleClass().add(styleClass);
         }
         button.setFocusTraversable(false);
         button.setUserData(tool);

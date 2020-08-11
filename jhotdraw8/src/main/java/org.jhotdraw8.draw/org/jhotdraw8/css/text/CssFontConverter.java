@@ -255,7 +255,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
                 + "\n  with ⟨FontStyle⟩: normal｜italic｜oblique"
                 + "\n  with ⟨FontWeight⟩: normal｜bold｜bolder｜lighter｜100｜200｜300｜400｜500｜600｜700｜800｜900"
                 + "\n  with ⟨FontSize⟩: size"
-                + "\n  with ⟨FontFamiliy⟩: identifier｜string"
+                + "\n  with ⟨FontFamily⟩: ⟨identifier⟩｜⟨string⟩"
                 ;
     }
 }

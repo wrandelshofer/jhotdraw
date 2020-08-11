@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import java.lang.String?>
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="inspector"
-            xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <center>
     <ListView fx:id="listView" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
               minHeight="44.0" minWidth="44.0" prefHeight="200.0" styleClass="flushTopRightLeft"
@@ -22,7 +22,7 @@
   <bottom>
     <HBox BorderPane.alignment="CENTER">
       <children>
-        <Button fx:id="addButton" mnemonicParsing="false" text="%addButton.text">
+        <Button fx:id="addButton" mnemonicParsing="false" styleClass="add-button" text="%addButton.text">
           <HBox.margin>
             <Insets/>
           </HBox.margin>
@@ -30,7 +30,7 @@
             <Tooltip text="%addButton.toolTipText"/>
           </tooltip>
         </Button>
-        <Button fx:id="removeButton" mnemonicParsing="false" text="%removeButton.text">
+        <Button fx:id="removeButton" mnemonicParsing="false" styleClass="remove-button" text="%removeButton.text">
           <HBox.margin>
             <Insets left="4.0"/>
           </HBox.margin>

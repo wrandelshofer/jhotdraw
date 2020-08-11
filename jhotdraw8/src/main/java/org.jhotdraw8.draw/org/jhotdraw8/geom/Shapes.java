@@ -13,6 +13,7 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
@@ -205,12 +206,13 @@ public class Shapes {
 
     @NonNull
     private static Shape awtShapeFromFXPath(@NonNull Path node) {
-        return awtShapeFromFXPathElements(node.getElements());
+        return awtShapeFromFXPathElements(node.getElements(), node.getFillRule());
     }
 
     @NonNull
-    public static Shape awtShapeFromFXPathElements(@NonNull List<PathElement> pathElements) {
+    public static Shape awtShapeFromFXPathElements(@NonNull List<PathElement> pathElements, FillRule fillRule) {
         SvgPath2D p = new SvgPath2D();
+        p.setWindingRule(fillRule == FillRule.NON_ZERO ? PathIterator.WIND_NON_ZERO : PathIterator.WIND_EVEN_ODD);
         double x = 0;
         double y = 0;
         for (PathElement pe : pathElements) {
@@ -2031,9 +2033,9 @@ public class Shapes {
     }
 
     @NonNull
-    public static List<PathElement> transformFXPathElements(@NonNull List<PathElement> elements, javafx.scene.transform.Transform fxT) {
+    public static List<PathElement> transformFXPathElements(@NonNull List<PathElement> elements, FillRule fillRule, javafx.scene.transform.Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
-        awtShapeFromFXPathElements(elements);
+        awtShapeFromFXPathElements(elements, fillRule);
         return result;
     }
 

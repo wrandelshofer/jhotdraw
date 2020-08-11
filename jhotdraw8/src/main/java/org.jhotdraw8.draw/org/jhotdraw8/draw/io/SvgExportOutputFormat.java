@@ -33,12 +33,13 @@ import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.TransformFlattener;
-import org.jhotdraw8.svg.io.AbstractSvgSceneGraphExporter;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
-import org.jhotdraw8.svg.io.SvgSceneGraphExporter;
+import org.jhotdraw8.svg.io.AbstractSvgSceneGraphWriter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
+import org.jhotdraw8.svg.io.SvgSceneGraphWriter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.w3c.dom.Document;
@@ -50,11 +51,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -67,7 +69,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
-        implements ClipboardOutputFormat, OutputFormat, XmlOutputFormatMixin {
+        implements ClipboardOutputFormat, OutputFormat {
 
     public final static DataFormat SVG_FORMAT;
     public final static String SVG_MIME_TYPE = "image/svg+xml";
@@ -96,17 +98,17 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     @NonNull
     private IdFactory idFactory = new SimpleIdFactory();
 
-    private BiFunction<Object, Object, AbstractSvgSceneGraphExporter> exporterFactory = SvgFullSceneGraphExporter::new;
+    private BiFunction<Object, Object, AbstractSvgSceneGraphWriter> exporterFactory = SvgFullSceneGraphWriter::new;
 
-    public void setExporterFactory(BiFunction<Object, Object, AbstractSvgSceneGraphExporter> exporterFactory) {
+    public void setExporterFactory(BiFunction<Object, Object, AbstractSvgSceneGraphWriter> exporterFactory) {
         this.exporterFactory = exporterFactory;
     }
 
     @NonNull
-    private AbstractSvgSceneGraphExporter createExporter() {
-        AbstractSvgSceneGraphExporter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
+    private AbstractSvgSceneGraphWriter createExporter() {
+        AbstractSvgSceneGraphWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setUriResolver(getUriResolver());
-        exporter.setExportInvisibleElements(getNonNull(SvgSceneGraphExporter.EXPORT_INVISIBLE_ELEMENTS_KEY));
+        exporter.setExportInvisibleElements(getNonNull(SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY));
         return exporter;
     }
 
@@ -137,15 +139,12 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         }
     }
 
-    public Document toDocument(URI documentHome, @NonNull Drawing external) throws IOException {
-        return toDocument(documentHome, external, Collections.singleton(external));
-    }
 
     public Document toDocument(URI documentHome, @NonNull Drawing external, @NonNull Collection<Figure> selection) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
-        final AbstractSvgSceneGraphExporter exporter = createExporter();
+        final AbstractSvgSceneGraphWriter exporter = createExporter();
         exporter.setRelativizePaths(true);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
@@ -170,7 +169,14 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     public void write(@NonNull Path file, @NonNull Drawing drawing, WorkState workState) throws IOException {
         if (isExportDrawing()) {
-            XmlOutputFormatMixin.super.write(file, drawing, workState);
+            Map<Key<?>, Object> hints = new HashMap<>();
+            RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+            try (OutputStream w = Files.newOutputStream(file)) {
+                final AbstractSvgSceneGraphWriter exporter = createExporter();
+                exporter.setRelativizePaths(true);
+                javafx.scene.Node drawingNode = toNode(drawing, drawing.getChildren(), hints);
+                exporter.write(w, drawingNode);
+            }
         }
         if (isExportSlices()) {
             writeSlices(file.getParent(), drawing);
@@ -185,6 +191,17 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         }
     }
 
+    @Override
+    public void write(URI documentHome, OutputStream out, Drawing drawing, WorkState workState) throws IOException {
+        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
+        write(documentHome, out, drawing, drawing.getChildren());
+    }
+
+    protected void write(URI documentHome, OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
+        Document doc = toDocument(documentHome, drawing, selection);
+        XmlUtil.write(out, doc);
+    }
+
     private void writeDrawingElementAttributes(@NonNull Element docElement, @NonNull Drawing drawing) throws IOException {
         docElement.setAttribute("width", sc.toString(drawing.get(Drawing.WIDTH)));
         docElement.setAttribute("height", sc.toString(drawing.get(Drawing.HEIGHT)));
@@ -195,7 +212,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
-        final AbstractSvgSceneGraphExporter exporter = createExporter();
+        final AbstractSvgSceneGraphWriter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
@@ -222,7 +239,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
             node.getTransforms().setAll(worldToLocal);
         }
         new TransformFlattener().flattenTranslates(node);
-        final AbstractSvgSceneGraphExporter exporter = createExporter();
+        final AbstractSvgSceneGraphWriter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();

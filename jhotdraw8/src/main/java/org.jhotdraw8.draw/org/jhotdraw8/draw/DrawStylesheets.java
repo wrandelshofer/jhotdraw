@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
+
 public class DrawStylesheets {
     private DrawStylesheets() {
     }

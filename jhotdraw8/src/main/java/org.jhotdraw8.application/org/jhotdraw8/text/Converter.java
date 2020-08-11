@@ -23,8 +23,6 @@ import java.text.ParseException;
  * @author Werner Randelshofer
  */
 public interface Converter<T> {
-
-
     /**
      * Constructs a value from a string.
      * <p>
@@ -46,8 +44,47 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
+    default T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        return fromString(CharBuffer.wrap(in), idResolver);
+    }
+
+    /**
+     * Constructs a value from a string.
+     * <p>
+     * The converter should try to create the value greedily, by consuming as
+     * many characters as possible for the value.
+     * <p>
+     * This method does not change the state of the converter.
+     *
+     * @param in         A char buffer which holds the string. The char buffer must be
+     *                   treated as read only! The position of the char buffer denotes the
+     *                   beginning of the string when this method is invoked. After completion of
+     *                   this method, the position is set after the last consumed character.
+     * @param idResolver The factory for looking up object ids. Nullable for non-resolving
+     *                   converters.
+     * @return The value. Nullable.
+     * @throws ParseException      if conversion failed. The error offset field is
+     *                             set to the position where parsing failed. The position of the buffer is
+     *                             undefined.
+     * @throws java.io.IOException Thrown by the CharBuffer.
+     */
+    @Nullable
     T fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
+    /**
+     * Converts a value to a string and appends it to the provided
+     * {@code Appendable}.
+     * <p>
+     * This method does not change the state of the converter.
+     *
+     * @param <TT>       the value type
+     * @param out        The appendable
+     * @param idSupplier The factory for creating object ids. Nullable for non-resolving
+     *                   converters.
+     * @param value      The value. Nullable.
+     * @throws java.io.IOException thrown by Appendable
+     */
+    <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException;
 
     /**
      * Constructs a value from a string.
@@ -68,7 +105,7 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
-    default T fromString(CharBuffer in) throws ParseException, IOException {
+    default T fromString(@NonNull CharBuffer in) throws ParseException, IOException {
         return fromString(in, null);
     }
 
@@ -140,20 +177,6 @@ public interface Converter<T> {
         return null;
     }
 
-    /**
-     * Converts a value to a string and appends it to the provided
-     * {@code Appendable}.
-     * <p>
-     * This method does not change the state of the converter.
-     *
-     * @param <TT>       the value type
-     * @param out        The appendable
-     * @param idSupplier The factory for creating object ids. Nullable for some
-     *                   converters.
-     * @param value      The value. Nullable.
-     * @throws java.io.IOException thrown by Appendable
-     */
-    <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException;
     // ----
     // convenience methods
     // ----
@@ -169,7 +192,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @throws java.io.IOException thrown by Appendable
      */
-    default <TT extends T> void toString(Appendable out, @Nullable TT value) throws IOException {
+    default <TT extends T> void toString(@NonNull Appendable out, @Nullable TT value) throws IOException {
         toString(out, null, value);
     }
 

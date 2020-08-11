@@ -51,6 +51,7 @@ import org.jhotdraw8.xml.text.XmlWordListConverter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -96,7 +97,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private boolean willUpdateSelectionInTree;
 
     @NonNull
-    private XmlWordListConverter wordListConverter = new XmlWordListConverter();
+    private final XmlWordListConverter wordListConverter = new XmlWordListConverter();
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
@@ -139,7 +140,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), LockableFigure.LOCKED)
         );
-        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
+        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Nullable
                     @Override
@@ -148,7 +149,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
                 }
         );
-        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
+        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
                     @Nullable
                     @Override
@@ -161,12 +162,12 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // This cell factory ensures that only styleable figures support editing of ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered.
         idColumn.setCellFactory(
-                new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
+                new Callback<>() {
 
-                    @Nullable
+                    @NonNull
                     @Override
                     public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
-                        return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
+                        return new TextFieldTreeTableCell<>(new DefaultStringConverter()) {
                             @Override
                             public void cancelEdit() {
                                 super.cancelEdit();
@@ -202,21 +203,22 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                 });
+
         // This cell factory ensures that only styleable figures support editing of style classes.
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered.
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
-        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
+        styleClassesColumn.setCellFactory(new Callback<>() {
 
-            @Nullable
+            @NonNull
             @Override
             public TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
-                return new TextFieldTreeTableCell<Figure, ImmutableList<String>>() {
+                return new TextFieldTreeTableCell<>() {
                     {
                         setConverter(new StringConverterAdapter<>(wordListConverter));
                     }
 
                     @NonNull
-                    private Set<String> syntheticClasses = new HashSet<>();
+                    private final Set<String> syntheticClasses = new HashSet<>();
 
                     @Override
                     public void cancelEdit() {
@@ -269,26 +271,19 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
         CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>(new CssPseudoClassConverter(false));
-        pseudoClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<PseudoClass>>, TreeTableCell<Figure, ImmutableSet<PseudoClass>>>() {
-            @NonNull
-            @Override
-            public TreeTableCell<Figure, ImmutableSet<PseudoClass>> call(TreeTableColumn<Figure, ImmutableSet<PseudoClass>> paramTableColumn) {
-                return new TextFieldTreeTableCell<Figure, ImmutableSet<PseudoClass>>() {
-                    {
-                        setConverter(new StringConverterAdapter<>(pseudoClassConverter));
-                    }
-
-                };
+        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<>() {
+            {
+                setConverter(new StringConverterAdapter<>(pseudoClassConverter));
             }
+
         });
 
-        final Comparator<String> comparator = collator::compare;
+        final Comparator<String> comparator = collator;
         typeColumn.setComparator(comparator);
         idColumn.setComparator(comparator);
-        //classesColumn.setComparator(comparator);
 
-        visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
-        lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn());
+        visibleColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn(InspectorStyleClasses.VISIBLE_CHECK_BOX));
+        lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn(InspectorStyleClasses.LOCKED_CHECK_BOX));
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treeView.getSelectionModel().getSelectedCells().addListener(treeSelectionHandler);
         treeView.setRowFactory(tv -> {
@@ -296,7 +291,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Figure rowData = row.getItem();
-                    drawingView.scrollFigureToVisible(rowData);
+                    DrawingView myDrawingView = this.drawingView;
+                    if (myDrawingView != null) {
+                        myDrawingView.scrollFigureToVisible(rowData);
+                    }
                 }
             });
             return row;
@@ -334,8 +332,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     newSelection.add(item.getValue());
                 }
             }
-            drawingView.getSelectedFigures().retainAll(newSelection);
-            drawingView.getSelectedFigures().addAll(newSelection);
+            DrawingView myDrawingView = this.drawingView;
+            if (myDrawingView != null) {
+                myDrawingView.getSelectedFigures().retainAll(newSelection);
+                myDrawingView.getSelectedFigures().addAll(newSelection);
+            }
             isUpdatingSelectionInView = false;
         }
     }
@@ -347,17 +348,18 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
             // Performance: collecting all indices and then setting them all at once is
             // much faster than invoking selectionModel.select(Object) for each item.
-            Set<Figure> selection = drawingView.getSelectedFigures();
+            DrawingView myDrawingView = this.drawingView;
+            Set<Figure> selection = myDrawingView == null ? Collections.emptySet() : myDrawingView.getSelectedFigures();
             switch (selection.size()) {
-                case 0:
-                    selectionModel.clearSelection();
-                    break;
-                case 1:
-                    selectionModel.clearSelection();
-                    final TreeItem<Figure> treeItem = model.getTreeItem(selection.iterator().next());
-                    if (treeItem != null) {
-                        selectionModel.select(treeItem);
-                    }
+            case 0:
+                selectionModel.clearSelection();
+                break;
+            case 1:
+                selectionModel.clearSelection();
+                final TreeItem<Figure> treeItem = model.getTreeItem(selection.iterator().next());
+                if (treeItem != null) {
+                    selectionModel.select(treeItem);
+                }
                     break;
                 default:
                     int index = 0;

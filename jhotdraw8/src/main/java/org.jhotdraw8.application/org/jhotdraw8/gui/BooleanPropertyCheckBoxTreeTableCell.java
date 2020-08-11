@@ -23,8 +23,11 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
 
     private final CheckBox checkBox = new CheckBox();
 
-    public BooleanPropertyCheckBoxTreeTableCell() {
+    public BooleanPropertyCheckBoxTreeTableCell(@Nullable String styleClass) {
         checkBox.selectedProperty().addListener(this::commitSelectionChange);
+        if (styleClass != null) {
+            checkBox.getStyleClass().add(styleClass);
+        }
     }
 
     @Override
@@ -42,7 +45,12 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
 
     @NonNull
     public static <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn() {
-        return list -> new BooleanPropertyCheckBoxTreeTableCell<>();
+        return forTreeTableColumn(null);
+    }
+
+    @NonNull
+    public static <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn(@Nullable String styleClass) {
+        return list -> new BooleanPropertyCheckBoxTreeTableCell<>(styleClass);
     }
 
     private void commitSelectionChange(Observable o) {

@@ -44,6 +44,8 @@ import static java.lang.Math.max;
 public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {
 
+    private final static int MIN_NODES_FOR_CLIPPING = 100;
+
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
         for (Figure child : getChildren()) {
@@ -72,7 +74,7 @@ public class LayerFigure extends AbstractCompositeFigure
         int maxNodesPerLayer = ctx.getNonNull(RenderContext.MAX_NODES_PER_LAYER);
         Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
         if (renderingIntent == RenderingIntent.EDITOR
-                && clipBounds != null) {
+                && clipBounds != null && getChildren().size() > MIN_NODES_FOR_CLIPPING) {
             childNodes = getChildren().stream().parallel().filter(child ->
                     child.getVisualBoundsInWorld().intersects(clipBounds)
             )

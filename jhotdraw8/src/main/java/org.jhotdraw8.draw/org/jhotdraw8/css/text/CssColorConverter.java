@@ -104,7 +104,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                         && tt.currentStringNonNull().startsWith("x")) {
                     color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
                 } else {
-                    throw new ParseException("CssColor: hex color expected", tt.getStartPosition());
+                    throw tt.createParseException("CssColor: hex color expected.");
                 }
                 break;
             case CssTokenType.TT_HASH:
@@ -117,7 +117,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             ? parseColorHexDigits(ident.substring(2), tt.getStartPosition())
                             : new CssColor(ident);
                 } catch (IllegalArgumentException e) {
-                    throw new ParseException(e.getMessage() + " value:" + ident, tt.getStartPosition());
+                    throw tt.createParseException(e.getMessage() + " value:" + ident);
                 }
                 break;
             case CssTokenType.TT_FUNCTION:
@@ -132,7 +132,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             values[i++] = tt.current() == CssTokenType.TT_NUMBER ? tt.currentNumberNonNull().doubleValue() / 255.0 : tt.currentNumberNonNull().doubleValue() / 100.0;
                             if (i < 3) {
                                 if (tt.next() != ',') {
-                                    throw new ParseException("CssColor: rgb comma expected but found " + tt.currentString(), tt.getStartPosition());
+                                    throw tt.createParseException("CssColor: rgb comma expected.");
                                 } else {
                                     buf.append(tt.currentString());
                                 }
@@ -146,7 +146,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             buf.append(')');
                             color = new CssColor(buf.toString(), new Color(clamp(values[0], 0, 1), clamp(values[1], 0, 1), clamp(values[2], 0, 1), 1.0));
                         } else {
-                            throw new ParseException("CssColor: rgb values expected but found " + tt.currentString(), tt.getStartPosition());
+                            throw tt.createParseException("CssColor: rgb values expected.");
                         }
                         break;
                     case "rgba":
@@ -159,7 +159,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             }
                             if (i < 4) {
                                 if (tt.next() != ',') {
-                                    throw new ParseException("CssColor: rgba comma expected but found " + tt.currentString(), tt.getStartPosition());
+                                    throw tt.createParseException("CssColor: rgba comma expected.");
                                 } else {
                                     buf.append(tt.currentString());
                                 }
@@ -173,7 +173,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             buf.append(')');
                             color = new CssColor(buf.toString(), new Color(clamp(values[0], 0, 1), clamp(values[1], 0, 1), clamp(values[2], 0, 1), clamp(values[3], 0, 1)));
                         } else {
-                            throw new ParseException("CssColor: 4 rgba values expected but found " + i + " values.", tt.getStartPosition());
+                            throw tt.createParseException("CssColor: 4 rgba values expected.");
                         }
                         break;
                     case "hsb":
@@ -186,7 +186,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             }
                             if (i < 3) {
                                 if (tt.next() != ',') {
-                                    throw new ParseException("CssColor: hsb comma expected but found " + tt.currentString(), tt.getStartPosition());
+                                    throw tt.createParseException("CssColor: hsb comma expected.");
                                 } else {
                                     buf.append(tt.currentString());
                                 }
@@ -200,7 +200,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             buf.append(')');
                             color = new CssColor(buf.toString(), Color.hsb(values[0], clamp(values[1], 0, 1), clamp(values[2], 0, 1)));
                         } else {
-                            throw new ParseException("CssColor: hsb values expected but found " + tt.currentString(), tt.getStartPosition());
+                            throw tt.createParseException("CssColor: hsb values expected.");
                         }
                         break;
                     case "hsba":
@@ -215,7 +215,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             }
                             if (i < 4) {
                                 if (tt.next() != ',') {
-                                    throw new ParseException("CssColor: hsba comma expected but found " + tt.currentString(), tt.getStartPosition());
+                                    throw tt.createParseException("CssColor: hsba comma expected.");
                                 } else {
                                     buf.append(tt.currentString());
                                 }
@@ -229,18 +229,18 @@ public class CssColorConverter implements CssConverter<CssColor> {
                             buf.append(')');
                             color = new CssColor(buf.toString(), Color.hsb(values[0], clamp(values[1], 0, 1), clamp(values[2], 0, 1), clamp(values[3], 0, 1)));
                         } else {
-                            throw new ParseException("CssColor: hsba values expected but found " + tt.currentValue(), tt.getStartPosition());
+                            throw tt.createParseException("CssColor: hsba values expected.");
                         }
                         break;
                     default:
-                        throw new ParseException("CssColor: expected but found " + tt.currentValue(), tt.getStartPosition());
+                        throw tt.createParseException("CssColor: color expected.");
                 }
                 if (tt.next() != ')') {
-                    throw new ParseException("CssColor: ')' expected but found " + tt.currentValue(), tt.getStartPosition());
+                    throw tt.createParseException("CssColor: ')' expected.");
                 }
                 break;
             default:
-                throw new ParseException("CssColor: expected but found " + tt.currentValue(), tt.getStartPosition());
+                throw tt.createParseException("CssColor: color expected.");
         }
         return color;
     }
@@ -278,10 +278,10 @@ public class CssColorConverter implements CssConverter<CssColor> {
                     return new CssColor(a == 255 ? '#' + hexdigits.substring(0, 6).toLowerCase()
                             : "rgba(" + r + "," + g + "," + b + "," + a / 255.0 + ")", new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
                 default:
-                    throw new ParseException("illegal hex-digits, expected 3, 6  or 8 digits.Found:" + hexdigits, startpos);
+                    throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
             }
         } catch (NumberFormatException e) {
-            ParseException pe = new ParseException("illegal hex-digits. Found:" + hexdigits, startpos);
+            ParseException pe = new ParseException("<hex-digits>: expected a hex-digit. Found:" + hexdigits, startpos);
             pe.initCause(e);
             throw pe;
         }

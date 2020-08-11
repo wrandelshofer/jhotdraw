@@ -33,7 +33,6 @@ import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorActivity;
@@ -129,8 +128,8 @@ import org.jhotdraw8.gui.dock.TabbedAccordionTrack;
 import org.jhotdraw8.gui.dock.Track;
 import org.jhotdraw8.gui.dock.VBoxTrack;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphExporter;
-import org.jhotdraw8.svg.io.SvgTinySceneGraphExporter;
+import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
+import org.jhotdraw8.svg.io.SvgTinySceneGraphWriter;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
@@ -147,7 +146,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
-import java.util.prefs.Preferences;
 
 import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
@@ -479,27 +477,16 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public void start() {
-        getNode().getScene().getStylesheets().addAll(//
-                DrawStylesheets.getInspectorsStylesheet(),//
-                GrapherApplication.class.getResource("/org/jhotdraw8/samples/grapher/grapher.css").toString()//
-        );
-
-        Preferences prefs = Preferences.userNodeForPackage(GrapherActivity.class);
-//        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
-    }
-
-    @Override
     public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
-            if (registerDataFormat(SvgTinySceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
+            if (registerDataFormat(SvgTinySceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
-                io.setExporterFactory(SvgTinySceneGraphExporter::new);
+                io.setExporterFactory(SvgTinySceneGraphWriter::new);
                 io.putAll(options);
                 io.write(uri, drawing, workState);
-            } else if (registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE).equals(format)
-                    || registerDataFormat(SvgFullSceneGraphExporter.SVG_MIME_TYPE_WITH_VERSION).equals(format)
+            } else if (registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE).equals(format)
+                    || registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)
                     || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.putAll(options);

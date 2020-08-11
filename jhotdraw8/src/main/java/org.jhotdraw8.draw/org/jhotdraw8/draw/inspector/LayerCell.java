@@ -88,8 +88,9 @@ public class LayerCell extends ListCell<Figure> {
         visibleCheckBox.selectedProperty().addListener(this::commitLayerVisible);
         lockedCheckBox.selectedProperty().addListener(this::commitLayerLocked);
 
-        visibleCheckBox.setGraphic(rsrc.getLargeIconProperty("object.visible.checkBox.selected", LayerCell.class));
-        lockedCheckBox.setGraphic(rsrc.getLargeIconProperty("object.locked.checkBox.selected", LayerCell.class));
+        visibleCheckBox.getStyleClass().add(InspectorStyleClasses.VISIBLE_CHECK_BOX);
+        lockedCheckBox.getStyleClass().add(InspectorStyleClasses.LOCKED_CHECK_BOX);
+
     }
 
     @Override
