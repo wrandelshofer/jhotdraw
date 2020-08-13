@@ -28,12 +28,15 @@ import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
@@ -190,7 +193,14 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
                                     @NonNull Path markerNode,
                                     @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
-            markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
+            try {
+                markerNode.getElements().clear();
+                FXPathBuilder builder = new FXPathBuilder(markerNode.getElements());
+                Shapes.buildFromSvgString(builder, svgString);
+                builder.build();
+            } catch (ParseException e) {
+                Logger.getLogger(AbstractElbowLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
+            }
             double angle = FXGeom.angle(end, start);
             markerNode.getTransforms().setAll(
                     new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),

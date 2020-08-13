@@ -23,12 +23,15 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * AbstractStraightLineConnectionWithMarkersFigure draws a straight line from start to end.
@@ -185,7 +188,14 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                                     @NonNull Path markerNode,
                                     @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
-            markerNode.getElements().setAll(Shapes.fxPathElementsFromSvgString(svgString));
+            try {
+                markerNode.getElements().clear();
+                FXPathBuilder builder = new FXPathBuilder(markerNode.getElements());
+                Shapes.buildFromSvgString(builder, svgString);
+                builder.build();
+            } catch (ParseException e) {
+                Logger.getLogger(AbstractStraightLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
+            }
             double angle = Geom.atan2(start.getY() - end.getY(), start.getX() - end.getX());
             markerNode.getTransforms().setAll(
                     new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),

@@ -12,7 +12,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
 /**
- * AnyPathBuilder.
+ * PathBuilder.
  *
  * @author Werner Randelshofer
  */

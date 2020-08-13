@@ -821,7 +821,7 @@ public abstract class AbstractSvgSceneGraphWriter extends AbstractPropertyBean i
         w.writeEndElement();
     }
 
-    private void writeMetadataAttributes(@NonNull XMLStreamWriter w, Node node) throws XMLStreamException {
+    private void writeMetadataChildElements(@NonNull XMLStreamWriter w, Node node) throws XMLStreamException {
         writeTitleElement(w, node);
         writeDescElement(w, node);
     }
@@ -836,8 +836,6 @@ public abstract class AbstractSvgSceneGraphWriter extends AbstractPropertyBean i
             writeFillAttributes(w, (Shape) node);
             writeStrokeAttributes(w, (Shape) node);
             writeClipAttributes(w, node);
-            writeShapeChildElements(w, (Shape) node);
-
         } else if (node instanceof Group) {
             writeGroupStartElement(w, (Group) node);
         } else if (node instanceof Region) {
@@ -847,13 +845,14 @@ public abstract class AbstractSvgSceneGraphWriter extends AbstractPropertyBean i
         } else {
             throw new IOException("not yet implemented for " + node);
         }
-
-
-        writeMetadataAttributes(w, node);
         writeStyleAttributes(w, node);
         writeTransformAttributes(w, node);
         writeCompositingAttributes(w, node);
 
+        writeMetadataChildElements(w, node);
+        if (node instanceof Shape) {
+            writeShapeChildElements(w, (Shape) node);
+        }
 
         if (node instanceof Parent) {
             final Parent pp = (Parent) node;

@@ -23,7 +23,8 @@ import org.jhotdraw8.geom.Shapes;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.io.IOException;
+import java.text.ParseException;
+import java.util.logging.Logger;
 
 /**
  * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
@@ -46,6 +47,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public final static CssSizeStyleableKey Y = RectangleFigure.Y;
 
     public final static BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
+    private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
 
     private transient Path2D.Float pathElements;
 
@@ -143,8 +145,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                             height);
                 }
                 pathElements.reset();
-            } catch (IOException e) {
-                System.err.println("Illegal SVG path:: " + pathstr);
+            } catch (ParseException e) {
+                LOGGER.warning("Illegal SVG path: " + pathstr);
                 return;
             }
         } else {

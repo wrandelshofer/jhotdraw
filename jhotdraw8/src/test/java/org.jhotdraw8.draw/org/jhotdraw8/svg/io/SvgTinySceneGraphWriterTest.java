@@ -22,7 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class SvgTinySceneGraphExporterTest {
+class SvgTinySceneGraphWriterTest {
     @NonNull
     @TestFactory
     public List<DynamicTest> exportTestToWriterFactory() {
@@ -36,16 +36,14 @@ class SvgTinySceneGraphExporterTest {
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\">\n" +
-                                "    <tspan x=\"10\" y=\"20\">Hello\n" +
-                                "  </tspan>\n" +
+                                "    <tspan x=\"10\" y=\"20\">Hello</tspan>\n" +
                                 "</text>\n" +
                                 "</svg>")),
                 dynamicTest("text escape", () -> testExportToWriter(new Text(10, 20, "&<>\""),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\">\n" +
-                                "    <tspan x=\"10\" y=\"20\">&amp;&lt;&gt;\"\n" +
-                                "  </tspan>\n" +
+                                "    <tspan x=\"10\" y=\"20\">&amp;&lt;&gt;\"</tspan>\n" +
                                 "</text>\n" +
                                 "</svg>"))
         );
@@ -71,8 +69,7 @@ class SvgTinySceneGraphExporterTest {
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\">\n" +
-                                "    <tspan x=\"10\" y=\"20\">&amp;&lt;&gt;\"\n" +
-                                "  </tspan>\n" +
+                                "    <tspan x=\"10\" y=\"20\">&amp;&lt;&gt;\"</tspan>\n" +
                                 "</text>\n" +
                                 "</svg>"))
         );

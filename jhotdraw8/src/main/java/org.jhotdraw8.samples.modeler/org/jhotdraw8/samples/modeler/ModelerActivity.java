@@ -578,7 +578,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
     @Override
     public void start() {
         getNode().getScene().getStylesheets().addAll(//
-                DrawStylesheets.getInspectorsStylesheet(false),//
+                DrawStylesheets.getInspectorsStylesheet(),//
                 ModelerApplication.class.getResource("/org/jhotdraw8/samples/modeler/modeler.css").toString()//
         );
 

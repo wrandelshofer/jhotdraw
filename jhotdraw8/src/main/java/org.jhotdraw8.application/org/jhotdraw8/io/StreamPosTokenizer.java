@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.IntArrayList;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.text.ParseException;
 
 import static java.lang.Math.max;
 
@@ -502,11 +503,16 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         readpos--;
     }
 
-    public void requireNextToken(int ttype, String errorMessage) throws IOException {
+    public void requireNextToken(int ttype, String errorMessage) throws ParseException, IOException {
         if (nextToken() != ttype) {
-            throw new IOException(errorMessage);
+            throw createException(errorMessage);
         }
     }
+
+    public ParseException createException(String errorMessage) {
+        return new ParseException(errorMessage, getStartPosition());
+    }
+
 
     /**
      * Parses the next token from the input stream of this tokenizer. The type
