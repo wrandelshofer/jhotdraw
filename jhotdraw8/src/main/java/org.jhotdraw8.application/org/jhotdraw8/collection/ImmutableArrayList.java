@@ -22,14 +22,16 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
 
     final static ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(true, new Object[0]);
 
+    private final static Object[] EMPTY_ARRAY = new Object[0];
+
     private final Object[] array;
 
     public ImmutableArrayList(@Nullable Collection<? extends E> copyItems) {
-        this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
+        this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
     }
 
     public ImmutableArrayList(@Nullable ReadOnlyCollection<? extends E> copyItems) {
-        this.array = copyItems == null || copyItems.isEmpty() ? new Object[0] : copyItems.toArray();
+        this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
     }
 
     ImmutableArrayList(@NonNull Object[] array) {
@@ -43,7 +45,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         if (length > a.length) {
             throw new IndexOutOfBoundsException("length = " + length);
         }
-        this.array = new Object[length];
+        this.array = length == 0 ? EMPTY_ARRAY : new Object[length];
         System.arraycopy(a, offset, array, 0, length);
     }
 
