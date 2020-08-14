@@ -686,7 +686,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the transformation
      */
-    @Nullable
+    @NonNull
     Transform getLocalToParent();
 
     /**
@@ -697,7 +697,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the transformation
      */
-    @Nullable
+    @NonNull
     Transform getLocalToWorld();
 
     @Override
@@ -720,7 +720,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the transformation
      */
-    @Nullable
+    @NonNull
     Transform getParentToLocal();
 
     /**
@@ -732,7 +732,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the transformation
      */
-    @Nullable
+    @NonNull
     Transform getParentToWorld();
 
     /**
@@ -816,7 +816,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the transformation
      */
-    @Nullable
+    @NonNull
     Transform getWorldToLocal();
 
     /**
@@ -828,7 +828,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the transformation
      */
-    @Nullable
+    @NonNull
     Transform getWorldToParent();
 
     /**

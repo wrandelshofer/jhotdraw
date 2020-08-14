@@ -75,7 +75,9 @@ public class RectangleFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Rectangle();
+        Rectangle n = new Rectangle();
+        n.setManaged(false);
+        return n;
     }
 
     @Override

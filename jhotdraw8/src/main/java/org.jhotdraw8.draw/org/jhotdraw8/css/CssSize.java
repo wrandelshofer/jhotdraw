@@ -12,18 +12,25 @@ import java.util.Objects;
 /**
  * Represents a size specified in a particular unit.
  * <p>
- * Unlike {@code javafx.css.Size} this class supports an open ended
+ * A CssSize can be used to hold the value of a CSS number-token,
+ * percentage-token or dimension-token.
+ * <p>
+ * Unlike {@link javafx.css.Size} this class supports an open ended
  * set of units.
+ * <p>
+ * References:
+ * <dl>
+ * <dt>CSS Syntax Module Level 3, Chapter 4. Tokenization</dt>
+ * <dd><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">link</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */
 public class CssSize {
 
-    @Nullable
-    public final static CssSize ZERO = new CssSize(0);
+    public static final @Nullable CssSize ZERO = new CssSize(0);
     public static final CssSize ONE = new CssSize(1);
-    @NonNull
-    private final String units;
+    private final @NonNull String units;
     private final double value;
 
     public CssSize(double value) {
@@ -35,13 +42,11 @@ public class CssSize {
         this.units = units == null ? UnitConverter.DEFAULT : units;
     }
 
-    @NonNull
-    public static CssSize max(@NonNull CssSize a, @NonNull CssSize b) {
+    public static @NonNull CssSize max(@NonNull CssSize a, @NonNull CssSize b) {
         return (a.getConvertedValue() >= b.getConvertedValue()) ? a : b;
     }
 
-    @NonNull
-    public static CssSize min(@NonNull CssSize a, @NonNull CssSize b) {
+    public static @NonNull CssSize min(@NonNull CssSize a, @NonNull CssSize b) {
         return (a.getConvertedValue() <= b.getConvertedValue()) ? a : b;
     }
 
@@ -76,8 +81,7 @@ public class CssSize {
         return converter.convert(this, units);
     }
 
-    @NonNull
-    public String getUnits() {
+    public @NonNull String getUnits() {
         return units;
     }
 
@@ -93,34 +97,28 @@ public class CssSize {
         return hash;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssSize{" + value + "\"" + units + "\"" + '}';
     }
 
-    @NonNull
-    public CssSize subtract(@NonNull CssSize that) {
+    public @NonNull CssSize subtract(@NonNull CssSize that) {
         return new CssSize(this.value - DefaultUnitConverter.getInstance().convert(that, this.units), this.units);
     }
 
-    @NonNull
-    public CssSize add(@NonNull CssSize that) {
+    public @NonNull CssSize add(@NonNull CssSize that) {
         return new CssSize(this.value + DefaultUnitConverter.getInstance().convert(that, this.units), this.units);
     }
 
-    @NonNull
-    public CssSize abs() {
+    public @NonNull CssSize abs() {
         return value >= 0 ? this : new CssSize(Math.abs(value), units);
     }
 
-    @NonNull
-    public CssSize multiply(double factor) {
+    public @NonNull CssSize multiply(double factor) {
         return new CssSize(value * factor, units);
     }
 
-    @NonNull
-    public CssSize divide(double divisor) {
+    public @NonNull CssSize divide(double divisor) {
         return new CssSize(value / divisor, units);
     }
 }

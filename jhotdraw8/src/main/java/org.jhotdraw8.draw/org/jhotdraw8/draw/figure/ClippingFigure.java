@@ -35,7 +35,7 @@ public class ClippingFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(Transform transform) {
+    public void reshapeInLocal(@NonNull Transform transform) {
         for (Figure child : getChildren()) {
             child.reshapeInLocal(transform);
         }

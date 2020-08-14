@@ -17,6 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
@@ -45,6 +47,7 @@ public class SvgTinySceneGraphReaderTest {
      * <a href="https://github.com/web-platform-tests/wpt">github</a>
      */
     private static final String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
+    private static final String ICONS_PATH = ".";
 
     private static final boolean INTERACTIVE = false;
 
@@ -75,13 +78,41 @@ public class SvgTinySceneGraphReaderTest {
 
     }
 
+    @TestFactory
+    @Disabled
+    public @NonNull Stream<DynamicTest> iconsTestFactory() throws IOException {
+        if (!Files.isDirectory(Path.of(ICONS_PATH))) {
+            System.err.println("Please fix the icons path: " + ICONS_PATH);
+            return Stream.empty();
+        }
+
+
+        return
+                Files.walk(Path.of(ICONS_PATH))
+                        .filter(p -> p.toString().endsWith(".svg"))
+                        .sorted(Comparator.comparing(p -> p.getName(p.getNameCount() - 1)))
+                        .map(p -> dynamicTest(p.getName(p.getNameCount() - 1).toString(), () -> doIconTest(p)));
+
+    }
+
+    private void doIconTest(Path testFile) throws Exception {
+        System.out.println(testFile);
+        System.out.println(testFile.toAbsolutePath());
+        SvgTinySceneGraphReaderNew instance = new SvgTinySceneGraphReaderNew();
+        Figure testNode = instance.read(testFile);
+
+    }
+
     private void doWebPlatformTest(Path testFile, Path referenceFile) throws Exception {
         System.out.println(testFile);
         System.out.println(referenceFile);
 
-        SvgTinySceneGraphReader instance = new SvgTinySceneGraphReader();
-        Node testNode = instance.read(testFile);
-        Node referenceNode = instance.read(referenceFile);
+        SvgTinySceneGraphReaderNew instance = new SvgTinySceneGraphReaderNew();
+        Figure testFigure = instance.read(testFile);
+        Figure referenceFigure = instance.read(referenceFile);
+        SimpleDrawingRenderer r = new SimpleDrawingRenderer();
+        Node testNode = r.render(testFigure);
+        Node referenceNode = r.render(referenceFigure);
 
         CompletableFuture<OrderedPair<WritableImage, WritableImage>> future = new CompletableFuture<>();
         Platform.runLater(() -> {

@@ -143,7 +143,9 @@ public class PageFigure extends AbstractCompositeFigure
     @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
-        javafx.scene.Group groupNode = new javafx.scene.Group();
+        javafx.scene.Group n = new javafx.scene.Group();
+        n.setManaged(false);
+        n.setAutoSizeChildren(false);
 
         Rectangle contentBoundsNode = new Rectangle();
         contentBoundsNode.setFill(null);
@@ -160,12 +162,12 @@ public class PageFigure extends AbstractCompositeFigure
 
         javafx.scene.Group currentPageNode = new javafx.scene.Group();
 
-        groupNode.getChildren().addAll(pageBoundsNode, insetsBoundsNode, contentBoundsNode, currentPageNode);
-        groupNode.getProperties().put(PAGE_BOUNDS_PROPERTY, pageBoundsNode);
-        groupNode.getProperties().put(PAGE_INSETS_PROPERTY, insetsBoundsNode);
-        groupNode.getProperties().put(CONTENT_BOUNDS_PROPERTY, contentBoundsNode);
-        groupNode.getProperties().put(CURRENT_PAGE_PROPERTY, currentPageNode);
-        return groupNode;
+        n.getChildren().addAll(pageBoundsNode, insetsBoundsNode, contentBoundsNode, currentPageNode);
+        n.getProperties().put(PAGE_BOUNDS_PROPERTY, pageBoundsNode);
+        n.getProperties().put(PAGE_INSETS_PROPERTY, insetsBoundsNode);
+        n.getProperties().put(CONTENT_BOUNDS_PROPERTY, contentBoundsNode);
+        n.getProperties().put(CURRENT_PAGE_PROPERTY, currentPageNode);
+        return n;
     }
 
     @NonNull

@@ -28,11 +28,10 @@ import java.util.function.Function;
 public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
         implements WriteableStyleableMapAccessor<CssSize> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     private final Converter<CssSize> converter = new CssSizeConverter(true);
-    @NonNull
-    private final CssMetaData<? extends Styleable, CssSize> cssMetaData;
+    private final @NonNull CssMetaData<? extends Styleable, CssSize> cssMetaData;
 
 
     /**
@@ -41,7 +40,7 @@ public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
      * @param defaultValue The default value.
      */
     public NullableCssSizeStyleableKey(@NonNull String name, @Nullable CssSize defaultValue) {
-        super(null, name, CssSize.class, true, defaultValue);
+        super(null, name, name, CssSize.class, null, true, defaultValue);
         Function<Styleable, StyleableProperty<CssSize>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
@@ -50,16 +49,13 @@ public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssSize> cvrtr
                 = new StyleConverterAdapter<>(converter);
-        CssMetaData<Styleable, CssSize> md
-                = new SimpleCssMetaData<>(property, function,
+        cssMetaData = new SimpleCssMetaData<>(property, function,
                 cvrtr, defaultValue, inherits);
-        cssMetaData = md;
     }
 
 
-    @NonNull
     @Override
-    public Converter<CssSize> getConverter() {
+    public @NonNull Converter<CssSize> getConverter() {
         return converter;
     }
 

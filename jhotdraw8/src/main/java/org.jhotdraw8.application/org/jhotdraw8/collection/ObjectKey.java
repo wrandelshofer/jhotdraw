@@ -40,25 +40,21 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds a String representation of the name.
      */
-    @NonNull
-    private final String name;
+    private final @NonNull String name;
     /**
      * Holds the default value.
      */
-    @Nullable
-    private final T defaultValue;
+    private final @Nullable T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @Nullable
-    private final Class<?> clazz;
+    private final @Nullable Class<?> clazz;
     /**
      * The type token is not sufficient, if the type is parameterized. We allow
      * to specify the type parameters as a string.
      */
-    @NonNull
-    private final List<Class<?>> typeParameters;
+    private final @NonNull List<Class<?>> typeParameters;
 
     /**
      * Whether the value may be set to null.
@@ -138,35 +134,30 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return name string.
      */
-    @NonNull
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
-    @NonNull
     @Override
-    public Class<T> getValueType() {
+    public @NonNull Class<T> getValueType() {
         @SuppressWarnings("unchecked")
         Class<T> ret = (Class<T>) clazz;
         return ret;
     }
 
-    @NonNull
     @Override
-    public Class<?> getComponentValueType() {
+    public @NonNull Class<?> getComponentValueType() {
         return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
     }
 
-    @NonNull
     @Override
-    public List<Class<?>> getValueTypeParameters() {
+    public @NonNull List<Class<?>> getValueTypeParameters() {
         return typeParameters;
     }
 
-    @NonNull
     @Override
-    public String getFullValueType() {
+    public @NonNull String getFullValueType() {
         StringBuilder buf = new StringBuilder();
         buf.append(clazz.getName());
         if (!typeParameters.isEmpty()) {
@@ -190,9 +181,8 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @return the default value.
      */
-    @Nullable
     @Override
-    public T getDefaultValue() {
+    public @Nullable T getDefaultValue() {
         return defaultValue;
     }
 
@@ -208,9 +198,8 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Returns the name string.
      */
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
     }

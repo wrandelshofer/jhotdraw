@@ -35,13 +35,12 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public abstract class AbstractDrawing extends AbstractCompositeFigure
-        implements Drawing, StyleableFigure, LockableFigure, NonTransformableFigure {
+        implements Drawing {
 
     /**
      * The style manager is created lazily.
      */
-    @Nullable
-    private StylesheetsManager<Figure> styleManager = null;
+    private @Nullable StylesheetsManager<Figure> styleManager = null;
 
     public AbstractDrawing() {
     }
@@ -56,9 +55,8 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         set(HEIGHT, height);
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setManaged(false);
         g.setAutoSizeChildren(false);
@@ -68,8 +66,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         return g;
     }
 
-    @NonNull
-    protected StylesheetsManager<Figure> createStyleManager() {
+    protected @NonNull StylesheetsManager<Figure> createStyleManager() {
         return new SimpleStylesheetsManager<>(new FigureSelectorModel());
     }
 
@@ -82,22 +79,19 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
      *
      * @return bounding box (0, 0, WIDTH, HEIGHT).
      */
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getNonNull(WIDTH), getNonNull(HEIGHT));
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         // Note: We must override getBoundsInLocal of AbstractCompositeFigure.
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
-    @Nullable
     @Override
-    public StylesheetsManager<Figure> getStyleManager() {
+    public @Nullable StylesheetsManager<Figure> getStyleManager() {
         if (styleManager == null) {
             styleManager = createStyleManager();
             updateStyleManager();
@@ -150,9 +144,6 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         Group g = (Group) n;
-        //applyTransformableFigureProperties(n);
-        applyStyleableFigureProperties(ctx, n);
-
         Bounds bounds = getLayoutBounds();
         Rectangle page = (Rectangle) g.getProperties().get("background");
         page.setX(bounds.getMinX());

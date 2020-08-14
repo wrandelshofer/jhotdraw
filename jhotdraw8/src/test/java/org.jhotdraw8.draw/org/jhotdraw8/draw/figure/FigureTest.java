@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.CssMetaData;
@@ -24,6 +25,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.junit.jupiter.api.Test;
 
@@ -132,7 +134,7 @@ public class FigureTest {
         }
 
         public @NonNull ObservableList<Figure> getChildren() {
-            return null;
+            return FXCollections.emptyObservableList();
         }
 
         @Nullable
@@ -140,8 +142,8 @@ public class FigureTest {
             return null;
         }
 
-        public Transform getParentToLocal() {
-            return null;
+        public @NonNull Transform getParentToLocal() {
+            return FXTransforms.IDENTITY;
         }
 
         @Override
@@ -149,24 +151,24 @@ public class FigureTest {
             return getLayoutBounds();
         }
 
-        public Transform getLocalToParent() {
-            return null;
+        public @NonNull Transform getLocalToParent() {
+            return FXTransforms.IDENTITY;
         }
 
-        public Transform getWorldToLocal() {
-            return null;
+        public @NonNull Transform getWorldToLocal() {
+            return FXTransforms.IDENTITY;
         }
 
-        public Transform getWorldToParent() {
-            return null;
+        public @NonNull Transform getWorldToParent() {
+            return FXTransforms.IDENTITY;
         }
 
-        public Transform getLocalToWorld() {
-            return null;
+        public @NonNull Transform getLocalToWorld() {
+            return FXTransforms.IDENTITY;
         }
 
-        public Transform getParentToWorld() {
-            return null;
+        public @NonNull Transform getParentToWorld() {
+            return FXTransforms.IDENTITY;
         }
 
         public void invalidateTransforms() {

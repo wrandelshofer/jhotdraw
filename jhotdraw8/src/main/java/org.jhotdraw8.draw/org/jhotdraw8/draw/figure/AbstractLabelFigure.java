@@ -69,7 +69,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         g.setManaged(false);
         g.setAutoSizeChildren(false);
         Path p = new Path();
+        p.setManaged(false);
         Text text = new Text();
+        text.setManaged(false);
         g.getProperties().put("pathNode", p);
         g.getProperties().put("textNode", text);
         return g;

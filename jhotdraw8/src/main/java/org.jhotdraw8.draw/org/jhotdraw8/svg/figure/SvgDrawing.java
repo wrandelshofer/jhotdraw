@@ -1,26 +1,29 @@
 /*
- * @(#)SimpleDrawing.java
+ * @(#)SvgDrawing.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.figure;
+
+package org.jhotdraw8.svg.figure;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.draw.figure.AbstractDrawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.NonTransformableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 
-public class SimpleDrawing extends AbstractDrawing
+/**
+ * Represents an SVG 'svg' element.
+ */
+public class SvgDrawing extends AbstractDrawing
         implements StyleableFigure, LockableFigure, NonTransformableFigure {
-    public SimpleDrawing(double width, double height) {
-        super(width, height);
-    }
-
-    public SimpleDrawing() {
-    }
-
     @Override
     public boolean isSuitableChild(@NonNull Figure newChild) {
         return true;
     }
+
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {

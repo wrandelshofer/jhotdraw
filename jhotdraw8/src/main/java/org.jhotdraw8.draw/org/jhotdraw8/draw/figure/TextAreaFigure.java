@@ -38,13 +38,13 @@ public class TextAreaFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
-        Group g = new Group();
-        g.setManaged(false);
-        g.setAutoSizeChildren(false);
+        Group n = new Group();
+        n.setManaged(false);
+        n.setAutoSizeChildren(false);
         Path p = new Path();
         Text text = new Text();
-        g.getChildren().addAll(p, text);
-        return g;
+        n.getChildren().addAll(p, text);
+        return n;
     }
 
     @NonNull

@@ -54,8 +54,9 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-
-        return new Path();
+        Path n = new Path();
+        n.setManaged(false);
+        return n;
     }
 
     @NonNull

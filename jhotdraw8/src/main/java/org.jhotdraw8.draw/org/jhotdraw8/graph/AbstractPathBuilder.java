@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -116,6 +115,27 @@ public abstract class AbstractPathBuilder<V, A> {
      */
     @Nullable
     public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints) throws PathBuilderException {
+        HashSet<Object> visitedSet = new HashSet<>();
+        return findVertexPathOverWaypointsNonNull(waypoints, visitedSet::clear, visitedSet::add);
+    }
+
+    /**
+     * Builds a VertexPath through the graph which traverses the specified
+     * waypoints.
+     * <p>
+     * This method uses a breadth first path search between waypoints.
+     *
+     * @param waypoints       waypoints, the iteration sequence of this collection
+     *                        determines how the waypoints are traversed
+     * @param clearVisitedSet a method that clears the visited set
+     * @param addToVisitedSet a method that adds a vertex to the visited set
+     *                        and returns true if the vertex was not in the visited set
+     * @return a VertexPath
+     * @throws PathBuilderException if the path cannot be constructed
+     */
+    @Nullable
+    public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints, Runnable clearVisitedSet, AddToSet<V> addToVisitedSet) throws PathBuilderException {
+
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -125,8 +145,8 @@ public abstract class AbstractPathBuilder<V, A> {
         pathElements.add(start); // root element
         while (i.hasNext()) {
             V goal = i.next();
-            BackLink<V, A> back = search(start, goal::equals,
-                    new LinkedHashSet<>()::add);
+            clearVisitedSet.run();
+            BackLink<V, A> back = search(start, goal::equals, addToVisitedSet);
             if (back == null) {
                 throw new PathBuilderException("Could not find path from " + start + " to " + goal + ".");
             } else {

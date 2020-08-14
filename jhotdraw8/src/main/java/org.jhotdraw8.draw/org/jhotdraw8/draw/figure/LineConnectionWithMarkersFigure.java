@@ -26,7 +26,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "LineConnectionWithMarkers";
+    public static final String TYPE_SELECTOR = "LineConnectionWithMarkers";
 
     public LineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
@@ -41,9 +41,8 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
         set(MARKER_FILL, new CssColor("black", Color.BLACK));
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

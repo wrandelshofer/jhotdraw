@@ -99,7 +99,9 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Arc();
+        Arc n = new Arc();
+        n.setManaged(false);
+        return n;
     }
 
     @Override

@@ -66,7 +66,9 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Path();
+        Path n = new Path();
+        n.setManaged(false);
+        return n;
     }
 
     @NonNull

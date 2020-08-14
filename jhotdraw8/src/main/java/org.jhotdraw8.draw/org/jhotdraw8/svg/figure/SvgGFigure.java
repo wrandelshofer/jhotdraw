@@ -2,13 +2,20 @@
  * @(#)GroupFigure.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.figure;
+package org.jhotdraw8.svg.figure;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Grouping;
+import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.ResizableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 
@@ -16,26 +23,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A figure which groups child figures, so that they can be edited by the user
- * as a unit.
+ * Represents an SVG 'g' element.
  *
  * @author Werner Randelshofer
  */
-public class GroupFigure extends AbstractCompositeFigure
-        implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {
+public class SvgGFigure extends AbstractCompositeFigure
+        implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Group";
+    public final static String TYPE_SELECTOR = "g";
 
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        javafx.scene.Group n = new javafx.scene.Group();
-        n.setAutoSizeChildren(false);
-        n.setManaged(false);
-        return n;
+        javafx.scene.Group g = new javafx.scene.Group();
+        g.setAutoSizeChildren(false);
+        g.setManaged(false);
+        return g;
     }
 
     @NonNull
@@ -66,7 +72,6 @@ public class GroupFigure extends AbstractCompositeFigure
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
-        applyCompositableFigureProperties(ctx, n);
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {

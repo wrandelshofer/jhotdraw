@@ -84,7 +84,9 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Line();
+        Line n = new Line();
+        n.setManaged(false);
+        return n;
     }
 
     @NonNull

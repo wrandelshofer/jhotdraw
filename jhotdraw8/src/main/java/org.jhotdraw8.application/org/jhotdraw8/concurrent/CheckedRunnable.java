@@ -5,7 +5,7 @@
 package org.jhotdraw8.concurrent;
 
 /**
- * A Runnable which can throw a checked exception.
+ * A Runnable that may throw a checked exception.
  *
  * @author Werner Randelshofer
  */

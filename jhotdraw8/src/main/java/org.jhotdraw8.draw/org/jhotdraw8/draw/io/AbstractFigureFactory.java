@@ -483,6 +483,24 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     /**
+     * Globally renames the specified key.
+     */
+    private <T> void renameKey(@NonNull MapAccessor<T> key, String newName) {
+        for (Map.Entry<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> entry : attrToKey.entrySet()) {
+            HashMap<String, MapAccessor<?>> map = entry.getValue();
+            if (map.values().remove(key)) {
+                map.put(newName, key);
+            }
+        }
+        for (Map.Entry<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> entry : keyToAttr.entrySet()) {
+            HashMap<MapAccessor<?>, String> map = entry.getValue();
+            if (map.containsKey(key)) {
+                map.put(key, newName);
+            }
+        }
+    }
+
+    /**
      * Globally removes the specified key.
      *
      * @param key the key

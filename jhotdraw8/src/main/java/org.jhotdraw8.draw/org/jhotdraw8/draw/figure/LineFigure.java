@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -24,9 +23,9 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.List;
 
@@ -42,20 +41,14 @@ public class LineFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Line";
+    public static final @NonNull String TYPE_SELECTOR = "Line";
 
-    @NonNull
-    public final static CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey START_Y = new CssSizeStyleableKey("startY", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey END_X = new CssSizeStyleableKey("endX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey END_Y = new CssSizeStyleableKey("endY", CssSize.ZERO);
-    @Nullable
-    public final static CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);
-    @Nullable
-    public final static CssPoint2DStyleableMapAccessor END = new CssPoint2DStyleableMapAccessor("end", END_X, END_Y);
+    public static final @NonNull CssSizeStyleableKey START_X = new CssSizeStyleableKey("startX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey START_Y = new CssSizeStyleableKey("startY", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey END_X = new CssSizeStyleableKey("endX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey END_Y = new CssSizeStyleableKey("endY", CssSize.ZERO);
+    public static final @NonNull CssPoint2DStyleableMapAccessor START = new CssPoint2DStyleableMapAccessor("start", START_X, START_Y);
+    public static final @NonNull CssPoint2DStyleableMapAccessor END = new CssPoint2DStyleableMapAccessor("end", END_X, END_Y);
 
     public LineFigure() {
         this(0, 0, 1, 1);
@@ -71,15 +64,13 @@ public class LineFigure extends AbstractLeafFigure
         set(END, new CssPoint2D(end));
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         CssPoint2D start = getNonNull(START);
         CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(start, end);
@@ -87,10 +78,12 @@ public class LineFigure extends AbstractLeafFigure
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        return Shapes.awtShapeFromFX(new Line(getNonNull(START_X).getConvertedValue(),
-                getNonNull(START_Y).getConvertedValue(),
-                getNonNull(END_X).getConvertedValue(),
-                getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
+        Path2D.Double p = new Path2D.Double();
+        p.moveTo(getNonNull(START_X).getConvertedValue(),
+                getNonNull(START_Y).getConvertedValue());
+        p.lineTo(getNonNull(END_X).getConvertedValue(),
+                getNonNull(END_Y).getConvertedValue());
+        return p.getPathIterator(tx);
     }
 
     @Override
@@ -109,10 +102,11 @@ public class LineFigure extends AbstractLeafFigure
         reshapeInLocal(FXTransforms.createReshapeTransform(getLayoutBounds(), x, y, width, height));
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
-        return new Line();
+    public @NonNull Node createNode(RenderContext drawingView) {
+        Line n = new Line();
+        n.setManaged(false);
+        return n;
     }
 
     @Override
@@ -153,9 +147,8 @@ public class LineFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

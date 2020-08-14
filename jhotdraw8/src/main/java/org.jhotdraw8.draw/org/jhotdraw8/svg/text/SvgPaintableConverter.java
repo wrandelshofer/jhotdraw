@@ -2,7 +2,7 @@
  * @(#)CssPaintableConverter.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.css.text;
+package org.jhotdraw8.svg.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -13,6 +13,10 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.text.AbstractCssConverter;
+import org.jhotdraw8.css.text.CssColorConverter;
+import org.jhotdraw8.css.text.CssLinearGradientConverter;
+import org.jhotdraw8.css.text.CssRadialGradientConverter;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 
@@ -33,12 +37,13 @@ import java.util.function.Consumer;
  * Paintable := (Color|LinearGradient|RadialGradient|ImagePattern|RepeatingImagePattern) ;
  * </pre>
  * <p>
- * FIXME currently only parses the Color and the LinearGradient productions
+ * FIXME must parse the SVG paint production and not the one from JavaFX
  * </p>
+ * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#SpecifyingPaint">link</a>
  *
  * @author Werner Randelshofer
  */
-public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
+public class SvgPaintableConverter extends AbstractCssConverter<Paintable> {
 
     @NonNull
     private static final CssColorConverter colorConverter = new CssColorConverter(false);
@@ -47,7 +52,7 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
     @NonNull
     private static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
 
-    public CssPaintableConverter(boolean nullable) {
+    public SvgPaintableConverter(boolean nullable) {
         super(nullable);
     }
 

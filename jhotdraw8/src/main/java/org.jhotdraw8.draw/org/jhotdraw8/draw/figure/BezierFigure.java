@@ -88,7 +88,9 @@ public class BezierFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Node createNode(RenderContext ctx) {
-        return new Path();
+        Path n = new Path();
+        n.setManaged(false);
+        return n;
     }
 
     @NonNull

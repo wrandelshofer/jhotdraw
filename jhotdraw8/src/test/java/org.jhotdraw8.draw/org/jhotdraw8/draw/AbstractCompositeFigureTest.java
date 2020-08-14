@@ -125,17 +125,17 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public Transform getWorldToLocal() {
+        public @NonNull Transform getWorldToLocal() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Transform getWorldToParent() {
+        public @NonNull Transform getWorldToParent() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void reshapeInLocal(Transform transform) {
+        public void reshapeInLocal(@NonNull Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

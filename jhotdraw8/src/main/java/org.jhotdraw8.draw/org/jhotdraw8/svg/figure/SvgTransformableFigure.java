@@ -2,16 +2,13 @@
  * @(#)TransformableFigure.java
  * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.figure;
+package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
@@ -20,14 +17,11 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.ObjectFigureKey;
-import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.TransformCachingFigure;
+import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.ArrayList;
@@ -36,16 +30,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+
 /**
  * A transformable figure supports the transformation of a figure.
  * <p>
  * The following transformations are supported:
  * <ul>
- * <li>Translation of the local bounds of the figure.</li>
- * <li>Rotation around the center of the untransformed local bounds
- * of the figure.</li>
- * <li>Scaling around the center of the untransformed local bounds
- * of the figure.</li>
  * <li>Arbitrary sequence of affine transformations of the
  * figure.</li>
  * </ul>
@@ -55,76 +45,14 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-public interface TransformableFigure extends TransformCachingFigure {
+public interface SvgTransformableFigure extends TransformCachingFigure {
     boolean CACHE = true;
-    /**
-     * Defines the angle of rotation around the center of the figure in degrees.
-     * <p>
-     * Default value: {@code 0}.
-     */
     @NonNull
-    DoubleStyleableKey ROTATE = new DoubleStyleableKey("rotate", 0.0);
-    /**
-     * Defines the rotation axis used.
-     * <p>
-     * Default value: {@code Rotate.Z_AXIS}.
-     */
-    @NonNull
-    ObjectFigureKey<Point3D> ROTATION_AXIS = new ObjectFigureKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the x axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
-    @NonNull
-    DoubleStyleableKey SCALE_X = new DoubleStyleableKey("scaleX", 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the y axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
-    @NonNull
-    DoubleStyleableKey SCALE_Y = new DoubleStyleableKey("scaleY", 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the z axis
-     * about the center of the figure. Default value: {@code 1}.
-     */
-    @NonNull
-    DoubleStyleableKey SCALE_Z = new DoubleStyleableKey("scaleZ", 1.0);
-    /**
-     * Defines the scale factor by which coordinates are scaled on the axes
-     * about the center of the figure.
-     */
-    @NonNull
-    Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
-    @NonNull
-    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", ImmutableLists.emptyList());
-    /**
-     * Defines the translation on the x axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
-    @NonNull
-    DoubleStyleableKey TRANSLATE_X = new DoubleStyleableKey("translateX", 0.0);
-    /**
-     * Defines the translation on the y axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
-    @NonNull
-    DoubleStyleableKey TRANSLATE_Y = new DoubleStyleableKey("translateY", 0.0);
-    /**
-     * Defines the translation on the z axis about the center of the figure.
-     * Default value: {@code 0}.
-     */
-    @NonNull
-    DoubleStyleableKey TRANSLATE_Z = new DoubleStyleableKey("translateZ", 0.0);
-    /**
-     * Defines the translation on the axes about the center of the
-     * figure.
-     */
-    @NonNull
-    Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverterOLD(false));
+    TransformListStyleableKey TRANSFORMS = TransformableFigure.TRANSFORMS;
 
     static @NonNull Set<Key<?>> getDeclaredKeys() {
         Set<Key<?>> keys = new LinkedHashSet<>();
-        Figure.getDeclaredKeys(TransformableFigure.class, keys);
+        Figure.getDeclaredKeys(SvgTransformableFigure.class, keys);
         return keys;
     }
 
@@ -160,21 +88,11 @@ public interface TransformableFigure extends TransformCachingFigure {
     }
 
     default void clearTransforms() {
-        remove(SCALE_X);
-        remove(SCALE_Y);
-        remove(ROTATE);
-        remove(TRANSLATE_X);
-        remove(TRANSLATE_Y);
         remove(TRANSFORMS);
     }
 
     default void flattenTransforms() {
         Transform p2l = getLocalToParent(false);
-        remove(SCALE_X);
-        remove(SCALE_Y);
-        remove(ROTATE);
-        remove(TRANSLATE_X);
-        remove(TRANSLATE_Y);
         if (p2l == null || p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
@@ -212,24 +130,6 @@ public interface TransformableFigure extends TransformCachingFigure {
             Point2D center = getCenterInLocal();
 
             ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
-            double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
-            double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
-            double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
-            double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
-            double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
-
-            if (tx != 0.0 || ty != 0.0) {
-                Translate tt = new Translate(tx, ty);
-                l2p = FXTransforms.concat(l2p, tt);
-            }
-            if (r != 0) {
-                Rotate tr = new FXPreciseRotate(r, center.getX(), center.getY());
-                l2p = FXTransforms.concat(l2p, tr);
-            }
-            if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
-                Scale ts = new Scale(sx, sy, center.getX(), center.getY());
-                l2p = FXTransforms.concat(l2p, ts);
-            }
             if (t != null && !t.isEmpty()) {
                 l2p = FXTransforms.concat(l2p, getTransform());
             }
@@ -249,35 +149,15 @@ public interface TransformableFigure extends TransformCachingFigure {
         Point2D center = getCenterInLocal();
 
         ImmutableList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
-        double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
-        double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
-        double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
-        double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
-        double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
-
-        if (tx != 0.0 || ty != 0.0) {
-            Translate tt = new Translate(tx, ty);
-            list.add(tt);
-        }
-        if (r != 0) {
-            Rotate tr = new Rotate(r, center.getX(), center.getY());
-            list.add(tr);
-        }
-        if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
-            Scale ts = new Scale(sx, sy, center.getX(), center.getY());
-            list.add(ts);
-        }
         if (!t.isEmpty()) {
             list.addAll(t.asList());
         }
         return list;
     }
 
-
     default @NonNull Transform getParentToLocal() {
         return getParentToLocal(true);
     }
-
 
     default @NonNull Transform getParentToLocal(boolean styled) {
         Transform p2l = CACHE ? getCachedParentToLocal() : null;
@@ -285,29 +165,9 @@ public interface TransformableFigure extends TransformCachingFigure {
             Point2D center = getCenterInLocal();
 
             ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
-            double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
-            double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
-            double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
-            double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
-            double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
 
             if (t != null && !t.isEmpty()) {
                 p2l = getInverseTransform();
-            }
-            if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
-                Scale ts = new Scale(1.0 / sx, 1.0 / sy, center.getX(), center.getY());
-                p2l = FXTransforms.concat(p2l, ts);
-            }
-            if (r != 0) {
-                Rotate tr = new FXPreciseRotate(-r, center.getX(), center.getY());
-                p2l = FXTransforms.concat(p2l, tr);
-            }
-            if (tx != 0.0 || ty != 0.0) {
-                Translate tt = new Translate(-tx, -ty);
-                p2l = FXTransforms.concat(p2l, tt);
-            }
-            if (p2l == null) {
-                p2l = FXTransforms.IDENTITY;
             }
             if (CACHE) {
                 setCachedParentToLocal(p2l);
@@ -331,12 +191,7 @@ public interface TransformableFigure extends TransformCachingFigure {
     }
 
     default boolean hasCenterTransforms() {
-        double sx = getStyledNonNull(SCALE_X);
-        double sy = getStyledNonNull(SCALE_Y);
-        double r = getStyledNonNull(ROTATE);
-        double tx = getStyledNonNull(TRANSLATE_X);
-        double ty = getStyledNonNull(TRANSLATE_Y);
-        return sx != 1 || sy != 1 || r != 0 || tx != 0 || ty != 0;
+        return false;
     }
 
     default boolean hasTransforms() {
@@ -383,8 +238,14 @@ public interface TransformableFigure extends TransformCachingFigure {
                             : parentToLocal.deltaTransform(translate.getTx(), translate.getTy());
                     reshapeInLocal(new Translate(p.getX(), p.getY()));
                 } else {
-                    set(TRANSLATE_X, getNonNull(TRANSLATE_X) + translate.getTx());
-                    set(TRANSLATE_Y, getNonNull(TRANSLATE_Y) + translate.getTy());
+                    ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+                    Transform lastTransform = transforms.get(transforms.size() - 1);
+                    if (lastTransform instanceof Translate) {
+                        set(TRANSFORMS, ImmutableLists.set(transforms, transforms.size() - 1,
+                                lastTransform.createConcatenation(translate)));
+                    } else {
+                        set(TRANSFORMS, ImmutableLists.add(transforms, 0, translate));
+                    }
                 }
             } else {
                 flattenTransforms();
@@ -437,8 +298,13 @@ public interface TransformableFigure extends TransformCachingFigure {
             if (transforms.isEmpty()) {
                 translateInLocal(new CssPoint2D(tr.getTx(), tr.getTy()));
             } else {
-                set(TRANSLATE_X, getNonNull(TRANSLATE_X) + tr.getTx());
-                set(TRANSLATE_Y, getNonNull(TRANSLATE_Y) + tr.getTy());
+                Transform lastTransform = transforms.get(transforms.size() - 1);
+                if (lastTransform instanceof Translate) {
+                    set(TRANSFORMS, ImmutableLists.set(transforms, transforms.size() - 1,
+                            lastTransform.createConcatenation(t)));
+                } else {
+                    set(TRANSFORMS, ImmutableLists.add(transforms, 0, t));
+                }
             }
         } else {
             flattenTransforms();

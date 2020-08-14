@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.FXTransforms;
 
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.CACHE;
-import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRANSFORM;
 
 /**
  * TransformCachingFigure.
@@ -21,7 +20,7 @@ import static org.jhotdraw8.draw.figure.FigureImplementationDetails.IDENTITY_TRA
  * @design.pattern Figure Mixin, Traits.
  */
 public interface TransformCachingFigure extends Figure {
-
+    boolean CACHE = true;
     @Nullable
     Transform getCachedLocalToWorld();
 
@@ -45,59 +44,55 @@ public interface TransformCachingFigure extends Figure {
     void setCachedWorldToParent(@Nullable Transform newValue);
 
     @Override
-    @Nullable
-    default Transform getParentToWorld() {
+    default @NonNull Transform getParentToWorld() {
         Transform t = CACHE ? getCachedParentToWorld() : null;
         if (t == null) {
-            t = getParent() == null ? IDENTITY_TRANSFORM : getParent().getLocalToWorld();
+            t = getParent() == null ? FXTransforms.IDENTITY : getParent().getLocalToWorld();
             if (CACHE) {
-                setCachedParentToWorld(t == null ? IDENTITY_TRANSFORM : t);
+                setCachedParentToWorld(t);
             }
         }
-        return t == IDENTITY_TRANSFORM ? null : t;
+        return t;
     }
 
 
     @Override
-    @Nullable
-    default Transform getLocalToWorld() {
+    default @NonNull Transform getLocalToWorld() {
         Transform t = CACHE ? getCachedLocalToWorld() : null;
         if (t == null) {
             t = getLocalToParent();
             final Figure parent = getParent();
             t = parent == null ? t : FXTransforms.concat(parent.getLocalToWorld(), t);
             if (CACHE) {
-                setCachedLocalToWorld(t == null ? IDENTITY_TRANSFORM : t);
+                setCachedLocalToWorld(t);
             }
         }
-        return t == IDENTITY_TRANSFORM ? null : t;
+        return t;
     }
 
     @Override
-    @Nullable
-    default Transform getWorldToLocal() {
+    default @NonNull Transform getWorldToLocal() {
         Transform t = getCachedWorldToLocal();
         if (t == null) {
             t = getParentToLocal();
             final Figure parent = getParent();
             t = parent == null ? t : FXTransforms.concat(t, parent.getWorldToLocal());
-            setCachedWorldToLocal(t == null ? IDENTITY_TRANSFORM : t);
+            setCachedWorldToLocal(t);
         }
-        return t == IDENTITY_TRANSFORM ? null : t;
+        return t;
     }
 
     @Override
-    @Nullable
-    default Transform getWorldToParent() {
+    default @NonNull Transform getWorldToParent() {
         Transform t = CACHE ? getCachedWorldToParent() : null;
         if (t == null) {
             final Figure parent = getParent();
-            t = parent == null ? IDENTITY_TRANSFORM : parent.getWorldToLocal();
+            t = parent == null ? FXTransforms.IDENTITY : parent.getWorldToLocal();
             if (CACHE) {
-                setCachedWorldToParent(t == null ? IDENTITY_TRANSFORM : t);
+                setCachedWorldToParent(t);
             }
         }
-        return t == IDENTITY_TRANSFORM ? null : t;
+        return t;
     }
 
     @Nullable

@@ -11,7 +11,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
@@ -34,19 +33,16 @@ public class EllipseFigure extends AbstractLeafFigure
         implements StrokableFigure, ResizableFigure, FillableFigure, TransformableFigure, HideableFigure, StyleableFigure,
         LockableFigure, CompositableFigure, ConnectableFigure, PathIterableFigure {
 
-    @NonNull
-    public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
-    @Nullable
-    public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
-    public final static CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
-    public final static CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
-    public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
+    public static final @NonNull CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
+    public static final @NonNull CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public static final @NonNull CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
+    public static final @NonNull CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
+    public static final @NonNull CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Ellipse";
+    public static final String TYPE_SELECTOR = "Ellipse";
 
     public EllipseFigure() {
         this(0, 0, 2, 2);// the values must correspond to the default values of the property keys
@@ -60,21 +56,20 @@ public class EllipseFigure extends AbstractLeafFigure
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
-        return new Ellipse();
+    public @NonNull Node createNode(RenderContext drawingView) {
+        Ellipse n = new Ellipse();
+        n.setManaged(false);
+        return n;
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new EllipseConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         double rx = getNonNull(RADIUS_X).getConvertedValue();
         double ry = getNonNull(RADIUS_Y).getConvertedValue();
         double cx = getNonNull(CENTER_X).getConvertedValue();
@@ -82,9 +77,8 @@ public class EllipseFigure extends AbstractLeafFigure
         return new BoundingBox(cx - rx, cy - ry, rx * 2.0, ry * 2.0);
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         CssSize rx = getNonNull(RADIUS_X);
         CssSize ry = getNonNull(RADIUS_Y);
         return new CssRectangle2D(getNonNull(CENTER_X).subtract(rx), getNonNull(CENTER_Y).subtract(ry), rx.multiply(2.0), ry.multiply(2.0));
@@ -116,9 +110,8 @@ public class EllipseFigure extends AbstractLeafFigure
         return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

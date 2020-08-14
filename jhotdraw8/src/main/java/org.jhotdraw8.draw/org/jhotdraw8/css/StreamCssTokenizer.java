@@ -130,10 +130,10 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  *
  * <p>
  * References:
- * <ul>
- * <li><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">CSS Syntax
- * Module Level 3, Chapter 4. Tokenization</a></li>
- * </ul>
+ * <dl>
+ * <dt>CSS Syntax Module Level 3, Chapter 4. Tokenization</dt>
+ * <dd><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">link</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */
@@ -147,6 +147,11 @@ public class StreamCssTokenizer implements CssTokenizer {
 
     @Nullable
     private String stringValue;
+    @NonNull
+    private final StringBuilder stringBuilder = new StringBuilder();
+    @NonNull
+    private final StringBuilder unitBuf = new StringBuilder();
+
     @Nullable
     private Number numericValue;
     private int lineNumber;
@@ -214,14 +219,14 @@ public class StreamCssTokenizer implements CssTokenizer {
             case ' ':
             case '\n':
             case '\t': {
-                StringBuilder buf = new StringBuilder();
+                stringBuilder.setLength(0);
                 while (ch == ' ' || ch == '\n' || ch == '\t') {
-                    buf.append((char) ch);
+                    stringBuilder.append((char) ch);
                     ch = in.nextChar();
                 }
                 in.pushBack(ch);
                 currentToken = TT_S;
-                stringValue = buf.toString();
+                stringValue = stringBuilder.toString();
                 break;
             }
             case '~': {
@@ -288,10 +293,10 @@ public class StreamCssTokenizer implements CssTokenizer {
                 break;
             }
             case '@': {
-                StringBuilder buf = new StringBuilder();
-                if (identMacro(ch = in.nextChar(), buf)) {
+                stringBuilder.setLength(0);
+                if (identMacro(ch = in.nextChar(), stringBuilder)) {
                     currentToken = TT_AT_KEYWORD;
-                    stringValue = buf.toString();
+                    stringValue = stringBuilder.toString();
                 } else {
                     in.pushBack(ch);
                     currentToken = '@';
@@ -300,10 +305,10 @@ public class StreamCssTokenizer implements CssTokenizer {
                 break;
             }
             case '#': {
-                StringBuilder buf = new StringBuilder();
-                if (nameMacro(ch = in.nextChar(), buf)) {
+                stringBuilder.setLength(0);
+                if (nameMacro(ch = in.nextChar(), stringBuilder)) {
                     currentToken = TT_HASH;
-                    stringValue = buf.toString();
+                    stringValue = stringBuilder.toString();
                 } else {
                     in.pushBack(ch);
                     currentToken = '#';
@@ -313,13 +318,13 @@ public class StreamCssTokenizer implements CssTokenizer {
             }
             case '\'':
             case '"': {
-                StringBuilder buf = new StringBuilder();
-                if (stringMacro(ch, buf)) {
+                stringBuilder.setLength(0);
+                if (stringMacro(ch, stringBuilder)) {
                     currentToken = TT_STRING;
-                    stringValue = buf.toString();
+                    stringValue = stringBuilder.toString();
                 } else {
                     currentToken = TT_BAD_STRING;
-                    stringValue = buf.toString();
+                    stringValue = stringBuilder.toString();
                 }
                 break;
 
@@ -336,9 +341,9 @@ public class StreamCssTokenizer implements CssTokenizer {
             case '7':
             case '8':
             case '9': {
-                StringBuilder buf = new StringBuilder();
-                StringBuilder unitBuf = new StringBuilder();
-                if (numMacro(ch, buf)) {
+                stringBuilder.setLength(0);
+                unitBuf.setLength(0);
+                if (numMacro(ch, stringBuilder)) {
                     ch = in.nextChar();
                     if (ch == '%') {
                         currentToken = TT_PERCENTAGE;
@@ -360,13 +365,13 @@ public class StreamCssTokenizer implements CssTokenizer {
             case '/': {
                 int next = in.nextChar();
                 if (next == '*') {
-                    StringBuilder buf = new StringBuilder();
-                    if (commentAfterSlashStarMacro(buf)) {
+                    stringBuilder.setLength(0);
+                    if (commentAfterSlashStarMacro(stringBuilder)) {
                         currentToken = TT_COMMENT;
                     } else {
                         currentToken = TT_BAD_COMMENT;
                     }
-                    stringValue = buf.toString();
+                    stringValue = stringBuilder.toString();
                 } else {
                     in.pushBack(next);
                     currentToken = ch;
@@ -383,11 +388,11 @@ public class StreamCssTokenizer implements CssTokenizer {
                         stringValue = "-->";
                         currentToken = TT_CDC;
                     } else {
-                        StringBuilder buf = new StringBuilder();
-                        buf.append("--");
-                        if (nameMacro(next2, buf)) {
+                        stringBuilder.setLength(0);
+                        stringBuilder.append("--");
+                        if (nameMacro(next2, stringBuilder)) {
                             currentToken = TT_IDENT;
-                            stringValue = buf.toString();
+                            stringValue = stringBuilder.toString();
                         } else {
                             in.pushBack(next2);
                             in.pushBack(next1);
@@ -397,9 +402,9 @@ public class StreamCssTokenizer implements CssTokenizer {
                     }
                 } else {
                     in.pushBack(next1);
-                    StringBuilder buf = new StringBuilder();
-                    StringBuilder unitBuf = new StringBuilder();
-                    if (numMacro(ch, buf)) {
+                    stringBuilder.setLength(0);
+                    unitBuf.setLength(0);
+                    if (numMacro(ch, stringBuilder)) {
                         ch = in.nextChar();
                         if (ch == '%') {
                             currentToken = TT_PERCENTAGE;
@@ -412,7 +417,7 @@ public class StreamCssTokenizer implements CssTokenizer {
                             currentToken = TT_NUMBER;
                         }
                     } else {
-                        if (identMacro(ch, buf)) {
+                        if (identMacro(ch, stringBuilder)) {
                             next1 = in.nextChar();
                             if (next1 == '(') {
                                 currentToken = TT_FUNCTION;
@@ -420,7 +425,7 @@ public class StreamCssTokenizer implements CssTokenizer {
                                 in.pushBack(next1);
                                 currentToken = TT_IDENT;
                             }
-                            stringValue = buf.toString();
+                            stringValue = stringBuilder.toString();
                         } else {
                             currentToken = ch;
                             stringValue = String.valueOf((char) currentToken);
@@ -448,13 +453,11 @@ public class StreamCssTokenizer implements CssTokenizer {
                     } else {
                         in.pushBack(next2);
                         in.pushBack(next1);
-                        StringBuilder buf = new StringBuilder();
                         currentToken = ch;
                         stringValue = String.valueOf((char) currentToken);
                     }
                 } else {
                     in.pushBack(next1);
-                    StringBuilder buf = new StringBuilder();
                     currentToken = ch;
                     stringValue = String.valueOf((char) currentToken);
                 }
@@ -463,27 +466,26 @@ public class StreamCssTokenizer implements CssTokenizer {
             case 'u':
             case 'U': {
                 // FIXME implement UNICODE_RANGE token
-
-                StringBuilder buf = new StringBuilder();
-                if (identMacro(ch, buf)) {
+                stringBuilder.setLength(0);
+                if (identMacro(ch, stringBuilder)) {
                     int next1 = in.nextChar();
                     if (next1 == '(') {
-                        stringValue = buf.toString();
+                        stringValue = stringBuilder.toString();
                         if (stringValue.equalsIgnoreCase("url")) {
-                            buf.setLength(0);
-                            if (uriMacro(buf)) {
+                            stringBuilder.setLength(0);
+                            if (uriMacro(stringBuilder)) {
                                 currentToken = TT_URL;
                             } else {
                                 currentToken = TT_BAD_URI;
                             }
-                            stringValue = buf.toString();
+                            stringValue = stringBuilder.toString();
                         } else {
                             currentToken = TT_FUNCTION;
                         }
                     } else {
                         in.pushBack(next1);
                         currentToken = TT_IDENT;
-                        stringValue = buf.toString();
+                        stringValue = stringBuilder.toString();
                     }
                 } else {
                     currentToken = ch;
@@ -493,16 +495,16 @@ public class StreamCssTokenizer implements CssTokenizer {
             }
 
             default: {
-                StringBuilder buf = new StringBuilder();
-                if (identMacro(ch, buf)) {
+                stringBuilder.setLength(0);
+                if (identMacro(ch, stringBuilder)) {
                     int next1 = in.nextChar();
                     if (next1 == '(') {
-                        stringValue = buf.toString();
+                        stringValue = stringBuilder.toString();
                         currentToken = TT_FUNCTION;
                     } else {
                         in.pushBack(next1);
                         currentToken = TT_IDENT;
-                        stringValue = buf.toString();
+                        stringValue = stringBuilder.toString();
                     }
                 } else {
                     currentToken = ch;

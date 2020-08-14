@@ -54,6 +54,8 @@ public interface ShapeableFigure extends Figure {
     @NonNull Rectangle2DStyleableMapAccessor SHAPE_BOUNDS = new Rectangle2DStyleableMapAccessor("shapeBounds", SHAPE_BOUNDS_X, SHAPE_BOUNDS_Y, SHAPE_BOUNDS_WIDTH, SHAPE_BOUNDS_HEIGHT);
     /**
      * Defines the border image as an SVG path.
+     * <p>
+     * Performance: it would be nice if Shape was an already parsed representation. For example a JavaFX Path object.
      */
     @NonNull NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", null);
     @NonNull String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";

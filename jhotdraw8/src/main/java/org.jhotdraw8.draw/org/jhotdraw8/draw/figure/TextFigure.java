@@ -105,7 +105,9 @@ public class TextFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Text();
+        Text n = new Text();
+        n.setManaged(false);
+        return n;
     }
 
     @Override

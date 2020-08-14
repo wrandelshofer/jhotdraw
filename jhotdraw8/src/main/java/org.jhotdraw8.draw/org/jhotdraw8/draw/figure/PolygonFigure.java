@@ -110,7 +110,9 @@ public class PolygonFigure extends AbstractLeafFigure
     @NonNull
     @Override
     public Node createNode(RenderContext drawingView) {
-        return new Polygon();
+        Polygon n = new Polygon();
+        n.setManaged(false);
+        return n;
     }
 
     @Override

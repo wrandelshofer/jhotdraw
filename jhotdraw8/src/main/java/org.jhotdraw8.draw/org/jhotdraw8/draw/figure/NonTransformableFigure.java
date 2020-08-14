@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.FXTransforms;
 
 /**
@@ -34,15 +33,13 @@ public interface NonTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    @Nullable
-    default Transform getLocalToParent() {
-        return FigureImplementationDetails.IDENTITY_TRANSFORM;
+    default @NonNull Transform getLocalToParent() {
+        return FXTransforms.IDENTITY;
     }
 
     @Override
-    @Nullable
-    default Transform getParentToLocal() {
-        return FigureImplementationDetails.IDENTITY_TRANSFORM;
+    default @NonNull Transform getParentToLocal() {
+        return FXTransforms.IDENTITY;
     }
 
     @Override

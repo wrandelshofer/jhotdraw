@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class ResourcesHelper {
@@ -123,7 +124,7 @@ class ResourcesHelper {
             return reader == null ? null : reader.read(url);
 
         } catch (MissingResourceException | IOException e) {
-            ResourcesHelper.LOG.warning("Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" not found.");
+            ResourcesHelper.LOG.log(Level.WARNING, "Resources[" + r.getBaseName() + "].getIconProperty \"" + key + suffix + "\" not found.", e);
             return null;
         }
     }
