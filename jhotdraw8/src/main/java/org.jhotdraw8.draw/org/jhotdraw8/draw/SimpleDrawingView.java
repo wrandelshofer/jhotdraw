@@ -46,7 +46,7 @@ import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.css.DefaultUnitConverter;
@@ -119,7 +119,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * The constrainer property holds the constrainer for this drawing view
      */
-    private final NonNullProperty<Constrainer> constrainer = new NonNullProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final NonNullObjectProperty<Constrainer> constrainer = new NonNullObjectProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
     private boolean constrainerNodeValid;
     /**
      * This is the set of figures which are out of sync with their JavaFX node.
@@ -136,8 +136,8 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
      * view.
      */
     @NonNull
-    private final NonNullProperty<DrawingModel> drawingModel //
-            = new NonNullProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
+    private final NonNullObjectProperty<DrawingModel> drawingModel //
+            = new NonNullObjectProperty<DrawingModel>(this, MODEL_PROPERTY, new SimpleDrawingModel()) {
         @Nullable
         private DrawingModel oldValue = null;
 
@@ -197,7 +197,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     /**
      * Margin around the drawing.
      */
-    private final ObjectProperty<Insets> margin = new NonNullProperty<>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
+    private final ObjectProperty<Insets> margin = new NonNullObjectProperty<>(this, MARGIN_PROPERTY, new Insets(20, 20, 20, 20));
 
     private final InvalidationListener modelInvalidationListener = o -> repaint();
 
@@ -319,7 +319,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
 
     @NonNull
     @Override
-    public NonNullProperty<Constrainer> constrainerProperty() {
+    public NonNullObjectProperty<Constrainer> constrainerProperty() {
         return constrainer;
     }
 
@@ -1153,7 +1153,7 @@ public class SimpleDrawingView extends AbstractDrawingView implements EditableCo
     }
 
     @Override
-    public @NonNull NonNullProperty<DrawingModel> modelProperty() {
+    public @NonNull NonNullObjectProperty<DrawingModel> modelProperty() {
         return drawingModel;
     }
 

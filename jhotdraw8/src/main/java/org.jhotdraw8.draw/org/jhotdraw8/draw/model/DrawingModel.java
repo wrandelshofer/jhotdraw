@@ -351,7 +351,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param f the figure
      */
     default void fireNodeInvalidated(Figure f) {
-        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     /**
@@ -365,6 +365,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      */
     default <T> void firePropertyValueChanged(Figure f, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     /**
@@ -374,6 +375,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      */
     default void fireTransformInvalidated(Figure f) {
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     /**
@@ -383,6 +385,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      */
     default void fireLayoutInvalidated(Figure f) {
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     /**
@@ -392,6 +395,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      */
     default void fireStyleInvalidated(Figure f) {
         fireDrawingModelEvent(DrawingModelEvent.styleInvalidated(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     /**

@@ -17,7 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -126,7 +126,7 @@ public interface DrawingView extends RenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    @NonNull NonNullProperty<DrawingModel> modelProperty();
+    @NonNull NonNullObjectProperty<DrawingModel> modelProperty();
 
     /**
      * The drawing model.
@@ -189,7 +189,7 @@ public interface DrawingView extends RenderContext {
      * drawing view, and {@code getName()} returning
      * {@code CONSTRAINER_PROPERTY}.
      */
-    @NonNull NonNullProperty<Constrainer> constrainerProperty();
+    @NonNull NonNullObjectProperty<Constrainer> constrainerProperty();
 
     /**
      * The focused property is set to true, when the DrawingView has input

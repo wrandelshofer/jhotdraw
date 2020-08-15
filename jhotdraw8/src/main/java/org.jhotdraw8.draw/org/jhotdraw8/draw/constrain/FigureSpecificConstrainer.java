@@ -10,7 +10,7 @@ import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -56,7 +56,7 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /**
      * All figures which are not in the map use the default constrainer.
      */
-    private final NonNullProperty<Constrainer> defaultConstrainer = new NonNullProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
 
     // ----
     // property methods
@@ -67,7 +67,7 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     }
 
     @NonNull
-    public NonNullProperty<Constrainer> defaultConstrainerProperty() {
+    public NonNullObjectProperty<Constrainer> defaultConstrainerProperty() {
         return defaultConstrainer;
     }
 

@@ -13,14 +13,14 @@ import java.util.Objects;
 /**
  * @author wr
  */
-public class NonNullPropertyTest {
+public class NonNullObjectPropertyTest {
 
     @Test
     public void testBind() {
         double minv = 0;
         double maxv = 1;
 
-        NonNullProperty<String> p1 = new NonNullProperty<>(null, null, "hello");
+        NonNullObjectProperty<String> p1 = new NonNullObjectProperty<>(null, null, "hello");
         ObjectProperty<String> p2 = new SimpleObjectProperty<>(null);
         p1.addListener((o, oldv, newv) -> {
             Objects.requireNonNull(newv);

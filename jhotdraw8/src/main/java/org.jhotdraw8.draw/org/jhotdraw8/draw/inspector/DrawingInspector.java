@@ -71,7 +71,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
 
     private void commitEdits() {
         DrawingView subject = getSubject();
-        subject.getModel().fireTreeModelEvent(TreeModelEvent.nodeInvalidated(subject.getModel(), subject.getDrawing()));
+        subject.getModel().fireTreeModelEvent(TreeModelEvent.nodeChanged(subject.getModel(), subject.getDrawing()));
     }
 
     @Override

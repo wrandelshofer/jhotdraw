@@ -17,7 +17,7 @@ import java.util.Objects;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class NonNullProperty<T> extends SimpleObjectProperty<T> {
+public class NonNullObjectProperty<T> extends SimpleObjectProperty<T> {
 
     /**
      * Creates a new instance.
@@ -26,7 +26,7 @@ public class NonNullProperty<T> extends SimpleObjectProperty<T> {
      * @param name         The name of the property
      * @param initialValue The initial value. NonNull.
      */
-    public NonNullProperty(Object bean, String name, T initialValue) {
+    public NonNullObjectProperty(Object bean, String name, T initialValue) {
         super(bean, name, initialValue);
     }
 

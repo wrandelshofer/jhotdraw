@@ -37,7 +37,7 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorActivity;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
-import org.jhotdraw8.draw.SimpleDrawingView;
+import org.jhotdraw8.draw.SimpleDrawingViewNew;
 import org.jhotdraw8.draw.action.AddToGroupAction;
 import org.jhotdraw8.draw.action.AlignBottomAction;
 import org.jhotdraw8.draw.action.AlignHorizontalAction;
@@ -349,7 +349,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             throw new InternalError(ex);
         }
 
-        drawingView = new SimpleDrawingView();
+        drawingView = new SimpleDrawingViewNew();
         // FIXME should use preferences!
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25, 5, 5));
         //drawingView.setHandleType(HandleType.TRANSFORM);

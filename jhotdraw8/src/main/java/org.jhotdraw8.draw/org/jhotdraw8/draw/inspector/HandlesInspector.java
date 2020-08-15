@@ -17,7 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.util.converter.NumberStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.text.CssColorConverter;
@@ -90,7 +90,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
     }
 
     @NonNull
-    private NonNullProperty<CssColor> handleColorProperty = new NonNullProperty<>(this, "handleColor", CssColor.valueOf("blue"));
+    private NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", CssColor.valueOf("blue"));
 
     @NonNull
     private IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);

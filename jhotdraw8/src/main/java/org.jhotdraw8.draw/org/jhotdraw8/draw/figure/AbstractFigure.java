@@ -254,6 +254,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
 
     @Override
     protected <T> void changed(Key<T> key, T oldValue, T newValue) {
+        invalidateTransforms();
         firePropertyChangeEvent(this, key, oldValue, newValue);
     }
 }

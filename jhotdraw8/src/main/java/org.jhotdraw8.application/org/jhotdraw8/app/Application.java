@@ -21,7 +21,7 @@ import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -74,7 +74,7 @@ public interface Application extends Disableable, PropertyBean {
      */
     @NonNull ReadOnlySetProperty<Activity> activitiesProperty();
 
-    @NonNull NonNullProperty<Preferences> preferencesProperty();
+    @NonNull NonNullObjectProperty<Preferences> preferencesProperty();
 
 
     /**
@@ -229,7 +229,7 @@ public interface Application extends Disableable, PropertyBean {
 
     @NonNull ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty();
 
-    @NonNull NonNullProperty<Resources> resourcesProperty();
+    @NonNull NonNullObjectProperty<Resources> resourcesProperty();
 
     @Nullable
     default Supplier<MenuBar> getMenuBarFactory() {

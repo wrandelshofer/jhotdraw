@@ -161,6 +161,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     event.getKey(), event.getOldValue(),
                     event.getNewValue()));
+            fireTreeModelEvent(TreeModelEvent.nodeChanged(this, event.getSource()));
         }
     }
 
@@ -168,6 +169,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private <T> void onPropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                 key, oldValue, newValue));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, figure));
     }
 
     private void markDirty(Figure figure, DirtyBits... bits) {
@@ -205,7 +207,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             if (index != -1) {
                 parent.getChildren().remove(index);
                 fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, parent, index));
-                fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
+                fireTreeModelEvent(TreeModelEvent.nodeChanged(this, parent));
             }
         }
     }
@@ -219,7 +221,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
         parent.getChildren().remove(index);
         fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, parent, index));
-        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, parent));
         return child;
     }
 
@@ -234,7 +236,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             int oldChildIndex = oldParent.getChildren().indexOf(child);
             oldParent.removeChild(child);
             fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, oldParent, oldChildIndex));
-            fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, oldParent));
+            fireTreeModelEvent(TreeModelEvent.nodeChanged(this, oldParent));
         }
         parent.getChildren().add(index, child);
         Figure newRoot = child.getRoot();
@@ -251,7 +253,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
         }
         fireTreeModelEvent(TreeModelEvent.nodeAddedToParent(this, child, parent, index));
-        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, parent));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, parent));
     }
 
     @Override
@@ -315,48 +317,56 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     public void reshapeInLocal(@NonNull Figure f, Transform transform) {
         f.reshapeInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void reshapeInParent(@NonNull Figure f, Transform transform) {
         f.reshapeInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void translateInParent(@NonNull Figure f, CssPoint2D delta) {
         f.translateInParent(delta);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void transformInParent(@NonNull Figure f, Transform transform) {
         f.transformInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void transformInLocal(@NonNull Figure f, Transform transform) {
         f.transformInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void reshapeInLocal(@NonNull Figure f, double x, double y, double width, double height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void reshapeInLocal(@NonNull Figure f, @NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
     public void layout(@NonNull Figure f, @NonNull RenderContext ctx) {
         f.layoutNotify(ctx);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override

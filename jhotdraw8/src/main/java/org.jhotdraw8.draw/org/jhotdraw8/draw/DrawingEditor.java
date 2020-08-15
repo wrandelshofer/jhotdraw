@@ -10,7 +10,7 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
@@ -231,7 +231,7 @@ public interface DrawingEditor {
      *
      * @return color of handle
      */
-    NonNullProperty<CssColor> handleColorProperty();
+    NonNullObjectProperty<CssColor> handleColorProperty();
 
     default CssColor getHandleColor() {
         return handleColorProperty().get();
@@ -305,7 +305,7 @@ public interface DrawingEditor {
      *
      * @return the handle key
      */
-    @NonNull NonNullProperty<HandleType> handleTypeProperty();
+    @NonNull NonNullObjectProperty<HandleType> handleTypeProperty();
 
 
     /**
@@ -323,7 +323,7 @@ public interface DrawingEditor {
      *
      * @return the handle key
      */
-    @NonNull NonNullProperty<HandleType> multiHandleTypeProperty();
+    @NonNull NonNullObjectProperty<HandleType> multiHandleTypeProperty();
 
 
     default void setMultiHandleType(@Nullable HandleType newValue) {

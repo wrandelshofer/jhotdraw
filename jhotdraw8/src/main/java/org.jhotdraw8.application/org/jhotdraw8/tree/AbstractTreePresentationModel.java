@@ -5,7 +5,7 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 
 /**
  * The {@code TreePresentationModel} can be used to present a {@code TreeModel}
@@ -23,8 +23,8 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
      * Holds the underlying model.
      */
     @Nullable
-    private final NonNullProperty<TreeModel<N>> treeModel //
-            = new NonNullProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<>()) {
+    private final NonNullObjectProperty<TreeModel<N>> treeModel //
+            = new NonNullObjectProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<>()) {
         @Nullable
         private TreeModel<N> oldValue = null;
 
@@ -38,7 +38,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     };
 
     @Nullable
-    public NonNullProperty<TreeModel<N>> treeModelProperty() {
+    public NonNullObjectProperty<TreeModel<N>> treeModelProperty() {
         return treeModel;
     }
 

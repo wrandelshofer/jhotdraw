@@ -101,7 +101,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     }
 
     @NonNull
-    public static <E> TreeModelEvent<E> nodeInvalidated(@NonNull TreeModel<E> source, E node) {
+    public static <E> TreeModelEvent<E> nodeChanged(@NonNull TreeModel<E> source, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_CHANGED, node, null, null, -1);
     }
 

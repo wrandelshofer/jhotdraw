@@ -24,7 +24,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.beans.NonNullProperty;
+import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.util.EmptyResources;
@@ -65,8 +65,8 @@ public abstract class AbstractApplication extends javafx.application.Application
     private final ObjectProperty<Function<Application, Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
     private final ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
     private final ObjectProperty<Supplier<URIChooser>> openChooserFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
-    private final NonNullProperty<Resources> resources = new NonNullProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
-    private final NonNullProperty<Preferences> preferences = new NonNullProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
+    private final NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
+    private final NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
     /**
      * Holds the max number of recent URIs.
@@ -204,12 +204,12 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public @NonNull NonNullProperty<Resources> resourcesProperty() {
+    public @NonNull NonNullObjectProperty<Resources> resourcesProperty() {
         return resources;
     }
 
     @Override
-    public @NonNull NonNullProperty<Preferences> preferencesProperty() {
+    public @NonNull NonNullObjectProperty<Preferences> preferencesProperty() {
         return preferences;
     }
 }

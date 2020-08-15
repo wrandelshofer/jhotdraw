@@ -160,7 +160,7 @@ public interface TreeModel<N> extends ObservableMixin {
      * @param node the node
      */
     default void fireNodeInvalidated(N node) {
-        fireTreeModelEvent(TreeModelEvent.nodeInvalidated(this, node));
+        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, node));
     }
 
     default boolean isLeaf(N node) {

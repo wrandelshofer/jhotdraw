@@ -93,6 +93,7 @@ public interface TransformableFigure extends TransformCachingFigure {
      * Defines the scale factor by which coordinates are scaled on the axes
      * about the center of the figure.
      */
+    @SuppressWarnings("unused")
     @NonNull
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     @NonNull
@@ -119,6 +120,7 @@ public interface TransformableFigure extends TransformCachingFigure {
      * Defines the translation on the axes about the center of the
      * figure.
      */
+    @SuppressWarnings("unused")
     @NonNull
     Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverterOLD(false));
 
@@ -145,7 +147,7 @@ public interface TransformableFigure extends TransformCachingFigure {
     default void applyTransformableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
-        if (t == null || t.isIdentity()) {
+        if (t.isIdentity()) {
             if (!transforms.isEmpty()) {
                 transforms.clear();
             }
