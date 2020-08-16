@@ -113,23 +113,17 @@
     >
       <src path="${src.main.java}/org.jhotdraw8.application"/>
       <src path="${src.main.java}/org.jhotdraw8.draw"/>
-      <!-- samples are only available for modular JVMs
-      <src path="${src.main.java}/org.jhotdraw8.samples.grapher"/>
-      <src path="${src.main.java}/org.jhotdraw8.samples.misc"/>
-      <src path="${src.main.java}/org.jhotdraw8.samples.modeler"/>
-      <src path="${src.main.java}/org.jhotdraw8.samples.net"/>
-      <src path="${src.main.java}/org.jhotdraw8.samples.pert"/>
-      <src path="${src.main.java}/org.jhotdraw8.samples.svg"/>
-      <src path="${src.main.java}/org.jhotdraw8.samples.teddy"/>
-      -->
       <compilerarg value="-Xlint"/>
       <exclude name="**/*DepsMain.java"/>
       <exclude name="module-info.java"/>
       <exclude name="**/*ResourceBundleProvider.java"/>
       <exclude name="**/ModulepathResources.java"/>
+      <!-- Use JavaFX that came with Java SE 8 -->
+      <!--
       <classpath>
         <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
       </classpath>
+      -->
       <compilerarg value="-version"/>
     </javac>
     <copy todir="${build.main.classes}">
@@ -1128,6 +1122,15 @@
       </fileset>
     </jar>
     -->
+    <jar file="${build}/sources/${ant.project.name}-src.jar">
+      <fileset dir="${src}/main/java/org.jhotdraw8.application">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="${src}/main/java/org.jhotdraw8.draw">
+        <exclude name=".*"/>
+      </fileset>
+    </jar>
+
   </target>
 
   <macrodef name="modular-jar">
@@ -1204,14 +1207,12 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
-    <jar file="${dist}/source/${ant.project.name}-src.jar">
-      <fileset dir="${src}/main/java">
+    <copy todir="${dist}/source">
+      <fileset dir="${build}/sources">
         <exclude name=".*"/>
+        <include name="*.jar"/>
       </fileset>
-      <fileset dir=".">
-        <include name="*.md"/>
-      </fileset>
-    </jar>
+    </copy>
     <!-- FIXME can't build modular javadoc with ANT
     <jar file="${dist}/${ant.project.name}-javadoc.jar">
       <fileset dir="${build.javadoc}">
