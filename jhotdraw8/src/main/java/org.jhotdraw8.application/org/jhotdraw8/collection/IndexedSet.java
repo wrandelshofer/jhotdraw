@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -153,7 +153,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     private E doSet(int index, E newValue) {
-        Objects.checkIndex(index, size);
+        Preconditions.checkIndex(index, size);
         E oldValue = elementData(index);
         data[index] = newValue;
         return oldValue;
@@ -187,7 +187,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     private void dataDoAdd(int index, E element) {
-        Objects.checkIndex(index, size + 1);
+        Preconditions.checkIndex(index, size + 1);
         ensureCapacity(size + 1);
         System.arraycopy(data, index,
                 data, index + 1,
@@ -238,7 +238,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     private E dataDoRemove(int index) {
-        Objects.checkIndex(index, size);
+        Preconditions.checkIndex(index, size);
         E oldValue = elementData(index);
         System.arraycopy(data, index + 1, data, index, size - index - 1);
         data[--size] = null;
@@ -247,7 +247,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @SuppressWarnings("unchecked")
     private List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
-        Objects.checkFromToIndex(fromIndex, toIndex, size);
+        Preconditions.checkFromToIndex(fromIndex, toIndex, size);
         int removedCount = toIndex - fromIndex;
         ArrayList<E> removed = new ArrayList<>(removedCount);
         if (removedCount > 0) {
@@ -313,7 +313,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     }
 
     private E doGet(int index) {
-        Objects.checkIndex(index, size);
+        Preconditions.checkIndex(index, size);
         return elementData(index);
     }
 

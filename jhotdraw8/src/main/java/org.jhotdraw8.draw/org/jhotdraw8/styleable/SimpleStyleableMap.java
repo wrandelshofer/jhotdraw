@@ -10,6 +10,7 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssDefaulting;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -69,6 +70,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      */
     public SimpleStyleableMap() {
         this(new HashMap<K, Integer>() {
+            private final static long serialVersionUID = 0L;
             @SuppressWarnings("unchecked")
             @Override
             public Integer get(Object key) {
@@ -212,7 +214,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      * @return nextUp with nextUp @gt;= value && nextUp == highestOneBit(nextUp).
      */
     private int nextPowerOfTwoUp(int value) {
-        Objects.checkIndex(value, 1 << 29);
+        Preconditions.checkIndex(value, 1 << 29);
         int highestOneBit = highestOneBit(value);
         return (value == highestOneBit) ? value : highestOneBit << 1;
     }

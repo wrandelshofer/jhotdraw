@@ -1319,7 +1319,7 @@ public class SvgTinySceneGraphReader {
             case XMLStreamConstants.SPACE:
                 break;
             case XMLStreamConstants.CHARACTERS:
-                if (!r.getText().isBlank()) {
+                if (!r.getText().trim().isEmpty()) {
                     logWarning(r, "<svg>: warning skipping characters: \"" + r.getText() + "\".");
                 }
                 break;

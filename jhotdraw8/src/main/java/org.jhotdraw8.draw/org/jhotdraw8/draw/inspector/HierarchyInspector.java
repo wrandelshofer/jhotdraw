@@ -140,7 +140,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), LockableFigure.LOCKED)
         );
-        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
+        // Type arguments needed for Java 8!
+        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Nullable
                     @Override
@@ -149,7 +150,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
                 }
         );
-        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
+        // Type arguments needed for Java 8!
+        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
                     @Nullable
                     @Override
@@ -162,12 +164,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // This cell factory ensures that only styleable figures support editing of ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered.
         idColumn.setCellFactory(
-                new Callback<>() {
+                // Type arguments needed for Java 8!
+                new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
 
                     @NonNull
                     @Override
                     public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
-                        return new TextFieldTreeTableCell<>(new DefaultStringConverter()) {
+                        // Type arguments needed for Java 8!
+                        return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
                             @Override
                             public void cancelEdit() {
                                 super.cancelEdit();
@@ -207,12 +211,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // This cell factory ensures that only styleable figures support editing of style classes.
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered.
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
-        styleClassesColumn.setCellFactory(new Callback<>() {
+        // Type arguments needed for Java 8!
+        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
 
             @NonNull
             @Override
             public TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
-                return new TextFieldTreeTableCell<>() {
+                // Type arguments needed for Java 8!
+                return new TextFieldTreeTableCell<Figure, ImmutableList<String>>() {
                     {
                         setConverter(new StringConverterAdapter<>(wordListConverter));
                     }
@@ -271,7 +277,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             }
         });
         CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>(new CssPseudoClassConverter(false));
-        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<>() {
+        // Type arguments needed for Java 8!
+        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<Figure, ImmutableSet<PseudoClass>>() {
             {
                 setConverter(new StringConverterAdapter<>(pseudoClassConverter));
             }

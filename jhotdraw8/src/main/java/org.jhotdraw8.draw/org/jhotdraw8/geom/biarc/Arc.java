@@ -56,8 +56,8 @@ public class Arc {
      * @return the point at t
      */
     public Point2D.Double pointAt(double t) {
-        var x = c.getX() + r * Math.cos(startAngle + t * sweepAngle);
-        var y = c.getY() + r * Math.sin(startAngle + t * sweepAngle);
+        double x = c.getX() + r * Math.cos(startAngle + t * sweepAngle);
+        double y = c.getY() + r * Math.sin(startAngle + t * sweepAngle);
         return new Point2D.Double(x, y);
     }
 

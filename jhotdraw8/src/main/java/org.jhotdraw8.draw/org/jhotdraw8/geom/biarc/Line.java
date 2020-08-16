@@ -54,8 +54,8 @@ public class Line {
         } else if (Double.isNaN(l.m)) {
             return verticalIntersection(l, this);
         } else {
-            var x = (this.m * this.p.getX() - l.m * l.p.getX() - this.p.getY() + l.p.getY()) / (this.m - l.m);
-            var y = m * x - m * p.getX() + p.getY();
+            double x = (this.m * this.p.getX() - l.m * l.p.getX() - this.p.getY() + l.p.getY()) / (this.m - l.m);
+            double y = m * x - m * p.getX() + p.getY();
             return new Point2D.Double(x, y);
         }
     }
@@ -70,8 +70,8 @@ public class Line {
      * @return
      */
     private static Point2D.Double verticalIntersection(Line vl, Line l) {
-        var x = vl.p.getX();
-        var y = l.m * (x - l.p.getX()) + l.p.getY();
+        double x = vl.p.getX();
+        double y = l.m * (x - l.p.getX()) + l.p.getY();
         return new Point2D.Double(x, y);
     }
 
@@ -83,7 +83,7 @@ public class Line {
      * @return
      */
     public static Line createPerpendicularAt(Point2D.Double P, Point2D.Double P1) {
-        var m = slope(P, P1);
+        double m = slope(P, P1);
 
         if (m == 0) {
             return new Line(P, Double.NaN);

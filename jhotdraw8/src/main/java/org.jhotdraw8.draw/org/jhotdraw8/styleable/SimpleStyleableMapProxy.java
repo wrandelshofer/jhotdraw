@@ -22,6 +22,7 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean containsKey(Object key) {
         boolean b = target.containsKey(origin, (K) key);
         boolean sb = super.containsKey(key);
@@ -38,17 +39,18 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
 
     @Override
     public V getOrDefault(Object key, V defaultValue) {
-        return target.getOrDefault(originOrdinal, (K) key, defaultValue);
+        return target.getOrDefault(originOrdinal, key, defaultValue);
     }
 
     @Override
+    @NonNull
     public Set<Entry<K, V>> entrySet() {
         return target.entrySet(origin);
     }
 
     @Override
     public V get(Object key) {
-        return target.getOrDefault(originOrdinal, (K) key, null);
+        return target.getOrDefault(originOrdinal, key, null);
     }
 
     @Override
@@ -57,6 +59,7 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V remove(Object key) {
         if (origin == null) {
             return null;

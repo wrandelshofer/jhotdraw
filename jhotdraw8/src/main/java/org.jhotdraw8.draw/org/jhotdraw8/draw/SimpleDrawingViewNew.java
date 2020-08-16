@@ -475,7 +475,6 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         Drawing drawing = getDrawing();
         Bounds bounds = drawing == null ? new BoundingBox(0, 0, 10, 10) : drawing.getLayoutBounds();
         double f = getZoomFactor();
-        double invf = 1 / f;
         double w = bounds.getWidth();
         double h = bounds.getHeight();
         zoomableScrollPane.setContentSize(w, h);
@@ -530,7 +529,7 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         Deque<Figure> cascade = new ArrayDeque<>(figures);
         for (Figure f : figures) {
             for (Figure ff : f.preorderIterable()) {
-                StreamSupport.stream(new TreeBreadthFirstSpliterator<Figure>(
+                StreamSupport.stream(new TreeBreadthFirstSpliterator<>(
                                 figure -> () ->
                                         figure.getLayoutObservers().stream()
                                                 .filter(x -> x.getLayoutSubjects().size() == 1).iterator()

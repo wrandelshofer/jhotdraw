@@ -604,7 +604,7 @@ public class BezierCurves {
                 c = r - i;
         if (fuzzyEqual(s, 0)) {
             if (!fuzzyEqual(l, 0)) {
-                var h = -c / l;
+                double h = -c / l;
                 if (0 <= h && 1 >= h) {
                     result.add(h);
                     return result;

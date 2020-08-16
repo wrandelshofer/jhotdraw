@@ -1,9 +1,12 @@
 package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
@@ -33,7 +36,7 @@ public class Bezier2BiArc {
         int maxCurves = 1024;
 
         // The bezier curves to approximate
-        var stack = new ArrayDeque<CubicCurve2D.Double>();
+        ArrayDeque<CubicCurve2D.Double> stack = new ArrayDeque<CubicCurve2D.Double>();
 
         // ---------------------------------------------------------------------------
         // First, calculate the inflection points and split the bezier at them (if any)
@@ -48,8 +51,8 @@ public class Bezier2BiArc {
             // Calculate the transition point for the BiArc
 
             // V: Intersection point of tangent lines
-            var C1 = bezier.getP1().equals(bezier.getCtrlP1()) ? bezier.getCtrlP2() : bezier.getCtrlP1();
-            var C2 = bezier.getP2().equals(bezier.getCtrlP2()) ? bezier.getCtrlP1() : bezier.getCtrlP2();
+            Point2D C1 = bezier.getP1().equals(bezier.getCtrlP1()) ? bezier.getCtrlP2() : bezier.getCtrlP1();
+            Point2D C2 = bezier.getP2().equals(bezier.getCtrlP2()) ? bezier.getCtrlP1() : bezier.getCtrlP2();
 
             @NonNull Point2D a0 = bezier.getP1();
             @NonNull Point2D b0 = bezier.getP2();
@@ -70,7 +73,7 @@ public class Bezier2BiArc {
                 continue;
             }
 
-            var V = intersectionResultEx.getFirst();
+            IntersectionPointEx V = intersectionResultEx.getFirst();
 
             Point2D.Double P1 = new Point2D.Double(bezier.getX1(), bezier.getY1());
             Point2D.Double P2 = new Point2D.Double(bezier.getX2(), bezier.getY2());
@@ -89,7 +92,7 @@ public class Bezier2BiArc {
             if (tMaxError != -1d && stack.size() + biarcs.size() < maxCurves) {
                 // If not, split the bezier curve the point where the distance is the maximum
                 // and try again with the two halves
-                var bs = BezierCurves.split(bezier, tMaxError);
+                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> bs = BezierCurves.split(bezier, tMaxError);
                 stack.push(bs.second());
                 stack.push(bs.first());
             } else {
@@ -113,13 +116,13 @@ public class Bezier2BiArc {
      * @return the incenter point G
      */
     public static Point2D.Double computeIncenterPoint(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
-        var dac = c.distance(a);
-        var dab = b.distance(a);
-        var dbc = b.distance(c);
+        double dac = c.distance(a);
+        double dab = b.distance(a);
+        double dbc = b.distance(c);
         return Points2D.divide(
-                Points2D.sum(Points2D.multiply(b,dac),
-                Points2D.multiply(c,dab),
-                        Points2D.multiply(a,dbc)),
+                Points2D.sum(Points2D.multiply(b, dac),
+                        Points2D.multiply(c, dab),
+                        Points2D.multiply(a, dbc)),
                 dac + dab + dbc);
     }
 
@@ -134,14 +137,14 @@ public class Bezier2BiArc {
      * @return the parameter with maximum error or -1d
      */
     private static double getParamWithMaxErrorOverTolerance(CubicCurve2D.Double bezier, int nrPointsToCheck, double tolerance, BiArc biarc) {
-        var maxDistance = tolerance;
-        var maxDistanceAt = -1d;
-        var parameterStep = 1d / nrPointsToCheck;
+        double maxDistance = tolerance;
+        double maxDistanceAt = -1d;
+        double parameterStep = 1d / nrPointsToCheck;
         for (int i = 0; i <= nrPointsToCheck; i++) {
-            var t = parameterStep * i;
-            var u1 = biarc.pointAt(t);
-            var u2 = BezierCurves.evalCubicCurve(bezier, t);
-            var distance = u1.distance(u2);
+            double t = parameterStep * i;
+            Point2D.Double u1 = biarc.pointAt(t);
+            Point2D.Double u2 = BezierCurves.evalCubicCurve(bezier, t);
+            double distance = u1.distance(u2);
 
             if (distance > maxDistance) {
                 maxDistance = distance;
@@ -152,7 +155,7 @@ public class Bezier2BiArc {
     }
 
     public static void splitAtInflectionPoints(CubicCurve2D.Double bezier, ArrayDeque<CubicCurve2D.Double> stack) {
-        var toSplit = bezier;
+        CubicCurve2D.Double toSplit = bezier;
 
         // Edge case: P1 == P2 -> Split bezier
         if (bezier.getP1().equals(bezier.getP2())) {
@@ -166,19 +169,19 @@ public class Bezier2BiArc {
         else if (toSplit.getP1().equals(toSplit.getCtrlP1()) || toSplit.getP2().equals(toSplit.getCtrlP2())) {
             stack.push(toSplit);
         } else {
-            var inflex = BezierCurves.inflectionPoints(toSplit);
+            DoubleArrayList inflex = BezierCurves.inflectionPoints(toSplit);
 
             if (inflex.size() == 1) {
-                var splitted = BezierCurves.split(toSplit, inflex.get(0));
+                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = BezierCurves.split(toSplit, inflex.get(0));
                 stack.push(splitted.second());
                 stack.push(splitted.first());
             } else if (inflex.size() == 2) {
-                var t1 = inflex.get(0);
-                var t2 = inflex.get(1);
+                double t1 = inflex.get(0);
+                double t2 = inflex.get(1);
 
                 // I'm not sure if I need, but it does not hurt to order them
                 if (t1 > t2) {
-                    var tmp = t1;
+                    double tmp = t1;
                     t1 = t2;
                     t2 = tmp;
                 }
@@ -186,9 +189,9 @@ public class Bezier2BiArc {
                 // Make the first split and save the first new curve.
                 // The second one has to be split again
                 // at the recalculated t2 (it is on a new curve)
-                var splitted1 = BezierCurves.split(toSplit, t1);
+                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted1 = BezierCurves.split(toSplit, t1);
                 t2 = (1 - t1) * t2;
-                var splitted2 = BezierCurves.split(splitted1.second(), t2);
+                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted2 = BezierCurves.split(splitted1.second(), t2);
                 stack.push(splitted2.second());
                 stack.push(splitted2.first());
                 stack.push(splitted1.first());

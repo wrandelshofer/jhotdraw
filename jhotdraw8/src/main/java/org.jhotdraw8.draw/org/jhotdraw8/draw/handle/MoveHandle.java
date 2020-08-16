@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.handle;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -45,10 +46,11 @@ public class MoveHandle extends LocatorHandle {
     private CssPoint2D oldPoint;
     @NonNull
     private final Region node;
+    @NonNull
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
-    @Nullable
+    @NonNull
     private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
-    @Nullable
+    @NonNull
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
     private boolean pressed;
@@ -72,7 +74,7 @@ public class MoveHandle extends LocatorHandle {
 
     @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public Node getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();
@@ -140,13 +142,17 @@ public class MoveHandle extends LocatorHandle {
         if (event.isShiftDown()) {
             // shift transforms all selected figures
             for (Figure f : groupReshapeableFigures) {
-                translateFigure(f, oldPoint, newPoint, model);
+                doTranslateFigure(f, oldPoint, newPoint, model);
             }
         } else {
             Figure f = owner;
-            translateFigure(f, oldPoint, newPoint, model);
+            doTranslateFigure(f, oldPoint, newPoint, model);
         }
         oldPoint = newPoint;
+    }
+
+    protected void doTranslateFigure(@NonNull Figure f, @NonNull CssPoint2D oldPoint, @NonNull CssPoint2D newPoint, @Nullable DrawingModel model) {
+        translateFigure(f, oldPoint, newPoint, model);
     }
 
     /**

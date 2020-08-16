@@ -32,7 +32,7 @@
   </exec>
 
   <property name="name" value="${ant.project.name}"/>
-  <property name="copyright" value="Copyright (c) 2017 The authors and contributors of JHotDraw."/>
+  <property name="copyright" value="Copyright (c) 2020 The authors and contributors of JHotDraw."/>
   <property name="license.name" value="MIT License"/>
   <property name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
   <property name="version" value="${git.version}"/>
@@ -1060,13 +1060,7 @@
       <classpath>
         <pathelement path="${lib.runtime}"/>
         <fileset file="${jdk}/lib/tools.jar"/>
-        <!--pathelement path="${build.javadoc}"/-->
       </classpath>
-      <!--
-      <modulepath>
-        <fileset file="${lib}/compile/modulepath/javafx-sdk-11.0.2/lib/*.jar"/>
-      </modulepath>
-      -->
     </javadoc>
   </target>
   <target name="do-jar-classes" depends="init">

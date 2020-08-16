@@ -159,16 +159,34 @@ public class InteractiveHandleRenderer {
                 break;
             }
             if (FXGeom.grow(shape.getBoundsInParent(), tolerance, tolerance).contains(point)) {
-                int cap = switch (shape.getStrokeLineCap()) {
-                    case SQUARE -> BasicStroke.CAP_SQUARE;
-                    case BUTT -> BasicStroke.CAP_BUTT;
-                    case ROUND -> BasicStroke.CAP_ROUND;
-                };
-                int join = switch (shape.getStrokeLineJoin()) {
-                    case MITER -> BasicStroke.JOIN_MITER;
-                    case BEVEL -> BasicStroke.JOIN_BEVEL;
-                    case ROUND -> BasicStroke.JOIN_ROUND;
-                };
+                int cap;
+                switch (shape.getStrokeLineCap()) {
+                case SQUARE:
+                    cap = BasicStroke.CAP_SQUARE;
+                    break;
+                case BUTT:
+                    cap = BasicStroke.CAP_BUTT;
+                    break;
+                case ROUND:
+                    cap = BasicStroke.CAP_ROUND;
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
+                int join;
+                switch (shape.getStrokeLineJoin()) {
+                case MITER:
+                    join = BasicStroke.JOIN_MITER;
+                    break;
+                case BEVEL:
+                    join = BasicStroke.JOIN_BEVEL;
+                    break;
+                case ROUND:
+                    join = BasicStroke.JOIN_ROUND;
+                    break;
+                default:
+                    throw new IllegalArgumentException();
+                }
                 return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
                         cap, join, (float) shape.getStrokeMiterLimit()
                 ).createStrokedShape(Shapes.awtShapeFromFX(shape))

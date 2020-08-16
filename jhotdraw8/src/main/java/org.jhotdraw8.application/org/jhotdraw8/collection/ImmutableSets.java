@@ -84,13 +84,13 @@ public class ImmutableSets {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
         switch (length) {
         case 0:
             return emptySet();
         case 1:
-            //noinspection unchecked
             return new ImmutableSingletonSet<>((T) a[offset]);
         default:
             return new ImmutableHashSet<T>(a, offset, length);
@@ -98,7 +98,7 @@ public class ImmutableSets {
     }
 
     @NonNull
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked"})
     public static <T> ImmutableSet<T> remove(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:

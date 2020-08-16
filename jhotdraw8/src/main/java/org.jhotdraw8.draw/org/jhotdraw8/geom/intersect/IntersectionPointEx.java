@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
  * Describes an intersection point of two parametric functions 'a' and 'b'.
  */
 public class IntersectionPointEx extends IntersectionPoint {
+    private final static long serialVersionUID = 0L;
 
     /**
      * @see #getArgumentB()

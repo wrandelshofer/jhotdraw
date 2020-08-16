@@ -25,7 +25,6 @@
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.draw/org/jhotdraw8/draw/gui/ZoomableScrollPane.java" afterDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />

@@ -33,7 +33,8 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
 
     @NonNull
     private SimpleStyleableMap<Key<?>, Object> createStyleableMap() {
-        return new SimpleStyleableMap<>(createKeyMap()) {
+        // Explicit type arguments needed for Java 8!
+        return new SimpleStyleableMap<Key<?>, Object>(createKeyMap()) {
             @Override
             @SuppressWarnings("unchecked")
             protected void callObservers(StyleOrigin origin, @NonNull MapChangeListener.Change<Key<?>, Object> change) {
@@ -55,6 +56,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     protected Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
+                private final static long serialVersionUID = 0L;
                 @NonNull
                 final AtomicInteger nextIndex = new AtomicInteger();
 

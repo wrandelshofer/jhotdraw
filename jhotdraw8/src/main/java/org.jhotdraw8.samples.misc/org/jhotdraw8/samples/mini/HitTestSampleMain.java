@@ -201,22 +201,24 @@ public class HitTestSampleMain extends Application {
 
     @NonNull
     private Color getColor(IntersectionResult r) {
-        return switch (r.getStatus()) {
-
-            case INTERSECTION -> Color.RED;
-            case NO_INTERSECTION -> Color.YELLOW;
-
-            case NO_INTERSECTION_INSIDE -> Color.GREEN;
-
-            case NO_INTERSECTION_OUTSIDE -> Color.BLUE;
-
-            case NO_INTERSECTION_TANGENT -> Color.PURPLE;
-
-            case NO_INTERSECTION_COINCIDENT -> Color.CYAN;
-
-            case NO_INTERSECTION_PARALLEL -> Color.ORANGE;
-
-        };
+        switch (r.getStatus()) {
+        case INTERSECTION:
+            return Color.RED;
+        case NO_INTERSECTION:
+            return Color.YELLOW;
+        case NO_INTERSECTION_INSIDE:
+            return Color.GREEN;
+        case NO_INTERSECTION_OUTSIDE:
+            return Color.BLUE;
+        case NO_INTERSECTION_TANGENT:
+            return Color.PURPLE;
+        case NO_INTERSECTION_COINCIDENT:
+            return Color.CYAN;
+        case NO_INTERSECTION_PARALLEL:
+            return Color.ORANGE;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     /**

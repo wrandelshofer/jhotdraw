@@ -201,8 +201,12 @@ public class SimpleDockRoot
             }
             if (zone == DropZone.CENTER) {
                 switch (pickedDock.getDockAxis()) {
-                case X -> zone = DropZone.RIGHT;
-                case Y -> zone = DropZone.BOTTOM;
+                case X:
+                    zone = DropZone.RIGHT;
+                    break;
+                case Y:
+                    zone = DropZone.BOTTOM;
+                    break;
                 }
             }
         } else {

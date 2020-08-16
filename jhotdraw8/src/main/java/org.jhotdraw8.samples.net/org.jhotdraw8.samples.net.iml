@@ -10,6 +10,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="org.jhotdraw8.application" />
     <orderEntry type="module" module-name="org.jhotdraw8.draw" />
-    <orderEntry type="library" name="org.openjfx:javafx:14.0.1" level="project" />
+    <orderEntry type="library" name="org.openjfx:javafx:14.0.2.1" level="project" />
   </component>
 </module>

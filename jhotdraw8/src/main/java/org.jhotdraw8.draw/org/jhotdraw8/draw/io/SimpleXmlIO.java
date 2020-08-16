@@ -671,7 +671,8 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
             Document doc = builder.newDocument();
             DOMResult result = new DOMResult(doc);
-            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+            XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
+            XMLStreamWriter w = xmlOutputFactory.createXMLStreamWriter(result);
 
             setUriResolver(new UriResolver(null, documentHome));
             writeClipping(w, internal, selection);
@@ -694,7 +695,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
             Document doc = builder.newDocument();
             DOMResult result = new DOMResult(doc);
-            XMLStreamWriter w = XMLOutputFactory.newDefaultFactory().createXMLStreamWriter(result);
+            XMLStreamWriter w = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
             writeDocument(w, documentHome, internal);
             w.close();
             return doc;

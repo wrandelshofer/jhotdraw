@@ -11,6 +11,7 @@ import java.awt.geom.Point2D;
  * coordinates for equals and hashCode.
  */
 public class IntersectionPoint extends Point2D.Double {
+    private final static long serialVersionUID = 0L;
     protected final double argumentA;
     protected final int segmentA;
 
