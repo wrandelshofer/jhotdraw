@@ -17,17 +17,17 @@ import java.util.Objects;
  * @param <V> the type of the items that form the pair
  * @author Werner Randelshofer
  */
-public class UnorderedPair<U, V> implements Pair<U, V> {
+public class UnorderedPair<V> implements Pair<V, V> {
 
-    private final U a;
+    private final V a;
     private final V b;
 
-    public UnorderedPair(U a, V b) {
+    public UnorderedPair(V a, V b) {
         this.a = a;
         this.b = b;
     }
 
-    public U first() {
+    public V first() {
         return a;
     }
 
@@ -50,7 +50,7 @@ public class UnorderedPair<U, V> implements Pair<U, V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked") final UnorderedPair<U, V> other = (UnorderedPair) obj;
+        @SuppressWarnings("unchecked") final UnorderedPair<V> other = (UnorderedPair) obj;
         if (Objects.equals(this.a, other.a) && Objects.equals(this.b, other.b)) {
             return true;
         }

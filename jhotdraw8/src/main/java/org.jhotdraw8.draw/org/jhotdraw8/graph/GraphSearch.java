@@ -102,7 +102,7 @@ public class GraphSearch {
         return disjointSets;
     }
 
-    private static class Edge<VV, AA> extends UnorderedPair<VV, VV> {
+    private static class Edge<VV, AA> extends UnorderedPair<VV> {
         private final AA arrow;
         private final double cost;
 
