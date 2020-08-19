@@ -1157,10 +1157,6 @@
         <arg line="-f &quot;${build}/modules/@{module}.jar&quot;"/>
         <arg line="-u"/>
         <arg line="-e @{mainclass}"/>
-      </exec>
-      <exec executable="jar">
-        <arg line="-f &quot;${build}/modules/@{module}.jar&quot;"/>
-        <arg line="-u"/>
         <arg line="--module-version=${version}"/>
       </exec>
 
