@@ -48,7 +48,7 @@ public interface OutputFormat extends PropertyBean {
      */
     default void write(@NonNull Path file, Drawing drawing, WorkState workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
-            write(file.toUri(), out, drawing, workState);
+            write(file.getParent().toUri(), out, drawing, workState);
         }
     }
 
