@@ -176,8 +176,8 @@ public class ListViewUtil {
 
         };
 
-        @Nullable
-        EventHandler<? super DragEvent> listDragHandler_DELETE_ME = new EventHandler<DragEvent>() {
+        @NonNull
+        EventHandler<? super DragEvent> listDragHandler = new EventHandler<DragEvent>() {
 
             @Override
             public void handle(@NonNull DragEvent event) {
@@ -291,7 +291,7 @@ public class ListViewUtil {
             return cell;
         };
         listView.setCellFactory(dndCellFactory);
-        //listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
+        listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
     }
 
     /**
