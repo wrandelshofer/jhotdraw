@@ -16,6 +16,7 @@ import org.jhotdraw8.css.SelectorModel;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -43,21 +44,21 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
-        if (recursionDepth > 1) {
-            throw new ParseException("〈var〉: Recursion not allowed.", tt.getStartPosition());
+    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
+                        @NonNull CssFunctionProcessor<T> functionProcessor,
+                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
+        if (recursionStack.contains(this)) {
+            throw tt.createParseException("〈var〉: Recursion not allowed.");
         }
 
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈var〉: function var() expected.");
         if (!getName().equals(tt.currentString())) {
-            throw new ParseException("〈var〉: function var() expected.", tt.getStartPosition());
+            throw tt.createParseException("〈var〉: function var() expected.");
         }
-        int line = tt.getLineNumber();
-        int start = tt.getStartPosition();
 
         tt.requireNextToken(CssTokenType.TT_IDENT, "〈var〉: function custom-property-name expected.");
 
-        String customPropertyName = tt.currentString();
+        String customPropertyName = tt.currentStringNonNull();
         List<CssToken> attrFallback = new ArrayList<>();
         if (tt.next() == CssTokenType.TT_COMMA) {
             while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
@@ -65,19 +66,27 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
             }
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw new ParseException("〈attr〉: right bracket expected. " + tt.current(), tt.getStartPosition());
+            throw tt.createParseException("〈attr〉: right bracket expected.");
         }
-        int end = tt.getEndPosition();
 
         if (!customPropertyName.startsWith("--")) {
-            throw new ParseException("〈var〉: custom-property-name starting with two dashes \"--\" expected. Found: \"" + customPropertyName + "\"", tt.getStartPosition());
+            throw tt.createParseException("〈var〉: custom-property-name starting with two dashes \"--\" expected.");
         }
         ReadOnlyList<CssToken> customValue = functionProcessor.getCustomProperties().get(customPropertyName);
+        recursionStack.push(this);
         if (customValue == null) {
-            functionProcessor.process(element, new ListCssTokenizer(attrFallback), out, recursionDepth + 1);
+            if (attrFallback.isEmpty()) {
+                // We have not been able to substitute the value.
+                // The value is "invalid at computed-value-time".
+                // https://drafts.csswg.org/css-variables/#using-variables
+                throw tt.createParseException("〈var〉: Could not find a custom property with this name: \"" + customPropertyName + "\".");
+            } else {
+                functionProcessor.process(element, new ListCssTokenizer(attrFallback), out, recursionStack);
+            }
         } else {
-            functionProcessor.process(element, new ListCssTokenizer(customValue), out, recursionDepth + 1);
+            functionProcessor.process(element, new ListCssTokenizer(customValue), out, recursionStack);
         }
+        recursionStack.pop();
     }
 
     @Override

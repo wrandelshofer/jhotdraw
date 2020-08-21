@@ -8,10 +8,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.css.function.CssFunction;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -38,22 +41,22 @@ public interface CssFunctionProcessor<T> {
      * @param element        an element of the DOM
      * @param tt             the tokenizer providing input tokens
      * @param out            a consumer for the processed tokens
-     * @param recursionDepth
+     * @param recursionStack
      * @throws IOException    in case of IO failure
      * @throws ParseException in case of a parsing failure
      */
-    void process(T element, CssTokenizer tt, Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException;
+    void process(T element, CssTokenizer tt, Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
     /**
      * Processes the next token(s).
      */
-    void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException;
+    void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
 
     /**
      * Convenience method for processing tokens.
      * <p>
-     * The default implementation calls {@link #process(Object, CssTokenizer, Consumer, int)}.
+     * The default implementation calls {@link #process(Object, CssTokenizer, Consumer, Deque)}.
      *
      * @param element an element of the DOM
      * @param in      the input tokens
@@ -65,7 +68,7 @@ public interface CssFunctionProcessor<T> {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
-            process(element, tt, out::add, 0);
+            process(element, tt, out::add, new ArrayDeque<>());
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception.", e);
         }

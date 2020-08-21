@@ -188,12 +188,6 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         }
         getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
         updateAllFigures();
-        /*
-        getDrawing().updateStyleManager();
-        for (Figure f : getDrawing().preorderIterable()) {
-            getDrawingModel().fireStyleInvalidated(f);
-        }*/
-
     }
 
     @Override

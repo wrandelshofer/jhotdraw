@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.text.ParseException;
+import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -51,7 +52,7 @@ abstract class AbstractCssFunctionProcessorTest {
         CssFunctionProcessor<Element> instance = createInstance(model, customProperties);
 
         try {
-            instance.process(elem, tt, consumer, 0);
+            instance.process(elem, tt, consumer, new ArrayDeque<>());
             if (expected == null) {
                 fail("must throw ParseException");
             }

@@ -438,7 +438,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                 if (value == null || isInitial(value)) {
                     elem.remove(origin, k);
                 } else {
-                    // Ignore it tokens are bad or just whitespace and comments
+                    // Ignore if tokens are bad or just whitespace and comments
                     boolean ignore = true;
                     for (CssToken t : value) {
                         if (t.getType() != CssTokenType.TT_S && t.getType() != CssTokenType.TT_COMMENT) {
@@ -461,7 +461,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                             convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                         }
                         elem.setStyled(origin, k, intern(convertedValue));
-                    } catch (IOException ex) {
+                    } catch (Throwable ex) {
                         LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
                     }
                 }

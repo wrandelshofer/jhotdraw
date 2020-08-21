@@ -142,7 +142,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
      * {@link CssTokenType#IDENT_REVERT},
      * {@link CssTokenType#IDENT_UNSET},
      */
-    public static final String UNSPECIFIED_VALUE_PLACEHOLDER = "revert";//"/* unspecified value */";
+    public static final String UNSPECIFIED_VALUE_PLACEHOLDER = "  ";//"/* unspecified value */";
     /**
      * This placeholder is displayed to indicate that multiple values have
      * been specified for this property.

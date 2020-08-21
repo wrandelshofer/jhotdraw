@@ -12,7 +12,9 @@ import org.jhotdraw8.css.function.CssFunction;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +65,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
-            process(element, tt, out::add, 0);
+            process(element, tt, out::add, new ArrayDeque<>());
         } catch (IOException e) {
             e.printStackTrace();
             out.clear();
@@ -86,28 +88,28 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return buf.toString();
     }
 
-    public final void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+    public final void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             tt.pushBack();
-            processToken(element, tt, out, recursionDepth);
+            processToken(element, tt, out, recursionStack);
         }
     }
 
-    public final void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
-        doProcessToken(element, tt, out, recursionDepth);
+    public final void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
+        doProcessToken(element, tt, out, recursionStack);
     }
 
-    protected void doProcessToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+    protected void doProcessToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
 
             @NonNull final String name = tt.currentStringNonNull();
             final CssFunction<T> function = functions.get(name);
             if (function != null) {
                 tt.pushBack();
-                function.process(element, tt, model, this, out, recursionDepth + 1);
+                function.process(element, tt, model, this, out, recursionStack);
             } else {
                 tt.pushBack();
-                processUnknownFunction(element, tt, out, recursionDepth + 1);
+                processUnknownFunction(element, tt, out, recursionStack);
             }
         } else {
             out.accept(tt.getToken());
@@ -121,16 +123,16 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
      * @param element        the element
      * @param tt             the tokenizer
      * @param out            the consumer
-     * @param recursionDepth
+     * @param recursionStack recursion stack for detecting infinite recursions
      * @throws IOException    on io failure
      * @throws ParseException on parse failure
      */
-    private void processUnknownFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+    private void processUnknownFunction(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈func〉: function expected.");
         out.accept(tt.getToken());
         while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             tt.pushBack();
-            processToken(element, tt, out, recursionDepth + 1);
+            processToken(element, tt, out, recursionStack);
         }
         if (tt.current() != CssTokenType.TT_EOF) {
             out.accept(tt.getToken());

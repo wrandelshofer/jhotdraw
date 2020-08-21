@@ -5,7 +5,6 @@
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssFunctionProcessor;
 import org.jhotdraw8.css.CssSize;
@@ -19,6 +18,7 @@ import org.jhotdraw8.css.UnitConverter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -62,7 +62,8 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
+                        @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
             throw tt.createParseException("〈" + getName() + "〉: function " + getName() + "() expected.");
@@ -107,7 +108,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
                 : list.get(list.size() - 1);
     }
 
-    @Nullable
+    @NonNull
     protected CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize size = null;
         switch (tt.next()) {

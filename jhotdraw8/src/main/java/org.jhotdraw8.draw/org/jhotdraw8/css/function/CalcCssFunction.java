@@ -17,7 +17,9 @@ import org.jhotdraw8.css.UnitConverter;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -54,7 +56,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                         @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
         CssSize dim = parseCalcFunction(element, tt, functionProcessor);
@@ -170,7 +172,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
             String name = tt.currentString();
             tt.pushBack();
             List<CssToken> list = new ArrayList<>();
-            functionProcessor.processToken(element, tt, list::add, 0);
+            functionProcessor.processToken(element, tt, list::add, new ArrayDeque<>());
             if (list.size() != 1) {
                 throw new ParseException("〈calc-value〉: function " + name + "() must return single value.", tt.getStartPosition());
             }

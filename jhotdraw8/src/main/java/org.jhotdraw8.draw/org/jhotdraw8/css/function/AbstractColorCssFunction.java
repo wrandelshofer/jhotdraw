@@ -16,6 +16,7 @@ import org.jhotdraw8.css.text.CssColorConverter;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T>
             String name = tt.currentString();
             tt.pushBack();
             List<CssToken> list = new ArrayList<>();
-            functionProcessor.processToken(element, tt, list::add, 0);
+            functionProcessor.processToken(element, tt, list::add, new ArrayDeque<>());
             if (list.isEmpty()) {
                 throw new ParseException("〈color-value〉: function " + name + "() must return a value.", tt.getStartPosition());
             }

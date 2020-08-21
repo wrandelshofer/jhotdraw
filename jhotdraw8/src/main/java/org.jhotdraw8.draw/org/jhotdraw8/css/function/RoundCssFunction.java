@@ -14,6 +14,7 @@ import org.jhotdraw8.css.SelectorModel;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Deque;
 import java.util.function.Consumer;
 
 /**
@@ -39,7 +40,9 @@ public class RoundCssFunction<T> extends CalcCssFunction<T> {
 
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+    public void process(@NonNull T element, @NonNull CssTokenizer tt,
+                        @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor,
+                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: " + getName() + "() function expected.");

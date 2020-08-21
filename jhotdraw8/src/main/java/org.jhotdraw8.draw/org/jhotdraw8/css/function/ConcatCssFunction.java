@@ -13,6 +13,7 @@ import org.jhotdraw8.css.SelectorModel;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Deque;
 import java.util.function.Consumer;
 
 /**
@@ -45,7 +46,8 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
 
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
+                        @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈concat〉: concat() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
             throw new ParseException("〈concat〉: concat() function expected.", tt.getStartPosition());

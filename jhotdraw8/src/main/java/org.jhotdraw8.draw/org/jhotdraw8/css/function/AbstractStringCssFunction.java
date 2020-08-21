@@ -12,6 +12,7 @@ import org.jhotdraw8.css.CssTokenizer;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
         }
         tt.pushBack();
 
-        functionProcessor.processToken(element, tt, temp::add, 0);
+        functionProcessor.processToken(element, tt, temp::add, new ArrayDeque<>());
         for (CssToken t : temp) {
             switch (t.getType()) {
             case CssTokenType.TT_STRING:

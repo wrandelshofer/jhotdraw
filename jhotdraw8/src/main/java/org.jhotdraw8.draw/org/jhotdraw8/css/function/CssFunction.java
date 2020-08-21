@@ -12,6 +12,7 @@ import org.jhotdraw8.css.SelectorModel;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Deque;
 import java.util.function.Consumer;
 
 /**
@@ -26,7 +27,7 @@ public interface CssFunction<T> {
                  @NonNull CssTokenizer tt,
                  @NonNull SelectorModel<T> model,
                  @NonNull CssFunctionProcessor<T> functionProcessor,
-                 @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException;
+                 @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
 
     /**

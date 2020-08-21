@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -54,7 +55,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     public void process(@NonNull T element, @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out, int recursionDepth) throws IOException, ParseException {
+                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
             throw tt.createParseException("〈" + getName() + "〉: function " + getName() + "() expected.");
@@ -228,10 +229,11 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
             }
 
         }
+        recursionStack.push(this);
         functionProcessor.processToken(element, new ListCssTokenizer(
                         attrFallback.isEmpty() ? Collections.singletonList(new CssToken(CssTokenType.TT_IDENT, "none")) : attrFallback),
-                out, recursionDepth + 1);
-
+                out, recursionStack);
+        recursionStack.pop();
     }
 
     @NonNull
