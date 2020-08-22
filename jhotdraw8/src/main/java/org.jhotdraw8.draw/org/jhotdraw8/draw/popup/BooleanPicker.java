@@ -30,25 +30,25 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
     private void init(@NonNull BiConsumer<Boolean, Boolean> callback) {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
-        MenuItem initialItem;
+        MenuItem unsetItem;
         MenuItem trueItem;
         MenuItem falseItem;
-        initialItem = new MenuItem();
+        unsetItem = new MenuItem();
         noneItem = new MenuItem();
         trueItem = new MenuItem();
         falseItem = new MenuItem();
-        initialItem.setOnAction(e -> callback.accept(false, null));
+        unsetItem.setOnAction(e -> callback.accept(false, null));
         noneItem.setOnAction(e -> callback.accept(true, null));
         trueItem.setOnAction(e -> callback.accept(true, true));
         falseItem.setOnAction(e -> callback.accept(true, false));
-        labels.configureMenuItem(initialItem, "value.initial");
+        labels.configureMenuItem(unsetItem, "value.unset");
         labels.configureMenuItem(noneItem, "value.none");
         labels.configureMenuItem(trueItem, "value.true");
         labels.configureMenuItem(falseItem, "value.false");
         contextMenu.getItems().addAll(
                 trueItem, falseItem,
                 new SeparatorMenuItem(),
-                initialItem, noneItem
+                unsetItem, noneItem
         );
     }
 

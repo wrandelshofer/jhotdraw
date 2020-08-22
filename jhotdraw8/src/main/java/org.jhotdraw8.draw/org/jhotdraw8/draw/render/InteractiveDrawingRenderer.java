@@ -558,17 +558,13 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
         Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
         dirtyFigureNodes.clear();
         for (Figure f : copyOfDirtyFigureNodes) {
-            if (!f.isShowing() && !hasNode(f)
-                    || !f.getBoundsInWorld().intersects(visibleRectInWorld)
-            ) {
+            Node node = getNode(f);
+            if (!f.isShowing() || node == null) {
                 // wont be updated and thus remains dirty!
                 dirtyFigureNodes.add(f);
                 continue;
             }
-            Node node = getNode(f);
-            if (node != null) {
-                f.updateNode(this, node);
-            }
+            f.updateNode(this, node);
         }
     }
 

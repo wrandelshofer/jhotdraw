@@ -41,15 +41,15 @@ public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
             contextMenu.getItems().add(valueItem);
         }
 
-        MenuItem initialItem = new MenuItem();
-        initialItem.setOnAction(e -> callback.accept(false, null));
+        MenuItem unsetItem = new MenuItem();
+        unsetItem.setOnAction(e -> callback.accept(false, null));
         noneItem = new MenuItem();
         noneItem.setOnAction(e -> callback.accept(true, null));
-        labels.configureMenuItem(initialItem, "value.initial");
+        labels.configureMenuItem(unsetItem, "value.unset");
         labels.configureMenuItem(noneItem, "value.none");
         contextMenu.getItems().addAll(
                 new SeparatorMenuItem(),
-                initialItem, noneItem
+                unsetItem, noneItem
         );
     }
 

@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * DepthFirstSpliterator.
+ * DepthFirstArcSpliterator.
  *
  * @param <V> the vertex type
  * @author Werner Randelshofer

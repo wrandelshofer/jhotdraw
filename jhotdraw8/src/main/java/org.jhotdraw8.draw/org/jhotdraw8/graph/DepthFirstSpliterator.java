@@ -58,7 +58,7 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
         deque = new ArrayDeque<>(16);
         this.visited = visited;
         if (visited.add(root)) {
-            deque.push(root);
+            deque.addLast(root);
         }
     }
 

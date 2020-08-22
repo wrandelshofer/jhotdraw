@@ -268,7 +268,7 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         handleRenderer.setDrawingView(this);
         zoomFactorProperty().addListener(this::onZoomFactorChanged);
         constrainer.addListener((o, oldValue, newValue) -> updateConstrainer(oldValue, newValue));
-        zoomableScrollPane.viewRectProperty().addListener(o -> revalidateConstrainer());
+        zoomableScrollPane.viewRectProperty().addListener(this::onViewRectChanged);
     }
 
     private void updateConstrainer(@Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
@@ -299,6 +299,10 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         revalidateLayout();
     }
 
+    private void onViewRectChanged(Observable observable, Bounds oldValue, Bounds newValue) {
+        revalidateLayout();
+    }
+
     private void initView() {
         String emptyCss = "/org/jhotdraw8/draw/empty.css";
         URL emptyCssUrl = SimpleDrawingViewNew.class.getResource(emptyCss);
@@ -326,6 +330,11 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
                 new Border(
                         new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
                         new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
+                ));
+        foreground.setBorder(
+                new Border(
+
+                        new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
                 ));
         CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
     }
@@ -480,7 +489,11 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         zoomableScrollPane.setContentSize(w, h);
         double p = 24;
         background.resizeRelocate(-p, -p, w * f + 2 * p, h * f + 2 * p);
-        foreground.resize(w * f, h * f);
+        Bounds vp = zoomableScrollPane.getViewportRect();
+        foreground.resize(vp.getWidth(), vp.getHeight());
+
+        handleRenderer.invalidateHandleNodes();
+        handleRenderer.repaint();
     }
 
     private void validateLayout() {

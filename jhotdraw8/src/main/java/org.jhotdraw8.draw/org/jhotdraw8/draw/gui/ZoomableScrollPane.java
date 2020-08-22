@@ -28,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 /**
  * A ScrollPane that also supports zooming.
@@ -164,31 +166,37 @@ public class ZoomableScrollPane {
         scrollContentRectToVisible(oldx, oldy, oldw, oldh);
     }
 
+    public ReadOnlyObjectProperty<Bounds> viewportRectProperty() {
+        return viewportPane.boundsInParentProperty();
+    }
+
     private void initBindings() {
         // - Translate the viewRect and the background + foreground panes when
         //   the scrollbars are moved.
-        DoubleBinding translateXBinding = createTranslateBinding(horizontalScrollBar);
-        DoubleBinding translateYBinding = createTranslateBinding(verticalScrollBar);
+        DoubleBinding backgroundTranslateXBinding = createBackgroundTranslateBinding(horizontalScrollBar);
+        DoubleBinding backgroundTranslateYBinding = createBackgroundTranslateBinding(verticalScrollBar);
+        DoubleBinding viewTranslateXBinding = createViewRectTranslateBinding(horizontalScrollBar);
+        DoubleBinding viewTranslateYBinding = createViewRectTranslateBinding(verticalScrollBar);
 
         viewRect.bind(CustomBinding.compute(() -> {
                     double invf = 1 / zoomFactor.get();
                     return new BoundingBox(
-                            -translateXBinding.get() * invf,
-                            -translateYBinding.get() * invf,
+                            viewTranslateXBinding.get() * invf,
+                            viewTranslateYBinding.get() * invf,
                             horizontalScrollBar.getVisibleAmount() * invf,
                             verticalScrollBar.getVisibleAmount() * invf
                     );
                 },
-                translateXBinding,
-                translateYBinding,
+                viewTranslateXBinding,
+                viewTranslateYBinding,
                 horizontalScrollBar.visibleAmountProperty(),
                 verticalScrollBar.visibleAmountProperty(),
                 zoomFactor));
 
-        background.translateXProperty().bind(translateXBinding);
-        background.translateYProperty().bind(translateYBinding);
-        foreground.translateXProperty().bind(translateXBinding);
-        foreground.translateYProperty().bind(translateYBinding);
+        background.translateXProperty().bind(backgroundTranslateXBinding);
+        background.translateYProperty().bind(backgroundTranslateYBinding);
+        //foreground.translateXProperty().bind(worldTranslateXBinding);
+        // foreground.translateYProperty().bind(worldTranslateYBinding);
 
         // - Adjust the size of the sub-scene when the viewport is resized.
         subScene.widthProperty().bind(viewportWidthProperty());
@@ -204,10 +212,10 @@ public class ZoomableScrollPane {
             scale.setY(newv.doubleValue());
         });
         Translate translate = new Translate();
-        translateXBinding.addListener((o, oldv, newv) -> {
+        backgroundTranslateXBinding.addListener((o, oldv, newv) -> {
             translate.setX(newv.doubleValue());
         });
-        translateYBinding.addListener((o, oldv, newv) -> {
+        backgroundTranslateYBinding.addListener((o, oldv, newv) -> {
             translate.setY(newv.doubleValue());
         });
         content.getTransforms().addAll(translate, scale);
@@ -276,7 +284,7 @@ public class ZoomableScrollPane {
     }
 
     @NonNull
-    private static DoubleBinding createTranslateBinding(ScrollBar scrollBar) {
+    private static DoubleBinding createBackgroundTranslateBinding(ScrollBar scrollBar) {
         return CustomBinding.computeDouble(
                 () -> {
                     final double
@@ -288,6 +296,26 @@ public class ZoomableScrollPane {
                         return Math.round((visible - max) * 0.5);
                     }
                     return -Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)), min, max);
+                },
+                scrollBar.valueProperty(),
+                scrollBar.minProperty(),
+                scrollBar.maxProperty(),
+                scrollBar.visibleAmountProperty());
+    }
+
+    @NonNull
+    private static DoubleBinding createViewRectTranslateBinding(ScrollBar scrollBar) {
+        return CustomBinding.computeDouble(
+                () -> {
+                    final double
+                            min = scrollBar.getMin(),
+                            max = scrollBar.getMax(),
+                            value = scrollBar.getValue(),
+                            visible = scrollBar.getVisibleAmount();
+                    if (visible > max) {
+                        return -Math.round((visible - max) * 0.5);
+                    }
+                    return Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)), min, max);
                 },
                 scrollBar.valueProperty(),
                 scrollBar.minProperty(),
@@ -361,6 +389,11 @@ public class ZoomableScrollPane {
         return viewRect.get();
     }
 
+    @NonNull
+    public Bounds getViewportRect() {
+        return viewportPane.getBoundsInParent();
+    }
+
     public ReadOnlyObjectProperty<Bounds> viewRectProperty() {
         return viewRect;
     }
@@ -418,13 +451,25 @@ public class ZoomableScrollPane {
     @NonNull
     public Transform getContentToView() {
         double sf = getZoomFactor();
-        return new Scale(sf, sf, 0, 0);
+        Bounds viewRect = getViewRect();
+        double tx, ty;
+        tx = background.getTranslateX();
+        ty = background.getTranslateY();
+        return new Affine(sf, 0, tx,
+                0, sf, ty);
     }
 
     @NonNull
     public Transform getViewToContent() {
         double sf = 1 / getZoomFactor();
-        return new Scale(sf, sf, 0, 0);
+        double tx, ty;
+        tx = background.getTranslateX();
+        ty = background.getTranslateY();
+        return new Affine(sf, 0, -tx * sf,
+                0, sf, -ty * sf
+        );
+
+
     }
 
     private Property<Transform> worldToView;
@@ -508,6 +553,4 @@ public class ZoomableScrollPane {
         return verticalScrollBar.visibleAmountProperty();
     }
 }
-
-
 

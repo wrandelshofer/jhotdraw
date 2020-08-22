@@ -316,7 +316,7 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    private void invalidateHandleNodes() {
+    public void invalidateHandleNodes() {
         handlesAreValid = false;
         dirtyHandles.addAll(handles.keySet());
     }

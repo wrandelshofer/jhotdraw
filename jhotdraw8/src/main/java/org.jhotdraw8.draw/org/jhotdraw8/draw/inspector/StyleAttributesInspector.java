@@ -20,8 +20,10 @@ import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.tree.TreeModelEvent;
 
 /**
  * FXML Controller class
@@ -47,13 +49,20 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         }
 
     };
+
+    private final Listener<TreeModelEvent<Figure>> treeModelListener = event -> {
+        invalidateTextArea(event.getSource());
+    };
+
     @NonNull
     private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {
             oldValue.removeListener(modelInvalidationHandler);
+            oldValue.removeTreeModelListener(treeModelListener);
         }
         if (newValue != null) {
             newValue.addListener(modelInvalidationHandler);
+            newValue.addTreeModelListener(treeModelListener);
         }
     };
 

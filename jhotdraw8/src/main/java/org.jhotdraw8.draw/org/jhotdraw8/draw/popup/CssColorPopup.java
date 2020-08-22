@@ -39,15 +39,15 @@ public class CssColorPopup {
         contextMenu.getItems().add(colorPickerItem);
         colorPicker.setOnAction(event -> callback.accept(true, CssColor.ofColor(colorPicker.getValue())));
 
-        MenuItem initialItem = new MenuItem();
-        initialItem.setOnAction(e -> callback.accept(false, null));
+        MenuItem unsetItem = new MenuItem();
+        unsetItem.setOnAction(e -> callback.accept(false, null));
         noneItem = new MenuItem();
         noneItem.setOnAction(e -> callback.accept(true, null));
-        labels.configureMenuItem(initialItem, "value.initial");
+        labels.configureMenuItem(unsetItem, "value.unset");
         labels.configureMenuItem(noneItem, "value.none");
         contextMenu.getItems().addAll(
                 new SeparatorMenuItem(),
-                initialItem, noneItem
+                unsetItem, noneItem
         );
 
         CustomBinding.bindBidirectionalAndConvert(
