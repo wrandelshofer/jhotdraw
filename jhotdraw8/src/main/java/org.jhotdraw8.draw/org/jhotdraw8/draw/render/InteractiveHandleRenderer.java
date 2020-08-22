@@ -326,10 +326,8 @@ public class InteractiveHandleRenderer {
     }
 
     public void revalidateHandles() {
-        if (handlesAreValid) {
-            handlesAreValid = false;
-            repaint();
-        }
+        invalidateHandles();
+        repaint();
     }
 
     public void jiggleHandles() {
