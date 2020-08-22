@@ -66,7 +66,7 @@ public class BezierNode {
      * This is a hint for editing tools. If this is set to true, the editing
      * tools shall keep all control points on the same line.
      */
-    private final boolean colinear;
+    private final boolean collinear;
     /**
      * This is a hint for editing tools. If this is set to true, the editing
      * tools shall keep C2 at the same distance from C0 as C1.
@@ -105,7 +105,7 @@ public class BezierNode {
 
     public BezierNode(double c0x, double c0y) {
         this.mask = C0_MASK;
-        this.colinear = false;
+        this.collinear = false;
         this.equidistant = false;
         this.x0 = c0x;
         this.x1 = c0y;
@@ -118,7 +118,7 @@ public class BezierNode {
 
     public BezierNode(@NonNull Point2D c0) {
         this.mask = C0_MASK;
-        this.colinear = false;
+        this.collinear = false;
         this.equidistant = false;
         this.x0 = c0.getX();
         this.x1 = c0.getX();
@@ -128,9 +128,9 @@ public class BezierNode {
         this.y2 = c0.getY();
     }
 
-    public BezierNode(int mask, boolean equidistant, boolean colinear, @NonNull Point2D c0, @NonNull Point2D c1, @NonNull Point2D c2) {
+    public BezierNode(int mask, boolean equidistant, boolean collinear, @NonNull Point2D c0, @NonNull Point2D c1, @NonNull Point2D c2) {
         this.mask = mask;
-        this.colinear = colinear;
+        this.collinear = collinear;
         this.equidistant = equidistant;
         this.x0 = c0.getX();
         this.x1 = c1.getX();
@@ -140,9 +140,9 @@ public class BezierNode {
         this.y2 = c2.getY();
     }
 
-    public BezierNode(int mask, boolean equidistant, boolean colinear, double x0, double y0, double x1, double y1, double x2, double y2) {
+    public BezierNode(int mask, boolean equidistant, boolean collinear, double x0, double y0, double x1, double y1, double x2, double y2) {
         this.mask = mask;
-        this.colinear = colinear;
+        this.collinear = collinear;
         this.equidistant = equidistant;
         this.x0 = x0;
         this.x1 = x1;
@@ -152,7 +152,7 @@ public class BezierNode {
         this.y2 = y2;
     }
 
-    public boolean computeIsColinear() {
+    public boolean computeIsCollinear() {
         if ((mask & MOVE_MASK) != 0 || (mask & C1C2_MASK) != C1C2_MASK) {
             return false;
         }
@@ -191,7 +191,7 @@ public class BezierNode {
         if (this.mask != other.mask) {
             return false;
         }
-        if (this.colinear != other.colinear) {
+        if (this.collinear != other.collinear) {
             return false;
         }
         if (this.equidistant != other.equidistant) {
@@ -375,7 +375,7 @@ public class BezierNode {
     public int hashCode() {
         int hash = 7;
         hash = 59 * hash + this.mask;
-        hash = 59 * hash + (this.colinear ? 1 : 0);
+        hash = 59 * hash + (this.collinear ? 1 : 0);
         hash = 59 * hash + (this.equidistant ? 1 : 0);
         hash = 59 * hash + (int) (Double.doubleToLongBits(this.x0) ^ (Double.doubleToLongBits(this.x0) >>> 32));
         hash = 59 * hash + (int) (Double.doubleToLongBits(this.x1) ^ (Double.doubleToLongBits(this.x1) >>> 32));
@@ -399,10 +399,10 @@ public class BezierNode {
     }
 
     /**
-     * @return the colinear
+     * @return the collinear
      */
-    public boolean isColinear() {
-        return colinear;
+    public boolean isCollinear() {
+        return collinear;
     }
 
     public boolean isControlPoint(int mask) {
@@ -451,7 +451,7 @@ public class BezierNode {
             ny2 = y2;
         }
 
-        return new BezierNode(this.mask, equidistant, colinear, nx0, ny0, nx1, ny1, nx2, ny2);
+        return new BezierNode(this.mask, equidistant, collinear, nx0, ny0, nx1, ny1, nx2, ny2);
     }
 
     /**
@@ -460,7 +460,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setC0(@NonNull Point2D c0) {
-        return new BezierNode(mask, equidistant, colinear, c0.getX(), c0.getY(), x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, c0.getX(), c0.getY(), x1, y1, x2, y2);
     }
 
     /**
@@ -470,7 +470,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setC0(double x0, double y0) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -481,7 +481,7 @@ public class BezierNode {
     public BezierNode setC0AndTranslateC1C2(@NonNull Point2D c0) {
         double x = c0.getX();
         double y = c0.getY();
-        return new BezierNode(mask, equidistant, colinear, x, y, x1 + x - x0, y1 + y - y0, x2 + x - x0, y2 + y - y0);
+        return new BezierNode(mask, equidistant, collinear, x, y, x1 + x - x0, y1 + y - y0, x2 + x - x0, y2 + y - y0);
     }
 
     /**
@@ -490,7 +490,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setC1(@NonNull Point2D c1) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, c1.getX(), c1.getY(), x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, c1.getX(), c1.getY(), x2, y2);
     }
 
     /**
@@ -500,7 +500,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setC1(double x1, double y1) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -509,7 +509,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setC2(@NonNull Point2D c2) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, c2.getX(), c2.getY());
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, c2.getX(), c2.getY());
     }
 
     /**
@@ -519,16 +519,16 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setC2(double x2, double y2) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
-     * @param colinear the colinear to set
+     * @param collinear the collinear to set
      * @return a new instance
      */
     @NonNull
-    public BezierNode setColinear(boolean colinear) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+    public BezierNode setCollinear(boolean collinear) {
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -537,7 +537,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setEquidistant(boolean equidistant) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -546,7 +546,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setMask(int mask) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -555,7 +555,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setX0(double x0) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -564,7 +564,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setX1(double x1) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -573,7 +573,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setX2(double x2) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -582,7 +582,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setY0(double y0) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -591,7 +591,7 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setY1(double y1) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**
@@ -600,13 +600,13 @@ public class BezierNode {
      */
     @NonNull
     public BezierNode setY2(double y2) {
-        return new BezierNode(mask, equidistant, colinear, x0, y0, x1, y1, x2, y2);
+        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "BezierNode{" + "colinear=" + colinear + ", equidistant=" + equidistant + ", mask=" + mask + ", x0=" + x0 + ", x1=" + x1 + ", x2=" + x2 + ", y0=" + y0 + ", y1=" + y1 + ", y2=" + y2 + '}';
+        return "BezierNode{" + "collinear=" + collinear + ", equidistant=" + equidistant + ", mask=" + mask + ", x0=" + x0 + ", x1=" + x1 + ", x2=" + x2 + ", y0=" + y0 + ", y1=" + y1 + ", y2=" + y2 + '}';
     }
 
     @NonNull
@@ -614,7 +614,7 @@ public class BezierNode {
         Point2D p0 = transform.transform(x0, y0);
         Point2D p1 = transform.transform(x1, y1);
         Point2D p2 = transform.transform(x2, y2);
-        return new BezierNode(mask, equidistant, colinear, p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        return new BezierNode(mask, equidistant, collinear, p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
 }

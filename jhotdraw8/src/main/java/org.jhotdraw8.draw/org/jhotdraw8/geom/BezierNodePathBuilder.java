@@ -30,7 +30,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder implements Builde
     protected void doClosePath() {
         BezierNode last = getLastNode();
         if (last != null) {
-            last = new BezierNode(last.getMask() | BezierNode.CLOSE_MASK, last.isEquidistant(), last.isColinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(),
+            last = new BezierNode(last.getMask() | BezierNode.CLOSE_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(),
                     last.getX2(), last.getY2());
             setLast(last);
         }
@@ -40,9 +40,9 @@ public class BezierNodePathBuilder extends AbstractPathBuilder implements Builde
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLastNode();
 
-        last = new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isColinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
-        if (last.computeIsColinear()) {
-            last = last.setColinear(true);
+        last = new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
+        if (last.computeIsCollinear()) {
+            last = last.setCollinear(true);
         }
         setLast(last);
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x2, y2, x - x2 + x, y - y2 + y));

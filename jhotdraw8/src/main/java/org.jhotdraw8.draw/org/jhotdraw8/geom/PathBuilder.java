@@ -27,12 +27,13 @@ public interface PathBuilder {
      * decrease the angles and the final point of the arc.
      * <p>
      * As specified in
-     * <a href=http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands>w3.org</a>
+     * <a href=http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands>
+     *     SVG elliptical arc commands</a>.
      * <p>
      * The default implementation of this method has been derived from Apache Batik
      * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc.
-     * The default implementation decomposes the arc into segments and
-     * invokes corresponding {@code curveTo} methods.
+     * The default implementation decomposes the arc into cubic curve
+     * segments and invokes corresponding {@code curveTo} methods.
      *
      * @param radiusX       the x radius of the ellipse
      * @param radiusY       the y radius of the ellipse

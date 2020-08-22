@@ -42,16 +42,18 @@ public class CssColor implements Paintable {
     }
 
     public CssColor(@Nullable String name) {
-        this.name = name;
         Color computedColor = DefaultSystemColorConverter.LIGHT_SYSTEM_COLORS.get(name);
-        if (computedColor == null) {
+        if (computedColor == null && name != null) {
             try {
                 computedColor = Color.web(name);
             } catch (IllegalArgumentException e) {
                 computedColor = Color.BLACK;
             }
+        } else {
+            computedColor = Color.BLACK;
         }
         this.color = computedColor;
+        this.name = name == null ? toName(computedColor) : name;
     }
 
     public CssColor(@Nullable String name, @NonNull Color color) {
@@ -59,7 +61,7 @@ public class CssColor implements Paintable {
         this.color = color;
     }
 
-    @NonNull
+    @Nullable
     public String getName() {
         return name;
     }

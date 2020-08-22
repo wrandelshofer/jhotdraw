@@ -112,7 +112,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
          * This is a hint for editing tools. If this is set to true, the editing
          * tools shall keep all control points on the same line.
          */
-        public boolean keepColinear = true;
+        public boolean keepCollinear = true;
         /**
          * This is a hint for editing tools. If this is set to true, the editing
          * tools shall keep  C2 at the same distance from C0 as C1.
@@ -138,7 +138,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
         public void setTo(@NonNull Node that) {
             this.mask = that.mask;
-            this.keepColinear = that.keepColinear;
+            this.keepCollinear = that.keepCollinear;
             System.arraycopy(that.x, 0, this.x, 0, 3);
             System.arraycopy(that.y, 0, this.y, 0, 3);
         }
@@ -1073,7 +1073,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             throw new IllegalPathStateException("moveTo only allowed when empty");
         }
         Node node = new Node(x1, y1);
-        node.keepColinear = false;
+        node.keepCollinear = false;
         node.moveTo = true;
         add(node);
     }
@@ -1093,7 +1093,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param y1 the y-coordinate of the point
      */
     public void lineTo(double x1, double y1) {
-        get(size() - 1).keepColinear = false;
+        get(size() - 1).keepCollinear = false;
         add(new Node(x1, y1));
     }
 
@@ -1151,7 +1151,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         lastPoint.y[2] = y1;
 
         if ((lastPoint.mask & C1C2_MASK) == C1C2_MASK) {
-            lastPoint.keepColinear = Math.abs(
+            lastPoint.keepCollinear = Math.abs(
                     Geom.angle(lastPoint.x[0], lastPoint.y[0],
                             lastPoint.x[1], lastPoint.y[1])
                             - Geom.angle(lastPoint.x[2], lastPoint.y[2],

@@ -30,6 +30,8 @@ import org.jhotdraw8.io.IdSupplier;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.Consumer;
 
 /**
@@ -104,166 +106,190 @@ public class CssEffectConverter implements CssConverter<Effect> {
 
     @Override
     public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        if (value instanceof Blend) {
-            Blend fx = (Blend) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, BLEND));
-            blendModeConverter.produceTokens(fx.getMode(), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            //FIXME
+        Deque<Effect> effects = new ArrayDeque<Effect>();
+        for (Effect chainedEffect = value; chainedEffect != null; ) {
+            effects.add(chainedEffect);
+            try {
+                Object inputEffect = chainedEffect.getClass().getDeclaredMethod("getInput", Effect.class).invoke(chainedEffect);
+                if (inputEffect instanceof Effect) {
+                    chainedEffect = (Effect) inputEffect;
+                    effects.addFirst(chainedEffect);
+                }
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                chainedEffect = null;
+            }
+        }
+
+        boolean first = true;
+        for (Effect eff : effects) {
+            if (first) {
+                first = false;
+            } else {
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+            }
+
+            if (eff instanceof Blend) {
+                Blend fx = (Blend) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, BLEND));
+                blendModeConverter.produceTokens(fx.getMode(), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                //FIXME
             /* if (fx.getInput() != null) {
                 out.accept(new CssToken(CssTokenType.,", ");
                 toString(out, idFactory, fx.getInput());
             }*/
-        } else if (value instanceof Bloom) {
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, BLOOM));
-            Bloom fx = (Bloom) value;
-            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getThreshold() * 100));
-            if (fx.getInput() != null) {
-                out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else if (value instanceof BoxBlur) {
-            BoxBlur fx = (BoxBlur) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, BOX_BLUR));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getWidth()));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getHeight()));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getIterations()));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
-                out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else if (value instanceof ColorAdjust) {
-            ColorAdjust fx = (ColorAdjust) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, COLOR_ADJUST));
-            boolean needComma = false;
-            final double hue = fx.getHue();
-            final double saturation = fx.getSaturation();
-            final double brightness = fx.getBrightness();
-            final double contrast = fx.getContrast();
-            boolean all = hue == 0 && saturation == 0 && brightness == 0 && contrast == 0;
-            if (hue != 0 || all) {
-                out.accept(new CssToken(CssTokenType.TT_IDENT, "hue"));
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                if (hue > 0) {
-                    out.accept(new CssToken(CssTokenType.TT_PLUS));
-                }
-                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, hue * 100));
-                needComma = true;
-            }
-            if (saturation != 0 || all) {
-                if (needComma) {
+            } else if (eff instanceof Bloom) {
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, BLOOM));
+                Bloom fx = (Bloom) eff;
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getThreshold() * 100));
+                if (fx.getInput() != null) {
                     out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    produceTokens(fx.getInput(), idSupplier, out);
                 }
-                out.accept(new CssToken(CssTokenType.TT_IDENT, "saturation"));
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                if (saturation > 0) {
-                    out.accept(new CssToken(CssTokenType.TT_PLUS));
-                }
-                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, saturation * 100));
-                needComma = true;
-            }
-            if (brightness != 0 || all) {
-                if (needComma) {
-                    out.accept(new CssToken(CssTokenType.TT_COMMA));
-                }
-                out.accept(new CssToken(CssTokenType.TT_IDENT, "brightness"));
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                if (brightness > 0) {
-                    out.accept(new CssToken(CssTokenType.TT_PLUS));
-                }
-                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, brightness * 100));
-                needComma = true;
-            }
-            if (contrast != 0 || all) {
-                if (needComma) {
-                    out.accept(new CssToken(CssTokenType.TT_COMMA));
-                }
-                out.accept(new CssToken(CssTokenType.TT_IDENT, "contrast"));
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                if (contrast > 0) {
-                    out.accept(new CssToken(CssTokenType.TT_PLUS));
-                }
-                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, contrast * 100));
-            }
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else if (value instanceof DropShadow) {
-            DropShadow fx = (DropShadow) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, DROP_SHADOW));
-            blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getSpread() * 100));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetX()));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetY()));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
+            } else if (eff instanceof BoxBlur) {
+                BoxBlur fx = (BoxBlur) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, BOX_BLUR));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getWidth()));
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else if (value instanceof GaussianBlur) {
-            GaussianBlur fx = (GaussianBlur) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, GAUSSIAN_BLUR));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getHeight()));
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
-                produceTokens(fx.getInput(), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getIterations()));
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else if (eff instanceof ColorAdjust) {
+                ColorAdjust fx = (ColorAdjust) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, COLOR_ADJUST));
+                boolean needComma = false;
+                final double hue = fx.getHue();
+                final double saturation = fx.getSaturation();
+                final double brightness = fx.getBrightness();
+                final double contrast = fx.getContrast();
+                boolean all = hue == 0 && saturation == 0 && brightness == 0 && contrast == 0;
+                if (hue != 0 || all) {
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "hue"));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    if (hue > 0) {
+                        out.accept(new CssToken(CssTokenType.TT_PLUS));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, hue * 100));
+                    needComma = true;
+                }
+                if (saturation != 0 || all) {
+                    if (needComma) {
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "saturation"));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    if (saturation > 0) {
+                        out.accept(new CssToken(CssTokenType.TT_PLUS));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, saturation * 100));
+                    needComma = true;
+                }
+                if (brightness != 0 || all) {
+                    if (needComma) {
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "brightness"));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    if (brightness > 0) {
+                        out.accept(new CssToken(CssTokenType.TT_PLUS));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, brightness * 100));
+                    needComma = true;
+                }
+                if (contrast != 0 || all) {
+                    if (needComma) {
+                        out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_IDENT, "contrast"));
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    if (contrast > 0) {
+                        out.accept(new CssToken(CssTokenType.TT_PLUS));
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, contrast * 100));
+                }
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else if (eff instanceof DropShadow) {
+                DropShadow fx = (DropShadow) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, DROP_SHADOW));
+                blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getSpread() * 100));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetX()));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetY()));
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else if (eff instanceof GaussianBlur) {
+                GaussianBlur fx = (GaussianBlur) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, GAUSSIAN_BLUR));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_COMMA));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else if (eff instanceof Glow) {
+                Glow fx = (Glow) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, GLOW));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getLevel() * 100));
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else if (eff instanceof InnerShadow) {
+                InnerShadow fx = (InnerShadow) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, INNER_SHADOW));
+                blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getChoke() * 100));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetX()));
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetY()));
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else if (eff instanceof Shadow) {
+                Shadow fx = (Shadow) eff;
+                out.accept(new CssToken(CssTokenType.TT_FUNCTION, SHADOW));
+                blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+                if (fx.getInput() != null) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                    produceTokens(fx.getInput(), idSupplier, out);
+                }
+            } else {
+                out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             }
-        } else if (value instanceof Glow) {
-            Glow fx = (Glow) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, GLOW));
-            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getLevel() * 100));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else if (value instanceof InnerShadow) {
-            InnerShadow fx = (InnerShadow) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, INNER_SHADOW));
-            blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, fx.getChoke() * 100));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetX()));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getOffsetY()));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else if (value instanceof Shadow) {
-            Shadow fx = (Shadow) value;
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, SHADOW));
-            blurTypeConverter.produceTokens(fx.getBlurType(), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            colorConverter.produceTokens(new CssColor(fx.getColor()), idSupplier, out);
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, fx.getRadius()));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            if (fx.getInput() != null) {
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                produceTokens(fx.getInput(), idSupplier, out);
-            }
-        } else {
-            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         }
     }
 
@@ -286,35 +312,35 @@ public class CssEffectConverter implements CssConverter<Effect> {
 
             Effect current;
             switch (tt.currentStringNonNull()) {
-                case BLEND:
-                    current = parseBlend(tt);
-                    break;
-                case BLOOM:
-                    current = parseBloom(tt);
-                    break;
-                case BOX_BLUR:
-                    current = parseBoxBlur(tt);
-                    break;
-                case COLOR_ADJUST:
-                    current = parseColorAdjust(tt);
-                    break;
-                case DROP_SHADOW:
-                    current = parseDropShadow(tt);
-                    break;
-                case GAUSSIAN_BLUR:
-                    current = parseGaussianBlur(tt);
-                    break;
-                case GLOW:
-                    current = parseGlow(tt);
-                    break;
-                case INNER_SHADOW:
-                    current = parseInnerShadow(tt);
-                    break;
-                case SHADOW:
-                    current = parseShadow(tt);
-                    break;
-                default:
-                    throw tt.createParseException("CSS Effect: \"" + BLEND + ", " + DROP_SHADOW + "(\" or \"" + INNER_SHADOW + "(\"  expected.");
+            case BLEND:
+                current = parseBlend(tt);
+                break;
+            case BLOOM:
+                current = parseBloom(tt);
+                break;
+            case BOX_BLUR:
+                current = parseBoxBlur(tt);
+                break;
+            case COLOR_ADJUST:
+                current = parseColorAdjust(tt);
+                break;
+            case DROP_SHADOW:
+                current = parseDropShadow(tt);
+                break;
+            case GAUSSIAN_BLUR:
+                current = parseGaussianBlur(tt);
+                break;
+            case GLOW:
+                current = parseGlow(tt);
+                break;
+            case INNER_SHADOW:
+                current = parseInnerShadow(tt);
+                break;
+            case SHADOW:
+                current = parseShadow(tt);
+                break;
+            default:
+                throw tt.createParseException("CSS Effect: \"" + BLEND + ", " + DROP_SHADOW + "(\" or \"" + INNER_SHADOW + "(\"  expected.");
             }
             if (first == null) {
                 first = previous = current;
@@ -353,14 +379,14 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private Effect parseBloom(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double threshold = 0.3;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                threshold = tt.currentNumberNonNull().doubleValue();
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                threshold = tt.currentNumberNonNull().doubleValue() / 100;
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            threshold = tt.currentNumberNonNull().doubleValue();
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            threshold = tt.currentNumberNonNull().doubleValue() / 100;
+            break;
+        default:
+            tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -374,31 +400,31 @@ public class CssEffectConverter implements CssConverter<Effect> {
         double height = 5;
         int iterations = 1;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                width = Geom.clamp(tt.currentNumberNonNull().doubleValue(), 0, 255);
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            width = Geom.clamp(tt.currentNumberNonNull().doubleValue(), 0, 255);
+            break;
+        default:
+            tt.pushBack();
         }
         if (tt.next() != ',') {
             tt.pushBack();
         }
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                height = Geom.clamp(tt.currentNumberNonNull().doubleValue(), 0, 255);
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            height = Geom.clamp(tt.currentNumberNonNull().doubleValue(), 0, 255);
+            break;
+        default:
+            tt.pushBack();
         }
         if (tt.next() != ',') {
             tt.pushBack();
         }
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                iterations = Geom.clamp(tt.currentNumberNonNull().intValue(), 0, 3);
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            iterations = Geom.clamp(tt.currentNumberNonNull().intValue(), 0, 3);
+            break;
+        default:
+            tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -416,31 +442,31 @@ public class CssEffectConverter implements CssConverter<Effect> {
             String ident = tt.currentStringNonNull();
             double adjust = 0.0;
             switch (tt.next()) {
-                case CssTokenType.TT_NUMBER:
-                    adjust = tt.currentNumberNonNull().doubleValue();
-                    break;
-                case CssTokenType.TT_PERCENTAGE:
-                    adjust = tt.currentNumberNonNull().doubleValue() / 100;
-                    break;
-                default:
-                    tt.pushBack();
+            case CssTokenType.TT_NUMBER:
+                adjust = tt.currentNumberNonNull().doubleValue();
+                break;
+            case CssTokenType.TT_PERCENTAGE:
+                adjust = tt.currentNumberNonNull().doubleValue() / 100;
+                break;
+            default:
+                tt.pushBack();
             }
             adjust = Geom.clamp(adjust, 0, 1);
             switch (ident) {
-                case "hue":
-                    hue = adjust;
-                    break;
-                case "saturation":
-                    saturation = adjust;
-                    break;
-                case "brightness":
-                    brightness = adjust;
-                    break;
-                case "contrast":
-                    contrast = adjust;
-                    break;
-                default:
-                    throw tt.createParseException("CSS \"hue\", \"saturation\", \"brightness\", or \"contrast\" expected.");
+            case "hue":
+                hue = adjust;
+                break;
+            case "saturation":
+                saturation = adjust;
+                break;
+            case "brightness":
+                brightness = adjust;
+                break;
+            case "contrast":
+                contrast = adjust;
+                break;
+            default:
+                throw tt.createParseException("CSS \"hue\", \"saturation\", \"brightness\", or \"contrast\" expected.");
             }
             if (tt.next() != ',') {
                 tt.pushBack();
@@ -461,11 +487,11 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private Effect parseGaussianBlur(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double radius = 5;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                radius = Geom.clamp(tt.currentNumberNonNull().doubleValue(), 0, 63);
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            radius = Geom.clamp(tt.currentNumberNonNull().doubleValue(), 0, 63);
+            break;
+        default:
+            tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -482,14 +508,14 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private Effect parseGlow(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double level = 0.3;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                level = tt.currentNumberNonNull().doubleValue();
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                level = tt.currentNumberNonNull().doubleValue() / 100;
-                break;
-            default:
-                tt.pushBack();
+        case CssTokenType.TT_NUMBER:
+            level = tt.currentNumberNonNull().doubleValue();
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            level = tt.currentNumberNonNull().doubleValue() / 100;
+            break;
+        default:
+            tt.pushBack();
         }
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
@@ -501,7 +527,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private Effect parseDropShadowOrInnerShadow(@NonNull CssTokenizer tt, boolean isDropShadow) throws ParseException, IOException {
         String func = isDropShadow ? DROP_SHADOW : INNER_SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
-        Color color = new Color(0, 0, 0, 0.75);
+        Color color = new Color(0, 0, 0, 0.25);
         double radius = 10.0;
         double spreadOrChocke = 0.0;
         double offsetX = 0.0;
@@ -541,14 +567,14 @@ public class CssEffectConverter implements CssConverter<Effect> {
                 tt.pushBack();
             }
             switch (tt.next()) {
-                case CssTokenType.TT_NUMBER:
-                    spreadOrChocke = tt.currentNumberNonNull().doubleValue();
-                    break;
-                case CssTokenType.TT_PERCENTAGE:
-                    spreadOrChocke = tt.currentNumberNonNull().doubleValue() / 100.0;
-                    break;
-                default:
-                    throw tt.createParseException("CSS Shadow-Effect: spread or chocke number expected.");
+            case CssTokenType.TT_NUMBER:
+                spreadOrChocke = tt.currentNumberNonNull().doubleValue();
+                break;
+            case CssTokenType.TT_PERCENTAGE:
+                spreadOrChocke = tt.currentNumberNonNull().doubleValue() / 100.0;
+                break;
+            default:
+                throw tt.createParseException("CSS Shadow-Effect: spread or chocke number expected.");
             }
             if (tt.next() != ',') {
                 tt.pushBack();
@@ -569,9 +595,9 @@ public class CssEffectConverter implements CssConverter<Effect> {
             } else {
                 input = parseEffect(tt);
             }
-        }
-        if (tt.current() != ')') {
-            throw tt.createParseException("CSS Shadow-Effect: ')' expected.");
+            if (tt.next() != ')') {
+                throw tt.createParseException("CSS Shadow-Effect: ')' expected.");
+            }
         }
 
         final Effect effect;

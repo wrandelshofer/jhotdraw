@@ -171,14 +171,14 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     BezierNode bn = list.get(pointIndex);
 
                     BezierNode newbn;
-                    if (bn.isColinear()) {
+                    if (bn.isCollinear()) {
                         if (bn.isEquidistant()) {
-                            newbn = bn.setColinear(false).setEquidistant(false);
+                            newbn = bn.setCollinear(false).setEquidistant(false);
                         } else {
-                            newbn = bn.setColinear(true).setEquidistant(true);
+                            newbn = bn.setCollinear(true).setEquidistant(true);
                         }
                     } else {
-                        newbn = bn.setColinear(true).setEquidistant(false);
+                        newbn = bn.setCollinear(true).setEquidistant(false);
                     }
                     dv.getModel().set(owner, pointKey,
                             ImmutableLists.set(list, pointIndex, newbn));
@@ -204,7 +204,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         BezierNode bn = list.get(pointIndex);
         Point2D p = f.worldToLocal(newPoint);
 
-        if (!bn.isColinear()) {
+        if (!bn.isCollinear()) {
             if (!bn.isEquidistant()) {
                 // move control point independently
                 BezierNode newBezierNode = bn.setC(controlPointMask, p);
@@ -286,47 +286,47 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
         Menu constraints = new Menu(DrawLabels.getResources().getString("handle.bezierControlPoint.constraints.text"));
         RadioMenuItem noneRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.noConstraints.text"));
-        RadioMenuItem colinearRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.colinearConstraint.text"));
+        RadioMenuItem collinearRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.collinearConstraint.text"));
         RadioMenuItem equidistantRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.equidistantConstraint.text"));
-        RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.colinearAndEquidistantConstraint.text"));
+        RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.collinearAndEquidistantConstraint.text"));
 
         BezierNodePath path = new BezierNodePath(owner.get(pointKey));
         BezierNode bnode = path.getNodes().get(pointIndex);
-        if (bnode.isEquidistant() && bnode.isColinear()) {
+        if (bnode.isEquidistant() && bnode.isCollinear()) {
             bothRadio.setSelected(true);
         } else if (bnode.isEquidistant()) {
             equidistantRadio.setSelected(true);
-        } else if (bnode.isColinear()) {
-            colinearRadio.setSelected(true);
+        } else if (bnode.isCollinear()) {
+            collinearRadio.setSelected(true);
         } else {
             noneRadio.setSelected(true);
         }
         noneRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setColinear(false).setEquidistant(false);
+            BezierNode changedNode = bnode.setCollinear(false).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
             view.recreateHandles();
         });
-        colinearRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setColinear(true).setEquidistant(false);
+        collinearRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setCollinear(true).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
             view.recreateHandles();
         });
         equidistantRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setColinear(false).setEquidistant(true);
+            BezierNode changedNode = bnode.setCollinear(false).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setColinear(true).setEquidistant(true);
+            BezierNode changedNode = bnode.setCollinear(true).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
             view.recreateHandles();
         });
 
-        constraints.getItems().addAll(noneRadio, colinearRadio, equidistantRadio, bothRadio);
+        constraints.getItems().addAll(noneRadio, collinearRadio, equidistantRadio, bothRadio);
         contextMenu.getItems().add(constraints);
         contextMenu.show(node, event.getScreenX(), event.getScreenY());
         event.consume();
@@ -363,7 +363,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
-        if (bn.isColinear()) {
+        if (bn.isCollinear()) {
             if (bn.isEquidistant()) {
                 node.setShape(REGION_SHAPE_SMOOTH);
             } else {

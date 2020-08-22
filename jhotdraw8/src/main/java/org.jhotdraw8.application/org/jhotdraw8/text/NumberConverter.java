@@ -47,6 +47,7 @@ public class NumberConverter implements Converter<Number> {
     private Comparable max;
     private String unit;
     private DecimalFormat doubleDecimalFormat;
+    private DecimalFormat floatDecimalFormat;
     private DecimalFormat scientificFormat;
     private double factor = 1;
     private int minIntDigits;
@@ -117,7 +118,7 @@ public class NumberConverter implements Converter<Number> {
     private void initFormats() {
         DecimalFormatSymbols s = new DecimalFormatSymbols(Locale.ENGLISH);
         doubleDecimalFormat = new DecimalFormat("#################0.#################", s);
-        //floatDecimalFormat = new DecimalFormat("#################0.########", s);
+        floatDecimalFormat = new DecimalFormat("#################0.########", s);
         scientificFormat = new DecimalFormat("0.0################E0", s);
     }
 
@@ -271,7 +272,7 @@ public class NumberConverter implements Converter<Number> {
             int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
             if (!usesScientificNotation || exponent > minNegativeExponent
                     && exponent < minPositiveExponent) {
-                str = doubleDecimalFormat.format(v);
+                str = floatDecimalFormat.format(v);
             } else {
                 str = scientificFormat.format(v);
             }

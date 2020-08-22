@@ -207,7 +207,7 @@ public class BezierNodePath implements Shape {
                 } else {
                     // quadratic curve controlled by prev
                     middle = new BezierNode(BezierNode.C2_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                    prev.setColinear(true);
+                    prev.setCollinear(true);
                     nodes.add(segment, middle);
                     BezierCurves.splitQuadCurveTo(prev.getX0(), prev.getY0(),
                             next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
@@ -230,7 +230,7 @@ public class BezierNodePath implements Shape {
                             nodes.set(segment, middle.setX1(x1).setY1(y1).setX0(x2).setY0(y2));
                         },
                         (x1, y1, x2, y2) -> {
-                            nodes.set(segment + 1, next.setX1(x1).setY1(y1).setColinear(true));
+                            nodes.set(segment + 1, next.setX1(x1).setY1(y1).setCollinear(true));
                         }
                 );
             } else {

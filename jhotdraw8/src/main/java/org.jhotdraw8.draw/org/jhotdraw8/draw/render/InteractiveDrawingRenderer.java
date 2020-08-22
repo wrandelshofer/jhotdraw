@@ -552,6 +552,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
     }
 
     private void updateNodes() {
+        // FIXME we onyl want to update nodes in here
         Bounds visibleRectInWorld = getClipBounds();
 
         // create copies of the lists to allow for concurrent modification

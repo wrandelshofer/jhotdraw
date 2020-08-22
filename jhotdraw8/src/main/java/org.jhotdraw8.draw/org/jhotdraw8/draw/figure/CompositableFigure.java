@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssPercentageConverter;
 import org.jhotdraw8.draw.key.BlendModeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
@@ -37,14 +36,14 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    BlendModeStyleableKey BLEND_MODE = new BlendModeStyleableKey("blendMode", BlendMode.SRC_OVER);
+    @NonNull BlendModeStyleableKey BLEND_MODE = new BlendModeStyleableKey("blendMode", BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
      * <p>
      * Default value: {@code null}.
      */
-    @Nullable EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
+    @NonNull EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -55,7 +54,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new CssPercentageConverter(false));
+    @NonNull DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new CssPercentageConverter(false));
 
     /**
      * Updates a figure node with all effect properties defined in this
@@ -75,7 +74,7 @@ public interface CompositableFigure extends Figure {
         final BlendMode blendMode = getStyled(BLEND_MODE);
         node.setBlendMode(blendMode == BlendMode.SRC_OVER ? null : blendMode);
         node.setEffect(getStyled(EFFECT));
-        node.setOpacity(getStyled(OPACITY));
+        node.setOpacity(getStyledNonNull(OPACITY));
     }
 
 }
