@@ -51,20 +51,24 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
         super(nullable);
     }
 
+    @NonNull
     @Override
-    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        if (value instanceof CssColor) {
-            CssColor c = (CssColor) value;
-            colorConverter.produceTokens(c, idSupplier, out);
-        } else if (value instanceof CssLinearGradient) {
-            CssLinearGradient lg = (CssLinearGradient) value;
-            linearGradientConverter.produceTokens(lg, idSupplier, out);
-        } else if (value instanceof CssRadialGradient) {
-            CssRadialGradient lg = (CssRadialGradient) value;
-            radialGradientConverter.produceTokens(lg, idSupplier, out);
-        } else {
-            throw new UnsupportedOperationException("not yet implemented for " + value);
+    public String getHelpText() {
+        String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
+                + "\n" + colorConverter.getHelpText()
+                + "\n" + linearGradientConverter.getHelpText()
+                + "\n" + radialGradientConverter.getHelpText()).split("\n");
+        StringBuilder buf = new StringBuilder();
+        Set<String> duplicateLines = new HashSet<>();
+        for (String line : lines) {
+            if (duplicateLines.add(line)) {
+                if (buf.length() != 0) {
+                    buf.append('\n');
+                }
+                buf.append(line);
+            }
         }
+        return buf.toString();
     }
 
     @NonNull
@@ -86,23 +90,19 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
         return colorConverter.parseNonNull(tt, idResolver);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
-        String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
-                + "\n" + colorConverter.getHelpText()
-                + "\n" + linearGradientConverter.getHelpText()
-                + "\n" + radialGradientConverter.getHelpText()).split("\n");
-        StringBuilder buf = new StringBuilder();
-        Set<String> duplicateLines = new HashSet<>();
-        for (String line : lines) {
-            if (duplicateLines.add(line)) {
-                if (buf.length() != 0) {
-                    buf.append('\n');
-                }
-                buf.append(line);
-            }
+    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+        if (value instanceof CssColor) {
+            CssColor c = (CssColor) value;
+            colorConverter.produceTokens(c, idSupplier, out);
+        } else if (value instanceof CssLinearGradient) {
+            CssLinearGradient lg = (CssLinearGradient) value;
+            linearGradientConverter.produceTokens(lg, idSupplier, out);
+        } else if (value instanceof CssRadialGradient) {
+            CssRadialGradient lg = (CssRadialGradient) value;
+            radialGradientConverter.produceTokens(lg, idSupplier, out);
+        } else {
+            throw new UnsupportedOperationException("not yet implemented for " + value);
         }
-        return buf.toString();
     }
 }

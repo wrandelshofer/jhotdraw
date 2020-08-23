@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.annotation.NonNull;
@@ -22,20 +23,20 @@ import java.util.function.BiConsumer;
 
 public class CssColorPopup {
     private CssColorDialog dialog;
-    private ContextMenu contextMenu;
-    private MenuItem noneItem;
-    private ColorPicker colorPicker;
+    private final ContextMenu contextMenu;
+    private final MenuItem noneItem;
+    private final ColorPicker colorPicker;
     private BiConsumer<Boolean, CssColor> callback;
 
     @NonNull
-    private ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
+    private final ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
 
     public CssColorPopup() {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
 
         colorPicker = new ColorPicker();
-        MenuItem colorPickerItem = new MenuItem(null, colorPicker);
+        MenuItem colorPickerItem = new Menu(null, colorPicker);
         contextMenu.getItems().add(colorPickerItem);
         colorPicker.setOnAction(event -> callback.accept(true, CssColor.ofColor(colorPicker.getValue())));
 

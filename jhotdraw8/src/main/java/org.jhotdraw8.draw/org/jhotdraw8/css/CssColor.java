@@ -109,9 +109,7 @@ public class CssColor implements Paintable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.color);
-        return hash;
+        return Objects.hash(this.color, this.name);
     }
 
     @Override
@@ -126,7 +124,8 @@ public class CssColor implements Paintable {
             return false;
         }
         final CssColor other = (CssColor) obj;
-        return Objects.equals(this.color, other.color);
+        return Objects.equals(this.color, other.color)
+                && Objects.equals(this.name, other.name);
     }
 
     @NonNull

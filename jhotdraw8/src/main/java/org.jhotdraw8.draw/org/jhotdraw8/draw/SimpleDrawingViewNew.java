@@ -316,7 +316,9 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
 
 
         background.setBackground(new Background(new BackgroundFill(
-                new ImagePattern(createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8), 0, 0, 16, 16, false)
+                new ImagePattern(
+                        createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8),
+                        0, 0, 16, 16, false)
                 , CornerRadii.EMPTY, Insets.EMPTY)));
         background.setManaged(false);
         zoomableScrollPane.getContentChildren().add(drawingRenderer.getNode());
@@ -330,11 +332,6 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
                 new Border(
                         new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
                         new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
-                ));
-        foreground.setBorder(
-                new Border(
-
-                        new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
                 ));
         CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
     }

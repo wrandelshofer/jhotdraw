@@ -50,23 +50,6 @@ public class CssColorConverter implements CssConverter<CssColor> {
         this.nullable = nullable;
     }
 
-
-    @Override
-    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        if (value == null) {
-            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
-            return;
-        }
-        StreamCssTokenizer tt = new StreamCssTokenizer(value.getName());
-        try {
-            while (tt.next() != CssTokenType.TT_EOF) {
-                out.accept(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
-            }
-        } catch (IOException e) {
-            throw new AssertionError("unexpected io exception", e);
-        }
-    }
-
     @Nullable
     @Override
     public CssColor getDefaultValue() {
@@ -83,7 +66,6 @@ public class CssColorConverter implements CssConverter<CssColor> {
     public boolean isNullable() {
         return nullable;
     }
-
 
     @Nullable
     @Override
@@ -277,13 +259,29 @@ public class CssColorConverter implements CssConverter<CssColor> {
                     a = (v & 0xff);
                     return new CssColor(a == 255 ? '#' + hexdigits.substring(0, 6).toLowerCase()
                             : "rgba(" + r + "," + g + "," + b + "," + a / 255.0 + ")", new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
-                default:
-                    throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
+            default:
+                throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
             }
         } catch (NumberFormatException e) {
             ParseException pe = new ParseException("<hex-digits>: expected a hex-digit. Found:" + hexdigits, startpos);
             pe.initCause(e);
             throw pe;
+        }
+    }
+
+    @Override
+    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+        if (value == null) {
+            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
+            return;
+        }
+        StreamCssTokenizer tt = new StreamCssTokenizer(value.getName());
+        try {
+            while (tt.next() != CssTokenType.TT_EOF) {
+                out.accept(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
+            }
+        } catch (IOException e) {
+            throw new AssertionError("unexpected io exception", e);
         }
     }
 }
