@@ -197,7 +197,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
                 }
             }
         }
-        updateRecentMenuItemsMB(mb.getMenus());
+        updateRecentMenuItemsInMenuBar(mb.getMenus());
 
         // Filter all key codes which are defined in the menu bar
         // XXX maybe this is needed on Mac OS X only
@@ -567,20 +567,20 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
     private void updateRecentMenuItemsInAllMenuBars(Observable o) {
         if (isSystemMenuSupported) {
             if (systemMenus != null) {
-                updateRecentMenuItemsMB(systemMenus);
+                updateRecentMenuItemsInMenuBar(systemMenus);
             }
         } else {
             for (Activity v : getActivities()) {
                 BorderPane bp = (BorderPane) v.getNode().getScene().getRoot();
                 MenuBar mb = (MenuBar) bp.getTop();
                 if (mb != null) {
-                    updateRecentMenuItemsMB((mb.getMenus()));
+                    updateRecentMenuItemsInMenuBar((mb.getMenus()));
                 }
             }
         }
     }
 
-    private void updateRecentMenuItemsMB(List<Menu> mb) {
+    private void updateRecentMenuItemsInMenuBar(List<Menu> mb) {
 
         Deque<List<?>> todo = new ArrayDeque<>();
         todo.add(mb);
