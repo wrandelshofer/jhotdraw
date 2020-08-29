@@ -97,8 +97,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public boolean removeAll(@NonNull Collection<?> c) {
         beginChange();
         try {
-            boolean res = super.removeAll(c);
-            return res;
+            return super.removeAll(c);
         } finally {
             endChange();
         }
@@ -108,8 +107,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     public boolean retainAll(@NonNull Collection<?> c) {
         beginChange();
         try {
-            boolean res = super.retainAll(c);
-            return res;
+            return super.retainAll(c);
         } finally {
             endChange();
         }
@@ -345,15 +343,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @NonNull
     public Iterable<E> descending(int index) {
-        return new Iterable<E>() {
-
-            @NonNull
-            @Override
-            public Iterator<E> iterator() {
-                return descendingIterator(index);
-            }
-
-        };
+        return () -> descendingIterator(index);
     }
 
     @NonNull
@@ -363,15 +353,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     @NonNull
     public Iterable<E> ascending(int index) {
-        return new Iterable<E>() {
-
-            @NonNull
-            @Override
-            public Iterator<E> iterator() {
-                return listIterator(index);
-            }
-
-        };
+        return () -> listIterator(index);
     }
 
     @NonNull
@@ -402,7 +384,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
 
     private class ObservableDescendingIterator implements ListIterator<E> {
 
-        private ObservableListIterator iter;
+        private final ObservableListIterator iter;
 
         public ObservableDescendingIterator(int index) {
             this.iter = new ObservableListIterator(index);
@@ -693,7 +675,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             this.sublist = sublist;
         }
 
-        private List<E> sublist;
+        private final List<E> sublist;
 
         @Override
         public int size() {
@@ -747,8 +729,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         public boolean addAll(@NonNull Collection<? extends E> c) {
             beginChange();
             try {
-                boolean res = sublist.addAll(c);
-                return res;
+                return sublist.addAll(c);
             } finally {
                 endChange();
             }
@@ -758,8 +739,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         public boolean addAll(int index, @NonNull Collection<? extends E> c) {
             beginChange();
             try {
-                boolean res = sublist.addAll(index, c);
-                return res;
+                return sublist.addAll(index, c);
             } finally {
                 endChange();
             }
@@ -769,8 +749,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         public boolean removeAll(@NonNull Collection<?> c) {
             beginChange();
             try {
-                boolean res = sublist.removeAll(c);
-                return res;
+                return sublist.removeAll(c);
             } finally {
                 endChange();
             }
@@ -780,8 +759,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         public boolean retainAll(@NonNull Collection<?> c) {
             beginChange();
             try {
-                boolean res = sublist.retainAll(c);
-                return res;
+                return sublist.retainAll(c);
             } finally {
                 endChange();
             }

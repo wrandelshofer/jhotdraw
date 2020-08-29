@@ -108,7 +108,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         if (source.getParent() == this) {
             children.fireItemUpdated(children.indexOf(source));
         }
-        super.firePropertyChangeEvent(event); //To change body of generated methods, choose Tools | Templates.
+        super.firePropertyChangeEvent(event);
     }
 
     @Override
@@ -116,6 +116,6 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         if (children.hasChangeListeners()) {
             children.fireItemUpdated(children.indexOf(source));
         }
-        super.firePropertyChangeEvent(source, key, oldValue, newValue); //To change body of generated methods, choose Tools | Templates.
+        super.firePropertyChangeEvent(source, key, oldValue, newValue);
     }
 }
