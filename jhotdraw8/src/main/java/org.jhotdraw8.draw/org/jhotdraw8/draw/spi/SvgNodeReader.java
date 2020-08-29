@@ -8,7 +8,7 @@ package org.jhotdraw8.draw.spi;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.spi.NodeReader;
-import org.jhotdraw8.svg.io.SvgTinySceneGraphReader;
+import org.jhotdraw8.svg.io.FXSvgTinyReader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +24,6 @@ public class SvgNodeReader implements NodeReader {
 
     @Override
     public Node read(@NonNull InputStream in) throws IOException {
-        return new SvgTinySceneGraphReader().read(in);
+        return new FXSvgTinyReader().read(in);
     }
 }

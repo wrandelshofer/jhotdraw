@@ -211,12 +211,12 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
         return f;
     }
 
-    @Nullable
+    @NonNull
     private Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
-    protected void setUriResolver(Function<URI, URI> uriResolver) {
+    protected void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
         this.uriResolver = uriResolver;
     }
 

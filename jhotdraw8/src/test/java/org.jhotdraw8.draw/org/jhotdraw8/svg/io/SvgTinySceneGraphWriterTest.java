@@ -77,7 +77,7 @@ class SvgTinySceneGraphWriterTest {
 
 
     private void testExportToDOM(Node node, String expected) throws IOException {
-        SvgTinySceneGraphWriter instance = new SvgTinySceneGraphWriter(null, null);
+        FXSvgTinyWriter instance = new FXSvgTinyWriter(null, null);
         Document document = instance.toDocument(node);
         StringWriter w = new StringWriter();
         XmlUtil.write(w, document);
@@ -87,7 +87,7 @@ class SvgTinySceneGraphWriterTest {
 
     private void testExportToWriter(Node node, String expected) throws IOException {
         StringWriter w = new StringWriter();
-        SvgTinySceneGraphWriter instance = new SvgTinySceneGraphWriter(null, null);
+        FXSvgTinyWriter instance = new FXSvgTinyWriter(null, null);
         instance.write(w, node);
         String actual = w.toString();
         assertEquals(expected, actual);

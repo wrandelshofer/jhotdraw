@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class SvgFullSceneGraphWriter extends AbstractSvgSceneGraphWriter {
+public class FXSvgFullWriter extends AbstractFXSvgWriter {
     private final static String SVG_VERSION = "1.1";
     private final static String SVG_BASE_PROFILE = "full";
     public final static String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
@@ -32,7 +32,7 @@ public class SvgFullSceneGraphWriter extends AbstractSvgSceneGraphWriter {
      *                    ImageView
      * @param skipKey     this property is used to retrieve a Boolean from a Node.
      */
-    public SvgFullSceneGraphWriter(Object imageUriKey, Object skipKey) {
+    public FXSvgFullWriter(Object imageUriKey, Object skipKey) {
         super(imageUriKey, skipKey);
     }
 

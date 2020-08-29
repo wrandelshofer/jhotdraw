@@ -128,8 +128,8 @@ import org.jhotdraw8.gui.dock.TabbedAccordionTrack;
 import org.jhotdraw8.gui.dock.Track;
 import org.jhotdraw8.gui.dock.VBoxTrack;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
-import org.jhotdraw8.svg.io.SvgTinySceneGraphWriter;
+import org.jhotdraw8.svg.io.FXSvgFullWriter;
+import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
@@ -480,13 +480,13 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
-            if (registerDataFormat(SvgTinySceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
+            if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
-                io.setExporterFactory(SvgTinySceneGraphWriter::new);
+                io.setExporterFactory(FXSvgTinyWriter::new);
                 io.putAll(options);
                 io.write(uri, drawing, workState);
-            } else if (registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE).equals(format)
-                    || registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)
+            } else if (registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE).equals(format)
+                    || registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)
                     || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.putAll(options);

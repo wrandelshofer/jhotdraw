@@ -98,7 +98,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-public abstract class AbstractSvgSceneGraphWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
+public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";
     public final static String SVG_NS = "http://www.w3.org/2000/svg";
     protected final static String XLINK_NS = "http://www.w3.org/1999/xlink";
@@ -122,7 +122,7 @@ public abstract class AbstractSvgSceneGraphWriter extends AbstractPropertyBean i
      * @param skipKey     this property is used to retrieve a Boolean from a Node.
      *                    If the Boolean is true, then the node is skipped.
      */
-    public AbstractSvgSceneGraphWriter(Object imageUriKey, Object skipKey) {
+    public AbstractFXSvgWriter(Object imageUriKey, Object skipKey) {
         this.imageUriKey = imageUriKey;
         this.skipKey = skipKey;
     }

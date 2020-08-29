@@ -98,7 +98,7 @@ public class SvgTinySceneGraphReaderTest {
     private void doIconTest(Path testFile) throws Exception {
         System.out.println(testFile);
         System.out.println(testFile.toAbsolutePath());
-        SvgTinySceneGraphReaderNew instance = new SvgTinySceneGraphReaderNew();
+        FigureSvgReader instance = new FigureSvgReader();
         Figure testNode = instance.read(testFile);
 
     }
@@ -107,7 +107,7 @@ public class SvgTinySceneGraphReaderTest {
         System.out.println(testFile);
         System.out.println(referenceFile);
 
-        SvgTinySceneGraphReaderNew instance = new SvgTinySceneGraphReaderNew();
+        FigureSvgReader instance = new FigureSvgReader();
         Figure testFigure = instance.read(testFile);
         Figure referenceFigure = instance.read(referenceFile);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();

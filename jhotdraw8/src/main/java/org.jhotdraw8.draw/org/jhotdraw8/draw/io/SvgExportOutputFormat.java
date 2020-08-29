@@ -33,8 +33,8 @@ import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.TransformFlattener;
-import org.jhotdraw8.svg.io.AbstractSvgSceneGraphWriter;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
+import org.jhotdraw8.svg.io.AbstractFXSvgWriter;
+import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.SvgSceneGraphWriter;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
@@ -98,15 +98,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     @NonNull
     private IdFactory idFactory = new SimpleIdFactory();
 
-    private BiFunction<Object, Object, AbstractSvgSceneGraphWriter> exporterFactory = SvgFullSceneGraphWriter::new;
+    private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;
 
-    public void setExporterFactory(BiFunction<Object, Object, AbstractSvgSceneGraphWriter> exporterFactory) {
+    public void setExporterFactory(BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory) {
         this.exporterFactory = exporterFactory;
     }
 
     @NonNull
-    private AbstractSvgSceneGraphWriter createExporter() {
-        AbstractSvgSceneGraphWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
+    private AbstractFXSvgWriter createExporter() {
+        AbstractFXSvgWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setUriResolver(getUriResolver());
         exporter.setExportInvisibleElements(getNonNull(SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY));
         return exporter;
@@ -144,7 +144,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
-        final AbstractSvgSceneGraphWriter exporter = createExporter();
+        final AbstractFXSvgWriter exporter = createExporter();
         exporter.setRelativizePaths(true);
         Document doc = exporter.toDocument(drawingNode);
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
@@ -172,7 +172,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
             Map<Key<?>, Object> hints = new HashMap<>();
             RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
             try (OutputStream w = Files.newOutputStream(file)) {
-                final AbstractSvgSceneGraphWriter exporter = createExporter();
+                final AbstractFXSvgWriter exporter = createExporter();
                 exporter.setRelativizePaths(true);
                 javafx.scene.Node drawingNode = toNode(drawing, drawing.getChildren(), hints);
                 exporter.write(w, drawingNode);
@@ -212,7 +212,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
-        final AbstractSvgSceneGraphWriter exporter = createExporter();
+        final AbstractFXSvgWriter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
@@ -239,7 +239,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
             node.getTransforms().setAll(worldToLocal);
         }
         new TransformFlattener().flattenTranslates(node);
-        final AbstractSvgSceneGraphWriter exporter = createExporter();
+        final AbstractFXSvgWriter exporter = createExporter();
         final Document doc = exporter.toDocument(node);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();

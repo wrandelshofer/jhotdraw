@@ -132,7 +132,7 @@ import org.jhotdraw8.samples.modeler.figure.UMLClassifierShapeFigure;
 import org.jhotdraw8.samples.modeler.figure.UMLEdgeFigure;
 import org.jhotdraw8.samples.modeler.io.ModelerFigureFactory;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
+import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
@@ -591,7 +591,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
     public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
-            if (registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
+            if (registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.putAll(options);
                 io.write(uri, drawing, workState);

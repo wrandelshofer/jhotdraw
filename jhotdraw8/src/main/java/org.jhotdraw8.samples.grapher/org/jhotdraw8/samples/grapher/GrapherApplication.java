@@ -17,8 +17,8 @@ import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.macos.MacOSPreferences;
 import org.jhotdraw8.samples.grapher.action.GrapherAboutAction;
-import org.jhotdraw8.svg.io.SvgFullSceneGraphWriter;
-import org.jhotdraw8.svg.io.SvgTinySceneGraphWriter;
+import org.jhotdraw8.svg.io.FXSvgFullWriter;
+import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,8 +72,8 @@ public class GrapherApplication extends SimpleFileBasedApplication {
         put(LICENSE_KEY, "MIT License.");
 
         List<URIExtensionFilter> exportExtensions = new ArrayList<>();
-        exportExtensions.add(new URIExtensionFilter("SVG Full", registerDataFormat(SvgFullSceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
-        exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(SvgTinySceneGraphWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
+        exportExtensions.add(new URIExtensionFilter("SVG Full", registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
+        exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
         exportExtensions.add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
         put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, exportExtensions));

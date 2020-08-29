@@ -5,54 +5,57 @@
 
 package org.jhotdraw8.svg.io;
 
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.collection.StringKey;
+import org.jhotdraw8.concurrent.CheckedRunnable;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
-import org.jhotdraw8.geom.FXPathBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.svg.figure.SvgCircleFigure;
+import org.jhotdraw8.svg.figure.SvgDrawing;
+import org.jhotdraw8.svg.figure.SvgEllipseFigure;
+import org.jhotdraw8.svg.figure.SvgGFigure;
+import org.jhotdraw8.svg.figure.SvgInheritableFigureAttributes;
+import org.jhotdraw8.svg.figure.SvgLineFigure;
+import org.jhotdraw8.svg.figure.SvgPathFigure;
+import org.jhotdraw8.svg.figure.SvgPathLengthFigure;
+import org.jhotdraw8.svg.figure.SvgPolygonFigure;
+import org.jhotdraw8.svg.figure.SvgPolylineFigure;
+import org.jhotdraw8.svg.figure.SvgRectFigure;
+import org.jhotdraw8.svg.figure.SvgTransformableFigure;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
@@ -76,7 +79,7 @@ import java.util.logging.Logger;
  * </dl>
  */
 
-public class SvgTinySceneGraphReader {
+public class FigureSvgReader {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     public static final String XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
     private static final Key<String> TITLE_KEY = new StringKey("title");
@@ -96,14 +99,51 @@ public class SvgTinySceneGraphReader {
 
     private static class Context {
         public IdResolver idFactory = new SimpleIdFactory();
-        Deque<Viewport> viewportStack = new ArrayDeque<>();
         List<String> internalStylesheets = new ArrayList<>();
+
+        List<CheckedRunnable> secondPass = new ArrayList<>();
 
         public void addInternalStylesheet(String stylesheet) {
             internalStylesheets.add(stylesheet);
         }
     }
 
+    /**
+     * Set of inheritable properties from:<br>
+     * <a href="https://www.w3.org/TR/SVGTiny12/attributeTable.html#PropertyTable">L.1 Property Table</a>
+     */
+    private static final Set<String> inheritablePropertys = new LinkedHashSet<>();
+
+    static {
+        inheritablePropertys.addAll(Arrays.asList("color",
+                "color-rendering",
+                "direction",
+                "display-align",
+                "fill",
+                "fill-opacity",
+                "fill-rule",
+                "font-family",
+                "font-size",
+                "font-style",
+                "font-variant",
+                "font-weight",
+                "image-rendering",
+                "line-increment",
+                "pointer-events",
+                "shape-rendering",
+                "stroke",
+                "stroke-dasharray",
+                "stroke-dashoffset",
+                "stroke-linecap",
+                "stroke-linejoin",
+                "stroke-miterlimit",
+                "stroke-opacity",
+                "stroke-width",
+                "text-align",
+                "text-anchor",
+                "text-rendering",
+                "visibility"));
+    }
 
     /**
      * Returns a value as a String array.
@@ -119,29 +159,6 @@ public class SvgTinySceneGraphReader {
         }
     }
 
-    private void computeViewportValues(Viewport viewport) {
-        viewport.widthPercentFactor = viewport.viewBox.width / 100d;
-        viewport.heightPercentFactor = viewport.viewBox.height / 100d;
-        viewport.numberFactor = Math.min(
-                viewport.width / viewport.viewBox.width,
-                viewport.height / viewport.viewBox.height);
-
-        AffineTransform viewBoxTransform = new AffineTransform();
-
-        viewBoxTransform.translate(
-                -viewport.viewBox.x * viewport.width / viewport.viewBox.width,
-                -viewport.viewBox.y * viewport.height / viewport.viewBox.height);
-        if (viewport.isPreserveAspectRatio) {
-            double factor = Math.min(
-                    viewport.width / viewport.viewBox.width,
-                    viewport.height / viewport.viewBox.height);
-            viewBoxTransform.scale(factor, factor);
-        } else {
-            viewBoxTransform.scale(
-                    viewport.width / viewport.viewBox.width,
-                    viewport.height / viewport.viewBox.height);
-        }
-    }
 
     private XMLStreamException createException(XMLStreamReader r, String s) {
         return new XMLStreamException(s + " " + getLocation(r));
@@ -151,13 +168,13 @@ public class SvgTinySceneGraphReader {
         return new XMLStreamException(s + " " + getLocation(r), cause);
     }
 
-    public Node read(Path path) throws IOException {
+    public Figure read(Path path) throws IOException {
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(path))) {
             return read(in);
         }
     }
 
-    public Node read(InputStream in) throws IOException {
+    public Figure read(InputStream in) throws IOException {
         try {
             XMLInputFactory dbf = XMLInputFactory.newInstance();
 
@@ -189,12 +206,12 @@ public class SvgTinySceneGraphReader {
         }
     }
 
-    private Node readAElement(XMLStreamReader r, Context ctx) {
+    private Figure readAElement(XMLStreamReader r, Context ctx) {
         return null;
     }
 
-    private Node readCircleElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Circle node = new Circle();
+    private Figure readCircleElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgCircleFigure node = new SvgCircleFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
             String localName = r.getAttributeLocalName(i);
@@ -202,16 +219,16 @@ public class SvgTinySceneGraphReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (localName) {
                 case "cx":
-                    node.setCenterX(toLength(r, value, 1));
+                    node.set(SvgCircleFigure.CX, toLength(r, value));
                     break;
                 case "cy":
-                    node.setCenterY(toLength(r, value, 1));
+                    node.set(SvgCircleFigure.CY, toLength(r, value));
                     break;
                 case "r":
-                    node.setRadius(toLength(r, value, 1));
+                    node.set(SvgCircleFigure.R, toLength(r, value));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readPathLengthAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute: " + namespace + ":" + localName + "=" + value + ".");
@@ -232,12 +249,12 @@ public class SvgTinySceneGraphReader {
         LOGGER.warning(message + " " + getLocation(r));
     }
 
-    private Node readClipPathElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readClipPathElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, parent);
+                Figure child = readElement(r, ctx, parent);
                 if (child != null) {
                     // FIXME handle clip path children
                 }
@@ -252,12 +269,12 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readDefsElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readDefsElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, parent);
+                Figure child = readElement(r, ctx, parent);
                 if (child != null) {
                     // FIXME add defs to ctx for second pass
                 }
@@ -271,7 +288,7 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readFilterElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readFilterElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         Loop:
         while (true) {
             switch (r.nextTag()) {
@@ -323,7 +340,7 @@ public class SvgTinySceneGraphReader {
                         break;
                     default:
                         // Accept non-node generating elements, like linearGradient.
-                        Node node = readElement(r, ctx, parent);
+                        Figure node = readElement(r, ctx, parent);
                         if (node != null) {
                             throw createException(r, "<filter>: Unsupported child element: " + localName);
                         }
@@ -339,78 +356,78 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private void readFeOffsetElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeOffsetElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feOffset not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeMergeElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeMergeElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feMerge not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeMorphologyElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeMorphologyElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feMorphology not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeColorMatrixElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeColorMatrixElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feColorMatrix not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeGaussianBlurElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeGaussianBlurElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feGaussianBlur not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeSpecularLightingElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeSpecularLightingElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feSpecularLighting not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeBlendElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeBlendElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feBlend not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeTurbulenceElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeTurbulenceElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feTurbulence not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeTileElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeTileElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feTile not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeFloodElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeFloodElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feFlood not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeCompositeElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeCompositeElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feComposite not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeComponentTransferElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeComponentTransferElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feComponentTransfer not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeConvolveMatrixElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeConvolveMatrixElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feConvolveMatrix not implemented.");
         skipElement(r, ctx);
     }
 
-    private void readFeImageElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private void readFeImageElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         logWarning(r, "Read feImage not implemented.");
         skipElement(r, ctx);
     }
 
-    private Node readElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
-        Node f;
+    private Figure readElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
+        Figure f;
         if (!SVG_NAMESPACE.equals(r.getNamespaceURI())) {
             LOGGER.fine("Skipping element " + r.getName() + ". " + getLocation(r));
             skipElement(r, ctx);
@@ -510,7 +527,7 @@ public class SvgTinySceneGraphReader {
         return f;
     }
 
-    private Node readMetadataElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readMetadataElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         LOGGER.fine("Skipping <metadata> element. " + getLocation(r));
         skipElement(r, ctx);
         return null;
@@ -554,8 +571,8 @@ public class SvgTinySceneGraphReader {
 
     }
 
-    private Node readEllipseElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Ellipse node = new Ellipse();
+    private Figure readEllipseElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgEllipseFigure node = new SvgEllipseFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
             String localName = r.getAttributeLocalName(i);
@@ -564,19 +581,19 @@ public class SvgTinySceneGraphReader {
 
                 switch (localName) {
                 case "cx":
-                    node.setCenterX(toLength(r, value, 1));
+                    node.set(SvgEllipseFigure.CX, toLength(r, value));
                     break;
                 case "cy":
-                    node.setCenterY(toLength(r, value, 1));
+                    node.set(SvgEllipseFigure.CY, toLength(r, value));
                     break;
                 case "rx":
-                    node.setRadiusX(toLength(r, value, 1));
+                    node.set(SvgEllipseFigure.RX, toLength(r, value));
                     break;
                 case "ry":
-                    node.setRadiusY(toLength(r, value, 1));
+                    node.set(SvgEllipseFigure.RY, toLength(r, value));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readPathLengthAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute: " + namespace + ":" + localName + "=" + value + ".");
@@ -592,10 +609,8 @@ public class SvgTinySceneGraphReader {
         return node;
     }
 
-    private Node readGElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Group node = new Group();
-        node.setAutoSizeChildren(false);
-        node.setManaged(false);
+    private Figure readGElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgGFigure node = new SvgGFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
             String localName = r.getAttributeLocalName(i);
@@ -618,7 +633,7 @@ public class SvgTinySceneGraphReader {
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, node);
+                Figure child = readElement(r, ctx, node);
                 if (child != null) {
                     node.getChildren().add(child);
                 }
@@ -632,15 +647,15 @@ public class SvgTinySceneGraphReader {
         return node;
     }
 
-    private Node readPatternElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readPatternElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
 
         readTransformAttributes(r, parent, ctx);
-        List<Node> patternNodes = new ArrayList<>();
+        List<Figure> patternNodes = new ArrayList<>();
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, parent);
+                Figure child = readElement(r, ctx, parent);
                 if (child != null) {
                     patternNodes.add(child);
                 }
@@ -654,15 +669,15 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readMarkerElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readMarkerElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
 
         readTransformAttributes(r, parent, ctx);
-        List<Node> patternNodes = new ArrayList<>();
+        List<Figure> patternNodes = new ArrayList<>();
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, parent);
+                Figure child = readElement(r, ctx, parent);
                 if (child != null) {
                     patternNodes.add(child);
                 }
@@ -676,15 +691,15 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readMaskElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readMaskElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
 
         readTransformAttributes(r, parent, ctx);
-        List<Node> maskNodes = new ArrayList<>();
+        List<Figure> maskNodes = new ArrayList<>();
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, parent);
+                Figure child = readElement(r, ctx, parent);
                 if (child != null) {
                     maskNodes.add(child);
                 }
@@ -698,7 +713,7 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readImageElement(XMLStreamReader r, Context ctx) {
+    private Figure readImageElement(XMLStreamReader r, Context ctx) {
         return null;
     }
 
@@ -711,8 +726,8 @@ public class SvgTinySceneGraphReader {
         return value;
     }
 
-    private Node readLineElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Line node = new Line();
+    private Figure readLineElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgLineFigure node = new SvgLineFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String localName = r.getAttributeLocalName(i);
             String value = r.getAttributeValue(i);
@@ -720,22 +735,19 @@ public class SvgTinySceneGraphReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (localName) {
                 case "x1":
-                    node.setStartX(toLength(r, value, 1));
+                    node.set(SvgLineFigure.X1, toLength(r, value));
                     break;
                 case "y1":
-                    node.setStartY(toLength(r, value, 1));
+                    node.set(SvgLineFigure.Y1, toLength(r, value));
                     break;
                 case "x2":
-                    node.setEndX(toLength(r, value, 1));
+                    node.set(SvgLineFigure.X2, toLength(r, value));
                     break;
                 case "y2":
-                    node.setEndY(toLength(r, value, 1));
-                    break;
-                case "pathLength":
-                    PATH_LENGTH_KEY.set(node.getProperties(), toLength(r, value, 1));
+                    node.set(SvgLineFigure.Y2, toLength(r, value));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readPathLengthAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute " + namespace + ":" + localName + "=\"" + value + "\".");
@@ -752,12 +764,12 @@ public class SvgTinySceneGraphReader {
         return node;
     }
 
-    private Node readLinearGradientElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readLinearGradientElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readStopElement(r, ctx);
+                Figure child = readStopElement(r, ctx);
                 if (child != null) {
                     // FIXME do something with stop element
                 }
@@ -771,12 +783,8 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readPathElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        javafx.scene.shape.Path node = new javafx.scene.shape.Path();
-        node.setStroke(null);
-        node.setFill(Color.BLACK);
-
-        node.setManaged(false);
+    private Figure readPathElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgPathFigure node = new SvgPathFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String name = r.getAttributeLocalName(i);
             String value = r.getAttributeValue(i);
@@ -784,17 +792,10 @@ public class SvgTinySceneGraphReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (name) {
                 case "d":
-                    FXPathBuilder builder = new FXPathBuilder();
-                    try {
-                        Shapes.buildFromSvgString(builder, value);
-                    } catch (ParseException e) {
-                        logWarning(r, "Skipping illegal path. " + e.getMessage());
-                    }
-                    //svgPath.setContent(r.getAttributeValue(i));
-                    node.getElements().setAll(builder.getElements());
+                    node.set(SvgPathFigure.D, value);
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, name, value)
+                    if (!readPathLengthAttribute(r, node, ctx, namespace, name, value)
                             && !readNodeAttribute(r, node, ctx, namespace, name, value)) {
                         throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
                     }
@@ -810,8 +811,8 @@ public class SvgTinySceneGraphReader {
         return node;
     }
 
-    private Node readPolygonElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Polygon node = new Polygon();
+    private Figure readPolygonElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgPolygonFigure node = new SvgPolygonFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String localName = r.getAttributeLocalName(i);
             String value = r.getAttributeValue(i);
@@ -819,11 +820,11 @@ public class SvgTinySceneGraphReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (localName) {
                 case "points":
-                    node.getPoints().addAll(
-                            toDoubles(r, value, ctx));
+                    node.set(SvgPolygonFigure.POINTS,
+                            ImmutableLists.ofCollection(toDoubles(r, value, ctx)));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readPathLengthAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)) {
                         throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
                     }
@@ -847,23 +848,31 @@ public class SvgTinySceneGraphReader {
         StringTokenizer tt = new StringTokenizer(str, " ,");
         List<Double> points = new ArrayList<>(tt.countTokens());
         for (int i = 0, n = tt.countTokens(); i < n; i++) {
-            points.add(toLength(r, tt.nextToken(), 1.0));
+            points.add(toNumber(r, tt.nextToken()));
         }
         return points;
     }
 
-    private Node readPolylineElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Polyline node = new Polyline();
+    private Double toNumber(XMLStreamReader r, String nextToken) throws XMLStreamException {
+        try {
+            return numberConverter.fromString(nextToken).doubleValue();
+        } catch (ParseException | IOException e) {
+            throw createException(r, e.getMessage());
+        }
+    }
+
+    private Figure readPolylineElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgPolylineFigure node = new SvgPolylineFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String name = r.getAttributeLocalName(i);
             String value = r.getAttributeValue(i);
             String namespace = r.getAttributeNamespace(i);
             switch (name) {
             case "points":
-                node.getPoints().addAll(toDoubles(r, value, ctx));
+                node.set(SvgPolylineFigure.POINTS, ImmutableLists.ofCollection(toDoubles(r, value, ctx)));
                 break;
             default:
-                if (!readShapeAttribute(r, node, ctx, namespace, name, value)
+                if (!readPathLengthAttribute(r, node, ctx, namespace, name, value)
                         && !readNodeAttribute(r, node, ctx, namespace, name, value)
                 ) {
                     throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
@@ -876,12 +885,12 @@ public class SvgTinySceneGraphReader {
         return node;
     }
 
-    private Node readRadialGradientElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readRadialGradientElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         Loop:
         while (true) {
             switch (r.nextTag()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readStopElement(r, ctx);
+                Figure child = readStopElement(r, ctx);
                 if (child != null) {
                     // FIXME do something with stop element
                 }
@@ -895,8 +904,8 @@ public class SvgTinySceneGraphReader {
         return null;
     }
 
-    private Node readRectElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Rectangle node = new Rectangle();
+    private Figure readRectElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        SvgRectFigure node = new SvgRectFigure();
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
             String name = r.getAttributeLocalName(i);
@@ -904,26 +913,26 @@ public class SvgTinySceneGraphReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (name) {
                 case "x":
-                    node.setX(toLength(r, value, 1));
+                    node.set(SvgRectFigure.X, toLength(r, value));
                     break;
                 case "y":
-                    node.setY(toLength(r, value, 1));
+                    node.set(SvgRectFigure.Y, toLength(r, value));
                     break;
                 case "rx":
-                    node.setArcWidth(toLength(r, value, 1));
+                    node.set(SvgRectFigure.RX, toLength(r, value));
                     break;
                 case "ry":
-                    node.setArcHeight(toLength(r, value, 1));
+                    node.set(SvgRectFigure.RY, toLength(r, value));
                     break;
                 case "width":
-                    node.setWidth(toLength(r, value, 1));
+                    node.set(SvgRectFigure.WIDTH, toLength(r, value));
                     break;
                 case "height":
-                    node.setHeight(toLength(r, value, 1));
+                    node.set(SvgRectFigure.HEIGHT, toLength(r, value));
                     break;
                 default:
                     if (!readNodeAttribute(r, node, ctx, namespace, name, value)
-                            && !readShapeAttribute(r, node, ctx, namespace, name, value)) {
+                            && !readPathLengthAttribute(r, node, ctx, namespace, name, value)) {
                         throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
                     }
                     break;
@@ -936,7 +945,7 @@ public class SvgTinySceneGraphReader {
         return node;
     }
 
-    private void requireEndElement(XMLStreamReader r, String s, Node node) throws XMLStreamException {
+    private void requireEndElement(XMLStreamReader r, String s, Figure node) throws XMLStreamException {
         switch (r.nextTag()) {
         case XMLStreamReader.END_ELEMENT:
             break;
@@ -945,7 +954,7 @@ public class SvgTinySceneGraphReader {
         }
     }
 
-    private Node readSvgElement(XMLStreamReader r, Context ctx) {
+    private Figure readSvgElement(XMLStreamReader r, Context ctx) {
         return null;
     }
 
@@ -954,7 +963,7 @@ public class SvgTinySceneGraphReader {
     /**
      * FIXME delete me
      */
-    private void readTransformAttributes(XMLStreamReader r, Node node, Context ctx) throws XMLStreamException {
+    private void readTransformAttributes(XMLStreamReader r, Figure node, Context ctx) throws XMLStreamException {
         try {
             for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
                 String name = r.getAttributeLocalName(i);
@@ -965,7 +974,7 @@ public class SvgTinySceneGraphReader {
                     case "transform":
                         ImmutableList<Transform> transforms = transformsConverter.fromString(value);
                         if (transforms != null) {
-                            node.getTransforms().addAll(transforms.asList());
+                            node.set(SvgTransformableFigure.TRANSFORMS, transforms);
                         }
                         break;
                     }
@@ -980,238 +989,72 @@ public class SvgTinySceneGraphReader {
     private final SvgStrokeAlignmentConverter strokAlignmentConverter = new SvgStrokeAlignmentConverter(false);
 
 
-    private boolean readNodeAttribute(XMLStreamReader r, Node node, Context ctx, String namespace, String name, String value) throws XMLStreamException {
+    private boolean readNodeAttribute(XMLStreamReader r, Figure node, Context ctx, String namespace, String name, String value) throws XMLStreamException {
         if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
-            switch (name) {
-            case "id":
-                node.setId(value);
-                return true;
-            case "style":
-                node.setStyle(value);
-                return true;
-            case "class":
-                node.getStyleClass().addAll(toWhitespaceOrCommaSeparatedArray(value));
-                return true;
-            case "cursor":
-                CURSOR_KEY.put(node.getProperties(), value);
-                return true;
-            case "onload":
-                ON_LOAD_KEY.put(node.getProperties(), value);
-                return true;
-            case "onclick":
-                ON_CLICK_KEY.put(node.getProperties(), value);
-                return true;
-            case "onmouseover":
-                ON_MOUSE_OVER_KEY.put(node.getProperties(), value);
-                return true;
-            case "onmousedown":
-                ON_MOUSE_DOWN_KEY.put(node.getProperties(), value);
-                return true;
-            case "clip-path":
-            case "opacity":
-                return true;
-            case "transform":
-                ImmutableList<Transform> transforms = null;
-                try {
-                    transforms = transformsConverter.fromString(value);
-                } catch (ParseException | IOException e) {
-                    logWarning(r, "Skipping illegal transform attribute. " + e.getMessage());
+            try {
+                switch (name) {
+                case "id":
+                    node.set(StyleableFigure.ID, value);
+                    break;
+                case "style":
+                    node.set(StyleableFigure.STYLE, value);
+                    break;
+                case "class":
+                    node.set(StyleableFigure.STYLE_CLASS,
+                            ImmutableLists.of(toWhitespaceOrCommaSeparatedArray(value)));
+                    break;
+                case "cursor":
+                    CURSOR_KEY.put(node.getProperties(), value);
+                    break;
+                case "onload":
+                    ON_LOAD_KEY.put(node.getProperties(), value);
+                    break;
+                case "onclick":
+                    ON_CLICK_KEY.put(node.getProperties(), value);
+                    break;
+                case "onmouseover":
+                    ON_MOUSE_OVER_KEY.put(node.getProperties(), value);
+                    break;
+                case "onmousedown":
+                    ON_MOUSE_DOWN_KEY.put(node.getProperties(), value);
+                    break;
+                case "transform":
+                    node.set(SvgTransformableFigure.TRANSFORMS, SvgTransformableFigure.TRANSFORMS.getConverter().fromString(value));
+                    break;
+                case "stroke-alignment":
+                    node.set(SvgInheritableFigureAttributes.STROKE_ALIGNMENT_KEY, SvgInheritableFigureAttributes.STROKE_ALIGNMENT_KEY.getConverter().fromString(value));
+                    break;
+                case "fill":
+                    ctx.secondPass.add(() ->
+                            node.set(SvgInheritableFigureAttributes.FILL_KEY, SvgInheritableFigureAttributes.FILL_KEY.getConverter().fromString(value, ctx.idFactory))
+                    );
+                    break;
+                case "stroke":
+                    ctx.secondPass.add(() ->
+                            node.set(SvgInheritableFigureAttributes.STROKE_KEY, SvgInheritableFigureAttributes.STROKE_KEY.getConverter().fromString(value, ctx.idFactory))
+                    );
+                    break;
+                default:
+                    return false;
                 }
-                if (transforms != null) {
-                    node.getTransforms().addAll(transforms.asList());
-                }
-                return true;
+            } catch (ParseException | IOException e) {
+                logWarning(r, "Error parsing attribute " + namespace + ":" + name + "=\"" + value + "\". " + e.getMessage());
             }
+            return true;
         }
         return false;
     }
 
-    private boolean readShapeAttribute(XMLStreamReader r, Shape shape, Context ctx, String namespace, String name, String value) throws XMLStreamException {
+    private boolean readPathLengthAttribute(XMLStreamReader r, Figure shape, Context ctx, String namespace, String name, String value) throws XMLStreamException {
         if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
             switch (name) {
 
-            //'color'
-            // Value:  	<color> | inherit
-            // Initial:  	 depends on user agent
-            // Applies to:  	None. Indirectly affects other properties via currentColor
-            // Inherited:  	 yes
-            // Percentages:  	 N/A
-            // Media:  	 visual
-            // Animatable:  	 yes
-            // Computed value:  	 Specified <color> value, except inherit
-            //
-            // value = readInheritAttribute(elem, "color", "black");
-            // if (DEBUG) System.out.println("color="+value);
-
-            //'color-rendering'
-            // Value:  	 auto | optimizeSpeed | optimizeQuality | inherit
-            // Initial:  	 auto
-            // Applies to:  	 container elements , graphics elements and 'animateColor'
-            // Inherited:  	 yes
-            // Percentages:  	 N/A
-            // Media:  	 visual
-            // Animatable:  	 yes
-            // Computed value:  	 Specified value, except inherit
-            //
-            // value = readInheritAttribute(elem, "color-rendering", "auto");
-            // if (DEBUG) System.out.println("color-rendering="+value);
-
-            case "fill":
-                // 'fill'
-                // Value:  	<paint> | inherit (See Specifying paint)
-                // Initial:  	 black
-                // Applies to:  	 shapes and text content elements
-                // Inherited:  	 yes
-                // Percentages:  	 N/A
-                // Media:  	 visual
-                // Animatable:  	 yes
-                // Computed value:  	 "none", system paint, specified <color> value or absolute IRI
-                Paint fill = toPaint(r, readInheritColorAttribute(r, name, value, "black", ctx), ctx);
-                shape.setFill(fill);
-                return true;
-
-            //'fill-opacity'
-            //Value:  	 <opacity-value> | inherit
-            //Initial:  	 1
-            //Applies to:  	 shapes and text content elements
-            //Inherited:  	 yes
-            //Percentages:  	 N/A
-            //Media:  	 visual
-            //Animatable:  	 yes
-            //Computed value:  	 Specified value, except inherit
-
-            // 'fill-rule'
-            // Value:	 nonzero | evenodd | inherit
-            // Initial: 	 nonzero
-            // Applies to:  	 shapes and text content elements
-            // Inherited:  	 yes
-            // Percentages:  	 N/A
-            // Media:  	 visual
-            // Animatable:  	 yes
-            // Computed value:  	 Specified value, except inherit
-
-            case "stroke":
-                //'stroke'
-                //Value:  	<paint> | inherit (See Specifying paint)
-                //Initial:  	 none
-                //Applies to:  	 shapes and text content elements
-                //Inherited:  	 yes
-                //Percentages:  	 N/A
-                //Media:  	 visual
-                //Animatable:  	 yes
-                //Computed value:  	 "none", system paint, specified <color> value
-                // or absolute IRI
-
-                // FIXME we can resolve this only in the second pass
-                // FIXME must be combined with stroke-opacity
-                Paint stroke = toPaint(r, readInheritColorAttribute(r, name, value, "none", ctx), ctx);
-                shape.setStroke(stroke);
-                return true;
-
-            case "stroke-alignment":
-                //Name: 	stroke-alignment
-                //Value: 	center | inner | outer
-                //Initial: 	center
-                //Applies to: 	shapes and text content elements
-                //Inherited: 	yes
-                //Percentages: 	N/A
-                //Media: 	visual
-                //Computed value: 	as specified
-                //Animatable: 	yes
-                try {
-                    StrokeType type = strokAlignmentConverter.fromString(
-                            readInheritAttribute(r, name, value, "center", ctx));
-                    shape.setStrokeType(type);
-                } catch (IOException | ParseException e) {
-                    throw createException(r, e.getMessage(), e);
-                }
-                return true;
-            case "stroke-dasharray":
-                //'stroke-dasharray'
-                //Value:  	 none | <dasharray> | inherit
-                //Initial:  	 none
-                //Applies to:  	 shapes and text content elements
-                //Inherited:  	 yes
-                //Percentages:  	 N/A
-                //Media:  	 visual
-                //Animatable:  	 yes (non-additive)
-                //Computed value:  	 Specified value, except inherit
-                shape.getStrokeDashArray().setAll(toDoubles(r, value, ctx));
-                return true;
-
-            //'stroke-dashoffset'
-            //Value:  	<length> | inherit
-            //Initial:  	 0
-            //Applies to:  	 shapes and text content elements
-            //Inherited:  	 yes
-            //Percentages:  	 N/A
-            //Media:  	 visual
-            //Animatable:  	 yes
-            //Computed value:  	 Specified value, except inherit
-
-            //'stroke-linecap'
-            //Value:  	 butt | round | square | inherit
-            //Initial:  	 butt
-            //Applies to:  	 shapes and text content elements
-            //Inherited:  	 yes
-            //Percentages:  	 N/A
-            //Media:  	 visual
-            //Animatable:  	 yes
-            //Computed value:  	 Specified value, except inherit
-
-
-            //'stroke-linejoin'
-            //Value:  	 miter | round | bevel | inherit
-            //Initial:  	 miter
-            //Applies to:  	 shapes and text content elements
-            //Inherited:  	 yes
-            //Percentages:  	 N/A
-            //Media:  	 visual
-            //Animatable:  	 yes
-            //Computed value:  	 Specified value, except inherit
-
-            //'stroke-miterlimit'
-            //Value:  	 <miterlimit> | inherit
-            //Initial:  	 4
-            //Applies to:  	 shapes and text content elements
-            //Inherited:  	 yes
-            //Percentages:  	 N/A
-            //Media:  	 visual
-            //Animatable:  	 yes
-            //Computed value:  	 Specified value, except inherit
-
-            case "stroke-opacity": {
-                //'stroke-opacity'
-                //Value:  	 <opacity-value> | inherit
-                //Initial:  	 1
-                //Applies to:  	 shapes and text content elements
-                //Inherited:  	 yes
-                //Percentages:  	 N/A
-                //Media:  	 visual
-                //Animatable:  	 yes
-                //Computed value:  	 Specified value, except inherit
-                double strokeOpacity = toLength(r, readInheritAttribute(r, name, value, "1", ctx), 1);
-                STROKE_OPACITY_KEY.put(shape.getProperties(), strokeOpacity);
+            case "pathLength": {
+                //https://www.w3.org/TR/2018/CR-SVG2-20181004/paths.html#PathLengthAttribute
+                double doubleValue = toNumber(r, value);
+                shape.set(SvgPathLengthFigure.PATH_LENGTH, doubleValue);
                 return true;
             }
-
-            case "stroke-width": {
-                //'stroke-width'
-                //Value:  	<length> | inherit
-                //Initial:  	 1
-                //Applies to:  	 shapes and text content elements
-                //Inherited:  	 yes
-                //Percentages:  	 N/A
-                //Media:  	 visual
-                //Animatable:  	 yes
-                //Computed value:  	 Specified value, except inherit
-                double doubleValue = toLength(r, readInheritAttribute(r, name, value, "1", ctx), 1);
-                shape.setStrokeWidth(doubleValue);
-                return true;
-            }
-            case "stroke-linecap":
-                return true;
-
             default:
                 break;
             }
@@ -1219,11 +1062,11 @@ public class SvgTinySceneGraphReader {
         return false;
     }
 
-    private Node readSolidColorElement(XMLStreamReader r, Context ctx) {
+    private Figure readSolidColorElement(XMLStreamReader r, Context ctx) {
         return null;
     }
 
-    private Node readStyleElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readStyleElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String name = r.getAttributeLocalName(i);
             String value = r.getAttributeValue(i);
@@ -1241,14 +1084,10 @@ public class SvgTinySceneGraphReader {
      * @param r reader
      * @throws XMLStreamException
      */
-    private Node readSvgRootElement(XMLStreamReader r) throws XMLStreamException, IOException {
+    private Figure readSvgRootElement(XMLStreamReader r) throws XMLStreamException, IOException {
         Context ctx = new Context();
-        Viewport rootViewport = new Viewport();
-        Viewport viewport = new Viewport();
-        ctx.viewportStack.add(rootViewport);
-        ctx.viewportStack.add(viewport);
 
-        StackPane node = new StackPane();
+        SvgDrawing node = new SvgDrawing();
 
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
@@ -1257,20 +1096,14 @@ public class SvgTinySceneGraphReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (localName) {
                 case "height":
-                    viewport.height = toLength(r, value, rootViewport.heightPercentFactor);
                     break;
                 case "width":
-                    viewport.width = toLength(r, value, rootViewport.widthPercentFactor);
                     break;
                 case "viewBox":
                     String[] viewBoxValues = toWhitespaceOrCommaSeparatedArray(value);
                     if (viewBoxValues.length != 4) {
                         throw createException(r, "4 values expected for viewBox: " + value + ".");
                     }
-                    viewport.viewBox.x = toLength(r, viewBoxValues[0], rootViewport.widthPercentFactor);
-                    viewport.viewBox.y = toLength(r, viewBoxValues[1], rootViewport.heightPercentFactor);
-                    viewport.viewBox.width = toLength(r, viewBoxValues[2], rootViewport.widthPercentFactor);
-                    viewport.viewBox.height = toLength(r, viewBoxValues[3], rootViewport.heightPercentFactor);
                     break;
                 case "baseProfile":
                     if (!"tiny".equals(value)) {
@@ -1300,17 +1133,12 @@ public class SvgTinySceneGraphReader {
         }
 
 
-        computeViewportValues(viewport);
-        node.setPrefWidth(viewport.width);
-        node.setPrefHeight(viewport.height);
-
         Loop:
         while (true) {
             switch (r.next()) {
             case XMLStreamReader.START_ELEMENT:
-                Node child = readElement(r, ctx, node);
+                Figure child = readElement(r, ctx, node);
                 if (child != null) {
-                    child.setManaged(false);
                     node.getChildren().add(child);
                 }
                 break;
@@ -1333,28 +1161,25 @@ public class SvgTinySceneGraphReader {
             }
         }
 
-        node.setClip(new
-
-                Rectangle(0, 0, viewport.width, viewport.height));
 
         return node;
     }
 
-    private Node readSwitchElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readSwitchElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         requireEndElement(r, "<switch>: end element expected", null);
         return null;
     }
 
-    private Node readScriptElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readScriptElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         skipElement(r, ctx);
         return null;
     }
 
-    private Node readTextAreaElement(XMLStreamReader r, Context ctx) {
+    private Figure readTextAreaElement(XMLStreamReader r, Context ctx) {
         return null;
     }
 
-    private static final Logger LOGGER = Logger.getLogger(SvgTinySceneGraphReader.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FigureSvgReader.class.getName());
 
     private Text readTSpanElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         Text shape = new Text();
@@ -1364,10 +1189,10 @@ public class SvgTinySceneGraphReader {
             String value = r.getAttributeValue(i);
             switch (name) {
             case "x":
-                shape.setX(toLength(r, value, 1));
+                //shape.setX(toLength(r, value));
                 break;
             case "y":
-                shape.setY(toLength(r, value, 1));
+                //shape.setY(toLength(r, value));
                 break;
             default:
                 logWarning(r, "Unsupported attribute in tspan element. name=" + name + ", value=" + value + ".");
@@ -1384,30 +1209,7 @@ public class SvgTinySceneGraphReader {
     }
 
     private Text readTextPathElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        Text shape = new Text();
-
-        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
-            String name = r.getAttributeLocalName(i);
-            String value = r.getAttributeValue(i);
-            switch (name) {
-            case "x":
-                shape.setX(toLength(r, value, 1));
-                break;
-            case "y":
-                shape.setY(toLength(r, value, 1));
-                break;
-            default:
-                logWarning(r, "Unsupported attribute in tspan element. name=" + name + ", value=" + value + ".");
-                break;
-            }
-        }
-
-        shape.setText(readTextContent(r));
-
-        // normalize text
-        shape.setText(shape.getText().trim().replaceAll("\\s+", " "));
-
-        return shape;
+        return null;
     }
 
     /**
@@ -1443,7 +1245,7 @@ public class SvgTinySceneGraphReader {
         return buf.toString();
     }
 
-    private Node readStopElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private Figure readStopElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         requireEndElement(r, "<stop>: end element expected", null);
         return null;
     }
@@ -1468,21 +1270,7 @@ public class SvgTinySceneGraphReader {
                 FONT_FAMILY_KEY.set(node.getProperties(), value);
                 return true;
             }
-            case "font-size": {
-                // 'font-size'
-                // Value:  	<absolute-size> | <relative-gsize |
-                // <length> | inherit
-                // Initial:  	medium
-                // Applies to:  	text content elements
-                // Inherited:  	yes, the computed value is inherited
-                // Percentages:  	N/A
-                // Media:  	visual
-                // Animatable:  	yes
-                // Computed value:  	 Absolute length
-                FONT_SIZE_KEY.set(node.getProperties(),
-                        toLength(r, readInheritAttribute(r, name, value, "1", ctx), 1));
-                return true;
-            }
+
             // 'font-style'
             // Value:  	normal | italic | oblique | inherit
             // Initial:  	normal
@@ -1533,148 +1321,38 @@ public class SvgTinySceneGraphReader {
 
     }
 
-    private Node readTextElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        // An SVG text element can result in one or more JavaFX text nodes.
-
-        Text node = new Text();
-        node.setManaged(false);
-        boolean hasLocation = false;
-        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
-            String localName = r.getAttributeLocalName(i);
-            String namespace = r.getAttributeNamespace(i);
-            String value = r.getAttributeValue(i);
-            if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
-                switch (localName) {
-                case "x":
-                    hasLocation = true;
-                    node.setX(toDoubles(r, value, ctx).get(0));
-                    break;
-                case "y":
-                    hasLocation = true;
-                    node.setY(toDoubles(r, value, ctx).get(0));
-                    break;
-                default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
-                            && !readNodeAttribute(r, node, ctx, namespace, localName, value)
-                            && !readFontAttribute(r, node, ctx, namespace, localName, value)
-                    ) {
-                        throw createException(r, "Unknown attribute " + namespace + ":" + localName + "=\"" + value + "\".");
-                    }
-                    break;
-                }
-            } else {
-                logWarning(r, "Skipping attribute " + namespace + ":" + localName + "=\"" + value + "\".");
-            }
-        }
-
-        Loop:
-        while (true) {
-            switch (r.next()) {
-            case XMLStreamReader.CHARACTERS:
-                node.setText(node.getText() + r.getText());
-                break;
-            case XMLStreamReader.START_ELEMENT:
-                if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
-                    String localName = r.getLocalName();
-                    switch (localName) {
-                    case "tspan": {
-                        Text child = readTSpanElement(r, ctx);
-                        if (!hasLocation) {
-                            hasLocation = true;
-                            node.setX(child.getX());
-                            node.setY(child.getY());
-                        }
-                        node.setText(node.getText() + child.getText());
-                        break;
-                    }
-                    case "textPath": {
-                        Text child = readTextPathElement(r, ctx);
-                        if (!hasLocation) {
-                            hasLocation = true;
-                            node.setX(child.getX());
-                            node.setY(child.getY());
-                        }
-                        node.setText(node.getText() + child.getText());
-                        break;
-                    }
-                    default:
-                        // Accept non-node generating elements, like linearGradient.
-                        Node childNode = readElement(r, ctx, node);
-                        if (childNode != null) {
-                            throw createException(r, "<text>: Unsupported child element: " + localName);
-                        }
-                    }
-                }
-                break;
-            case XMLStreamReader.END_ELEMENT:
-                break Loop;
-            default:
-                throw createException(r, "<text>: start element or end element expected.");
-            }
-        }
-
-        // normalize text
-        node.setText(node.getText().trim().replaceAll("\\s+", " "));
-
-        return node;
+    private Figure readTextElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        return null;
     }
 
-    private Node readTitleElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readTitleElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         String title = readTextContent(r);
         TITLE_KEY.put(parent.getProperties(), title);
         return null;
     }
 
-    private Node readDescElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
+    private Figure readDescElement(XMLStreamReader r, Context ctx, Figure parent) throws XMLStreamException {
         String title = readTextContent(r);
         DESC_KEY.put(parent.getProperties(), title);
         return null;
     }
 
-    private Node readUseElement(XMLStreamReader r, Context ctx) {
+    private Figure readUseElement(XMLStreamReader r, Context ctx) {
         return null;
     }
 
-    /**
-     * Returns a value as a length.
-     * http://www.w3.org/TR/SVGMobile12/types.html#DataTypeLength
-     */
-    private double toLength(XMLStreamReader reader, String str, double percentFactor) throws XMLStreamException {
-        double scaleFactor = 1d;
-        if (str == null || str.length() == 0 || str.equals("none")) {
-            return 0d;
+    private CssSize toLength(XMLStreamReader reader, String str) throws XMLStreamException {
+        try {
+            return sizeConverter.fromString(str);
+        } catch (ParseException | IOException e) {
+            logWarning(reader, e.getMessage());
+            return CssSize.ZERO;
         }
 
-        if (str.endsWith("%")) {
-            str = str.substring(0, str.length() - 1);
-            scaleFactor = percentFactor;
-        } else if (str.endsWith("px")) {
-            str = str.substring(0, str.length() - 2);
-        } else if (str.endsWith("pt")) {
-            str = str.substring(0, str.length() - 2);
-            scaleFactor = 1.25;
-        } else if (str.endsWith("pc")) {
-            str = str.substring(0, str.length() - 2);
-            scaleFactor = 15;
-        } else if (str.endsWith("mm")) {
-            str = str.substring(0, str.length() - 2);
-            scaleFactor = 3.543307;
-        } else if (str.endsWith("cm")) {
-            str = str.substring(0, str.length() - 2);
-            scaleFactor = 35.43307;
-        } else if (str.endsWith("in")) {
-            str = str.substring(0, str.length() - 2);
-            scaleFactor = 90;
-        } else if (str.endsWith("em")) {
-            str = str.substring(0, str.length() - 2);
-            // XXX - This doesn't work
-            scaleFactor = 13;
-        } else {
-            scaleFactor = 1d;
-        }
-
-        return Double.parseDouble(str) * scaleFactor;
     }
+
+    final CssSizeConverter sizeConverter = new CssSizeConverter(false);
+    final XmlNumberConverter numberConverter = new XmlNumberConverter();
 
     private final SvgPaintConverter paintConverter = new SvgPaintConverter(true);
 
@@ -1687,58 +1365,5 @@ public class SvgTinySceneGraphReader {
         }
     }
 
-    /**
-     * Each SVG element establishes a new Viewport.
-     */
-    private static class Viewport {
 
-        /**
-         * The width of the Viewport.
-         */
-        public double width = 640d;
-        /**
-         * The height of the Viewport.
-         */
-        public double height = 480d;
-        /**
-         * The viewBox specifies the coordinate system within the Viewport.
-         */
-        public Rectangle2D.Double viewBox = new Rectangle2D.Double(0d, 0d, 640d, 480d);
-        /**
-         * Factor for percent values relative to Viewport width.
-         */
-        public double widthPercentFactor = 640d / 100d;
-        /**
-         * Factor for percent values relative to Viewport height.
-         */
-        public double heightPercentFactor = 480d / 100d;
-        /**
-         * Factor for number values in the user coordinate system.
-         * This is the smaller value of width / viewBox.width and height / viewBox.height.
-         */
-        public double numberFactor;
-        /**
-         * http://www.w3.org/TR/SVGMobile12/coords.html#PreserveAspectRatioAttribute
-         * XXX - use a more sophisticated variable here
-         */
-        public boolean isPreserveAspectRatio = true;
-        private HashMap<Key<?>, Object> attributes = new HashMap<Key<?>, Object>();
-
-        @Override
-        public String toString() {
-            return "widthPercentFactor:" + widthPercentFactor + ";"
-                    + "heightPercentFactor:" + heightPercentFactor + ";"
-                    + "numberFactor:" + numberFactor + ";"
-                    + attributes;
-        }
-
-    }
-
-
-    /**
-     * Reads an attribute that is inherited.
-     */
-    private @NonNull String readInheritAttribute(XMLStreamReader r, String attributeName, @NonNull String value, @Nullable String initialValue, Context ctx) {
-        return value;
-    }
 }

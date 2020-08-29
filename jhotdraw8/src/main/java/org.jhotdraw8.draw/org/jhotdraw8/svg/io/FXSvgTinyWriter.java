@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class SvgTinySceneGraphWriter extends AbstractSvgSceneGraphWriter {
+public class FXSvgTinyWriter extends AbstractFXSvgWriter {
 
     private final static String SVG_VERSION = "1.2";
     private final static String SVG_BASE_PROFILE = "tiny";
@@ -37,7 +37,7 @@ public class SvgTinySceneGraphWriter extends AbstractSvgSceneGraphWriter {
      *                    ImageView
      * @param skipKey     this property is used to retrieve a Boolean from a Node.
      */
-    public SvgTinySceneGraphWriter(Object imageUriKey, Object skipKey) {
+    public FXSvgTinyWriter(Object imageUriKey, Object skipKey) {
         super(imageUriKey, skipKey);
     }
 
