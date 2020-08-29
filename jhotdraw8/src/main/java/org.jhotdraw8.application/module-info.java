@@ -32,7 +32,6 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.io;
     exports org.jhotdraw8.binding;
     exports org.jhotdraw8.gui;
-    exports org.jhotdraw8.gui.dockold;
     exports org.jhotdraw8.gui.dock;
     exports org.jhotdraw8.event;
     exports org.jhotdraw8.gui.fontchooser;
