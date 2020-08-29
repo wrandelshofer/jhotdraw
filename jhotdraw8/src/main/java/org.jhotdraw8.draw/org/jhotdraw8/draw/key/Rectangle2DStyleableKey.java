@@ -57,7 +57,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Rectangle2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, Rectangle2D> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, defaultValue, inherits);
@@ -73,7 +73,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
     private Converter<Rectangle2D> converter;
 
     @Override
-    public @NonNull Converter<Rectangle2D> getConverter() {
+    public @NonNull Converter<Rectangle2D> getCssConverter() {
         if (converter == null) {
             converter = new Rectangle2DConverter(false);
         }

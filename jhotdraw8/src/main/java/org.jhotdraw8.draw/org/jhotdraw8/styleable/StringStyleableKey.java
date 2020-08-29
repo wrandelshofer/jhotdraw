@@ -49,7 +49,7 @@ public class StringStyleableKey extends StringKey implements WriteableStyleableM
 
     @NonNull
     @Override
-    public Converter<String> getConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 

@@ -89,7 +89,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
 
     @NonNull
     @Override
-    public Converter<CssFont> getConverter() {
+    public Converter<CssFont> getCssConverter() {
         return converter;
     }
 

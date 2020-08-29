@@ -72,7 +72,7 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
 
     @NonNull
     @Override
-    public Converter<Insets> getConverter() {
+    public Converter<Insets> getCssConverter() {
         return converter;
     }
 }

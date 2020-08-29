@@ -54,7 +54,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, Point2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, Point2D> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
@@ -73,7 +73,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     private Converter<Point2D> converter;
 
     @Override
-    public @NonNull Converter<Point2D> getConverter() {
+    public @NonNull Converter<Point2D> getCssConverter() {
         if (converter == null) {
             converter = new CssScale2DConverter();
         }

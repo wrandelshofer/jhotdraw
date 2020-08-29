@@ -61,7 +61,7 @@ public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStylea
 
     @NonNull
     @Override
-    public Converter<T> getConverter() {
+    public Converter<T> getCssConverter() {
         return converter;
     }
 }

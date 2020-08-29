@@ -67,7 +67,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleable
 
     @NonNull
     @Override
-    public Converter<T> getConverter() {
+    public Converter<T> getCssConverter() {
         return converter;
     }
 }

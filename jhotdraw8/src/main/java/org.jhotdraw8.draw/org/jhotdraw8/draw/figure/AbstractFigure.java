@@ -15,6 +15,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.css.CssDefaultableValue;
+import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
@@ -256,5 +259,30 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     protected <T> void changed(Key<T> key, T oldValue, T newValue) {
         invalidateTransforms();
         firePropertyChangeEvent(this, key, oldValue, newValue);
+    }
+
+    @Override
+    public <T> @NonNull T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
+        T value = super.getStyledNonNull(key);
+        if (value instanceof CssDefaultableValue<?>) {
+            @SuppressWarnings("unchecked") CssDefaultableValue<T> dv = (CssDefaultableValue<T>) value;
+            if (dv.getDefaulting() == CssDefaulting.INHERIT && getParent() != null) {
+                value = getParent().getStyledNonNull(key);
+            }
+        }
+
+        return value;
+    }
+
+    @Override
+    public <T> @Nullable T getStyled(@NonNull MapAccessor<T> key) {
+        T value = super.getStyled(key);
+        if (value instanceof CssDefaultableValue<?>) {
+            @SuppressWarnings("unchecked") CssDefaultableValue<T> dv = (CssDefaultableValue<T>) value;
+            if (dv.getDefaulting() == CssDefaulting.INHERIT && getParent() != null) {
+                value = getParent().getStyled(key);
+            }
+        }
+        return value;
     }
 }

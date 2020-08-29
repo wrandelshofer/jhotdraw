@@ -79,7 +79,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull Converter<Point3D> getConverter() {
+    public @NonNull Converter<Point3D> getCssConverter() {
         return converter;
     }
 

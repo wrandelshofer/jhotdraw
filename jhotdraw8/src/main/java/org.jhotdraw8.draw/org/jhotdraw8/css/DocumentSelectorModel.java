@@ -233,7 +233,6 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     @Override
     public boolean hasAttribute(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName) {
-        // FIXME we need the XML schema to return the correct result
         return element.hasAttribute(attributeName);
     }
 

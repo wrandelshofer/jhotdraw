@@ -61,7 +61,7 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
 
     @NonNull
     @Override
-    public Converter<Effect> getConverter() {
+    public Converter<Effect> getCssConverter() {
         return converter;
     }
 }

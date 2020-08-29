@@ -28,7 +28,7 @@ import org.jhotdraw8.svg.figure.SvgCircleFigure;
 import org.jhotdraw8.svg.figure.SvgDrawing;
 import org.jhotdraw8.svg.figure.SvgEllipseFigure;
 import org.jhotdraw8.svg.figure.SvgGFigure;
-import org.jhotdraw8.svg.figure.SvgInheritableFigureAttributes;
+import org.jhotdraw8.svg.figure.SvgInheritableFigure;
 import org.jhotdraw8.svg.figure.SvgLineFigure;
 import org.jhotdraw8.svg.figure.SvgPathFigure;
 import org.jhotdraw8.svg.figure.SvgPathLengthFigure;
@@ -59,6 +59,9 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
+import static org.jhotdraw8.svg.figure.SvgElementFigure.DESC_KEY;
+import static org.jhotdraw8.svg.figure.SvgElementFigure.TITLE_KEY;
+
 /**
  * Reader for an SVG Tiny 1.2 file.
  * <p>
@@ -82,8 +85,6 @@ import java.util.logging.Logger;
 public class FigureSvgReader {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     public static final String XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
-    private static final Key<String> TITLE_KEY = new StringKey("title");
-    private static final Key<String> DESC_KEY = new StringKey("desc");
     private static final Key<String> FONT_FAMILY_KEY = new StringKey("fontFamily");
     private static final Key<String> CURSOR_KEY = new StringKey("cursor");
     private static final Key<String> ON_LOAD_KEY = new StringKey("onload");
@@ -1019,19 +1020,19 @@ public class FigureSvgReader {
                     ON_MOUSE_DOWN_KEY.put(node.getProperties(), value);
                     break;
                 case "transform":
-                    node.set(SvgTransformableFigure.TRANSFORMS, SvgTransformableFigure.TRANSFORMS.getConverter().fromString(value));
+                    node.set(SvgTransformableFigure.TRANSFORMS, SvgTransformableFigure.TRANSFORMS.getCssConverter().fromString(value));
                     break;
                 case "stroke-alignment":
-                    node.set(SvgInheritableFigureAttributes.STROKE_ALIGNMENT_KEY, SvgInheritableFigureAttributes.STROKE_ALIGNMENT_KEY.getConverter().fromString(value));
+                    node.set(SvgInheritableFigure.STROKE_ALIGNMENT_KEY, SvgInheritableFigure.STROKE_ALIGNMENT_KEY.getCssConverter().fromString(value));
                     break;
                 case "fill":
                     ctx.secondPass.add(() ->
-                            node.set(SvgInheritableFigureAttributes.FILL_KEY, SvgInheritableFigureAttributes.FILL_KEY.getConverter().fromString(value, ctx.idFactory))
+                            node.set(SvgInheritableFigure.FILL_KEY, SvgInheritableFigure.FILL_KEY.getCssConverter().fromString(value, ctx.idFactory))
                     );
                     break;
                 case "stroke":
                     ctx.secondPass.add(() ->
-                            node.set(SvgInheritableFigureAttributes.STROKE_KEY, SvgInheritableFigureAttributes.STROKE_KEY.getConverter().fromString(value, ctx.idFactory))
+                            node.set(SvgInheritableFigure.STROKE_KEY, SvgInheritableFigure.STROKE_KEY.getCssConverter().fromString(value, ctx.idFactory))
                     );
                     break;
                 default:

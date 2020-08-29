@@ -37,4 +37,12 @@ public class CssDefaultableValue<T> {
     public @Nullable T getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "CssDefaultableValue{" +
+                /*"defaulting=" +*/ defaulting +
+                ", value=" + value +
+                '}';
+    }
 }

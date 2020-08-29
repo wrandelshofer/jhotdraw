@@ -311,8 +311,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     protected <T> Picker<T> createPicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
         Class<T> type = acc.getValueType();
         boolean nullable = true;
-        if (acc.getConverter() instanceof CssConverter) {
-            CssConverter<T> converter = (CssConverter<T>) acc.getConverter();
+        if (acc.getCssConverter() instanceof CssConverter) {
+            CssConverter<T> converter = (CssConverter<T>) acc.getCssConverter();
             nullable = converter.isNullable();
         }
         Picker<?> p = null;
@@ -329,7 +329,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         } else if (type.isEnum()) {
             Class<? extends Enum<?>> enumClazz = (Class<? extends Enum<?>>) type;
             @SuppressWarnings("rawtypes")
-            EnumPicker suppress = new EnumPicker(enumClazz, acc.getConverter());
+            EnumPicker suppress = new EnumPicker(enumClazz, acc.getCssConverter());
             p = suppress;
         }
 

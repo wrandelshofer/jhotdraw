@@ -62,7 +62,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, BoundingBox> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, BoundingBox> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
@@ -83,7 +83,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
     private Converter<BoundingBox> converter;
 
     @Override
-    public @NonNull Converter<BoundingBox> getConverter() {
+    public @NonNull Converter<BoundingBox> getCssConverter() {
         if (converter == null) {
             converter = new CssBoundingBoxConverter(false);
         }

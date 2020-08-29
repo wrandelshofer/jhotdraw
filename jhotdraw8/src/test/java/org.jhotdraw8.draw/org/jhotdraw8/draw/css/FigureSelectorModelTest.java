@@ -43,7 +43,7 @@ public class FigureSelectorModelTest {
         final NullablePaintableStyleableKey key = FillableFigure.FILL;
         final String attrName = key.getCssName();
         final String namespace = key.getCssNamespace();
-        final Converter<Paintable> converter = key.getConverter();
+        final Converter<Paintable> converter = key.getCssConverter();
 
 
         assertNotNull(key.getDefaultValue(), "need a key with a non-null default value for this test");

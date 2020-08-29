@@ -80,7 +80,7 @@ public class DoubleStyleableKey
 
     @NonNull
     @Override
-    public Converter<@NonNull Double> getConverter() {
+    public Converter<@NonNull Double> getCssConverter() {
         return converter;
     }
 }

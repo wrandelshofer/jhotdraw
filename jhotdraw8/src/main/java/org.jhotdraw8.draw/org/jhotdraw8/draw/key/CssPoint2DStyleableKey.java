@@ -78,7 +78,7 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoi
 
 
     @Override
-    public @NonNull Converter<CssPoint2D> getConverter() {
+    public @NonNull Converter<CssPoint2D> getCssConverter() {
         return converter;
     }
 

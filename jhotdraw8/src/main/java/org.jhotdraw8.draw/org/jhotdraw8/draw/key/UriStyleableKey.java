@@ -65,7 +65,7 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, URI> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, URI> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, defaultValue, inherits);
@@ -81,7 +81,7 @@ public class UriStyleableKey extends AbstractStyleableKey<URI> implements Writea
     private Converter<URI> converter;
 
     @Override
-    public @NonNull Converter<URI> getConverter() {
+    public @NonNull Converter<URI> getCssConverter() {
         if (converter == null) {
             converter = new CssUriConverter();
         }

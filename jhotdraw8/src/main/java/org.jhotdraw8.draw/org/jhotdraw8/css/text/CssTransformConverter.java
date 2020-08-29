@@ -214,7 +214,7 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
     @Override
     public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
-        String func = tt.currentString();
+        String func = tt.currentStringNonNull();
         int funcPos = tt.getStartPosition();
         List<Double> m = new ArrayList<>();
         while (tt.next() != ')' && tt.current() != CssTokenType.TT_EOF) {

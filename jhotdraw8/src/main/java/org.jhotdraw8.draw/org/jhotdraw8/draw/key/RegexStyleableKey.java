@@ -69,7 +69,7 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, RegexReplace> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, RegexReplace> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, defaultValue, inherits);
@@ -85,7 +85,7 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
 
     @NonNull
     @Override
-    public Converter<RegexReplace> getConverter() {
+    public Converter<RegexReplace> getCssConverter() {
         return converter;
     }
 }

@@ -104,7 +104,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
 
     @NonNull
     @Override
-    public Converter<CssStrokeStyle> getConverter() {
+    public Converter<CssStrokeStyle> getCssConverter() {
         return converter;
     }
 

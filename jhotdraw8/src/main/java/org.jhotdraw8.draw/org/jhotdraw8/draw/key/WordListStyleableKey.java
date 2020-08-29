@@ -71,7 +71,7 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
     private Converter<ImmutableList<String>> converter;
 
     @Override
-    public @NonNull Converter<ImmutableList<String>> getConverter() {
+    public @NonNull Converter<ImmutableList<String>> getCssConverter() {
         if (converter == null) {
             converter = new XmlWordListConverter();
         }

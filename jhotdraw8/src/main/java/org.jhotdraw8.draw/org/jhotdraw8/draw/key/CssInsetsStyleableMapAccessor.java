@@ -64,7 +64,7 @@ public class CssInsetsStyleableMapAccessor
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssInsets> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<@NonNull Styleable, @NonNull CssInsets> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
@@ -86,7 +86,7 @@ public class CssInsetsStyleableMapAccessor
 
     @NonNull
     @Override
-    public Converter<CssInsets> getConverter() {
+    public Converter<CssInsets> getCssConverter() {
         return converter;
     }
 

@@ -32,7 +32,8 @@ import java.awt.geom.RoundRectangle2D;
  * @author Werner Randelshofer
  */
 public class SvgRectFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -113,21 +114,15 @@ public class SvgRectFigure extends AbstractLeafFigure
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
+        applyInheritableFigureProperties(ctx, n);
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
-        double x = getNonNull(X).getConvertedValue(unit);
-        double y = getNonNull(Y).getConvertedValue(unit);
-        double rx = getNonNull(RX).getConvertedValue(unit);
-        double ry = getNonNull(RY).getConvertedValue(unit);
-        double w = getNonNull(WIDTH).getConvertedValue(unit);
-        double h = getNonNull(HEIGHT).getConvertedValue(unit);
-        n.setX(x);
-        n.setY(y);
-        n.setArcWidth(rx);
-        n.setArcHeight(ry);
-        n.setWidth(w);
-        n.setHeight(h);
+        n.setX(getNonNull(X).getConvertedValue(unit));
+        n.setY(getNonNull(Y).getConvertedValue(unit));
+        n.setArcWidth(getNonNull(RX).getConvertedValue(unit));
+        n.setArcHeight(getNonNull(RY).getConvertedValue(unit));
+        n.setWidth(getNonNull(WIDTH).getConvertedValue(unit));
+        n.setHeight(getNonNull(HEIGHT).getConvertedValue(unit));
         n.applyCss();
-
     }
 
     @Override

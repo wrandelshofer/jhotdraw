@@ -32,7 +32,8 @@ import java.awt.geom.PathIterator;
  * @author Werner Randelshofer
  */
 public class SvgLineFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */

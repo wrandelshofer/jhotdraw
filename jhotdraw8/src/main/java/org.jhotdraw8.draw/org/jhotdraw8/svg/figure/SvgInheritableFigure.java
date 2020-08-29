@@ -5,7 +5,10 @@
 
 package org.jhotdraw8.svg.figure;
 
+import javafx.scene.effect.BlendMode;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
@@ -17,6 +20,7 @@ import org.jhotdraw8.css.text.CssMappedConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
+import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.svg.text.SvgDisplay;
 import org.jhotdraw8.svg.text.SvgFontSize;
 import org.jhotdraw8.svg.text.SvgFontSizeConverter;
@@ -27,7 +31,7 @@ import org.jhotdraw8.svg.text.SvgVisibility;
 /**
  * The following attributes can be defined on all SVG figures.
  */
-public interface SvgInheritableFigureAttributes extends Figure {
+public interface SvgInheritableFigure extends Figure {
     /**
      * stroke-alignment.
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#SpecifyingStrokeAlignment">link</a>
@@ -75,9 +79,9 @@ public interface SvgInheritableFigureAttributes extends Figure {
      * stroke-width.
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#StrokeWidth">link</a>
      */
-    DefaultableStyleableKey<Double> STROKE_WIDTH_KEY = new DefaultableStyleableKey<>("stroke-width", Double.class,
-            new CssDoubleConverter(false),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
+    DefaultableStyleableKey<CssSize> STROKE_WIDTH_KEY = new DefaultableStyleableKey<>("stroke-width", CssSize.class,
+            new CssSizeConverter(false),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT), CssSize.ONE);
     /**
      * visibility.
      * <a href="https://www.w3.org/TR/SVGTiny12/painting.html#DisplayProperty">link</a>
@@ -88,6 +92,31 @@ public interface SvgInheritableFigureAttributes extends Figure {
                             "hidden", SvgVisibility.HIDDEN,
                             "collapse", SvgVisibility.COLLAPSE).asMap()),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgVisibility.VISIBLE);
+    /**
+     * mix-blend-mode.
+     * <a href="https://developer.mozilla.org/de/docs/Web/CSS/mix-blend-mode">link</a>
+     */
+    DefaultableStyleableKey<BlendMode> MIX_BLEND_MODE_KEY = new DefaultableStyleableKey<>("mix-blend-mode", BlendMode.class,
+            new CssMappedConverter<BlendMode>("mix-blend-mode",
+                    ImmutableMaps.ofEntries(
+                            ImmutableMaps.entry("normal", BlendMode.SRC_OVER),
+                            ImmutableMaps.entry("mulitply", BlendMode.MULTIPLY),
+                            ImmutableMaps.entry("screen", BlendMode.SCREEN),
+                            ImmutableMaps.entry("overlay", BlendMode.OVERLAY),
+                            ImmutableMaps.entry("darken", BlendMode.DARKEN),
+                            ImmutableMaps.entry("lighten", BlendMode.LIGHTEN),
+                            ImmutableMaps.entry("color-dodge", BlendMode.COLOR_DODGE),
+                            ImmutableMaps.entry("color-burn", BlendMode.COLOR_BURN),
+                            ImmutableMaps.entry("hard-light", BlendMode.HARD_LIGHT),
+                            ImmutableMaps.entry("soft-light", BlendMode.SOFT_LIGHT),
+                            ImmutableMaps.entry("difference", BlendMode.DIFFERENCE),
+                            ImmutableMaps.entry("exclusion", BlendMode.EXCLUSION),
+                            ImmutableMaps.entry("hue", BlendMode.SRC_OVER),//FIXME
+                            ImmutableMaps.entry("saturation", BlendMode.SRC_OVER),//FIXME
+                            ImmutableMaps.entry("color", BlendMode.SRC_OVER),//FIXME
+                            ImmutableMaps.entry("luminosity", BlendMode.SRC_OVER)// FIXME
+                    ).asMap()),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT), BlendMode.SRC_OVER);
 
     /**
      * display.
@@ -103,4 +132,31 @@ public interface SvgInheritableFigureAttributes extends Figure {
                     ImmutableMaps.of("inline", SvgDisplay.INLINE).asMap(), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!
             SvgDisplay.INLINE);
+
+
+    /**
+     * Updates a shape node.
+     *
+     * @param ctx   the render context
+     * @param shape a shape node
+     */
+    default void applyInheritableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+        CssDefaultableValue<Paintable> fill = getStyledNonNull(FILL_KEY);
+        shape.setFill(Paintable.getPaint(fill.getValue(), ctx));
+
+        CssDefaultableValue<Paintable> stroke = getStyledNonNull(STROKE_KEY);
+        shape.setStroke(Paintable.getPaint(stroke.getValue(), ctx));
+
+        CssDefaultableValue<BlendMode> blendMode = getStyledNonNull(MIX_BLEND_MODE_KEY);
+        BlendMode bmValue = blendMode.getValue();
+        if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to nul
+            bmValue = null;
+        }
+        if (shape.getBlendMode() != bmValue) {// Workaround: only set value if different
+            shape.setBlendMode(bmValue);
+        }
+
+        CssDefaultableValue<CssSize> sw = getStyledNonNull(STROKE_WIDTH_KEY);
+        shape.setStrokeWidth(sw.getValue() == null ? 1.0 : sw.getValue().getConvertedValue(ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY)));
+    }
 }

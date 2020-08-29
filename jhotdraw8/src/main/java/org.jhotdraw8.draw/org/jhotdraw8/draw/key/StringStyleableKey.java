@@ -90,7 +90,7 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
 
     @NonNull
     @Override
-    public Converter<String> getConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 }

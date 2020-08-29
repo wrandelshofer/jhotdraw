@@ -72,7 +72,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
 
     @NonNull
     @Override
-    public Converter<Point2D> getConverter() {
+    public Converter<Point2D> getCssConverter() {
         return converter;
     }
 }

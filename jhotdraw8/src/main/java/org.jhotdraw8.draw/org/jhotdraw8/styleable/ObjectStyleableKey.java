@@ -61,7 +61,7 @@ public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyl
 
     @NonNull
     @Override
-    public Converter<T> getConverter() {
+    public Converter<T> getCssConverter() {
         return converter;
     }
 

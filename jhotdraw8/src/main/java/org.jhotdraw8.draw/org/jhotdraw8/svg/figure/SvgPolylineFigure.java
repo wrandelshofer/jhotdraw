@@ -38,7 +38,8 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class SvgPolylineFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */

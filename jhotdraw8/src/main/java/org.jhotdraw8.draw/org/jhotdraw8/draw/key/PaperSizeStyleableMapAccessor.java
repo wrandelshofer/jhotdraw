@@ -56,7 +56,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssPoint2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, CssPoint2D> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
@@ -74,7 +74,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
 
 
     @Override
-    public @NonNull Converter<CssPoint2D> getConverter() {
+    public @NonNull Converter<CssPoint2D> getCssConverter() {
         if (converter == null) {
             converter = new CssPaperSizeConverter();
         }

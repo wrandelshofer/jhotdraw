@@ -28,7 +28,9 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class SvgGFigure extends AbstractCompositeFigure
-        implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure {
+        implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
+        SvgInheritableFigure,
+        SvgElementFigure {
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.

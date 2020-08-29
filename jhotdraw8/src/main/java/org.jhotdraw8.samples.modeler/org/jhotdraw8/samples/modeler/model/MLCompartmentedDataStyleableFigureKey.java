@@ -85,7 +85,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
 
     @NonNull
     @Override
-    public Converter<MLCompartmentalizedData> getConverter() {
+    public Converter<MLCompartmentalizedData> getCssConverter() {
         return converter;
     }
 }

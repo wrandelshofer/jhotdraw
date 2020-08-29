@@ -68,7 +68,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
     }
 
     @Override
-    public @NonNull Converter<CssDefaultableValue<T>> getConverter() {
+    public @NonNull Converter<CssDefaultableValue<T>> getCssConverter() {
         return converter;
     }
 

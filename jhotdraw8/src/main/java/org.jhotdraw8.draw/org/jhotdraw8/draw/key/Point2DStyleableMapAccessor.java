@@ -86,7 +86,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     private final Converter<Point2D> converter;
 
     @Override
-    public final @NonNull Converter<Point2D> getConverter() {
+    public final @NonNull Converter<Point2D> getCssConverter() {
         return converter;
     }
 

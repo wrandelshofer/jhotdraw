@@ -62,7 +62,7 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
     private Converter<BlendMode> converter;
 
     @Override
-    public @NonNull Converter<BlendMode> getConverter() {
+    public @NonNull Converter<BlendMode> getCssConverter() {
         if (converter == null) {
             converter = new CssEnumConverter<>(BlendMode.class, false);
         }

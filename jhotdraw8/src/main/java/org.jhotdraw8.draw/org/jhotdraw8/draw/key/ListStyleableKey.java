@@ -78,7 +78,7 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<T>> getConverter() {
+    public @NonNull Converter<ImmutableList<T>> getCssConverter() {
         return converter;
     }
 

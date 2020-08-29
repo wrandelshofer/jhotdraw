@@ -13,10 +13,10 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
-import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.key.ObservableWordListKey;
+import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 
@@ -60,7 +60,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @NonNull
-    NullableObjectKey<String> STYLE = new NullableObjectKey<>("style", String.class, null);
+    StringReadOnlyStyleableKey STYLE = new StringReadOnlyStyleableKey("style");
 
     /**
      * We store the type selector of the figure on the node that is used

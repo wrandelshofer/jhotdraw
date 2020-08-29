@@ -78,7 +78,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
 
     @NonNull
     @Override
-    public Converter<ImmutableList<Point2D>> getConverter() {
+    public Converter<ImmutableList<Point2D>> getCssConverter() {
         return converter;
     }
 

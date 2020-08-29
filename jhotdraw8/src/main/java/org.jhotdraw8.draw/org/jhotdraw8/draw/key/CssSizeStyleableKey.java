@@ -60,7 +60,7 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> 
 
     @NonNull
     @Override
-    public Converter<CssSize> getConverter() {
+    public Converter<CssSize> getCssConverter() {
         return converter;
     }
 

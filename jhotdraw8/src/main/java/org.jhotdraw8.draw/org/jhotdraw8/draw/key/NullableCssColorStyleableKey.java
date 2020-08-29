@@ -72,7 +72,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
 
     @NonNull
     @Override
-    public Converter<CssColor> getConverter() {
+    public Converter<CssColor> getCssConverter() {
         return converter;
     }
 }

@@ -74,7 +74,7 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
 
     @NonNull
     @Override
-    public Converter<Double> getConverter() {
+    public Converter<Double> getCssConverter() {
         return converter;
     }
 }

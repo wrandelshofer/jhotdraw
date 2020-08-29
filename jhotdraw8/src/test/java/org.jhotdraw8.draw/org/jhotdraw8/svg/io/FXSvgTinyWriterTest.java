@@ -22,7 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class SvgTinySceneGraphWriterTest {
+class FXSvgTinyWriterTest {
     @NonNull
     @TestFactory
     public List<DynamicTest> exportTestToWriterFactory() {

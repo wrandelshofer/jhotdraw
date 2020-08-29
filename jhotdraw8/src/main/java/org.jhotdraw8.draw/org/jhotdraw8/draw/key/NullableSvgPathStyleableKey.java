@@ -64,7 +64,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, String> converter
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, String> md
                 = new SimpleCssMetaData<>(property, function,
                 converter, defaultValue, inherits);
@@ -79,7 +79,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
 
     @NonNull
     @Override
-    public Converter<String> getConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 }

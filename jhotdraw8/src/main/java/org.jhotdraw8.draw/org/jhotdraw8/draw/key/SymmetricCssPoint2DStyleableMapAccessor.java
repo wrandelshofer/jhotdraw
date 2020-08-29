@@ -63,7 +63,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, CssPoint2D> cnvrtr
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
@@ -81,7 +81,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
 
     @Override
-    public @NonNull Converter<CssPoint2D> getConverter() {
+    public @NonNull Converter<CssPoint2D> getCssConverter() {
         if (converter == null) {
             converter = new CssSymmetricPoint2DConverter();
         }

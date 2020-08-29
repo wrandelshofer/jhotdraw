@@ -30,7 +30,9 @@ import java.awt.geom.PathIterator;
  * @author Werner Randelshofer
  */
 public class SvgCircleFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure,
+        PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -112,13 +114,21 @@ public class SvgCircleFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Circle n = (Circle) node;
+        double r = getStyledNonNull(R).getConvertedValue();
+        if (r == 0) {
+            // r==0 disables rendering
+            n.setVisible(false);
+            return;
+        }
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
+        applyInheritableFigureProperties(ctx, n);
         n.setCenterX(getStyledNonNull(CX).getConvertedValue());
         n.setCenterY(getStyledNonNull(CY).getConvertedValue());
-        n.setRadius(getStyledNonNull(R).getConvertedValue());
+        n.setRadius(r);
         n.applyCss();
+
 
     }
 

@@ -71,7 +71,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
     }
 
     @Override
-    public @NonNull Converter<Paintable> getConverter() {
+    public @NonNull Converter<Paintable> getCssConverter() {
         return converter;
     }
 }

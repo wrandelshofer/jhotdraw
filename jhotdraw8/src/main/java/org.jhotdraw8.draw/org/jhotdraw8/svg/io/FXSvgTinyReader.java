@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.svg.io;
 
+import javafx.geometry.BoundingBox;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -40,8 +41,6 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +48,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
@@ -91,6 +89,7 @@ public class FXSvgTinyReader {
     private static final Key<String> ON_MOUSE_OVER_KEY = new StringKey("onmouseover");
     private static final Key<String> ON_MOUSE_DOWN_KEY = new StringKey("onmousedown");
     private static final Key<String> BASE_PROFILE_KEY = new StringKey("baseProfile");
+    private static final Key<BoundingBox> VIEW_BOX_KEY = new ObjectKey<BoundingBox>("baseProfile", BoundingBox.class);
     private static final Key<String> VERSION_KEY = new StringKey("version");
     private static final Key<Double> STROKE_OPACITY_KEY = new ObjectKey<>("strokeOpacity", Double.class);
     private static final Key<Double> FONT_SIZE_KEY = new ObjectKey<>("fontSize", Double.class);
@@ -116,29 +115,6 @@ public class FXSvgTinyReader {
         }
     }
 
-    private void computeViewportValues(Viewport viewport) {
-        viewport.widthPercentFactor = viewport.viewBox.width / 100d;
-        viewport.heightPercentFactor = viewport.viewBox.height / 100d;
-        viewport.numberFactor = Math.min(
-                viewport.width / viewport.viewBox.width,
-                viewport.height / viewport.viewBox.height);
-
-        AffineTransform viewBoxTransform = new AffineTransform();
-
-        viewBoxTransform.translate(
-                -viewport.viewBox.x * viewport.width / viewport.viewBox.width,
-                -viewport.viewBox.y * viewport.height / viewport.viewBox.height);
-        if (viewport.isPreserveAspectRatio) {
-            double factor = Math.min(
-                    viewport.width / viewport.viewBox.width,
-                    viewport.height / viewport.viewBox.height);
-            viewBoxTransform.scale(factor, factor);
-        } else {
-            viewBoxTransform.scale(
-                    viewport.width / viewport.viewBox.width,
-                    viewport.height / viewport.viewBox.height);
-        }
-    }
 
     private XMLStreamException createException(XMLStreamReader r, String s) {
         return new XMLStreamException(s + " " + getLocation(r));
@@ -264,8 +240,6 @@ public class FXSvgTinyReader {
         }
         return null;
     }
-
-
 
 
     private Node readElement(XMLStreamReader r, Context ctx, Node parent) throws XMLStreamException {
@@ -552,7 +526,8 @@ public class FXSvgTinyReader {
      * This is similar to {@code readInheritAttribute}, but takes care of the
      * "currentColor" magic attribute value.
      */
-    private @Nullable String readInheritColorAttribute(@NonNull XMLStreamReader r, @NonNull String attributeName, @NonNull String value, @Nullable String initialValue, Context ctx) {
+    @Nullable
+    private String readInheritColorAttribute(@NonNull XMLStreamReader r, @NonNull String attributeName, @NonNull String value, @Nullable String initialValue, Context ctx) {
         return value;
     }
 
@@ -1069,7 +1044,6 @@ public class FXSvgTinyReader {
     }
 
 
-
     /**
      * The reader must be positioned on START_ELEMENT of the root SVG element.
      *
@@ -1078,8 +1052,6 @@ public class FXSvgTinyReader {
      */
     private Node readSvgRootElement(XMLStreamReader r) throws XMLStreamException, IOException {
         Context ctx = new Context();
-        Viewport rootViewport = new Viewport();
-        Viewport viewport = new Viewport();
 
         StackPane node = new StackPane();
 
@@ -1090,20 +1062,21 @@ public class FXSvgTinyReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (localName) {
                 case "height":
-                    viewport.height = toLength(r, value, rootViewport.heightPercentFactor);
+                    node.setPrefHeight(toLength(r, value, 1));
                     break;
                 case "width":
-                    viewport.width = toLength(r, value, rootViewport.widthPercentFactor);
+                    node.setPrefWidth(toLength(r, value, 1));
                     break;
                 case "viewBox":
                     String[] viewBoxValues = toWhitespaceOrCommaSeparatedArray(value);
                     if (viewBoxValues.length != 4) {
                         throw createException(r, "4 values expected for viewBox: " + value + ".");
                     }
-                    viewport.viewBox.x = toLength(r, viewBoxValues[0], rootViewport.widthPercentFactor);
-                    viewport.viewBox.y = toLength(r, viewBoxValues[1], rootViewport.heightPercentFactor);
-                    viewport.viewBox.width = toLength(r, viewBoxValues[2], rootViewport.widthPercentFactor);
-                    viewport.viewBox.height = toLength(r, viewBoxValues[3], rootViewport.heightPercentFactor);
+                    VIEW_BOX_KEY.set(node.getProperties(), new BoundingBox(
+                            toLength(r, viewBoxValues[0], 1),
+                            toLength(r, viewBoxValues[1], 1),
+                            toLength(r, viewBoxValues[2], 1),
+                            toLength(r, viewBoxValues[3], 1)));
                     break;
                 case "baseProfile":
                     if (!"tiny".equals(value)) {
@@ -1133,13 +1106,9 @@ public class FXSvgTinyReader {
         }
 
 
-        computeViewportValues(viewport);
-        node.setPrefWidth(viewport.width);
-        node.setPrefHeight(viewport.height);
-
         readSubtree(r, ctx, node);
 
-        node.setClip(new Rectangle(0, 0, viewport.width, viewport.height));
+        node.setClip(new Rectangle(0, 0, node.getPrefWidth(), node.getPrefHeight()));
 
         return node;
     }
@@ -1470,16 +1439,17 @@ public class FXSvgTinyReader {
      * http://www.w3.org/TR/SVGMobile12/types.html#DataTypeLength
      */
     private double toLength(XMLStreamReader reader, String str, double percentFactor) throws XMLStreamException {
-        double scaleFactor = 1d;
         if (str == null || str.length() == 0 || str.equals("none")) {
             return 0d;
         }
 
+        final double scaleFactor;
         if (str.endsWith("%")) {
             str = str.substring(0, str.length() - 1);
             scaleFactor = percentFactor;
         } else if (str.endsWith("px")) {
             str = str.substring(0, str.length() - 2);
+            scaleFactor = 1.0;
         } else if (str.endsWith("pt")) {
             str = str.substring(0, str.length() - 2);
             scaleFactor = 1.25;
@@ -1515,53 +1485,6 @@ public class FXSvgTinyReader {
             logWarning(r, "Could not read paint: " + value);
             return null;
         }
-    }
-
-    /**
-     * Each SVG element establishes a new Viewport.
-     */
-    private static class Viewport {
-
-        /**
-         * The width of the Viewport.
-         */
-        public double width = 640d;
-        /**
-         * The height of the Viewport.
-         */
-        public double height = 480d;
-        /**
-         * The viewBox specifies the coordinate system within the Viewport.
-         */
-        public Rectangle2D.Double viewBox = new Rectangle2D.Double(0d, 0d, 640d, 480d);
-        /**
-         * Factor for percent values relative to Viewport width.
-         */
-        public double widthPercentFactor = 640d / 100d;
-        /**
-         * Factor for percent values relative to Viewport height.
-         */
-        public double heightPercentFactor = 480d / 100d;
-        /**
-         * Factor for number values in the user coordinate system.
-         * This is the smaller value of width / viewBox.width and height / viewBox.height.
-         */
-        public double numberFactor;
-        /**
-         * http://www.w3.org/TR/SVGMobile12/coords.html#PreserveAspectRatioAttribute
-         * XXX - use a more sophisticated variable here
-         */
-        public boolean isPreserveAspectRatio = true;
-        private HashMap<Key<?>, Object> attributes = new HashMap<Key<?>, Object>();
-
-        @Override
-        public String toString() {
-            return "widthPercentFactor:" + widthPercentFactor + ";"
-                    + "heightPercentFactor:" + heightPercentFactor + ";"
-                    + "numberFactor:" + numberFactor + ";"
-                    + attributes;
-        }
-
     }
 
 

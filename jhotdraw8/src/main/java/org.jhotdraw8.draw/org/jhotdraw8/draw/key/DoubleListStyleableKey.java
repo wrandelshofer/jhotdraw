@@ -69,7 +69,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<Double>> getConverter() {
+    public @NonNull Converter<ImmutableList<Double>> getCssConverter() {
         return converter;
     }
 

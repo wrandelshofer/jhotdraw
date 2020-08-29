@@ -233,8 +233,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         final CssFunctionProcessor<E> functionProcessor = functions.isEmpty() ? null : createCssFunctionProcessor(selectorModel, customProperties);
 
         StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
-                .stream()
-                .parallel()
+                .stream().parallel()
                 .forEach(elem -> {
                     // Clear stylesheet values
                     selectorModel.reset(elem);
@@ -276,18 +275,20 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     if (selectorModel.hasAttribute(elem, null, "style")) {
                         Map<QualifiedName, ImmutableList<CssToken>> inlineDeclarations = new HashMap<>();
                         String styleValue = selectorModel.getAttributeAsString(elem, null, "style");
-                        try {
-                            for (Declaration d : parser.parseDeclarationList(styleValue)) {
-                                // Declarations without terms are ignored
-                                if (d.getTerms().isEmpty()) {
-                                    continue;
-                                }
+                        if (styleValue != null) {
+                            try {
+                                for (Declaration d : parser.parseDeclarationList(styleValue)) {
+                                    // Declarations without terms are ignored
+                                    if (d.getTerms().isEmpty()) {
+                                        continue;
+                                    }
 
-                                inlineDeclarations.put(new QualifiedName(d.getNamespace(), d.getPropertyName()), d.getTerms());
+                                    inlineDeclarations.put(new QualifiedName(d.getNamespace(), d.getPropertyName()), d.getTerms());
+                                }
+                            } catch (IOException ex) {
+                                System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + styleValue);
+                                ex.printStackTrace();
                             }
-                        } catch (IOException ex) {
-                            System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + styleValue);
-                            ex.printStackTrace();
                         }
                         Map<String, ImmutableList<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
                         for (Map.Entry<QualifiedName, ImmutableList<CssToken>> entry : inlineDeclarations.entrySet()) {

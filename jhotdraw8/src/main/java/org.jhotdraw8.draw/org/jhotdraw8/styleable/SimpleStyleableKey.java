@@ -28,7 +28,7 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param metaData  The CSS meta data.
      * @param converter the converter
      */
-    public SimpleStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
+    public SimpleStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
         this(key, clazz, null, metaData, converter, null);
     }
 

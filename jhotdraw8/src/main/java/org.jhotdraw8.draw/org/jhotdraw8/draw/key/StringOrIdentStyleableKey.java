@@ -57,7 +57,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull Str
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         final StyleConverter<String, String> converter
-                = new StyleConverterAdapter<>(getConverter());
+                = new StyleConverterAdapter<>(getCssConverter());
         CssMetaData<Styleable, String> md
                 = new SimpleCssMetaData<>(property, function,
                 converter, defaultValue, inherits);
@@ -73,7 +73,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull Str
     private Converter<String> converter;
 
     @Override
-    public @NonNull Converter<String> getConverter() {
+    public @NonNull Converter<String> getCssConverter() {
         if (converter == null) {
             converter = new CssStringOrIdentConverter();
         }

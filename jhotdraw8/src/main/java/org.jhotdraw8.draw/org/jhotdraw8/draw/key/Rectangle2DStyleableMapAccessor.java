@@ -87,7 +87,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
 
     @NonNull
     @Override
-    public Converter<Rectangle2D> getConverter() {
+    public Converter<Rectangle2D> getCssConverter() {
         return converter;
     }
 

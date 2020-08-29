@@ -76,7 +76,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
 
     @NonNull
     @Override
-    public Converter<String> getConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 }

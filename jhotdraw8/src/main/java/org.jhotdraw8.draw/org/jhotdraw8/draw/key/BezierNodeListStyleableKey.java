@@ -74,7 +74,7 @@ public class BezierNodeListStyleableKey
 
     @NonNull
     @Override
-    public Converter<ImmutableList<BezierNode>> getConverter() {
+    public Converter<ImmutableList<BezierNode>> getCssConverter() {
         return converter;
     }
 

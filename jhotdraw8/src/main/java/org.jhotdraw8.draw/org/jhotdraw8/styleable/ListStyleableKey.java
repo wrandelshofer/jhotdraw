@@ -72,7 +72,7 @@ public class ListStyleableKey<T> extends ListKey<T>
 
     @NonNull
     @Override
-    public Converter<ImmutableList<T>> getConverter() {
+    public Converter<ImmutableList<T>> getCssConverter() {
         return converter;
     }
 

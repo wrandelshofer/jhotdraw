@@ -79,7 +79,7 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
 
     @NonNull
     @Override
-    public Converter<CssFont> getConverter() {
+    public Converter<CssFont> getCssConverter() {
         return converter;
     }
 }

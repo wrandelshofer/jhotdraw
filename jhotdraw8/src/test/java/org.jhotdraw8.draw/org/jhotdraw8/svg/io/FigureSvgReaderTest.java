@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class SvgTinySceneGraphReaderTest {
+public class FigureSvgReaderTest {
 
     /**
      * Set this constant to the path of the directory into which you checked
@@ -49,7 +49,7 @@ public class SvgTinySceneGraphReaderTest {
     private static final String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
     private static final String ICONS_PATH = ".";
 
-    private static final boolean INTERACTIVE = false;
+    private static final boolean INTERACTIVE = true;
 
     @BeforeAll
     public static void startJFX() throws InterruptedException, ExecutionException, TimeoutException {
@@ -58,7 +58,7 @@ public class SvgTinySceneGraphReaderTest {
     }
 
 
-    @Disabled
+    /// @Disabled
     @TestFactory
     public @NonNull Stream<DynamicTest> webPlatformTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(WPT_PATH))) {

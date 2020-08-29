@@ -15,6 +15,7 @@ import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
+import org.jhotdraw8.xml.text.XmlStringConverter;
 
 import java.util.function.Function;
 
@@ -88,11 +89,18 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
 
     @NonNull
     private final CssStringConverter converter;
+    @NonNull
+    private final XmlStringConverter xmlConverter = new XmlStringConverter();
 
     @NonNull
     @Override
-    public Converter<String> getConverter() {
+    public Converter<String> getCssConverter() {
 
         return converter;
+    }
+
+    @Override
+    public @NonNull Converter<String> getXmlConverter() {
+        return xmlConverter;
     }
 }

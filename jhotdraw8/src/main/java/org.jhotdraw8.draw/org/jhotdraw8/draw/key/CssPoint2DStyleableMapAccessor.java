@@ -89,7 +89,7 @@ public class CssPoint2DStyleableMapAccessor
 
 
     @Override
-    public @NonNull Converter<@NonNull CssPoint2D> getConverter() {
+    public @NonNull Converter<@NonNull CssPoint2D> getCssConverter() {
         return converter;
     }
 

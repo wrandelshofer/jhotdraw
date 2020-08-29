@@ -79,7 +79,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<@NonNull Boolean>
     private Converter<@NonNull Boolean> converter;
 
     @Override
-    public @NonNull Converter<@NonNull Boolean> getConverter() {
+    public @NonNull Converter<@NonNull Boolean> getCssConverter() {
         if (converter == null) {
             converter = new CssBooleanConverter(isNullable());
         }

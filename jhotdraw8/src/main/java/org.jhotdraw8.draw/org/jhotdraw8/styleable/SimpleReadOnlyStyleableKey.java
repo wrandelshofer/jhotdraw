@@ -88,7 +88,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
 
     @Override
     @NonNull
-    public Converter<T> getConverter() {
+    public Converter<T> getCssConverter() {
         return converter;
     }
 
