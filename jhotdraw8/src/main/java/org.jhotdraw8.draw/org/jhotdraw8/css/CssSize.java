@@ -103,11 +103,19 @@ public class CssSize {
     }
 
     public @NonNull CssSize subtract(@NonNull CssSize that) {
-        return new CssSize(this.value - DefaultUnitConverter.getInstance().convert(that, this.units), this.units);
+        return subtract(that, DefaultUnitConverter.getInstance());
     }
 
     public @NonNull CssSize add(@NonNull CssSize that) {
-        return new CssSize(this.value + DefaultUnitConverter.getInstance().convert(that, this.units), this.units);
+        return add(that, DefaultUnitConverter.getInstance());
+    }
+
+    public @NonNull CssSize subtract(@NonNull CssSize that, @NonNull UnitConverter unitConverter) {
+        return new CssSize(this.value - unitConverter.convert(that, this.units), this.units);
+    }
+
+    public @NonNull CssSize add(@NonNull CssSize that, @NonNull UnitConverter unitConverter) {
+        return new CssSize(this.value + unitConverter.convert(that, this.units), this.units);
     }
 
     public @NonNull CssSize abs() {
