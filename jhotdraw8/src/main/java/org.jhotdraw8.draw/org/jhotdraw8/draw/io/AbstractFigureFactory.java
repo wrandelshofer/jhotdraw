@@ -17,6 +17,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -53,9 +54,9 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     private final Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
     private final Set<String> skipElements = new HashSet<>();
     private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
-    private final Map<String, Converter<?>> valueFromXML = new HashMap<>();
+    private final Map<Type, Converter<?>> valueFromXML = new HashMap<>();
 
-    private final Map<String, Converter<?>> valueToXML = new HashMap<>();
+    private final Map<Type, Converter<?>> valueToXML = new HashMap<>();
     @Nullable
     private IdFactory idFactory;
 
@@ -83,32 +84,15 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     /**
      * Adds a converter.
      *
-     * @param <T>       the value type
-     * @param valueType A value type returned by
-     *                  {@code MapAccessor.getValueType();}.
-     * @param converter the converter
-     */
-    public <T> void addConverterForType(@NonNull Class<? extends T> valueType, Converter<T> converter) {
-        addConverterForType(valueType, converter, false);
-    }
-
-    public <T> void addConverterForType(@NonNull Class<? extends T> valueType, Converter<T> converter, boolean force) {
-        addConverterForType(valueType.getName(), converter, force);
-
-    }
-
-    /**
-     * Adds a converter.
-     *
      * @param fullValueType A value type returned by
      *                      {@code MapAccessor.getFullValueType();}.
      * @param converter     the converter
      */
-    public void addConverterForType(String fullValueType, Converter<?> converter) {
+    public void addConverterForType(Type fullValueType, Converter<?> converter) {
         addConverterForType(fullValueType, converter, false);
     }
 
-    public void addConverterForType(String fullValueType, Converter<?> converter, boolean force) {
+    public void addConverterForType(Type fullValueType, Converter<?> converter, boolean force) {
         if (!force && valueToXML.containsKey(fullValueType)) {
             throw new IllegalStateException("you already added " + fullValueType);
         }
@@ -285,7 +269,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     public void checkConverters() {
         for (HashMap<MapAccessor<?>, String> map : keyToAttr.values()) {
             for (MapAccessor<?> k : map.keySet()) {
-                String fullValueType = k.getFullValueType();
+                Type fullValueType = k.getValueType();
                 if (!k.isTransient() && !keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
                     LOGGER.warning(getClass() + " can not convert " + fullValueType + " to XML for key " + k + ".");
                 }
@@ -545,11 +529,11 @@ public abstract class AbstractFigureFactory implements FigureFactory {
                 Converter<T> suppress = converter = (Converter<T>) converterFromKey;
             } else {
                 @SuppressWarnings("unchecked")
-                Converter<T> suppress = converter = (Converter<T>) valueFromXML.get(key.getFullValueType());
+                Converter<T> suppress = converter = (Converter<T>) valueFromXML.get(key.getValueType());
             }
             if (converter == null) {
                 throw new IOException("no converter for key \"" + key + "\" with attribute type "
-                        + key.getFullValueType());
+                        + key.getValueType());
             }
             return converter.fromString(CharBuffer.wrap(string), idFactory);
         } catch (ParseException ex) {
@@ -576,11 +560,11 @@ public abstract class AbstractFigureFactory implements FigureFactory {
             Converter<T> suppress = converter = (Converter<T>) keyValueToXML.get(key);
         } else {
             @SuppressWarnings("unchecked")
-            Converter<T> suppress = converter = (Converter<T>) valueToXML.get(key.getFullValueType());
+            Converter<T> suppress = converter = (Converter<T>) valueToXML.get(key.getValueType());
         }
         if (converter == null) {
             throw new IOException("no converter for attribute type "
-                    + key.getFullValueType());
+                    + key.getValueType());
         }
         StringBuilder builder = new StringBuilder();
         converter.toString(builder, idFactory, value);

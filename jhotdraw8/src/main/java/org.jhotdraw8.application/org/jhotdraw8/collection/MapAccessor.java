@@ -8,7 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.List;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -80,30 +81,21 @@ public interface MapAccessor<T> extends Serializable {
     T remove(@NonNull Map<? super Key<?>, Object> a);
 
     /**
-     * Returns the value type.
-     * If this is a {@code {@literal List<String>}} then the value type
-     * is {@code List}.
-     *
-     * @return the value type
-     */
-    @NonNull Class<T> getValueType();
-
-    /**
-     * Returns the component type of the value type.
+     * Returns the value type of this map accessor.
      * <p>
-     * If this is a {@code {@literal List<String>}} then the component value type
-     * is {@code String}.
-     *
-     * @return the component value type
+     * If the value type has type parameters, make sure to create it using
+     * {@link org.jhotdraw8.reflect.TypeToken}.
      */
-    Class<?> getComponentValueType();
+    @NonNull Type getValueType();
 
     /**
-     * Returns the type parameters of the value type.
-     *
-     * @return an unmodifiable list with the type parameters
+     * Returns the raw value type of this map accessor.
      */
-    @NonNull List<Class<?>> getValueTypeParameters();
+    @SuppressWarnings("unchecked")
+    default @NonNull Class<T> getRawValueType() {
+        Type t = getValueType();
+        return (Class<T>) ((t instanceof ParameterizedType) ? ((ParameterizedType) t).getRawType() : t);
+    }
 
     /**
      * Returns the default value of this map accessor.
@@ -111,15 +103,6 @@ public interface MapAccessor<T> extends Serializable {
      * @return the default value
      */
     T getDefaultValue();
-
-
-    /**
-     * Returns a string representation of the value type and its type
-     * parameters.
-     *
-     * @return the class name of the value type including type parameters
-     */
-    String getFullValueType();
 
     /**
      * Whether the value needs to be made persistent.

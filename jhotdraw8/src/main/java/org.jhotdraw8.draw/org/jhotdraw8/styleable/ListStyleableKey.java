@@ -16,6 +16,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
@@ -30,28 +31,28 @@ public class ListStyleableKey<T> extends ListKey<T>
     private final CssMetaData<? extends Styleable, @NonNull ImmutableList<T>> cssMetaData;
     private final String cssName;
 
-    public ListStyleableKey(@NonNull String key, @NonNull Class<T> elemClass, @NonNull CssConverter<T> converter) {
-        this(key, elemClass, ImmutableLists.emptyList(), converter);
+    public ListStyleableKey(@NonNull String key, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
+        this(key, type, ImmutableLists.emptyList(), converter);
     }
 
-    public ListStyleableKey(@NonNull String key, @NonNull Class<T> elemClass, @NonNull CssListConverter<T> converter) {
-        this(key, elemClass, ImmutableLists.emptyList(), converter);
+    public ListStyleableKey(@NonNull String key, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssListConverter<T> converter) {
+        this(key, type, ImmutableLists.emptyList(), converter);
     }
 
-    public ListStyleableKey(@NonNull String key, @NonNull Class<T> elemClass, @NonNull ImmutableList<T> defaultValue, @NonNull CssConverter<T> converter) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), elemClass, defaultValue, converter);
+    public ListStyleableKey(@NonNull String key, @NonNull TypeToken<ImmutableList<T>> type, @NonNull ImmutableList<T> defaultValue, @NonNull CssConverter<T> converter) {
+        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), type, defaultValue, converter);
     }
 
-    public ListStyleableKey(@NonNull String key, @NonNull Class<T> elemClass, @NonNull ImmutableList<T> defaultValue, @NonNull CssListConverter<T> converter) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), elemClass, defaultValue, converter);
+    public ListStyleableKey(@NonNull String key, @NonNull TypeToken<ImmutableList<T>> type, @NonNull ImmutableList<T> defaultValue, @NonNull CssListConverter<T> converter) {
+        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), type, defaultValue, converter);
     }
 
-    public ListStyleableKey(@NonNull String key, String cssName, @NonNull Class<T> elemClass, @NonNull ImmutableList<T> defaultValue, @NonNull CssConverter<T> converter) {
-        this(key, cssName, elemClass, defaultValue, new CssListConverter<>(converter));
+    public ListStyleableKey(@NonNull String key, String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull ImmutableList<T> defaultValue, @NonNull CssConverter<T> converter) {
+        this(key, cssName, type, defaultValue, new CssListConverter<>(converter));
     }
 
-    public ListStyleableKey(@NonNull String key, String cssName, @NonNull Class<T> elemClass, @NonNull ImmutableList<T> defaultValue, @NonNull CssListConverter<T> converter) {
-        super(key, elemClass, defaultValue);
+    public ListStyleableKey(@NonNull String key, String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull ImmutableList<T> defaultValue, @NonNull CssListConverter<T> converter) {
+        super(key, type, defaultValue);
         this.converter = converter;
 
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {

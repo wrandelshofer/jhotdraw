@@ -306,10 +306,11 @@ public interface SelectorModel<T> {
      *
      * @param element   The element
      * @param origin    The style origin
-     * @param namespace an optional namespace (null means any namespace)
+     * @param namespace an optional namespace ({@code null} means any namespace)
      * @param name      The attribute name
-     * @param value     The attribute value. Null removes the attribute from the
-     *                  element.
+     * @param value     The attribute value. {@code null} removes the attribute from the
+     *                  element. That is, {@code null} has the same effect like the
+     *                  keyword "unset".
      * @throws ParseException if parsing the value failed
      */
     void setAttribute(@NonNull T element, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value) throws ParseException;

@@ -7,7 +7,10 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+
+import java.lang.reflect.Type;
 
 /**
  * AbstractStyleableKey.
@@ -24,25 +27,23 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      * value.
      *
      * @param key          The name of the name.
-     * @param clazz        The type of the value.
+     * @param typeToken    The type of the value.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@NonNull String key, @NonNull Class<T> clazz, T defaultValue) {
-        this(key, clazz, null, defaultValue);
+    public AbstractStyleableKey(@NonNull String key, @NonNull TypeToken<T> typeToken, T defaultValue) {
+        this(null, key, typeToken.getType(), defaultValue == null, defaultValue);
     }
 
     /**
      * Creates a new instance with the specified name, type token class, default
-     * value, and allowing null values.
+     * value.
      *
-     * @param name           The name of the key.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
-     * @param defaultValue   The default value.
+     * @param key          The name of the name.
+     * @param type        The type of the value.
+     * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@NonNull String name, @NonNull Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
-        this(null, name, clazz, typeParameters, true, defaultValue);
+    public AbstractStyleableKey(@NonNull String key, @NonNull Type type, T defaultValue) {
+        this(null, key, ReadOnlyStyleableMapAccessor.toCssName(key), type, defaultValue == null, defaultValue);
     }
 
     /**
@@ -51,28 +52,12 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      *
      * @param namespace    The namespace
      * @param name         The name of the key.
-     * @param clazz        The type of the value.
+     * @param type        The type of the value.
      * @param isNullable   Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Class<?> clazz, boolean isNullable, T defaultValue) {
-        this(namespace, name, clazz, null, isNullable, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param namespace      The namespace
-     * @param name           The name of the key.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
-     * @param isNullable     Whether the value may be set to null
-     * @param defaultValue   The default value.
-     */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
-        this(namespace, name, ReadOnlyStyleableMapAccessor.toCssName(name), clazz, null, isNullable, defaultValue);
+    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Type type, boolean isNullable, T defaultValue) {
+        this(namespace, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, isNullable, defaultValue);
     }
 
     /**
@@ -82,14 +67,12 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
      * @param namespace      The namespace
      * @param name           The name of the key.
      * @param cssName        The name of the as seen by CSS.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
+     * @param type          The type of the value.
      * @param isNullable     Whether the value may be set to null
      * @param defaultValue   The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull String cssName, @NonNull Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
-        super(name, clazz, typeParameters, isNullable, defaultValue);
+    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull String cssName, @NonNull Type type, boolean isNullable, T defaultValue) {
+        super(name, type, isNullable, defaultValue);
         this.cssName = cssName;
         this.namespace = namespace;
     }

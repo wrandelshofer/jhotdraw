@@ -21,6 +21,7 @@ import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+import org.jhotdraw8.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -128,7 +129,9 @@ public interface MarkerStrokableFigure extends Figure {
      * Stroke Properties</a>
      */
     ListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableKey<>("marker-stroke-dasharray",
-            CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
+            new TypeToken<ImmutableList<CssSize>>() {
+            },
+            new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**
      * Combined map accessor for all stroke style properties.

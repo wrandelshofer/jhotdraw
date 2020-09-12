@@ -151,7 +151,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     protected final BorderPane drawPane = new BorderPane();
     protected final StackPane node = new StackPane();
 
-
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
             try {
@@ -248,7 +247,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // Properties
     // ---
     @Override
-    public final ObservableMap<Key<?>, Object> getProperties() {
+    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableHashMap();
         }
@@ -421,5 +420,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     protected void requestFocus() {
         Platform.runLater(eventPane::requestFocus);
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty focusedProperty() {
+        return eventPane.focusedProperty();
     }
 }

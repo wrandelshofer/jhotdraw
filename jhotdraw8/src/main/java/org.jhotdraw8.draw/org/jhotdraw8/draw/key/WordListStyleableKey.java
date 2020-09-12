@@ -11,6 +11,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -48,7 +49,8 @@ public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<Str
      * @param defaultValue The default value.
      */
     public WordListStyleableKey(@NonNull String name, ImmutableList<String> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{String.class}, defaultValue);
+        super(name, new TypeToken<ImmutableList<String>>() {
+        }, defaultValue);
         Function<Styleable, StyleableProperty<ImmutableList<String>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);

@@ -19,6 +19,7 @@ import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
+import org.jhotdraw8.reflect.TypeToken;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -58,7 +59,9 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListKey<URI>("authorStylesheets", URI.class);
+    @NonNull Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListKey<URI>("authorStylesheets",
+            new TypeToken<ImmutableList<URI>>() {
+            });
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -70,14 +73,16 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListKey<URI>("userAgentStylesheets", URI.class);
+    @NonNull Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListKey<URI>("userAgentStylesheets", new TypeToken<ImmutableList<URI>>() {
+    });
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListKey<String>("inlineStylesheets", String.class);
+    @NonNull Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListKey<String>("inlineStylesheets", new TypeToken<ImmutableList<String>>() {
+    });
     /**
      * Defines the canvas width.
      * <p>

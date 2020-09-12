@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -171,37 +172,47 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInLine(@NonNull Line path) {
-        if (!canFlattenTranslate(path)) {
+    private void flattenTranslatesInLine(@NonNull Line shape) {
+        if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(path);
-        Point2D p = t.transform(path.getStartX(), path.getStartY());
-        path.setStartX(p.getX());
-        path.setStartY(p.getY());
-        Point2D p2 = t.transform(path.getEndX(), path.getEndY());
-        path.setEndX(p2.getX());
-        path.setEndY(p2.getY());
+        Translate t = flattenTranslate(shape);
+        Point2D p = t.transform(shape.getStartX(), shape.getStartY());
+        shape.setStartX(p.getX());
+        shape.setStartY(p.getY());
+        Point2D p2 = t.transform(shape.getEndX(), shape.getEndY());
+        shape.setEndX(p2.getX());
+        shape.setEndY(p2.getY());
     }
 
-    private void flattenTranslatesInRectangle(@NonNull Rectangle rectangle) {
-        if (!canFlattenTranslate(rectangle)) {
+    private void flattenTranslatesInEllipse(@NonNull Ellipse shape) {
+        if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(rectangle);
-        Point2D p = t.transform(rectangle.getX(), rectangle.getY());
-        rectangle.setX(p.getX());
-        rectangle.setY(p.getY());
+        Translate t = flattenTranslate(shape);
+        Point2D p = t.transform(shape.getCenterX(), shape.getCenterY());
+        shape.setCenterX(p.getX());
+        shape.setCenterY(p.getY());
     }
 
-    private void flattenTranslatesInText(@NonNull Text text) {
-        if (!canFlattenTranslate(text)) {
+    private void flattenTranslatesInRectangle(@NonNull Rectangle shape) {
+        if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(text);
-        Point2D p = t.transform(text.getX(), text.getY());
-        text.setX(p.getX());
-        text.setY(p.getY());
+        Translate t = flattenTranslate(shape);
+        Point2D p = t.transform(shape.getX(), shape.getY());
+        shape.setX(p.getX());
+        shape.setY(p.getY());
+    }
+
+    private void flattenTranslatesInText(@NonNull Text shape) {
+        if (!canFlattenTranslate(shape)) {
+            return;
+        }
+        Translate t = flattenTranslate(shape);
+        Point2D p = t.transform(shape.getX(), shape.getY());
+        shape.setX(p.getX());
+        shape.setY(p.getY());
     }
 
     private void flattenTranslatesInShape(Shape shape) {
@@ -213,6 +224,8 @@ public class TransformFlattener {
             flattenTranslatesInPolyline((Polyline) shape);
         } else if (shape instanceof Line) {
             flattenTranslatesInLine((Line) shape);
+        } else if (shape instanceof Ellipse) {
+            flattenTranslatesInEllipse((Ellipse) shape);
         } else if (shape instanceof Rectangle) {
             flattenTranslatesInRectangle((Rectangle) shape);
         } else if (shape instanceof Text) {

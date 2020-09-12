@@ -6,10 +6,9 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.reflect.TypeToken;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -49,12 +48,8 @@ public class ObjectKey<T> implements Key<T> {
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    private final @Nullable Class<?> clazz;
-    /**
-     * The type token is not sufficient, if the type is parameterized. We allow
-     * to specify the type parameters as a string.
-     */
-    private final @NonNull List<Class<?>> typeParameters;
+    private final @NonNull Type type;
+
 
     /**
      * Whether the value may be set to null.
@@ -69,8 +64,12 @@ public class ObjectKey<T> implements Key<T> {
      * @param name  The name of the key.
      * @param clazz The type of the value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Class<T> clazz) {
-        this(name, clazz, null, null);
+    public ObjectKey(@NonNull String name, @NonNull Type clazz) {
+        this(name, clazz, null);
+    }
+
+    public ObjectKey(@NonNull String name, @NonNull TypeToken<T> clazz, T defaultValue) {
+        this(name, clazz.getType(), defaultValue);
     }
 
     /**
@@ -81,8 +80,8 @@ public class ObjectKey<T> implements Key<T> {
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Class<T> clazz, T defaultValue) {
-        this(name, clazz, null, defaultValue);
+    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable T defaultValue) {
+        this(name, clazz, true, defaultValue);
     }
 
     /**
@@ -91,30 +90,19 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @param name           The name of the key.
      * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
-     * @param defaultValue   The default value.
-     */
-    public ObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
-        this(name, clazz, typeParameters, true, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param name           The name of the key.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify null if
-     *                       no type parameters are given. Otherwise specify them in arrow brackets.
      * @param isNullable     Whether the value may be set to null
      * @param defaultValue   The default value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T defaultValue) {
-        this(name, clazz, typeParameters, isNullable, false, defaultValue);
+    public ObjectKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T defaultValue) {
+        this(name, clazz, isNullable, false, defaultValue);
     }
 
-    public ObjectKey(@Nullable String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
+    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T defaultValue) {
+        this(name, clazz, isNullable, false, defaultValue);
+    }
+
+
+    public ObjectKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
         Objects.requireNonNull(name, "name is null");
         Objects.requireNonNull(clazz, "clazz is null");
         if (!isNullable && defaultValue == null) {
@@ -122,8 +110,7 @@ public class ObjectKey<T> implements Key<T> {
         }
 
         this.name = name;
-        this.clazz = clazz;
-        this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
+        this.type = clazz;
         this.isNullable = isNullable;
         this.isTransient = isTransient;
         this.defaultValue = defaultValue;
@@ -140,40 +127,8 @@ public class ObjectKey<T> implements Key<T> {
     }
 
     @Override
-    public @NonNull Class<T> getValueType() {
-        @SuppressWarnings("unchecked")
-        Class<T> ret = (Class<T>) clazz;
-        return ret;
-    }
-
-    @Override
-    public @NonNull Class<?> getComponentValueType() {
-        return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
-    }
-
-    @Override
-    public @NonNull List<Class<?>> getValueTypeParameters() {
-        return typeParameters;
-    }
-
-    @Override
-    public @NonNull String getFullValueType() {
-        StringBuilder buf = new StringBuilder();
-        buf.append(clazz.getName());
-        if (!typeParameters.isEmpty()) {
-            buf.append('<');
-            boolean first = true;
-            for (Class<?> tp : typeParameters) {
-                if (first) {
-                    first = false;
-                } else {
-                    buf.append(',');
-                }
-                buf.append(tp.getName());
-            }
-            buf.append('>');
-        }
-        return buf.toString();
+    public @NonNull Type getValueType() {
+        return type;
     }
 
     /**

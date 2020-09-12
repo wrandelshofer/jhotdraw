@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.tool;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.annotation.NonNull;
@@ -258,4 +259,6 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the help text
      */
     String getHelpText();
+
+    ReadOnlyBooleanProperty focusedProperty();
 }

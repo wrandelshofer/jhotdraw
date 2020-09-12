@@ -24,31 +24,19 @@ public class NullableObjectKey<T> extends ObjectKey<T> {
      * @param clazz     The type of the value.
      */
     public NullableObjectKey(@NonNull String key, @NonNull Class<T> clazz) {
-        this(key, clazz, null, null);
+        this(key, clazz, null);
     }
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value.
-     *  @param key          The name of the name.
+     *
+     * @param name         The name of the key.
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public NullableObjectKey(@NonNull String key, @NonNull Class<T> clazz, @Nullable T defaultValue) {
-        this(key, clazz, null, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing null values.
-     *  @param name           The name of the key.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
-     * @param defaultValue   The default value.
-     */
-    public NullableObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue) {
-        super(name, clazz, typeParameters, true, false, defaultValue);
+    public NullableObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable T defaultValue) {
+        super(name, clazz, true, false, defaultValue);
     }
 
 

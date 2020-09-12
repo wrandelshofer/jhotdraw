@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Imports a JavaFX scene graph to SVG Tiny 1.2.
+ * Exports a JavaFX scene graph to SVG Tiny 1.2.
  * <p>
  * References:<br>
  * <a href="https://www.w3.org/TR/SVGTiny12/">SVG 1.1</a>

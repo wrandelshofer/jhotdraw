@@ -233,6 +233,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
             ObservableMap<String, Set<E>> pseudoStyles = createPseudoStyles();
 
             StylesheetsManager<E> sm = getStyleManager();
+            if (sm == null) {
+                return;
+            }
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             // This must not be done in parallel, because we may have observers on
@@ -309,7 +312,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     @NonNull
     @SuppressWarnings("unchecked")
     protected <T> Picker<T> createPicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
-        Class<T> type = acc.getValueType();
+        Class<T> type = acc.getRawValueType();
         boolean nullable = true;
         if (acc.getCssConverter() instanceof CssConverter) {
             CssConverter<T> converter = (CssConverter<T>) acc.getCssConverter();
@@ -684,6 +687,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
         Set<E> fs = new LinkedHashSet<>(selectedOrRoot);
         pseudoStyles.put("selected", fs);
         StylesheetsManager<E> sm = getStyleManager();
+        if (sm == null) {
+            return;
+        }
         SelectorModel<E> selectorModel = sm.getSelectorModel();
         selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
         SelectorGroup selector = updateSelector(selectedOrRoot, selectorModel);

@@ -52,6 +52,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.net.UriUtil;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
@@ -94,7 +95,9 @@ import static java.lang.Math.min;
 public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
 
     @NonNull
-    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener", ChangeListener.class, new Class<?>[]{Boolean.class}, null);
+    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener",
+            new TypeToken<ChangeListener<Boolean>>() {
+            }, null);
     @NonNull
     private final static Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
     @NonNull

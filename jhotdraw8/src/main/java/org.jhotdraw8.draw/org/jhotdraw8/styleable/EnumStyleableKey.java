@@ -38,7 +38,7 @@ public class EnumStyleableKey<@Nullable T extends Enum<T>> extends SimpleStyleab
     public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @Nullable T defaultValue) {
         super(name, clazz, null, null, defaultValue);
 
-        converter = new CssEnumConverter<>(getValueType(), false);
+        converter = new CssEnumConverter<>(getRawValueType(), false);
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {

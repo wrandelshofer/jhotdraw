@@ -30,9 +30,9 @@ public interface MarkerFillableFigure extends Figure {
     /**
      * Defines the paint used for filling the interior of the figure.
      * <p>
-     * Default value: {@code Color.WHITE}.
+     * Default value: {@code Color.BLACK}.
      */
-    NullablePaintableStyleableKey MARKER_FILL = new NullablePaintableStyleableKey("marker-fill", new CssColor("white", Color.WHITE));
+    NullablePaintableStyleableKey MARKER_FILL = new NullablePaintableStyleableKey("marker-fill", new CssColor("black", Color.BLACK));
     /**
      * Defines the fill-rule used for filling the interior of the figure..
      * <p>

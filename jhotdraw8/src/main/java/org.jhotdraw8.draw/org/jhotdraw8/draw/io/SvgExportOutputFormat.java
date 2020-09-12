@@ -235,7 +235,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         Transform worldToLocal = slice.getWorldToLocal();
         Point2D sliceOrigin = slice.getSliceOrigin();
         worldToLocal = FXTransforms.concat(worldToLocal, new Translate(-sliceOrigin.getX(), -sliceOrigin.getY()));
-        if (worldToLocal != null) {
+        if (!worldToLocal.isIdentity()) {
             node.getTransforms().setAll(worldToLocal);
         }
         new TransformFlattener().flattenTranslates(node);

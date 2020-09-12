@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
@@ -17,8 +18,8 @@ public interface MarkerStartableFigure extends Figure {
     /**
      * Marker start is an SVG path that points to the right, with coordinate 0,0 at the head of the path.
      */
-    @Nullable NullableSvgPathStyleableKey MARKER_START_SHAPE = new NullableSvgPathStyleableKey("marker-start-shape", null);
-    DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
+    @NonNull NullableSvgPathStyleableKey MARKER_START_SHAPE = new NullableSvgPathStyleableKey("marker-start-shape", null);
+    @NonNull DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
 
     @Nullable
     default String getMarkerStartShape() {

@@ -48,8 +48,6 @@ public interface Key<T> extends MapAccessor<T> {
         return map.containsKey(this);
     }
 
-    @NonNull String getFullValueType();
-
     /**
      * Gets the value of the attribute denoted by this Key from a Map.
      *
@@ -171,7 +169,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return True if assignable.
      */
     default boolean isAssignable(@Nullable Object value) {
-        return value == null && isNullable() || getValueType().isInstance(value);
+        return value == null && isNullable() || value != null && getValueType().equals(value.getClass());
     }
 
     /**

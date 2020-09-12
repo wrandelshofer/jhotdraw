@@ -5,6 +5,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
+import java.lang.reflect.Type;
 
 /**
  * TransientKey can be used to store temporary data in an object.
@@ -24,13 +27,10 @@ public class TransientKey<T> extends ObjectKey<T> {
         super(name, clazz, defaultValue);
     }
 
-    public TransientKey(@NonNull String name, @NonNull Class<?> clazz, Class<?>[] typeParameters, T defaultValue) {
-        super(name, clazz, typeParameters, defaultValue);
+    public TransientKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
+        super(name, clazz, isNullable, isTransient, defaultValue);
     }
 
-    public TransientKey(@NonNull String name, @NonNull Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue) {
-        super(name, clazz, typeParameters, isNullable, defaultValue);
-    }
 
     @Override
     public boolean isTransient() {

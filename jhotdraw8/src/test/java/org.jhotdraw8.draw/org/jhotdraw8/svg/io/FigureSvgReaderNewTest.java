@@ -17,6 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,7 +40,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class FigureSvgReaderTest {
+public class FigureSvgReaderNewTest {
 
     /**
      * Set this constant to the path of the directory into which you checked
@@ -67,19 +69,18 @@ public class FigureSvgReaderTest {
         }
 
 
-        return
-                Files.walk(Path.of(WPT_PATH))
-                        //   .filter(p->Files.isRegularFile(p))
-                        .filter(p -> p.toString().endsWith("-ref.svg"))
-                        .map(p -> new OrderedPair<>(Path.of(p.toString().substring(0, p.toString().length() - "-ref.svg".length()) + ".svg"), p))
-                        // .filter(op->Files.isRegularFile(op.first()))
-                        .sorted(Comparator.comparing(p -> p.first().getName(p.first().getNameCount() - 1)))
-                        .map(p -> dynamicTest(p.first().getName(p.first().getNameCount() - 1).toString(), () -> doWebPlatformTest(p.first(), p.second())));
+        return Files.walk(Path.of(WPT_PATH))
+                //   .filter(p->Files.isRegularFile(p))
+                .filter(p -> p.toString().endsWith("-ref.svg"))
+                .map(p -> new OrderedPair<>(Path.of(p.toString().substring(0, p.toString().length() - "-ref.svg".length()) + ".svg"), p))
+                // .filter(op->Files.isRegularFile(op.first()))
+                .sorted(Comparator.comparing(p -> p.first().getName(p.first().getNameCount() - 1)))
+                .map(p -> dynamicTest(p.first().getName(p.first().getNameCount() - 1).toString(), () -> doWebPlatformTest(p.first(), p.second())));
 
     }
 
     @TestFactory
-    @Disabled
+    //@Disabled
     public @NonNull Stream<DynamicTest> iconsTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(ICONS_PATH))) {
             System.err.println("Please fix the icons path: " + ICONS_PATH);
@@ -98,16 +99,18 @@ public class FigureSvgReaderTest {
     private void doIconTest(Path testFile) throws Exception {
         System.out.println(testFile);
         System.out.println(testFile.toAbsolutePath());
-        FigureSvgReader instance = new FigureSvgReader();
+        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
         Figure testNode = instance.read(testFile);
-
+        Drawing drawing = (Drawing) testNode;
+        org.junit.jupiter.api.Assertions.assertEquals(new CssSize(22), drawing.get(Drawing.WIDTH), "width");
+        org.junit.jupiter.api.Assertions.assertEquals(new CssSize(22), drawing.get(Drawing.HEIGHT), "height");
     }
 
     private void doWebPlatformTest(Path testFile, Path referenceFile) throws Exception {
         System.out.println(testFile);
         System.out.println(referenceFile);
 
-        FigureSvgReader instance = new FigureSvgReader();
+        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
         Figure testFigure = instance.read(testFile);
         Figure referenceFigure = instance.read(referenceFile);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();

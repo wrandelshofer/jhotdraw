@@ -43,7 +43,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class SvgPaintableConverter extends AbstractCssConverter<Paintable> {
+public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
 
     @NonNull
     private static final CssColorConverter colorConverter = new CssColorConverter(false);
@@ -52,7 +52,7 @@ public class SvgPaintableConverter extends AbstractCssConverter<Paintable> {
     @NonNull
     private static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
 
-    public SvgPaintableConverter(boolean nullable) {
+    public SvgCssPaintableConverter(boolean nullable) {
         super(nullable);
     }
 

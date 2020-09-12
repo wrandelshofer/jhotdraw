@@ -9,12 +9,13 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 
+import java.lang.reflect.Type;
 import java.util.function.Function;
 
 public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyleableMapAccessor<T> {
@@ -29,20 +30,16 @@ public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyl
         this(name, clazz, null, converter);
     }
 
-    public ObjectStyleableKey(String name, Class<T> clazz, T defaultValue, @NonNull Converter<T> converter) {
-        this(name, clazz, null, defaultValue, converter);
+    public ObjectStyleableKey(String name, TypeToken<T> clazz, @NonNull Converter<T> converter) {
+        this(name, clazz, null, converter);
     }
 
-    public ObjectStyleableKey(String name, Class<?> clazz, @Nullable Class<?>[] typeParameters, @Nullable T defaultValue, @NonNull Converter<T> converter) {
-        this(name, clazz, typeParameters, true, defaultValue, converter);
+    public ObjectStyleableKey(String name, TypeToken<T> clazz, T defaultValue, @NonNull Converter<T> converter) {
+        this(name, clazz.getType(), defaultValue, converter);
     }
 
-    public ObjectStyleableKey(String name, Class<?> clazz, Class<?>[] typeParameters, boolean isNullable, T defaultValue, @NonNull Converter<T> converter) {
-        this(name, clazz, typeParameters, isNullable, false, defaultValue, converter);
-    }
-
-    public ObjectStyleableKey(@Nullable String name, @Nullable Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, boolean isTransient, @Nullable T defaultValue, @NonNull Converter<T> converter) {
-        super(name, clazz, typeParameters, isNullable, isTransient, defaultValue);
+    public ObjectStyleableKey(String name, Type clazz, T defaultValue, @NonNull Converter<T> converter) {
+        super(name, clazz, defaultValue == null, false, defaultValue);
         this.converter = converter;
 
         Function<Styleable, StyleableProperty<T>> function = s -> {

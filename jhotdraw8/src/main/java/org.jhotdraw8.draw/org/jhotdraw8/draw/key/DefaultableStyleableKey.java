@@ -14,6 +14,7 @@ import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssDefaultableValueConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -41,12 +42,12 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      * Creates a new instance with the specified name, mask and default value.
      *
      * @param name         The name of the key.
-     * @param clazz        the class of the type
+     * @param type         The full type
      * @param converter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public DefaultableStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull CssConverter<T> converter, @NonNull CssDefaultableValue<T> defaultValue, @Nullable T initialValue) {
-        super(name, CssDefaultableValue.class, new Class<?>[]{clazz}, defaultValue);
+    public DefaultableStyleableKey(@NonNull String name, @NonNull TypeToken<CssDefaultableValue<T>> type, @NonNull CssConverter<T> converter, @NonNull CssDefaultableValue<T> defaultValue, @Nullable T initialValue) {
+        super(name, type, defaultValue);
 
         Function<Styleable, StyleableProperty<CssDefaultableValue<T>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

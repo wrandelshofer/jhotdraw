@@ -15,6 +15,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -52,7 +53,8 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param defaultValue The default value.
      */
     public TransformListStyleableKey(@NonNull String name, ImmutableList<Transform> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{Transform.class}, defaultValue);
+        super(name, new TypeToken<ImmutableList<Transform>>() {
+        }, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Transform>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

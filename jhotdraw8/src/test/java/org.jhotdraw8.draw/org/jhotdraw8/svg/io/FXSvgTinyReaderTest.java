@@ -56,7 +56,7 @@ public class FXSvgTinyReaderTest {
     }
 
 
-    // @Disabled
+    @Disabled
     @TestFactory
     public @NonNull Stream<DynamicTest> webPlatformTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(WPT_PATH))) {
@@ -77,13 +77,13 @@ public class FXSvgTinyReaderTest {
     }
 
     @TestFactory
-    @Disabled
+    //@Disabled
     public @NonNull Stream<DynamicTest> iconsTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(ICONS_PATH))) {
             System.err.println("Please fix the icons path: " + ICONS_PATH);
             return Stream.empty();
         }
-
+        System.err.println("path: " + Path.of(ICONS_PATH).toAbsolutePath());
 
         return
                 Files.walk(Path.of(ICONS_PATH))

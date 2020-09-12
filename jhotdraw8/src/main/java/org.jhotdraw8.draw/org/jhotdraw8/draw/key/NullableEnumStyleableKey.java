@@ -59,7 +59,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends AbstractStyleab
         }
 
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
-        converter = new CssEnumConverter<>(getValueType(), nullable);
+        converter = new CssEnumConverter<>(getRawValueType(), nullable);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;

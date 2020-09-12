@@ -10,13 +10,17 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.CheckedRunnable;
+import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.text.CssDefaultableValueConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.svg.figure.SvgCircleFigure;
 import org.jhotdraw8.svg.figure.SvgDrawing;
@@ -28,6 +32,9 @@ import org.jhotdraw8.svg.figure.SvgPathFigure;
 import org.jhotdraw8.svg.figure.SvgPolygonFigure;
 import org.jhotdraw8.svg.figure.SvgPolylineFigure;
 import org.jhotdraw8.svg.figure.SvgRectFigure;
+import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
+import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.xml.text.XmlStringConverter;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -38,6 +45,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -51,11 +59,34 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Reads an SVG "Tiny" 1.2 file and creates Figure objects from it.
+ * <p>
+ * References:<br>
+ * <dl>
+ *     <dt>SVG 1.2 Tiny</dt>
+ *     <dd><a href="https://www.w3.org/TR/SVGTiny12/index.html">link</a></dd>
+ * </dl>
+ * <dl>
+ *     <dt>SVG Strokes</dt>
+ *     <dd><a href="https://www.w3.org/TR/svg-strokes/">link</a></dd>
+ * </dl>
+ */
 public class FigureSvgTinyReaderNew {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     private static final Logger LOGGER = Logger.getLogger(FigureSvgTinyReaderNew.class.getName());
-    private final Map<String, Map<String, MapAccessor<?>>> attrMap = new LinkedHashMap<>();
-    private final Map<String, Supplier<Figure>> factoryMap = new LinkedHashMap<>();
+    /**
+     * Maps from an attribute name to an accessor.
+     */
+    private final Map<String, Map<String, MapAccessor<?>>> accessorMap = new LinkedHashMap<>();
+    /**
+     * Maps from an element name to a figure factory.
+     */
+    private final Map<String, Supplier<Figure>> figureMap = new LinkedHashMap<>();
+    /**
+     * Maps from a type to a converter.
+     */
+    private final Map<Type, Converter<?>> converterMap = new LinkedHashMap<>();
 
     {
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
@@ -70,21 +101,33 @@ public class FigureSvgTinyReaderNew {
                 ImmutableMaps.entry("polyline", SvgPolylineFigure.class)
                 //ImmutableMaps.entry("text", SvgTextFigure.class)
         )) {
-            Class<? extends Figure> aClass = e.getValue();
-            Map<String, MapAccessor<?>> m = Figure.getDeclaredAndInheritedMapAccessors(aClass).stream()
+            String elem = e.getKey();
+            Class<? extends Figure> figureClass = e.getValue();
+            Map<String, MapAccessor<?>> m = Figure.getDeclaredAndInheritedMapAccessors(figureClass).stream()
                     .collect(Collectors.toMap(MapAccessor::getName, Function.identity()
                     ));
-            attrMap.put(e.getKey(), m);
-            factoryMap.put(e.getKey(), () -> {
+            accessorMap.put(elem, m);
+            for (MapAccessor<?> acc : m.values()) {
+                if (acc instanceof ReadOnlyStyleableMapAccessor) {
+                    ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) acc;
+                    converterMap.put(acc.getValueType(), rosma.getCssConverter());
+                }
+            }
+
+            figureMap.put(e.getKey(), () -> {
                 try {
-                    return (Figure) aClass.getConstructor().newInstance();
+                    return figureClass.getConstructor().newInstance();
                 } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
                     throw new RuntimeException(ex);
                 }
             });
         }
 
-
+        // Override converters that have different representations in CSS and XML
+        converterMap.put(String.class, new XmlStringConverter());
+        converterMap.put(new TypeToken<CssDefaultableValue<Paintable>>() {
+                }.getType(),
+                new CssDefaultableValueConverter<>(new SvgXmlPaintableConverter()));
     }
 
     private XMLStreamException createException(XMLStreamReader r, String s) {
@@ -97,6 +140,10 @@ public class FigureSvgTinyReaderNew {
 
     private XMLStreamException createException(Location r, String s, Throwable cause) {
         return new XMLStreamException(s + " " + getLocation(r), cause);
+    }
+
+    private XMLStreamException createException(Location r, String s) {
+        return new XMLStreamException(s + " " + getLocation(r));
     }
 
     private String getLocation(XMLStreamReader r) {
@@ -116,7 +163,7 @@ public class FigureSvgTinyReaderNew {
         try (InputStream in = new BufferedInputStream(Files.newInputStream(p))) {
             return read(in, p.toUri());
         } catch (IOException e) {
-            throw new IOException("Error reading file: " + p, e);
+            throw new IOException("Error reading file: \"" + p.toAbsolutePath() + "\".", e);
         }
     }
 
@@ -125,7 +172,8 @@ public class FigureSvgTinyReaderNew {
 
             XMLInputFactory dbf = XMLInputFactory.newInstance();
 
-            // We do not want that the reader creates a socket connection!
+            // We do not want that the reader creates a socket connection,
+            // even if it would benefit the result!
             dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
             dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
             dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
@@ -203,10 +251,18 @@ public class FigureSvgTinyReaderNew {
                             @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
                             if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?>) {
                                 ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) mapAccessor;
-                                try {
-                                    node.set(mapAccessor, rosma.getXmlConverter().fromString(value));
-                                } catch (ParseException | IOException e) {
-                                    throw createException(location, "Could not read attribute \"" + localName + "\".", e);
+                                Converter<?> converter = converterMap.get(rosma.getValueType());
+                                if (converter == null) {
+                                    throw createException(location, "No converter for attribute \"" + localName + "\".");
+                                } else {
+                                    try {
+                                        node.set(mapAccessor, converter.fromString(value, ctx.idFactory));
+                                    } catch (ParseException e) {
+                                        LOGGER.warning("Could not convert attribute \"" + localName + "\". " + getLocation(location)
+                                                + "\n" + e.getMessage());
+                                    } catch (IOException e) {
+                                        throw createException(location, "Could not read attribute \"" + localName + "\".", e);
+                                    }
                                 }
                             }
                         });
@@ -246,10 +302,10 @@ public class FigureSvgTinyReaderNew {
     private Figure readElement(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String localName = r.getLocalName();
         if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
-            Supplier<Figure> figureSupplier = factoryMap.get(localName);
+            Supplier<Figure> figureSupplier = figureMap.get(localName);
             if (figureSupplier != null) {
                 Figure node = figureSupplier.get();
-                readAttributes(r, node, attrMap.get(localName), ctx);
+                readAttributes(r, node, accessorMap.get(localName), ctx);
                 readChildElements(r, node == null ? parent : node, ctx);
                 if (parent != null) {
                     parent.getChildren().add(node);

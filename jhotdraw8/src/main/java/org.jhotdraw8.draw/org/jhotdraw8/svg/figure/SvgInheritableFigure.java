@@ -21,10 +21,11 @@ import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
 import org.jhotdraw8.svg.text.SvgDisplay;
 import org.jhotdraw8.svg.text.SvgFontSize;
 import org.jhotdraw8.svg.text.SvgFontSizeConverter;
-import org.jhotdraw8.svg.text.SvgPaintableConverter;
 import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
 import org.jhotdraw8.svg.text.SvgVisibility;
 
@@ -37,32 +38,43 @@ public interface SvgInheritableFigure extends Figure {
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#SpecifyingStrokeAlignment">link</a>
      */
     DefaultableStyleableKey<StrokeType> STROKE_ALIGNMENT_KEY = new DefaultableStyleableKey<>(
-            "stroke-alignment", StrokeType.class, new SvgStrokeAlignmentConverter(false),
+            "stroke-alignment",
+            new TypeToken<CssDefaultableValue<StrokeType>>() {
+            },
+            new SvgStrokeAlignmentConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), StrokeType.CENTERED);
     /**
      * fill.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillProperty">link</a>
      */
-    DefaultableStyleableKey<Paintable> FILL_KEY = new DefaultableStyleableKey<>("fill", Paintable.class, new SvgPaintableConverter(true),
+    DefaultableStyleableKey<Paintable> FILL_KEY = new DefaultableStyleableKey<>("fill",
+            new TypeToken<CssDefaultableValue<Paintable>>() {
+            }, new SvgCssPaintableConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssColor.BLACK);
 
     /**
      * stroke.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#StrokeProperty">link</a>
      */
-    DefaultableStyleableKey<Paintable> STROKE_KEY = new DefaultableStyleableKey<>("stroke", Paintable.class, new SvgPaintableConverter(true),
+    DefaultableStyleableKey<Paintable> STROKE_KEY = new DefaultableStyleableKey<>("stroke",
+            new TypeToken<CssDefaultableValue<Paintable>>() {
+            }, new SvgCssPaintableConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), null);
     /**
      * fill-opacity.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillOpacityProperty">link</a>
      */
-    DefaultableStyleableKey<CssSize> FILL_OPACITY_KEY = new DefaultableStyleableKey<>("fill-opacity", CssSize.class, new CssSizeConverter(false),
+    DefaultableStyleableKey<CssSize> FILL_OPACITY_KEY = new DefaultableStyleableKey<>("fill-opacity",
+            new TypeToken<CssDefaultableValue<CssSize>>() {
+            }, new CssSizeConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssSize.ONE);
     /**
      * font-size.
      * <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">link</a>
      */
-    DefaultableStyleableKey<SvgFontSize> FONT_SIZE_KEY = new DefaultableStyleableKey<>("font-size", SvgFontSize.class, new SvgFontSizeConverter(),
+    DefaultableStyleableKey<SvgFontSize> FONT_SIZE_KEY = new DefaultableStyleableKey<>("font-size",
+            new TypeToken<CssDefaultableValue<SvgFontSize>>() {
+            }, new SvgFontSizeConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
             new SvgFontSize(SvgFontSize.SizeKeyword.MEDIUM, null)
     );
@@ -71,7 +83,8 @@ public interface SvgInheritableFigure extends Figure {
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#LineJoin">link</a>
      */
     DefaultableStyleableKey<Double> STROKE_MITERLIMIT_KEY = new DefaultableStyleableKey<Double>("stroke-miterlimit",
-            Double.class,
+            new TypeToken<CssDefaultableValue<Double>>() {
+            },
             new CssDoubleConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
             4.0);
@@ -79,14 +92,19 @@ public interface SvgInheritableFigure extends Figure {
      * stroke-width.
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#StrokeWidth">link</a>
      */
-    DefaultableStyleableKey<CssSize> STROKE_WIDTH_KEY = new DefaultableStyleableKey<>("stroke-width", CssSize.class,
+    DefaultableStyleableKey<CssSize> STROKE_WIDTH_KEY = new DefaultableStyleableKey<CssSize>(
+            "stroke-width",
+            new TypeToken<CssDefaultableValue<CssSize>>() {
+            },
             new CssSizeConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), CssSize.ONE);
     /**
      * visibility.
      * <a href="https://www.w3.org/TR/SVGTiny12/painting.html#DisplayProperty">link</a>
      */
-    DefaultableStyleableKey<SvgVisibility> VISIBILITY_KEY = new DefaultableStyleableKey<>("visiblity", SvgVisibility.class,
+    DefaultableStyleableKey<SvgVisibility> VISIBILITY_KEY = new DefaultableStyleableKey<>("visiblity",
+            new TypeToken<CssDefaultableValue<SvgVisibility>>() {
+            },
             new CssMappedConverter<SvgVisibility>("visiblity",
                     ImmutableMaps.of("visible", SvgVisibility.VISIBLE,
                             "hidden", SvgVisibility.HIDDEN,
@@ -96,7 +114,9 @@ public interface SvgInheritableFigure extends Figure {
      * mix-blend-mode.
      * <a href="https://developer.mozilla.org/de/docs/Web/CSS/mix-blend-mode">link</a>
      */
-    DefaultableStyleableKey<BlendMode> MIX_BLEND_MODE_KEY = new DefaultableStyleableKey<>("mix-blend-mode", BlendMode.class,
+    DefaultableStyleableKey<BlendMode> MIX_BLEND_MODE_KEY = new DefaultableStyleableKey<>("mix-blend-mode",
+            new TypeToken<CssDefaultableValue<BlendMode>>() {
+            },
             new CssMappedConverter<BlendMode>("mix-blend-mode",
                     ImmutableMaps.ofEntries(
                             ImmutableMaps.entry("normal", BlendMode.SRC_OVER),
@@ -127,7 +147,9 @@ public interface SvgInheritableFigure extends Figure {
      *     <dt>SVG 2</dt><dd><a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/render.html#VisibilityControl">link</a></dd>
      * </dl>
      */
-    DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<SvgDisplay>("display", SvgDisplay.class,
+    DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<SvgDisplay>("display",
+            new TypeToken<CssDefaultableValue<SvgDisplay>>() {
+            },
             new CssMappedConverter<SvgDisplay>("display",
                     ImmutableMaps.of("inline", SvgDisplay.INLINE).asMap(), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!

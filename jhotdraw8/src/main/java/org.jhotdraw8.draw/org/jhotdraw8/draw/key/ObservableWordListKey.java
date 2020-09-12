@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.reflect.TypeToken;
 
 /**
  * ObservableWordListKey.
@@ -32,6 +33,7 @@ public class ObservableWordListKey extends ObjectFigureKey<@NonNull ImmutableLis
      * @param defaultValue The default value.
      */
     public ObservableWordListKey(@NonNull String name, @NonNull ImmutableList<String> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{String.class}, defaultValue);
+        super(name, new TypeToken<ImmutableList<String>>() {
+        }, defaultValue);
     }
 }

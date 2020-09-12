@@ -5,9 +5,26 @@
 package org.jhotdraw8.util;
 
 
+import org.jhotdraw8.annotation.NonNull;
+
 public class Preconditions {
     private Preconditions() {
 
+    }
+
+    /**
+     * Throws an illegal argument exception with a formatted message
+     * if the expression is not true.
+     *
+     * @param expression           an expression
+     * @param errorMessageTemplate the template for the error message
+     * @param arguments            arguments for the error message
+     * @throws IllegalArgumentException if expression is not true
+     */
+    public static void checkArgument(boolean expression, @NonNull String errorMessageTemplate, @NonNull Object... arguments) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.format(errorMessageTemplate, arguments));
+        }
     }
 
     /**

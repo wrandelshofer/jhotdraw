@@ -40,7 +40,7 @@ public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
      * @param defaultValue The default value.
      */
     public NullableCssSizeStyleableKey(@NonNull String name, @Nullable CssSize defaultValue) {
-        super(null, name, name, CssSize.class, null, true, defaultValue);
+        super(null, name, name, CssSize.class, true, defaultValue);
         Function<Styleable, StyleableProperty<CssSize>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);

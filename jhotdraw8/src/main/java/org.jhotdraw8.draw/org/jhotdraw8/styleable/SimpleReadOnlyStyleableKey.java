@@ -7,8 +7,11 @@ package org.jhotdraw8.styleable;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.text.Converter;
+
+import java.lang.reflect.Type;
 
 /**
  * SimpleStyleableKey.
@@ -20,7 +23,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
     private final String cssName;
     private final static long serialVersionUID = 1L;
 
-    @NonNull
+    @Nullable
     protected CssMetaData<?, T> cssMetaData;
     @NonNull
     protected Converter<T> converter;
@@ -34,9 +37,10 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      * @param metaData  The CSS meta data.
      * @param converter the converter
      */
-    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
-        this(key, clazz, null, metaData, converter, null);
+    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
+        this(key, clazz, metaData, converter, null);
     }
+
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -48,25 +52,10 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @NonNull CssMetaData<?, T> metaData, @NonNull Converter<T> converter, T defaultValue) {
-        this(key, clazz, null, metaData, converter, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key            The name of the name.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
-     * @param metaData       The CSS meta data.
-     * @param converter      the converter
-     * @param defaultValue   The default value.
-     */
-    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Class<?> clazz, @NonNull Class<?>[] typeParameters,
-                                      CssMetaData<?, T> metaData, Converter<T> converter, T defaultValue) {
-        super(key, clazz, typeParameters, defaultValue);
+    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz,
+                                      @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter,
+                                      @Nullable T defaultValue) {
+        super(key, clazz, defaultValue == null, defaultValue);
         this.converter = converter;
         this.cssMetaData = metaData;
         this.cssName = ReadOnlyStyleableMapAccessor.toCssName(key);

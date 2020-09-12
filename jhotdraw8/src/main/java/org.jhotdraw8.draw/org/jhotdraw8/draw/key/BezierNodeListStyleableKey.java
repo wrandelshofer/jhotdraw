@@ -13,6 +13,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -51,7 +52,8 @@ public class BezierNodeListStyleableKey
      * @param defaultValue The default value.
      */
     public BezierNodeListStyleableKey(@NonNull String name, ImmutableList<BezierNode> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{BezierNode.class}, defaultValue);
+        super(name, new TypeToken<ImmutableList<BezierNode>>() {
+        }, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<BezierNode>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

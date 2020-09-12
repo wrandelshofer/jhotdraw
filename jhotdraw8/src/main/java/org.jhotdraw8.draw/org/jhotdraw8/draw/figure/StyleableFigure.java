@@ -19,6 +19,7 @@ import org.jhotdraw8.draw.key.ObservableWordListKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.reflect.TypeToken;
 
 /**
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
@@ -52,7 +53,9 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @NonNull
-    ObjectFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new ObjectFigureKey<>("pseudoClassStates", ImmutableSet.class, new Class<?>[]{PseudoClass.class}, ImmutableSets.emptySet());
+    ObjectFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new ObjectFigureKey<>("pseudoClassStates",
+            new TypeToken<ImmutableSet<PseudoClass>>() {
+            }, ImmutableSets.emptySet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.

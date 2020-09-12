@@ -107,7 +107,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public final ObservableMap<Key<?>, Object> getProperties() {
+    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableHashMap();
         }

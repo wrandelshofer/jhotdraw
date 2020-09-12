@@ -42,7 +42,7 @@ public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStylea
         Objects.requireNonNull(defaultValue, "defaultValue is null");
 
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
-        converter = new CssEnumConverter<>(getValueType(), false);
+        converter = new CssEnumConverter<>(getRawValueType(), false);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
                     StyleablePropertyBean spb = (StyleablePropertyBean) s;

@@ -526,11 +526,16 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
     }
 
     private void paint() {
+        updateRenderContext();
+        getModel().validate(this);
+        updateNodes();
+
+    }
+
+    private void updateRenderContext() {
         set(RenderContext.CLIP_BOUNDS, getClipBounds());
         DefaultUnitConverter units = new DefaultUnitConverter(90, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
         set(RenderContext.UNIT_CONVERTER_KEY, units);
-        updateNodes();
-
     }
 
     private void removeNode(Figure f) {
@@ -561,7 +566,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
         for (Figure f : copyOfDirtyFigureNodes) {
             Node node = getNode(f);
             if (!f.isShowing() || node == null) {
-                // wont be updated and thus remains dirty!
+                if (node != null) {
+                    node.setVisible(false);
+                }
+                // wont otherwise be updated and thus remains dirty!
                 dirtyFigureNodes.add(f);
                 continue;
             }

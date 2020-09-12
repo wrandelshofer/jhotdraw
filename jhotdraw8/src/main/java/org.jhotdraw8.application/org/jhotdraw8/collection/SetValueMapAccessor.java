@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -53,11 +52,6 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public String getFullValueType() {
-        return Boolean.class.getName();
-    }
-
-    @Override
     public String getName() {
         return name;
     }
@@ -72,18 +66,6 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     @Override
     public Class<Boolean> getValueType() {
         return Boolean.class;
-    }
-
-    @NonNull
-    @Override
-    public Class<?> getComponentValueType() {
-        return Boolean.class;
-    }
-
-    @NonNull
-    @Override
-    public List<Class<?>> getValueTypeParameters() {
-        return Collections.emptyList();
     }
 
     @Override

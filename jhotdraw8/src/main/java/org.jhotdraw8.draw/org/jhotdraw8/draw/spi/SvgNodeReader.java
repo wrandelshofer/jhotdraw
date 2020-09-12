@@ -24,6 +24,7 @@ public class SvgNodeReader implements NodeReader {
 
     @Override
     public Node read(@NonNull InputStream in) throws IOException {
+        //return new FXSvgTinyReaderNew().read(in,  Paths.get(System.getProperty("user.home")).toUri());
         return new FXSvgTinyReader().read(in);
     }
 }

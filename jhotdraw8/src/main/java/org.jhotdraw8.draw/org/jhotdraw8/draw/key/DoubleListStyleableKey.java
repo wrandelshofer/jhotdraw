@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -48,7 +49,8 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      * @param defaultValue The default value.
      */
     public DoubleListStyleableKey(@NonNull String name, ImmutableList<Double> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{Double.class}, defaultValue);
+        super(name, new TypeToken<ImmutableList<Double>>() {
+        }, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Double>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

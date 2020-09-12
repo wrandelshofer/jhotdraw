@@ -72,6 +72,7 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
     final
     private SimpleDrawingViewNode node = new SimpleDrawingViewNode();
     private boolean constrainerNodeValid;
+    private boolean backgroundNodeValid;
 
     private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
 
@@ -245,7 +246,7 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
 
     @Override
     public Bounds getVisibleRect() {
-        return zoomableScrollPane.getViewRect();
+        return worldToView(zoomableScrollPane.getVisibleContentRect());
     }
 
     @Override
@@ -259,7 +260,7 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         model.get().setRoot(new SimpleDrawing());
         onDrawingModelChanged(model, null, model.getValue());
         drawingRenderer.modelProperty().bind(this.modelProperty());
-        drawingRenderer.clipBoundsProperty().bind(zoomableScrollPane.viewRectProperty());
+        drawingRenderer.clipBoundsProperty().bind(zoomableScrollPane.visibleContentRectProperty());
         drawingRenderer.editorProperty().bind(this.editorProperty());
         drawingRenderer.setDrawingView(this);
         handleRenderer.modelProperty().bind(this.modelProperty());
@@ -267,18 +268,37 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         handleRenderer.editorProperty().bind(this.editorProperty());
         handleRenderer.setDrawingView(this);
         zoomFactorProperty().addListener(this::onZoomFactorChanged);
-        constrainer.addListener((o, oldValue, newValue) -> updateConstrainer(oldValue, newValue));
-        zoomableScrollPane.viewRectProperty().addListener(this::onViewRectChanged);
+        constrainer.addListener(this::onConstrainerChanged);
+        zoomableScrollPane.visibleContentRectProperty().addListener(this::onViewRectChanged);
+        zoomableScrollPane.contentToViewProperty().addListener(this::onContentToViewChanged);
+
+        Border unfocusedBorder = new Border(
+                new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
+                new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
+        );
+        Border focusedBorder = new Border(
+                new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
+                new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
+        );
+        background.borderProperty().bind(CustomBinding.convert(focused, b -> b ? focusedBorder : unfocusedBorder));
+        CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
+        CustomBinding.bind(focused, toolProperty(), Tool::focusedProperty);
     }
 
-    private void updateConstrainer(@Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
+    private void onContentToViewChanged(Observable observable) {
+        updateBackgroundNode();
+    }
+
+    private void onConstrainerChanged(@NonNull Observable o, @Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
         if (oldValue != null) {
             foreground.getChildren().remove(oldValue.getNode());
             oldValue.removeListener(this::onConstrainerInvalidated);
         }
         if (newValue != null) {
-            foreground.getChildren().add(0, newValue.getNode());
-            newValue.getNode().applyCss();
+            Node node = newValue.getNode();
+            node.setManaged(false);
+            foreground.getChildren().add(0, node);
+            node.applyCss();
             newValue.updateNode(this);
             newValue.addListener(this::onConstrainerInvalidated);
             invalidateConstrainer();
@@ -288,6 +308,10 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
 
     private void invalidateConstrainer() {
         constrainerNodeValid = false;
+    }
+
+    private void invalidateBackground() {
+        backgroundNodeValid = false;
     }
 
     private void onConstrainerInvalidated(Observable o) {
@@ -328,12 +352,6 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
                 foreground);
         foreground.setManaged(false);
 
-        background.setBorder(
-                new Border(
-                        new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
-                        new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
-                ));
-        CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
     }
 
     @Override
@@ -385,12 +403,12 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         if (oldValue != null) {
             foreground.getChildren().remove(oldValue.getNode());
             oldValue.setDrawingView(null);
-            focused.unbind();
         }
         if (newValue != null) {
-            foreground.getChildren().add(newValue.getNode());
+            Node node = newValue.getNode();
+            node.setManaged(true);// we want the tool to fill the view
+            foreground.getChildren().add(node);
             newValue.setDrawingView(this);
-            focused.bind(newValue.getNode().focusedProperty());
         }
     }
 
@@ -458,6 +476,31 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         }
     }
 
+    private void revalidateBackground() {
+        invalidateBackground();
+        repaint();
+    }
+
+    private void validateBackground() {
+        if (!backgroundNodeValid) {
+            updateBackgroundNode();
+            backgroundNodeValid = true;
+        }
+    }
+
+    private void updateBackgroundNode() {
+        Drawing drawing = getDrawing();
+        Bounds bounds = drawing == null ? new BoundingBox(0, 0, 10, 10) : drawing.getLayoutBounds();
+        Bounds bounds1 = worldToView(bounds);
+        double x = bounds1.getMinX();
+        double y = bounds1.getMinY();
+        double w = bounds1.getWidth();
+        double h = bounds1.getHeight();
+
+        double p = 24;
+        background.resizeRelocate(x - p, y - p, w + 2 * p, h + 2 * p);
+    }
+
     private void updateConstrainerNode() {
         Constrainer c = getConstrainer();
         if (c != null) {
@@ -468,13 +511,14 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
     private void revalidateLayout() {
         if (isLayoutValid) {
             isLayoutValid = false;
-            Platform.runLater(this::validateLayout);
+            validateLayout();
+            //Platform.runLater(this::validateLayout);
         }
     }
 
     @Override
     public void scrollRectToVisible(Bounds boundsInView) {
-
+        zoomableScrollPane.scrollViewRectToVisible(boundsInView);
     }
 
     private void updateLayout() {
@@ -484,19 +528,19 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
         double w = bounds.getWidth();
         double h = bounds.getHeight();
         zoomableScrollPane.setContentSize(w, h);
-        double p = 24;
-        background.resizeRelocate(-p, -p, w * f + 2 * p, h * f + 2 * p);
         Bounds vp = zoomableScrollPane.getViewportRect();
         foreground.resize(vp.getWidth(), vp.getHeight());
 
         handleRenderer.invalidateHandleNodes();
         handleRenderer.repaint();
+        updateConstrainerNode();
+        updateBackgroundNode();
     }
 
     private void validateLayout() {
         if (!isLayoutValid) {
-            isLayoutValid = true;
             updateLayout();
+            isLayoutValid = true;
         }
     }
 

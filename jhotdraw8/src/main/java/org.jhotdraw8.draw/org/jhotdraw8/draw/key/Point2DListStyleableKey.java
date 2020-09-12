@@ -15,6 +15,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -54,7 +55,8 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
      * @param defaultValue The default value.
      */
     public Point2DListStyleableKey(@NonNull String name, @NonNull ImmutableList<@NonNull Point2D> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{Point2D.class}, defaultValue);
+        super(name, new TypeToken<ImmutableList<Point2D>>() {
+        }, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<Point2D>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

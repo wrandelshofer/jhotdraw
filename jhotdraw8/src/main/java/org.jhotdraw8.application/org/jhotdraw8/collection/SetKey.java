@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.reflect.TypeToken;
+
 /**
  * DoubleKey.
  *
@@ -13,11 +15,11 @@ public class SetKey<E> extends ObjectKey<ImmutableSet<E>> {
 
     private final static long serialVersionUID = 1L;
 
-    public SetKey(String key, Class<E> elemClass) {
-        super(key, ImmutableSet.class, new Class<?>[]{elemClass}, ImmutableSets.emptySet());
+    public SetKey(String key, TypeToken<ImmutableSet<E>> type) {
+        super(key, type, ImmutableSets.emptySet());
     }
 
-    public SetKey(String key, Class<E> elemClass, ImmutableSet<E> defaultValue) {
-        super(key, ImmutableArrayList.class, new Class<?>[]{elemClass}, defaultValue);
+    public SetKey(String key, TypeToken<ImmutableSet<E>> type, ImmutableSet<E> defaultValue) {
+        super(key, type, defaultValue);
     }
 }

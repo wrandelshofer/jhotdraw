@@ -16,11 +16,16 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Files;
 
+/**
+ * Reads an SVG "Tiny" 1.2 file and creates JavaFX nodes from it.
+ */
 public class FXSvgTinyReaderNew {
 
     public Node read(@NonNull java.nio.file.Path p) throws IOException {
         try (InputStream in = new BufferedInputStream(Files.newInputStream(p))) {
             return read(in, p.getParent().toUri());
+        } catch (IOException e) {
+            throw new IOException("Error reading file \"" + p.toAbsolutePath() + "\".", e);
         }
     }
 

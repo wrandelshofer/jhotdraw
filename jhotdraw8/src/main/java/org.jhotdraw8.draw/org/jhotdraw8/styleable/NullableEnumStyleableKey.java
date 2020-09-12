@@ -47,7 +47,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleable
         super(name, clazz, null, null, defaultValue);
 
 
-        converter = new CssEnumConverter<>(getValueType(), true);
+        converter = new CssEnumConverter<>(getRawValueType(), true);
         StyleablePropertyFactory<?> factory = new StyleablePropertyFactory<>(null);
         cssMetaData = factory.createEnumCssMetaData(clazz,
                 Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {

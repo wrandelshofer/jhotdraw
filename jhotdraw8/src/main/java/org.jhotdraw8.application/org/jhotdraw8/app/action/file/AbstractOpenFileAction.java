@@ -23,6 +23,7 @@ import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
@@ -35,7 +36,9 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     @NonNull
     public final static Key<URIChooser> OPEN_CHOOSER_KEY = new ObjectKey<>("openChooser", URIChooser.class);
     @NonNull
-    public final static Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new ObjectKey<>("openChooserFactory", Supplier.class, new Class<?>[]{URIChooser.class}, null);
+    public final static Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new ObjectKey<>("openChooserFactory",
+            new TypeToken<Supplier<URIChooser>>() {
+            }, null);
 
     public AbstractOpenFileAction(@NonNull FileBasedApplication app) {
         super(app);

@@ -9,6 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.text.Converter;
 
+import java.lang.reflect.Type;
+
 /**
  * SimpleStyleableKey.
  *
@@ -24,12 +26,12 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * value null, and allowing null values.
      *
      * @param key       The name of the name.
-     * @param clazz     The type of the value.
+     * @param type      The type of the value.
      * @param metaData  The CSS meta data.
      * @param converter the converter
      */
-    public SimpleStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
-        this(key, clazz, null, metaData, converter, null);
+    public SimpleStyleableKey(@NonNull String key, @NonNull Type type, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
+        this(key, type, metaData, converter, null);
     }
 
     /**
@@ -37,30 +39,13 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * value, and allowing or disallowing null values.
      *
      * @param key          The name of the name.
-     * @param clazz        The type of the value.
+     * @param type         The type of the value.
      * @param metaData     The CSS meta data.
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(@NonNull String key, @NonNull Class<T> clazz, @Nullable CssMetaData<?, T> metaData, @Nullable Converter<T> converter, T defaultValue) {
-        this(key, clazz, null, metaData, converter, defaultValue);
-    }
-
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value, and allowing or disallowing null values.
-     *
-     * @param key            The name of the name.
-     * @param clazz          The type of the value.
-     * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
-     * @param metaData       The CSS meta data.
-     * @param converter      the converter
-     * @param defaultValue   The default value.
-     */
-    public SimpleStyleableKey(@NonNull String key, @NonNull Class<?> clazz, Class<?>[] typeParameters,
-                              @Nullable CssMetaData<?, T> metaData, @Nullable Converter<T> converter, T defaultValue) {
-        super(key, clazz, typeParameters, metaData, converter, defaultValue);
+    public SimpleStyleableKey(@NonNull String key, @NonNull Type type, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter, T defaultValue) {
+        super(key, type, metaData, converter, defaultValue);
     }
 
 

@@ -58,9 +58,15 @@ public class ZoomableScrollPaneSampleMain extends Application {
         s.setShowTickMarks(true);
         s.setShowTickLabels(true);
         Rectangle storedBounds = new Rectangle();
+        storedBounds.setOpacity(0.1);
+        storedBounds.setManaged(false);
         Button b = new Button("storeRect");
         b.setOnAction(evt -> {
-            Bounds w = p.getViewRect();
+            Bounds w = p.getVisibleContentRect();
+            System.err.println("stored contentRect   " + FXGeom.toString(w));
+            System.err.println("stored viewRect      " + FXGeom.toString(p.getViewRect()));
+            System.err.println("computed viewRect    " + FXGeom.toString(p.getContentToView().transform(w)));
+            System.err.println("computed contentRect " + FXGeom.toString(p.getViewToContent().transform(p.getViewRect())));
             storedBounds.setX(w.getMinX());
             storedBounds.setY(w.getMinY());
             storedBounds.setWidth(w.getWidth());
@@ -69,6 +75,9 @@ public class ZoomableScrollPaneSampleMain extends Application {
         Button b2 = new Button("scrollToRect");
         b2.setOnAction(evt -> {
             p.scrollContentRectToVisible(storedBounds.getBoundsInLocal());
+            System.err.println("restored contentRect " + FXGeom.toString(p.getVisibleContentRect()));
+            System.err.println("restored viewRect    " + FXGeom.toString(p.getViewRect()));
+            System.err.println("computed viewRect    " + FXGeom.toString(p.getContentToView().transform(p.getVisibleContentRect())));
         });
         hbox.getChildren().add(s);
         hbox.getChildren().add(b);
@@ -78,16 +87,15 @@ public class ZoomableScrollPaneSampleMain extends Application {
         Scene scene = new Scene(borderPane, 300, 250);
         Label label = new Label("-");
         borderPane.setBottom(label);
-        label.textProperty().bind(CustomBinding.convert(p.viewRectProperty(), FXGeom::toString));
+        label.textProperty().bind(CustomBinding.convert(p.visibleContentRectProperty(), FXGeom::toString));
 
         primaryStage.setScene(scene);
 
-        p.setContentSize(80_000, 600);
+        p.setContentSize(800, 600);
 
         Rectangle bg = new Rectangle(10, 10, 780, 580);
         bg.setFill(Color.BLUE);
         bg.setManaged(false);
-        p.getBackgroundChildren().add(bg);
         p.contentToViewProperty().addListener((o, oldv, newv) -> {
             Bounds lb = newv.transform(new BoundingBox(10, 10, 780, 580));
             bg.setX(lb.getMinX());
@@ -95,6 +103,7 @@ public class ZoomableScrollPaneSampleMain extends Application {
             bg.setWidth(lb.getWidth());
             bg.setHeight(lb.getHeight());
         });
+        p.getBackgroundChildren().add(bg);
 
         Rectangle fg = new Rectangle(10, 10, 780, 580);
         fg.setFill(null);
@@ -136,7 +145,7 @@ public class ZoomableScrollPaneSampleMain extends Application {
 
         p.setSubSceneUserAgentStylesheet(getClass().getResource("empty.css").toString());
 
-        p.getContentChildren().addAll(sr, sr2, sr3, sr4, sr5, button);
+        p.getContentChildren().addAll(sr, sr2, sr3, sr4, sr5, storedBounds, button);
 
         p.zoomFactorProperty().bind(
                 CustomBinding.computeDouble(() -> Math.pow(2, s.getValue()), s.valueProperty())

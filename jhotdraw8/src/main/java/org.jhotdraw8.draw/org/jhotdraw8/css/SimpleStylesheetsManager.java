@@ -399,9 +399,6 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 CssToken first = value.size() == 0 ? null : value.getFirst();
                 if (first != null && first.getType() == CssTokenType.TT_IDENT) {
                     switch (first.getStringValueNonNull()) {
-                    case CssTokenType.IDENT_INITIAL:
-                    case CssTokenType.IDENT_INHERIT:
-                    case CssTokenType.IDENT_REVERT:
                     case CssTokenType.IDENT_UNSET:
                         appliedValue = null;
                         break;

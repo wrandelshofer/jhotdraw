@@ -27,6 +27,7 @@ import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.reflect.TypeToken;
 
 import java.awt.BasicStroke;
 import java.util.ArrayList;
@@ -119,7 +120,9 @@ public interface StrokableFigure extends Figure {
      * Stroke Properties</a>
      */
     @NonNull ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray",
-            CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
+            new TypeToken<ImmutableList<CssSize>>() {
+            },
+            new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**
      * Combined map accessor for all stroke style properties.

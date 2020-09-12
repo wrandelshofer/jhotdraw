@@ -44,11 +44,6 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
     @NonNull
     Converter<T> getCssConverter();
 
-    @NonNull
-    default Converter<T> getXmlConverter() {
-        return getCssConverter();
-    }
-
     /**
      * Returns the CSS name string.
      * <p>

@@ -11,13 +11,13 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.StyleConverterAdapter;
 import org.jhotdraw8.xml.text.XmlWordListConverter;
 
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -48,22 +48,9 @@ public class ObservableWordListStyleableKey extends AbstractStyleableKey<Immutab
      * @param defaultValue The default value.
      */
     public ObservableWordListStyleableKey(@NonNull String name, ImmutableList<String> defaultValue) {
-        super(name, List.class, new Class<?>[]{Double.class}, defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
+        super(name, new TypeToken<ImmutableList<String>>() {
+        }, defaultValue);
 
-         Function<Styleable, StyleableProperty<ImmutableObservableList<String>>> function = s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         };
-         boolean inherits = false;
-         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-         final StyleConverter<ParsedValue[], ImmutableList<String>> converter
-         = DoubleListStyleConverter.getInstance();
-         CssMetaData<Styleable, ImmutableList<String>> md
-         = new SimpleCssMetaData<Styleable, ImmutableList<String>>(property, function,
-         converter, defaultValue, inherits);
-         cssMetaData = md;*/
         Function<Styleable, StyleableProperty<ImmutableList<String>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);

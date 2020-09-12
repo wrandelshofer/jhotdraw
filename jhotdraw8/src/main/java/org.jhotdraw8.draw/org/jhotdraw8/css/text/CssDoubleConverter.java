@@ -48,12 +48,12 @@ public class CssDoubleConverter extends AbstractCssConverter<Double> {
                         value = Double.NaN;
                         break;
                     default:
-                        throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+                        throw tt.createParseException("⟨Double⟩: number expected.");
                 }
                 return value;
             }
             default:
-                throw new ParseException("⟨Double⟩: number expected.", tt.getStartPosition());
+                throw tt.createParseException("⟨Double⟩: number expected.");
         }
     }
 

@@ -14,6 +14,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -42,22 +43,23 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
      * default value.
      *
      * @param name      The name of the key.
-     * @param clazz     the class of the type
+     * @param type      the class of the type
      * @param converter String converter for a list element
      */
-    public ListStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull CssConverter<T> converter) {
-        this(name, clazz, converter, ImmutableLists.emptyList());
+    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
+        this(name, type, converter, ImmutableLists.emptyList());
     }
 
     /**
      * Creates a new instance with the specified name, mask and default value.
-     *  @param name         The name of the key.
-     * @param clazz        the class of the type
+     *
+     * @param name         The name of the key.
+     * @param type         the class of the type
      * @param converter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public ListStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
-        super(name, ImmutableList.class, new Class<?>[]{clazz}, defaultValue);
+    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
+        super(name, type, defaultValue);
 
         Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

@@ -201,13 +201,9 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         if (value instanceof Collection) {
             @SuppressWarnings("unchecked")
             Collection<Object> c = (Collection<Object>) value;
-            if (k.getValueTypeParameters().equals("<String>")) {
-                return c.contains(word);
-            } else {
-                for (Object o : c) {
-                    if (o != null && word.equals(o.toString())) {
-                        return true;
-                    }
+            for (Object o : c) {
+                if (o != null && word.equals(o.toString())) {
+                    return true;
                 }
             }
         } else if (value instanceof String) {

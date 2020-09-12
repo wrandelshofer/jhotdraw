@@ -22,6 +22,7 @@ import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -129,7 +130,9 @@ public interface SecondStrokableFigure extends Figure {
      * Stroke Properties</a>
      */
     ListStyleableKey<CssSize> SECOND_STROKE_DASH_ARRAY = new ListStyleableKey<>("second-stroke-dasharray",
-            CssSize.class, new CssSizeConverter(false), ImmutableLists.emptyList());
+            new TypeToken<ImmutableList<CssSize>>() {
+            },
+            new CssSizeConverter(false), ImmutableLists.emptyList());
 
     /**
      * Combined map accessor for all stroke style properties.

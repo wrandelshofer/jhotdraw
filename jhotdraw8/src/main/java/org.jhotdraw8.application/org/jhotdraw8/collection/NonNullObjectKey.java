@@ -7,9 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -52,13 +50,7 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
      * assignability of attribute values at runtime.
      */
     @NonNull
-    private final Class<?> clazz;
-    /**
-     * The type token is not sufficient, if the type is parameterized. We allow
-     * to specify the type parameters as a string.
-     */
-    @NonNull
-    private final List<Class<?>> typeParameters;
+    private final Type type;
 
     private final boolean isTransient;
 
@@ -67,11 +59,11 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
      * value, and allowing or disallowing null values.
      *
      * @param name         The name of the key.
-     * @param clazz        The type of the value.
+     * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public NonNullObjectKey(@NonNull String name, Class<T> clazz, @NonNull T defaultValue) {
-        this(name, clazz, null, defaultValue);
+    public NonNullObjectKey(@NonNull String name, Class<T> type, @NonNull T defaultValue) {
+        this(name, type, null, defaultValue);
     }
 
     /**
@@ -79,23 +71,22 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
      * value, and allowing or disallowing null values.
      *
      * @param name           The name of the key.
-     * @param clazz          The type of the value.
+     * @param type           The type of the value.
      * @param typeParameters The type parameters of the class. Specify null if
      *                       no type parameters are given. Otherwise specify them in arrow brackets.
      * @param defaultValue   The default value.
      */
-    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
-        this(name, clazz, typeParameters, false, defaultValue);
+    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
+        this(name, type, typeParameters, false, defaultValue);
     }
 
-    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
+    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
         Objects.requireNonNull(name, "name is null");
-        Objects.requireNonNull(clazz, "clazz is null");
+        Objects.requireNonNull(type, "clazz is null");
         Objects.requireNonNull(defaultValue, "defaultValue may not be null if isNullable==false");
 
         this.name = name;
-        this.clazz = clazz;
-        this.typeParameters = typeParameters == null ? Collections.emptyList() : Collections.unmodifiableList(Arrays.asList(typeParameters.clone()));
+        this.type = type;
         this.isTransient = isTransient;
         this.defaultValue = defaultValue;
     }
@@ -113,43 +104,8 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
 
     @NonNull
     @Override
-    public Class<T> getValueType() {
-        @SuppressWarnings("unchecked")
-        Class<T> ret = (Class<T>) clazz;
-        return ret;
-    }
-
-    @NonNull
-    @Override
-    public Class<?> getComponentValueType() {
-        return typeParameters.size() == 0 ? getValueType() : typeParameters.get(0);
-    }
-
-    @NonNull
-    @Override
-    public List<Class<?>> getValueTypeParameters() {
-        return typeParameters;
-    }
-
-    @NonNull
-    @Override
-    public String getFullValueType() {
-        StringBuilder buf = new StringBuilder();
-        buf.append(clazz.getName());
-        if (!typeParameters.isEmpty()) {
-            buf.append('<');
-            boolean first = true;
-            for (Class<?> tp : typeParameters) {
-                if (first) {
-                    first = false;
-                } else {
-                    buf.append(',');
-                }
-                buf.append(tp.getName());
-            }
-            buf.append('>');
-        }
-        return buf.toString();
+    public Type getValueType() {
+        return type;
     }
 
     /**

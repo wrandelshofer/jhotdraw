@@ -53,7 +53,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 /**
- * Reader for an SVG Tiny 1.2 file.
+ * Reader for an SVG "Tiny" 1.2 file.
  * <p>
  * This is a minimalistic SVG reader for loading icons and other resources
  * into a Java FX scene graph.

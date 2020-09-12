@@ -25,7 +25,6 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
-import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -99,21 +98,6 @@ import java.util.regex.Pattern;
  * @author Werner Randelshofer
  */
 public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, OutputFormat, ClipboardOutputFormat, ClipboardInputFormat {
-    /**
-     * Comments which appear inside an XML element, that can not be associated
-     * to as a head comment.
-     */
-    public final static NullableObjectKey<List<String>> XML_BODY_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
-    /**
-     * Comments which can not be associated to a figure, or which appear in the
-     * epilog of an XML file.
-     */
-    public final static NullableObjectKey<List<String>> XML_EPILOG_COMMENT_KEY = new NullableObjectKey<>("xmlEpilogComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
-    /**
-     * Comments which appear before an XML element of a figure are associated to
-     * the figure as a comment.
-     */
-    public final static NullableObjectKey<List<String>> XML_HEAD_COMMENT_KEY = new NullableObjectKey<>("xmlHeadComment", List.class, new Class<?>[]{String.class}, Collections.emptyList());
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     protected List<String> comments;
     protected FigureFactory figureFactory;
@@ -484,7 +468,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             if (key != null && figureFactory.figureAttributeKeys(figure).contains(key)) {
                 Object value = null;
 
-                if (keyValueTypeIsFigure.computeIfAbsent(key, k -> Figure.class.isAssignableFrom(k.getValueType()))) {
+                if (keyValueTypeIsFigure.computeIfAbsent(key, k -> Figure.class.isAssignableFrom(k.getRawValueType()))) {
                     value = getFigure(attr.getValue());
                 } else {
                     try {
@@ -795,7 +779,7 @@ public class SimpleXmlIO extends AbstractPropertyBean implements InputFormat, Ou
             if (figureFactory.getObjectIdAttribute().equals(name)) {
                 return;
             }
-            if (Figure.class.isAssignableFrom(k.getValueType())) {
+            if (Figure.class.isAssignableFrom(k.getRawValueType())) {
                 w.writeAttribute(name, idFactory.createId(value));
             } else {
                 w.writeAttribute(name, figureFactory.valueToString(k, value));

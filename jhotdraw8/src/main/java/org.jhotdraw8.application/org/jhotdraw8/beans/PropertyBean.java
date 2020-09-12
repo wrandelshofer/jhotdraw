@@ -61,7 +61,7 @@ public interface PropertyBean {
 
     @NonNull
     default <T> ObjectProperty<T> getProperty(@NonNull Key<T> key) {
-        return new MapEntryProperty<>(getProperties(), key, key.getValueType());
+        return new MapEntryProperty<>(getProperties(), key, key.getRawValueType());
     }
 
     // ---
@@ -181,7 +181,7 @@ public interface PropertyBean {
 
     @NonNull
     default <T> ObjectProperty<T> propertyAt(@NonNull Key<T> key) {
-        return new MapEntryProperty<>(getProperties(), key, key.getValueType());
+        return new MapEntryProperty<>(getProperties(), key, key.getRawValueType());
     }
 
     @NonNull
