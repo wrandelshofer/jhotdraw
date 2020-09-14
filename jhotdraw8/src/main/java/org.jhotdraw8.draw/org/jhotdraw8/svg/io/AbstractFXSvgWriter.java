@@ -43,7 +43,6 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -55,6 +54,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.io.IdFactory;
@@ -1321,7 +1321,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             txs.add(new Translate(node.getTranslateX(), node.getTranslateY()));
         }
         if (node.getRotate() != 0.0) {
-            txs.add(new Rotate(node.getRotate(), pivot.getX(), pivot.getY()));
+            txs.add(new FXPreciseRotate(node.getRotate(), pivot.getX(), pivot.getY()));
         }
         if (node.getScaleX() != 1.0 || node.getScaleY() != 1.0) {
             txs.add(new Scale(node.getScaleX(), node.getScaleY(), pivot.getX(), pivot.getY()));

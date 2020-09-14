@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
@@ -24,6 +23,7 @@ import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 
@@ -198,7 +198,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
             }
             double angle = Geom.atan2(start.getY() - end.getY(), start.getX() - end.getX());
             markerNode.getTransforms().setAll(
-                    new Rotate(angle * 180 / Math.PI, start.getX(), start.getY()),
+                    new FXPreciseRotate(angle * 180 / Math.PI, start.getX(), start.getY()),
                     new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),
                     new Translate(start.getX(), start.getY()));
             markerNode.setVisible(true);

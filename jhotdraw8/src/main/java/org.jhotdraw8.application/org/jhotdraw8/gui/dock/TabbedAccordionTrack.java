@@ -201,6 +201,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         if (isRotated()) {
             Rotate rotate = new Rotate(270, 0, 0);
             Translate translate = new Translate(0, getHeight());
+
             accordion.getTransforms().setAll(translate, rotate);
             accordion.resizeRelocate(0, 0, getHeight(), getWidth());
         } else {

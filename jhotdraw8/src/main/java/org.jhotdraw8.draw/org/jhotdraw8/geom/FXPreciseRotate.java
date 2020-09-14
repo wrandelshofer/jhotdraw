@@ -17,6 +17,10 @@ public class FXPreciseRotate extends Rotate {
         super(r, x, y);
     }
 
+    public FXPreciseRotate(double r) {
+        this(r, 0, 0);
+    }
+
     @Override
     public Point2D inverseTransform(double x, double y) {
         Point3D axis = getAxis();
