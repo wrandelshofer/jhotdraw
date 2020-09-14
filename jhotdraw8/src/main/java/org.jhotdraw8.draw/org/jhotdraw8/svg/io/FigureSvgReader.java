@@ -91,8 +91,6 @@ public class FigureSvgReader {
     private static final Key<String> ON_CLICK_KEY = new StringKey("onclick");
     private static final Key<String> ON_MOUSE_OVER_KEY = new StringKey("onmouseover");
     private static final Key<String> ON_MOUSE_DOWN_KEY = new StringKey("onmousedown");
-    private static final Key<String> BASE_PROFILE_KEY = new StringKey("baseProfile");
-    private static final Key<String> VERSION_KEY = new StringKey("version");
     private static final Key<Double> STROKE_OPACITY_KEY = new ObjectKey<>("strokeOpacity", Double.class);
     private static final Key<Double> FONT_SIZE_KEY = new ObjectKey<>("fontSize", Double.class);
     private static final Key<Double> PATH_LENGTH_KEY = new ObjectKey<>("pathLength", Double.class);
@@ -1107,10 +1105,7 @@ public class FigureSvgReader {
                     }
                     break;
                 case "baseProfile":
-                    if (!"tiny".equals(value)) {
-                        logWarning(r, "Unsupported baseProfile=\"" + value + "\".");
-                    }
-                    BASE_PROFILE_KEY.put(node.getProperties(), value);
+                    node.set(SvgDrawing.BASE_PROFILE, value);
                     break;
                 case "version":
                     switch (value) {
@@ -1121,7 +1116,7 @@ public class FigureSvgReader {
                         logWarning(r, "Unsupported version=\"" + value + "\".");
                         break;
                     }
-                    VERSION_KEY.put(node.getProperties(), value);
+                    node.set(SvgDrawing.VERSION, value);
                     break;
                 default:
                     if (!readNodeAttribute(r, node, ctx, namespace, localName, value)) {
@@ -1251,76 +1246,6 @@ public class FigureSvgReader {
         return null;
     }
 
-    SvgFontFamilyConverter fontFamilyConverter = new SvgFontFamilyConverter();
-
-    private boolean readFontAttribute(XMLStreamReader r, Text node, Context ctx, String namespace, String name, String value) throws XMLStreamException {
-        if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
-            switch (name) {
-            case "font-family": {
-                // 'font-family'
-                // Value:  	[[ <family-name> |
-                // <generic-family> ],]* [<family-name> |
-                // <generic-family>] | inherit
-                // Initial:  	depends on user agent
-                // Applies to:  	text content elements
-                // Inherited:  	yes
-                // Percentages:  	N/A
-                // Media:  	visual
-                // Animatable:  	yes
-                // Computed value:  	 Specified value, except inherit
-                FONT_FAMILY_KEY.set(node.getProperties(), value);
-                return true;
-            }
-
-            // 'font-style'
-            // Value:  	normal | italic | oblique | inherit
-            // Initial:  	normal
-            // Applies to:  	text content elements
-            // Inherited:  	yes
-            // Percentages:  	N/A
-            // Media:  	visual
-            // Animatable:  	yes
-            // Computed value:  	 Specified value, except inherit
-
-
-            //'font-variant'
-            //Value:  	normal | small-caps | inherit
-            //Initial:  	normal
-            //Applies to:  	text content elements
-            //Inherited:  	yes
-            //Percentages:  	N/A
-            //Media:  	visual
-            //Animatable:  	no
-            //Computed value:  	 Specified value, except inherit
-
-            // 'font-weight'
-            // Value:  	normal | bold | bolder | lighter | 100 | 200 | 300
-            // | 400 | 500 | 600 | 700 | 800 | 900 | inherit
-            // Initial:  	normal
-            // Applies to:  	text content elements
-            // Inherited:  	yes
-            // Percentages:  	N/A
-            // Media:  	visual
-            // Animatable:  	yes
-            // Computed value:  	 one of the legal numeric values, non-numeric
-            // values shall be converted to numeric values according to the rules
-            // defined below.
-
-            // Note: text-decoration is an SVG 1.1 feature
-            //'text-decoration'
-            //Value:  	none | [ underline || overline || line-through || blink ] | inherit
-            //Initial:  	none
-            //Applies to:  	text content elements
-            //Inherited:  	no (see prose)
-            //Percentages:  	N/A
-            //Media:  	visual
-            //Animatable:  	yes
-            }
-        }
-        return false;
-
-
-    }
 
     private Figure readTextElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         return null;

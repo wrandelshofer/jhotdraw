@@ -48,5 +48,9 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
         super(key, type, metaData, converter, defaultValue);
     }
 
+    public SimpleStyleableKey(@NonNull String key, @NonNull String cssName, @NonNull Type type, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter, T defaultValue) {
+        super(key, cssName, type, metaData, converter, defaultValue);
+    }
+
 
 }

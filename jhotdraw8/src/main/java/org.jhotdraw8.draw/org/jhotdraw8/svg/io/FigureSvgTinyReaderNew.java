@@ -36,6 +36,7 @@ import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.xml.text.XmlStringConverter;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -82,7 +83,7 @@ public class FigureSvgTinyReaderNew {
     /**
      * Maps from an element name to a figure factory.
      */
-    private final Map<String, Supplier<Figure>> figureMap = new LinkedHashMap<>();
+    private final Map<QName, Supplier<Figure>> figureMap = new LinkedHashMap<>();
     /**
      * Maps from a type to a converter.
      */
@@ -114,7 +115,7 @@ public class FigureSvgTinyReaderNew {
                 }
             }
 
-            figureMap.put(e.getKey(), () -> {
+            figureMap.put(new QName(SVG_NAMESPACE, e.getKey()), () -> {
                 try {
                     return figureClass.getConstructor().newInstance();
                 } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
@@ -301,8 +302,9 @@ public class FigureSvgTinyReaderNew {
 
     private Figure readElement(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String localName = r.getLocalName();
+
         if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
-            Supplier<Figure> figureSupplier = figureMap.get(localName);
+            Supplier<Figure> figureSupplier = figureMap.get(r.getName());
             if (figureSupplier != null) {
                 Figure node = figureSupplier.get();
                 readAttributes(r, node, accessorMap.get(localName), ctx);

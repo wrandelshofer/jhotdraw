@@ -55,14 +55,24 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
     public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz,
                                       @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter,
                                       @Nullable T defaultValue) {
+        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), clazz, metaData, converter, defaultValue);
+
+    }
+
+    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull String cssName, @NonNull Type clazz,
+                                      @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter,
+                                      @Nullable T defaultValue) {
         super(key, clazz, defaultValue == null, defaultValue);
         this.converter = converter;
         this.cssMetaData = metaData;
-        this.cssName = ReadOnlyStyleableMapAccessor.toCssName(key);
+        this.cssName = cssName;
     }
 
     @Override
     public @NonNull CssMetaData<? extends @NonNull Styleable, T> getCssMetaData() {
+        if (cssMetaData == null) {
+            throw new IllegalStateException("cssMetadata has not been set yet.");
+        }
         return cssMetaData;
     }
 
