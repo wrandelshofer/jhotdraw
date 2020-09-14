@@ -40,6 +40,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.css.MacOSSystemColorConverter;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.constrain.NullConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -151,6 +152,8 @@ public class SimpleDrawingViewNew extends AbstractDrawingView {
     }
 
     protected void init() {
+        drawingRenderer.setRenderContext(this);
+        set(SYSTEM_COLOR_CONVERTER_KEY, new MacOSSystemColorConverter());
 
     }
 

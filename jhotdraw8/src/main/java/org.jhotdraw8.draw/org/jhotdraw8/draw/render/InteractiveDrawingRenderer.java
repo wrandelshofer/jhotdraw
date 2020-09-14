@@ -46,9 +46,13 @@ import java.util.Set;
 import static org.jhotdraw8.draw.render.InteractiveHandleRenderer.contains;
 
 
-public class InteractiveDrawingRenderer extends AbstractPropertyBean implements RenderContext {
+public class InteractiveDrawingRenderer extends AbstractPropertyBean {
+    public static final String RENDER_CONTEXT_PROPERTY = "renderContext";
     public static final String MODEL_PROPERTY = "model";
     public static final String DRAWING_VIEW_PROPERTY = "drawingView";
+    @NonNull
+    private final NonNullObjectProperty<RenderContext> renderContext //
+            = new NonNullObjectProperty<>(this, RENDER_CONTEXT_PROPERTY, new SimpleRenderContext());
     @NonNull
     private final NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
@@ -384,13 +388,26 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
         }
         Node n = figureToNodeMap.get(f);
         if (n == null) {
-            n = f.createNode(this);
+            n = f.createNode(getRenderContext());
             figureToNodeMap.put(f, n);
             nodeToFigureMap.put(n, f);
             dirtyFigureNodes.add(f);
             repaint();
         }
         return n;
+    }
+
+    public @NonNull NonNullObjectProperty<RenderContext> renderContextProperty() {
+        return renderContext;
+    }
+
+    @NonNull
+    public RenderContext getRenderContext() {
+        return renderContext.get();
+    }
+
+    public void setRenderContext(@NonNull RenderContext newValue) {
+        renderContext.set(newValue);
     }
 
     public double getZoomFactor() {
@@ -527,7 +544,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
 
     private void paint() {
         updateRenderContext();
-        getModel().validate(this);
+        getModel().validate(getRenderContext());
         updateNodes();
 
     }
@@ -573,7 +590,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean implements 
                 dirtyFigureNodes.add(f);
                 continue;
             }
-            f.updateNode(this, node);
+            f.updateNode(getRenderContext(), node);
         }
     }
 
