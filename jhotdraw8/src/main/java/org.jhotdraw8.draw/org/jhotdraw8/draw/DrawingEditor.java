@@ -23,9 +23,6 @@ import org.jhotdraw8.draw.tool.Tool;
  * on the {@code Tool} if it becomes the active tool or loses this status.
  *
  * @author Werner Randelshofer
- * @design.pattern org.jhotdraw8.draw.figure.Drawing Framework, KeyAbstraction.
- * @design.pattern DrawingEditor Mediator, Mediator. The DrawingEditor allows to
- * use the same {@code Tool} with multiple {@code DrawingView}s.
  */
 public interface DrawingEditor {
 

@@ -37,7 +37,6 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
      */
     public AbstractDrawingViewAction(@NonNull DrawingEditor editor) {
         this.editor = editor;
-        DrawingView dv = editor.getActiveDrawingView();
 
         // If the editor has no active drawing view, or the drawing view is disabled,
         // we add the editor as a disabler to this action.
@@ -51,7 +50,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
      *
      * @return the drawing editor
      */
-    public DrawingEditor getEditor() {
+    public @NonNull DrawingEditor getEditor() {
         return editor;
     }
 

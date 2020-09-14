@@ -55,10 +55,6 @@ import java.util.Set;
  * </p>
  *
  * @author Werner Randelshofer
- * @design.pattern Drawing Framework, KeyAbstraction.
- * @design.pattern DrawingModel MVC, View.
- * @design.pattern DrawingEditor Mediator, Colleague.
- * @design.pattern org.jhotdraw8.draw.tool.HandleTracker Chain of
  * Responsibility, Handler.
  */
 public interface DrawingView extends RenderContext {

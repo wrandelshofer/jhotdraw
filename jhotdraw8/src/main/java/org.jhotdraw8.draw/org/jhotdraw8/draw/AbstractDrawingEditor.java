@@ -29,9 +29,9 @@ import java.util.prefs.Preferences;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
     @NonNull
-    private ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
+    private final ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
     @NonNull
-    private IntegerProperty handleSize = new SimpleIntegerProperty(
+    private final IntegerProperty handleSize = new SimpleIntegerProperty(
             this, HANDLE_SIZE_PROPERTY,
             Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_SIZE_PROPERTY, 5)) {
         @Override
@@ -42,7 +42,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         }
     };
     @NonNull
-    private IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
+    private final IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
             this, HANDLE_STROKE_WDITH_PROPERTY,
             Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_STROKE_WDITH_PROPERTY, 1)) {
         @Override
@@ -53,10 +53,10 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         }
     };
     @NonNull
-    private NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
+    private final NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
             CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
         @Override
-        public void set(@NonNull CssColor newValue) {
+        public void set(CssColor newValue) {
             super.set(newValue);
             Preferences.userNodeForPackage(AbstractDrawingView.class).put(HANDLE_COLOR_PROPERTY, newValue.getName());
             recreateHandles();
@@ -81,7 +81,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
 
     private final ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
         if (newValue) {
-            setActiveDrawingView((DrawingView) ((ReadOnlyProperty) observable).getBean());
+            setActiveDrawingView((DrawingView) ((ReadOnlyProperty<?>) observable).getBean());
         }
     };
 
@@ -210,9 +210,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         });
     }
 
-    private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<Tool>(this, DEFAULT_TOOL_PROPERTY) {
-
-    };
+    private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
 
 
     @NonNull

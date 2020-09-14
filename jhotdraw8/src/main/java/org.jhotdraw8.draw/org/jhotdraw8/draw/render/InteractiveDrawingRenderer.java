@@ -148,15 +148,18 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     @Nullable
     public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
-        Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
-                getDrawingView().viewToWorld(vx, vy));
-        for (Figure f : figures) {
-            if (f.isShowing()) {
-                Node n = getNode(f);
-                Point2D pointInLocal = n.sceneToLocal(pointInScene);
-                if (
-                        contains(n, pointInLocal, tolerance)) {
-                    return f;
+        if (worldNode != null) {
+            Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
+                    getDrawingView().viewToWorld(vx, vy));
+            for (Figure f : figures) {
+                if (f.isShowing()) {
+                    Node n = getNode(f);
+                    if (n != null) {
+                        Point2D pointInLocal = n.sceneToLocal(pointInScene);
+                        if (contains(n, pointInLocal, tolerance)) {
+                            return f;
+                        }
+                    }
                 }
             }
         }
@@ -166,8 +169,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
 
     public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
-
         Node n = figureToNodeMap.get(figure);
+        if (n == null) {
+            return null;
+        }
         Transform viewToNode = null;
         for (Node p = n; p != null; p = p.getParent()) {
             try {
@@ -204,12 +209,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return null;
     }
 
-    /**
-     * @param p
-     * @param pp
-     * @param tolerance tolerance in view coordinates
-     * @return
-     */
     @Nullable
     private Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance) {
         if (p == null) {
@@ -574,7 +573,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private void updateNodes() {
-        // FIXME we onyl want to update nodes in here
+        // FIXME we only want to update nodes inside visibleRectInWorld
         Bounds visibleRectInWorld = getClipBounds();
 
         // create copies of the lists to allow for concurrent modification
