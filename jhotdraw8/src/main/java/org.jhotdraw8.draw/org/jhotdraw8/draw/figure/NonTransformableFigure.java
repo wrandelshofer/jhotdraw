@@ -18,17 +18,17 @@ import org.jhotdraw8.geom.FXTransforms;
 public interface NonTransformableFigure extends TransformCachingFigure {
 
     @Override
-    default void transformInParent(Transform transform) {
+    default void transformInParent(@NonNull Transform transform) {
         // empty because non-transformable figures can not be transformed
     }
 
     @Override
-    default void transformInLocal(Transform transform) {
+    default void transformInLocal(@NonNull Transform transform) {
         // empty because non-transformable figures can not be transformed
     }
 
     @Override
-    default void reshapeInParent(Transform transform) {
+    default void reshapeInParent(@NonNull Transform transform) {
         reshapeInLocal(FXTransforms.concat(getParentToLocal(), transform));
     }
 

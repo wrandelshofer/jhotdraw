@@ -5,8 +5,8 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
@@ -89,7 +89,7 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    @NonNull ReadOnlyObjectProperty<Application> applicationProperty();
+    @NonNull ObjectProperty<Application> applicationProperty();
 
     /**
      * Used by the application to display unique titles if multiple
@@ -101,6 +101,9 @@ public interface Activity extends Disableable, PropertyBean {
 
 
     // getter and setter methods for properties
+    default void setApplication(@NonNull Application application) {
+        applicationProperty().set(application);
+    }
 
     @NonNull
     default Application getApplication() {

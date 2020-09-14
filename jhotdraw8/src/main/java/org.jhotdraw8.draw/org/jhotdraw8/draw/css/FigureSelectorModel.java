@@ -316,7 +316,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             }
         }
         if (isInitialValue) {
-            return "initial";
+            return null;
         }
         StringBuilder buf = new StringBuilder();
         Converter<Object> converter = key.getCssConverter();

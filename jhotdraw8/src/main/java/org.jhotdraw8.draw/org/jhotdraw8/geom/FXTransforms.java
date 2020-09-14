@@ -38,7 +38,10 @@ import static java.lang.Math.sqrt;
  */
 public class FXTransforms {
     /**
-     * Immutable identity transform.
+     * 'Immutable' identity transform.
+     * <p>
+     * JavaFX Transforms are not actually immutable.
+     * Do not change the value of this transform!
      */
     public static final Transform IDENTITY = new Translate();
 
@@ -148,7 +151,7 @@ public class FXTransforms {
                 list.add(new Scale(tx, ty));
             }
             if (rot1 != 0.0 && rot2 != 0.0) {
-                list.add(new Rotate(rot1 * 180.0 / Math.PI));
+                list.add(new FXPreciseRotate(rot1 * 180.0 / Math.PI));
             }
         }
 

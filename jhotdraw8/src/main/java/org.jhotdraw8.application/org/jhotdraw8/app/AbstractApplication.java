@@ -36,7 +36,6 @@ import java.util.AbstractMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
@@ -62,7 +61,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     private final ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
     private final ReadOnlyListProperty<String> stylesheets = new javafx.beans.property.ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
 
-    private final ObjectProperty<Function<Application, Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
+    private final ObjectProperty<Supplier<Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
     private final ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
     private final ObjectProperty<Supplier<URIChooser>> openChooserFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
     private final NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
@@ -194,7 +193,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public @NonNull ObjectProperty<Function<Application, Activity>> activityFactoryProperty() {
+    public @NonNull ObjectProperty<Supplier<Activity>> activityFactoryProperty() {
         return activityFactory;
     }
 

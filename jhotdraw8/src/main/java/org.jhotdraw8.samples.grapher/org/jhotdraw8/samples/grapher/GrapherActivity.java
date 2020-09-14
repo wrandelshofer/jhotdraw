@@ -20,7 +20,6 @@ import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
-import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
@@ -178,10 +177,6 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     @FXML
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
-
-    public GrapherActivity(@NonNull Application application) {
-        super(application);
-    }
 
     @NonNull
     private Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {

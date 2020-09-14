@@ -38,10 +38,6 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 
-    public AbstractFileBasedActivity(@NonNull Application application) {
-        super(application);
-    }
-
     @NonNull
     @Override
     public BooleanProperty modifiedProperty() {

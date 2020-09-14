@@ -46,10 +46,6 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @FXML
     private TextArea textArea;
 
-    public TeddyActivity(@NonNull Application application) {
-        super(application);
-    }
-
     @NonNull
     @Override
     public CompletionStage<Void> clear() {

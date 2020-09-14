@@ -222,7 +222,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void reshapeInParent(Transform transform) {
+    default void reshapeInParent(@NonNull Transform transform) {
         final boolean hasCenters = hasCenterTransforms();
         final boolean hasTransforms = hasTransforms();
         if (!hasTransforms && (transform instanceof Translate)) {
@@ -276,7 +276,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void transformInLocal(Transform t) {
+    default void transformInLocal(@NonNull Transform t) {
         flattenTransforms();
         ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
@@ -287,8 +287,8 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void transformInParent(@Nullable Transform t) {
-        if (t == null || t.isIdentity()) {
+    default void transformInParent(@NonNull Transform t) {
+        if (t.isIdentity()) {
             return;
         }
         if (t instanceof Translate) {

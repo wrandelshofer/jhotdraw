@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
@@ -182,11 +181,11 @@ public interface Application extends Disableable, PropertyBean {
      */
     default CompletionStage<Activity> createActivity() {
         return FXWorker.supply(() -> {
-            Function<Application, Activity> factory = getActivityFactory();
+            Supplier<Activity> factory = getActivityFactory();
             if (factory == null) {
                 throw new IllegalStateException("No activityFactory has been set on the Application.");
             }
-            return factory.apply(this);
+            return factory.get();
         });
     }
 
@@ -217,13 +216,13 @@ public interface Application extends Disableable, PropertyBean {
         maxNumberOfRecentUrisProperty().set(newValue);
     }
 
-    @NonNull ObjectProperty<Function<Application, Activity>> activityFactoryProperty();
+    @NonNull ObjectProperty<Supplier<Activity>> activityFactoryProperty();
 
-    default Function<Application, Activity> getActivityFactory() {
+    default Supplier<Activity> getActivityFactory() {
         return activityFactoryProperty().get();
     }
 
-    default void setActivityFactory(Function<Application, Activity> newValue) {
+    default void setActivityFactory(Supplier<Activity> newValue) {
         activityFactoryProperty().set(newValue);
     }
 
@@ -257,12 +256,12 @@ public interface Application extends Disableable, PropertyBean {
     }
 
     @NonNull
-    default <T> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml) {
+    default <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml) {
         return createFxmlNodeSupplier(fxml, getResources().asResourceBundle());
     }
 
     @NonNull
-    default <T> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
+    default <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
         return () -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(resourceBundle);
@@ -278,20 +277,15 @@ public interface Application extends Disableable, PropertyBean {
     @NonNull
     default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
                                                          @NonNull ResourceBundle resources) {
-        return createFxmlControllerSupplier(fxml, resources, null);
+        return createFxmlControllerSupplier(fxml, resources, (Callback<Class<?>, Object>) null);
     }
 
-    @NonNull
-    default Function<Application, Activity> createFxmlActivityControllerFactory(@NonNull URL fxml,
-                                                                                @Nullable Function<Application, Activity> activityFactory) {
-        return createFxmlActivityControllerFactory(fxml, activityFactory, getResources().asResourceBundle());
-    }
 
     @NonNull
-    default Function<Application, Activity> createFxmlActivityControllerFactory(@NonNull URL fxml,
-                                                                                @Nullable Function<Application, Activity> activityFactory,
-                                                                                @NonNull ResourceBundle resources) {
-        return app -> this.<Activity>createFxmlControllerSupplier(fxml, resources, clazz -> activityFactory.apply(app)).get();
+    default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
+                                                         @NonNull ResourceBundle resources,
+                                                         @Nullable Supplier<T> controllerFactory) {
+        return () -> this.<T>createFxmlControllerSupplier(fxml, resources, controllerFactory == null ? null : clazz -> controllerFactory.get()).get();
     }
 
     @NonNull

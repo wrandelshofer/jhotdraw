@@ -5,11 +5,11 @@
 package org.jhotdraw8.app;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     @NonNull
-    protected final ReadOnlyObjectProperty<Application> application;
+    protected final ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableHashMap();
     protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY);
@@ -36,8 +36,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
 
 
-    public AbstractActivity(@NonNull Application application) {
-        this.application = new ReadOnlyObjectWrapper<>(this, APPLICATION_PROPERTY, application);
+    public AbstractActivity() {
     }
 
     @NonNull
@@ -56,9 +55,8 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
         return title;
     }
 
-    @NonNull
     @Override
-    public ReadOnlyObjectProperty<Application> applicationProperty() {
+    public @NonNull ObjectProperty<Application> applicationProperty() {
         return application;
     }
 

@@ -15,7 +15,6 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
@@ -177,7 +176,7 @@ public interface TransformableFigure extends TransformCachingFigure {
         remove(ROTATE);
         remove(TRANSLATE_X);
         remove(TRANSLATE_Y);
-        if (p2l == null || p2l.isIdentity()) {
+        if (p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
             set(TRANSFORMS, ImmutableLists.of(p2l));
@@ -185,11 +184,11 @@ public interface TransformableFigure extends TransformCachingFigure {
     }
 
 
-    default @Nullable Transform getInverseTransform() {
+    default @NonNull Transform getInverseTransform() {
         ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
-            t = null; // leave null
+            t = FXTransforms.IDENTITY;
         } else {
             try {
                 t = list.get(list.size() - 1).createInverse();
@@ -213,7 +212,7 @@ public interface TransformableFigure extends TransformCachingFigure {
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
-            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            ImmutableList<Transform> transforms = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
             double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
             double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
@@ -232,7 +231,7 @@ public interface TransformableFigure extends TransformCachingFigure {
                 Scale ts = new Scale(sx, sy, center.getX(), center.getY());
                 l2p = FXTransforms.concat(l2p, ts);
             }
-            if (t != null && !t.isEmpty()) {
+            if (transforms != null && !transforms.isEmpty()) {
                 l2p = FXTransforms.concat(l2p, getTransform());
             }
             if (l2p == null) {
@@ -262,7 +261,7 @@ public interface TransformableFigure extends TransformCachingFigure {
             list.add(tt);
         }
         if (r != 0) {
-            Rotate tr = new Rotate(r, center.getX(), center.getY());
+            Rotate tr = new FXPreciseRotate(r, center.getX(), center.getY());
             list.add(tr);
         }
         if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
@@ -286,14 +285,14 @@ public interface TransformableFigure extends TransformCachingFigure {
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            ImmutableList<Transform> transforms = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
             double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
             double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
             double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
             double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
             double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
 
-            if (t != null && !t.isEmpty()) {
+            if (!transforms.isEmpty()) {
                 p2l = getInverseTransform();
             }
             if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
@@ -318,11 +317,17 @@ public interface TransformableFigure extends TransformCachingFigure {
         return p2l;
     }
 
-    default @Nullable Transform getTransform() {
+
+    /**
+     * Gets the {@link #TRANSFORMS} flattened into a single transform.
+     *
+     * @return the flattened transforms
+     */
+    default @NonNull Transform getTransform() {
         ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
-            t = null; // leave empty
+            t = FXTransforms.IDENTITY;
         } else {
             t = list.get(0);
             for (int i = 1, n = list.size(); i < n; i++) {
@@ -368,8 +373,8 @@ public interface TransformableFigure extends TransformCachingFigure {
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-    @Override
-    default void reshapeInParent(Transform transform) {
+
+    default void reshapeInParentOld(@NonNull Transform transform) {
         final boolean hasCenters = hasCenterTransforms();
         final boolean hasTransforms = hasTransforms();
         if (!hasTransforms && (transform instanceof Translate)) {
@@ -381,7 +386,7 @@ public interface TransformableFigure extends TransformCachingFigure {
             if (transform instanceof Translate) {
                 Translate translate = (Translate) transform;
                 if (!hasCenters) {
-                    Point2D p = parentToLocal == null ? new Point2D(translate.getTx(), translate.getTy())
+                    Point2D p = parentToLocal.isIdentity() ? new Point2D(translate.getTx(), translate.getTy())
                             : parentToLocal.deltaTransform(translate.getTx(), translate.getTy());
                     reshapeInLocal(new Translate(p.getX(), p.getY()));
                 } else {
@@ -402,6 +407,18 @@ public interface TransformableFigure extends TransformCachingFigure {
         }
     }
 
+    @Override
+    default void reshapeInParent(@NonNull Transform transform) {
+        if (transform instanceof Translate) {
+            Point2D p = getInverseTransform().deltaTransform(transform.getTx(), transform.getTy());
+            reshapeInLocal(new Translate(p.getX(), p.getY()));
+        } else {
+            // FIXME we do not want to reshape!
+            Transform combined = FXTransforms.concat(transform, getTransform());
+            set(TRANSFORMS, ImmutableLists.of(combined));
+        }
+    }
+
     /**
      * Convenience method for setting a new value for the {@link #TRANSFORMS}
      * property.
@@ -417,7 +434,7 @@ public interface TransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void transformInLocal(Transform t) {
+    default void transformInLocal(@NonNull Transform t) {
         flattenTransforms();
         ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
@@ -428,8 +445,8 @@ public interface TransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void transformInParent(@Nullable Transform t) {
-        if (t == null || t.isIdentity()) {
+    default void transformInParent(@NonNull Transform t) {
+        if (t.isIdentity()) {
             return;
         }
         if (t instanceof Translate) {

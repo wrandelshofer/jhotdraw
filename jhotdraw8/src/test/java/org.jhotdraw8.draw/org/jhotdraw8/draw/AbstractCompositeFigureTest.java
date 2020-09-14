@@ -151,17 +151,17 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public void reshapeInParent(Transform transform) {
+        public void reshapeInParent(@NonNull Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void transformInLocal(Transform transform) {
+        public void transformInLocal(@NonNull Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void transformInParent(Transform transform) {
+        public void transformInParent(@NonNull Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

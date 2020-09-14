@@ -53,7 +53,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
      * @param defaultValue The default value.
      */
     public NullableSvgPathStyleableKey(@NonNull String key, String defaultValue) {
-        super(key, String.class, defaultValue);
+        super(null, key, String.class, true, defaultValue);
 
         Function<Styleable, StyleableProperty<String>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;

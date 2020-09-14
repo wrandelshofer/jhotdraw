@@ -1177,7 +1177,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param transform the desired transformation in parent coordinates
      */
-    void reshapeInParent(Transform transform);
+    void reshapeInParent(@NonNull Transform transform);
 
     /**
      * Attempts to translate the parent bounds of the figure.
@@ -1227,7 +1227,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param transform the desired transformation in local coordinates
      */
-    void transformInLocal(Transform transform);
+    void transformInLocal(@NonNull Transform transform);
 
     /**
      * Attempts to transform the figure.
@@ -1236,7 +1236,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param transform the desired transformation in parent coordinates
      */
-    void transformInParent(Transform transform);
+    void transformInParent(@NonNull Transform transform);
 
     /**
      * This method is invoked on a figure and all its descendants by

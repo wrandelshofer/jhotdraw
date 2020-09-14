@@ -295,6 +295,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
      * @param activity the activity
      */
     protected void onActivityAdded(@NonNull FileBasedActivity activity) {
+        activity.setApplication(this);
         activity.init();
 
         activity.setTitle(getLabels().getString("unnamedFile"));

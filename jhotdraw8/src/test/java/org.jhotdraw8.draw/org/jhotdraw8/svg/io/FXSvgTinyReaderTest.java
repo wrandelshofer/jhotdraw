@@ -77,7 +77,7 @@ public class FXSvgTinyReaderTest {
     }
 
     @TestFactory
-    //@Disabled
+    @Disabled
     public @NonNull Stream<DynamicTest> iconsTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(ICONS_PATH))) {
             System.err.println("Please fix the icons path: " + ICONS_PATH);
