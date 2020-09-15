@@ -128,21 +128,21 @@ public interface PathBuilder {
         // Compute the angle start
         n = Math.sqrt((ux * ux) + (uy * uy));
         p = ux; // (1 * ux) + (0 * uy)
-        sign = (uy < 0) ? -1d : 1d;
+        sign = (uy < 0) ? -1 : 1;
         double angleStart = Math.toDegrees(sign * Math.acos(p / n));
 
         // Compute the angle extent
         n = Math.sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
         p = ux * vx + uy * vy;
-        sign = (ux * vy - uy * vx < 0) ? -1d : 1d;
+        sign = (ux * vy - uy * vx < 0) ? -1 : 1;
         double angleExtent = Math.toDegrees(sign * Math.acos(p / n));
         if (!sweepFlag && angleExtent > 0) {
-            angleExtent -= 360f;
+            angleExtent -= 360.0;
         } else if (sweepFlag && angleExtent < 0) {
-            angleExtent += 360f;
+            angleExtent += 360.0;
         }
-        angleExtent %= 360f;
-        angleStart %= 360f;
+        angleExtent %= 360.0;
+        angleStart %= 360.0;
 
         //
         // We can now build the resulting Arc2D in double precision
