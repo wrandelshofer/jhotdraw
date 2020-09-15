@@ -165,8 +165,8 @@ import java.util.Objects;
  * [65]  Ignore         ::=  Char* - (Char* ('&lt;![' | ']]>') Char*)
  *
  * Character Reference
- * [66]  CharRef        ::=  '&#' [0-9]+ ';'
- *                        |  '&#x' [0-9a-fA-F]+ ';'
+ * [66]  CharRef        ::=  '&' '#' [0-9]+ ';'
+ *                        |  '&' '#' 'x' [0-9a-fA-F]+ ';'
  *
  * Entity Reference
  * [67]  Reference      ::=  EntityRef | CharRef
@@ -676,7 +676,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         writeXmlContent(new String(data, start, len), escapeDoubleQuotes, escapeDoubleDashes);
     }
 
-    private void writeXmlContent(String content, boolean escapeDoubleQuotes, boolean escapeDoubleDashes) throws XMLStreamException {
+    private void writeXmlContent(String content, boolean escapeDoubleQuotesAndNonPrintables, boolean escapeDoubleDashes) throws XMLStreamException {
         for (int index = 0, end = content.length(); index < end; index++) {
             char ch = content.charAt(index);
 
@@ -689,6 +689,17 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
                 }
                 continue;
             }
+            if (escapeDoubleQuotesAndNonPrintables &&
+                    (Character.isWhitespace(ch)&&ch!=' ')
+                    ||Character.isISOControl(ch)
+                    ||index != end - 1
+                    && Character.isSurrogatePair(ch, content.charAt(index + 1))
+                    &&Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1)))
+            ) {
+                writeCharRef(ch);
+                continue;
+            }
+
             switch (ch) {
             case '<':
                 write("&lt;");
@@ -711,7 +722,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
                 write("&gt;");
                 break;
             case '"':
-                if (escapeDoubleQuotes) {
+                if (escapeDoubleQuotesAndNonPrintables) {
                     write("&quot;");
                 } else {
                     write(ch);
