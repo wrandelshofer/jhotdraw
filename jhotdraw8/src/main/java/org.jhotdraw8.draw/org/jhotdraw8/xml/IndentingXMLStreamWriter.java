@@ -540,6 +540,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         }
     }
 
+    private void writeEndElementLineBreakAndIndentation() throws XMLStreamException {
+        write(LINE_BREAK);
+        for (int i = stack.size() - 2; i >= 0; i--) {
+            write(INDENTATION);
+        }
+    }
+
     @Override
     public void writeEmptyElement(@NonNull String localName) throws XMLStreamException {
         writeEmptyElement(DEFAULT_PREFIX, localName, DEFAULT_NAMESPACE);
@@ -571,7 +578,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             isStartTagOpen = false;
         } else {
             if (!element.isHasContent()) {
-                writeLineBreakAndIndentation();
+                writeEndElementLineBreakAndIndentation();
             }
             write(OPEN_END_TAG);
             String prefix = element.getPrefix();

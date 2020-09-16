@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-  ~ @(#)JHotDrawIcons.xml
-  ~ Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
-  -->
-<Drawing background="rgba(255,255,255,0)" height="88" id="drawing1" width="164"
-         xmlns="http://jhotdraw.org/samples/grapher">
+<Drawing xmlns="http://jhotdraw.org/samples/grapher" background="rgba(255,255,255,0)" height="88" id="drawing1"
+         width="164">
   <Layer id="content">
     <Rectangle bounds="90 46 19 16" fill="none" id="rectangle12" stroke="grey" stroke-type="inside"/>
     <Rectangle bounds="68 72 14 10" fill="none" id="rectangle24" stroke="grey" stroke-type="inside"/>
@@ -30,7 +26,6 @@
     <Polygon id="polygon2" points="5, 47, 13, 47, 17, 51.266666666666666, 17, 63, 5, 63" stroke="darkcyan"
              stroke-type="inside" stroke-width="2"/>
     <Polyline fill="none" id="polyline3" points="12.5, 48, 12.5, 52, 16.5, 52" stroke="darkcyan"/>
-    <Label fill="none" font="19 Futura Medium" id="label1" origin="25 63" stroke="none">A</Label>
     <Line end="62.5 63" id="line7" start="62.5 48" stroke="darkcyan"/>
     <Line end="17 39" id="line9" start="5 27" stroke-linecap="square" stroke-width="2"/>
     <Label fill="none" font="19 Futura Medium" id="label2" origin="49 63" stroke="none" textFill="darkcyan">#</Label>
@@ -79,11 +74,18 @@
                 path="M94,41 C92,39,89,26,92,25 95.55756236768944,23.814145877436857,98,35,99,35 100.34709693002728,35,103.15395010584848,25.05131670194949,106,26 109,27,104.7426782909871,39.062578371337935,104,41"
                 stroke-width="2"/>
     <Rectangle bounds="92 4 14 14" id="rectangle13" stroke-type="inside" stroke-width="2"/>
-    <Label fill="none" font="11 Futura Medium" id="label3" origin="95 15.15" stroke="none">A</Label>
-    <Label fill="none" font="19 Futura Medium" id="label4" origin="113 63" stroke="none" stroke-linecap="square"
-           stroke-miterlimit="10" textFill="grey">A
-    </Label>
     <Rectangle bounds="128 48 1 15" fill="black" id="rectangle14" stroke="white" stroke-type="outside"/>
+    <CombinedPath fill="grey" id="combinedpath1" stroke="none">
+      <Label fill="none" font="19 Futura Medium" id="label4" origin="113 63" stroke="none" stroke-linecap="square"
+             stroke-miterlimit="10" textFill="grey">A&#xa;
+      </Label>
+    </CombinedPath>
+    <CombinedPath fill="#1a1a1a" id="combinedpath2" stroke="none">
+      <Label fill="none" font="19 Futura Medium" id="label1" origin="25 63" stroke="none">A</Label>
+    </CombinedPath>
+    <CombinedPath fill="#333333" id="combinedpath3" stroke="none">
+      <Label fill="none" font="11 Futura Medium" id="label3" origin="95 15.15" stroke="none">A</Label>
+    </CombinedPath>
   </Layer>
   <Layer id="slices" locked="true">
     <Slice bounds="0 0 22 22" id="createSlice"/>
