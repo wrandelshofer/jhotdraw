@@ -1073,6 +1073,11 @@
         <include name="*.jar"/>
       </fileset>
     </pathconvert>
+    <echo file="${build.main.classes}/META-INF/services/org.jhotdraw8.app.spi.NodeReaderProvider">
+      org.jhotdraw8.app.spi.FxmlNodeReaderProvider
+      org.jhotdraw8.app.spi.ImageNodeReaderProvider
+      org.jhotdraw8.draw.spi.SvgImageReaderProvider
+    </echo>
 
     <jar destfile="${build.main.jars}/${ant.project.name}.jar">
       <!-- The attributes are structured into section has described here:
