@@ -131,6 +131,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -138,6 +139,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -145,6 +147,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -152,6 +155,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -159,6 +163,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -166,6 +171,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -173,6 +179,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
@@ -204,6 +211,7 @@
         <exclude name="**/.*"/>
         <include name="**/*.properties"/>
         <include name="**/*.png"/>
+        <include name="**/*.svg"/>
         <include name="**/*.fxml"/>
         <include name="**/*.css"/>
       </fileset>
