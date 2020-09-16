@@ -117,7 +117,7 @@ public interface PathBuilder {
         double cy = sy2 + (sinAngle * cx1 + cosAngle * cy1);
 
         //
-        // Step 4 : Compute the angleStart (angle1) and the angleExtent (dangle)
+        // Step 4 : Compute the angleStart the angleExtent
         //
         double ux = (x1 - cx1) / radiusX;
         double uy = (y1 - cy1) / radiusY;
