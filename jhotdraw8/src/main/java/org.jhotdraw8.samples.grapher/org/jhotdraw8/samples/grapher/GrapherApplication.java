@@ -12,7 +12,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.NonNullBooleanKey;
 import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
-import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.macos.MacOSPreferences;
@@ -75,7 +75,7 @@ public class GrapherApplication extends SimpleFileBasedApplication {
         exportExtensions.add(new URIExtensionFilter("SVG Full", registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
-        exportExtensions.add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
+        exportExtensions.add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XmlEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
         put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, exportExtensions));
     }
 

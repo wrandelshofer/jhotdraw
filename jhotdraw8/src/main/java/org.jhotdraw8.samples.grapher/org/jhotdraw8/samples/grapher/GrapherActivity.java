@@ -103,9 +103,10 @@ import org.jhotdraw8.draw.io.DefaultFigureFactory;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
-import org.jhotdraw8.draw.io.SimpleXmlIO;
+import org.jhotdraw8.draw.io.SimpleXmlReader;
+import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
-import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.draw.tool.ConnectionTool;
@@ -355,10 +356,11 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
 
         FigureFactory factory = new DefaultFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
-        SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        SimpleXmlWriter io = new SimpleXmlWriter(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        SimpleXmlReader ior = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 io, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
-        drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(io));
+        drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
 
         editor = new SimpleDrawingEditor();
         editor.addDrawingView(drawingView);
@@ -460,7 +462,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         return FXWorker.supply(() -> {
             FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
-            SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+            SimpleXmlReader io = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             applyUserAgentStylesheet(drawing);
@@ -490,13 +492,13 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
                 io.putAll(options);
                 io.write(uri, drawing, workState);
-            } else if (registerDataFormat(XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {
-                XMLEncoderOutputFormat io = new XMLEncoderOutputFormat();
+            } else if (registerDataFormat(XmlEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {
+                XmlEncoderOutputFormat io = new XmlEncoderOutputFormat();
                 io.write(uri, drawing, workState);
             } else {
                 DefaultFigureFactory factory = new DefaultFigureFactory();
                 IdFactory idFactory = factory.getIdFactory();
-                SimpleXmlIO io = new SimpleXmlIO(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+                SimpleXmlWriter io = new SimpleXmlWriter(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
                 io.write(uri, drawing, workState);
             }
         }).handle((voidvalue, ex) -> {

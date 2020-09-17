@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  */
-public class XMLEncoderOutputFormat extends AbstractPropertyBean implements OutputFormat {
+public class XmlEncoderOutputFormat extends AbstractPropertyBean implements OutputFormat {
     /**
      * Holds the current options.
      */

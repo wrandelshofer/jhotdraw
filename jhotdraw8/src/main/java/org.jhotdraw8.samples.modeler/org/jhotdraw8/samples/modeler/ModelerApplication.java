@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.SimpleFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
-import org.jhotdraw8.draw.io.XMLEncoderOutputFormat;
+import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
@@ -48,7 +48,7 @@ public class ModelerApplication extends SimpleFileBasedApplication {
         List<URIExtensionFilter> exportExtensions = new ArrayList<>();
         exportExtensions.add(new URIExtensionFilter("SVG", FXSvgFullWriter.SVG_MIME_TYPE, "*.svg"));
         exportExtensions.add(new URIExtensionFilter("PNG", BitmapExportOutputFormat.PNG_MIME_TYPE, "*.png"));
-        exportExtensions.add(new URIExtensionFilter("XMLSerialized", XMLEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE, "*.ser.xml"));
+        exportExtensions.add(new URIExtensionFilter("XMLSerialized", XmlEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE, "*.ser.xml"));
         put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, exportExtensions));
     }
 
