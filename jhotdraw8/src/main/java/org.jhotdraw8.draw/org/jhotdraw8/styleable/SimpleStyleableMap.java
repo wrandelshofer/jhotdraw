@@ -408,6 +408,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     @Override
     public void resetStyledValues() {
+        // Performance: this method is called very often.
         final int userOrdinal = StyleOrigin.USER.ordinal();
         for (int i = 0, n = values.length; i < n; i++) {
             if (i % numOrigins != userOrdinal) {

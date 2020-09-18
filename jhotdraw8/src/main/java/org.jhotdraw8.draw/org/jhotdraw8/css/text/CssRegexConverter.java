@@ -30,6 +30,9 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
+
+    public static final String REPLACE_FUNCTION = "replace";
+
     public CssRegexConverter(final boolean nullable) {
         super(nullable);
     }
@@ -37,11 +40,11 @@ public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
     @NonNull
     @Override
     public RegexReplace parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨replace⟩: function expected.");
-        if (!"replace".equals(tt.currentStringNonNull())) {
-            throw tt.createParseException("⟨replace⟩: replace() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨" + REPLACE_FUNCTION + "⟩: function expected.");
+        if (!REPLACE_FUNCTION.equals(tt.currentStringNonNull())) {
+            throw tt.createParseException("⟨" + REPLACE_FUNCTION + "⟩: " + REPLACE_FUNCTION + "() function expected.");
         }
-        tt.requireNextToken(CssTokenType.TT_STRING, "⟨replace⟩: find string expected.");
+        tt.requireNextToken(CssTokenType.TT_STRING, "⟨" + REPLACE_FUNCTION + "⟩: find string expected.");
         String find = tt.currentStringNonNull();
         String replace;
         if (tt.next() != CssTokenType.TT_COMMA) {
@@ -53,20 +56,20 @@ public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
             tt.pushBack();
             replace = null;
         }
-        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨replace⟩: right bracket expected.");
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨" + REPLACE_FUNCTION + "⟩: right bracket expected.");
         return new RegexReplace(find, replace);
     }
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨replace⟩: none | replace(⟨Match⟩, ⟨Replace⟩)"
+        return "Format of ⟨" + REPLACE_FUNCTION + "⟩: none | " + REPLACE_FUNCTION + "(⟨Match⟩, ⟨Replace⟩)"
                 + "\nFormat of ⟨Match⟩: \"match\""
                 + "\nFormat of ⟨Replace⟩: \"replacement\"";
     }
 
     @Override
     protected <TT extends RegexReplace> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_FUNCTION, "replace"));
+        out.accept(new CssToken(CssTokenType.TT_FUNCTION, REPLACE_FUNCTION));
         String find = value.getFind();
         out.accept(new CssToken(CssTokenType.TT_STRING, find == null ? "" : find));
         out.accept(new CssToken(CssTokenType.TT_COMMA));

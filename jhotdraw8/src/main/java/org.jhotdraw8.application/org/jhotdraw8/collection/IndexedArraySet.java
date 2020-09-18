@@ -30,11 +30,11 @@ import static java.lang.Math.min;
 /**
  * A {@code Set} that provides precise control where each element is inserted.
  * <p>
- * The set is backed by a list.
+ * The set is backed by an array.
  *
  * @author Werner Randelshofer
  */
-public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
+public class IndexedArraySet<E> extends ObservableListBase<E> implements Set<E>, Deque<E> {
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
     /**
@@ -46,7 +46,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
     /**
      * Creates a new instance.
      */
-    public IndexedSet() {
+    public IndexedArraySet() {
         data = EMPTY_ARRAY;
     }
 
@@ -56,7 +56,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
      *
      * @param col A collection.
      */
-    public IndexedSet(Collection<? extends E> col) {
+    public IndexedArraySet(Collection<? extends E> col) {
         this.size = col.size();
         data = Arrays.copyOf(col.toArray(), size, Object[].class);
     }
@@ -510,7 +510,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
         @Override
         public void remove() {
             checkModCount();
-            IndexedSet.this.remove(index - 1);
+            IndexedArraySet.this.remove(index - 1);
             index--;
             to--;
             expectedModCount = modCount;
@@ -522,7 +522,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
             }
-            IndexedSet.this.set(index - 1, e);
+            IndexedArraySet.this.set(index - 1, e);
             expectedModCount = modCount;
         }
 
@@ -532,7 +532,7 @@ public class IndexedSet<E> extends ObservableListBase<E> implements Set<E>, Dequ
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
             }
-            IndexedSet.this.add(index, e);
+            IndexedArraySet.this.add(index, e);
             index++;
             to++;
             expectedModCount = modCount;

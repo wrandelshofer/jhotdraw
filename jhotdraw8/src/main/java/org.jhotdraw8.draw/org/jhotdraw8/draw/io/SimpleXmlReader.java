@@ -400,16 +400,16 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
             //external.set(XML_EPILOG_COMMENT_KEY, comments);
         }
         try {
-            figureToElementMap.entrySet().stream()
-                    .parallel()
-                    .forEach((Map.Entry<Figure, Element> entry) -> {
-                        try {
-                            readElementAttributes(entry.getKey(), entry.getValue());
-                            readElementNodeList(entry.getKey(), entry.getValue());
-                        } catch (IOException e) {
-                            throw new UncheckedIOException(e);
-                        }
-                    });
+            for (Map.Entry<Figure, Element> entry : figureToElementMap.entrySet()) {
+                Figure key = entry.getKey();
+                Element value = entry.getValue();
+                try {
+                    readElementAttributes(key, value);
+                    readElementNodeList(key, value);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }
         } finally {
             figureToElementMap.clear();
         }

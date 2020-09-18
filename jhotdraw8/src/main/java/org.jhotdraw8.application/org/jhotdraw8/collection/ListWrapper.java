@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.AbstractList;
 import java.util.List;
 
@@ -30,5 +32,17 @@ public class ListWrapper<E> extends AbstractList<E> {
     @Override
     public int size() {
         return backingList.size();
+    }
+
+    @Override
+    @NonNull
+    public Object[] toArray() {
+        return backingList.toArray();
+    }
+
+    @Override
+    @NonNull
+    public <T> T[] toArray(@NonNull T[] a) {
+        return backingList.toArray(a);
     }
 }

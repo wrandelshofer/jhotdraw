@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Processes the replace() function.
  * <pre>
- * replace     = "replace(", string, [","], regex, [","], replacement, ")" ;
+ * replace     = "regex-replace(", string, [","], regex, [","], replacement, ")" ;
  * string      = string-token ;
  * regex       = string-token ;
  * replacement = string-token ;
@@ -30,7 +30,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */
-    public final static String NAME = "replace";
+    public final static String NAME = "regex-replace";
 
     public ReplaceCssFunction() {
         this(NAME);
@@ -44,9 +44,9 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     public void process(@NonNull T element, @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor,
                         @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈replace〉: replace() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + NAME + "〉: " + NAME + "() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
-            throw new ParseException("〈replace〉: replace() function expected.", tt.getStartPosition());
+            throw new ParseException("〈" + NAME + "〉: " + NAME + "() function expected.", tt.getStartPosition());
         }
 
         int line = tt.getLineNumber();
@@ -62,7 +62,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
         }
         String repl = evalString(element, tt, getName(), functionProcessor);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw new ParseException("〈replace〉: right bracket ')' expected.", tt.getStartPosition());
+            throw new ParseException("〈" + NAME + "〉: right bracket ')' expected.", tt.getStartPosition());
         }
 
         try {
@@ -70,7 +70,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
             int end = tt.getEndPosition();
             out.accept(new CssToken(CssTokenType.TT_STRING, result, null, line, start, end));
         } catch (IllegalArgumentException e) {
-            ParseException ex = new ParseException("〈replace〉: " + e.getMessage(), tt.getStartPosition());
+            ParseException ex = new ParseException("〈" + NAME + "〉: " + e.getMessage(), tt.getStartPosition());
             ex.initCause(e);
             throw ex;
         }

@@ -6,7 +6,7 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IndexedSet;
+import org.jhotdraw8.collection.IndexedArraySet;
 
 /**
  * A child list for implementations of the {@link TreeNode} interface.
@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.IndexedSet;
  * This list maintains the parent of tree nodes that are added/removed
  * from the child list, as described in {@link TreeNode#getChildren()}.
  */
-public class ChildList<E extends TreeNode<E>> extends IndexedSet<E> {
+public class ChildList<E extends TreeNode<E>> extends IndexedArraySet<E> {
 
     private final E parent;
 

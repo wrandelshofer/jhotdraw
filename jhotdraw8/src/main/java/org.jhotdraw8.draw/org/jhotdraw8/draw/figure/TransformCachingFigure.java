@@ -77,7 +77,9 @@ public interface TransformCachingFigure extends Figure {
             t = getParentToLocal();
             final Figure parent = getParent();
             t = parent == null ? t : FXTransforms.concat(t, parent.getWorldToLocal());
-            setCachedWorldToLocal(t);
+            if (CACHE) {
+                setCachedWorldToLocal(t);
+            }
         }
         return t;
     }

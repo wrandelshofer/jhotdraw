@@ -12,6 +12,7 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -149,9 +150,23 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
 
     /**
      * Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
+     * <p>
+     * Uses a non-identity hash map for storing the vertices.
      */
     public DirectedGraphBuilder() {
-        this(16, 16);
+        this(16, 16, false);
+    }
+
+    /**
+     * Creates a new instance with the specified initial capacities.
+     * <p>
+     * Uses a non-identity hash map for storing the vertices.
+     *
+     * @param vertexCapacity the initial capacity for vertices
+     * @param arrowCapacity  the initial capacity for arrows
+     */
+    public DirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+        this(vertexCapacity, arrowCapacity, false);
     }
 
     /**
@@ -159,10 +174,11 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      *
      * @param vertexCapacity the initial capacity for vertices
      * @param arrowCapacity  the initial capacity for arrows
+     * @param identityMap    whether to use an identity hash map for storing the vertices
      */
-    public DirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+    public DirectedGraphBuilder(int vertexCapacity, int arrowCapacity, boolean identityMap) {
         super(vertexCapacity, arrowCapacity);
-        this.vertexMap = new HashMap<>(vertexCapacity);
+        this.vertexMap = identityMap ? new IdentityHashMap<>(vertexCapacity) : new HashMap<>(vertexCapacity);
         this.vertices = new ArrayList<>(vertexCapacity);
         this.arrows = new ArrayList<>(arrowCapacity);
     }
@@ -178,6 +194,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
 
     /**
      * Creates a new instance which contains a copy of the specified graph.
+     * <p>
+     * Uses a non-identity hash map for storing the vertices.
      *
      * @param graph        a graph
      * @param vertexMapper a mapping function for the vertices

@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * @author werni
  */
-public class IndexedSetTest {
+public class IndexedArraySetTest {
 
-    public IndexedSetTest() {
+    public IndexedArraySetTest() {
     }
 
     public static void testAdd(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
-        IndexedSet<Character> list = new IndexedSet<Character>(asList(initialList));
+        IndexedArraySet<Character> list = new IndexedArraySet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
@@ -77,7 +77,7 @@ public class IndexedSetTest {
     }
 
     public static void testSet(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
-        IndexedSet<Character> list = new IndexedSet<Character>(asList(initialList));
+        IndexedArraySet<Character> list = new IndexedArraySet<Character>(asList(initialList));
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);

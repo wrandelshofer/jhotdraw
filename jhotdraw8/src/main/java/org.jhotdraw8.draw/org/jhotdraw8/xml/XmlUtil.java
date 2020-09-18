@@ -27,6 +27,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -41,6 +44,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,7 +52,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -337,4 +343,68 @@ public class XmlUtil {
 
     }
 
+    public static String readNamespaceUri(URI file) throws IOException {
+        try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(Paths.get(file)))) {
+            return readNamespaceUri(new StreamSource(in));
+        }
+
+    }
+
+    public static String readNamespaceUri(Source source) throws IOException {
+        XMLInputFactory dbf = XMLInputFactory.newInstance();
+
+        // We do not want that the reader creates a socket connection,
+        // even if it would benefit the result!
+        dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
+        dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        dbf.setXMLResolver((publicID,
+                            systemID,
+                            baseURI,
+                            namespace) -> null);
+        try {
+            for (XMLStreamReader r = dbf.createXMLStreamReader(source); r.hasNext(); ) {
+                int next = r.next();
+                switch (next) {
+                case XMLStreamReader.START_ELEMENT:
+                    return r.getNamespaceURI();
+                case XMLStreamReader.END_ELEMENT:
+                    return null;
+                case XMLStreamReader.PROCESSING_INSTRUCTION:
+                    break;
+                case XMLStreamReader.CHARACTERS:
+                    break;
+                case XMLStreamReader.COMMENT:
+                    break;
+                case XMLStreamReader.SPACE:
+                    break;
+                case XMLStreamReader.START_DOCUMENT:
+                    break;
+                case XMLStreamReader.END_DOCUMENT:
+                    break;
+                case XMLStreamReader.ENTITY_REFERENCE:
+                    break;
+                case XMLStreamReader.ATTRIBUTE:
+                    break;
+                case XMLStreamReader.DTD:
+                    break;
+                case XMLStreamReader.CDATA:
+                    break;
+                case XMLStreamReader.NAMESPACE:
+                    break;
+                case XMLStreamReader.NOTATION_DECLARATION:
+                    break;
+                case XMLStreamReader.ENTITY_DECLARATION:
+                    break;
+                default:
+                    throw new IOException("unsupported XMLStream event: " + next);
+                }
+            }
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+
+
+        return null;
+    }
 }
