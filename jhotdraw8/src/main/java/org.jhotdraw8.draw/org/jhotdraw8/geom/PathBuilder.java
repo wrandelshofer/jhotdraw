@@ -6,9 +6,6 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Arc2D;
-import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
 /**
@@ -28,7 +25,7 @@ public interface PathBuilder {
      * <p>
      * As specified in
      * <a href=http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands>
-     *     SVG elliptical arc commands</a>.
+     * SVG elliptical arc commands</a>.
      * <p>
      * The default implementation of this method has been derived from Apache Batik
      * class org.apache.batik.ext.awt.geom.ExtendedGeneralPath#computArc.
@@ -54,135 +51,12 @@ public interface PathBuilder {
                        double x, double y,
                        boolean largeArcFlag, boolean sweepFlag
     ) {
-        double x0, y0;
-        x0 = getLastX();
-        y0 = getLastY();
-        // Ensure radii are valid
-        if (radiusX == 0 || radiusY == 0) {
-            lineTo(x, y);
-            return;
-        }
-
-        if (x0 == x && y0 == y) {
-            // If the endpoints (x, y) and (x0, y0) are identical, then this
-            // is equivalent to omitting the elliptical arc segment entirely.
-            return;
-        }
-
-        // Compute the half distance between the current and the final point
-        double dx2 = (x0 - x) / 2d;
-        double dy2 = (y0 - y) / 2d;
-        // Convert angle from degrees to radians
-        double angle = Math.toRadians(xAxisRotation);
-        double cosAngle = Math.cos(angle);
-        double sinAngle = Math.sin(angle);
-
-        //
-        // Step 1 : Compute (x1, y1)
-        //
-        double x1 = (cosAngle * dx2 + sinAngle * dy2);
-        double y1 = (-sinAngle * dx2 + cosAngle * dy2);
-        // Ensure radii are large enough
-        radiusX = Math.abs(radiusX);
-        radiusY = Math.abs(radiusY);
-        double Prx = radiusX * radiusX;
-        double Pry = radiusY * radiusY;
-        double Px1 = x1 * x1;
-        double Py1 = y1 * y1;
-        // check that radii are large enough
-        double radiiCheck = Px1 / Prx + Py1 / Pry;
-        if (radiiCheck > 1) {
-            radiusX = Math.sqrt(radiiCheck) * radiusX;
-            radiusY = Math.sqrt(radiiCheck) * radiusY;
-            Prx = radiusX * radiusX;
-            Pry = radiusY * radiusY;
-        }
-
-        //
-        // Step 2 : Compute (cx1, cy1)
-        //
-        double sign = (largeArcFlag == sweepFlag) ? -1 : 1;
-        double sq = ((Prx * Pry) - (Prx * Py1) - (Pry * Px1)) / ((Prx * Py1) + (Pry * Px1));
-        sq = (sq < 0) ? 0 : sq;
-        double coef = (sign * Math.sqrt(sq));
-        double cx1 = coef * ((radiusX * y1) / radiusY);
-        double cy1 = coef * -((radiusY * x1) / radiusX);
-
-        //
-        // Step 3 : Compute (cx, cy) from (cx1, cy1)
-        //
-        double sx2 = (x0 + x) / 2.0;
-        double sy2 = (y0 + y) / 2.0;
-        double cx = sx2 + (cosAngle * cx1 - sinAngle * cy1);
-        double cy = sy2 + (sinAngle * cx1 + cosAngle * cy1);
-
-        //
-        // Step 4 : Compute the angleStart the angleExtent
-        //
-        double ux = (x1 - cx1) / radiusX;
-        double uy = (y1 - cy1) / radiusY;
-        double vx = (-x1 - cx1) / radiusX;
-        double vy = (-y1 - cy1) / radiusY;
-        double p, n;
-
-        // Compute the angle start
-        n = Math.sqrt((ux * ux) + (uy * uy));
-        p = ux; // (1 * ux) + (0 * uy)
-        sign = (uy < 0) ? -1 : 1;
-        double angleStart = Math.toDegrees(sign * Math.acos(p / n));
-
-        // Compute the angle extent
-        n = Math.sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
-        p = ux * vx + uy * vy;
-        sign = (ux * vy - uy * vx < 0) ? -1 : 1;
-        double angleExtent = Math.toDegrees(sign * Math.acos(p / n));
-        if (!sweepFlag && angleExtent > 0) {
-            angleExtent -= 360.0;
-        } else if (sweepFlag && angleExtent < 0) {
-            angleExtent += 360.0;
-        }
-        angleExtent %= 360.0;
-        angleStart %= 360.0;
-
-        //
-        // We can now build the resulting Arc2D in double precision
-        //
-        Arc2D.Double arc = new Arc2D.Double(
-                cx - radiusX, cy - radiusY,
-                radiusX * 2d, radiusY * 2d,
-                -angleStart, -angleExtent,
-                Arc2D.OPEN);
-
-        // Create a path iterator of the rotated arc
-        PathIterator i = arc.getPathIterator(
-                AffineTransform.getRotateInstance(
-                        angle, arc.getCenterX(), arc.getCenterY()));
-
-        // Add the segments to the bezier path
-        double[] coords = new double[6];
-        i.next(); // skip first moveTo
-        while (!i.isDone()) {
-            int type = i.currentSegment(coords);
-            switch (type) {
-                case PathIterator.SEG_CLOSE:
-                    // ignore
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    curveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]);
-                    break;
-                case PathIterator.SEG_LINETO:
-                    lineTo(coords[0], coords[1]);
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    // ignore
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    quadTo(coords[0], coords[1], coords[2], coords[3]);
-                    break;
-            }
-            i.next();
-        }
+        ArcToCubicBezier.arcTo(getLastX(), getLastY(),
+                radiusX, radiusY, xAxisRotation, x, y, largeArcFlag, sweepFlag,
+                this::lineTo,
+                this::curveTo);
     }
+
 
     /**
      * Closes the path by adding a straight line back to the last
