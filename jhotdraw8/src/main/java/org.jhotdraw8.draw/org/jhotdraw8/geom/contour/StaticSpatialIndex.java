@@ -122,10 +122,12 @@ public class StaticSpatialIndex {
      * @param nodeSize number of items per node
      */
     public StaticSpatialIndex(int numItems, int nodeSize) {
-        if (numItems <= 0)
+        if (numItems <= 0) {
             throw new IllegalArgumentException("number of items (" + numItems + ") must be greater than 0");
-        if (!(2 <= nodeSize && nodeSize <= 65535))
+        }
+        if (!(2 <= nodeSize && nodeSize <= 65535)) {
             throw new IllegalArgumentException("node size (" + nodeSize + ") must be between 2 and 65535");
+        }
         this.nodeSize = nodeSize;
         // calculate the total number of nodes in the R-tree to allocate space for
         // and the index of each tree level (used in search later)
@@ -467,8 +469,9 @@ public class StaticSpatialIndex {
      */
     void visitQuery(double minX, double minY, double maxX, double maxY, @NonNull IntPredicate visitor,
                     @NonNull IntArrayDeque stack) {
-        if (m_pos != 4 * m_numNodes)
+        if (m_pos != 4 * m_numNodes) {
             throw new IllegalStateException("data not yet indexed - call Finish() before querying");
+        }
 
         int nodeIndex = 4 * m_numNodes - 4;
         int level = m_numLevels - 1;
@@ -511,7 +514,9 @@ public class StaticSpatialIndex {
         }
     }
 
-    /** Quicksort that partially sorts the bounding box data alongside the Hilbert values. */
+    /**
+     * Quicksort that partially sorts the bounding box data alongside the Hilbert values.
+     */
     void sort(int[] values, double[] boxes, int[] indices, int left,
               int right) {
         assert left <= right : "left index should never be past right index";
