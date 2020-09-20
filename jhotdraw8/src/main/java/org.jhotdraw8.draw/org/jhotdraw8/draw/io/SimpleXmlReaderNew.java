@@ -207,7 +207,8 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
 
     private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass) throws IOException {
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
-            if (namespaceURI != null && !namespaceURI.equals(r.getAttributeNamespace(i))) {
+            String ns = r.getAttributeNamespace(i);
+            if (namespaceURI != null && ns != null && !namespaceURI.equals(ns)) {
                 continue;
             }
             String attributeLocalName = r.getAttributeLocalName(i);
@@ -218,9 +219,10 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
             } else {
                 Location location = r.getLocation();
                 secondPass.add(() -> {
-                    @SuppressWarnings("unchecked") MapAccessor<Object> key = null;
                     try {
-                        key = (MapAccessor<Object>) figureFactory.nameToKey(figure, attributeLocalName);
+                        @SuppressWarnings("unchecked")
+                        MapAccessor<Object> key =
+                                (MapAccessor<Object>) figureFactory.nameToKey(figure, attributeLocalName);
                         if (key != null) {
                             figure.set(key, figureFactory.stringToValue(key, attributeValue));
                         } else {
