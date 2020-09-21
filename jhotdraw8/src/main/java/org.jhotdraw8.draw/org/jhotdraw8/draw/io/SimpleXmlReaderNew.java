@@ -213,11 +213,16 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
             }
             String attributeLocalName = r.getAttributeLocalName(i);
             String attributeValue = r.getAttributeValue(i);
+            Location location = r.getLocation();
             if (idAttribute.equals(attributeLocalName)) {
+                if (idFactory.getObject(attributeValue) != null) {
+                    throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
+                } else {
+                    idFactory.putId(attributeValue, figure);
+                }
                 idFactory.putId(attributeValue, figure);
                 figure.set(StyleableFigure.ID, attributeValue);
             } else {
-                Location location = r.getLocation();
                 secondPass.add(() -> {
                     try {
                         @SuppressWarnings("unchecked")

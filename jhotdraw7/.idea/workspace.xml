@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:sourceforge" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="BuildServerSettings">
     <option name="LOGIN" value="" />
     <option name="SERVER_URL" value="http://buildserver" />
@@ -25,6 +48,11 @@
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/build.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedHashSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedHashSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedArraySet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/tree/ChildList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/tree/ChildList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/test/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedSetTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/test/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedArraySetTest.java" afterDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
