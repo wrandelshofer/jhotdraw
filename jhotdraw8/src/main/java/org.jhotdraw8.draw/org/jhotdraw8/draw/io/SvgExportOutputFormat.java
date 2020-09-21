@@ -57,6 +57,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -174,7 +175,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
             try (OutputStream w = Files.newOutputStream(file)) {
                 final AbstractFXSvgWriter exporter = createExporter();
                 exporter.setRelativizePaths(true);
-                javafx.scene.Node drawingNode = toNode(drawing, drawing.getChildren(), hints);
+                javafx.scene.Node drawingNode = toNode(drawing, Collections.singletonList(drawing), hints);
                 exporter.write(w, drawingNode);
             }
         }

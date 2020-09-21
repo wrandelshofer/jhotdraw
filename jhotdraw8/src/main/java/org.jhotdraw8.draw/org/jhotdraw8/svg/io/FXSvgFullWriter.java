@@ -75,8 +75,8 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
         if (idFactory.getId(clip) == null) {
             String id = idFactory.createId(clip, "clipPath");
             w.writeStartElement("clipPath");
-            writeNodeRecursively(w, clip, 2);
             w.writeAttribute("id", id);
+            writeNodeRecursively(w, clip, 2);
             w.writeEndElement();
         }
     }
