@@ -32,12 +32,12 @@ public class ArcToCubicBezier {
      * see http://math.stackexchange.com/questions/873224
      */
     private static double[] approximateUnitArc(double theta1, double delta_theta) {
-        var alpha = (4 / 3.0) * Math.tan(delta_theta * 0.25);
+        double alpha = (4 / 3.0) * Math.tan(delta_theta * 0.25);
 
-        var x1 = Math.cos(theta1);
-        var y1 = Math.sin(theta1);
-        var x2 = Math.cos(theta1 + delta_theta);
-        var y2 = Math.sin(theta1 + delta_theta);
+        double x1 = Math.cos(theta1);
+        double y1 = Math.sin(theta1);
+        double x2 = Math.cos(theta1 + delta_theta);
+        double y2 = Math.sin(theta1 + delta_theta);
 
         return new double[]{x1, y1, x1 - y1 * alpha, y1 + x1 * alpha, x2 + y2 * alpha, y2 - x2 * alpha, x2, y2};
     }
@@ -80,12 +80,12 @@ public class ArcToCubicBezier {
         phi = xAxisRotation;
 
 
-        var sin_phi = Math.sin(phi * TAU / 360.0);
-        var cos_phi = Math.cos(phi * TAU / 360.0);
+        double sin_phi = Math.sin(phi * TAU / 360.0);
+        double cos_phi = Math.cos(phi * TAU / 360.0);
 
         // Make sure radii are valid.
-        var x1p = cos_phi * (x1 - x2) * 0.5 + sin_phi * (y1 - y2) * 0.5;
-        var y1p = -sin_phi * (x1 - x2) * 0.5 + cos_phi * (y1 - y2) * 0.5;
+        double x1p = cos_phi * (x1 - x2) * 0.5 + sin_phi * (y1 - y2) * 0.5;
+        double y1p = -sin_phi * (x1 - x2) * 0.5 + cos_phi * (y1 - y2) * 0.5;
 
         if (x1p == 0 && y1p == 0) {
             // We're asked to draw line to itself.
@@ -104,7 +104,7 @@ public class ArcToCubicBezier {
         rx = Math.abs(rx);
         ry = Math.abs(ry);
 
-        var lambda = (x1p * x1p) / (rx * rx) + (y1p * y1p) / (ry * ry);
+        double lambda = (x1p * x1p) / (rx * rx) + (y1p * y1p) / (ry * ry);
         if (lambda > 1) {
             double sqrtLambda = Math.sqrt(lambda);
             rx *= sqrtLambda;
@@ -113,18 +113,18 @@ public class ArcToCubicBezier {
 
 
         // Get center parameters (cx, cy, theta1, delta_theta).
-        var cc = getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_phi, cos_phi);
+        ArcCenter cc = getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_phi, cos_phi);
 
-        var result = new ArrayList<double[]>();
-        var theta1 = cc.theta1;
-        var delta_theta = cc.delta_theta;
+        ArrayList<double[]> result = new ArrayList<double[]>();
+        double theta1 = cc.theta1;
+        double delta_theta = cc.delta_theta;
 
         // Split an arc to multiple segments, so each segment
         // will be less than τ/4 (= 90° = π/2).
-        var segments = Math.max(Math.ceil(Math.abs(delta_theta) / (Math.PI * 0.5)), 1.0);
+        double segments = Math.max(Math.ceil(Math.abs(delta_theta) / (Math.PI * 0.5)), 1.0);
         delta_theta /= segments;
 
-        for (var i = 0; i < segments; i++) {
+        for (int i = 0; i < segments; i++) {
             result.add(approximateUnitArc(theta1, delta_theta));
             theta1 += delta_theta;
         }
@@ -133,17 +133,17 @@ public class ArcToCubicBezier {
         // now need to transform back to the original ellipse.
         for (int k = 0, n = result.size(); k < n; k++) {
             double[] curve = result.get(k);
-            for (var i = 2; i < curve.length; i += 2) {
-                var x_ = curve[i];
-                var y_ = curve[i + 1];
+            for (int i = 2; i < curve.length; i += 2) {
+                double x_ = curve[i];
+                double y_ = curve[i + 1];
 
                 // scale
                 x_ *= rx;
                 y_ *= ry;
 
                 // rotate
-                var xp = cos_phi * x_ - sin_phi * y_;
-                var yp = sin_phi * x_ + cos_phi * y_;
+                double xp = cos_phi * x_ - sin_phi * y_;
+                double yp = sin_phi * x_ + cos_phi * y_;
 
                 // translate
                 curve[i] = xp + cc.cx;
@@ -171,19 +171,19 @@ public class ArcToCubicBezier {
         // Moving an ellipse so origin will be the middlepoint between our two
         // points. After that, rotate it to line up ellipse axes with coordinate
         // axes.
-        var x1p = cos_phi * (x1 - x2) * 0.5 + sin_phi * (y1 - y2) * 0.5;
-        var y1p = -sin_phi * (x1 - x2) * 0.5 + cos_phi * (y1 - y2) * 0.5;
+        double x1p = cos_phi * (x1 - x2) * 0.5 + sin_phi * (y1 - y2) * 0.5;
+        double y1p = -sin_phi * (x1 - x2) * 0.5 + cos_phi * (y1 - y2) * 0.5;
 
-        var rx_sq = rx * rx;
-        var ry_sq = ry * ry;
-        var x1p_sq = x1p * x1p;
-        var y1p_sq = y1p * y1p;
+        double rx_sq = rx * rx;
+        double ry_sq = ry * ry;
+        double x1p_sq = x1p * x1p;
+        double y1p_sq = y1p * y1p;
 
         // Step 2.
         //
         // Compute coordinates of the centre of this ellipse (cx', cy')
         // in the new coordinate system.
-        var radicand = (rx_sq * ry_sq) - (rx_sq * y1p_sq) - (ry_sq * x1p_sq);
+        double radicand = (rx_sq * ry_sq) - (rx_sq * y1p_sq) - (ry_sq * x1p_sq);
 
         if (radicand < 0) {
             // due to rounding errors it might be e.g. -1.3877787807814457e-17
@@ -193,26 +193,26 @@ public class ArcToCubicBezier {
         radicand /= (rx_sq * y1p_sq) + (ry_sq * x1p_sq);
         radicand = Math.sqrt(radicand) * (fa == fs ? -1 : 1);
 
-        var cxp = radicand * rx / ry * y1p;
-        var cyp = radicand * -ry / rx * x1p;
+        double cxp = radicand * rx / ry * y1p;
+        double cyp = radicand * -ry / rx * x1p;
 
         // Step 3.
         //
         // Transform back to get centre coordinates (cx, cy) in the original
         // coordinate system.
-        var cx = cos_phi * cxp - sin_phi * cyp + (x1 + x2) * 0.5;
-        var cy = sin_phi * cxp + cos_phi * cyp + (y1 + y2) * 0.5;
+        double cx = cos_phi * cxp - sin_phi * cyp + (x1 + x2) * 0.5;
+        double cy = sin_phi * cxp + cos_phi * cyp + (y1 + y2) * 0.5;
 
         // Step 4.
         //
         // Compute angles (theta1, delta_theta).
-        var v1x = (x1p - cxp) / rx;
-        var v1y = (y1p - cyp) / ry;
-        var v2x = (-x1p - cxp) / rx;
-        var v2y = (-y1p - cyp) / ry;
+        double v1x = (x1p - cxp) / rx;
+        double v1y = (y1p - cyp) / ry;
+        double v2x = (-x1p - cxp) / rx;
+        double v2y = (-y1p - cyp) / ry;
 
-        var theta1 = unitVectorAngle(1, 0, v1x, v1y);
-        var delta_theta = unitVectorAngle(v1x, v1y, v2x, v2y);
+        double theta1 = unitVectorAngle(1, 0, v1x, v1y);
+        double delta_theta = unitVectorAngle(v1x, v1y, v2x, v2y);
 
         if (!fs && delta_theta > 0) {
             delta_theta -= TAU;
@@ -231,8 +231,8 @@ public class ArcToCubicBezier {
      * we can use simplified math (without length normalization)
      */
     private static double unitVectorAngle(double ux, double uy, double vx, double vy) {
-        var sign = (ux * vy - uy * vx < 0) ? -1 : 1;
-        var dot = ux * vx + uy * vy;
+        int sign = (ux * vy - uy * vx < 0) ? -1 : 1;
+        double dot = ux * vx + uy * vy;
 
         // Add this to work with arbitrary vectors:
         // dot /= Math.sqrt(ux * ux + uy * uy) * Math.sqrt(vx * vx + vy * vy);
