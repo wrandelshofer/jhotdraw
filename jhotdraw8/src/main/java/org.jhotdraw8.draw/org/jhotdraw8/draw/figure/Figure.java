@@ -948,6 +948,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
+     * Returns true if the specified key is user editable.
+     *
+     * @param key a key
+     * @return whether the key is user edtiable
+     */
+    default boolean isEditableKey(MapAccessor<?> key) {
+        return isSupportedKey(key);
+    }
+
+    /**
      * Whether the figure and all its ancestors are visible.
      *
      * @return true if the user can see the figure

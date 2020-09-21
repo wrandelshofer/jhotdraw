@@ -186,7 +186,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                                 if (row != null) {
                                     Figure item = row.getItem();
                                     //Test for disable condition
-                                    if (item != null && item.isSupportedKey(StyleableFigure.ID)) {
+                                    if (item != null && item.isEditableKey(StyleableFigure.ID)) {
                                         isEditable = true;
                                     }
 
@@ -257,7 +257,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         if (row != null) {
                             Figure figure = row.getItem();
                             //Test for disable condition
-                            if (figure != null && figure.isSupportedKey(StyleableFigure.STYLE_CLASS)) {
+                            if (figure != null && figure.isEditableKey(StyleableFigure.STYLE_CLASS)) {
                                 isEditable = true;
                             }
                             // show the computed  classes!
