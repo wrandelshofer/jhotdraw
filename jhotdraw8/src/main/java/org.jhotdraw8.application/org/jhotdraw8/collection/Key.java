@@ -15,6 +15,7 @@ import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Objects;
 
@@ -169,7 +170,19 @@ public interface Key<T> extends MapAccessor<T> {
      * @return True if assignable.
      */
     default boolean isAssignable(@Nullable Object value) {
-        return value == null && isNullable() || value != null && getValueType().equals(value.getClass());
+        if (getValueType() instanceof Class<?>) {
+            final Class<?> clazz = (Class<?>) getValueType();
+            return value == null && isNullable() || clazz.isInstance(value);
+        }
+        if (getValueType() instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) getValueType();
+            if (pt.getRawType() instanceof Class<?>) {
+                Class<?> clazz = (Class<?>) pt.getRawType();
+                return value == null && isNullable() || clazz.isInstance(value);
+            }
+        }
+        // We cannot check if the value type is assignable.
+        return value == null && isNullable();
     }
 
     /**
