@@ -37,14 +37,14 @@ class FXSvgTinyWriterTest {
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\">\n" +
                                 "    <tspan x=\"10\" y=\"20\">Hello</tspan>\n" +
-                                "</text>\n" +
+                                "  </text>\n" +
                                 "</svg>")),
                 dynamicTest("text escape", () -> testExportToWriter(new Text(10, 20, "&<>\""),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\">\n" +
                                 "    <tspan x=\"10\" y=\"20\">&amp;&lt;&gt;\"</tspan>\n" +
-                                "</text>\n" +
+                                "  </text>\n" +
                                 "</svg>"))
         );
     }
@@ -70,7 +70,7 @@ class FXSvgTinyWriterTest {
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\">\n" +
                                 "    <tspan x=\"10\" y=\"20\">&amp;&lt;&gt;\"</tspan>\n" +
-                                "</text>\n" +
+                                "  </text>\n" +
                                 "</svg>"))
         );
     }
@@ -78,7 +78,7 @@ class FXSvgTinyWriterTest {
 
     private void testExportToDOM(Node node, String expected) throws IOException {
         FXSvgTinyWriter instance = new FXSvgTinyWriter(null, null);
-        Document document = instance.toDocument(node);
+        Document document = instance.toDocument(node, null);
         StringWriter w = new StringWriter();
         XmlUtil.write(w, document);
         String actual = w.toString();
@@ -88,7 +88,7 @@ class FXSvgTinyWriterTest {
     private void testExportToWriter(Node node, String expected) throws IOException {
         StringWriter w = new StringWriter();
         FXSvgTinyWriter instance = new FXSvgTinyWriter(null, null);
-        instance.write(w, node);
+        instance.write(w, node, null);
         String actual = w.toString();
         assertEquals(expected, actual);
     }

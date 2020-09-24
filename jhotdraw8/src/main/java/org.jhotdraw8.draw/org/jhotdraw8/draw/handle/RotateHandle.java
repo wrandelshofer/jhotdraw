@@ -194,7 +194,7 @@ public class RotateHandle extends AbstractHandle {
         Point2D center = FXGeom.center(o.getLayoutBounds());
         Transform t = FXTransforms.concat(getWorldToRotate(), view.getViewToWorld());
         Point2D newPoint = (t == null) ? new Point2D(event.getX(), event.getY()) : t.transform(new Point2D(event.getX(), event.getY()));
-        double newRotate = 90 + 180.0 / Math.PI * Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY());
+        double newRotate = 90 + Math.toDegrees(Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY()));
 
         newRotate = newRotate % 360;
         if (newRotate < 0) {

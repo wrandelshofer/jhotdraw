@@ -151,7 +151,7 @@ public class FXTransforms {
                 list.add(new Scale(tx, ty));
             }
             if (rot1 != 0.0 && rot2 != 0.0) {
-                list.add(new FXPreciseRotate(rot1 * 180.0 / Math.PI));
+                list.add(new FXPreciseRotate(Math.toDegrees(rot1)));
             }
         }
 
@@ -223,7 +223,7 @@ public class FXTransforms {
      * @return a rotation matrix
      */
     private static Transform rotateRadians(double theta, double pivotX, double pivotY) {
-        return new FXPreciseRotate(theta * 180.0 / Math.PI, pivotX, pivotY);
+        return new FXPreciseRotate(Math.toDegrees(theta), pivotX, pivotY);
     }
 
     /**

@@ -16,6 +16,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
@@ -147,7 +148,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
         exporter.setRelativizePaths(true);
-        Document doc = exporter.toDocument(drawingNode);
+        Document doc = exporter.toDocument(drawingNode,
+                new CssDimension2D(
+                        external.getNonNull(Drawing.WIDTH),
+                        external.getNonNull(Drawing.HEIGHT)));
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
     }
@@ -176,7 +180,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
                 final AbstractFXSvgWriter exporter = createExporter();
                 exporter.setRelativizePaths(true);
                 javafx.scene.Node drawingNode = toNode(drawing, Collections.singletonList(drawing), hints);
-                exporter.write(w, drawingNode);
+                exporter.write(w, drawingNode,
+                        new CssDimension2D(drawing.getNonNull(Drawing.WIDTH), drawing.getNonNull(Drawing.HEIGHT)));
             }
         }
         if (isExportSlices()) {
@@ -210,11 +215,12 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     @Override
     protected void writePage(@NonNull Path file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
+        CssSize pw = page.getNonNull(PageFigure.PAPER_WIDTH);
+        CssSize ph = page.getNonNull(PageFigure.PAPER_HEIGHT);
         markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
         final AbstractFXSvgWriter exporter = createExporter();
-        final Document doc = exporter.toDocument(node);
+        final Document doc = exporter.toDocument(node, new CssDimension2D(pw, ph));
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);
@@ -241,7 +247,8 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         }
         new TransformFlattener().flattenTranslates(node);
         final AbstractFXSvgWriter exporter = createExporter();
-        final Document doc = exporter.toDocument(node);
+        Bounds bounds = slice.getBoundsInLocal();
+        final Document doc = exporter.toDocument(node, new CssDimension2D(bounds.getWidth(), bounds.getHeight()));
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);

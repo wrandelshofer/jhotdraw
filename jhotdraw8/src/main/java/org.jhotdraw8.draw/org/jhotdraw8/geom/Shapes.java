@@ -1001,7 +1001,7 @@ public class Shapes {
         float ix = 0, iy = 0;// initial point of a subpath
         char next = 'z'; // next instruction
         for (; !iter.isDone(); iter.next()) {
-            double px = x, py = y;// previous point
+            float px = x, py = y;// previous point
             if (buf.length() != 0) {
                 buf.append(' ');
             }

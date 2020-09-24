@@ -51,6 +51,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.geom.FXGeom;
@@ -448,7 +449,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         return true;
     }
 
-    public Document toDocument(@NonNull javafx.scene.Node drawingNode) throws IOException {
+    public Document toDocument(@NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setNamespaceAware(true);
@@ -458,7 +459,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             Document doc = builder.newDocument();
             DOMResult result = new DOMResult(doc);
             XMLStreamWriter w = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
-            writeDocument(w, drawingNode);
+            writeDocument(w, drawingNode, size);
             w.close();
             return doc;
         } catch (XMLStreamException | ParserConfigurationException e) {
@@ -466,20 +467,20 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    public void write(OutputStream out, @NonNull Node drawingNode) throws IOException {
+    public void write(OutputStream out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
-            writeDocument(w, drawingNode);
+            writeDocument(w, drawingNode, size);
             w.flush();
         } catch (XMLStreamException e) {
             throw new IOException("Error writing to Writer.", e);
         }
     }
 
-    public void write(Writer out, @NonNull javafx.scene.Node drawingNode) throws IOException {
+    public void write(Writer out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
-            writeDocument(w, drawingNode);
+            writeDocument(w, drawingNode, size);
             w.flush();
         } catch (XMLStreamException e) {
             throw new IOException("Error writing to Writer.", e);
@@ -643,7 +644,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeDocument(XMLStreamWriter w, Node drawingNode) throws XMLStreamException, IOException {
+    private void writeDocument(XMLStreamWriter w, Node drawingNode, CssDimension2D size) throws XMLStreamException, IOException {
         idFactory.reset();
         initIdFactoryRecursively(drawingNode);
 
@@ -652,7 +653,8 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("svg");
         w.writeDefaultNamespace(SVG_NS);
         w.writeNamespace(XLINK_Q, XLINK_NS);
-        writeDocumentElementAttributes(w, drawingNode);
+        writeDocumentElementAttributes(w, drawingNode, size);
+
         if (shouldWriteDefs(drawingNode)) {
             writeDefs(w, drawingNode);
         }
@@ -662,7 +664,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     }
 
     protected abstract void writeDocumentElementAttributes(@NonNull XMLStreamWriter
-                                                                   w, Node drawingNode) throws XMLStreamException;
+                                                                   w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException;
 
     private void writeEllipseStartElement(@NonNull XMLStreamWriter w, @NonNull Ellipse node) throws XMLStreamException {
         w.writeStartElement("ellipse");

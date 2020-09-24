@@ -461,4 +461,80 @@ public class Geom {
     public static double atan2Ellipse(double cx, double cy, double rx, double ry, double x, double y) {
         return atan2(y, x);//FIXME implement me
     }
+
+    /**
+     * Returns the trigonometric sine of an angle in degrees.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Values of Trigonometric ratios for 0, 30, 45, 60 and 90 degrees</dt>
+     *     <dd><a href="https://mathinstructor.net/2012/08/values-of-trigonometric-ratios-for-0-30-45-60-and-90-degrees/">link</a></dd>
+     * </dl>
+     *
+     * @param aDeg an angle in degrees
+     * @return the sine of the argument
+     */
+    public static double sinDegrees(double aDeg) {
+        int aDegInt = (int) aDeg;
+        if (aDeg == aDegInt) {
+            switch (aDegInt % 360) {
+                case 0:
+                    return 0.0;// = sqrt(0/4)
+                case 30:
+                case 150:
+                case -210:
+                case -330:
+                    return 0.5;// = sqrt(1/4)
+                case -30:
+                case -150:
+                case 210:
+                case 330:
+                    return -0.5;// = sqrt(1/4)
+                case 45:
+                case 135:
+                case -315:
+                case -225:
+                    return Math.sqrt(0.5);// = sqrt(2/4)
+                case -45:
+                case -135:
+                case 315:
+                case 225:
+                    return -Math.sqrt(0.5);// = sqrt(2/4)
+                case 60:
+                case 120:
+                case -300:
+                case -240:
+                    return Math.sqrt(0.75);// = sqrt(3/4)
+                case -60:
+                case -120:
+                case 300:
+                case 240:
+                    return -Math.sqrt(0.75);// = sqrt(3/4)
+                case 90:
+                case -270:
+                    return 1;// = sqrt(4/4)
+                case -90:
+                case 270:
+                    return -1;// = sqrt(4/4)
+
+            }
+        }
+        return Math.sin(Math.toRadians(aDeg));
+    }
+
+    /**
+     * Returns the trigonometric cosine of an angle in degrees.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Values of Trigonometric ratios for 0, 30, 45, 60 and 90 degrees</dt>
+     *     <dd><a href="https://mathinstructor.net/2012/08/values-of-trigonometric-ratios-for-0-30-45-60-and-90-degrees/">link</a></dd>
+     * </dl>
+     *
+     * @param aDeg an angle in degrees
+     * @return the cosine of the argument
+     */
+    public static double cosDegrees(double aDeg) {
+        return sinDegrees(aDeg + 90);
+    }
 }

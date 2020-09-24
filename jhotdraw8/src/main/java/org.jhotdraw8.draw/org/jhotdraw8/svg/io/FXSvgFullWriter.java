@@ -6,6 +6,8 @@ package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 
 import javax.xml.stream.XMLStreamException;
@@ -37,9 +39,13 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
     }
 
     protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
-                                                          w, Node drawingNode) throws XMLStreamException {
+                                                          w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException {
         w.writeAttribute("version", getSvgVersion());
         w.writeAttribute("baseProfile", getSvgBaseProfile());
+        if (size != null) {
+            w.writeAttribute("width", nb.toString(size.getWidth().getValue()) + size.getWidth().getUnits());
+            w.writeAttribute("height", nb.toString(size.getHeight().getValue()) + size.getHeight().getUnits());
+        }
     }
 
     protected String getSvgVersion() {

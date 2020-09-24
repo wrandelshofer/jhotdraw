@@ -19,15 +19,17 @@ public class CssPoint2D {
 
     public final static CssPoint2D ZERO = new CssPoint2D();
 
+    @NonNull
     private final CssSize x;
+    @NonNull
     private final CssSize y;
 
-    public CssPoint2D(CssSize x, CssSize y) {
+    public CssPoint2D(@NonNull CssSize x, @NonNull CssSize y) {
         this.x = x;
         this.y = y;
     }
 
-    public CssPoint2D(double x, double y, String units) {
+    public CssPoint2D(double x, double y, @NonNull String units) {
         this(new CssSize(x, units), new CssSize(y, units));
     }
 
@@ -36,7 +38,7 @@ public class CssPoint2D {
     }
 
     public CssPoint2D(double x, double y) {
-        this(x, y, null);
+        this(x, y, UnitConverter.DEFAULT);
     }
 
     public CssPoint2D(@NonNull Point2D p) {
@@ -61,10 +63,12 @@ public class CssPoint2D {
         return Objects.equals(this.y, other.y);
     }
 
+    @NonNull
     public CssSize getX() {
         return x;
     }
 
+    @NonNull
     public CssSize getY() {
         return y;
     }

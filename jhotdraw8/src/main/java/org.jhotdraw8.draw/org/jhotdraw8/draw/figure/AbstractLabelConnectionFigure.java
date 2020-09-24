@@ -224,14 +224,14 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             final boolean layoutTransforms;
             switch (getStyledNonNull(LABEL_AUTOROTATE)) {
             case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
-                final double theta = (Geom.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+                final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
                 rotate = new FXPreciseRotate(theta, origin.getX(), origin.getY());
                 layoutTransforms = true;
                 // set(ROTATE, theta);
             }
             break;
             case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
-                final double theta = (Geom.atan2(tangent.getY(), tangent.getX()) * 180.0 / Math.PI + 360.0) % 360.0;
+                final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
                 final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
                 rotate = new FXPreciseRotate(halfTheta, origin.getX(), origin.getY());
                 layoutTransforms = true;
