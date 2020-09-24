@@ -1271,6 +1271,18 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         } else if (node.isStrikethrough()) {
             w.writeAttribute("text-decoration", "line-through ");
         }
+        switch (node.getTextAlignment()) {
+            case LEFT:
+                break;
+            case CENTER:
+                w.writeAttribute("text-anchor", "middle");
+                break;
+            case RIGHT:
+                w.writeAttribute("text-anchor", "end");
+                break;
+            case JUSTIFY:
+                break;
+        }
     }
 
     private void writeTextChildElements(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
