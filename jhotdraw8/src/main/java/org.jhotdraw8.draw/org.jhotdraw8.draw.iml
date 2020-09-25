@@ -13,6 +13,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="org.junit.jupiter:junit-jupiter:5.5.2" level="project" />
     <orderEntry type="module" module-name="org.jhotdraw8.application" exported="" />
-    <orderEntry type="library" name="org.openjfx:javafx:14.0.2.1" level="project" />
+    <orderEntry type="library" exported="" name="org.openjfx:javafx:15" level="project" />
   </component>
 </module>
