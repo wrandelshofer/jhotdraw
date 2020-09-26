@@ -51,15 +51,26 @@ public interface IdFactory extends IdResolver, IdSupplier {
     @Nullable String createId(@NonNull Object object, @Nullable String prefix, String suggestedId);
 
     /**
-     * Puts an id for the specified object. If the object already has an id, the
-     * old id is replaced.
+     * Puts the id and the object for mapping between them.
+     * <p>
+     * If the object already has an id, the old id is replaced.
      *
      * @param id     the id
      * @param object the object
      * @return the object that previously was assigned to this id
      */
     @Nullable
-    Object putId(@NonNull String id, @NonNull Object object);
+    Object putIdAndObject(@NonNull String id, @NonNull Object object);
+
+    /**
+     * Puts the id for mapping to the specified object.
+     *
+     * @param id     the id
+     * @param object the object
+     * @return the object that previously was assigned to this id
+     */
+    @Nullable
+    Object putIdToObject(@NonNull String id, @NonNull Object object);
 
     /**
      * Clears all ids.

@@ -215,7 +215,7 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
             String attributeValue = r.getAttributeValue(i);
             Location location = r.getLocation();
             if (idAttribute.equals(attributeLocalName)) {
-                Object anotherObjWithSameId = idFactory.putId(attributeValue, figure);
+                Object anotherObjWithSameId = idFactory.putIdToObject(attributeValue, figure);
                 if (anotherObjWithSameId != null) {
                     throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
                 }

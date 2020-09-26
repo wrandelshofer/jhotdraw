@@ -104,9 +104,4 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
             key = null;
         }
     }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
 }

@@ -542,7 +542,7 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
                 if (idFactory.getObject(id) != null) {
                     throw new IOException("SimpleXmlIO: duplicate id " + id + " in element " + elem.getTagName());
                 } else {
-                    idFactory.putId(id, figure);
+                    idFactory.putIdAndObject(id, figure);
                 }
             }
             return figure;

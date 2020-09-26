@@ -23,30 +23,25 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     /**
      * Holds the indices of the vertices at the arrow heads.
      */
-    @NonNull
-    protected final int[] arrowHeads;
+    protected final @NonNull int[] arrowHeads;
 
     /**
-     * Holds offsets into the nextArrowHeads table for each vertex.
+     * Holds offsets into the arrowHeads table for each vertex.
      */
-    @NonNull
-    protected final int[] vertices;
+    protected final @NonNull int[] vertices;
 
     /**
-     * Holds the arrows.
+     * Holds the arrow objects.
      */
-    @NonNull
-    protected final A[] arrows;
+    protected final @NonNull A[] arrows;
     /**
-     * Holds the vertices.
+     * Holds the vertex objects.
      */
-    @NonNull
-    protected final V[] vertexObjects;
+    protected final @NonNull V[] vertexObjects;
     /**
      * Holds the indices.
      */
-    @NonNull
-    protected final Map<V, Integer> vertexToIndexMap;
+    protected final @NonNull Map<V, Integer> vertexToIndexMap;
 
     /**
      * Creates a new instance from the specified graph.
@@ -130,24 +125,21 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     }
 
 
-    @NonNull
     @Override
-    public A getArrow(int index) {
+    public @NonNull A getArrow(int index) {
         return arrows[index];
     }
 
-    @NonNull
     @Override
-    public A getNextArrow(int vi, int i) {
+    public @NonNull A getNextArrow(int vi, int i) {
         if (i < 0 || i >= getNextCount(vi)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
         }
         return arrows[vertices[vi] + i];
     }
 
-    @NonNull
     @Override
-    public A getNextArrow(@NonNull V v, int i) {
+    public @NonNull A getNextArrow(@NonNull V v, int i) {
         return getNextArrow(getVertexIndex(v), i);
     }
 
@@ -164,9 +156,8 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return arrowHeads[vertices[vi] + i];
     }
 
-    @NonNull
     @Override
-    public V getNext(@NonNull V vertex, int i) {
+    public @NonNull V getNext(@NonNull V vertex, int i) {
         return vertexObjects[getNext(vertexToIndexMap.get(vertex), i)];
     }
 
@@ -189,9 +180,8 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return vertices.length;
     }
 
-    @NonNull
     @Override
-    public V getVertex(int index) {
+    public @NonNull V getVertex(int index) {
         return vertexObjects[index];
     }
 
@@ -207,9 +197,8 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
         return getNextCount(vertexToIndexMap.get(vertex));
     }
 
-    @NonNull
     @Override
-    public Collection<V> getVertices() {
+    public @NonNull Collection<V> getVertices() {
         return Arrays.asList(vertexObjects);
 
     }
@@ -220,8 +209,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     }
 
 
-    @NonNull
-    public A getArrow(int vertex, int index) {
+    public @NonNull A getArrow(int vertex, int index) {
         return arrows[getArrowIndex(vertex, index)];
     }
 

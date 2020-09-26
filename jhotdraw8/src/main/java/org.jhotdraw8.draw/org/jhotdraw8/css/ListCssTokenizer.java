@@ -19,11 +19,11 @@ import static org.jhotdraw8.css.CssTokenType.TT_COMMENT;
 import static org.jhotdraw8.css.CssTokenType.TT_S;
 
 public class ListCssTokenizer implements CssTokenizer {
-    @NonNull
-    private final ImmutableList<CssToken> in;
+    private final @NonNull ImmutableList<CssToken> in;
     private int index = 0;
     private boolean pushBack = true;
     private CssToken current;
+    private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
     public ListCssTokenizer(@NonNull List<CssToken> in) {
         this(ImmutableLists.ofCollection(in));
@@ -31,18 +31,16 @@ public class ListCssTokenizer implements CssTokenizer {
 
     public ListCssTokenizer(@NonNull ReadOnlyList<CssToken> in) {
         this.in = ImmutableLists.ofCollection(in);
-        current = in.isEmpty() ? new CssToken(CssTokenType.TT_EOF) : in.get(0);
+        current = in.isEmpty() ? EOF : in.get(0);
     }
 
-    @Nullable
     @Override
-    public Number currentNumber() {
+    public @Nullable Number currentNumber() {
         return current.getNumericValue();
     }
 
-    @Nullable
     @Override
-    public String currentString() {
+    public @Nullable String currentString() {
         return current.getStringValue();
     }
 
@@ -93,14 +91,7 @@ public class ListCssTokenizer implements CssTokenizer {
             if (index < in.size()) {
                 current = in.get(index);
             } else {
-                if (current == null) {
-                    current = new CssToken(CssTokenType.TT_EOF);
-                } else {
-                    current = new CssToken(CssTokenType.TT_EOF, null, null
-                            , current.getLineNumber(),
-                            current.getEndPos(), current
-                            .getEndPos());
-                }
+                current = EOF;
             }
         }
         return current.getType();

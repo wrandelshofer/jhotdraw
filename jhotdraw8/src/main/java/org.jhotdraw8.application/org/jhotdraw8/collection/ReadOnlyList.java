@@ -168,6 +168,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      * @param toIndex   the to index (exclusive)
      * @return the sub list
      */
+    @NonNull
     ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex);
 
     /**

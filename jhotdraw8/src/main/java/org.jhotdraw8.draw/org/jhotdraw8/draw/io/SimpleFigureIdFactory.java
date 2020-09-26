@@ -25,7 +25,7 @@ public class SimpleFigureIdFactory extends SimpleIdFactory {
                 Styleable f = (Styleable) object;
                 id = f.getId();
                 if (id != null && getObject(id) == null) {
-                    putId(id, object);
+                    putIdAndObject(id, object);
                 } else {
                     id = super.createId(object, f.getTypeSelector().toLowerCase());
                 }
@@ -45,7 +45,7 @@ public class SimpleFigureIdFactory extends SimpleIdFactory {
                 Styleable f = (Styleable) object;
                 id = f.getId();
                 if (id != null) {
-                    putId(id, object);
+                    putIdAndObject(id, object);
                 } else {
                     id = super.createId(object, f.getTypeSelector());
                 }

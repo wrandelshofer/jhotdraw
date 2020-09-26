@@ -345,7 +345,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private void initIdFactoryRecursively(@NonNull javafx.scene.Node node) throws IOException {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
-            idFactory.putId(id, node);
+            idFactory.putIdAndObject(id, node);
         } else {
             idFactory.createId(node, node.getTypeSelector().toLowerCase());
         }

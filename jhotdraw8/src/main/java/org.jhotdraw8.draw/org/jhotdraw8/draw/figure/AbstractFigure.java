@@ -125,8 +125,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     @Override
     public final ObservableSet<Figure> getLayoutObservers() {
         if (layoutObservers == null) {
-            layoutObservers = FXCollections.synchronizedObservableSet(
-                    FXCollections.observableSet(new LinkedHashSet<>()));
+            layoutObservers =
+                    FXCollections.observableSet(new LinkedHashSet<>());
         }
         return layoutObservers;
     }

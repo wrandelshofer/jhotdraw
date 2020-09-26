@@ -41,14 +41,16 @@ import java.util.function.Supplier;
 public class CustomBinding {
     /**
      * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+     * <p>
+     * This method keeps a strong reference to {@code propertyB}.
      *
      * @param <T>       the type of properties 'a' and 'b'
      * @param <M>       the type of the mediator property
      * @param propertyA property 'a'
-     * @param mediator  the mediator property
-     * @param propertyB property 'b'
+     * @param mediator  the mediator property 'm'
+     * @param propertyB property 'b', this can be a new instance on each call
      */
-    public static <T, M> void bindBidirectional(
+    public static <T, M> void bindBidirectionalStrongly(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
         final ChangeListener<M> changeListener = new ChangeListener<M>() {
@@ -63,6 +65,34 @@ public class CustomBinding {
                 if (newv != null) {
                     strongReference = propertyB.apply(newv);
                     propertyA.bindBidirectional(strongReference);
+                }
+            }
+        };
+        changeListener.changed(mediator, null, mediator.getValue());
+        mediator.addListener(changeListener);
+    }
+
+    /**
+     * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
+     *
+     * @param <T>       the type of properties 'a' and 'b'
+     * @param <M>       the type of the mediator property
+     * @param propertyA property 'a'
+     * @param mediator  the mediator property 'm'
+     * @param propertyB property 'b', must return the same instance each time
+     *                  when called for the same object 'm'.
+     */
+    public static <T, M> void bindBidirectional(
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
+
+        final ChangeListener<M> changeListener = new ChangeListener<M>() {
+            @Override
+            public void changed(ObservableValue<? extends M> o, M oldv, M newv) {
+                if (oldv != null) {
+                    propertyA.unbindBidirectional(propertyB.apply(oldv));
+                }
+                if (newv != null) {
+                    propertyA.bindBidirectional(propertyB.apply(newv));
                 }
             }
         };

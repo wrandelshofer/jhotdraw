@@ -16,9 +16,6 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class SimpleIdFactory implements IdFactory {
-    // inv:
-    // idToObject.size() == objectToId.size();
-
     private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>();
     private final @NonNull Map<String, Object> idToObject = new HashMap<>();
     private final @NonNull Map<Object, String> objectToId = new HashMap<>();
@@ -45,11 +42,19 @@ public class SimpleIdFactory implements IdFactory {
         return idToObject.get(id);
     }
 
-    public Object putId(String id, Object object) {
+    public Object putIdAndObject(String id, Object object) {
         String oldId = objectToId.put(object, id);
         if (oldId != null) {
             idToObject.remove(oldId);
         }
+        Object oldObject = idToObject.put(id, object);
+        if (oldObject != null) {
+            objectToId.remove(oldObject);
+        }
+        return oldObject;
+    }
+
+    public Object putIdToObject(String id, Object object) {
         Object oldObject = idToObject.put(id, object);
         if (oldObject != null) {
             objectToId.remove(oldObject);

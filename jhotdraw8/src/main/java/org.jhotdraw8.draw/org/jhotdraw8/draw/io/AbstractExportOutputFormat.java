@@ -125,7 +125,7 @@ public abstract class AbstractExportOutputFormat extends AbstractPropertyBean im
         int numberOfPages = 0;
         for (Page page : pages) {
             if (page.getId() != null) {
-                idFactory.putId(page.getId(), page);
+                idFactory.putIdAndObject(page.getId(), page);
             }
             numberOfPages += page.getNumberOfSubPages();
         }
@@ -226,7 +226,7 @@ public abstract class AbstractExportOutputFormat extends AbstractPropertyBean im
         IdFactory idFactory = new SimpleIdFactory();
         for (Figure slice : slices) {
             if (slice.getId() != null) {
-                idFactory.putId(slice.getId(), slice);
+                idFactory.putIdAndObject(slice.getId(), slice);
             }
         }
         Node node = null;

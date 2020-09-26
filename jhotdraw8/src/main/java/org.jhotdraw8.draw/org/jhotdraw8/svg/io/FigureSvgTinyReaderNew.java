@@ -244,7 +244,7 @@ public class FigureSvgTinyReaderNew {
                 Location location = r.getLocation();
 
                 if ("id".equals(localName)) {
-                    ctx.idFactory.putId(value, node);
+                    ctx.idFactory.putIdAndObject(value, node);
                     node.set(StyleableFigure.ID, value);
                 } else {
                     if (m != null) {
