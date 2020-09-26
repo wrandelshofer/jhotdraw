@@ -56,7 +56,10 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     public AbstractRegionFigure(double x, double y, double width, double height) {
-        reshapeInLocal(x, y, width, height);
+        // Performance: Only set properties if the differ from the default value.
+        if (x != 0 || y != 0 || width != 0 || height != 0) {
+            reshapeInLocal(x, y, width, height);
+        }
     }
 
     public AbstractRegionFigure(@NonNull Rectangle2D rect) {

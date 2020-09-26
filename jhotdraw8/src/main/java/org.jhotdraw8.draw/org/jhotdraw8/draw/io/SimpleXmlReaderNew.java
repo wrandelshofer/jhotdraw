@@ -188,14 +188,14 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
 
     @NonNull
     private Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
-        Figure figure = figureFactory.nameToFigure(r.getLocalName());
+        Figure figure = figureFactory.createFigureByElementName(r.getLocalName());
         if (figure == null) {
-            throw new IOException("Cannot create figure for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
+            throw new IOException("Cannot create figure in element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
         }
         if (!stack.isEmpty()) {
             Figure parent = stack.peek();
             if (!figure.isSuitableParent(parent) || !parent.isSuitableChild(figure)) {
-                throw new IOException("Cannot add figure to parent for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
+                throw new IOException("Cannot add figure to parent in element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
             }
             parent.getChildren().add(figure);
         } else {
@@ -215,19 +215,17 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
             String attributeValue = r.getAttributeValue(i);
             Location location = r.getLocation();
             if (idAttribute.equals(attributeLocalName)) {
-                if (idFactory.getObject(attributeValue) != null) {
+                Object anotherObjWithSameId = idFactory.putId(attributeValue, figure);
+                if (anotherObjWithSameId != null) {
                     throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
-                } else {
-                    idFactory.putId(attributeValue, figure);
                 }
-                idFactory.putId(attributeValue, figure);
-                figure.set(StyleableFigure.ID, attributeValue);
+                setId(figure, attributeValue);
             } else {
                 secondPass.add(() -> {
                     try {
                         @SuppressWarnings("unchecked")
                         MapAccessor<Object> key =
-                                (MapAccessor<Object>) figureFactory.nameToKey(figure, attributeLocalName);
+                                (MapAccessor<Object>) figureFactory.getKeyByAttributeName(figure, attributeLocalName);
                         if (key != null) {
                             figure.set(key, figureFactory.stringToValue(key, attributeValue));
                         } else {
@@ -239,6 +237,10 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
                 });
             }
         }
+    }
+
+    protected void setId(@NonNull Figure figure, String id) {
+        figure.set(StyleableFigure.ID, id);
     }
 
     @Override

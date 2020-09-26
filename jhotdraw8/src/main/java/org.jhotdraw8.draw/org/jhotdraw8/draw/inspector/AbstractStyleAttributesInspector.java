@@ -810,8 +810,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
         Set<String> styleClasses = new TreeSet<>();
         boolean first = true;
         for (E f : selection) {
-            selectorModel.getAttributeNames(f);
-
             if (first) {
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);

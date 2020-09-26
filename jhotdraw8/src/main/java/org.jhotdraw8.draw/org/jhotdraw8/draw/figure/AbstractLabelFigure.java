@@ -59,7 +59,13 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     public AbstractLabelFigure(double x, double y) {
-        set(ORIGIN, new CssPoint2D(x, y));
+        // Performance: Only set properties if they differ from the default value.
+        if (x != 0) {
+            set(ORIGIN_X, new CssSize(x));
+        }
+        if (y != 0) {
+            set(ORIGIN_Y, new CssSize(y));
+        }
     }
 
     @NonNull

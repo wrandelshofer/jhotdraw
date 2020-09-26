@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.io;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
@@ -37,15 +38,17 @@ public interface IdFactory extends IdResolver, IdSupplier {
 
     /**
      * Creates an id for the specified object. If the object already has an id,
-     * then that id is returned.
+     * then that id is returned. If the object has no id and the suggestedId
+     * has not been assigned to an object yet, then the suggestedId is
+     * used.
      *
-     * @param object the object
-     * @param prefix the prefix used to create a new id, if the desired id is
-     *               taken
-     * @param id     the desired id
+     * @param object      the object
+     * @param prefix      the prefix used to create a new id, if the suggested id is
+     *                    taken
+     * @param suggestedId the suggested id
      * @return the id
      */
-    @Nullable String createId(Object object, @Nullable String prefix, String id);
+    @Nullable String createId(@NonNull Object object, @Nullable String prefix, String suggestedId);
 
     /**
      * Puts an id for the specified object. If the object already has an id, the
@@ -53,8 +56,10 @@ public interface IdFactory extends IdResolver, IdSupplier {
      *
      * @param id     the id
      * @param object the object
+     * @return the object that previously was assigned to this id
      */
-    void putId(String id, @Nullable Object object);
+    @Nullable
+    Object putId(@NonNull String id, @NonNull Object object);
 
     /**
      * Clears all ids.

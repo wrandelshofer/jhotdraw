@@ -11,6 +11,4 @@ public interface IdResolver {
      * @return the object
      */
     @Nullable Object getObject(String id);
-
-
 }

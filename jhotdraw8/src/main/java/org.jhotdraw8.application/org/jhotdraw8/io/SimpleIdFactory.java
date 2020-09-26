@@ -16,13 +16,12 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class SimpleIdFactory implements IdFactory {
+    // inv:
+    // idToObject.size() == objectToId.size();
 
-    @NonNull
-    private Map<String, Long> prefixToNextId = new HashMap<>();
-    @NonNull
-    private Map<String, Object> idToObject = new HashMap<>();
-    @NonNull
-    private Map<Object, String> objectToId = new HashMap<>();
+    private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>();
+    private final @NonNull Map<String, Object> idToObject = new HashMap<>();
+    private final @NonNull Map<Object, String> objectToId = new HashMap<>();
 
     @Override
     public void reset() {
@@ -31,9 +30,8 @@ public class SimpleIdFactory implements IdFactory {
         objectToId.clear();
     }
 
-    @Nullable
     @Override
-    public String createId(Object object) {
+    public @Nullable String createId(Object object) {
         return createId(object, "");
     }
 
@@ -47,7 +45,7 @@ public class SimpleIdFactory implements IdFactory {
         return idToObject.get(id);
     }
 
-    public void putId(String id, Object object) {
+    public Object putId(String id, Object object) {
         String oldId = objectToId.put(object, id);
         if (oldId != null) {
             idToObject.remove(oldId);
@@ -56,6 +54,7 @@ public class SimpleIdFactory implements IdFactory {
         if (oldObject != null) {
             objectToId.remove(oldObject);
         }
+        return oldObject;
     }
 
     public String createId(Object object, @Nullable String prefix) {
@@ -73,12 +72,11 @@ public class SimpleIdFactory implements IdFactory {
         return id;
     }
 
-    @Nullable
-    public String createId(Object object, @Nullable String prefix, @Nullable String idx) {
+    public @Nullable String createId(Object object, @Nullable String prefix, @Nullable String suggestedId) {
         String existingId = objectToId.get(object);
         if (existingId == null) {
-            if (idx != null && !idToObject.containsKey(idx)) {
-                existingId = idx;
+            if (suggestedId != null && !idToObject.containsKey(suggestedId)) {
+                existingId = suggestedId;
             } else {
                 long pNextId = prefixToNextId.getOrDefault(prefix, 1L);
 
@@ -94,5 +92,4 @@ public class SimpleIdFactory implements IdFactory {
         }
         return existingId;
     }
-
 }

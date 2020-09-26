@@ -294,16 +294,13 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public MapAccessor<?> elementNameToKey(@NonNull Figure f, String attributeName) throws IOException {
+    public MapAccessor<?> getKeyByElementName(@NonNull Figure f, String elementName) throws IOException {
         HashMap<String, MapAccessor<?>> strToKey = elemToKey.get(f.getClass());
-        if (elemToKey.containsKey(f.getClass())) {
-            strToKey = elemToKey.get(f.getClass());
-        }
-        if (!strToKey.containsKey(attributeName)) {
-            throw new IOException("no mapping for attribute " + attributeName
+        if (strToKey == null || !strToKey.containsKey(elementName)) {
+            throw new IOException("no mapping for attribute " + elementName
                     + " in figure " + f.getClass());
         }
-        return strToKey.get(attributeName);
+        return strToKey.get(elementName);
     }
 
     @NonNull
@@ -323,7 +320,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
 
     @Nullable
     @Override
-    public String figureToName(@NonNull Figure f) throws IOException {
+    public String getElementNameByFigure(@NonNull Figure f) throws IOException {
         if (!figureToName.containsKey(f.getClass())) {
             if (skipFigures.contains(f.getClass())) {
                 return null;
@@ -392,7 +389,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public String keyToElementName(@NonNull Figure f, MapAccessor<?> key) throws IOException {
+    public String getElementNameByKey(@NonNull Figure f, MapAccessor<?> key) throws IOException {
         HashMap<MapAccessor<?>, String> keyToStr = null;
         if (keyToElem.containsKey(f.getClass())) {
             keyToStr = keyToElem.get(f.getClass());
@@ -405,7 +402,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public String keyToName(@NonNull Figure f, MapAccessor<?> key) throws IOException {
+    public String getAttributeNameByKey(@NonNull Figure f, MapAccessor<?> key) throws IOException {
         HashMap<MapAccessor<?>, String> keyToStr = null;
         if (keyToAttr.containsKey(f.getClass())) {
             keyToStr = keyToAttr.get(f.getClass());
@@ -419,25 +416,22 @@ public abstract class AbstractFigureFactory implements FigureFactory {
 
     @Nullable
     @Override
-    public Figure nameToFigure(String elementName) throws IOException {
-        if (!nameToFigure.containsKey(elementName)) {
+    public Figure createFigureByElementName(String elementName) throws IOException {
+        Supplier<Figure> supplier = nameToFigure.get(elementName);
+        if (supplier == null) {
             if (skipElements.contains(elementName)) {
                 return null;
             }
             throw new IOException("no mapping for element " + elementName);
         }
-        Supplier<Figure> supplier = nameToFigure.get(elementName);
         return supplier.get();
     }
 
     @Nullable
     @Override
-    public MapAccessor<?> nameToKey(@NonNull Figure f, String attributeName) throws IOException {
+    public MapAccessor<?> getKeyByAttributeName(@NonNull Figure f, String attributeName) throws IOException {
         HashMap<String, MapAccessor<?>> strToKey = attrToKey.get(f.getClass());
-        if (attrToKey.containsKey(f.getClass())) {
-            strToKey = attrToKey.get(f.getClass());
-        }
-        if (!strToKey.containsKey(attributeName)) {
+        if (strToKey == null || !strToKey.containsKey(attributeName)) {
             Set<Class<? extends Figure>> set = (skipAttributes.get(attributeName));
             if (set == null || !set.contains(f.getClass())) {
                 LOGGER.warning("no mapping for attribute " + attributeName

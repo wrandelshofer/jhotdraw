@@ -34,16 +34,16 @@ public interface FigureFactory {
      * @return the name
      * @throws java.io.IOException if the factory does not support this figure
      */
-    @Nullable String figureToName(Figure f) throws IOException;
+    @Nullable String getElementNameByFigure(Figure f) throws IOException;
 
     /**
-     * Maps an XML element name to a figure.
+     * Creates a new figure given the name of an XML element.
      *
-     * @param name the name
+     * @param elementName the name
      * @return the figure
      * @throws java.io.IOException if the factory does not support this name
      */
-    @Nullable Figure nameToFigure(String name) throws IOException;
+    @Nullable Figure createFigureByElementName(String elementName) throws IOException;
 
     /**
      * Maps a key to a XML attribute name. The name used for persistent storage
@@ -55,7 +55,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the key for
      *                             the specified figure
      */
-    String keyToName(Figure f, MapAccessor<?> key) throws IOException;
+    String getAttributeNameByKey(Figure f, MapAccessor<?> key) throws IOException;
 
     /**
      * Maps an XML attribute name to a key.
@@ -66,7 +66,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the name for
      *                             the specified figure
      */
-    @Nullable MapAccessor<?> nameToKey(Figure f, String name) throws IOException;
+    @Nullable MapAccessor<?> getKeyByAttributeName(Figure f, String name) throws IOException;
 
     /**
      * Maps a key to a XML element name. The name used for persistent storage
@@ -84,7 +84,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the key for
      *                             the specified figure
      */
-    String keyToElementName(Figure f, MapAccessor<?> key) throws IOException;
+    String getElementNameByKey(Figure f, MapAccessor<?> key) throws IOException;
 
     /**
      * Maps an XML element name to a key.
@@ -95,7 +95,7 @@ public interface FigureFactory {
      * @throws java.io.IOException if the factory does not support the name for
      *                             the specified figure
      */
-    MapAccessor<?> elementNameToKey(Figure f, String name) throws IOException;
+    MapAccessor<?> getKeyByElementName(Figure f, String name) throws IOException;
 
     /**
      * Maps a value to an XML attribute value.
@@ -113,7 +113,7 @@ public interface FigureFactory {
      * Maps a value to a XML node list.
      * <p>
      * The node list may not contain elements with a name that conflicts with
-     * the names returned by {@link #figureToName}.
+     * the names returned by {@link #getElementNameByFigure}.
      *
      * @param key   the key
      * @param value the value
@@ -127,7 +127,7 @@ public interface FigureFactory {
      * Maps a XML node list to a value.
      * <p>
      * The node list does not contain elements with a name that conflicts with
-     * the names returned by {@link #figureToName}.
+     * the names returned by {@link #getElementNameByFigure}.
      *
      * @param <T>      the type of the value
      * @param key      the key

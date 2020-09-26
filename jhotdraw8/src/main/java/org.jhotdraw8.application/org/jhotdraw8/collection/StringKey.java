@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * StringKey.
+ * A nullable StringKey.
  *
  * @author Werner Randelshofer
  */

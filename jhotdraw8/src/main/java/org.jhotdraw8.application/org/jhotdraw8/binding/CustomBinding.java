@@ -51,12 +51,19 @@ public class CustomBinding {
     public static <T, M> void bindBidirectional(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
-        final ChangeListener<M> changeListener = (o, oldv, newv) -> {
-            if (oldv != null) {
-                propertyA.unbindBidirectional(propertyB.apply(oldv));
-            }
-            if (newv != null) {
-                propertyA.bindBidirectional(propertyB.apply(newv));
+        final ChangeListener<M> changeListener = new ChangeListener<M>() {
+            private Property<T> strongReference;
+
+            @Override
+            public void changed(ObservableValue<? extends M> o, M oldv, M newv) {
+                if (oldv != null && strongReference != null) {
+                    propertyA.unbindBidirectional(strongReference);
+                    strongReference = null;
+                }
+                if (newv != null) {
+                    strongReference = propertyB.apply(newv);
+                    propertyA.bindBidirectional(strongReference);
+                }
             }
         };
         changeListener.changed(mediator, null, mediator.getValue());

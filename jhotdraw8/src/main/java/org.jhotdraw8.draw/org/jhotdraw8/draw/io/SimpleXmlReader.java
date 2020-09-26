@@ -444,7 +444,7 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
             }
 
             @SuppressWarnings("unchecked")
-            MapAccessor<Object> key = (MapAccessor<Object>) figureFactory.nameToKey(figure, attr.getLocalName());
+            MapAccessor<Object> key = (MapAccessor<Object>) figureFactory.getKeyByAttributeName(figure, attr.getLocalName());
             if (key != null && figureFactory.figureAttributeKeys(figure).contains(key)) {
                 Object value = null;
 
@@ -479,7 +479,7 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
         for (MapAccessor<?> ky : keys) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) ky;
-            String name = figureFactory.keyToElementName(figure, key);
+            String name = figureFactory.getElementNameByKey(figure, key);
             if ("".equals(name)) {
                 List<Node> nodeList = new ArrayList<>();
                 NodeList children = elem.getChildNodes();
@@ -496,7 +496,7 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
                             }
                         } else {
                             try {
-                                if (figureFactory.nameToFigure(childElem.getLocalName()) != null) {
+                                if (figureFactory.createFigureByElementName(childElem.getLocalName()) != null) {
                                     continue;
                                 }
                             } catch (IOException e) {
@@ -531,7 +531,7 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
                     return null;
                 }
             }
-            Figure figure = figureFactory.nameToFigure(elem.getLocalName());
+            Figure figure = figureFactory.createFigureByElementName(elem.getLocalName());
             if (figure == null) {
                 return null;
             }

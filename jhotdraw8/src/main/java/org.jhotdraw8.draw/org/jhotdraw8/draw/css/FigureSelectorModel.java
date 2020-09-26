@@ -245,14 +245,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     @NonNull
     @Override
     public Set<QualifiedName> getAttributeNames(@NonNull Figure element) {
-        // FIXME use keyToName map
         return getWritableMetaMap(element).keySet();
     }
 
     @NonNull
     @Override
     public Set<QualifiedName> getComposedAttributeNames(@NonNull Figure element) {
-        // FIXME use keyToName map
         Set<QualifiedName> attr = new HashSet<>();
         Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {

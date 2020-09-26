@@ -252,7 +252,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         }
         Clipping external = new ClippingFigure();
         idFactory.reset();
-        final String docElemName = figureFactory.figureToName(external);
+        final String docElemName = figureFactory.getElementNameByFigure(external);
         w.writeStartDocument();
         w.setDefaultNamespace(namespaceURI);
         w.writeStartElement(docElemName);
@@ -268,7 +268,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
             setUriResolver(new UriResolver(null, documentHome));
             Drawing external = figureFactory.toExternalDrawing(internal);
             idFactory.reset();
-            final String docElemName = figureFactory.figureToName(external);
+            final String docElemName = figureFactory.getElementNameByFigure(external);
             w.writeStartDocument();
             w.setDefaultNamespace(namespaceURI);
             writeProcessingInstructions(w, external);
@@ -295,7 +295,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
             }
         }
         if (!k.isTransient() && !figureFactory.isDefaultValue(figure, k, value)) {
-            String name = figureFactory.keyToName(figure, k);
+            String name = figureFactory.getAttributeNameByKey(figure, k);
             if (figureFactory.getObjectIdAttribute().equals(name)) {
                 return;
             }
@@ -346,7 +346,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
 
     protected void writeNodeRecursively(@NonNull XMLStreamWriter w, @NonNull Figure figure, int depth) throws IOException {
         try {
-            String elementName = figureFactory.figureToName(figure);
+            String elementName = figureFactory.getElementNameByFigure(figure);
             if (elementName == null) {
                 // => the figureFactory decided that we should skip the figure
                 return;
@@ -355,7 +355,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
             writeElementAttributes(w, figure);
             writeElementNodeList(w, figure);
             for (Figure child : figure.getChildren()) {
-                if (figureFactory.figureToName(child) != null) {
+                if (figureFactory.getElementNameByFigure(child) != null) {
                     writeNodeRecursively(w, child, depth + 1);
                 }
             }

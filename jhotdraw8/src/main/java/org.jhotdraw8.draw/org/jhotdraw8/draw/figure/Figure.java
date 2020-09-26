@@ -42,6 +42,7 @@ import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -196,7 +197,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     static void getDeclaredMapAccessors(@NonNull Class<?> clazz, @NonNull Collection<MapAccessor<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
-                if (MapAccessor.class.isAssignableFrom(f.getType())) {
+                if (Modifier.isStatic(f.getModifiers())
+                        && MapAccessor.class.isAssignableFrom(f.getType())) {
                     MapAccessor<?> k = (MapAccessor<?>) f.get(null);
                     keys.add(k);
                 }

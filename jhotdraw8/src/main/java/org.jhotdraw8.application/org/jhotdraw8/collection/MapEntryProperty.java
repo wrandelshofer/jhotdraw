@@ -72,21 +72,26 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         return key.toString();
     }
 
+    private int changing;
+
     @Override
     public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
-        if (this.key.equals(change.getKey())) {
-            if (change.wasAdded()) {// was added, or removed and then added
-                @SuppressWarnings("unchecked")
-                T valueAdded = (T) change.getValueAdded();
-                if (!Objects.equals(super.get(), valueAdded)) {
-                    set(valueAdded);
-                }
-            } else if (change.wasRemoved()) {// was removed but not added
-                if (super.get() != null) {
-                    set(null);
+        if (changing++ == 0) {
+            if (this.key.equals(change.getKey())) {
+                if (change.wasAdded()) {// was added, or removed and then added
+                    @SuppressWarnings("unchecked")
+                    T valueAdded = (T) change.getValueAdded();
+                    if (!Objects.equals(super.get(), valueAdded)) {
+                        set(valueAdded);
+                    }
+                } else if (change.wasRemoved()) {// was removed but not added
+                    if (super.get() != null) {
+                        set(null);
+                    }
                 }
             }
         }
+        changing--;
     }
 
     @Override
@@ -98,5 +103,10 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
             map = null;
             key = null;
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
     }
 }
