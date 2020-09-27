@@ -90,14 +90,11 @@ import static java.lang.Math.min;
  */
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {
 
-    @NonNull
-    private final static Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener",
+    private static final @NonNull Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener",
             new TypeToken<ChangeListener<Boolean>>() {
             }, null);
-    @NonNull
-    private final static Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
-    @NonNull
-    public static final String WINDOW_MENU_ID = "window";
+    private static final @NonNull Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
+    public static final @NonNull String WINDOW_MENU_ID = "window";
     public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
     private Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
 
@@ -119,8 +116,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     private boolean isSystemMenuSupported;
 
 
-    @NonNull
-    private ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
+    private @NonNull ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
     {
@@ -161,8 +157,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      * @param actions the action map
      * @return the menu bar
      */
-    @Nullable
-    protected MenuBar createMenuBar(@Nullable Activity activity, @Nullable Stage stage, @NonNull Map<String, Action> actions) {
+    protected @Nullable MenuBar createMenuBar(@Nullable Activity activity, @Nullable Stage stage, @NonNull Map<String, Action> actions) {
         Supplier<MenuBar> factory = getMenuBarFactory();
         MenuBar mb = factory == null ? null : factory.get();
         if (mb == null) {
@@ -366,8 +361,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         Platform.runLater(activity::start);
     }
 
-    @NonNull
-    protected Stage createStage(@NonNull FileBasedActivity activity) {
+    protected @NonNull Stage createStage(@NonNull FileBasedActivity activity) {
         Stage stage = new Stage();
         stage.initStyle(StageStyle.UNIFIED);
         BorderPane borderPane = new BorderPane();
