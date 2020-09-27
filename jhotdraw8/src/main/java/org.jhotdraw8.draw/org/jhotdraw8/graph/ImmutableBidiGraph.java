@@ -17,7 +17,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
     /**
      * Holds offsets into the {@link #prev} table for each vertex.
      */
-    protected final @NonNull int[] prevOffsets;
+    protected final @NonNull int[] prevOffset;
 
     /**
      * Holds the arrow objects.
@@ -28,7 +28,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
         super(graph);
 
         this.prev = new int[next.length];
-        this.prevOffsets = new int[nextOffsets.length];
+        this.prevOffset = new int[nextOffset.length];
         @SuppressWarnings("unchecked")
         A[] uncheckedArrows = (A[]) new Object[prev.length];
         this.prevArrows = uncheckedArrows;
@@ -38,7 +38,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
             int i = 0;
             for (V v : graph.getVertices()) {
 
-                nextOffsets[i] = arrowCount;
+                nextOffset[i] = arrowCount;
                 this.vertices[i] = v;
                 for (int j = 0, n = graph.getPrevCount(v); j < n; j++) {
                     prev[arrowCount] = vertexToIndexMap.get(graph.getPrev(v, j));
@@ -56,7 +56,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
         if (i < 0 || i >= getPrevCount(vi)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
         }
-        return prev[prevOffsets[vi] + i];
+        return prev[prevOffset[vi] + i];
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
         if (i < 0 || i >= getPrevCount(vi)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getPrevCount(vi));
         }
-        return prevArrows[prevOffsets[vi] + i];
+        return prevArrows[prevOffset[vi] + i];
     }
 
     @Override
@@ -79,8 +79,8 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
 
     @Override
     public int getPrevCount(int vi) {
-        final int offset = prevOffsets[vi];
-        final int nextOffset = (vi == prevOffsets.length - 1) ? prev.length : prevOffsets[vi + 1];
+        final int offset = prevOffset[vi];
+        final int nextOffset = (vi == prevOffset.length - 1) ? prev.length : prevOffset[vi + 1];
         return nextOffset - offset;
     }
 
