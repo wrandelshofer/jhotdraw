@@ -6,7 +6,7 @@ package org.jhotdraw8.samples.modeler;
 
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.SimpleFileBasedApplication;
+import org.jhotdraw8.app.AbstractFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
@@ -31,7 +31,7 @@ import static org.jhotdraw8.app.action.file.ExportFileAction.EXPORT_CHOOSER_FACT
  *
  * @author Werner Randelshofer
  */
-public class ModelerApplication extends SimpleFileBasedApplication {
+public class ModelerApplication extends AbstractFileBasedApplication {
 
     @Override
     protected void initResourceBundle() {

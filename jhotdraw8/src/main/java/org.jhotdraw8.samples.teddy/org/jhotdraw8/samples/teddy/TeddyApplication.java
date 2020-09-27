@@ -7,7 +7,7 @@ package org.jhotdraw8.samples.teddy;
 import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.SimpleFileBasedApplication;
+import org.jhotdraw8.app.AbstractFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.fxml.FxmlUtil;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -24,7 +24,7 @@ import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_
  *
  * @author Werner Randelshofer
  */
-public class TeddyApplication extends SimpleFileBasedApplication {
+public class TeddyApplication extends AbstractFileBasedApplication {
 
     @Override
     protected void initResourceBundle() {

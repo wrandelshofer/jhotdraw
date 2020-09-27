@@ -7,12 +7,13 @@ package org.jhotdraw8.samples.grapher;
 import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.SimpleFileBasedApplication;
+import org.jhotdraw8.app.AbstractFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.NonNullBooleanKey;
 import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
+import org.jhotdraw8.fxml.FxmlUtil;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 import org.jhotdraw8.macos.MacOSPreferences;
@@ -31,7 +32,7 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
  *
  * @author Werner Randelshofer
  */
-public class GrapherApplication extends SimpleFileBasedApplication {
+public class GrapherApplication extends AbstractFileBasedApplication {
 
     /**
      * @param args the command line arguments
@@ -61,7 +62,9 @@ public class GrapherApplication extends SimpleFileBasedApplication {
     @Override
     protected void initFactories() {
         setActivityFactory(GrapherActivity::new);
-        setMenuBarFactory(createFxmlNodeSupplier(getClass().getResource("GrapherMenuBar.fxml")));
+        setMenuBarFactory(FxmlUtil.createFxmlNodeSupplier(
+                getClass().getResource("GrapherMenuBar.fxml"),
+                getResources().asResourceBundle()));
     }
 
     @Override

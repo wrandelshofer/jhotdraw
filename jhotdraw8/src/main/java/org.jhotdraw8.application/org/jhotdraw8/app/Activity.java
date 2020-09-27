@@ -74,8 +74,7 @@ public interface Activity extends Disableable, PropertyBean {
      */
     @NonNull ReadOnlyMapProperty<String, Action> actionsProperty();
 
-    @NonNull
-    default ObservableMap<String, Action> getActions() {
+    default @NonNull ObservableMap<String, Action> getActions() {
         return actionsProperty().get();
     }
 
@@ -105,11 +104,11 @@ public interface Activity extends Disableable, PropertyBean {
         applicationProperty().set(application);
     }
 
-    @NonNull
-    default Application getApplication() {
+    default @NonNull Application getApplication() {
         Application application = applicationProperty().get();
         if (application == null) {
-            throw new NullPointerException("application was not initialized with a non-null value in the constructor of an Activity.");
+            throw new NullPointerException(
+                    "application was not initialized with a non-null value in the constructor of an Activity.");
         }
         return application;
     }
@@ -125,8 +124,7 @@ public interface Activity extends Disableable, PropertyBean {
 
     Node getNode();
 
-    @Nullable
-    default String getTitle() {
+    default @Nullable String getTitle() {
         return titleProperty().get();
     }
 

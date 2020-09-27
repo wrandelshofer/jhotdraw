@@ -5512,7 +5512,7 @@
 											"top": 360,
 											"width": 137,
 											"height": 103,
-											"text": "{An Activity represents an 'activity' that a user does, such as editing a document, playing a game, listening to music.}"
+											"text": "{An Activity represents 'something' that a user does, such as editing a document, playing a game, listening to music.}"
 										},
 										{
 											"_type": "UMLConstraintLinkView",
@@ -15962,12 +15962,12 @@
 															"_parent": {
 																"$ref": "AAAAAAF0zlgPkkO7BnY="
 															},
-															"font": "Arial;13;1",
+															"font": "Arial;13;3",
 															"left": 213,
 															"top": 55,
-															"width": 174.814453125,
+															"width": 184.92626953125,
 															"height": 13,
-															"text": "SimpleFileBasedApplication"
+															"text": "AbstractFileBasedApplication"
 														},
 														{
 															"_type": "LabelView",
@@ -15978,7 +15978,7 @@
 															"font": "Arial;13;0",
 															"left": 213,
 															"top": 70,
-															"width": 174.814453125,
+															"width": 184.92626953125,
 															"height": 13,
 															"text": "(from org.jhotdraw8.app)"
 														},
@@ -15999,7 +15999,7 @@
 													"font": "Arial;13;0",
 													"left": 208,
 													"top": 48,
-													"width": 184.814453125,
+													"width": 194.92626953125,
 													"height": 40,
 													"stereotypeLabel": {
 														"$ref": "AAAAAAF0zlgPkkO8jwc="
@@ -16026,7 +16026,7 @@
 													"font": "Arial;13;0",
 													"left": 208,
 													"top": 88,
-													"width": 184.814453125,
+													"width": 194.92626953125,
 													"height": 10
 												},
 												{
@@ -16041,7 +16041,7 @@
 													"font": "Arial;13;0",
 													"left": 208,
 													"top": 98,
-													"width": 184.814453125,
+													"width": 194.92626953125,
 													"height": 10
 												},
 												{
@@ -16081,7 +16081,7 @@
 											"containerChangeable": true,
 											"left": 208,
 											"top": 48,
-											"width": 184.814453125,
+											"width": 194.92626953125,
 											"height": 60,
 											"showNamespace": true,
 											"nameCompartment": {
@@ -16121,8 +16121,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 279,
-													"top": 117,
+													"left": 281,
+													"top": 116,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 15,
@@ -16142,8 +16142,8 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 264,
-													"top": 115,
+													"left": 266,
+													"top": 113,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 30,
@@ -16163,8 +16163,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 308,
-													"top": 120,
+													"left": 310,
+													"top": 121,
 													"height": 13,
 													"alpha": -1.5707963267948966,
 													"distance": 15,
@@ -16182,7 +16182,7 @@
 												"$ref": "AAAAAAF0zlVr+0CVgJQ="
 											},
 											"lineStyle": 1,
-											"points": "292:143;296:108",
+											"points": "294:143;299:108",
 											"showVisibility": true,
 											"nameLabel": {
 												"$ref": "AAAAAAF0zlg8Y0QBEc8="
@@ -30274,7 +30274,7 @@
 												"$ref": "AAAAAAFyzLjh52VfmR8="
 											},
 											"name": "Activity Purpose Constraint",
-											"specification": "An Activity represents an 'activity' that a user does, such as editing a document, playing a game, listening to music."
+											"specification": "An Activity represents 'something' that a user does, such as editing a document, playing a game, listening to music."
 										}
 									],
 									"attributes": [
@@ -30304,7 +30304,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFyzLeyJ2T8wwk="
 									},
-									"name": "SimpleFileBasedApplication",
+									"name": "AbstractFileBasedApplication",
 									"ownedElements": [
 										{
 											"_type": "UMLGeneralization",
@@ -30319,7 +30319,8 @@
 												"$ref": "AAAAAAFvj/4hn967yhA="
 											}
 										}
-									]
+									],
+									"isAbstract": true
 								},
 								{
 									"_type": "UMLClass",
