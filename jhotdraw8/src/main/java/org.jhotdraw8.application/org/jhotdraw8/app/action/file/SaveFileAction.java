@@ -7,7 +7,6 @@ package org.jhotdraw8.app.action.file;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.FileBasedActivity;
-import org.jhotdraw8.net.UriUtil;
 
 import java.net.URI;
 
@@ -58,7 +57,6 @@ public class SaveFileAction extends AbstractSaveFileAction {
     protected void onSaveSucceeded(@NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format) {
         v.setURI(uri);
         v.clearModified();
-        v.setTitle(UriUtil.getName(uri));
         v.setDataFormat(format);
         app.getRecentUris().put(uri, format);
     }

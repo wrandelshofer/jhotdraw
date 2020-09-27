@@ -6,6 +6,7 @@ package org.jhotdraw8.app;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
@@ -183,4 +184,15 @@ public interface FileBasedActivity extends Activity {
     default boolean isEmpty() {
         return !isModified() && getURI() == null;
     }
+
+    /**
+     * For file-based activity, the title should be bound to the file name
+     * from the {@link #uriProperty()}.
+     * <p>
+     * See {@link Activity#titleProperty()} for a general descriptinn of
+     * this property.
+     *
+     * @return the title of the activity
+     */
+    @NonNull StringProperty titleProperty();
 }

@@ -132,7 +132,7 @@ public interface Activity extends Disableable, PropertyBean {
         titleProperty().set(newValue);
     }
 
-    /**
+     /**
      * Initializes the activity.
      * <p>
      * See life-cycle in {@link Activity}.
@@ -161,11 +161,16 @@ public interface Activity extends Disableable, PropertyBean {
     void destroy();
 
     /**
-     * The title of the activity.
+     * The title of the activity as displayed in the title bars of the
+     * activity’s windows and in alert dialogs related to the activity.
      * <p>
-     * FIXME should be read-only because it is managed by the activity itself
+     * If the activity can be associated to a name, then the title
+     * should be that name. If the name has not be assigned yet, the
+     * title should be 'unnamed'.
+     * <p>
+     * See {@link FileBasedActivity#titleProperty()}.
      *
-     * @return the titel property
+     * @return the title of the activity
      */
     @NonNull StringProperty titleProperty();
 

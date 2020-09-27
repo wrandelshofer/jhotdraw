@@ -17,14 +17,15 @@ import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.app.action.file.RevertFileAction;
 import org.jhotdraw8.app.action.file.SaveFileAction;
 import org.jhotdraw8.app.action.file.SaveFileAsAction;
+import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.net.UriUtil;
 
 import java.net.URI;
 
 /**
- * AbstractDocumentBasedActivity.
+ * AbstractFileBasedActivity.
  *
  * @author Werner Randelshofer
- * $$
  */
 public abstract class AbstractFileBasedActivity extends AbstractActivity implements FileBasedActivity {
 
@@ -38,9 +39,14 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 
-    @NonNull
+    protected void initTitle() {
+        titleProperty().bind(CustomBinding.convert(uri, uri ->
+                uri == null ?
+                        getApplication().getResources().getString("unnamedFile") : UriUtil.getName(uri)));
+    }
+
     @Override
-    public BooleanProperty modifiedProperty() {
+    public @NonNull BooleanProperty modifiedProperty() {
         return modified;
     }
 
@@ -53,15 +59,13 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
         modified.set(true);
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<URI> uriProperty() {
+    public @NonNull ObjectProperty<URI> uriProperty() {
         return uri;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<DataFormat> dataFormatProperty() {
+    public @NonNull ObjectProperty<DataFormat> dataFormatProperty() {
         return dataFormat;
     }
 

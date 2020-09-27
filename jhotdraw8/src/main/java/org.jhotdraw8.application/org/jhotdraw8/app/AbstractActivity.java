@@ -31,7 +31,8 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     protected final ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableHashMap();
-    protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY);
+    protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
+            ApplicationLabels.getResources().getString("unnamedFile"));
     private final IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
     private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
 
@@ -80,9 +81,12 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     public void init() {
         initView();
+        initTitle();
         initActions(getActions());
         getNode().disableProperty().bind(disabledProperty());
     }
+
+    protected abstract void initTitle();
 
     @Override
     public @NonNull ReadOnlyMapProperty<String, Action> actionsProperty() {

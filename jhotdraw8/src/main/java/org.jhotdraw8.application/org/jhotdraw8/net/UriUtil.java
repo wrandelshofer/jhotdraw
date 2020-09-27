@@ -7,6 +7,7 @@ package org.jhotdraw8.net;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -29,6 +30,22 @@ public class UriUtil {
 
     /**
      * Returns the name of an URI for display in the title bar of a window.
+     * <p>
+     * If the URI is a file URI, then displays the file name followed
+     * by the path to the file. If the file is inside the user home
+     * directory, only the relative path is shown.
+     * <p>
+     * Examples:
+     * <pre>
+     *     uri = /User/me/Desktop/Hello.txt
+     *     ⊢ title = Hello.txt [~/Desktop]
+     *
+     *     uri = /User/notme/Desktop/Hello.txt
+     *     ⊢ title = Hello.txt [/User/notme/Desktop]
+     *
+     *     uri = /Volumes/NetworkDrive/Hello.txt
+     *     ⊢ title = Hello.txt [/Volumes/NetworkDrive]
+     * </pre>
      *
      * @param uri the uri
      * @return the name
@@ -36,7 +53,18 @@ public class UriUtil {
     public static String getName(@NonNull URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
             Path file = Paths.get(clearQuery(uri));
-            return file.getFileName() + " [" + file.getParent() + "]";
+            String userHome = System.getProperty("user.home");
+            boolean isInsideHome = false;
+            if (userHome != null) {
+                Path userHomePath = Path.of(userHome);
+                if (file.startsWith(userHomePath)) {
+                    file = userHomePath.relativize(file);
+                    isInsideHome = true;
+                }
+            }
+            return file.getFileName() + " ["
+                    + (isInsideHome ? "~" + File.separatorChar : "")
+                    + file.getParent() + "]";
         }
         return uri.toString();
     }

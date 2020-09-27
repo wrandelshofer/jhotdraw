@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
@@ -47,7 +48,6 @@ import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
-import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
@@ -59,6 +59,7 @@ import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -213,7 +214,10 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         CustomBinding.bindListContentToSet(menu.getItems(), getActivities(),
                 v -> menuItemMap.computeIfAbsent(v, k -> {
                     final CheckMenuItem menuItem = new CheckMenuItem();
-                    menuItem.textProperty().bind(v.titleProperty());
+                    menuItem.textProperty().bind(
+                            CustomBinding.formatted(getLabels().getString("frame.title"),
+                                    v.titleProperty(), get(NAME_KEY), v.disambiguationProperty(), new SimpleBooleanProperty())
+                    );
                     menuItem.setOnAction(evt -> {
                         final Stage s = v.get(STAGE_KEY);
                         if (s != null) {
@@ -241,7 +245,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 for (Activity v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
-                Collections.sort(list, (a, b) -> a.getDisambiguation() - b.getDisambiguation());
+                Collections.sort(list, Comparator.comparingInt(Activity::getDisambiguation));
                 int prev = 0;
                 for (Activity v : list) {
                     int current = v.getDisambiguation();
@@ -289,7 +293,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         activity.setApplication(this);
         activity.init();
 
-        activity.setTitle(getLabels().getString("unnamedFile"));
         ObservableMap<String, Action> map = activity.getActions();
         map.put(CloseFileAction.ID, new CloseFileAction(activity));
 
@@ -487,7 +490,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     v.setURI(uri);
                     v.setDataFormat(result);
                     v.clearModified();
-                    v.setTitle(UriUtil.getName(uri));
                 }
                 v.removeDisabler(this);
             });

@@ -152,7 +152,6 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
                 v.setURI(uri);
                 v.setDataFormat(actualFormat);
                 v.clearModified();
-                v.setTitle(UriUtil.getName(uri));
                 getApplication().getRecentUris().put(uri, actualFormat);
                 v.removeDisabler(workState);
             }

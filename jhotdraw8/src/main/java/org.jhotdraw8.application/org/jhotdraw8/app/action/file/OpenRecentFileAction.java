@@ -159,7 +159,6 @@ public static final String ID = "file.openRecent";
                     v.removeDisabler(workState);
                 }
                 URI finalUri = v.getURI();
-                v.setTitle(finalUri == null ? null : UriUtil.getName(finalUri));
             });
         } catch (Throwable t) {
             v.removeDisabler(workState);
