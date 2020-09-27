@@ -10,7 +10,7 @@ import java.util.AbstractMap;
 import java.util.Set;
 
 /**
- * Wraps a {@link ReadOnlyMap} in the {@link MAP} API.
+ * Wraps a {@link ReadOnlyMap} in the {@link java.util.Map} API.
  * <p>
  * The underlying ReadOnlyMap is referenced - not copied. This allows to pass a
  * ReadOnlyMap to a client who does not understand the ReadOnlyMap APi.

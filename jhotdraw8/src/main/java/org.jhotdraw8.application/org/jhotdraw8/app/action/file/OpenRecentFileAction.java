@@ -6,6 +6,7 @@ package org.jhotdraw8.app.action.file;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Activity;
@@ -22,6 +23,7 @@ import org.jhotdraw8.util.Resources;
 import java.net.URI;
 import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 
 /**
@@ -44,7 +46,8 @@ import java.util.concurrent.CancellationException;
  *
  * <p>
  * <em>Open last URI on launch</em><br> {@code OpenRecentFileAction} supplies
- * data for this feature by calling {@link Application#addRecentURI} when it
+ * data for this feature by calling
+ * {@link Application#getRecentUris()}{@code .add()} when it
  * successfully opened a file. See {@link org.jhotdraw8.app} for a description
  * of the feature.
  * </p>
@@ -100,7 +103,7 @@ public static final String ID = "file.openRecent";
 
             if (emptyView == null) {
                 app.createActivity().thenAccept(v -> {
-                    app.add(v);
+                    app.getActivities().add(v);
                     doIt((FileBasedActivity) v, true);
                 });
             } else {
@@ -120,10 +123,14 @@ public static final String ID = "file.openRecent";
         Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
         alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText(labels.getFormatted("file.open.couldntOpen.message", UriUtil.getName(uri)));
-
+        ButtonType removeUri = new ButtonType(labels.getString("file.removeOpenRecentEntry.buttonText"));
+        alert.getButtonTypes().add(removeUri);
         // Note: we must invoke clear() or read() on the view, before we start using it.
         v.clear();
-        alert.showAndWait();
+        Optional<ButtonType> selection = alert.showAndWait();
+        if (selection.isPresent() && selection.get() == removeUri) {
+            getApplication().getRecentUris().remove(uri);
+        }
     }
 
     protected void openViewFromURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, DataFormat format) {

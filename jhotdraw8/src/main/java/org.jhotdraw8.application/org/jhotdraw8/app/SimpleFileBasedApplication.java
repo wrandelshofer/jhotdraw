@@ -150,7 +150,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
     }
 
     public SimpleFileBasedApplication() {
-        recentUrisProperty().get().addListener(this::updateRecentMenuItemsInAllMenuBars);
+        getRecentUris().addListener(this::updateRecentMenuItemsInAllMenuBars);
     }
 
     @Override
@@ -483,7 +483,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
                 alert.show();
                 return;
             }
-            add(v);
+            getActivities().add(v);
             v.addDisabler(this);
             v.read(uri, null, null, false, new SimpleWorkState()).whenComplete((result, ex) -> {
                 if (ex != null) {
@@ -525,7 +525,7 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
                 alert.show();
                 return;
             }
-            add(v);
+            getActivities().add(v);
             v.addDisabler(this);
             v.clear().whenComplete((result, ex) -> {
                 if (ex != null) {
@@ -594,7 +594,11 @@ public class SimpleFileBasedApplication extends AbstractFileBasedApplication {
                     Menu mmi = (Menu) mi;
                     if (FILE_OPEN_RECENT_MENU.equals(mmi.getId())) {
                         mmi.getItems().clear();
-                        for (Map.Entry<URI, DataFormat> entry : recentUrisProperty()) {
+                        int skip = getRecentUris().size() - getMaxNumberOfRecentUris();
+                        for (Map.Entry<URI, DataFormat> entry : getRecentUris().entrySet()) {
+                            if (skip-- > 0) {
+                                continue;
+                            }
                             URI uri = entry.getKey();
                             DataFormat format = entry.getValue();
                             MenuItem mii = new MenuItem();

@@ -17,7 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
-import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
@@ -30,14 +29,9 @@ import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.AbstractMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
@@ -85,13 +79,11 @@ public interface Application extends Disableable, PropertyBean {
     @NonNull ReadOnlyMapProperty<String, Action> actionsProperty();
 
 
-    @NonNull
-    default ObservableMap<String, Action> getActions() {
+    default @NonNull ObservableMap<String, Action> getActions() {
         return actionsProperty().get();
     }
 
-    @NonNull
-    default Preferences getPreferences() {
+    default @NonNull Preferences getPreferences() {
         return preferencesProperty().get();
     }
 
@@ -107,39 +99,24 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the recent Uris
      */
-    ReadOnlySetProperty<Map.Entry<URI, DataFormat>> recentUrisProperty();
+    ReadOnlyMapProperty<URI, DataFormat> recentUrisProperty();
+
+    default @NonNull ObservableMap<URI, DataFormat> getRecentUris() {
+        return recentUrisProperty().get();
+    }
 
     /**
      * The maximal number of recent URIs. Specifies how many items of
      * {@link #recentUrisProperty} are used and persisted in user preferences.
-     * This number is also persisted.
+     * This number is also persisted in user preferences.
      *
      * @return the number of recent Uris
      */
     @NonNull IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    @NonNull
-    default ObservableSet<Activity> getActivities() {
+    default @NonNull ObservableSet<Activity> getActivities() {
         return activitiesProperty().get();
-    }
-
-    /**
-     * Adds the activity to the set of activities and shows it.
-     *
-     * @param v the activity
-     */
-    default void add(Activity v) {
-        activitiesProperty().add(v);
-    }
-
-    /**
-     * Removes the activities from the set of visible views and hides it.
-     *
-     * @param v the activities
-     */
-    default void remove(Activity v) {
-        activitiesProperty().remove(v);
     }
 
     /**
@@ -151,12 +128,9 @@ public interface Application extends Disableable, PropertyBean {
     ReadOnlyObjectProperty<Activity> activeActivityProperty();
 
     // Convenience method
-    @Nullable
-    default Activity getActiveActivity() {
+    default @Nullable Activity getActiveActivity() {
         return activeActivityProperty().get();
     }
-
-
 
 
     /**
@@ -169,8 +143,7 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the node
      */
-    @Nullable
-    default Node getNode() {
+    default @Nullable Node getNode() {
         return null;
     }
 
@@ -187,25 +160,6 @@ public interface Application extends Disableable, PropertyBean {
             }
             return factory.get();
         });
-    }
-
-    /**
-     * Adds a recent URI.
-     *
-     * @param uri        a recent URI
-     * @param dataFormat the data format that was used to access the URI
-     */
-    default void addRecentURI(URI uri, DataFormat dataFormat) {
-        // ensures that the last used uri lands at the end of the LinkedHashSet.
-        Set<Map.Entry<URI, DataFormat>> recents = recentUrisProperty().get();
-        AbstractMap.SimpleEntry<URI, DataFormat> entry = new AbstractMap.SimpleEntry<>(uri, dataFormat);
-        recents.remove(entry);
-        recents.add(entry);
-        if (recents.size() > getMaxNumberOfRecentUris()) {
-            Iterator<Map.Entry<URI, DataFormat>> i = recents.iterator();
-            i.next();
-            i.remove();
-        }
     }
 
     default int getMaxNumberOfRecentUris() {
@@ -230,15 +184,13 @@ public interface Application extends Disableable, PropertyBean {
 
     @NonNull NonNullObjectProperty<Resources> resourcesProperty();
 
-    @Nullable
-    default Supplier<MenuBar> getMenuBarFactory() {
+    default @Nullable Supplier<MenuBar> getMenuBarFactory() {
         return menuBarFactoryProperty().get();
     }
 
     @NonNull ReadOnlyListProperty<String> stylesheetsProperty();
 
-    @NonNull
-    default ObservableList<String> getStylesheets() {
+    default @NonNull ObservableList<String> getStylesheets() {
         return stylesheetsProperty().get();
     }
 
@@ -246,8 +198,7 @@ public interface Application extends Disableable, PropertyBean {
         menuBarFactoryProperty().set(newValue);
     }
 
-    @NonNull
-    default Resources getResources() {
+    default @NonNull Resources getResources() {
         return resourcesProperty().get();
     }
 
@@ -255,13 +206,11 @@ public interface Application extends Disableable, PropertyBean {
         resourcesProperty().set(newValue);
     }
 
-    @NonNull
-    default <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml) {
+    default @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml) {
         return createFxmlNodeSupplier(fxml, getResources().asResourceBundle());
     }
 
-    @NonNull
-    default <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
+    default @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
         return () -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(resourceBundle);
@@ -274,35 +223,5 @@ public interface Application extends Disableable, PropertyBean {
     }
 
 
-    @NonNull
-    default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
-                                                         @NonNull ResourceBundle resources) {
-        return createFxmlControllerSupplier(fxml, resources, (Callback<Class<?>, Object>) null);
-    }
-
-
-    @NonNull
-    default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
-                                                         @NonNull ResourceBundle resources,
-                                                         @Nullable Supplier<T> controllerFactory) {
-        return () -> this.<T>createFxmlControllerSupplier(fxml, resources, controllerFactory == null ? null : clazz -> controllerFactory.get()).get();
-    }
-
-    @NonNull
-    default <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
-                                                         @NonNull ResourceBundle resources,
-                                                         @Nullable Callback<Class<?>, Object> controllerFactory) {
-        return () -> {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setResources(resources);
-            loader.setControllerFactory(controllerFactory);
-            try (InputStream in = fxml.openStream()) {
-                loader.load(in);
-                return loader.getController();
-            } catch (IOException ex) {
-                throw new UncheckedIOException(ex);
-            }
-        };
-    }
 
 }

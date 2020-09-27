@@ -9,6 +9,7 @@ import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.SimpleFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.fxml.FxmlUtil;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 
@@ -32,7 +33,7 @@ public class TeddyApplication extends SimpleFileBasedApplication {
 
     @Override
     protected void initFactories() {
-        setActivityFactory(createFxmlControllerSupplier(
+        setActivityFactory(FxmlUtil.createFxmlControllerSupplier(
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
                 TeddyLabels.getResources().asResourceBundle(),
                 TeddyActivity::new));

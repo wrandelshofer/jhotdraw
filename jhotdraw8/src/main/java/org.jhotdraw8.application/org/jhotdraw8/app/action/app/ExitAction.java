@@ -168,7 +168,7 @@ public static final String ID = "application.exit";
                         getApplication().removeDisabler(workState);
                         break;
                     case NO:
-                        getApplication().remove(unsavedView);
+                        getApplication().getActivities().remove(unsavedView);
                         unsavedView.removeDisabler(workState);
                         reviewNext(workState);
                         break;
@@ -252,7 +252,7 @@ public static final String ID = "application.exit";
             } else {
                 v.setURI(uri);
                 v.clearModified();
-                app.addRecentURI(uri, format);
+                app.getRecentUris().put(uri, format);
             }
             return null;
         });
@@ -292,7 +292,7 @@ public static final String ID = "application.exit";
         for (Activity pr : new ArrayList<>(app.getActivities())) {
             FileBasedActivity p = (FileBasedActivity) pr;
             if (!p.isDisabled() && !p.isModified()) {
-                app.remove(p);
+                app.getActivities().remove(p);
             }
         }
         if (app.getActivities().isEmpty()) {

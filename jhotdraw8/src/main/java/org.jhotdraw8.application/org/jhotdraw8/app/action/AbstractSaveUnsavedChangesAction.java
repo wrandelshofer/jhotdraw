@@ -223,7 +223,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                 v.setURI(uri);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
-                app.addRecentURI(uri, dataFormat);
+                app.getRecentUris().put(uri, dataFormat);
                 doIt(v);
             }
             return null;

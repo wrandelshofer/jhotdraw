@@ -39,7 +39,7 @@ public static final String ID = "file.new";
     protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
         app.createActivity().thenAccept(newView -> {
             FileBasedActivity newDOView = (FileBasedActivity) newView;
-            app.add(newDOView);
+            app.getActivities().add(newDOView);
             newDOView.clear().thenRun(() -> {
                 newDOView.clearModified();
             });

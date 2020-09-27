@@ -60,7 +60,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
         v.clearModified();
         v.setTitle(UriUtil.getName(uri));
         v.setDataFormat(format);
-        app.addRecentURI(uri, format);
+        app.getRecentUris().put(uri, format);
     }
 
 }

@@ -37,7 +37,7 @@ public static final String ID = "file.close";
     @Override
     protected CompletionStage<Void> doIt(@Nullable FileBasedActivity view) {
         if (view != null) {
-            app.remove(view);
+            app.getActivities().remove(view);
         }
         return CompletableFuture.completedFuture(null);
     }

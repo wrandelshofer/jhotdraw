@@ -41,7 +41,7 @@ public static final String ID = "file.clearRecentFiles";
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
-        app.recentUrisProperty().clear();
+        app.getRecentUris().clear();
     }
 
     /**

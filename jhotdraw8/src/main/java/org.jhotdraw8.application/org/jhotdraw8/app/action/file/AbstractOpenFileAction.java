@@ -88,7 +88,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
-            app.add(view);
+            app.getActivities().add(view);
 
             // Prevent same URI from being opened more than once
             if (!getApplication().getNonNull(FileBasedApplication.ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI)) {
@@ -96,7 +96,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
                     FileBasedActivity v = (FileBasedActivity) vp;
                     if (v.getURI() != null && v.getURI().equals(uri)) {
                         if (disposeView) {
-                            app.remove(view);
+                            app.getActivities().remove(view);
                         }
                         app.removeDisabler(workState);
                         v.getNode().getScene().getWindow().requestFocus();
@@ -109,7 +109,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             openViewFromURI(view, uri, chooser, workState);
         } else {
             if (disposeView) {
-                app.remove(view);
+                app.getActivities().remove(view);
             }
             app.removeDisabler(workState);
         }
@@ -153,7 +153,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
                 v.setDataFormat(actualFormat);
                 v.clearModified();
                 v.setTitle(UriUtil.getName(uri));
-                getApplication().addRecentURI(uri, actualFormat);
+                getApplication().getRecentUris().put(uri, actualFormat);
                 v.removeDisabler(workState);
             }
         });

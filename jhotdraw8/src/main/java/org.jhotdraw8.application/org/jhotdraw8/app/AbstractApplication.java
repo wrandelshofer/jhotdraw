@@ -17,9 +17,9 @@ import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
@@ -32,7 +32,6 @@ import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.AbstractMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -82,12 +81,12 @@ public abstract class AbstractApplication extends javafx.application.Application
     /**
      * Holds the recent URIs.
      */
-    private final ReadOnlySetProperty<Map.Entry<URI, DataFormat>> recentUris//
-            = new ReadOnlySetWrapper<Map.Entry<URI, DataFormat>>(//
+    private final ReadOnlyMapProperty<URI, DataFormat> recentUris//
+            = new ReadOnlyMapWrapper<URI, DataFormat>(//
             this, RECENT_URIS_PROPERTY, //
-            FXCollections.observableSet(new LinkedHashSet<Map.Entry<URI, DataFormat>>())).getReadOnlyProperty();
+            FXCollections.observableMap(new LinkedHashMap<URI, DataFormat>(16, 0.5f, true))).getReadOnlyProperty();
 
-    {
+    {// initializer for 'disabled' property
         ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
         robw.bind(Bindings.isNotEmpty(disablers));
         final ReadOnlyBooleanProperty readOnlyProperty = robw.getReadOnlyProperty();
@@ -136,17 +135,17 @@ public abstract class AbstractApplication extends javafx.application.Application
                         format = new DataFormat(columns[1]);
                     }
                 }
-                recentUris.add(new AbstractMap.SimpleEntry<>(uri, format));
+                recentUris.put(uri, format);
             } catch (URISyntaxException ex) {
                 ex.printStackTrace();
             }
         }
-        recentUris.get().addListener((SetChangeListener.Change<? extends Map.Entry<URI, DataFormat>> change) -> {
+        recentUris.get().addListener((MapChangeListener.Change<? extends URI, ? extends DataFormat> change) -> {
             StringBuilder buf = new StringBuilder();
-            int count = 0;
-            for (Map.Entry<URI, DataFormat> entry : recentUris) {
-                if (count++ > getMaxNumberOfRecentUris()) {
-                    break;
+            int skip = recentUris.size() - getMaxNumberOfRecentUris();
+            for (Map.Entry<URI, DataFormat> entry : recentUris.entrySet()) {
+                if (skip-- > 0) {
+                    continue;
                 }
                 if (buf.length() != 0) {
                     buf.append('\n');
@@ -171,7 +170,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public ReadOnlySetProperty<Map.Entry<URI, DataFormat>> recentUrisProperty() {
+    public ReadOnlyMapProperty<URI, DataFormat> recentUrisProperty() {
         return recentUris;
     }
 
