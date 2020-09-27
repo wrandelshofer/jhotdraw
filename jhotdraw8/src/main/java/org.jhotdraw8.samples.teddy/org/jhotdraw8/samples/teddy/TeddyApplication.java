@@ -37,8 +37,9 @@ public class TeddyApplication extends SimpleFileBasedApplication {
                 TeddyApplication.class.getResource("TeddyActivity.fxml"),
                 TeddyLabels.getResources().asResourceBundle(),
                 TeddyActivity::new));
-        setMenuBarFactory(createFxmlNodeSupplier(
-                TeddyApplication.class.getResource("TeddyMenuBar.fxml")));
+        setMenuBarFactory(FxmlUtil.createFxmlNodeSupplier(
+                TeddyApplication.class.getResource("TeddyMenuBar.fxml"),
+                TeddyLabels.getResources().asResourceBundle()));
     }
 
     @Override

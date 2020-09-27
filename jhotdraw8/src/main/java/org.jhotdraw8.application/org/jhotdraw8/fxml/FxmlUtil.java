@@ -6,6 +6,7 @@
 package org.jhotdraw8.fxml;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -46,6 +47,18 @@ public class FxmlUtil {
                 return loader.getController();
             } catch (IOException ex) {
                 throw new UncheckedIOException(ex);
+            }
+        };
+    }
+
+    public static @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
+        return () -> {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(resourceBundle);
+            try (InputStream in = fxml.openStream()) {
+                return loader.load(in);
+            } catch (IOException ex) {
+                throw new InternalError(ex);
             }
         };
     }

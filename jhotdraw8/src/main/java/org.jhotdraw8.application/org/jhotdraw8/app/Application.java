@@ -13,7 +13,6 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
@@ -27,11 +26,7 @@ import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.util.Resources;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
@@ -206,21 +201,7 @@ public interface Application extends Disableable, PropertyBean {
         resourcesProperty().set(newValue);
     }
 
-    default @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml) {
-        return createFxmlNodeSupplier(fxml, getResources().asResourceBundle());
-    }
 
-    default @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
-        return () -> {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setResources(resourceBundle);
-            try (InputStream in = fxml.openStream()) {
-                return loader.load(in);
-            } catch (IOException ex) {
-                throw new InternalError(ex);
-            }
-        };
-    }
 
 
 
