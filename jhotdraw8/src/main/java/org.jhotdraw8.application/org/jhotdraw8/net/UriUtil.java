@@ -56,7 +56,7 @@ public class UriUtil {
             String userHome = System.getProperty("user.home");
             boolean isInsideHome = false;
             if (userHome != null) {
-                Path userHomePath = Path.of(userHome);
+                Path userHomePath = Paths.get(userHome);
                 if (file.startsWith(userHomePath)) {
                     file = userHomePath.relativize(file);
                     isInsideHome = true;
