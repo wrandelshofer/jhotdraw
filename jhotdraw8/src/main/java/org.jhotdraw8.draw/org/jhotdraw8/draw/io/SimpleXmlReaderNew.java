@@ -63,6 +63,7 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
 
     @Override
     public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
+        setUriResolver(new UriResolver(documentHome, null));
         XMLInputFactory dbf = XMLInputFactory.newInstance();
 
         // We do not want that the reader creates a socket connection,
@@ -100,47 +101,50 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
             throw new IOException(e);
         }
 
-
-        return stack.isEmpty() ? null : stack.getFirst();
+        Figure figure = stack.isEmpty() ? null : stack.getFirst();
+        if ((figure instanceof Drawing)) {
+            figure.set(Drawing.DOCUMENT_HOME, documentHome);
+        }
+        return figure;
     }
 
     private void readNode(XMLStreamReader r, int next, @NonNull Deque<Figure> stack, @NonNull List<Runnable> secondPass) throws IOException {
         switch (next) {
-        case XMLStreamReader.START_ELEMENT:
-            readStartElement(r, stack, secondPass);
-            break;
-        case XMLStreamReader.END_ELEMENT:
-            readEndElement(r, stack);
-            break;
-        case XMLStreamReader.PROCESSING_INSTRUCTION:
-            readProcessingInstruction(r, stack, secondPass);
-            break;
-        case XMLStreamReader.CHARACTERS:
-            break;
-        case XMLStreamReader.COMMENT:
-            break;
-        case XMLStreamReader.SPACE:
-            break;
-        case XMLStreamReader.START_DOCUMENT:
-            break;
-        case XMLStreamReader.END_DOCUMENT:
-            break;
-        case XMLStreamReader.ENTITY_REFERENCE:
-            break;
-        case XMLStreamReader.ATTRIBUTE:
-            break;
-        case XMLStreamReader.DTD:
-            break;
-        case XMLStreamReader.CDATA:
-            break;
-        case XMLStreamReader.NAMESPACE:
-            break;
-        case XMLStreamReader.NOTATION_DECLARATION:
-            break;
-        case XMLStreamReader.ENTITY_DECLARATION:
-            break;
-        default:
-            throw new IOException("unsupported XMLStream event: " + next);
+            case XMLStreamReader.START_ELEMENT:
+                readStartElement(r, stack, secondPass);
+                break;
+            case XMLStreamReader.END_ELEMENT:
+                readEndElement(r, stack);
+                break;
+            case XMLStreamReader.PROCESSING_INSTRUCTION:
+                readProcessingInstruction(r, stack, secondPass);
+                break;
+            case XMLStreamReader.CHARACTERS:
+                break;
+            case XMLStreamReader.COMMENT:
+                break;
+            case XMLStreamReader.SPACE:
+                break;
+            case XMLStreamReader.START_DOCUMENT:
+                break;
+            case XMLStreamReader.END_DOCUMENT:
+                break;
+            case XMLStreamReader.ENTITY_REFERENCE:
+                break;
+            case XMLStreamReader.ATTRIBUTE:
+                break;
+            case XMLStreamReader.DTD:
+                break;
+            case XMLStreamReader.CDATA:
+                break;
+            case XMLStreamReader.NAMESPACE:
+                break;
+            case XMLStreamReader.NOTATION_DECLARATION:
+                break;
+            case XMLStreamReader.ENTITY_DECLARATION:
+                break;
+            default:
+                throw new IOException("unsupported XMLStream event: " + next);
         }
     }
 

@@ -117,15 +117,14 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                     ClipboardContent content = new ClipboardContent();
                     URI stylesheetUri = items.get(0);
                     URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
-                    stylesheetUri = documentHome.resolve(stylesheetUri);
-
+                    if (documentHome != null)
+                        stylesheetUri = documentHome.resolve(stylesheetUri);
                     content.putUrl(stylesheetUri.toString());
                     clipboard.setContent(content);
                 }
 
-                @Nullable
                 @Override
-                public List<URI> read(@NonNull Clipboard clipboard) {
+                public @Nullable List<URI> read(@NonNull Clipboard clipboard) {
                     List<URI> list;
                     if (clipboard.hasUrl()) {
                         list = new ArrayList<>();
@@ -138,8 +137,9 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                         URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
                         for (File f : clipboard.getFiles()) {
                             URI dragboardUri = f.toURI();
-                            //URI stylesheetUri = documentHome.relativize(dragboardUri);
-                            URI stylesheetUri = dragboardUri;
+                            URI stylesheetUri = (documentHome != null)
+                                    ? documentHome.resolve(dragboardUri)
+                                    : dragboardUri;
                             list.add(stylesheetUri);
                         }
                     } else {
