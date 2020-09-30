@@ -23,7 +23,6 @@ module org.jhotdraw8.draw {
     opens org.jhotdraw8.draw.action.images;
     opens org.jhotdraw8.draw.gui to javafx.fxml;
     opens org.jhotdraw8.draw.popup to javafx.fxml;
-    opens org.jhotdraw8.geom; // must be opened so that JUnit can access it
 
     exports org.jhotdraw8.css;
     exports org.jhotdraw8.css.ast;

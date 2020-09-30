@@ -321,24 +321,35 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         if (converter instanceof CssConverter) {// FIXME this is questionable
             CssConverter<Object> c = (CssConverter<Object>) converter;
             try {
-                for (CssToken t : c.toTokens(element.getStyled(origin, key), null)) {
-                    switch (t.getType()) {
-                    case CssTokenType.TT_NUMBER:
-                        buf.append(t.getNumericValueNonNull().toString());
-                        break;
-                    case CssTokenType.TT_PERCENTAGE:
-                        buf.append(t.getNumericValueNonNull().toString());
-                        buf.append('%');
-                        break;
-                    case CssTokenType.TT_DIMENSION:
-                        buf.append(t.getNumericValueNonNull().toString());
-                        if (t.getStringValue() != null) {
-                            buf.append(t.getStringValue());
+                List<CssToken> cssTokens = c.toTokens(element.getStyled(origin, key), null);
+                if (cssTokens.size() == 1) {
+                    // If the value is scalar, then append it without CSS syntax adornments.
+                    for (CssToken t : cssTokens) {
+                        switch (t.getType()) {
+                            case CssTokenType.TT_NUMBER:
+                                buf.append(t.getNumericValueNonNull().toString());
+                                break;
+                            case CssTokenType.TT_PERCENTAGE:
+                                buf.append(t.getNumericValueNonNull().toString());
+                                buf.append('%');
+                                break;
+                            case CssTokenType.TT_DIMENSION:
+                                buf.append(t.getNumericValueNonNull().toString());
+                                if (t.getStringValue() != null) {
+                                    buf.append(t.getStringValue());
+                                }
+                                break;
+                            default:
+                                if (t.getStringValue() != null) {
+                                    buf.append(t.getStringValue());
+                                }
+                                break;
                         }
-                        break;
-                    default:
-                        buf.append(t.getStringValue());
-                        break;
+                    }
+                } else {
+                    // If the value is non-scalar, then append it with all CSS syntax adornments.
+                    for (CssToken t : cssTokens) {
+                        buf.append(t.toString());
                     }
                 }
             } catch (IOException e) {

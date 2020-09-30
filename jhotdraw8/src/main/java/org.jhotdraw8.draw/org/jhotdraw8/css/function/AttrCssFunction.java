@@ -18,6 +18,7 @@ import org.jhotdraw8.css.UnitConverter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
@@ -36,6 +37,14 @@ import java.util.function.Consumer;
  *     qualified-name = [ [ ident-token ], "|" ] , ident-token ;
  * </pre>
  * If attr-fallback is not given, then ident "none" is assumed.
+ * <p>
+ * References:
+ * <dl>
+ *     <dd></dd>attr() function<dt>
+ *         <a href="https://drafts.csswg.org/css-values-4/#attr-notation">csswg.org</a></a>
+ *     </dt>
+ * </dl>
+ * </p>
  */
 public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     /**
@@ -78,7 +87,13 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
 
         if (tt.next() == CssTokenType.TT_COMMA) {
             while (tt.nextNoSkip() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+                if (tt.current() == CssTokenType.TT_S && attrFallback.isEmpty()) {
+                    continue;//remove leading white space
+                }
                 attrFallback.add(tt.getToken());
+            }
+            while (!attrFallback.isEmpty() && attrFallback.get(attrFallback.size() - 1).getType() == CssTokenType.TT_S) {
+                attrFallback.remove(attrFallback.size() - 1);//remove trailing white space
             }
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
@@ -86,146 +101,85 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         }
         int end = tt.getEndPosition();
 
-        @Nullable List<CssToken> strValue = model.getAttribute(element, null, attrName.getNamespace(), attrName.getName());
-        if (strValue != null) {
-            Outer:
+        applyFunction(element, model, functionProcessor, out, recursionStack, line, start, attrName, typeOrUnit, attrFallback, end);
+    }
+
+    public void applyFunction(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack, int line, int start, QualifiedName attrName, String typeOrUnit, List<CssToken> attrFallback, int end) throws IOException, ParseException {
+        @Nullable List<CssToken> tokenizedValue = model.getAttribute(element, null, attrName.getNamespace(), attrName.getName());
+        if (tokenizedValue != null) {
             switch (typeOrUnit == null ? "string" : typeOrUnit) {
-            case "string": {
-                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                while (t2.next() != CssTokenType.TT_EOF) {
-                    switch (t2.current()) {
-                    case CssTokenType.TT_STRING:
-                        out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
-                        break;
-                    case CssTokenType.TT_IDENT:
-                        if (t2.currentStringNonNull().equals(CssTokenType.IDENT_NONE)) {
-                            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
-                        } else {
-                            out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentStringNonNull(), null, line, start, end));
-                        }
-                        break;
-                    case CssTokenType.TT_NUMBER:
-                    case CssTokenType.TT_PERCENTAGE:
-                        out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString(), null, line, start, end));
-                        break;
-                    case CssTokenType.TT_DIMENSION:
-                        out.accept(new CssToken(CssTokenType.TT_STRING, t2.currentNumberNonNull().toString() + t2.currentStringNonNull(), null, line, start, end));
-                        break;
-                    default:
-                        break Outer; // use fallback
+                default:
+                case "string":
+                    if (applyAsString(element, model, out, line, start, attrName, end)) {
+                        return;
                     }
-                }
-                return; // use output
-            }
-            case "color":
-            case "url":
-                break;//use fallback
-            case "integer":
-            case "number": {
-                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                if (t2.next() == CssTokenType.TT_EOF) {
-                    break Outer; // use fallback
-                }
-                t2.pushBack();
-                while (t2.next() != CssTokenType.TT_EOF) {
-                    switch (t2.current()) {
-                    case CssTokenType.TT_STRING:
-                    case CssTokenType.TT_IDENT:
-                        double d;
-                        try {
-                            d = Double.parseDouble(t2.currentStringNonNull());
-                        } catch (NumberFormatException e) {
-                            break Outer; // use fallback
-                        }
-                        out.accept(new CssToken(CssTokenType.TT_NUMBER, null, d, line, start, end));
-                        break;
-                    case CssTokenType.TT_NUMBER:
-                    case CssTokenType.TT_DIMENSION:
-                    case CssTokenType.TT_PERCENTAGE:
-                        out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonNull(), line, start, end));
-                        break;
-                    default:
-                        break Outer; // use fallback
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_STRING, ""));
                     }
-                }
-                return; // use output
-            }
-            case "length": {
-                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                if (t2.next() == CssTokenType.TT_EOF) {
-                    break Outer; // use fallback
-                }
-                t2.pushBack();
-                while (t2.next() != CssTokenType.TT_EOF) {
-                    switch (t2.current()) {
-                    case CssTokenType.TT_STRING:
-                    case CssTokenType.TT_IDENT:
-                        double d;
-                        try {
-                            d = Double.parseDouble(t2.currentStringNonNull());
-                        } catch (NumberFormatException e) {
-                            break Outer; // use fallback
-                        }
-                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, UnitConverter.DEFAULT, d, line, start, end));
-                        break;
-                    case CssTokenType.TT_NUMBER:
-                    case CssTokenType.TT_DIMENSION:
-                    case CssTokenType.TT_PERCENTAGE:
-                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentStringNonNull(), t2.currentNumberNonNull(), line, start, end));
-                        break;
-                    default:
-                        break Outer; // use fallback
+                    break;
+                case "color":
+                    // FIXME implement applyAsColor
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_IDENT, "currentcolor"));
                     }
-                }
-                return; // use output
-            }
-            case "%": {
-                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                while (t2.next() != CssTokenType.TT_EOF) {
-                    switch (t2.current()) {
-                    case CssTokenType.TT_STRING:
-                    case CssTokenType.TT_IDENT:
-                        double d;
-                        try {
-                            d = Double.parseDouble(t2.currentStringNonNull());
-                        } catch (NumberFormatException e) {
-                            break Outer; // use fallback
-                        }
-                        out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, d, line, start, end));
-                        break;
-                    case CssTokenType.TT_NUMBER:
-                    case CssTokenType.TT_DIMENSION:
-                    case CssTokenType.TT_PERCENTAGE:
-                        out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonNull(), line, start, end));
-                        break;
-                    default:
-                        break Outer; // use fallback
+                    break;
+                case "url":
+                    // FIXME implement applyAsURL
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_URL, "about:invalid"));
                     }
-                }
-                return; // use output
-            }
-            case "angle":
-            case "time":
-            case "frequency":
-                // XXX currently not implemented
-                break; // use fallback
-            default:
-                final ListCssTokenizer t2 = new ListCssTokenizer(strValue);
-                while (t2.next() != CssTokenType.TT_EOF) {
-                    switch (t2.current()) {
-                    case CssTokenType.TT_STRING:
-                    case CssTokenType.TT_IDENT:
-                        break Outer;// use fallback
-                    case CssTokenType.TT_NUMBER:
-                    case CssTokenType.TT_DIMENSION:
-                    case CssTokenType.TT_PERCENTAGE:
-                        out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonNull(), line, start, end));
-                        break;
-                    default:
-                        break Outer; // use fallback
+                    break;
+                case "em":
+                case "ex":
+                case "px":
+                case "rem":
+                case "vw":
+                case "vh":
+                case "vmin":
+                case "vmax":
+                case "mm":
+                case "cm":
+                case "in":
+                case "pt":
+                case "pc":
+                    if (applyAsLengthInTheGivenUnits(out, line, start, typeOrUnit, end, tokenizedValue)) {
+                        return;
                     }
-                }
-                return; // use output
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_DIMENSION, 0, typeOrUnit));
+                    }
+                    break;
+
+                case "integer":
+                case "number":
+                    if (applyAsNumber(out, line, start, typeOrUnit, end, tokenizedValue)) {
+                        return;
+                    }
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
+                    }
+                    break;
+                case "length":
+                    if (applyAsLength(out, line, start, typeOrUnit, end, tokenizedValue)) {
+                        return;
+                    }
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
+                    }
+                    break;
+                case "%":
+                    if (applyAsPercentage(out, line, start, typeOrUnit, end, tokenizedValue)) {
+                        return;
+                    }
+                    if (attrFallback.isEmpty()) {
+                        attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
+                    }
+                    break;
+                case "angle":
+                case "time":
+                case "frequency":
+                    // XXX currently not implemented
+                    break; // use fallback
             }
 
         }
@@ -234,6 +188,175 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                         attrFallback.isEmpty() ? Collections.singletonList(new CssToken(CssTokenType.TT_IDENT, "none")) : attrFallback),
                 out, recursionStack);
         recursionStack.pop();
+    }
+
+    /**
+     * The attribute value is parsed as a CSS <number>, that is without the unit (e.g. 12.5), and interpreted as a <percentage>. If it is not valid, that is not a number or out of the range accepted by the CSS property, the default value is used.
+     * If the given value is used as a length, attr() computes it to an absolute length.
+     * Leading and trailing spaces are stripped.
+     * <p>
+     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+     * MDN web docs, attr()</a>
+     */
+    private boolean applyAsPercentage(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
+        final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
+        while (t2.next() != CssTokenType.TT_EOF) {
+            switch (t2.current()) {
+                case CssTokenType.TT_STRING:
+                case CssTokenType.TT_IDENT:
+                    double d;
+                    try {
+                        d = Double.parseDouble(t2.currentStringNonNull());
+                    } catch (NumberFormatException e) {
+                        return false; // use fallback
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, d, line, start, end));
+                    return true;
+                case CssTokenType.TT_NUMBER:
+                case CssTokenType.TT_DIMENSION:
+                case CssTokenType.TT_PERCENTAGE:
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, t2.currentNumberNonNull(), line, start, end));
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The attribute value is parsed as a CSS {@code length} dimension,
+     * that is including the unit (e.g. 12.5em). If it is not valid, that is
+     * not a length or out of the range accepted by the CSS property, the default value is used.
+     * If the given unit is a relative length, attr() computes it to an absolute length.
+     * Leading and trailing spaces are stripped.
+     * <p>
+     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+     * MDN web docs, attr()</a>
+     */
+    private boolean applyAsLength(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
+        final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
+        if (t2.next() == CssTokenType.TT_EOF) {
+            return false; // use fallback
+        }
+        t2.pushBack();
+        while (t2.next() != CssTokenType.TT_EOF) {
+            switch (t2.current()) {
+                case CssTokenType.TT_STRING:
+                case CssTokenType.TT_IDENT:
+                    double d;
+                    try {
+                        d = Double.parseDouble(t2.currentStringNonNull());
+                    } catch (NumberFormatException e) {
+                        return false; // use fallback
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, UnitConverter.DEFAULT, d, line, start, end));
+                    return true;
+                case CssTokenType.TT_NUMBER:
+                case CssTokenType.TT_DIMENSION:
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, t2.currentString() == null ? "" : t2.currentString(), t2.currentNumberNonNull(), line, start, end));
+                    return true;
+                case CssTokenType.TT_PERCENTAGE:
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, "", t2.currentNumberNonNull().doubleValue() * 100, line, start, end));
+                    return true;
+
+            }
+        }
+        return false; // use fallback
+    }
+
+    /**
+     * The attribute value is parsed as a CSS {@code number}.
+     * If it is not valid, that is not a number or out of the range accepted
+     * by the CSS property, the default value is used.
+     * Leading and trailing spaces are stripped.
+     * <p>
+     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+     * MDN web docs, attr()</a>
+     */
+    private boolean applyAsNumber(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
+        final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
+        if (t2.next() == CssTokenType.TT_EOF) {
+            return false;
+        }
+        t2.pushBack();
+        while (t2.next() != CssTokenType.TT_EOF) {
+            switch (t2.current()) {
+                case CssTokenType.TT_STRING:
+                case CssTokenType.TT_IDENT:
+                    double d;
+                    try {
+                        d = Double.parseDouble(t2.currentStringNonNull());
+                    } catch (NumberFormatException e) {
+                        return false; // use fallback
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, null, d, line, start, end));
+                    return true;
+                case CssTokenType.TT_NUMBER:
+                case CssTokenType.TT_DIMENSION:
+                case CssTokenType.TT_PERCENTAGE:
+                    out.accept(new CssToken(CssTokenType.TT_NUMBER, null, t2.currentNumberNonNull(), line, start, end));
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The attribute value is parsed as a CSS {@code length} dimension, that is
+     * including the unit (e.g. 12.5em). If it is not valid, that is not a
+     * length or out of the range accepted by the CSS property, the default
+     * value is used.
+     * If the given unit is a relative length, attr() computes it to an
+     * absolute length. Leading and trailing spaces are stripped.
+     * <p>
+     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+     * MDN web docs, attr()</a>
+     */
+    public boolean applyAsLengthInTheGivenUnits(@NonNull Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, @NonNull List<CssToken> tokenizedValue) {
+        final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
+        if (t2.next() == CssTokenType.TT_EOF) {
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, 0, typeOrUnit));
+        }
+        t2.pushBack();
+        while (t2.next() != CssTokenType.TT_EOF) {
+            switch (t2.current()) {
+                case CssTokenType.TT_STRING:
+                case CssTokenType.TT_IDENT:
+                    double d;
+                    try {
+                        d = Double.parseDouble(t2.currentStringNonNull());
+                    } catch (NumberFormatException e) {
+                        return false;
+                    }
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, d, line, start, end));
+                    return true;
+                case CssTokenType.TT_NUMBER:
+                case CssTokenType.TT_DIMENSION:
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonNull(), line, start, end));
+                    return true;
+                case CssTokenType.TT_PERCENTAGE:
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, typeOrUnit, t2.currentNumberNonNull().doubleValue() * 100.0, line, start, end));
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The attribute value is treated as a CSS {@code string}.
+     * It is NOT reparsed, and in particular the characters are used as-is
+     * instead of CSS escapes being turned into different characters.
+     * <p>
+     * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
+     * MDN web docs, attr()</a>
+     */
+    public boolean applyAsString(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
+        String attributeAsString = model.getAttributeAsString(element, null, attrName.getNamespace(), attrName.getName());
+        if (attributeAsString == null) {
+            return false;
+        } else {
+            out.accept(new CssToken(CssTokenType.TT_STRING, attributeAsString, null, line, start, end));
+            return true;
+        }
     }
 
     @NonNull

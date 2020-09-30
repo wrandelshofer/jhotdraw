@@ -60,17 +60,6 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
         if (tt.next() != CssTokenType.TT_COMMA) {
             tt.pushBack();
         }
-        if (tt.next() == CssTokenType.TT_RIGHT_BRACKET) {
-            // We need 3 arguments, but maybe there is a 2 argument function
-            // with the same name defined as an attribute value.
-            out.accept(new CssToken(CssTokenType.TT_FUNCTION, NAME));
-            out.accept(new CssToken(CssTokenType.TT_STRING, str));
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_STRING, regex));
-            out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-            return;
-        }
-        tt.pushBack();
         String repl = evalString(element, tt, getName(), functionProcessor);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
             throw new ParseException("〈" + NAME + "〉: right bracket ')' expected.", tt.getStartPosition());
