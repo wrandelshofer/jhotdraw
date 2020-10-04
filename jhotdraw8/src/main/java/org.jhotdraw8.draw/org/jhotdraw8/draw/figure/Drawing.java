@@ -161,6 +161,7 @@ public interface Drawing extends Figure {
         if (styleManager != null) {
             styleManager.applyStylesheetsTo(preorderIterable());
             for (Figure f : preorderIterable()) {
+                f.updateCss(ctx);
                 f.invalidateTransforms();
             }
         }
