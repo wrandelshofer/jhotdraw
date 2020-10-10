@@ -7,11 +7,15 @@ package org.jhotdraw8.text;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serializable;
 import java.text.CollationKey;
 import java.text.Collator;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
+import java.util.Comparator;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * The OSXCollator strives to match the collation rules used by the Mac OS X
@@ -53,7 +57,7 @@ public class OSXCollator extends Collator {
             String rules = ((RuleBasedCollator) collator).getRules();
 
             // If hyphen is ignored except for tertiary difference, make it
-            // a primary difference, and move in front of the first primary 
+            // a primary difference, and move in front of the first primary
             // difference found in the rules
             int pos = rules.indexOf(",'-'");
             int primaryRelationPos = rules.indexOf('<');
@@ -67,8 +71,8 @@ public class OSXCollator extends Collator {
                         + rules.substring(primaryRelationPos);
             }
 
-            // If space is ignored except for secondary and tertiary 
-            // difference, make it a primary difference, and move in front 
+            // If space is ignored except for secondary and tertiary
+            // difference, make it a primary difference, and move in front
             // of the first primary difference found in the rules
             pos = rules.indexOf(";' '");
             primaryRelationPos = rules.indexOf('<');
@@ -175,5 +179,13 @@ public class OSXCollator extends Collator {
         for (int j = start; j < end; j++) {
             out.append(s.charAt(j));
         }
+    }
+
+    public static <T> Comparator<T> comparing(
+            @NonNull Function<? super T, String> keyExtractor) {
+        OSXCollator collator = new OSXCollator();
+        Objects.requireNonNull(keyExtractor);
+        return (Comparator<T> & Serializable)
+                (c1, c2) -> collator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
     }
 }

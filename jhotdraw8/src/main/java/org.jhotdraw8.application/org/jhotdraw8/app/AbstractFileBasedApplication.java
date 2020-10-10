@@ -49,6 +49,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.text.OSXCollator;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
@@ -586,11 +587,11 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     Menu mmi = (Menu) mi;
                     if (FILE_OPEN_RECENT_MENU.equals(mmi.getId())) {
                         mmi.getItems().clear();
-                        int skip = getRecentUris().size() - getMaxNumberOfRecentUris();
-                        for (Map.Entry<URI, DataFormat> entry : getRecentUris().entrySet()) {
-                            if (skip-- > 0) {
-                                continue;
-                            }
+                        List<Map.Entry<URI, DataFormat>> list =
+                                new ArrayList<>(getRecentUris().entrySet()).subList(0, min(getRecentUris().size(), getMaxNumberOfRecentUris()));
+                        list.sort(OSXCollator.comparing(e -> e.getKey().toString()));
+
+                        for (Map.Entry<URI, DataFormat> entry : list) {
                             URI uri = entry.getKey();
                             DataFormat format = entry.getValue();
                             MenuItem mii = new MenuItem();
