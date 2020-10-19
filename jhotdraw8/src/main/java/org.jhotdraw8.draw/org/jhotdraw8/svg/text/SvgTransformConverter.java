@@ -68,7 +68,8 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTy()));
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-        } else if (tx instanceof Scale) {
+        } else if ((tx instanceof Scale) && ((Scale) tx).getPivotX() == 0.0 && ((Scale) tx).getPivotY() == 0.0) {
+            // Svg only supports scale with a pivot of at 0,0.
             Scale ts = (Scale) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "scale"));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getX()));
@@ -76,11 +77,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
                 out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getY()));
             }
-            if (ts.getPivotX() != 0 || ts.getPivotY() != 0) {
-              //  System.err.println("SvgTransformConverter pivot not implemented yet");
-            }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-
         } else if (tx instanceof Rotate) {
             Rotate tr = (Rotate) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "rotate"));
