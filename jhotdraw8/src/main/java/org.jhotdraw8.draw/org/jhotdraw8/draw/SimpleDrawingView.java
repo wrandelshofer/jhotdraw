@@ -34,6 +34,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -61,6 +64,7 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
@@ -274,16 +278,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         constrainer.addListener(this::onConstrainerChanged);
         zoomableScrollPane.visibleContentRectProperty().addListener(this::onViewRectChanged);
         zoomableScrollPane.contentToViewProperty().addListener(this::onContentToViewChanged);
-
-        Border unfocusedBorder = new Border(
-                new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
-                new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
-        );
-        Border focusedBorder = new Border(
-                new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(24)),
-                new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))
-        );
-        background.borderProperty().bind(CustomBinding.convert(focused, b -> b ? focusedBorder : unfocusedBorder));
         CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
         CustomBinding.bind(focused, toolProperty(), Tool::focusedProperty);
     }
@@ -341,13 +335,18 @@ public class SimpleDrawingView extends AbstractDrawingView {
         );
         node.setCenter(zoomableScrollPane.getNode());
 
-
+        background.getStyleClass().add("canvasPane");
         background.setBackground(new Background(new BackgroundFill(
                 new ImagePattern(
                         createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8),
                         0, 0, 16, 16, false)
                 , CornerRadii.EMPTY, Insets.EMPTY)));
         background.setManaged(false);
+        BorderStrokeStyle outsideStroke = new BorderStrokeStyle(StrokeType.OUTSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 24.0, 0, Collections.emptyList());
+        Border backgroundBorder = new Border(
+                new BorderStroke(Color.TRANSPARENT, outsideStroke, CornerRadii.EMPTY, new BorderWidths(24))
+        );
+        background.setBorder(backgroundBorder);
         zoomableScrollPane.getContentChildren().add(drawingRenderer.getNode());
         zoomableScrollPane.getBackgroundChildren().add(background);
         zoomableScrollPane.getForegroundChildren().addAll(
@@ -500,7 +499,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         double w = bounds1.getWidth();
         double h = bounds1.getHeight();
 
-        double p = 24;
+        double p = 0;
         background.resizeRelocate(x - p, y - p, w + 2 * p, h + 2 * p);
     }
 

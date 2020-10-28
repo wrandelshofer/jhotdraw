@@ -12,9 +12,10 @@
     -fx-stroke: black;
 }
 
-/* Styles the canvas pane behind the drawing. This is a rectangle with a checkerboard pattern on it. */
+/* Styles the canvas pane behind the drawing. This is a region with a checkerboard pattern on it. */
 #canvasPane {
     /*-fx-effect: dropshadow(gaussian,rgba(0,0,0,0.6),10,0,0,2);*//* XXX very poor performance with dropshadow! */
+    -fx-border-color: green;
 }
 
 /* Styles the tool pane in front of the drawing. This is a group. */

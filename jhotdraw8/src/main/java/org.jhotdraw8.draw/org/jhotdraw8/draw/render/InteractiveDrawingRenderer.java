@@ -50,15 +50,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     public static final String RENDER_CONTEXT_PROPERTY = "renderContext";
     public static final String MODEL_PROPERTY = "model";
     public static final String DRAWING_VIEW_PROPERTY = "drawingView";
-    @NonNull
-    private final NonNullObjectProperty<RenderContext> renderContext //
+    private final @NonNull NonNullObjectProperty<RenderContext> renderContext //
             = new NonNullObjectProperty<>(this, RENDER_CONTEXT_PROPERTY, new SimpleRenderContext());
-    @NonNull
-    private final NonNullObjectProperty<DrawingModel> model //
+    private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
 
-    @NonNull
-    private final Group drawingPane = new Group();
+    private final @NonNull Group drawingPane = new Group();
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
     /**
@@ -68,14 +65,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
     private final Map<Figure, Node> figureToNodeMap = new HashMap<>();
     private final Map<Node, Figure> nodeToFigureMap = new HashMap<>();
-    @NonNull
-    final private ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
-    @NonNull
-    final private ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
-    @Nullable
-    private Runnable repainter = null;
-    @NonNull
-    private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
+    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
+    private @Nullable Runnable repainter = null;
+    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
 
     public InteractiveDrawingRenderer() {
         drawingPane.setManaged(false);
@@ -87,13 +80,11 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return clipBounds;
     }
 
-    @NonNull
-    public ObjectProperty<DrawingView> drawingViewProperty() {
+    public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
-    @NonNull
-    public ObjectProperty<DrawingEditor> editorProperty() {
+    public @NonNull ObjectProperty<DrawingEditor> editorProperty() {
         return editor;
     }
 
@@ -105,9 +96,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         this.drawingView.set(drawingView);
     }
 
-    @Nullable
-
-    public Figure findFigure(double vx, double vy) {
+    public @Nullable Figure findFigure(double vx, double vy) {
         Drawing dr = getDrawing();
         Figure f = findFigureRecursive((Parent) getNode(dr),
                 getDrawingView().viewToWorld(vx, vy),
@@ -128,9 +117,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param figures figures of interest
      * @return a figure in the specified set which contains the point, or null.
      */
-    @Nullable
-
-    public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures) {
+    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures) {
         return findFigure(vx, vy, figures, getEditor().getTolerance());
     }
 
@@ -145,8 +132,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      *                  coordinates, in which the the point is considered to be inside the figure
      * @return a figure in the specified set which contains the point, or null.
      */
-    @Nullable
-    public Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
+    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         if (worldNode != null) {
             Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
@@ -209,8 +195,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return null;
     }
 
-    @Nullable
-    private Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance) {
+    private @Nullable Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance) {
         if (p == null) {
             return null;
         }
@@ -236,9 +221,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return null;
     }
 
-    @NonNull
-
-    public List<Figure> findFigures(double vx, double vy, boolean decompose) {
+    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
         List<Figure> list = new ArrayList<>();
@@ -246,9 +229,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return list;
     }
 
-    @NonNull
-
-    public List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    public @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
@@ -290,9 +271,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    @NonNull
-
-    public List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    public @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
@@ -359,8 +338,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         this.clipBounds.set(clipBounds);
     }
 
-    @Nullable
-    public Drawing getDrawing() {
+    public @Nullable Drawing getDrawing() {
         return getModel() == null ? null : getModel().getDrawing();
     }
 
@@ -380,8 +358,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return drawingPane;
     }
 
-    @Nullable
-    public Node getNode(@Nullable Figure f) {
+    public @Nullable Node getNode(@Nullable Figure f) {
         if (f == null) {
             return null;
         }
@@ -400,8 +377,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return renderContext;
     }
 
-    @NonNull
-    public RenderContext getRenderContext() {
+    public @NonNull RenderContext getRenderContext() {
         return renderContext.get();
     }
 
@@ -593,9 +569,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    @NonNull
-
-    public DoubleProperty zoomFactorProperty() {
+    public @NonNull DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
 }

@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.control.ScrollBar;
@@ -70,6 +71,7 @@ import java.util.ResourceBundle;
 public class ZoomableScrollPane {
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "scaleFactor", 1.0);
     private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
+    private final ObjectProperty<Insets> insets = new SimpleObjectProperty<>(this, "insets", new Insets(24, 24, 24, 24));
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -211,8 +213,14 @@ public class ZoomableScrollPane {
         content.getTransforms().addAll(translate, scale);
 
         // - Adjust the scrollbar max, when the subScene is resized.
-        horizontalScrollBar.maxProperty().bind(contentWidthProperty().multiply(zoomFactor));
-        verticalScrollBar.maxProperty().bind(contentHeightProperty().multiply(zoomFactor));
+        horizontalScrollBar.maxProperty().bind(
+                CustomBinding.compute(() -> getContentWidth() * getZoomFactor() + getInsets().getRight(), contentWidthProperty(), zoomFactor, insets));
+        horizontalScrollBar.minProperty().bind(
+                CustomBinding.compute(() -> -getInsets().getLeft(), insets));
+        verticalScrollBar.maxProperty().bind(
+                CustomBinding.compute(() -> getContentHeight() * getZoomFactor() + getInsets().getBottom(), contentHeightProperty(), zoomFactor, insets));
+        verticalScrollBar.minProperty().bind(
+                CustomBinding.compute(() -> -getInsets().getTop(), insets));
 
         // - Adjust the scrollbar visibleAmount whe the viewport is resized.
         horizontalScrollBar.visibleAmountProperty().bind(viewportWidthProperty());
@@ -291,9 +299,7 @@ public class ZoomableScrollPane {
     @NonNull
     private static DoubleBinding createContentRectTranslateBinding(ScrollBar scrollBar) {
         return CustomBinding.computeDouble(
-                () -> {
-                    return getScrollBarPosition(scrollBar);
-                },
+                () -> getScrollBarPosition(scrollBar),
                 scrollBar.valueProperty(),
                 scrollBar.minProperty(),
                 scrollBar.maxProperty(),
@@ -391,7 +397,7 @@ public class ZoomableScrollPane {
         if (visible > max) {
             return -Math.round((visible - max) * 0.5);
         }
-        return Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)), min, max);
+        return Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)) + min, min, max);
     }
 
     @NonNull
@@ -553,6 +559,18 @@ public class ZoomableScrollPane {
 
     public ReadOnlyDoubleProperty viewRectHeightProperty() {
         return verticalScrollBar.visibleAmountProperty();
+    }
+
+    public Insets getInsets() {
+        return insets.get();
+    }
+
+    public ObjectProperty<Insets> insetsProperty() {
+        return insets;
+    }
+
+    public void setInsets(Insets insets) {
+        this.insets.set(insets);
     }
 }
 
