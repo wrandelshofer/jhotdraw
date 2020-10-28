@@ -31,7 +31,7 @@ import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.SimpleDrawingViewNew;
+import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -465,7 +465,7 @@ public class InteractiveHandleRenderer {
         return selectedFigures;
     }
 
-    public void setDrawingView(SimpleDrawingViewNew newValue) {
+    public void setDrawingView(SimpleDrawingView newValue) {
         drawingView.set(newValue);
     }
 

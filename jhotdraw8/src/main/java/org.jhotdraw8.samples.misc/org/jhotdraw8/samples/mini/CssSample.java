@@ -14,7 +14,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
-import org.jhotdraw8.draw.SimpleDrawingView;
+import org.jhotdraw8.draw.SimpleDrawingViewOld;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -90,7 +90,7 @@ public class CssSample extends Application {
         drawing.updateAllCss(ctx);
         drawing.layoutAll(ctx);
 
-        DrawingView drawingView = new SimpleDrawingView();
+        DrawingView drawingView = new SimpleDrawingViewOld();
 
         drawingView.setDrawing(drawing);
         drawingView.setConstrainer(new GridConstrainer(10, 10));
