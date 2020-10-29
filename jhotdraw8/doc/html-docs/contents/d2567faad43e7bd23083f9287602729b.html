@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Undo Support - Logical View</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Source+Code+Pro:300,400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="../assets/css/bootstrap.css">
+<link rel="stylesheet" href="../assets/css/jquery.bonsai.css">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/icon-font/icons.css">
+<script type="text/javascript" src="../assets/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="../assets/js/bootstrap.js"></script>
+<script type="text/javascript" src="../assets/js/jquery.bonsai.js"></script>
+
+  </head>
+  <body>
+    <div>
+
+      <!-- Name Title -->
+
+      <h1>Undo Support - Logical View</h1>
+
+      <!-- Type and Stereotype -->
+
+      <section style="margin-top: .5em;">
+        <span class="alert alert-info">
+          <span class="node-icon staruml-icon icon-UMLClassDiagram"></span>
+          UMLClassDiagram
+        </span>
+        
+      </section>
+
+      <!-- Path -->
+
+      <section style="margin-top: 10px">
+        
+        
+        
+          
+          <span class="label label-info"><a href='caf2a2eb677eaec2abd97f9bb4e8e528.html'><span class='node-icon staruml-icon icon-Project'></span>JHotDraw 8</a></span>
+        
+          <span>::</span>
+          <span class="label label-info"><a href='c0a0cda4041bb1143395771f445c8ec2.html'><span class='node-icon staruml-icon icon-UMLModel'></span>JHotDraw 8 Application Framework</a></span>
+        
+          <span>::</span>
+          <span class="label label-info"><a href='31bb50bf31205a6fba09127d1ca50be3.html'><span class='node-icon staruml-icon icon-UMLModel'></span>Logical View</a></span>
+        
+          <span>::</span>
+          <span class="label label-info"><a href='08f03d137116e5df13db6eb09c7ccac3.html'><span class='node-icon staruml-icon icon-UMLModel'></span>Undo Support</a></span>
+        
+          <span>::</span>
+          <span class="label label-info"><a href='d2567faad43e7bd23083f9287602729b.html'><span class='node-icon staruml-icon icon-UMLClassDiagram'></span>Undo Support - Logical View</a></span>
+        
+      </section>
+
+      <!-- Diagram -->
+
+      
+      <section>
+        <h3>Diagram</h3>
+        <img src="../diagrams/d2567faad43e7bd23083f9287602729b.svg">
+      </section>
+      
+
+      <!-- Description -->
+
+      
+      <section>
+        <h3>Description</h3>
+        <div>
+          
+            <p>The idea of the design for undo/redo support in JHotDraw is to implement
+UndoManagerAdapter(s) that can be connected with Model objects using the
+Listener support of the model.</p>
+
+<p>An UndoManagerAdapter creates an UndoableEdit for each ModelChangeEvent that
+it receives from the Model. It adds each created UndoableEdit object to
+the UndoManager.</p>
+
+<p>Grouping events into user transactions:</p>
+
+<p>A UserInterfaceControl creates a CompoundEdit object and adds it to
+the UndoManager when the user starts an undoable action.
+The User Interface Control calls end() on the CompoundEdit when the user
+has completed the undoable action.
+The UndoManager aggregates UndoableEdit events into a CompoundEdit until
+end() has been called on the CompoundEdit. </p>
+
+<p>Note that undo/redo still works if a UserInterfaceControl does not create
+CompoundEdits however then the user might be surprised that a single
+action caused multiple UndoableEdits.</p>
+          
+        </div>
+      </section>
+      
+
+      <!-- Specification -->
+
+      
+
+      <!-- Directed Relationship -->
+
+      
+
+      <!-- Undirected Relationship -->
+
+      
+
+      <!-- Classifier -->
+
+      
+
+      <!-- Interface -->
+
+      
+
+      <!-- Component -->
+
+      
+
+      <!-- Node -->
+
+      
+
+      <!-- Actor -->
+
+      
+
+      <!-- Use Case -->
+
+      
+
+      <!-- Template Parameters -->
+
+      
+
+      <!-- Literals -->
+
+      
+
+      <!-- Attributes -->
+
+      
+
+      <!-- Operations -->
+
+      
+
+      <!-- Receptions -->
+
+      
+
+      <!-- Extension Points -->
+
+      
+
+      <!-- Parameters -->
+
+      
+
+      <!-- Diagrams -->
+
+      
+      
+
+      <!-- Behavior -->
+
+      
+
+      <!-- Action -->
+
+      
+
+      <!-- Interaction -->
+
+      
+
+      <!-- CombinedFragment -->
+
+      
+
+      <!-- Activity -->
+
+      
+
+      <!-- State Machine -->
+
+      
+
+      <!-- State Machine -->
+
+      
+
+      <!-- State -->
+
+      
+
+      <!-- Vertex -->
+
+      
+
+      <!-- Transition -->
+
+      
+
+      <!-- Data Model (ERD) -->
+
+      
+
+      <!-- Columns (ERD) -->
+
+      
+
+      <!-- Related Entities (ERD) -->
+
+      
+
+      <!-- Data Flows (DFD) -->
+
+      
+
+      <!-- Flows (Flowchart) -->
+
+      
+
+      <!-- Properties -->
+
+      <section>
+        <h3>Properties</h3>
+        
+        <table class="table table-striped table-bordered">
+    <tr>
+        <th width="50%">Name</th>
+        <th width="50%">Value</th>
+    </tr>
+    
+    
+    
+    
+    
+    
+    
+    <tr>
+        <td>name</td>
+        <td>Undo Support - Logical View</td>
+    </tr>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <tr>
+        <td>defaultDiagram</td>
+        <td><span class='label label-info'>false</span></td>
+    </tr>
+    
+    
+    
+    
+    
+</table>                
+
+      </section>
+
+      <!-- Tags -->
+
+      
+
+      <!-- Constraints, Dependencies, Dependants -->
+
+      
+
+      <!-- Relationships -->
+
+      
+      
+
+
+      <!-- Owned Elements -->
+
+      
+      
+
+
+    </div>
+  </body>
+</html>
