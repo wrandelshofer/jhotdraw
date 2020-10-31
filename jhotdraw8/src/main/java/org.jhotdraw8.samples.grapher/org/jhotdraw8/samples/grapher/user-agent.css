@@ -4,25 +4,25 @@
  */
 
 Drawing {
-    background: canvas;
+    background: white;
 }
 Label {
-    text-fill: canvastext;
+    text-fill: black;
 }
 TextArea {
-    fill: canvas;
-    text-fill: canvastext;
-    stroke: canvastext;
+    fill: none;
+    text-fill: black;
+    stroke: none;
 }
 Rectangle,
 Ellipse,
 Polygon,
 Bezier {
-    fill: canvas;
-    stroke: canvastext;
+    fill: white;
+    stroke: black;
 }
 Line,
 Polyline,
 LineConnectionWithMarkers {
-    stroke: canvastext;
+    stroke: black;
 }

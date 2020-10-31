@@ -103,7 +103,7 @@ public class TextEditingTool extends AbstractTool {
         x1 = event.getX();
         y1 = event.getY();
 
-        Figure figure = view.findFigure(x1, y1);
+        Figure figure = view.findFigure(x1, y1,f->f.isSelectable()&&f instanceof TextEditableFigure);
         if (figure instanceof TextEditableFigure) {
             TextEditableFigure f = (TextEditableFigure) figure;
             TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.worldToLocal(new Point2D(x1, y1)), view.findFigureNode(f, x1, y1));

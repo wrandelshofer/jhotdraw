@@ -356,10 +356,10 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
 
         FigureFactory factory = new DefaultFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
-        SimpleXmlWriter io = new SimpleXmlWriter(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
+        SimpleXmlWriter iow = new SimpleXmlWriter(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         SimpleXmlReader ior = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
-                io, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
+                iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
 
         editor = new SimpleDrawingEditor();

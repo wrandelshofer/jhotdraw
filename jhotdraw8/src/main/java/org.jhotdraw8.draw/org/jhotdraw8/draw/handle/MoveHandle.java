@@ -184,6 +184,10 @@ public class MoveHandle extends LocatorHandle {
      */
     public static void translateFigure(@NonNull Figure f, @NonNull CssPoint2D oldPoint, @NonNull CssPoint2D newPoint, @Nullable DrawingModel model) {
         CssPoint2D delta = newPoint.subtract(oldPoint);
+
+        final Transform wtl = f.getWorldToParent();
+        delta= FXTransforms.isIdentityOrNull(wtl) ? delta : new CssPoint2D(wtl.deltaTransform(delta.getConvertedValue()));
+
         if (model != null) {
             model.translateInParent(f, delta);
         } else {

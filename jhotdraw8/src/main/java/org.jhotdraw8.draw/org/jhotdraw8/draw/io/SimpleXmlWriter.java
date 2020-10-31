@@ -256,6 +256,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         w.writeStartDocument();
         w.setDefaultNamespace(namespaceURI);
         w.writeStartElement(docElemName);
+        w.writeDefaultNamespace(namespaceURI);
         for (Figure child : ordered) {
             writeNodeRecursively(w, child, 1);
         }

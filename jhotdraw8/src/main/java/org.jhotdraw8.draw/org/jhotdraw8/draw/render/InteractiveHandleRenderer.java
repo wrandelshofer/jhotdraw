@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
 public class InteractiveHandleRenderer {
     private static final String RENDER_CONTEXT = "renderContenxt";
     private static final String DRAWING_VIEW = "drawingView";
-    private final static double SQRT2 = Math.sqrt(2);
+    private final static double LINE45DEG = Math.sqrt(0.5);
     @NonNull
     final
     private Group handlesPane = new Group();
@@ -131,17 +131,17 @@ public class InteractiveHandleRenderer {
      * tolerance.
      *
      * @param node      The node
-     * @param point     The point in local coordinates
+     * @param pointInLocal     The point in local coordinates
      * @param tolerance The maximal distance the point is allowed to be away
-     *                  from the node
+     *                  from the node, in view coordinates
      * @return true if the node contains the point
      */
-    public static boolean contains(@NonNull Node node, @NonNull Point2D point, double tolerance) {
-        double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(SQRT2, SQRT2).magnitude();
+    public static boolean contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
+        double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(LINE45DEG, LINE45DEG).magnitude();
 
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
-            if (shape.contains(point)) {
+            if (shape.contains(pointInLocal)) {
                 return true;
             }
 
@@ -158,7 +158,7 @@ public class InteractiveHandleRenderer {
                 widthFactor = 1;
                 break;
             }
-            if (FXGeom.grow(shape.getBoundsInParent(), tolerance, tolerance).contains(point)) {
+            if (FXGeom.grow(shape.getBoundsInLocal(), toleranceInLocal, toleranceInLocal).contains(pointInLocal)) {
                 int cap;
                 switch (shape.getStrokeLineCap()) {
                 case SQUARE:
@@ -190,21 +190,21 @@ public class InteractiveHandleRenderer {
                 return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
                         cap, join, (float) shape.getStrokeMiterLimit()
                 ).createStrokedShape(Shapes.awtShapeFromFX(shape))
-                        .contains(new java.awt.geom.Point2D.Double(point.getX(), point.getY()));
+                        .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()));
             } else {
                 return false;
             }
         } else if (node instanceof Group) {
-            if (FXGeom.contains(node.getBoundsInLocal(), point, toleranceInLocal)) {
+            if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 for (Node child : ((Group) node).getChildren()) {
-                    if (contains(child, child.parentToLocal(point), tolerance)) {
+                    if (contains(child, child.parentToLocal(pointInLocal), tolerance)) {
                         return true;
                     }
                 }
             }
             return false;
         } else { // foolishly assumes that all other nodes are rectangular and opaque
-            return FXGeom.contains(node.getBoundsInLocal(), point, tolerance);
+            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance);
         }
     }
 

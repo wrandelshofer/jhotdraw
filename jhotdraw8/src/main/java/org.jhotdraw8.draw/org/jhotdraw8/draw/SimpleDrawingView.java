@@ -68,6 +68,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
 public class SimpleDrawingView extends AbstractDrawingView {
@@ -192,33 +193,23 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @Nullable Figure findFigure(double vx, double vy, Set<Figure> figures) {
-        return drawingRenderer.findFigure(vx, vy, figures);
-    }
-
-    @Override
-    public @Nullable Figure findFigure(double vx, double vy) {
-        return drawingRenderer.findFigure(vx, vy);
-    }
-
-    @Override
     public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
         return drawingRenderer.findFigureNode(figure, vx, vy);
     }
 
     @Override
-    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose) {
-        return drawingRenderer.findFigures(vx, vy, decompose);
+    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate) {
+        return drawingRenderer.findFigures(vx, vy, decompose,predicate);
     }
 
     @Override
     public @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
-        return drawingRenderer.findFiguresInside(vx, vy, vwidth, vheight, decompose);
+        return drawingRenderer.findFiguresInside(vx, vy, vwidth, vheight, decompose, Figure::isSelectable);
     }
 
     @Override
-    public @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
-        return drawingRenderer.findFiguresIntersecting(vx, vy, vwidth, vheight, decompose);
+    public @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
+        return drawingRenderer.findFiguresIntersecting(vx, vy, vwidth, vheight, decompose, predicate);
     }
 
     @Override

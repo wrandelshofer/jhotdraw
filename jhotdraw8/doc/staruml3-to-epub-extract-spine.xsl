@@ -8,7 +8,7 @@
   <xsl:template match="h:script"/>
   <xsl:template match="h:span"/>
   <xsl:template match="h:ol[@id='navigation-tree']//h:a">&lt;itemref idref=&quot;<xsl:value-of select="@href"/>&quot;
-    linear=&quot;no&quot;/&gt;
+    linear=&quot;yes&quot;/&gt;
   </xsl:template>
   <xsl:template match="h:ol[@id='navigation-tree']//h:li/h:div[h:span[contains(@class,'Project')]]//h:a">&lt;itemref
     idref=&quot;<xsl:value-of select="@href"/>&quot; linear=&quot;yes&quot;/&gt;

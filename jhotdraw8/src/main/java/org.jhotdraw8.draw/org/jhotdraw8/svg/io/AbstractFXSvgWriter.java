@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.svg.io;
 
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -77,11 +78,13 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
+import java.awt.BasicStroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -94,7 +97,6 @@ import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -186,8 +188,8 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             boolean lineComplete = false;
             float maxAscent = 0, maxDescent = 0;
             float horizontalPos = leftMargin;
-            LinkedList<TextLayout> layouts = new LinkedList<>();
-            LinkedList<Float> penPositions = new LinkedList<>();
+            List<TextLayout> layouts = new ArrayList<>();
+            List<Float> penPositions = new ArrayList<>();
 
             int first = layouts.size();
 
@@ -237,7 +239,8 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                     penPositions.set(first, rightMargin - layouts.get(first).getVisibleAdvance() - 1);
                     break;
                 case CENTER:
-                    penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                    //  penPositions.set(first, (rightMargin - 1 - leftMargin - layouts.get(first).getVisibleAdvance()) / 2 + leftMargin);
+                    penPositions.set(first, (rightMargin - 1 - leftMargin) * 0.5f + leftMargin);
                     break;
                 case JUSTIFY:
                     // not supported
@@ -288,7 +291,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
         java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
         float leftMargin = (float) textRect.getMinX();
-        float rightMargin = (float) Math.max(leftMargin + 1, textRect.getMinX() + textRect.getWidth() + 1);
+        float rightMargin = (float) Math.max(leftMargin, textRect.getMinX() + textRect.getWidth());
         float verticalPos = (float) textRect.getMinY();
         float maxVerticalPos = (float) (textRect.getMinY() + textRect.getHeight());
         if (leftMargin < rightMargin) {
@@ -836,7 +839,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (node instanceof Shape) {
             writeShapeStartElement(w, (Shape) node);
             writeFillAttributes(w, (Shape) node);
-            writeStrokeAttributes(w, (Shape) node);
+            if (((Shape) node).getStrokeType() == StrokeType.CENTERED) {
+                writeStrokeAttributes(w, (Shape) node);
+            }
             writeClipAttributes(w, node);
         } else if (node instanceof Group) {
             writeGroupStartElement(w, (Group) node);
@@ -850,7 +855,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         writeStyleAttributes(w, node);
         writeTransformAttributes(w, node);
         writeCompositingAttributes(w, node);
-
         writeMetadataChildElements(w, node);
         if (node instanceof Shape) {
             writeShapeChildElements(w, (Shape) node);
@@ -863,6 +867,10 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             }
         }
         w.writeEndElement();
+
+        if (node instanceof Shape && ((Shape) node).getStrokeType() != StrokeType.CENTERED) {
+            writeStrokedShapeElement(w, ((Shape) node));
+        }
     }
 
     private void writePaintDefs(@NonNull XMLStreamWriter w, Paint paint) throws IOException, XMLStreamException {
@@ -886,6 +894,72 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             d = Shapes.doubleSvgStringFromElements(node.getElements());
         }
         w.writeAttribute("d", d);
+    }
+
+    protected void writeStrokedShapeElement(@NonNull XMLStreamWriter w, @NonNull Shape fxShape) throws XMLStreamException, IOException {
+        w.writeStartElement("path");
+
+        java.awt.Shape shape = Shapes.awtShapeFromFX(fxShape);
+        int cap;
+        switch (fxShape.getStrokeLineCap()) {
+        case SQUARE:
+            cap = BasicStroke.CAP_SQUARE;
+            break;
+        case BUTT:
+        default:
+            cap = BasicStroke.CAP_BUTT;
+            break;
+        case ROUND:
+            cap = BasicStroke.CAP_ROUND;
+            break;
+        }
+        int join;
+        switch (fxShape.getStrokeLineJoin()) {
+        case MITER:
+        default:
+            join = BasicStroke.JOIN_MITER;
+            break;
+        case BEVEL:
+            join = BasicStroke.JOIN_BEVEL;
+            break;
+        case ROUND:
+            join = BasicStroke.JOIN_ROUND;
+            break;
+        }
+        ObservableList<Double> strokeDashArray = fxShape.getStrokeDashArray();
+        float[] dashes = new float[strokeDashArray.size()];
+        for (int i = 0; i < strokeDashArray.size(); i++) {
+            dashes[i] = strokeDashArray.get(i).floatValue();
+        }
+
+        java.awt.Shape strokedShape = new BasicStroke(
+                (float) (fxShape.getStrokeWidth() * (fxShape.getStrokeType() == StrokeType.CENTERED ? 1 : 2)),
+                cap, join,
+                (float) fxShape.getStrokeMiterLimit(),
+                dashes.length == 0 ? null : dashes, (float) fxShape.getStrokeDashOffset()).createStrokedShape(shape);
+        java.awt.geom.Area area = new java.awt.geom.Area(strokedShape);
+
+        switch (fxShape.getStrokeType()) {
+        case INSIDE:
+            area.intersect(new Area(shape));
+            break;
+        case OUTSIDE:
+            area.subtract(new Area(shape));
+            break;
+        case CENTERED:
+            break;
+        }
+
+        String d;
+        if (isRelativizePaths()) {
+            d = Shapes.doubleRelativeSvgStringFromAWT(area.getPathIterator(null));
+        } else {
+            d = Shapes.doubleSvgStringFromAWT(area.getPathIterator(null));
+        }
+        w.writeAttribute("d", d);
+
+        writeStrokedShapeAttributes(w, fxShape);
+        w.writeEndElement();
     }
 
     private void writePolygonStartElement(@NonNull XMLStreamWriter w, @NonNull Polygon node) throws XMLStreamException {
@@ -1081,7 +1155,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                         }
 
                         writeShapeStartElement(w, bgs);
-                        writeStrokeAttributes(w, bs);
+                        writeBorderStrokeAttributes(w, bs);
                         w.writeAttribute("fill", "none");
                         w.writeEndElement();
                     }
@@ -1185,26 +1259,47 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (shape.getStrokeDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
         }
+        /* XXX We must simulated non-centered strokes because SVG does not support it yet.
         if (shape.getStrokeType() != StrokeType.CENTERED) {
             // XXX this is currentl only a proposal for SVG 2
             //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
             switch (shape.getStrokeType()) {
             case INSIDE:
-                w.writeAttribute("stroke-alignment", "inner");
+                w.writeAttribute("stroke-align", "inner");
                 break;
             case CENTERED:
-                w.writeAttribute("stroke-alignment", "center");
                 break;
             case OUTSIDE:
-                w.writeAttribute("stroke-alignment", "outer");
+                w.writeAttribute("stroke-align", "outer");
                 break;
             default:
                 throw new IOException("Unsupported stroke type " + shape.getStrokeType());
             }
+        }*/
+    }
+
+    private void writeStrokedShapeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException, IOException {
+        Paint stroke = shape.getStroke();
+        if (stroke == null) {
+            return;
+        }
+
+
+        String id = idFactory.getId(stroke);
+        if (id != null) {
+            w.writeAttribute("fill", "url(#" + id + ")");
+        } else {
+            w.writeAttribute("fill", paintConverter.toString(stroke));
+            if (stroke instanceof Color) {
+                Color c = (Color) stroke;
+                if (!c.isOpaque()) {
+                    w.writeAttribute("fill-opacity", nb.toString(c.getOpacity()));
+                }
+            }
         }
     }
 
-    private void writeStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull BorderStroke shape) throws XMLStreamException, IOException {
+    private void writeBorderStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull BorderStroke shape) throws XMLStreamException, IOException {
         if (shape.getTopStroke() != null) {
             w.writeAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }
@@ -1228,24 +1323,23 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (style.getDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
         }
+        /* FIXME We must simulate non-centered strokes, because SVG does not support it yet.
         if (style.getType() != StrokeType.CENTERED) {
-            // XXX this is currently only a proposal for SVG 2
-            //       https://svgwg.org/specs/strokes/#SpecifyingStrokeAlignment
+            // CSS Fill and Stroke Module Level 3
+            // https://www.w3.org/TR/fill-stroke-3/#stroke-align
             switch (style.getType()) {
             case INSIDE:
-                w.writeAttribute("stroke-alignment", "inner");
+                w.writeAttribute("stroke-align", "inner");
                 break;
-                /*
             case CENTERED:
-                w.writeAttribute("stroke-alignment", "center");
-                break;*/
+                break;
             case OUTSIDE:
-                w.writeAttribute("stroke-alignment", "outer");
+                w.writeAttribute("stroke-align", "outer");
                 break;
             default:
                 throw new IOException("Unsupported stroke type " + style.getType());
             }
-        }
+        }*/
     }
 
     protected void writeStyleAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
@@ -1272,16 +1366,16 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("text-decoration", "line-through ");
         }
         switch (node.getTextAlignment()) {
-            case LEFT:
-                break;
-            case CENTER:
-                w.writeAttribute("text-anchor", "middle");
-                break;
-            case RIGHT:
-                w.writeAttribute("text-anchor", "end");
-                break;
-            case JUSTIFY:
-                break;
+        case LEFT:
+            break;
+        case CENTER:
+            w.writeAttribute("text-anchor", "middle");
+            break;
+        case RIGHT:
+            w.writeAttribute("text-anchor", "end");
+            break;
+        case JUSTIFY:
+            break;
         }
     }
 

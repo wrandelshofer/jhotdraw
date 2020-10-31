@@ -335,77 +335,6 @@
 						"$ref": "AAAAAAF1NXJmMCATIqw="
 					},
 					"name": "Logical View",
-					"ownedElements": [
-						{
-							"_type": "UMLModel",
-							"_id": "AAAAAAF1NXJmMCBLNHA=",
-							"_parent": {
-								"$ref": "AAAAAAF1NXJmMCBJPGM="
-							},
-							"name": "Model1",
-							"ownedElements": [
-								{
-									"_type": "UMLClassDiagram",
-									"_id": "AAAAAAF1NXJmMCBMk40=",
-									"_parent": {
-										"$ref": "AAAAAAF1NXJmMCBLNHA="
-									},
-									"name": "ClassDiagram1",
-									"ownedViews": [
-										{
-											"_type": "UMLFrameView",
-											"_id": "AAAAAAF1NXJmMCBN3zQ=",
-											"_parent": {
-												"$ref": "AAAAAAF1NXJmMCBMk40="
-											},
-											"model": {
-												"$ref": "AAAAAAF1NXJmMCBMk40="
-											},
-											"subViews": [
-												{
-													"_type": "LabelView",
-													"_id": "AAAAAAF1NXJmMCBOhdA=",
-													"_parent": {
-														"$ref": "AAAAAAF1NXJmMCBN3zQ="
-													},
-													"font": "Arial;13;0",
-													"left": 80.6181640625,
-													"top": 45,
-													"width": 89.86083984375,
-													"height": 13,
-													"text": "ClassDiagram1"
-												},
-												{
-													"_type": "LabelView",
-													"_id": "AAAAAAF1NXJmMCBPq1g=",
-													"_parent": {
-														"$ref": "AAAAAAF1NXJmMCBN3zQ="
-													},
-													"font": "Arial;13;1",
-													"left": 45,
-													"top": 45,
-													"width": 30.6181640625,
-													"height": 13,
-													"text": "class"
-												}
-											],
-											"font": "Arial;13;0",
-											"left": 40,
-											"top": 40,
-											"width": 328,
-											"height": 280,
-											"nameLabel": {
-												"$ref": "AAAAAAF1NXJmMCBOhdA="
-											},
-											"frameTypeLabel": {
-												"$ref": "AAAAAAF1NXJmMCBPq1g="
-											}
-										}
-									]
-								}
-							]
-						}
-					],
 					"documentation": "The Logical View captures the object model of the design.\n\nThe logical view shows an object-oriented decomposition of the problem domain\n(logical architecture).\n\n\nThe logical architecture primarily supports the functional requirements\n— what the system should provide in terms of services to its users. \n\nThe system is decomposed into a set of key abstractions, taken (mostly) \nfrom the problem domain, in the form of objects or object classes. "
 				},
 				{
@@ -415,16 +344,6 @@
 						"$ref": "AAAAAAF1NXJmMCATIqw="
 					},
 					"name": "Development View",
-					"ownedElements": [
-						{
-							"_type": "UMLPackageDiagram",
-							"_id": "AAAAAAF1NXJmMCBTEao=",
-							"_parent": {
-								"$ref": "AAAAAAF1NXJmMCBQ/2A="
-							},
-							"name": "PackageDiagram1"
-						}
-					],
 					"documentation": "The Development View describes the static organization of the software \nin its development environment.\n\nIt development architecture is a decomposition of the design into small\nchunks (subsystems) - modules, packages, interfaces, classes.\n\nThe development architecture of the system is represented by module and\nsubsystem diagrams, showing the ‘export’ and ‘import’ relationships. \nThe complete development architecture can only be described when all\nthe elements of the software have been identified. It is, however,\npossible to list the rules that govern the development architecture: \npartitioning, grouping, visibility.\n"
 				},
 				{
@@ -443,16 +362,6 @@
 						"$ref": "AAAAAAF1NXJmMCATIqw="
 					},
 					"name": "Physical View",
-					"ownedElements": [
-						{
-							"_type": "UMLDeploymentDiagram",
-							"_id": "AAAAAAF1NXJmMSBb7lc=",
-							"_parent": {
-								"$ref": "AAAAAAF1NXJmMSBXVg4="
-							},
-							"name": "DeploymentDiagram1"
-						}
-					],
 					"documentation": "The Physical View captures the mapping(s) of the software onto the \nhardware and reflects its distributed aspect.\n\nThe physical view shows a physical decomposition of the deployed\nsolution.\n"
 				},
 				{
@@ -535,55 +444,6 @@
 					},
 					"name": "Structure of this document",
 					"ownedViews": [
-						{
-							"_type": "UMLFrameView",
-							"_id": "AAAAAAF1NXJmMSBirKM=",
-							"_parent": {
-								"$ref": "AAAAAAF1NXJmMSBh9Uw="
-							},
-							"model": {
-								"$ref": "AAAAAAF1NXJmMCATIqw="
-							},
-							"subViews": [
-								{
-									"_type": "LabelView",
-									"_id": "AAAAAAF1NXJmMSBj+LE=",
-									"_parent": {
-										"$ref": "AAAAAAF1NXJmMSBirKM="
-									},
-									"font": "Arial;13;0",
-									"left": 47.9599609375,
-									"top": 21,
-									"width": 65.29541015625,
-									"height": 13,
-									"text": "JHotDraw8"
-								},
-								{
-									"_type": "LabelView",
-									"_id": "AAAAAAF1NXJmMSBkuRE=",
-									"_parent": {
-										"$ref": "AAAAAAF1NXJmMSBirKM="
-									},
-									"font": "Arial;13;1",
-									"left": 21,
-									"top": 21,
-									"width": 21.9599609375,
-									"height": 13,
-									"text": "pkg"
-								}
-							],
-							"font": "Arial;13;0",
-							"left": 16,
-							"top": 16,
-							"width": 729,
-							"height": 441,
-							"nameLabel": {
-								"$ref": "AAAAAAF1NXJmMSBj+LE="
-							},
-							"frameTypeLabel": {
-								"$ref": "AAAAAAF1NXJmMSBkuRE="
-							}
-						},
 						{
 							"_type": "UMLModelView",
 							"_id": "AAAAAAF1NXJmMSBrdls=",
@@ -1935,6 +1795,54 @@
 							"height": 40,
 							"nameCompartment": {
 								"$ref": "AAAAAAF1NhxIAANBvqs="
+							}
+						},
+						{
+							"_type": "UMLFrameView",
+							"_id": "AAAAAAF1fcYGOHJQKls=",
+							"_parent": {
+								"$ref": "AAAAAAF1NXJmMSBh9Uw="
+							},
+							"model": {
+								"$ref": "AAAAAAFuRabUrEywv3U="
+							},
+							"subViews": [
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAF1fcYGOHJRAo0=",
+									"_parent": {
+										"$ref": "AAAAAAF1fcYGOHJQKls="
+									},
+									"font": "Arial;13;0",
+									"left": 27,
+									"top": 13,
+									"width": 152.74072265625,
+									"height": 13,
+									"text": "Structure of this document"
+								},
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAF1fcYGOHJSgrY=",
+									"_parent": {
+										"$ref": "AAAAAAF1fcYGOHJQKls="
+									},
+									"font": "Arial;13;1",
+									"left": 21,
+									"top": 13,
+									"width": 1,
+									"height": 13
+								}
+							],
+							"font": "Arial;13;0",
+							"left": 16,
+							"top": 8,
+							"width": 673,
+							"height": 424,
+							"nameLabel": {
+								"$ref": "AAAAAAF1fcYGOHJRAo0="
+							},
+							"frameTypeLabel": {
+								"$ref": "AAAAAAF1fcYGOHJSgrY="
 							}
 						}
 					]
@@ -34978,26 +34886,6 @@
 						"$ref": "AAAAAAFuRabUrEyxzQo="
 					},
 					"name": "Physical View",
-					"ownedElements": [
-						{
-							"_type": "UMLModel",
-							"_id": "AAAAAAFuRabUqUxgFkU=",
-							"_parent": {
-								"$ref": "AAAAAAFuRabUqUxhN3s="
-							},
-							"name": "Model1",
-							"ownedElements": [
-								{
-									"_type": "UMLDeploymentDiagram",
-									"_id": "AAAAAAFuRabUqUxfcPU=",
-									"_parent": {
-										"$ref": "AAAAAAFuRabUqUxgFkU="
-									},
-									"name": "DeploymentDiagram1"
-								}
-							]
-						}
-					],
 					"documentation": "The Physical View captures the mapping(s) of the software onto the \nhardware and reflects its distributed aspect.\n\nThe physical view shows a physical decomposition of the deployed\nsolution.\n"
 				},
 				{
@@ -61163,14 +61051,6 @@
 							}
 						},
 						{
-							"_type": "UMLPackageDiagram",
-							"_id": "AAAAAAFvj6fhpFel+VU=",
-							"_parent": {
-								"$ref": "AAAAAAFvj6fhpFeme7s="
-							},
-							"name": "PackageDiagram1"
-						},
-						{
 							"_type": "UMLPackage",
 							"_id": "AAAAAAFvMgIlW4DpLDY=",
 							"_parent": {
@@ -63768,142 +63648,6 @@
 							"target": {
 								"$ref": "AAAAAAFvj6fhpFebfGc="
 							}
-						},
-						{
-							"_type": "UMLActivity",
-							"_id": "AAAAAAF1Iv+FXsliwiU=",
-							"_parent": {
-								"$ref": "AAAAAAFvj6fhpFep6Js="
-							},
-							"name": "Activity1",
-							"ownedElements": [
-								{
-									"_type": "UMLActivityDiagram",
-									"_id": "AAAAAAF1Iv+FX8ljE9U=",
-									"_parent": {
-										"$ref": "AAAAAAF1Iv+FXsliwiU="
-									},
-									"name": "ActivityDiagram1",
-									"ownedViews": [
-										{
-											"_type": "UMLActionView",
-											"_id": "AAAAAAF1IwAPysne/xE=",
-											"_parent": {
-												"$ref": "AAAAAAF1Iv+FX8ljE9U="
-											},
-											"model": {
-												"$ref": "AAAAAAF1IwAPysnc2AY="
-											},
-											"subViews": [
-												{
-													"_type": "UMLNameCompartmentView",
-													"_id": "AAAAAAF1IwAPysnfs54=",
-													"_parent": {
-														"$ref": "AAAAAAF1IwAPysne/xE="
-													},
-													"model": {
-														"$ref": "AAAAAAF1IwAPysnc2AY="
-													},
-													"subViews": [
-														{
-															"_type": "LabelView",
-															"_id": "AAAAAAF1IwAPy8ngaGs=",
-															"_parent": {
-																"$ref": "AAAAAAF1IwAPysnfs54="
-															},
-															"visible": false,
-															"font": "Arial;13;0",
-															"left": 32,
-															"top": -176,
-															"height": 13
-														},
-														{
-															"_type": "LabelView",
-															"_id": "AAAAAAF1IwAPy8nhdxE=",
-															"_parent": {
-																"$ref": "AAAAAAF1IwAPysnfs54="
-															},
-															"font": "Arial;13;1",
-															"left": 221,
-															"top": 399,
-															"width": 86.6708984375,
-															"height": 13,
-															"text": "changed"
-														},
-														{
-															"_type": "LabelView",
-															"_id": "AAAAAAF1IwAPy8niHzI=",
-															"_parent": {
-																"$ref": "AAAAAAF1IwAPysnfs54="
-															},
-															"visible": false,
-															"font": "Arial;13;0",
-															"left": 237,
-															"top": 326,
-															"width": 86.6708984375,
-															"height": 13,
-															"text": "(from Activity1)"
-														},
-														{
-															"_type": "LabelView",
-															"_id": "AAAAAAF1IwAPy8njuRw=",
-															"_parent": {
-																"$ref": "AAAAAAF1IwAPysnfs54="
-															},
-															"visible": false,
-															"font": "Arial;13;0",
-															"left": 32,
-															"top": -176,
-															"height": 13,
-															"horizontalAlignment": 1
-														}
-													],
-													"font": "Arial;13;0",
-													"left": 216,
-													"top": 392,
-													"width": 96.6708984375,
-													"height": 25,
-													"stereotypeLabel": {
-														"$ref": "AAAAAAF1IwAPy8ngaGs="
-													},
-													"nameLabel": {
-														"$ref": "AAAAAAF1IwAPy8nhdxE="
-													},
-													"namespaceLabel": {
-														"$ref": "AAAAAAF1IwAPy8niHzI="
-													},
-													"propertyLabel": {
-														"$ref": "AAAAAAF1IwAPy8njuRw="
-													}
-												}
-											],
-											"font": "Arial;13;0",
-											"containerChangeable": true,
-											"left": 216,
-											"top": 392,
-											"width": 96.6708984375,
-											"height": 56,
-											"nameCompartment": {
-												"$ref": "AAAAAAF1IwAPysnfs54="
-											}
-										}
-									]
-								}
-							],
-							"nodes": [
-								{
-									"_type": "UMLAction",
-									"_id": "AAAAAAF1IwAPysnc2AY=",
-									"_parent": {
-										"$ref": "AAAAAAF1Iv+FXsliwiU="
-									},
-									"name": "changed",
-									"kind": "callOperation",
-									"target": {
-										"$ref": "AAAAAAFyzJyfdln4yxQ="
-									}
-								}
-							]
 						}
 					],
 					"documentation": "The Process View captures the concurrency and synchronization aspects \nof the design.\n\nThe provess view shows a process-oriented decomposition of the problem domain\n(process architecture).\n\n\nThe process architecture takes into account some non-functional requirements\nsuch as performance and availability. It addresses issues of concurrency and\ndistribution, of system’s integrity, of fault-tolerance, and how the main\nabstractions from the logical view fit within the process architecture \n— on which thread of control is an operation for an object actually executed.\n\nThe system is decomposed into several levels of abstraction, each level\naddressing different concerns. At the highest level, the process architecture \ncan be viewed as a set of independently executing logical networks of communicating\nprograms (called “processes”), distributed across a set of hardware resources \nconnected by a LAN or a WAN. Multiple logical networks may exist simultaneously,\nsharing the same physical resources.\n"
@@ -63928,14 +63672,6 @@
 							"target": {
 								"$ref": "AAAAAAFvj6fhpFebfGc="
 							}
-						},
-						{
-							"_type": "UMLDeploymentDiagram",
-							"_id": "AAAAAAFvj6fhpFet0mI=",
-							"_parent": {
-								"$ref": "AAAAAAFvj6fhpFeuYaQ="
-							},
-							"name": "DeploymentDiagram1"
 						}
 					],
 					"documentation": "The Physical View captures the mapping(s) of the software onto the \nhardware and reflects its distributed aspect.\n\nThe physical view shows a physical decomposition of the deployed\nsolution.\n"
@@ -73093,55 +72829,6 @@
 					"name": "Structure of this document",
 					"ownedViews": [
 						{
-							"_type": "UMLFrameView",
-							"_id": "AAAAAAFuRU4W/TqjJVQ=",
-							"_parent": {
-								"$ref": "AAAAAAFuRU3GaTqVQlo="
-							},
-							"model": {
-								"$ref": "AAAAAAFuRUUv5znuFNQ="
-							},
-							"subViews": [
-								{
-									"_type": "LabelView",
-									"_id": "AAAAAAFuRU4W/Tqkpj8=",
-									"_parent": {
-										"$ref": "AAAAAAFuRU4W/TqjJVQ="
-									},
-									"font": "Arial;13;0",
-									"left": 47.9599609375,
-									"top": 21,
-									"width": 97.82080078125,
-									"height": 13,
-									"text": "Template Project"
-								},
-								{
-									"_type": "LabelView",
-									"_id": "AAAAAAFuRU4W/jqlBsM=",
-									"_parent": {
-										"$ref": "AAAAAAFuRU4W/TqjJVQ="
-									},
-									"font": "Arial;13;1",
-									"left": 21,
-									"top": 21,
-									"width": 21.9599609375,
-									"height": 13,
-									"text": "pkg"
-								}
-							],
-							"font": "Arial;13;0",
-							"left": 16,
-							"top": 16,
-							"width": 753,
-							"height": 441,
-							"nameLabel": {
-								"$ref": "AAAAAAFuRU4W/Tqkpj8="
-							},
-							"frameTypeLabel": {
-								"$ref": "AAAAAAFuRU4W/jqlBsM="
-							}
-						},
-						{
 							"_type": "UMLModelView",
 							"_id": "AAAAAAFuRU9BYzqunGY=",
 							"_parent": {
@@ -74497,6 +74184,54 @@
 							},
 							"typeLabel": {
 								"$ref": "AAAAAAF1NfOyMvkhgLM="
+							}
+						},
+						{
+							"_type": "UMLFrameView",
+							"_id": "AAAAAAF1fcZdcHJgaPg=",
+							"_parent": {
+								"$ref": "AAAAAAFuRU3GaTqVQlo="
+							},
+							"model": {
+								"$ref": "AAAAAAFuRU3GaTqVQlo="
+							},
+							"subViews": [
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAF1fcZdcXJhXYU=",
+									"_parent": {
+										"$ref": "AAAAAAF1fcZdcHJgaPg="
+									},
+									"font": "Arial;13;0",
+									"left": 27,
+									"top": 21,
+									"width": 152.74072265625,
+									"height": 13,
+									"text": "Structure of this document"
+								},
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAF1fcZdcXJigZE=",
+									"_parent": {
+										"$ref": "AAAAAAF1fcZdcHJgaPg="
+									},
+									"font": "Arial;13;1",
+									"left": 21,
+									"top": 21,
+									"width": 1,
+									"height": 13
+								}
+							],
+							"font": "Arial;13;0",
+							"left": 16,
+							"top": 16,
+							"width": 689,
+							"height": 448,
+							"nameLabel": {
+								"$ref": "AAAAAAF1fcZdcXJhXYU="
+							},
+							"frameTypeLabel": {
+								"$ref": "AAAAAAF1fcZdcXJigZE="
 							}
 						}
 					]

@@ -42,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.jhotdraw8.draw.render.InteractiveHandleRenderer.contains;
 
@@ -96,12 +97,11 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         this.drawingView.set(drawingView);
     }
 
-    public @Nullable Figure findFigure(double vx, double vy) {
+    public @Nullable Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
         Drawing dr = getDrawing();
         Figure f = findFigureRecursive((Parent) getNode(dr),
                 getDrawingView().viewToWorld(vx, vy),
-                getEditor().getTolerance());
-        //getViewToWorld().deltaTransform(getEditor().getTolerance(), getEditor().getTolerance()).getX());
+                getEditor().getTolerance(), predicate);
         return f;
     }
 
@@ -128,11 +128,11 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param vx        point in view coordinates
      * @param vy        point in view coordinates
      * @param figures   figures of interest
-     * @param tolerance the number of pixels around the figure in view
+     * @param radius the number of pixels around the figure in view
      *                  coordinates, in which the the point is considered to be inside the figure
      * @return a figure in the specified set which contains the point, or null.
      */
-    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
+    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double radius) {
         Node worldNode = getNode(getDrawing());
         if (worldNode != null) {
             Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
@@ -142,7 +142,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                     Node n = getNode(f);
                     if (n != null) {
                         Point2D pointInLocal = n.sceneToLocal(pointInScene);
-                        if (contains(n, pointInLocal, tolerance)) {
+                        if (contains(n, pointInLocal, radius)) {
                             return f;
                         }
                     }
@@ -195,7 +195,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return null;
     }
 
-    private @Nullable Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance) {
+    private @Nullable Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance, Predicate<Figure> predicate) {
         if (p == null) {
             return null;
         }
@@ -208,12 +208,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             Point2D pl = n.parentToLocal(pp);
             if (contains(n, pl, tolerance)) {
                 Figure f = nodeToFigureMap.get(n);
-                if (f == null || !f.isSelectable()) {
+                if (f == null || !predicate.test(f)) {
                     if (n instanceof Parent) {
-                        f = findFigureRecursive((Parent) n, pl, tolerance);
+                        f = findFigureRecursive((Parent) n, pl, tolerance, predicate);
                     }
                 }
-                if (f != null && f.isSelectable()) {
+                if (f != null && predicate.test(f)) {
                     return f;
                 }
             }
@@ -221,25 +221,27 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return null;
     }
 
-    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose) {
+    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
         List<Figure> list = new ArrayList<>();
-        findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose);
+        findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose,
+                predicate);
         return list;
     }
 
-    public @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    public @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
         List<Figure> list = new ArrayList<>();
-        findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
+        findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose, predicate);
         return list;
     }
 
-    private void findFiguresInsideRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose) {
+    private boolean findFiguresInsideRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose, Predicate<Figure> predicate) {
+        boolean foundAFigure=false;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -250,84 +252,96 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             if (f1 != null && f1.isSelectable() && f1.isShowing()) {
                 Bounds pl = n.parentToLocal(pp);
                 if (pl.contains(n.getBoundsInLocal())) { // only drill down if the parent bounds contains the point
-                    Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable()) {
-                        found.add(f);
-                    }
-                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
+                    boolean test =predicate.test(f1);
+                    boolean foundDecomposedFigure=false;
+                    if (!test || decompose && f1.isDecomposable()) {
                         if (n instanceof Parent) {
-                            findFiguresInsideRecursive((Parent) n, pl, found, decompose);
+                            foundAFigure|=foundDecomposedFigure|= findFiguresInsideRecursive((Parent) n, pl, found, decompose, predicate);
                         }
+                    }
+                    if (test&&!foundDecomposedFigure) {
+                        found.add(f1);
+                        foundAFigure=true;
                     }
                 }
             } else {
                 Bounds pl = n.parentToLocal(pp);
                 if (n.intersects(pl)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
-                        findFiguresInsideRecursive((Parent) n, pl, found, decompose);
+                        foundAFigure|=findFiguresInsideRecursive((Parent) n, pl, found, decompose, predicate);
                     }
                 }
             }
         }
+        return foundAFigure;
     }
 
-    public @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    public @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
         List<Figure> list = new ArrayList<>();
-        findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose);
+        findFiguresIntersectingRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose, predicate);
         return list;
     }
 
-    private void findFiguresIntersectingRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose) {
+    private boolean findFiguresIntersectingRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose, Predicate<Figure> predicate) {
+        boolean foundAFigure=false;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Bounds pl = n.parentToLocal(pp);
             if (n.intersects(pl)) { // only drill down if the parent intersects the point
                 Figure f = nodeToFigureMap.get(n);
-                if (f != null && f.isSelectable()) {
-                    found.add(f);
-                }
-                if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
+                boolean test = f!=null&&predicate.test(f);
+                if (!test || decompose && f.isDecomposable()) {
                     if (n instanceof Parent) {
-                        findFiguresIntersectingRecursive((Parent) n, pl, found, decompose);
+                        foundAFigure|=findFiguresIntersectingRecursive((Parent) n, pl, found, decompose, predicate);
                     }
+                }
+                if (test&&!foundAFigure) {
+                    found.add(f);
+                    foundAFigure=true;
                 }
             }
         }
+        return foundAFigure;
     }
 
-    private void findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Figure> found, boolean decompose) {
+    private boolean findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Figure> found, boolean decompose,
+                                      Predicate<Figure> figurePredicate) {
+        boolean foundAFigure=false;
         double tolerance = getEditor().getTolerance();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
             Figure f1 = nodeToFigureMap.get(n);
-            if (f1 != null && f1.isSelectable()) {
+            if (f1 != null) {
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, tolerance)) { // only drill down if the parent contains the point
-                    Figure f = nodeToFigureMap.get(n);
-                    if (f != null && f.isSelectable() && f1.isShowing()) {
-                        found.add(f);
-                    }
-                    if (f == null || !f.isSelectable() || decompose && f.isDecomposable()) {
+                    boolean test = figurePredicate.test(f1);
+                    if (!test||decompose&&f1.isDecomposable()) {
                         if (n instanceof Parent) {
-                            findFiguresRecursive((Parent) n, pl, found, decompose);
+                            foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate);
                         }
+                    }
+                    if (test&&!foundAFigure) {
+                        // only add if we did successfully decompose
+                        found.add(f1);
+                        foundAFigure=true;
                     }
                 }
             } else {
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, tolerance)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
-                        findFiguresRecursive((Parent) n, pl, found, decompose);
+                        foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate);
                     }
                 }
             }
         }
+        return foundAFigure;
     }
 
     public Bounds getClipBounds() {

@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A {@code DrawingView} can display a {@code Drawing} in a JavaFX scene graph.
@@ -270,22 +271,42 @@ public interface DrawingView extends RenderContext {
      * @return A figure or null
      */
     @Nullable
-    Figure findFigure(double vx, double vy, Set<Figure> figures);
+    default Figure findFigure(double vx, double vy, Set<Figure> figures) {
+        List<Figure> result = findFigures(vx, vy, false, figures::contains);
+        return result.isEmpty()?null:result.get(0);
+    }
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
-     * Z-order from front to back. Skips disabled figures.
+     * Z-order from front to back. Only returns selectable figures.
      *
      * @param vx x in view coordinates
      * @param vy y in view coordinates
      * @return A figure or null
      */
     @Nullable
-    Figure findFigure(double vx, double vy);
+    default Figure findFigure(double vx, double vy) {
+        return findFigure(vx,vy,Figure::isSelectable);
+    }
+
+    /**
+     * Finds the figure at the given view coordinates. Figures are searched in
+     * Z-order from front to back.
+     *
+     * @param vx x in view coordinates
+     * @param vy y in view coordinates
+     * @return A figure or null
+     */
+    @Nullable
+    default Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
+        List<Figure> result = findFigures(vx, vy, false, predicate);
+        return result.isEmpty()?null:result.get(0);
+    }
+
 
     /**
      * Finds the child node of the specified figure that contains the
-     * specified view coordianates.
+     * specified view coordinates.
      *
      * @param figure the figure
      * @param vx     x in view coordinates
@@ -297,8 +318,8 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
-     * Figures are searched in Z-order from front to back. Skips disabled
-     * figures.
+     * Figures are searched in Z-order from front to back. Only returns
+     * figures that are selectable.
      *
      * @param vx        x in view coordinates
      * @param vy        y in view coordinates
@@ -306,7 +327,21 @@ public interface DrawingView extends RenderContext {
      * @return A list of figures from front to back
      */
     @NonNull
-    List<Figure> findFigures(double vx, double vy, boolean decompose);
+    default List<Figure> findFigures(double vx, double vy, boolean decompose) {
+        return findFigures(vx,vy,decompose,Figure::isSelectable);
+    }
+
+    /**
+     * Finds the figure at the given view coordinates behind the given figure.
+     * Figures are searched in Z-order from front to back.
+     *
+     * @param vx        x in view coordinates
+     * @param vy        y in view coordinates
+     * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back
+     */
+    @NonNull
+    List<Figure> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate);
 
     /**
      * Returns all figures that lie within the specified bounds given in view
@@ -332,9 +367,10 @@ public interface DrawingView extends RenderContext {
      * @param vwidth    width in view coordinates
      * @param vheight   height in view coordinates
      * @param decompose whether to decompose the figures
+     * @param predicate
      * @return A list of figures from front to back
      */
-    @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate);
 
     // Handles
 
@@ -369,7 +405,7 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Finds the figure at the given view coordinates. Figures are searched in
-     * Z-order from front to back. Skips disabled figures and unselectable
+     * Z-order from front to back. Skips disabled figures and non-selectable
      * figures.
      *
      * @param pointInView point in view coordinates
@@ -382,7 +418,7 @@ public interface DrawingView extends RenderContext {
 
     /**
      * Finds the figures at the given view coordinates. Figures are searched in
-     * Z-order from front to back. Skips disabled figures and unselectable
+     * Z-order from front to back. Skips disabled figures and non-selectable
      * figures.
      *
      * @param pointInView point in view coordinates
@@ -397,7 +433,7 @@ public interface DrawingView extends RenderContext {
     /**
      * Returns all figures that are inside the specified bounds given in view
      * coordinates. The figures are returned in Z-order from front to back.
-     * Skips disabled figures and unselectable figures.
+     * Skips disabled figures and non-selectable figures.
      *
      * @param rectangleInView rectangle in view coordinates
      * @param decompose       whether to decompose the figures
@@ -411,7 +447,7 @@ public interface DrawingView extends RenderContext {
     /**
      * Returns all figures that intersect the specified bounds given in view
      * coordinates. The figures are returned in Z-order from back to front.
-     * Skips disabled figures and unselectable figures.
+     * Skips disabled figures and non-selectable figures.
      *
      * @param rectangleInView rectangle in view coordinates
      * @param decompose       whether to decompose the figures
@@ -419,7 +455,7 @@ public interface DrawingView extends RenderContext {
      */
     @NonNull
     default List<Figure> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
-        return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
+        return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose, Figure::isSelectable);
     }
 
     default void setDrawing(Drawing newValue) {
