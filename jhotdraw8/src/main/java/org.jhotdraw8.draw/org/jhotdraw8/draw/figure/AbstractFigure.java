@@ -274,17 +274,4 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         return value;
     }
 
-    @Override
-    public <T> @Nullable T getStyled(@NonNull MapAccessor<T> key) {
-        T value = super.getStyled(key);
-
-        // FIXME "inherit" is quirky - so we cannot implement it this way
-        if (value instanceof CssDefaultableValue<?>) {
-            @SuppressWarnings("unchecked") CssDefaultableValue<T> dv = (CssDefaultableValue<T>) value;
-            if (dv.getDefaulting() == CssDefaulting.INHERIT && getParent() != null) {
-                value = getParent().getStyled(key);
-            }
-        }
-        return value;
-    }
 }

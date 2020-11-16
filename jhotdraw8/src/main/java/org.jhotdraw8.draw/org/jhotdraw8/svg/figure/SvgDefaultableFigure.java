@@ -10,29 +10,21 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableMaps;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssDefaultableValue;
-import org.jhotdraw8.css.CssDefaulting;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssMappedConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
-import org.jhotdraw8.svg.text.SvgDisplay;
-import org.jhotdraw8.svg.text.SvgFontSize;
-import org.jhotdraw8.svg.text.SvgFontSizeConverter;
-import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
-import org.jhotdraw8.svg.text.SvgVisibility;
+import org.jhotdraw8.svg.text.*;
 
 /**
- * The following attributes can be defined on all SVG figures.
+ * The following attributes can be defined on all SVG figures using the "defaulting"
+ * mechanism.
  */
-public interface SvgInheritableFigure extends Figure {
+public interface SvgDefaultableFigure extends DefaultableFigure {
     /**
      * stroke-alignment.
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#SpecifyingStrokeAlignment">link</a>
@@ -162,15 +154,14 @@ public interface SvgInheritableFigure extends Figure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applyInheritableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
-        CssDefaultableValue<Paintable> fill = getStyledNonNull(FILL_KEY);
-        shape.setFill(Paintable.getPaint(fill.getValue(), ctx));
+    default void applySvgDefaultableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+        Paintable fill = getDefaultableStyledNonNull(FILL_KEY);
+        shape.setFill(Paintable.getPaint(fill, ctx));
 
-        CssDefaultableValue<Paintable> stroke = getStyledNonNull(STROKE_KEY);
-        shape.setStroke(Paintable.getPaint(stroke.getValue(), ctx));
+        Paintable stroke = getDefaultableStyled(STROKE_KEY);
+        shape.setStroke(Paintable.getPaint(stroke, ctx));
 
-        CssDefaultableValue<BlendMode> blendMode = getStyledNonNull(MIX_BLEND_MODE_KEY);
-        BlendMode bmValue = blendMode.getValue();
+        BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
         if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to nul
             bmValue = null;
         }
@@ -178,7 +169,7 @@ public interface SvgInheritableFigure extends Figure {
             shape.setBlendMode(bmValue);
         }
 
-        CssDefaultableValue<CssSize> sw = getStyledNonNull(STROKE_WIDTH_KEY);
-        shape.setStrokeWidth(sw.getValue() == null ? 1.0 : sw.getValue().getConvertedValue(ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY)));
+        CssSize sw = getDefaultableStyledNonNull(STROKE_WIDTH_KEY);
+        shape.setStrokeWidth(sw.getConvertedValue(ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY)));
     }
 }

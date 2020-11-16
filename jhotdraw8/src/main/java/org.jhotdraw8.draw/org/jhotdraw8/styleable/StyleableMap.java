@@ -8,7 +8,6 @@ import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssDefaulting;
 
 import java.util.Map;
 import java.util.Set;
@@ -31,20 +30,6 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
     @NonNull Map<K, V> getMap(@NonNull StyleOrigin origin);
 
     @Nullable StyleOrigin getStyleOrigin(@NonNull K key);
-
-    /**
-     * If the styleable map does not contain the specified key in
-     * the specified origin, then the defaulting indicates how to obtain the
-     * value.
-     *
-     * @param origin the style origin
-     * @param key    the key
-     * @return the defaulting method indicates how the value can be retrieved
-     * when the key is absent, null indicates that the key is present. If the
-     * key is not known to this map, then the value is {@link CssDefaulting#INHERIT}
-     * for an {@link InheritableKey}, and {@link CssDefaulting#INHERIT} if not.
-     */
-    @Nullable CssDefaulting getDefaulting(@NonNull StyleOrigin origin, @NonNull K key);
 
     /**
      * Removes the specified key from the specified style origin

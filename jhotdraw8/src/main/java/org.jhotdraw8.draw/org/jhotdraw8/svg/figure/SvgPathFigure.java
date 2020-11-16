@@ -12,21 +12,13 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.AbstractLeafFigure;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
-import org.jhotdraw8.geom.FXPathBuilder;
-import org.jhotdraw8.geom.FXTransformPathBuilder;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.*;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
@@ -38,8 +30,8 @@ import java.text.ParseException;
  * @author Werner Randelshofer
  */
 public class SvgPathFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
-        SvgElementFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
+        SvgElementFigure, SvgCompositableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -124,6 +116,8 @@ public class SvgPathFigure extends AbstractLeafFigure
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
+        applySvgDefaultableFigureProperties(ctx, n);
+        applySvgCompositableFigureProperties(ctx,n);
 
         FXPathBuilder bb = new FXPathBuilder();
         String d = get(D);

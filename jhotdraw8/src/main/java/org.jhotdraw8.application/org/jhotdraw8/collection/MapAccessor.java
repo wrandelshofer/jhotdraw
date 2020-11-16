@@ -99,6 +99,10 @@ public interface MapAccessor<T> extends Serializable {
 
     /**
      * Returns the default value of this map accessor.
+     * <p>
+     * The default value of an attribute or property is
+     * the value used when that attribute or property is not
+     * specified.
      *
      * @return the default value
      */

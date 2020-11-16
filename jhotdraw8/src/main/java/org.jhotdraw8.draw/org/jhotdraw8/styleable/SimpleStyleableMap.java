@@ -9,19 +9,9 @@ import javafx.collections.MapChangeListener;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.util.Preconditions;
 
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Integer.highestOneBit;
@@ -57,7 +47,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     private Object[] values;
     private final @NonNull SimpleStyleableMap<K, V> originalMap;
-    static final int AUTO_ORIGIN = -1;
+    static final int AUTO_ORIGIN = -StyleOrigin.INLINE.ordinal();
 
     /**
      * Creates a new instance which supports insertion of
@@ -270,10 +260,6 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return null;
     }
 
-    public @Nullable CssDefaulting getDefaulting(@NonNull StyleOrigin origin, @NonNull K key) {
-        throw new UnsupportedOperationException();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public V removeKey(@NonNull StyleOrigin origin, @NonNull K key) {
@@ -296,9 +282,11 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     /**
-     * Gets a raw value.
+     * Gets a raw value from the specified ordinal StyleOrigin or (if the negative ordinal
+     * is given) searches through StyleOrigins starting from the given negative ordinal
+     * StyleOrigin.
      *
-     * @param ordinal the ordinal of the Origin or AUTO_ORIGIN
+     * @param ordinal the ordinal of the StyleOrigin or the negative ordinal.
      * @param index   the index of the Key
      * @return rawValue: NO_VALUE means that no value is stored, NULL_VALUE means
      * that the null value is stored, all other values are stored values.
@@ -306,10 +294,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @SuppressWarnings("unchecked")
     private @Nullable Object getRawValue(int ordinal, int index) {
         Object value;
-        if (ordinal == -1) {
+        if (ordinal < 0) {
             value = null;
             if (index * numOrigins < values.length) {
-                for (int i = numOrigins - 1; i >= 0; i--) {
+                for (int i = -ordinal; i >= 0; i--) {
                     final int valueIndex = index * numOrigins + i;
                     value = values[valueIndex];
                     if (value != NO_VALUE) {

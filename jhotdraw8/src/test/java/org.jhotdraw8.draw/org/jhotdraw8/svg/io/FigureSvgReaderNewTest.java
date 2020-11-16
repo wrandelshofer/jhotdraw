@@ -17,20 +17,29 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.key.DefaultableStyleableMapAccessor;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
+import org.jhotdraw8.svg.figure.SvgRectFigure;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
+import java.io.StringReader;
+import java.net.URL;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +47,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class FigureSvgReaderNewTest {
@@ -102,9 +112,64 @@ public class FigureSvgReaderNewTest {
         FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
         Figure testNode = instance.read(testFile);
         Drawing drawing = (Drawing) testNode;
-        org.junit.jupiter.api.Assertions.assertEquals(new CssSize(22), drawing.get(Drawing.WIDTH), "width");
-        org.junit.jupiter.api.Assertions.assertEquals(new CssSize(22), drawing.get(Drawing.HEIGHT), "height");
+        assertEquals(new CssSize(22), drawing.get(Drawing.WIDTH), "width");
+        assertEquals(new CssSize(22), drawing.get(Drawing.HEIGHT), "height");
     }
+
+    @NonNull
+    @TestFactory
+    public List<DynamicTest> svgWithDefaultableAttributesFactory() {
+        return Arrays.asList(
+                dynamicTest("rect with fill value", () -> testDefaultable(
+                        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
+                                "  <rect id=\"r\" fill=\"#ff0000\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "</svg>\n", "r", SvgRectFigure.FILL_KEY,
+                        CssColor.valueOf("#ff0000"))),
+                dynamicTest("rect inherits fill value from svg element", () -> testDefaultable(
+                        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
+                                " baseProfile=\"tiny\" version=\"1.2\"" +
+                                " fill=\"#ff0000\">\n" +
+                                "  <rect id=\"r\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "</svg>\n", "r", SvgRectFigure.FILL_KEY,
+                        CssColor.valueOf("#ff0000"))),
+                dynamicTest("rect inherits fill value from g element", () -> testDefaultable(
+                        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
+                                " baseProfile=\"tiny\" version=\"1.2\">\n" +
+                                " <g fill=\"#ff0000\">\n" +
+                        "  <rect id=\"r\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "</g>\n"
+                                +"</svg>\n",
+                        "r", SvgRectFigure.FILL_KEY,
+                        CssColor.valueOf("#ff0000")))
+        );
+    }
+
+    private <T> void testDefaultable(String svg, String id, DefaultableStyleableMapAccessor<T> key, T expected) throws IOException {
+        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
+        Figure drawing = instance.read(new StreamSource(new StringReader(svg)));
+        for (Figure f : drawing.depthFirstIterable()) {
+            if (f instanceof DefaultableFigure) {
+                DefaultableFigure df=(DefaultableFigure)f;
+                if (id.equals(f.getId())) {
+                    T actual = df.getDefaultableStyled(key);
+                    assertEquals(expected, actual);
+                }
+            }
+        }
+    }
+
+    private void doIconTest(URL testFile) throws Exception {
+        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
+        Figure testNode = instance.read(new StreamSource(testFile.toString()));
+        Drawing drawing = (Drawing) testNode;
+        assertEquals(new CssSize(22), drawing.get(Drawing.WIDTH), "width");
+        assertEquals(new CssSize(22), drawing.get(Drawing.HEIGHT), "height");
+    }
+
+
 
     private void doWebPlatformTest(Path testFile, Path referenceFile) throws Exception {
         System.out.println(testFile);

@@ -43,7 +43,7 @@ public class ObjectKey<T> implements Key<T> {
     /**
      * Holds the default value.
      */
-    private final @Nullable T defaultValue;
+    private final @Nullable T initialValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
@@ -68,8 +68,8 @@ public class ObjectKey<T> implements Key<T> {
         this(name, clazz, null);
     }
 
-    public ObjectKey(@NonNull String name, @NonNull TypeToken<T> clazz, T defaultValue) {
-        this(name, clazz.getType(), defaultValue);
+    public ObjectKey(@NonNull String name, @NonNull TypeToken<T> clazz, T initialValue) {
+        this(name, clazz.getType(), initialValue);
     }
 
     /**
@@ -78,10 +78,10 @@ public class ObjectKey<T> implements Key<T> {
      *
      * @param name         The name of the key.
      * @param clazz        The type of the value.
-     * @param defaultValue The default value.
+     * @param initialValue The default value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable T defaultValue) {
-        this(name, clazz, true, defaultValue);
+    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable T initialValue) {
+        this(name, clazz, true, initialValue);
     }
 
     /**
@@ -91,21 +91,21 @@ public class ObjectKey<T> implements Key<T> {
      * @param name           The name of the key.
      * @param clazz          The type of the value.
      * @param isNullable     Whether the value may be set to null
-     * @param defaultValue   The default value.
+     * @param initialValue   The default value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T defaultValue) {
-        this(name, clazz, isNullable, false, defaultValue);
+    public ObjectKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T initialValue) {
+        this(name, clazz, isNullable, false, initialValue);
     }
 
-    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T defaultValue) {
-        this(name, clazz, isNullable, false, defaultValue);
+    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T initialValue) {
+        this(name, clazz, isNullable, false, initialValue);
     }
 
 
-    public ObjectKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
+    public ObjectKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
         Objects.requireNonNull(name, "name is null");
         Objects.requireNonNull(clazz, "clazz is null");
-        if (!isNullable && defaultValue == null) {
+        if (!isNullable && initialValue == null) {
             throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
         }
 
@@ -113,7 +113,7 @@ public class ObjectKey<T> implements Key<T> {
         this.type = clazz;
         this.isNullable = isNullable;
         this.isTransient = isTransient;
-        this.defaultValue = defaultValue;
+        this.initialValue = initialValue;
     }
 
     /**
@@ -131,14 +131,9 @@ public class ObjectKey<T> implements Key<T> {
         return type;
     }
 
-    /**
-     * Returns the default value of the attribute.
-     *
-     * @return the default value.
-     */
     @Override
     public @Nullable T getDefaultValue() {
-        return defaultValue;
+        return initialValue;
     }
 
     @Override

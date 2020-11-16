@@ -8,10 +8,13 @@ package org.jhotdraw8.css;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.Objects;
+
 /**
  * Wraps a value that supports CSS defaulting.
+ * @see CssDefaulting
  *
- * @param <T>
+ * @param <T> the value type
  */
 public class CssDefaultableValue<T> {
     private final @Nullable CssDefaulting defaulting;
@@ -44,5 +47,19 @@ public class CssDefaultableValue<T> {
                 /*"defaulting=" +*/ defaulting +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CssDefaultableValue<?> that = (CssDefaultableValue<?>) o;
+        return defaulting == that.defaulting &&
+                Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(defaulting, value);
     }
 }

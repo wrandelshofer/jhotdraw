@@ -846,7 +846,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         } else if (node instanceof Group) {
             writeGroupStartElement(w, (Group) node);
         } else if (node instanceof Region) {
-            writeRegion(w, (Region) node);
+            writeRegionStartElement(w, (Region) node);
         } else if (node instanceof ImageView) {
             writeImageViewStartElement(w, (ImageView) node);
         } else {
@@ -856,8 +856,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         writeTransformAttributes(w, node);
         writeCompositingAttributes(w, node);
         writeMetadataChildElements(w, node);
+
         if (node instanceof Shape) {
             writeShapeChildElements(w, (Shape) node);
+        }else if (node instanceof Region) {
+            writeRegionChildElements(w,(Region) node);
         }
 
         if (node instanceof Parent) {
@@ -1081,8 +1084,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeRegion(@NonNull XMLStreamWriter w, @NonNull Region region) throws IOException, XMLStreamException {
+    private void writeRegionStartElement(@NonNull XMLStreamWriter w, @NonNull Region region) throws IOException, XMLStreamException {
         w.writeStartElement("g");
+    }
+
+    private void writeRegionChildElements(@NonNull XMLStreamWriter w, @NonNull Region region) throws IOException, XMLStreamException {
 
         double x = region.getLayoutX();
         double y = region.getLayoutY();
@@ -1167,7 +1173,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                 }
             }
         }
-        w.writeEndElement();
     }
 
     private void writeSVGPathStartElement(@NonNull XMLStreamWriter w, @NonNull SVGPath node) throws XMLStreamException {

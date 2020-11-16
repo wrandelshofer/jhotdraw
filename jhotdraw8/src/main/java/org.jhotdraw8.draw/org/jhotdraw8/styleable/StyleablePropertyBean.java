@@ -12,6 +12,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.css.CssDefaultableValue;
+import org.jhotdraw8.css.CssDefaulting;
 
 import java.util.Objects;
 

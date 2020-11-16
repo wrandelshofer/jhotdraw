@@ -11,14 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -77,7 +70,7 @@ import java.util.logging.Logger;
  * </dl>
  */
 
-public class FXSvgTinyReader {
+public class FXSvgTinyReaderOld {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     public static final String XLINK_NAMESPACE = "http://www.w3.org/1999/xlink";
     private static final Key<String> TITLE_KEY = new StringKey("title");
@@ -181,7 +174,7 @@ public class FXSvgTinyReader {
                     node.setRadius(toLength(r, value, 1));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readDefaultableAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute: " + namespace + ":" + localName + "=" + value + ".");
@@ -395,7 +388,7 @@ public class FXSvgTinyReader {
                     node.setRadiusY(toLength(r, value, 1));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readDefaultableAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute: " + namespace + ":" + localName + "=" + value + ".");
@@ -422,7 +415,9 @@ public class FXSvgTinyReader {
             if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
                 switch (localName) {
                 default:
-                    if (!readNodeAttribute(r, node, ctx, namespace, localName, value)
+                    if (//!readDefaultableAttribute(r, node, ctx, namespace, localName, value)
+                    //        &&
+                    !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute: " + namespace + ":" + localName + "=" + value + ".");
                     }
@@ -555,7 +550,7 @@ public class FXSvgTinyReader {
                     PATH_LENGTH_KEY.set(node.getProperties(), toLength(r, value, 1));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readDefaultableAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                     ) {
                         throw createException(r, "Unsupported attribute " + namespace + ":" + localName + "=\"" + value + "\".");
@@ -614,7 +609,7 @@ public class FXSvgTinyReader {
                     node.getElements().setAll(builder.getElements());
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, name, value)
+                    if (!readDefaultableAttribute(r, node, ctx, namespace, name, value)
                             && !readNodeAttribute(r, node, ctx, namespace, name, value)) {
                         throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
                     }
@@ -643,7 +638,7 @@ public class FXSvgTinyReader {
                             toDoubles(r, value, ctx));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readDefaultableAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)) {
                         throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
                     }
@@ -683,7 +678,7 @@ public class FXSvgTinyReader {
                 node.getPoints().addAll(toDoubles(r, value, ctx));
                 break;
             default:
-                if (!readShapeAttribute(r, node, ctx, namespace, name, value)
+                if (!readDefaultableAttribute(r, node, ctx, namespace, name, value)
                         && !readNodeAttribute(r, node, ctx, namespace, name, value)
                 ) {
                     throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
@@ -743,7 +738,7 @@ public class FXSvgTinyReader {
                     break;
                 default:
                     if (!readNodeAttribute(r, node, ctx, namespace, name, value)
-                            && !readShapeAttribute(r, node, ctx, namespace, name, value)) {
+                            && !readDefaultableAttribute(r, node, ctx, namespace, name, value)) {
                         throw createException(r, "Unsupported attribute: " + r.getAttributeName(i));
                     }
                     break;
@@ -846,7 +841,7 @@ public class FXSvgTinyReader {
         return false;
     }
 
-    private boolean readShapeAttribute(XMLStreamReader r, Shape shape, Context ctx, String namespace, String name, String value) throws XMLStreamException {
+    private boolean readDefaultableAttribute(XMLStreamReader r, Shape shape, Context ctx, String namespace, String name, String value) throws XMLStreamException {
         if (SVG_NAMESPACE.equals(namespace) || namespace == null) {
             switch (name) {
 
@@ -1153,7 +1148,7 @@ public class FXSvgTinyReader {
         return null;
     }
 
-    private static final Logger LOGGER = Logger.getLogger(FXSvgTinyReader.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FXSvgTinyReaderOld.class.getName());
 
     private Text readTSpanElement(XMLStreamReader r, Context ctx) throws XMLStreamException {
         Text shape = new Text();
@@ -1353,7 +1348,7 @@ public class FXSvgTinyReader {
                     node.setY(toDoubles(r, value, ctx).get(0));
                     break;
                 default:
-                    if (!readShapeAttribute(r, node, ctx, namespace, localName, value)
+                    if (!readDefaultableAttribute(r, node, ctx, namespace, localName, value)
                             && !readNodeAttribute(r, node, ctx, namespace, localName, value)
                             && !readFontAttribute(r, node, ctx, namespace, localName, value)
                     ) {

@@ -42,6 +42,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -169,6 +171,9 @@ public class FigureSvgTinyReaderNew {
     }
 
     public Figure read(@NonNull InputStream in, @NonNull URI documentHome) throws IOException {
+    return     read(new StreamSource(in));
+    }
+        public Figure read(@NonNull Source in) throws IOException {
         try {
 
             XMLInputFactory dbf = XMLInputFactory.newInstance();

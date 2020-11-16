@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class FXSvgTinyReaderTest {
+public class FXSvgTinyReaderOldTest {
 
     /**
      * Set this constant to the path of the directory into which you checked

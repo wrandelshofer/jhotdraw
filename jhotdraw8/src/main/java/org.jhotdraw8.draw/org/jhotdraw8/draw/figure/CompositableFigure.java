@@ -60,8 +60,8 @@ public interface CompositableFigure extends Figure {
      * Updates a figure node with all effect properties defined in this
      * interface.
      * <p>
-     * Applies the following properties: {@code BLEND_MODE}, {@code EFFECT},
-     * {@code OPACITY}.
+     * Applies the following properties: {@link #BLEND_MODE}, {@link #EFFECT},
+     * {@link #OPACITY}.
      * <p>
      * This method is intended to be used by {@link #updateNode}.
      *

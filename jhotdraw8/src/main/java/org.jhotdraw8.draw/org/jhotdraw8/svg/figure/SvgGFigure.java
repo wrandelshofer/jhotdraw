@@ -9,13 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Grouping;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.ResizableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 
@@ -29,8 +23,8 @@ import java.util.List;
  */
 public class SvgGFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
-        SvgInheritableFigure,
-        SvgElementFigure {
+        SvgDefaultableFigure,
+        SvgElementFigure, SvgCompositableFigure {
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
@@ -74,6 +68,7 @@ public class SvgGFigure extends AbstractCompositeFigure
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
+        applySvgCompositableFigureProperties(ctx,n);
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {

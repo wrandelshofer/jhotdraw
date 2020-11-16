@@ -13,11 +13,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.draw.figure.AbstractLeafFigure;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
@@ -32,8 +28,8 @@ import java.awt.geom.RoundRectangle2D;
  * @author Werner Randelshofer
  */
 public class SvgRectFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
-        SvgElementFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
+        SvgElementFigure,SvgCompositableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -114,7 +110,8 @@ public class SvgRectFigure extends AbstractLeafFigure
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
-        applyInheritableFigureProperties(ctx, n);
+        applySvgDefaultableFigureProperties(ctx, n);
+        applySvgCompositableFigureProperties(ctx,n);
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         n.setX(getNonNull(X).getConvertedValue(unit));
         n.setY(getNonNull(Y).getConvertedValue(unit));

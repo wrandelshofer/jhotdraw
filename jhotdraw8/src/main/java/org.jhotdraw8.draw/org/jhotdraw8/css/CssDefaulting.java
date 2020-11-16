@@ -1,13 +1,14 @@
 package org.jhotdraw8.css;
 
 /**
- * CSS Defaulting keywords can be applied to all CSS properties.
+ * CSS Defaulting keywords can be applied to all CSS properties
+ * in HTML and SVG.
  * <p>
  * References:
- * <ul>
- * <li><a href="https://www.w3.org/TR/css-cascade-4/#defaulting">
- * CSS Cascading and Inheritance Level 4, Chapter 7. Defaulting</a></li>
- * </ul>
+ * <dl>
+ *     <dt>Defaulting</dt><dd><a href="http://www.w3.org/TR/css-cascade-4/#defaulting">
+ *         CSS Cascading and Inheritance Level 4, Chapter 7. Defaulting</a></dd>
+ * </dl>
  */
 public enum CssDefaulting {
     /**

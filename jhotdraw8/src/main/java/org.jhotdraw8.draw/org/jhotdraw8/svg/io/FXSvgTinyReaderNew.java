@@ -32,6 +32,8 @@ public class FXSvgTinyReaderNew {
     public Node read(@NonNull InputStream in, @NonNull URI documentHome) throws IOException {
         Figure figure = new FigureSvgTinyReaderNew().read(in, documentHome);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
-        return r.render(figure);
+        Node node = r.render(figure);
+        node.setManaged(true);
+        return node;
     }
 }

@@ -28,7 +28,7 @@ import org.jhotdraw8.svg.figure.SvgCircleFigure;
 import org.jhotdraw8.svg.figure.SvgDrawing;
 import org.jhotdraw8.svg.figure.SvgEllipseFigure;
 import org.jhotdraw8.svg.figure.SvgGFigure;
-import org.jhotdraw8.svg.figure.SvgInheritableFigure;
+import org.jhotdraw8.svg.figure.SvgDefaultableFigure;
 import org.jhotdraw8.svg.figure.SvgLineFigure;
 import org.jhotdraw8.svg.figure.SvgPathFigure;
 import org.jhotdraw8.svg.figure.SvgPathLengthFigure;
@@ -1021,16 +1021,16 @@ public class FigureSvgReader {
                     node.set(SvgTransformableFigure.TRANSFORMS, SvgTransformableFigure.TRANSFORMS.getCssConverter().fromString(value));
                     break;
                 case "stroke-alignment":
-                    node.set(SvgInheritableFigure.STROKE_ALIGNMENT_KEY, SvgInheritableFigure.STROKE_ALIGNMENT_KEY.getCssConverter().fromString(value));
+                    node.set(SvgDefaultableFigure.STROKE_ALIGNMENT_KEY, SvgDefaultableFigure.STROKE_ALIGNMENT_KEY.getCssConverter().fromString(value));
                     break;
                 case "fill":
                     ctx.secondPass.add(() ->
-                            node.set(SvgInheritableFigure.FILL_KEY, SvgInheritableFigure.FILL_KEY.getCssConverter().fromString(value, ctx.idFactory))
+                            node.set(SvgDefaultableFigure.FILL_KEY, SvgDefaultableFigure.FILL_KEY.getCssConverter().fromString(value, ctx.idFactory))
                     );
                     break;
                 case "stroke":
                     ctx.secondPass.add(() ->
-                            node.set(SvgInheritableFigure.STROKE_KEY, SvgInheritableFigure.STROKE_KEY.getCssConverter().fromString(value, ctx.idFactory))
+                            node.set(SvgDefaultableFigure.STROKE_KEY, SvgDefaultableFigure.STROKE_KEY.getCssConverter().fromString(value, ctx.idFactory))
                     );
                     break;
                 default:

@@ -11,11 +11,7 @@ import javafx.scene.shape.Ellipse;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.AbstractLeafFigure;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
@@ -30,8 +26,8 @@ import java.awt.geom.PathIterator;
  * @author Werner Randelshofer
  */
 public class SvgEllipseFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgInheritableFigure,
-        SvgElementFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure,
+        SvgElementFigure, SvgDefaultableFigure, SvgCompositableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -123,6 +119,8 @@ public class SvgEllipseFigure extends AbstractLeafFigure
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
+        applySvgDefaultableFigureProperties(ctx,n);
+        applySvgCompositableFigureProperties(ctx,node);
         n.setCenterX(getStyledNonNull(CX).getConvertedValue());
         n.setCenterY(getStyledNonNull(CY).getConvertedValue());
         n.setRadiusX(getStyledNonNull(RX).getConvertedValue());

@@ -7,20 +7,19 @@ package org.jhotdraw8.draw.figure;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.SimpleStylesheetsManager;
-import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -57,12 +56,8 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
 
     @Override
     public @NonNull Node createNode(RenderContext drawingView) {
-        Group g = new Group();
+        Pane g = new Pane();
         g.setManaged(false);
-        g.setAutoSizeChildren(false);
-        Rectangle background = new Rectangle();
-        background.setId("background");
-        g.getProperties().put("background", background);
         return g;
     }
 
@@ -143,19 +138,19 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
-        Group g = (Group) n;
+        Pane g = (Pane) n;
         Bounds bounds = getLayoutBounds();
-        Rectangle page = (Rectangle) g.getProperties().get("background");
-        page.setX(bounds.getMinX());
-        page.setY(bounds.getMinY());
-        page.setWidth(bounds.getWidth());
-        page.setHeight(bounds.getHeight());
-        CssColor cclr = getStyled(BACKGROUND);
-        page.setFill(Paintable.getPaint(cclr, ctx));
+        g.setPrefWidth(bounds.getWidth());
+        g.setPrefHeight(bounds.getHeight());
+        g.resizeRelocate(
+        bounds.getMinX(),
+        bounds.getMinY(),
+        bounds.getWidth(),
+        bounds.getHeight());
+        updateBackground(ctx, g);
         g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
-        nodes.add(page);
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
@@ -163,6 +158,11 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         if (!group.equals(nodes)) {
             group.setAll(nodes);
         }
+    }
+
+    public void updateBackground(RenderContext ctx, Pane g) {
+        CssColor cclr = getStyled(BACKGROUND);
+        g.setBackground(new Background(new BackgroundFill(cclr.getPaint(), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     @Override
