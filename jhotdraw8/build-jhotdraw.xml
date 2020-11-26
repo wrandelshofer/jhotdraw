@@ -868,20 +868,22 @@ new-inline-tags: section
       </fileset>
       <globmapper from="*.html" to="*.xhtml"/>
     </copy>
-    <xslt style="${doc}/staruml4-to-epub-strip-javascript.xsl"
+    <xslt style="${doc}/staruml4-to-epub-tidy.xsl"
           basedir="${build}/epub-docs/contents-html"
           includes="*.xhtml"
           extension=".xhtml"
           destdir="${build}/epub-docs/OEBPS/contents"
     >
     </xslt>
-    <replaceregexp flags="g">
+    <!--
+    <replaceregexp flags="g" encoding="UTF-8">
       <regexp pattern="\.html"/>
       <substitution expression=".xhtml"/>
       <fileset dir="${build}/epub-docs/OEBPS/contents">
         <include name="*.xhtml"/>
       </fileset>
     </replaceregexp>
+    -->
   </target>
   <target name="do-uml-to-epub--03-extract-spine"
           depends=""
