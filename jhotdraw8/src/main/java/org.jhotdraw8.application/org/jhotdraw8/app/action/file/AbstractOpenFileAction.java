@@ -50,7 +50,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(OPEN_CHOOSER_FACTORY_KEY);
             chooser = factory == null ? new FileURIChooser() : factory.get();
-            app.put(OPEN_CHOOSER_KEY, chooser);
+            app.set(OPEN_CHOOSER_KEY, chooser);
         }
         return chooser;
     }

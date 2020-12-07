@@ -70,16 +70,16 @@ public class GrapherApplication extends AbstractFileBasedApplication {
     @Override
     protected void initProperties() {
         super.initProperties();
-        put(NAME_KEY, "Grapher");
-        put(COPYRIGHT_KEY, "Copyright © 2020 The authors and contributors of JHotDraw.");
-        put(LICENSE_KEY, "MIT License.");
+        set(NAME_KEY, "Grapher");
+        set(COPYRIGHT_KEY, "Copyright © 2020 The authors and contributors of JHotDraw.");
+        set(LICENSE_KEY, "MIT License.");
 
         List<URIExtensionFilter> exportExtensions = new ArrayList<>();
         exportExtensions.add(new URIExtensionFilter("SVG Full", registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("SVG Tiny", registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION), "*.svg"));
         exportExtensions.add(new URIExtensionFilter("PNG", registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE), "*.png"));
         exportExtensions.add(new URIExtensionFilter("XMLSerialized", registerDataFormat(XmlEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE), "*.ser.xml"));
-        put(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, exportExtensions));
+        set(EXPORT_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, exportExtensions));
     }
 
     @Override

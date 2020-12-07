@@ -44,12 +44,12 @@ public class TeddyApplication extends AbstractFileBasedApplication {
 
     @Override
     protected void initProperties() {
-        put(NAME_KEY, "Teddy");
-        put(COPYRIGHT_KEY, "The authors and contributors of JHotDraw.");
-        put(LICENSE_KEY, "MIT License");
+        set(NAME_KEY, "Teddy");
+        set(COPYRIGHT_KEY, "The authors and contributors of JHotDraw.");
+        set(LICENSE_KEY, "MIT License");
         List<URIExtensionFilter> extensions = Arrays.asList(new URIExtensionFilter("Text Files", "text/plain", "*.txt"));
-        put(SAVE_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, extensions));
-        put(OPEN_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, extensions));
+        set(SAVE_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, extensions));
+        set(OPEN_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, extensions));
     }
 
     @Override

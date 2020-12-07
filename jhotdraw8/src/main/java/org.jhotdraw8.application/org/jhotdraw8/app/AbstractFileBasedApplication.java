@@ -298,7 +298,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         map.put(CloseFileAction.ID, new CloseFileAction(activity));
 
         Stage stage = createStage(activity);
-        activity.put(STAGE_KEY, stage);
+        activity.set(STAGE_KEY, stage);
 
         PreferencesUtil.installStagePrefsHandler(getPreferences(), "stage", stage);
 
@@ -629,9 +629,9 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     }
 
     protected void initProperties() {
-        put(NAME_KEY, getClass().getSimpleName());
-        put(VERSION_KEY, getClass().getPackage().getImplementationVersion());
-        put(COPYRIGHT_KEY, getClass().getPackage().getImplementationVendor());
+        set(NAME_KEY, getClass().getSimpleName());
+        set(VERSION_KEY, getClass().getPackage().getImplementationVersion());
+        set(COPYRIGHT_KEY, getClass().getPackage().getImplementationVendor());
     }
 
     protected void initFactories() {

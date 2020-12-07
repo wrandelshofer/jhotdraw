@@ -49,12 +49,14 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
     @Nullable
     private String namespaceURI;
     @NonNull
-    private FigureFactory figureFactory = new DefaultFigureFactory();
+    private FigureFactory figureFactory;
 
     private String idAttribute = "id";
 
-    public SimpleXmlReaderNew(@NonNull IdFactory idFactory) {
+    public SimpleXmlReaderNew(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
+        this.figureFactory=figureFactory;
+        this.namespaceURI=namespaceURI;
     }
 
     @Override
@@ -263,6 +265,10 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
 
     public void setFigureFactory(@NonNull FigureFactory figureFactory) {
         this.figureFactory = figureFactory;
+    }
+
+    public IdFactory getIdFactory() {
+        return idFactory;
     }
 
     protected void setUriResolver(@NonNull Function<URI, URI> uriResolver) {

@@ -102,7 +102,7 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
-import org.jhotdraw8.draw.io.SimpleXmlReaderOld;
+import org.jhotdraw8.draw.io.SimpleXmlReaderNew;
 import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
@@ -456,7 +456,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         FigureFactory factory = new ModelerFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
         SimpleXmlWriter iow = new SimpleXmlWriter(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
-        SimpleXmlReaderOld ior = new SimpleXmlReaderOld(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
+        SimpleXmlReaderNew ior = new SimpleXmlReaderNew( factory,idFactory, DIAGRAMMER_NAMESPACE_URI);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
@@ -565,7 +565,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         return FXWorker.supply(() -> {
             FigureFactory factory = new ModelerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
-            SimpleXmlReaderOld io = new SimpleXmlReaderOld(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
+            SimpleXmlReaderNew io = new SimpleXmlReaderNew(factory, idFactory, DIAGRAMMER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             applyUserAgentStylesheet(drawing);
@@ -594,11 +594,11 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         return FXWorker.run(() -> {
             if (registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
-                io.putAll(options);
+                io.getProperties().putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".png")) {
                 BitmapExportOutputFormat io = new BitmapExportOutputFormat();
-                io.putAll(options);
+                io.getProperties().putAll(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(XmlEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {
                 XmlEncoderOutputFormat io = new XmlEncoderOutputFormat();
@@ -618,7 +618,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
                     SvgExportOutputFormat io2 = new SvgExportOutputFormat();
                     Map<Key<?>, Object> options2 = new HashMap<>();
                     SvgExportOutputFormat.EXPORT_DRAWING_KEY.put(options2, true);
-                    io2.putAll(options2);
+                    io2.getProperties().putAll(options2);
                     io2.write(svgUri, drawing, workState);
                 }
             }

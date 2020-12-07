@@ -618,6 +618,10 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
         this.figureFactory = figureFactory;
     }
 
+    public IdFactory getIdFactory() {
+        return idFactory;
+    }
+
     public void setNamespaceURI(String namespaceURI) {
         this.namespaceURI = namespaceURI;
     }
