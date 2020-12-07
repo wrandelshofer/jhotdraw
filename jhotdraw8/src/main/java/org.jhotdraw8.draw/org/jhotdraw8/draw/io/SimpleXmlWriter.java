@@ -149,7 +149,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
     }
 
     @Override
-    public void putAll(@Nullable Map<Key<?>, Object> options) {
+    public void putAll(@Nullable Map<? extends Key<?>, ? extends Object> options) {
         this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 
@@ -339,7 +339,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
             Object value = figure.get(key);
-            if (!key.isTransient() && figure.containsKey(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
+            if (!key.isTransient() && figure.containsMapAccessor(StyleOrigin.USER, key) && !figureFactory.isDefaultValue(figure, key, value)) {
                 figureFactory.valueToNodeList(key, value, w);
             }
         }

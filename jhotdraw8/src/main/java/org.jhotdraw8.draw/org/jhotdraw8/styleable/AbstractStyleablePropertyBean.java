@@ -23,12 +23,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractStyleablePropertyBean implements StyleablePropertyBean {
+public abstract class AbstractStyleablePropertyBean
+        implements StyleablePropertyBean {
     protected final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
 
-    /**
-     * Holds the properties.
-     */
     protected final StyleableMap<Key<?>, Object> properties =
             createStyleableMap();
 
@@ -118,7 +116,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     }
 
     @Override
-    public <T> boolean containsKey(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key) {
+    public <T> boolean containsMapAccessor(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key) {
         return key.containsKey(getStyleableMap().getMap(origin));
     }
 
@@ -171,7 +169,6 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     protected void callObservers(StyleOrigin origin, boolean willChange, MapChangeListener.Change<Key<?>, Object> change) {
 
     }
-
     @Override
     public void resetStyledValues() {
         properties.resetStyledValues();

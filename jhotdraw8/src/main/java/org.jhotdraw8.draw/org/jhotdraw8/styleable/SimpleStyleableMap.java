@@ -11,7 +11,16 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.Preconditions;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Integer.highestOneBit;
@@ -40,10 +49,15 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private @Nullable CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
 
     private @Nullable CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
-    private final @NonNull Map<K, Integer> keyMap;
+    private  @NonNull Map<K, Integer> keyMap;
     private final @NonNull StyleOrigin origin;
     private final int originOrdinal;
     private final @NonNull int[] sizes;
+
+    protected void setKeyMap(Map<K, Integer> keyMap) {
+        this.keyMap=keyMap;
+        this.values = new Object[keyMap.size() * numOrigins];
+    }
 
     private Object[] values;
     private final @NonNull SimpleStyleableMap<K, V> originalMap;
@@ -145,7 +159,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         return containsKey(origin, (K) key);
     }
 
-    public boolean containsKey(@Nullable StyleOrigin origin, @NonNull K key) {
+    public <T extends K> boolean containsKey(@Nullable StyleOrigin origin, @NonNull T key) {
         Integer index = keyMap.get(key);
 
         if (origin == null) {

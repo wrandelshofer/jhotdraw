@@ -32,7 +32,7 @@ public class XmlEncoderOutputFormat extends AbstractPropertyBean implements Outp
     private Map<? super Key<?>, Object> options = Collections.emptyMap();
 
     @Override
-    public void putAll(@Nullable Map<Key<?>, Object> options) {
+    public void putAll(@Nullable Map<? extends Key<?>, ? extends Object> options) {
         this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 

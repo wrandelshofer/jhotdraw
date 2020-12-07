@@ -40,12 +40,11 @@ public interface Drawing extends Figure {
     /**
      * Specifies the home address of all relative URLs used in a drawing.
      * <p>
-     * XXX internally we should only use absolute URLs.
-     * <p>
-     * This property is not styleable.</p>
+     * This property is not styleable.
      */
     @NonNull Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
+
     /**
      * Holds a list of author stylesheets. If the value is null, then no
      * stylesheets are used.

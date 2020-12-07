@@ -338,7 +338,6 @@ public class FigureSvgTinyReaderNew {
             logWarning(r, "Skipping foreign element: " + r.getName() + ".");
             skipElement(r, ctx);
         }
-        System.out.println("done element " + localName);
         return null;
     }
 

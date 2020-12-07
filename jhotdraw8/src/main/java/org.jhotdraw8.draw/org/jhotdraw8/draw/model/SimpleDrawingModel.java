@@ -18,6 +18,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
+import org.jhotdraw8.draw.figure.TransformCachingFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -457,7 +458,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     for (Enumerator<Figure> i = f.preorderSpliterator(); i.moveNext(); ) {
                         final Figure a = i.current();
                         if (visited.add(a)) {
-                            if (a instanceof TransformableFigure) {
+                            if (a instanceof TransformableFigure
+                            ||a instanceof TransformCachingFigure) {
                                 markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
                             }
                         }

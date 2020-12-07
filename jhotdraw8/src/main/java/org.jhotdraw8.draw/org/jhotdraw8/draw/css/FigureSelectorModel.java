@@ -302,11 +302,11 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         if (key == null) {
             return null;
         }
-        boolean isInitialValue = origin != null && !element.containsKey(origin, key);
+        boolean isInitialValue = origin != null && !element.containsMapAccessor(origin, key);
         if (isInitialValue) {
             if ((key instanceof CompositeMapAccessor)) {
                 for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
-                    if (element.containsKey(origin, subkey)) {
+                    if (element.containsMapAccessor(origin, subkey)) {
                         isInitialValue = false;
                         break;
                     }
@@ -369,11 +369,11 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         if (key == null) {
             return null;
         }
-        boolean isInitialValue = origin != null && !element.containsKey(origin, key);
+        boolean isInitialValue = origin != null && !element.containsMapAccessor(origin, key);
         if (isInitialValue) {
             if ((key instanceof CompositeMapAccessor)) {
                 for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
-                    if (element.containsKey(origin, subkey)) {
+                    if (element.containsMapAccessor(origin, subkey)) {
                         isInitialValue = false;
                         break;
                     }

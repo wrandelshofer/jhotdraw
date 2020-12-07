@@ -23,7 +23,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public interface StyleableMap<K, V> extends ObservableMap<K, V> {
-    boolean containsKey(@NonNull StyleOrigin origin, @NonNull K key);
+    <T extends K> boolean containsKey(@NonNull StyleOrigin origin, @NonNull T key);
 
     @Nullable V get(@NonNull StyleOrigin origin, @NonNull K key);
 

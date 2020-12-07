@@ -195,7 +195,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
     }
 
     @Override
-    public void putAll(@Nullable Map<Key<?>, Object> options) {
+    public void putAll(@Nullable Map<? extends Key<?>, ? extends Object> options) {
         this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 

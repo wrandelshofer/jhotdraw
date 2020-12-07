@@ -41,10 +41,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         implements Figure, TransformCachingFigure {
 
     private ObservableSet<Figure> layoutObservers;
-    @Nullable
-    private Drawing drawing;
-    @Nullable
-    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
+    private @Nullable Drawing drawing;
+    private final @NonNull ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
     private Transform cachedLocalToWorld;
     private Transform cachedWorldToParent;
@@ -54,8 +52,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     private Transform cachedWorldToLocal;
 
 
-    @NonNull
-    protected Map<Key<?>, Integer> createKeyMap() {
+    protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;
 
@@ -75,7 +72,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      * This method calls {@link #doAddNotify}.
      */
     @Override
-    final public void addNotify(Drawing drawing) {
+    public final void addNotify(Drawing drawing) {
         this.drawing = drawing;
         doAddNotify(drawing);
     }
@@ -101,9 +98,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
 
-    @NonNull
     @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+    public @NonNull List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
         for (MapAccessor<?> key : getSupportedKeys()) {
             if (key instanceof WriteableStyleableMapAccessor<?>) {
@@ -116,9 +112,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         return list;
     }
 
-    @Nullable
     @Override
-    final public Drawing getDrawing() {
+    public final @Nullable Drawing getDrawing() {
         return drawing;
     }
 
@@ -171,14 +166,13 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      * This method calls {@link #doAddNotify}.
      */
     @Override
-    final public void removeNotify(Drawing drawing) {
+    public final void removeNotify(Drawing drawing) {
         this.drawing = null;
         doRemoveNotify(drawing);
     }
 
     @Override
-    @Nullable
-    public Transform getCachedLocalToWorld() {
+    public @Nullable Transform getCachedLocalToWorld() {
         return cachedLocalToWorld;
     }
 
@@ -188,8 +182,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    @Nullable
-    public Transform getCachedWorldToParent() {
+    public @Nullable Transform getCachedWorldToParent() {
         return cachedWorldToParent;
     }
 
@@ -199,8 +192,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    @Nullable
-    public Transform getCachedParentToLocal() {
+    public @Nullable Transform getCachedParentToLocal() {
         return cachedParentToLocal;
     }
 
@@ -210,8 +202,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    @Nullable
-    public Transform getCachedLocalToParent() {
+    public @Nullable Transform getCachedLocalToParent() {
         return cachedLocalToParent;
     }
 
@@ -221,8 +212,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    @Nullable
-    public Transform getCachedWorldToLocal() {
+    public @Nullable Transform getCachedWorldToLocal() {
         return cachedWorldToLocal;
     }
 
@@ -232,8 +222,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    @Nullable
-    public Transform getCachedParentToWorld() {
+    public @Nullable Transform getCachedParentToWorld() {
         return cachedParentToWorld;
     }
 

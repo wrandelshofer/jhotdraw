@@ -175,7 +175,7 @@ public interface PropertyBean {
      * @param map a map with keys and values
      */
     @NonNull
-    default void putAll(@NonNull Map<Key<?>, Object> map) {
+    default void putAll(@NonNull Map<? extends Key<?>, ? extends Object> map) {
         getProperties().putAll(map);
     }
 
