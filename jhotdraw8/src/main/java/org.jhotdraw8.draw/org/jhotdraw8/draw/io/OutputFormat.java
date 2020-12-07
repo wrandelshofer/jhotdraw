@@ -48,7 +48,7 @@ public interface OutputFormat extends PropertyBean {
      */
     default void write(@NonNull Path file, Drawing drawing, WorkState workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
-            write(file.getParent().toUri(), out, drawing, workState);
+            write(out, file.getParent().toUri(), drawing, workState);
         }
     }
 
@@ -56,12 +56,12 @@ public interface OutputFormat extends PropertyBean {
      * Writes a Drawing into an output stream.
      *
      *
-     * @param documentHome
      * @param out       The output stream.
+     * @param documentHome
      * @param drawing   The drawing.
      * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    void write(URI documentHome, OutputStream out, Drawing drawing, WorkState workState) throws IOException;
+    void write(OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException;
 
 }

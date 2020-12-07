@@ -41,19 +41,15 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
-    @NonNull
-    private final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
-    @NonNull
-    private final IdFactory idFactory;
-    @Nullable
-    private String namespaceURI;
-    @NonNull
-    private FigureFactory figureFactory;
+public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
+    private final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    private final @NonNull IdFactory idFactory;
+    private @Nullable String namespaceURI;
+    private @NonNull FigureFactory figureFactory;
 
     private String idAttribute = "id";
 
-    public SimpleXmlReaderNew(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
+    public SimpleXmlStaxReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
         this.figureFactory=figureFactory;
         this.namespaceURI=namespaceURI;
@@ -154,9 +150,8 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
         }
     }
 
-    private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-    @NonNull
-    private Function<URI, URI> uriResolver = new UriResolver(null, null);
+    private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
+    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     private void readProcessingInstruction(XMLStreamReader r, @NonNull Deque<Figure> stack, List<Runnable> secondPass) {
         if (figureFactory.getStylesheetsKey() != null) {
@@ -196,11 +191,10 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
         readAttributes(r, figure, secondPass);
     }
 
-    @NonNull
-    private Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
+    private @NonNull Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
         Figure figure = figureFactory.createFigureByElementName(r.getLocalName());
         if (figure == null) {
-            throw new IOException("Cannot create figure in element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
+            throw new IOException("Cannot create figure for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
         }
         if (!stack.isEmpty()) {
             Figure parent = stack.peek();
@@ -267,7 +261,7 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
         this.figureFactory = figureFactory;
     }
 
-    public IdFactory getIdFactory() {
+    public @NonNull IdFactory getIdFactory() {
         return idFactory;
     }
 

@@ -156,7 +156,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     }
 
     @Override
-    public void write(URI documentHome, @NonNull OutputStream out, @NonNull Drawing drawing, WorkState workState) throws IOException {
+    public void write(@NonNull OutputStream out, URI documentHome, @NonNull Drawing drawing, WorkState workState) throws IOException {
         WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), getNonNull(EXPORT_DRAWING_DPI_KEY));
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
         writeImage(out, writableImage, getNonNull(EXPORT_DRAWING_DPI_KEY));

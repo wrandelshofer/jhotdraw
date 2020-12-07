@@ -32,8 +32,8 @@ import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssInsets;
-import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -102,7 +102,7 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
-import org.jhotdraw8.draw.io.SimpleXmlReaderNew;
+import org.jhotdraw8.draw.io.SimpleXmlStaxReader;
 import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
@@ -402,7 +402,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         ttbar.addTool(new CreationTool("edit.createSlice", labels, () -> createFigure(SliceFigure::new), layerFactory), 200, 0, 16);
         ttbar.addTool(new CreationTool("edit.createPage", labels, () -> createFigure(() -> {
             PageFigure pf = new PageFigure();
-            pf.set(PageFigure.PAPER_SIZE, new CssPoint2D(297, 210, "mm"));
+            pf.set(PageFigure.PAPER_SIZE, new CssDimension2D(297, 210, "mm"));
             pf.set(PageFigure.PAGE_INSETS, new CssInsets(2, 1, 2, 1, "cm"));
             PageLabelFigure pl = new PageLabelFigure(940, 700, labels.getFormatted("pageLabel.text",
                     PageLabelFigure.PAGE_PLACEHOLDER, PageLabelFigure.NUM_PAGES_PLACEHOLDER),
@@ -456,7 +456,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         FigureFactory factory = new ModelerFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
         SimpleXmlWriter iow = new SimpleXmlWriter(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
-        SimpleXmlReaderNew ior = new SimpleXmlReaderNew( factory,idFactory, DIAGRAMMER_NAMESPACE_URI);
+        SimpleXmlStaxReader ior = new SimpleXmlStaxReader( factory,idFactory, DIAGRAMMER_NAMESPACE_URI);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
@@ -565,7 +565,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         return FXWorker.supply(() -> {
             FigureFactory factory = new ModelerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
-            SimpleXmlReaderNew io = new SimpleXmlReaderNew(factory, idFactory, DIAGRAMMER_NAMESPACE_URI);
+            SimpleXmlStaxReader io = new SimpleXmlStaxReader(factory, idFactory, DIAGRAMMER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             applyUserAgentStylesheet(drawing);

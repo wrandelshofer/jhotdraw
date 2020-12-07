@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Clipping;
@@ -47,8 +46,6 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -77,15 +74,14 @@ import java.util.regex.Pattern;
  *
  * @author Werner Randelshofer
  */
-public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFormat, ClipboardInputFormat {
-    private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
+public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFormat, ClipboardInputFormat {
+    private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     protected List<String> comments;
     protected FigureFactory figureFactory;
     /**
      * Performance: This does not need to be a linked hash map, because we iterate in parallel over it.
      */
-    @NonNull
-    protected Map<Figure, Element> figureToElementMap = new ConcurrentHashMap<>();
+    protected @NonNull Map<Figure, Element> figureToElementMap = new ConcurrentHashMap<>();
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
@@ -95,20 +91,15 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
      */
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
-    /**
-     * Holds the current options.
-     */
-    @NonNull
-    private Map<? super Key<?>, Object> options = Collections.emptyMap();
-    @NonNull
-    private Function<URI, URI> uriResolver = new UriResolver(null, null);
+
+    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
     private boolean doAddNotifyAndUpdateCss = true;
 
-    public SimpleXmlReaderOld(FigureFactory factory, IdFactory idFactory) {
+    public SimpleXmlDomReader(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
     }
 
-    public SimpleXmlReaderOld(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
+    public SimpleXmlDomReader(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
         this.figureFactory = factory;
         this.idFactory = idFactory;
         this.namespaceURI = namespaceURI;
@@ -128,8 +119,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
         }
     }
 
-    @Nullable
-    public Figure fromDocument(@NonNull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
+    public @Nullable Figure fromDocument(@NonNull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
         setUriResolver(new UriResolver(documentHome, null));
         idFactory.reset();
         if (oldDrawing != null) {
@@ -144,8 +134,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
         return readDrawingOrClippingFromDocument(doc, oldDrawing, documentHome);
     }
 
-    @Nullable
-    private String getAttribute(@NonNull Element elem, String unqualifiedName) {
+    private @Nullable String getAttribute(@NonNull Element elem, String unqualifiedName) {
         String value;
         if (namespaceURI == null) {
             return elem.getAttribute(unqualifiedName);
@@ -166,8 +155,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
         return df;
     }
 
-    @NonNull
-    public Figure getFigure(String id) throws IOException {
+    public @NonNull Figure getFigure(String id) throws IOException {
         Figure f = (Figure) idFactory.getObject(id);
         /*        if (f == null) {
         throw new IOException("no figure for id:" + id);
@@ -175,8 +163,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
         return f;
     }
 
-    @NonNull
-    private Function<URI, URI> getUriResolver() {
+    private @NonNull Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
@@ -195,13 +182,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
     }
 
     @Override
-    public void putAll(@Nullable Map<? extends Key<?>, ? extends Object> options) {
-        this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
-    }
-
-    @NonNull
-    @Override
-    public Figure read(@NonNull Path file, Drawing drawing, @NonNull WorkState workState) throws IOException {
+    public @NonNull Figure read(@NonNull Path file, Drawing drawing, @NonNull WorkState workState) throws IOException {
         try {
             URI documentHome = file.getParent() == null ? Paths.get(System.getProperty("user.home")).toUri() : file.getParent().toUri();
             final Drawing newDrawing;
@@ -214,39 +195,33 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
         }
     }
 
-    @Nullable
-    public Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState workState) throws IOException {
+    public @Nullable Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState workState) throws IOException {
         Document doc = XmlUtil.readWithLocations(new InputSource(in), isNamespaceAware());
         return read(doc, drawing, documentHome);
     }
 
-    @Nullable
-    public Figure read(InputSource in, Drawing drawing, URI documentHome) throws IOException {
+    public @Nullable Figure read(InputSource in, Drawing drawing, URI documentHome) throws IOException {
         Document doc = XmlUtil.readWithLocations(in, isNamespaceAware());
         return read(doc, drawing, documentHome);
     }
 
-    @Nullable
-    public Figure read(@NonNull Document in, Drawing drawing, URI documentHome) throws IOException {
+    public @Nullable Figure read(@NonNull Document in, Drawing drawing, URI documentHome) throws IOException {
         return fromDocument(in, drawing, documentHome);
     }
 
-    @Nullable
-    protected Figure read(@NonNull String string, Drawing drawing, URI documentHome) throws IOException {
+    protected @Nullable Figure read(@NonNull String string, Drawing drawing, URI documentHome) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing, documentHome);
         }
     }
 
-    @Nullable
-    protected Figure read(Reader in, Drawing drawing, URI documentHome) throws IOException {
+    protected @Nullable Figure read(Reader in, Drawing drawing, URI documentHome) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing, documentHome);
     }
 
-    @NonNull
     @Override
-    public Set<Figure> read(@NonNull Clipboard clipboard, @NonNull DrawingModel model, @NonNull Drawing drawing, @Nullable Figure layer) throws IOException {
+    public @NonNull Set<Figure> read(@NonNull Clipboard clipboard, @NonNull DrawingModel model, @NonNull Drawing drawing, @Nullable Figure layer) throws IOException {
         setUriResolver(new UriResolver(null, drawing.get(Drawing.DOCUMENT_HOME)));
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
@@ -290,8 +265,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
      * @return the figure
      * @throws IOException in case of failure
      */
-    @Nullable
-    protected Figure readDrawingOrClipping(@NonNull Element drawingElement, Drawing oldDrawing) throws IOException {
+    protected @Nullable Figure readDrawingOrClipping(@NonNull Element drawingElement, Drawing oldDrawing) throws IOException {
 
         figureToElementMap.clear();
         Drawing external = null;
@@ -355,8 +329,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
      * @return a figure
      * @throws IOException in case of failure
      */
-    @Nullable
-    protected Figure readDrawingOrClippingFromDocument(@NonNull Document doc, Drawing oldDrawing, URI documentHome) throws IOException {
+    protected @Nullable Figure readDrawingOrClippingFromDocument(@NonNull Document doc, Drawing oldDrawing, URI documentHome) throws IOException {
 
         figureToElementMap.clear();
         Drawing external = null;
@@ -522,8 +495,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
      * @return the created figure
      * @throws IOException in case of failure
      */
-    @Nullable
-    protected Figure readNode(Node node) throws IOException {
+    protected @Nullable Figure readNode(Node node) throws IOException {
         if (node instanceof Element) {
             Element elem = (Element) node;
             if (namespaceURI != null) {
@@ -559,8 +531,7 @@ public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFor
      * @return a figure
      * @throws IOException in case of failure
      */
-    @Nullable
-    protected Figure readNodesRecursively(@NonNull Node node) throws IOException {
+    protected @Nullable Figure readNodesRecursively(@NonNull Node node) throws IOException {
         switch (node.getNodeType()) {
         case Node.ELEMENT_NODE:
             Figure figure = readNode(node);

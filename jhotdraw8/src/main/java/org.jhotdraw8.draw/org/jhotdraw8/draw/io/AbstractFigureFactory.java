@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  * @author Werner Randelshofer
  */
 public abstract class AbstractFigureFactory implements FigureFactory {
-    private final static Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
     private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
     private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
@@ -56,8 +56,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     private final Map<Type, Converter<?>> valueFromXML = new HashMap<>();
 
     private final Map<Type, Converter<?>> valueToXML = new HashMap<>();
-    @Nullable
-    private IdFactory idFactory;
+    private @Nullable IdFactory idFactory;
 
     public AbstractFigureFactory() {
         this(new SimpleFigureIdFactory());
@@ -302,24 +301,21 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return strToKey.get(elementName);
     }
 
-    @NonNull
     @Override
-    public Set<MapAccessor<?>> figureAttributeKeys(@NonNull Figure f) {
+    public @NonNull Set<MapAccessor<?>> figureAttributeKeys(@NonNull Figure f) {
         Set<MapAccessor<?>> keys = figureAttributeKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
     }
 
-    @NonNull
     @Override
-    public Set<MapAccessor<?>> figureNodeListKeys(@NonNull Figure f) {
+    public @NonNull Set<MapAccessor<?>> figureNodeListKeys(@NonNull Figure f) {
         Set<MapAccessor<?>> keys = figureNodeListKeys.get(f.getClass());
         return keys == null ? Collections.emptySet() : keys;
 
     }
 
-    @Nullable
     @Override
-    public String getElementNameByFigure(@NonNull Figure f) throws IOException {
+    public @Nullable String getElementNameByFigure(@NonNull Figure f) throws IOException {
         if (!figureToName.containsKey(f.getClass())) {
             if (skipFigures.contains(f.getClass())) {
                 return null;
@@ -341,8 +337,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    @Nullable
-    public IdFactory getIdFactory() {
+    public @Nullable IdFactory getIdFactory() {
         return idFactory;
     }
 
@@ -413,9 +408,8 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return keyToStr.get(key);
     }
 
-    @Nullable
     @Override
-    public Figure createFigureByElementName(String elementName) throws IOException {
+    public @Nullable Figure createFigureByElementName(String elementName) throws IOException {
         Supplier<Figure> supplier = nameToFigure.get(elementName);
         if (supplier == null) {
             if (skipElements.contains(elementName)) {
@@ -426,9 +420,8 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return supplier.get();
     }
 
-    @Nullable
     @Override
-    public MapAccessor<?> getKeyByAttributeName(@NonNull Figure f, String attributeName) throws IOException {
+    public @Nullable MapAccessor<?> getKeyByAttributeName(@NonNull Figure f, String attributeName) throws IOException {
         HashMap<String, MapAccessor<?>> strToKey = attrToKey.get(f.getClass());
         if (strToKey == null || !strToKey.containsKey(attributeName)) {
             Set<Class<? extends Figure>> set = (skipAttributes.get(attributeName));
@@ -441,9 +434,8 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return strToKey.get(attributeName);
     }
 
-    @NonNull
     @Override
-    public <T> T nodeListToValue(@NonNull MapAccessor<T> key, @NonNull List<Node> nodeList) throws IOException {
+    public @NonNull <T> T nodeListToValue(@NonNull MapAccessor<T> key, @NonNull List<Node> nodeList) throws IOException {
         if (key.getValueType() == String.class) {
             StringBuilder buf = new StringBuilder();
             for (Node node : nodeList) {
@@ -543,9 +535,8 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         }
     }
 
-    @NonNull
     @Override
-    public <T> String valueToString(@NonNull MapAccessor<T> key, T value) throws IOException {
+    public @NonNull <T> String valueToString(@NonNull MapAccessor<T> key, T value) throws IOException {
 
         Converter<T> converter;
         if (keyValueToXML.containsKey(key)) {

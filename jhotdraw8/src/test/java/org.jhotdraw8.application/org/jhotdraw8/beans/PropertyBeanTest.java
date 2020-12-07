@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.beans;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ObjectKey;
@@ -30,7 +29,7 @@ public class PropertyBeanTest {
         System.out.println("getObservableValue");
         Key<String> key = new ObjectKey<String>("key", String.class);
         PropertyBean bean = new SimplePropertyBean();
-        ObservableValue<String> ov = (ObservableValue<String>) Bindings.valueAt(bean.getProperties(), key);
+        ObservableValue<String> ov = bean.valueAt( key);
         String[] newValue = new String[1];
         ov.addListener((o, oldv, newv) -> {
             newValue[0] = newv;

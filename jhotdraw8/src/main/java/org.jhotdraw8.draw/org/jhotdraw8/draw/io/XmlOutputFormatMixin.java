@@ -46,7 +46,7 @@ public interface XmlOutputFormatMixin extends OutputFormat {
     }
 
     @Override
-    default void write(URI documentHome, OutputStream out, @NonNull Drawing drawing, WorkState workState) throws IOException {
+    default void write(OutputStream out, URI documentHome, @NonNull Drawing drawing, WorkState workState) throws IOException {
         write(documentHome, out, drawing, drawing.getChildren());
     }
 

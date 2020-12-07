@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Clipping;
@@ -46,15 +45,11 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 /**
  * SimpleXmlWriter.
@@ -76,14 +71,11 @@ import java.util.regex.Pattern;
  * @author Werner Randelshofer
  */
 public class SimpleXmlWriter extends AbstractPropertyBean implements OutputFormat, ClipboardOutputFormat {
-    private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-    protected List<String> comments;
     protected FigureFactory figureFactory;
     /**
      * Performance: This does not need to be a linked hash map, because we iterate in parallel over it.
      */
-    @NonNull
-    protected Map<Figure, Element> figureToElementMap = new ConcurrentHashMap<>();
+    protected @NonNull Map<Figure, Element> figureToElementMap = new ConcurrentHashMap<>();
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
@@ -93,13 +85,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
      */
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
-    /**
-     * Holds the current options.
-     */
-    @NonNull
-    private Map<? super Key<?>, Object> options = Collections.emptyMap();
-    @NonNull
-    private Function<URI, URI> uriResolver = new UriResolver(null, null);
+    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -135,8 +121,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         return df;
     }
 
-    @NonNull
-    private Function<URI, URI> getUriResolver() {
+    private @NonNull Function<URI, URI> getUriResolver() {
         return uriResolver;
     }
 
@@ -146,11 +131,6 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
 
     public boolean isNamespaceAware() {
         return namespaceURI != null;
-    }
-
-    @Override
-    public void putAll(@Nullable Map<? extends Key<?>, ? extends Object> options) {
-        this.options = (options == null) ? Collections.emptyMap() : new LinkedHashMap<>(options);
     }
 
     public void setFigureFactory(FigureFactory figureFactory) {
@@ -209,7 +189,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
     }
 
     @Override
-    public void write(URI documentHome, OutputStream out, Drawing drawing, WorkState workState) throws IOException {
+    public void write(OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {
         write(documentHome, new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8)),
                 drawing, workState);
     }

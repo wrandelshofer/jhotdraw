@@ -22,9 +22,9 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -275,9 +275,8 @@ public class PageFigure extends AbstractCompositeFigure
         return new Rectangle(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-    @Nullable
     @Override
-    public CssPoint2D getPaperSize() {
+    public CssDimension2D getPaperSize() {
         return getStyled(PAPER_SIZE);
     }
 

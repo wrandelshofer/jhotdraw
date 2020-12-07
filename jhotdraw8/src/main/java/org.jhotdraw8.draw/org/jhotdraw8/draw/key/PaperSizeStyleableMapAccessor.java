@@ -11,7 +11,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssPaperSizeConverter;
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,54 +27,54 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssPoint2D> {
+public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssDimension2D> {
 
     private final static long serialVersionUID = 1L;
-    private Converter<CssPoint2D> converter;
+    private Converter<CssDimension2D> converter;
 
     @NonNull
-    private final CssMetaData<?, CssPoint2D> cssMetaData;
+    private final CssMetaData<?, CssDimension2D> cssMetaData;
     @NonNull
-    private final MapAccessor<CssSize> xKey;
+    private final MapAccessor<CssSize> widthKey;
     @NonNull
-    private final MapAccessor<CssSize> yKey;
+    private final MapAccessor<CssSize> heightKey;
 
     /**
      * Creates a new instance with the specified name.
      *
      * @param name the name of the accessor
-     * @param xKey the key for the x coordinate of the point
-     * @param yKey the key for the y coordinate of the point
+     * @param widthKey the key for the x coordinate of the point
+     * @param heightKey the key for the y coordinate of the point
      */
-    public PaperSizeStyleableMapAccessor(String name, @NonNull MapAccessor<CssSize> xKey, @NonNull MapAccessor<CssSize> yKey) {
-        super(name, CssPoint2D.class, new MapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
+    public PaperSizeStyleableMapAccessor(String name, @NonNull MapAccessor<CssSize> widthKey, @NonNull MapAccessor<CssSize> heightKey) {
+        super(name, CssDimension2D.class, new MapAccessor<?>[]{widthKey, heightKey}, new CssDimension2D(widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 
-        Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
+        Function<Styleable, StyleableProperty<CssDimension2D>> function = s -> {
             StyleablePropertyBean spb = (StyleablePropertyBean) s;
             return spb.getStyleableProperty(this);
         };
         boolean inherits = false;
         String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssPoint2D> cnvrtr
+        final StyleConverter<String, CssDimension2D> cnvrtr
                 = new StyleConverterAdapter<>(getCssConverter());
-        CssMetaData<Styleable, CssPoint2D> md
+        CssMetaData<Styleable, CssDimension2D> md
                 = new SimpleCssMetaData<>(property, function,
                 cnvrtr, getDefaultValue(), inherits);
         cssMetaData = md;
 
-        this.xKey = xKey;
-        this.yKey = yKey;
+        this.widthKey = widthKey;
+        this.heightKey = heightKey;
     }
 
     @NonNull
     @Override
-    public CssPoint2D get(@NonNull Map<? super Key<?>, Object> a) {
-        return new CssPoint2D(xKey.get(a), yKey.get(a));
+    public CssDimension2D get(@NonNull Map<? super Key<?>, Object> a) {
+        return new CssDimension2D(widthKey.get(a), heightKey.get(a));
     }
 
 
     @Override
-    public @NonNull Converter<CssPoint2D> getCssConverter() {
+    public @NonNull Converter<CssDimension2D> getCssConverter() {
         if (converter == null) {
             converter = new CssPaperSizeConverter();
         }
@@ -82,23 +82,23 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
     }
 
     @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, CssPoint2D> getCssMetaData() {
+    public @NonNull CssMetaData<? extends @NonNull Styleable, CssDimension2D> getCssMetaData() {
         return cssMetaData;
 
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull CssPoint2D value) {
-        xKey.put(a, value.getX());
-        yKey.put(a, value.getY());
+    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull CssDimension2D value) {
+        widthKey.put(a, value.getWidth());
+        heightKey.put(a, value.getHeight());
     }
 
     @NonNull
     @Override
-    public CssPoint2D remove(@NonNull Map<? super Key<?>, Object> a) {
-        CssPoint2D oldValue = get(a);
-        xKey.remove(a);
-        yKey.remove(a);
+    public CssDimension2D remove(@NonNull Map<? super Key<?>, Object> a) {
+        CssDimension2D oldValue = get(a);
+        widthKey.remove(a);
+        heightKey.remove(a);
         return oldValue;
     }
 

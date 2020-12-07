@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 
@@ -70,10 +70,10 @@ public interface Page extends Figure {
      * @return the internal page number
      */
     default Paper createPaper(int internalPageNumber) {
-        CssPoint2D size = getPaperSize();
+        CssDimension2D size = getPaperSize();
         UnitConverter c = new DefaultUnitConverter(72);
-        double w = c.convert(size.getX(), "pt");
-        double h = c.convert(size.getY(), "pt");
+        double w = c.convert(size.getWidth(), "pt");
+        double h = c.convert(size.getHeight(), "pt");
 
         for (Paper p : PAPERS) {
             if (p.getWidth() == w && p.getHeight() == h
@@ -123,7 +123,7 @@ public interface Page extends Figure {
      *
      * @return the page size
      */
-    CssPoint2D getPaperSize();
+    CssDimension2D getPaperSize();
 
     @Override
     default boolean isAllowsChildren() {

@@ -198,7 +198,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    public void write(URI documentHome, OutputStream out, Drawing drawing, WorkState workState) throws IOException {
+    public void write(OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         write(documentHome, out, drawing, drawing.getChildren());
     }

@@ -4,7 +4,9 @@
  */
 package org.jhotdraw8.beans;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -129,5 +131,11 @@ public interface PropertyBean {
         @SuppressWarnings("unchecked")
         T removedValue = (T) getProperties().remove(key);
         return removedValue;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    default <T> ObservableValue<T> valueAt(Key<T> key) {
+        return (ObservableValue<T>) Bindings.valueAt(getProperties(), key);
     }
 }

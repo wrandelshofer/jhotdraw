@@ -15,7 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
@@ -40,11 +40,10 @@ import static java.lang.Math.abs;
  */
 public class PrinterExportFormat extends AbstractExportOutputFormat {
 
-    private final static double INCH_2_MM = 25.4;
+    private static final double INCH_2_MM = 25.4;
 
-    @NonNull
     @Override
-    protected String getExtension() {
+    protected @NonNull String getExtension() {
         return "png";
     }
 
@@ -53,10 +52,10 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public Paper findPaper(@NonNull CssPoint2D paperSize) {
+    public Paper findPaper(@NonNull CssDimension2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
-        double w = uc.convert(paperSize.getX(), UnitConverter.POINTS);
-        double h = uc.convert(paperSize.getY(), UnitConverter.POINTS);
+        double w = uc.convert(paperSize.getWidth(), UnitConverter.POINTS);
+        double h = uc.convert(paperSize.getHeight(), UnitConverter.POINTS);
         for (Paper paper : job.getPrinter().getPrinterAttributes().getSupportedPapers()) {
 
             if (abs(paper.getWidth() - w) < 1 && abs(paper.getHeight() - h) < 1
@@ -67,7 +66,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(@NonNull CssPoint2D pageSize, @NonNull Figure slice, @NonNull Bounds viewportBounds, @NonNull Node node, double dpi) throws IOException {
+    private void printSlice(@NonNull CssDimension2D pageSize, @NonNull Figure slice, @NonNull Bounds viewportBounds, @NonNull Node node, double dpi) throws IOException {
         Paper paper = findPaper(pageSize);
         Point2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
