@@ -26,8 +26,7 @@ import java.util.logging.Logger;
 public class XmlObjectReferenceConverter<T> implements Converter<T> {
 
     private static final Logger LOGGER = Logger.getLogger(XmlObjectReferenceConverter.class.getName());
-    @NonNull
-    private final Class<T> clazz;
+    private final @NonNull Class<T> clazz;
 
     /**
      * Creates a new instance
@@ -47,9 +46,13 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
         out.append(value == null ? "none" : idSupplier.getId(value));
     }
 
-    @Nullable
     @Override
-    public T fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        return fromString(buf.toString(),idResolver);
+    }
+
+    @Override
+    public @Nullable T fromString(@Nullable CharSequence buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (idResolver == null) {
             throw new UnsupportedOperationException("idFactory is required for this converter");
         }
@@ -67,9 +70,8 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
         return value;
     }
 
-    @Nullable
     @Override
-    public T getDefaultValue() {
+    public @Nullable T getDefaultValue() {
         return null;
     }
 }

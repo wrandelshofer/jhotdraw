@@ -45,7 +45,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
     }
 
     @Override
-    public Object fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         int pos = buf.position();
         String str = buf.toString();
         ParsePosition pp = new ParsePosition(0);

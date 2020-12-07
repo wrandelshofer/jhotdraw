@@ -74,7 +74,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
 
     @Nullable
     @Override
-    public Connector fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Connector c;
         CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         c = parseConnector(tt, idResolver);

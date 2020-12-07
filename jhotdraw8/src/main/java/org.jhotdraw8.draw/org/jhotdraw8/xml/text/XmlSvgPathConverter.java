@@ -35,7 +35,7 @@ public class XmlSvgPathConverter implements Converter<SVGPath> {
 
     @NonNull
     @Override
-    public SVGPath fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);

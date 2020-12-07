@@ -46,7 +46,7 @@ public class XmlBooleanConverter implements Converter<Boolean> {
 
     @NonNull
     @Override
-    public Boolean fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public Boolean fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

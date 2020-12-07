@@ -69,7 +69,7 @@ public interface Converter<T> {
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
     @Nullable
-    T fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException;
+    T fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
     /**
      * Converts a value to a string and appends it to the provided

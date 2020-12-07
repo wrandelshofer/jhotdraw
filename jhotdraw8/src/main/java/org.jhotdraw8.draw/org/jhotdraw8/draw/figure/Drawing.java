@@ -178,7 +178,7 @@ public interface Drawing extends Figure {
     default Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
-        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(128, 128, true);
+        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(256, 256, true);
         for (Figure f : postorderIterable()) {
             graphBuilder.addVertex(f);
             for (Figure obs : f.getLayoutObservers()) {

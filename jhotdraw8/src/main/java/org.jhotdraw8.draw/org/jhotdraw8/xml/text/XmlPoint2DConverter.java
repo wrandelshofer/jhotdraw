@@ -33,7 +33,7 @@ public class XmlPoint2DConverter implements Converter<Point2D> {
 
     @NonNull
     @Override
-    public Point2D fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Point2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new Point2D((double) v[0], (double) v[1]);

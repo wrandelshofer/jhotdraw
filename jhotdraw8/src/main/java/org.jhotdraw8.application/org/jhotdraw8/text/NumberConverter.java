@@ -311,7 +311,7 @@ public class NumberConverter implements Converter<Number> {
 
     @Nullable
     @Override
-    public Number fromString(@Nullable CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
+    public Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }

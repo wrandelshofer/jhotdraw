@@ -102,7 +102,7 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
-import org.jhotdraw8.draw.io.SimpleXmlReader;
+import org.jhotdraw8.draw.io.SimpleXmlReaderOld;
 import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
@@ -456,7 +456,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         FigureFactory factory = new ModelerFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
         SimpleXmlWriter iow = new SimpleXmlWriter(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
-        SimpleXmlReader ior = new SimpleXmlReader(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
+        SimpleXmlReaderOld ior = new SimpleXmlReaderOld(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
@@ -565,7 +565,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         return FXWorker.supply(() -> {
             FigureFactory factory = new ModelerFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
-            SimpleXmlReader io = new SimpleXmlReader(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
+            SimpleXmlReaderOld io = new SimpleXmlReaderOld(factory, idFactory, DIAGRAMMER_NAMESPACE_URI, null);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             applyUserAgentStylesheet(drawing);

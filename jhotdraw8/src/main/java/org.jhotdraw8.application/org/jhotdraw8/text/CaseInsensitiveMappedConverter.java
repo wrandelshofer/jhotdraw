@@ -16,10 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
-    @NonNull
-    private final Map<String, E> fromStringMap;
-    @NonNull
-    private final Map<E, String> toStringMap;
+    private final @NonNull Map<String, E> fromStringMap;
+    private final @NonNull Map<E, String> toStringMap;
 
     public CaseInsensitiveMappedConverter(@NonNull Map<String, E> fromStringMap) {
         this.fromStringMap = new LinkedHashMap<>();
@@ -30,9 +28,8 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
         }
     }
 
-    @Nullable
     @Override
-    public E fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (in == null) {
             throw new ParseException("Illegal value=null", 0);
         }
@@ -45,9 +42,8 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
         return e;
     }
 
-    @Nullable
     @Override
-    public E getDefaultValue() {
+    public @Nullable E getDefaultValue() {
         return null;
     }
 

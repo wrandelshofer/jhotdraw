@@ -16,9 +16,9 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class SimpleIdFactory implements IdFactory {
-    private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>();
-    private final @NonNull Map<String, Object> idToObject = new HashMap<>();
-    private final @NonNull Map<Object, String> objectToId = new HashMap<>();
+    private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>(128,0.4f);
+    private final @NonNull Map<String, Object> idToObject = new HashMap<>(128,0.4f);
+    private final @NonNull Map<Object, String> objectToId = new HashMap<>(128,0.4f);
 
     @Override
     public void reset() {

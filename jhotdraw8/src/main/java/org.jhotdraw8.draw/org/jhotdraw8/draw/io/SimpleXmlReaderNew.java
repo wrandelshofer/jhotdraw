@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,10 +92,13 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
         }
 
         try {
-            secondPass.parallelStream().forEach(Runnable::run);
-            /*for (Runnable pass : secondPass) {
-                pass.run();
-            }*/
+            if (ForkJoinPool.getCommonPoolParallelism()>1) {
+                secondPass.parallelStream().forEach(Runnable::run);
+            } else {
+                for (Runnable pass : secondPass) {
+                    pass.run();
+                }
+            }
         } catch (UncheckedIOException e) {
             throw e.getCause();
         } catch (Exception e) {

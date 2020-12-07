@@ -77,7 +77,7 @@ import java.util.regex.Pattern;
  *
  * @author Werner Randelshofer
  */
-public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat, ClipboardInputFormat {
+public class SimpleXmlReaderOld extends AbstractPropertyBean implements InputFormat, ClipboardInputFormat {
     private final static Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     protected List<String> comments;
     protected FigureFactory figureFactory;
@@ -104,11 +104,11 @@ public class SimpleXmlReader extends AbstractPropertyBean implements InputFormat
     private Function<URI, URI> uriResolver = new UriResolver(null, null);
     private boolean doAddNotifyAndUpdateCss = true;
 
-    public SimpleXmlReader(FigureFactory factory, IdFactory idFactory) {
+    public SimpleXmlReaderOld(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
     }
 
-    public SimpleXmlReader(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
+    public SimpleXmlReaderOld(FigureFactory factory, IdFactory idFactory, String namespaceURI, String namespaceQualifier) {
         this.figureFactory = factory;
         this.idFactory = idFactory;
         this.namespaceURI = namespaceURI;

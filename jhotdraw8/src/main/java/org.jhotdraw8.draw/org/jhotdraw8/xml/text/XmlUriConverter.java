@@ -30,7 +30,7 @@ public class XmlUriConverter implements Converter<URI> {
     }
 
     @Override
-    public @Nullable URI fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable URI fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (in == null) return null;
         String str = in.toString().trim();
         in.position(in.limit());// fully consume the buffer

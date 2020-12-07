@@ -29,7 +29,7 @@ public class XmlUrlConverter implements Converter<URL> {
 
     @NonNull
     @Override
-    public URL fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public URL fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         URL value = new URL(in.toString());
         in.position(in.limit());
         return value;

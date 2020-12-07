@@ -38,7 +38,7 @@ public class CssScale2DConverter implements Converter<Point2D> {
 
     @NonNull
     @Override
-    public Point2D fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Point2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
         case 1:

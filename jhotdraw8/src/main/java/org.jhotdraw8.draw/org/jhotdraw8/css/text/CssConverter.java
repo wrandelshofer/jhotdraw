@@ -129,8 +129,7 @@ public interface CssConverter<T> extends Converter<T> {
     default T fromString(@NonNull CharSequence buf, @Nullable IdResolver idResolver) throws ParseException {
         try {
             StreamCssTokenizer tt = new StreamCssTokenizer(buf);
-            T value = parse(tt, idResolver);
-            return value;
+            return parse(tt, idResolver);
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception", e);
         }

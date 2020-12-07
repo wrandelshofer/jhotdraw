@@ -33,7 +33,7 @@ public class CssWordConverter implements Converter<String> {
 
     @NonNull
     @Override
-    public String fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

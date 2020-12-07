@@ -13,6 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,7 +56,7 @@ public abstract class AbstractStyleablePropertyBean implements StyleableProperty
     @NonNull
     protected Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
-            ConcurrentHashMap<Key<?>, Integer> m = new ConcurrentHashMap<Key<?>, Integer>() {
+            IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<>() {
                 private final static long serialVersionUID = 0L;
                 @NonNull
                 final AtomicInteger nextIndex = new AtomicInteger();

@@ -76,7 +76,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     public ImmutableHashMap(@NonNull Collection<? extends Map.Entry<K, V>> entries) {
-        HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size());
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size()*2);
         for (Map.Entry<K, V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
         }
@@ -84,7 +84,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     public ImmutableHashMap(@NonNull ReadOnlyCollection<Map.Entry<K, V>> entries) {
-        HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size());
+        HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size()*2);
         for (Map.Entry<K, V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
         }

@@ -113,7 +113,7 @@ public class CssPaperSizeConverter implements Converter<CssPoint2D> {
 
     @Nullable
     @Override
-    public CssPoint2D fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssPoint2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CssTokenizer tt = new StreamCssTokenizer(buf);
         return parsePageSize(tt, idResolver);
 

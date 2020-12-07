@@ -33,7 +33,7 @@ public class XmlRectangle2DConverter implements Converter<Rectangle2D> {
 
     @NonNull
     @Override
-    public Rectangle2D fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Rectangle2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new Rectangle2D((double) v[0], (double) v[1], (double) v[2], (double) v[3]);

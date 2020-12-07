@@ -40,7 +40,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Nullable
     @Override
-    public ImmutableList<BezierNode> fromString(@Nullable CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public ImmutableList<BezierNode> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String input = buf.toString();
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
 

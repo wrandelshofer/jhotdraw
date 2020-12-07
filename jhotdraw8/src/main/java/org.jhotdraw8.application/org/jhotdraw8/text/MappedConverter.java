@@ -46,7 +46,7 @@ public class MappedConverter<E> implements Converter<E> {
 
     @Nullable
     @Override
-    public E fromString(@Nullable CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (in == null) {
             throw new ParseException("Illegal value=null", 0);
         }
