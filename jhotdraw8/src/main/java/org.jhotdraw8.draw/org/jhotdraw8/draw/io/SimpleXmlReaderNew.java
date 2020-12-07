@@ -233,7 +233,7 @@ public class SimpleXmlReaderNew implements InputFormat, ClipboardInputFormat {
                         if (key != null) {
                             figure.set(key, figureFactory.stringToValue(key, attributeValue));
                         } else {
-                            throw new UncheckedIOException(new IOException("Unsupported attribute " + attributeLocalName + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber()));
+                            throw new UncheckedIOException(new IOException("Unsupported attribute \"" + attributeLocalName + "\" at line " + location.getLineNumber() + ", col " + location.getColumnNumber()));
                         }
                     } catch (IOException e) {
                         throw new UncheckedIOException(e);

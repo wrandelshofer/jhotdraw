@@ -10,7 +10,11 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableMaps;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssDefaultableValue;
+import org.jhotdraw8.css.CssDefaulting;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssMappedConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
@@ -18,7 +22,12 @@ import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.svg.text.*;
+import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
+import org.jhotdraw8.svg.text.SvgDisplay;
+import org.jhotdraw8.svg.text.SvgFontSize;
+import org.jhotdraw8.svg.text.SvgFontSizeConverter;
+import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
+import org.jhotdraw8.svg.text.SvgVisibility;
 
 /**
  * The following attributes can be defined on all SVG figures using the "defaulting"
@@ -155,7 +164,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param shape a shape node
      */
     default void applySvgDefaultableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
-        Paintable fill = getDefaultableStyledNonNull(FILL_KEY);
+        Paintable fill = getDefaultableStyled(FILL_KEY);
         shape.setFill(Paintable.getPaint(fill, ctx));
 
         Paintable stroke = getDefaultableStyled(STROKE_KEY);

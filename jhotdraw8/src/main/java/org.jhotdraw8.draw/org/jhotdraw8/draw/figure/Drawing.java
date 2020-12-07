@@ -161,7 +161,8 @@ public interface Drawing extends Figure {
         if (styleManager != null) {
             styleManager.applyStylesheetsTo(preorderIterable());
             for (Figure f : preorderIterable()) {
-                f.updateCss(ctx);
+                // XXX WR why do we updateCss again, after having done applyStylesheetsTo??
+                //f.updateCss(ctx);
                 f.invalidateTransforms();
             }
         }

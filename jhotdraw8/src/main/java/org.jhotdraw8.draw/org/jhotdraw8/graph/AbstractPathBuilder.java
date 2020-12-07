@@ -101,7 +101,16 @@ public abstract class AbstractPathBuilder<V, A> {
             return null;
         }
     }
-
+    @Nullable
+    public VertexPath<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints,
+                                                     Runnable clearVisitedSet,
+                                                     AddToSet<V> addToVisitedSet) {
+        try {
+            return findVertexPathOverWaypointsNonNull(waypoints,clearVisitedSet,addToVisitedSet);
+        } catch (PathBuilderException e) {
+            return null;
+        }
+    }
     /**
      * Builds a VertexPath through the graph which traverses the specified
      * waypoints.
@@ -134,7 +143,9 @@ public abstract class AbstractPathBuilder<V, A> {
      * @throws PathBuilderException if the path cannot be constructed
      */
     @Nullable
-    public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints, Runnable clearVisitedSet, AddToSet<V> addToVisitedSet) throws PathBuilderException {
+    public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints,
+                                                            Runnable clearVisitedSet,
+                                                            AddToSet<V> addToVisitedSet) throws PathBuilderException {
 
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);

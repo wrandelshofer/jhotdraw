@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
-import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -529,7 +528,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
                 throw new IOException("no converter for key \"" + key + "\" with attribute type "
                         + key.getValueType());
             }
-            return converter.fromString(CharBuffer.wrap(string), idFactory);
+            return converter.fromString(string, idFactory);
         } catch (ParseException ex) {
             throw new IOException(ex + "\nstring: \"" + string + "\"", ex);
         }

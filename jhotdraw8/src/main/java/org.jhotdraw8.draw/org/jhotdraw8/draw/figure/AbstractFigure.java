@@ -252,13 +252,15 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
                 styleManager.applyStylesheetsTo(this);
             }
         }
-        invalidateTransforms();
+        //invalidateTransforms();
     }
 
     @Override
     protected <T> void changed(Key<T> key, T oldValue, T newValue) {
-        invalidateTransforms();
-        firePropertyChangeEvent(this, key, oldValue, newValue);
+        // XXX WR we do not want to invalidate transforms and fire property
+        //        change events because this slows everything down!
+       // invalidateTransforms();
+       // firePropertyChangeEvent(this, key, oldValue, newValue);
     }
 
     @Override

@@ -11,7 +11,14 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -1476,7 +1483,7 @@ public class FXSvgTinyReaderOld {
     private Paint toPaint(XMLStreamReader r, String value, Context ctx) throws XMLStreamException {
         try {
             return paintConverter.fromString(value, ctx.idFactory);
-        } catch (ParseException | IOException e) {
+        } catch (ParseException e) {
             logWarning(r, "Could not read paint: " + value);
             return null;
         }

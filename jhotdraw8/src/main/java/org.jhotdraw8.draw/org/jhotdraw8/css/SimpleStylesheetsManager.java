@@ -371,8 +371,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         continue;
                     }
 
-                    applicableDeclarations.add(new AbstractMap.SimpleEntry<>(selector.getSpecificity(),
-                            new AbstractMap.SimpleEntry<>(s, d)));
+                    applicableDeclarations.add(new AbstractMap.SimpleImmutableEntry<>(selector.getSpecificity(),
+                            new AbstractMap.SimpleImmutableEntry<>(s, d)));
                 }
             }
         }

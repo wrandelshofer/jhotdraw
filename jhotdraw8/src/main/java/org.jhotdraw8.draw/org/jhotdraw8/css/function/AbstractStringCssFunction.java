@@ -20,6 +20,7 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
     public AbstractStringCssFunction(String name) {
         super(name);
     }
+    private final static               ParseException parseException = new ParseException("〈---〉: String, Number, CssSize, Percentage or URL expected.", 0);
 
 
     @NonNull
@@ -49,11 +50,13 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
                 count++;
                 break;
             default:
-                throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
+                throw parseException;
+               // throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", t.getStartPos());
             }
         }
         if (count == 0) {
-            throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", tt.getStartPosition());
+            throw parseException;
+          //  throw new ParseException("〈" + expressionName + "〉: String, Number, CssSize, Percentage or URL expected.", 0);
         }
 
         return buf.toString();

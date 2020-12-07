@@ -25,10 +25,10 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.svg.figure.SvgCircleFigure;
+import org.jhotdraw8.svg.figure.SvgDefaultableFigure;
 import org.jhotdraw8.svg.figure.SvgDrawing;
 import org.jhotdraw8.svg.figure.SvgEllipseFigure;
 import org.jhotdraw8.svg.figure.SvgGFigure;
-import org.jhotdraw8.svg.figure.SvgDefaultableFigure;
 import org.jhotdraw8.svg.figure.SvgLineFigure;
 import org.jhotdraw8.svg.figure.SvgPathFigure;
 import org.jhotdraw8.svg.figure.SvgPathLengthFigure;
@@ -1285,7 +1285,7 @@ public class FigureSvgReader {
     private Paint toPaint(XMLStreamReader r, String value, Context ctx) throws XMLStreamException {
         try {
             return paintConverter.fromString(value, ctx.idFactory);
-        } catch (ParseException | IOException e) {
+        } catch (ParseException e) {
             logWarning(r, "Could not read paint: " + value);
             return null;
         }
