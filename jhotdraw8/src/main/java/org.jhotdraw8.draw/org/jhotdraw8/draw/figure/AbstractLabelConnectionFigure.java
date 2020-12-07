@@ -98,7 +98,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected <T> void changed(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    protected <T> void onPropertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (key == LABEL_TARGET) {
             if (oldValue != null) {
                 ((Figure) oldValue).getLayoutObservers().remove(this);

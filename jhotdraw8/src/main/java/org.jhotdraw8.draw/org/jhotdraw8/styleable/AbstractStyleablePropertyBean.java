@@ -37,7 +37,7 @@ public abstract class AbstractStyleablePropertyBean
             @Override
             @SuppressWarnings("unchecked")
             protected void callObservers(StyleOrigin origin, @NonNull MapChangeListener.Change<Key<?>, Object> change) {
-                changed((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
+                onPropertyChanged((Key<Object>) change.getKey(), change.getValueRemoved(), change.getValueAdded());
                 AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
                 super.callObservers(origin, change);
             }
@@ -154,7 +154,7 @@ public abstract class AbstractStyleablePropertyBean
      * @param oldValue the old value
      * @param newValue the new value
      */
-    protected <T> void changed(Key<T> key, T oldValue, T newValue) {
+    protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue) {
     }
 
     /**
