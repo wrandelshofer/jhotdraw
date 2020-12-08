@@ -74,4 +74,9 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
     public @Nullable T getDefaultValue() {
         return null;
     }
+
+   public boolean needsIdResolver() {
+        return true;
+    }
+
 }

@@ -218,4 +218,8 @@ public interface Converter<T> {
         }
         return out.toString();
     }
+
+    default boolean needsIdResolver() {
+        return false;
+    }
 }

@@ -150,6 +150,8 @@ public interface FigureFactory {
      */
     @Nullable <T> T stringToValue(MapAccessor<T> key, String cdata) throws IOException;
 
+    <T> boolean needsIdResolver(MapAccessor<T> key) throws IOException;
+
     /**
      * Returns the default for the key. The default value used for persistent
      * storage may be different from the default value defined in the key.

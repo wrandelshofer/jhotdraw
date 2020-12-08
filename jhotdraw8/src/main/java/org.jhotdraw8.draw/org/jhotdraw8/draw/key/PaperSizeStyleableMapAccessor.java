@@ -11,6 +11,7 @@ import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssPaperSizeConverter;
@@ -29,15 +30,12 @@ import java.util.function.Function;
  */
 public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssDimension2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private Converter<CssDimension2D> converter;
 
-    @NonNull
-    private final CssMetaData<?, CssDimension2D> cssMetaData;
-    @NonNull
-    private final MapAccessor<CssSize> widthKey;
-    @NonNull
-    private final MapAccessor<CssSize> heightKey;
+    private final @NonNull CssMetaData<?, CssDimension2D> cssMetaData;
+    private final @NonNull NonNullMapAccessor<CssSize> widthKey;
+    private final @NonNull NonNullMapAccessor<CssSize> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -46,7 +44,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
      * @param widthKey the key for the x coordinate of the point
      * @param heightKey the key for the y coordinate of the point
      */
-    public PaperSizeStyleableMapAccessor(String name, @NonNull MapAccessor<CssSize> widthKey, @NonNull MapAccessor<CssSize> heightKey) {
+    public PaperSizeStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<CssSize> widthKey, @NonNull NonNullMapAccessor<CssSize> heightKey) {
         super(name, CssDimension2D.class, new MapAccessor<?>[]{widthKey, heightKey}, new CssDimension2D(widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 
         Function<Styleable, StyleableProperty<CssDimension2D>> function = s -> {
@@ -66,10 +64,9 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
         this.heightKey = heightKey;
     }
 
-    @NonNull
     @Override
-    public CssDimension2D get(@NonNull Map<? super Key<?>, Object> a) {
-        return new CssDimension2D(widthKey.get(a), heightKey.get(a));
+    public @NonNull CssDimension2D get(@NonNull Map<? super Key<?>, Object> a) {
+        return new CssDimension2D(widthKey.getNonNull(a), heightKey.getNonNull(a));
     }
 
 
@@ -93,9 +90,8 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
         heightKey.put(a, value.getHeight());
     }
 
-    @NonNull
     @Override
-    public CssDimension2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull CssDimension2D remove(@NonNull Map<? super Key<?>, Object> a) {
         CssDimension2D oldValue = get(a);
         widthKey.remove(a);
         heightKey.remove(a);

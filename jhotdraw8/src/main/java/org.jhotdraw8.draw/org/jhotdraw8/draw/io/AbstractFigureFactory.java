@@ -505,25 +505,35 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
+    public <T> boolean needsIdResolver(MapAccessor<T> key) throws IOException {
+        return getConverter(key).needsIdResolver();
+    }
+
+    @Override
     public <T> T stringToValue(@NonNull MapAccessor<T> key, @NonNull String string) throws IOException {
         try {
-            Converter<T> converter;
-            final Converter<?> converterFromKey = keyValueFromXML.get(key);
-            if (converterFromKey != null) {
-                @SuppressWarnings("unchecked")
-                Converter<T> suppress = converter = (Converter<T>) converterFromKey;
-            } else {
-                @SuppressWarnings("unchecked")
-                Converter<T> suppress = converter = (Converter<T>) valueFromXML.get(key.getValueType());
-            }
-            if (converter == null) {
-                throw new IOException("no converter for key \"" + key + "\" with attribute type "
-                        + key.getValueType());
-            }
+            Converter<T> converter = getConverter(key);
             return converter.fromString(string, idFactory);
         } catch (ParseException ex) {
             throw new IOException(ex + "\nstring: \"" + string + "\"", ex);
         }
+    }
+
+    protected @NonNull <T> Converter<T> getConverter(@NonNull MapAccessor<T> key) throws IOException {
+        Converter<T> converter;
+        final Converter<?> converterFromKey = keyValueFromXML.get(key);
+        if (converterFromKey != null) {
+            @SuppressWarnings("unchecked")
+            Converter<T> suppress = converter = (Converter<T>) converterFromKey;
+        } else {
+            @SuppressWarnings("unchecked")
+            Converter<T> suppress = converter = (Converter<T>) valueFromXML.get(key.getValueType());
+        }
+        if (converter == null) {
+            throw new IOException("no converter for key \"" + key + "\" with attribute type "
+                    + key.getValueType());
+        }
+        return converter;
     }
 
     @Override
@@ -537,19 +547,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
 
     @Override
     public @NonNull <T> String valueToString(@NonNull MapAccessor<T> key, T value) throws IOException {
-
-        Converter<T> converter;
-        if (keyValueToXML.containsKey(key)) {
-            @SuppressWarnings("unchecked")
-            Converter<T> suppress = converter = (Converter<T>) keyValueToXML.get(key);
-        } else {
-            @SuppressWarnings("unchecked")
-            Converter<T> suppress = converter = (Converter<T>) valueToXML.get(key.getValueType());
-        }
-        if (converter == null) {
-            throw new IOException("no converter for attribute type "
-                    + key.getValueType());
-        }
+        Converter<T> converter=getConverter(key);
         StringBuilder builder = new StringBuilder();
         converter.toString(builder, idFactory, value);
         return builder.toString();

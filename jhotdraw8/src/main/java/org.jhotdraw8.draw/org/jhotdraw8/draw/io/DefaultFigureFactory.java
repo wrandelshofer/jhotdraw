@@ -40,6 +40,7 @@ import org.jhotdraw8.css.text.CssInsetsConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssPaintConverter;
 import org.jhotdraw8.css.text.CssPaintableConverter;
+import org.jhotdraw8.css.text.CssPaperSizeConverter;
 import org.jhotdraw8.css.text.CssPoint2DConverter;
 import org.jhotdraw8.css.text.CssPoint3DConverter;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
@@ -203,7 +204,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
         addConverterForType(CssStrokeStyle.class, new CssStrokeStyleConverter(false));
 
-
+        addConverter(PageFigure.PAPER_SIZE,new CssPaperSizeConverter());
         addConverter(StyleableFigure.STYLE_CLASS, new XmlWordListConverter());
         addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));

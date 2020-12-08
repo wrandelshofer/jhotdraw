@@ -42,17 +42,40 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
+    private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     private final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
     private final @NonNull IdFactory idFactory;
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
-
     private String idAttribute = "id";
+    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     public SimpleXmlStaxReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
-        this.figureFactory=figureFactory;
-        this.namespaceURI=namespaceURI;
+        this.figureFactory = figureFactory;
+        this.namespaceURI = namespaceURI;
+    }
+
+    private @NonNull Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
+        Figure figure = figureFactory.createFigureByElementName(r.getLocalName());
+        if (figure == null) {
+            throw new IOException("Cannot create figure for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
+        }
+        if (!stack.isEmpty()) {
+            Figure parent = stack.peek();
+            if (!figure.isSuitableParent(parent) || !parent.isSuitableChild(figure)) {
+                throw new IOException("Cannot add figure to parent in element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
+            }
+            parent.getChildren().add(figure);
+        } else {
+            stack.addFirst(figure);// add twice, so that it will remain after we finish the file
+        }
+        stack.addFirst(figure);
+        return figure;
+    }
+
+    public @NonNull IdFactory getIdFactory() {
+        return idFactory;
     }
 
     @Override
@@ -90,7 +113,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         }
 
         try {
-            if (ForkJoinPool.getCommonPoolParallelism()>1) {
+            if (ForkJoinPool.getCommonPoolParallelism() > 1) {
                 secondPass.parallelStream().forEach(Runnable::run);
             } else {
                 for (Runnable pass : secondPass) {
@@ -110,48 +133,80 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         return figure;
     }
 
-    private void readNode(XMLStreamReader r, int next, @NonNull Deque<Figure> stack, @NonNull List<Runnable> secondPass) throws IOException {
-        switch (next) {
-            case XMLStreamReader.START_ELEMENT:
-                readStartElement(r, stack, secondPass);
-                break;
-            case XMLStreamReader.END_ELEMENT:
-                readEndElement(r, stack);
-                break;
-            case XMLStreamReader.PROCESSING_INSTRUCTION:
-                readProcessingInstruction(r, stack, secondPass);
-                break;
-            case XMLStreamReader.CHARACTERS:
-                break;
-            case XMLStreamReader.COMMENT:
-                break;
-            case XMLStreamReader.SPACE:
-                break;
-            case XMLStreamReader.START_DOCUMENT:
-                break;
-            case XMLStreamReader.END_DOCUMENT:
-                break;
-            case XMLStreamReader.ENTITY_REFERENCE:
-                break;
-            case XMLStreamReader.ATTRIBUTE:
-                break;
-            case XMLStreamReader.DTD:
-                break;
-            case XMLStreamReader.CDATA:
-                break;
-            case XMLStreamReader.NAMESPACE:
-                break;
-            case XMLStreamReader.NOTATION_DECLARATION:
-                break;
-            case XMLStreamReader.ENTITY_DECLARATION:
-                break;
-            default:
-                throw new IOException("unsupported XMLStream event: " + next);
+    @Override
+    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, @Nullable Figure parent) throws IOException {
+        return null;
+    }
+
+    private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass) throws IOException {
+        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
+            String ns = r.getAttributeNamespace(i);
+            if (namespaceURI != null && ns != null && !namespaceURI.equals(ns)) {
+                continue;
+            }
+            String attributeLocalName = r.getAttributeLocalName(i);
+            String attributeValue = r.getAttributeValue(i);
+            Location location = r.getLocation();
+            if (idAttribute.equals(attributeLocalName)) {
+                Object anotherObjWithSameId = idFactory.putIdToObject(attributeValue, figure);
+                if (anotherObjWithSameId != null) {
+                    throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
+                }
+                setId(figure, attributeValue);
+            } else {
+                @SuppressWarnings("unchecked")
+                MapAccessor<Object> key =
+                        (MapAccessor<Object>) figureFactory.getKeyByAttributeName(figure, attributeLocalName);
+                if (key == null) {
+                    throw new IOException("Unsupported attribute \"" + attributeLocalName + "\" at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
+                }
+                if (figureFactory.needsIdResolver(key)) {
+                    secondPass.add(() -> {
+                        try {
+                            figure.set(key, figureFactory.stringToValue(key, attributeValue));
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
+                }else{
+                    figure.set(key, figureFactory.stringToValue(key, attributeValue));
+                }
+            }
         }
     }
 
-    private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
+    private void readEndElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) {
+        stack.removeFirst();
+    }
+
+    private void readNode(XMLStreamReader r, int next, @NonNull Deque<Figure> stack, @NonNull List<Runnable> secondPass) throws IOException {
+        switch (next) {
+        case XMLStreamReader.START_ELEMENT:
+            readStartElement(r, stack, secondPass);
+            break;
+        case XMLStreamReader.END_ELEMENT:
+            readEndElement(r, stack);
+            break;
+        case XMLStreamReader.PROCESSING_INSTRUCTION:
+            readProcessingInstruction(r, stack, secondPass);
+            break;
+        case XMLStreamReader.CHARACTERS:
+        case XMLStreamReader.ENTITY_DECLARATION:
+        case XMLStreamReader.NOTATION_DECLARATION:
+        case XMLStreamReader.NAMESPACE:
+        case XMLStreamReader.CDATA:
+        case XMLStreamReader.DTD:
+        case XMLStreamReader.ATTRIBUTE:
+        case XMLStreamReader.ENTITY_REFERENCE:
+        case XMLStreamReader.END_DOCUMENT:
+        case XMLStreamReader.START_DOCUMENT:
+        case XMLStreamReader.SPACE:
+        case XMLStreamReader.COMMENT:
+            break;
+        default:
+            throw new IOException("unsupported XMLStream event: " + next);
+        }
+    }
 
     private void readProcessingInstruction(XMLStreamReader r, @NonNull Deque<Figure> stack, List<Runnable> secondPass) {
         if (figureFactory.getStylesheetsKey() != null) {
@@ -178,10 +233,6 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         }
     }
 
-    private void readEndElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) {
-        stack.removeFirst();
-    }
-
     private void readStartElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack, @NonNull List<Runnable> secondPass) throws IOException {
         if (namespaceURI != null && !namespaceURI.equals(r.getNamespaceURI())) {
             return;
@@ -191,78 +242,16 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         readAttributes(r, figure, secondPass);
     }
 
-    private @NonNull Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
-        Figure figure = figureFactory.createFigureByElementName(r.getLocalName());
-        if (figure == null) {
-            throw new IOException("Cannot create figure for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
-        }
-        if (!stack.isEmpty()) {
-            Figure parent = stack.peek();
-            if (!figure.isSuitableParent(parent) || !parent.isSuitableChild(figure)) {
-                throw new IOException("Cannot add figure to parent in element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
-            }
-            parent.getChildren().add(figure);
-        } else {
-            stack.addFirst(figure);// add twice, so that it will remain after we finish the file
-        }
-        stack.addFirst(figure);
-        return figure;
-    }
-
-    private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass) throws IOException {
-        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
-            String ns = r.getAttributeNamespace(i);
-            if (namespaceURI != null && ns != null && !namespaceURI.equals(ns)) {
-                continue;
-            }
-            String attributeLocalName = r.getAttributeLocalName(i);
-            String attributeValue = r.getAttributeValue(i);
-            Location location = r.getLocation();
-            if (idAttribute.equals(attributeLocalName)) {
-                Object anotherObjWithSameId = idFactory.putIdToObject(attributeValue, figure);
-                if (anotherObjWithSameId != null) {
-                    throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
-                }
-                setId(figure, attributeValue);
-            } else {
-                secondPass.add(() -> {
-                    try {
-                        @SuppressWarnings("unchecked")
-                        MapAccessor<Object> key =
-                                (MapAccessor<Object>) figureFactory.getKeyByAttributeName(figure, attributeLocalName);
-                        if (key != null) {
-                            figure.set(key, figureFactory.stringToValue(key, attributeValue));
-                        } else {
-                            throw new UncheckedIOException(new IOException("Unsupported attribute \"" + attributeLocalName + "\" at line " + location.getLineNumber() + ", col " + location.getColumnNumber()));
-                        }
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                });
-            }
-        }
+    public void setFigureFactory(@NonNull FigureFactory figureFactory) {
+        this.figureFactory = figureFactory;
     }
 
     protected void setId(@NonNull Figure figure, String id) {
         figure.set(StyleableFigure.ID, id);
     }
 
-    @Override
-    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, @Nullable Figure parent) throws IOException {
-        return null;
-    }
-
-
     public void setNamespaceURI(@Nullable String namespaceURI) {
         this.namespaceURI = namespaceURI;
-    }
-
-    public void setFigureFactory(@NonNull FigureFactory figureFactory) {
-        this.figureFactory = figureFactory;
-    }
-
-    public @NonNull IdFactory getIdFactory() {
-        return idFactory;
     }
 
     protected void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
