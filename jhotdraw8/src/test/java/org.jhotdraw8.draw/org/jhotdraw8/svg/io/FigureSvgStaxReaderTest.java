@@ -39,7 +39,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class FigureSvgReaderNewTest {
+public class FigureSvgStaxReaderTest {
 
     /**
      * Set this constant to the path of the directory into which you checked
@@ -78,15 +80,29 @@ public class FigureSvgReaderNewTest {
             return Stream.empty();
         }
 
+        Set<String> unwantedTests = new HashSet<>();
+        unwantedTests.add("bearing/absolute.svg"); // No browser currently supports bearing
+        unwantedTests.add("bearing/relative.svg"); // No browser currently supports bearing
+        unwantedTests.add("bearing/zero.svg"); // No browser currently supports bearing
+        unwantedTests.add("closepath/segment-completing.svg"); // No browser renders this illegal path
+
 
         return Files.walk(Path.of(WPT_PATH))
                 //   .filter(p->Files.isRegularFile(p))
                 .filter(p -> p.toString().endsWith("-ref.svg"))
                 .map(p -> new OrderedPair<>(Path.of(p.toString().substring(0, p.toString().length() - "-ref.svg".length()) + ".svg"), p))
                 // .filter(op->Files.isRegularFile(op.first()))
-                .sorted(Comparator.comparing(p -> p.first().getName(p.first().getNameCount() - 1)))
-                .map(p -> dynamicTest(p.first().getName(p.first().getNameCount() - 1).toString(), () -> doWebPlatformTest(p.first(), p.second())));
+                .filter(p -> !unwantedTests.contains(getLastTwoPathElements(p)))
+                .sorted(Comparator.comparing(p -> getLastTwoPathElements(p)))
+                .map(p -> dynamicTest(getLastTwoPathElements(p)
+                        , () -> doWebPlatformTest(p.first(), p.second())));
 
+    }
+
+    @NonNull
+    protected String getLastTwoPathElements(OrderedPair<Path, Path> p) {
+        return p.first().getName(p.first().getNameCount() - 2).toString()
+                + "/" + p.first().getName(p.first().getNameCount() - 1).toString();
     }
 
     @TestFactory
@@ -177,6 +193,7 @@ public class FigureSvgReaderNewTest {
 
         FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
         Figure testFigure = instance.read(testFile);
+        dump(testFigure, 0);
         Figure referenceFigure = instance.read(referenceFile);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node testNode = r.render(testFigure);
@@ -187,29 +204,10 @@ public class FigureSvgReaderNewTest {
             try {
                 WritableImage testImage = testNode.snapshot(new SnapshotParameters(), null);
                 WritableImage referenceImage = referenceNode.snapshot(new SnapshotParameters(), null);
-                if (INTERACTIVE) {
-                    Stage stage = new Stage();
-                    HBox hbox = new HBox();
-                    hbox.getChildren().addAll(new ImageView(testImage),
-                            new ImageView(referenceImage));
-                    stage.setScene(new Scene(hbox));
-                    stage.sizeToScene();
-                    stage.setWidth(Math.max(100, stage.getWidth()));
-                    stage.setHeight(Math.max(100, stage.getHeight()));
-                    stage.setTitle(testFile.getName(testFile.getNameCount() - 1).toString());
-                    stage.show();
-                    stage.setOnCloseRequest(evt -> {
-                        System.out.println("stage.close requested");
-                        future.complete(new OrderedPair<>(testImage, referenceImage));
-                        stage.close();
-                    });
-                } else {
-                    future.complete(new OrderedPair<>(testImage, referenceImage));
-                }
+                future.complete(new OrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
                 t.printStackTrace();
                 future.completeExceptionally(t);
-
             }
         });
 
@@ -220,8 +218,46 @@ public class FigureSvgReaderNewTest {
         IntBuffer actualBuffer = createIntBuffer(actualImage);
         IntBuffer expectedBuffer = createIntBuffer(expectedImage);
 
+        if (INTERACTIVE && !actualBuffer.equals(expectedBuffer)) {
+            CompletableFuture<Boolean> waitUntilClosed = new CompletableFuture<>();
+            Platform.runLater(() -> {
+                try {
+                    Stage stage = new Stage();
+                    HBox hbox = new HBox();
+                    hbox.getChildren().addAll(new ImageView(actualImage),
+                            new ImageView(expectedImage));
+                    stage.setScene(new Scene(hbox));
+                    stage.sizeToScene();
+                    stage.setWidth(Math.max(100, stage.getWidth()));
+                    stage.setHeight(Math.max(100, stage.getHeight()));
+                    stage.setTitle(testFile.getName(testFile.getNameCount() - 1).toString());
+                    stage.show();
+                    stage.setOnCloseRequest(evt -> {
+                        stage.close();
+                        waitUntilClosed.complete(Boolean.TRUE);
+                    });
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    waitUntilClosed.completeExceptionally(t);
+
+                }
+            });
+            try {
+                waitUntilClosed.get(1, TimeUnit.MINUTES);
+            } catch (TimeoutException e) {
+                // keep stage open, move to next test
+            }
+        }
+
         assertArrayEquals(expectedBuffer.array(), actualBuffer.array());
 
+    }
+
+    private void dump(Figure f, int depth) {
+        System.out.println(".".repeat(depth) + f.getTypeSelector() + " " + f.getId());
+        for (Figure child : f.getChildren()) {
+            dump(child, depth + 1);
+        }
     }
 
     private @NonNull IntBuffer createIntBuffer(WritableImage actualImage) {

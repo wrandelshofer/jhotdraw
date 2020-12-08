@@ -195,7 +195,7 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
         }
     }
 
-    public @Nullable Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState workState) throws IOException {
+    public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
         Document doc = XmlUtil.readWithLocations(new InputSource(in), isNamespaceAware());
         return read(doc, drawing, documentHome);
     }

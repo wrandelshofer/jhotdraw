@@ -23,6 +23,7 @@ import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.svg.figure.SvgCircleFigure;
+import org.jhotdraw8.svg.figure.SvgDefsFigure;
 import org.jhotdraw8.svg.figure.SvgDrawing;
 import org.jhotdraw8.svg.figure.SvgElementFigure;
 import org.jhotdraw8.svg.figure.SvgEllipseFigure;
@@ -96,6 +97,7 @@ public class FigureSvgTinyReaderNew {
                 ImmutableMaps.entry("svg", SvgDrawing.class),
                 ImmutableMaps.entry("g", SvgGFigure.class),
                 ImmutableMaps.entry("rect", SvgRectFigure.class),
+                ImmutableMaps.entry("defs", SvgDefsFigure.class),
                 ImmutableMaps.entry("circle", SvgCircleFigure.class),
                 ImmutableMaps.entry("ellipse", SvgEllipseFigure.class),
                 ImmutableMaps.entry("line", SvgLineFigure.class),

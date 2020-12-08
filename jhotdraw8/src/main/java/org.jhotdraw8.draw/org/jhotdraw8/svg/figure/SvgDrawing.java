@@ -12,7 +12,11 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.AbstractDrawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.NonTransformableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.styleable.SimpleStyleableKey;
 
@@ -42,5 +46,10 @@ public class SvgDrawing extends AbstractDrawing
     @Override
     public void updateBackground(RenderContext ctx, Pane g) {
         // background is always transparent!
+    }
+
+    @Override
+    public @NonNull String getTypeSelector() {
+        return "svg";
     }
 }

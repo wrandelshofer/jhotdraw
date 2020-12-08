@@ -24,7 +24,6 @@ import java.nio.file.Paths;
  * InputFormat.
  *
  * @author Werner Randelshofer
- * @design.pattern Drawing Strategy, Strategy.
  */
 public interface InputFormat extends PropertyBean {
 

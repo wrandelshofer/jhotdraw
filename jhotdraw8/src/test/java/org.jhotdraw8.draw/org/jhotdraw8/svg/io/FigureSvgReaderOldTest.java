@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class FigureSvgReaderTest {
+public class FigureSvgReaderOldTest {
 
     /**
      * Set this constant to the path of the directory into which you checked
@@ -98,7 +98,7 @@ public class FigureSvgReaderTest {
     private void doIconTest(Path testFile) throws Exception {
         System.out.println(testFile);
         System.out.println(testFile.toAbsolutePath());
-        FigureSvgReader instance = new FigureSvgReader();
+        FigureSvgReaderOld instance = new FigureSvgReaderOld();
         Figure testNode = instance.read(testFile);
 
     }
@@ -107,7 +107,7 @@ public class FigureSvgReaderTest {
         System.out.println(testFile);
         System.out.println(referenceFile);
 
-        FigureSvgReader instance = new FigureSvgReader();
+        FigureSvgReaderOld instance = new FigureSvgReaderOld();
         Figure testFigure = instance.read(testFile);
         Figure referenceFigure = instance.read(referenceFile);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
