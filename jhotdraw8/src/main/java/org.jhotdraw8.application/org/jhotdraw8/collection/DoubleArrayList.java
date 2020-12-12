@@ -77,8 +77,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *              provided array)
      * @return the new instance
      */
-    @NonNull
-    public static DoubleArrayList of(@NonNull double... items) {
+    public static @NonNull DoubleArrayList of(@NonNull double... items) {
         return new DoubleArrayList(items);
     }
 
@@ -127,8 +126,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param out the output collection
      * @return out
      */
-    @NonNull
-    public <T extends Collection<Double>> T addAllInto(@NonNull T out) {
+    public @NonNull <T extends Collection<Double>> T addAllInto(@NonNull T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -311,8 +309,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return an iterator over the elements of this list
      */
-    @NonNull
-    public PrimitiveIterator.OfDouble iterator() {
+    public @NonNull PrimitiveIterator.OfDouble iterator() {
         return new PrimitiveIterator.OfDouble() {
             private int index = 0;
             private final int size = DoubleArrayList.this.size;
@@ -338,8 +335,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return a spliterator over the elements of this list
      */
-    @NonNull
-    public Spliterator.OfDouble spliterator() {
+    public @NonNull Spliterator.OfDouble spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -348,8 +344,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return a stream
      */
-    @NonNull
-    public DoubleStream stream() {
+    public @NonNull DoubleStream stream() {
         return (size == 0) ? DoubleStream.empty() : Arrays.stream(items, 0, size);
     }
 
@@ -358,8 +353,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return array
      */
-    @NonNull
-    public double[] toArray() {
+    public @NonNull double[] toArray() {
         double[] result = new double[size];
         if (size > 0) {
             System.arraycopy(items, 0, result, 0, size);
@@ -367,9 +361,8 @@ public class DoubleArrayList implements Iterable<Double> {
         return result;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return Arrays.toString(items);
     }
 

@@ -103,9 +103,9 @@
 														"$ref": "AAAAAAF1c1GaGvdr0fY="
 													},
 													"font": "Arial;13;0",
-													"left": 117,
-													"top": 85,
-													"width": 239,
+													"left": 61,
+													"top": 69,
+													"width": 527,
 													"height": 13,
 													"text": "«requirement»"
 												},
@@ -116,9 +116,9 @@
 														"$ref": "AAAAAAF1c1GaGvdr0fY="
 													},
 													"font": "Arial;13;1",
-													"left": 117,
-													"top": 100,
-													"width": 239,
+													"left": 61,
+													"top": 84,
+													"width": 527,
 													"height": 13,
 													"text": "Modularity"
 												},
@@ -130,8 +130,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 224,
-													"top": 160,
+													"left": 112,
+													"top": 128,
 													"width": 119.1962890625,
 													"height": 13,
 													"text": "(from Requirements)"
@@ -144,16 +144,16 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 224,
-													"top": 160,
+													"left": 112,
+													"top": 128,
 													"height": 13,
 													"horizontalAlignment": 1
 												}
 											],
 											"font": "Arial;13;0",
-											"left": 112,
-											"top": 80,
-											"width": 249,
+											"left": 56,
+											"top": 64,
+											"width": 537,
 											"height": 38,
 											"stereotypeLabel": {
 												"$ref": "AAAAAAF1c1GaG/dsiGw="
@@ -179,8 +179,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 112,
-											"top": 80,
+											"left": 56,
+											"top": 64,
 											"width": 10,
 											"height": 10
 										},
@@ -195,8 +195,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 112,
-											"top": 80,
+											"left": 56,
+											"top": 64,
 											"width": 10,
 											"height": 10
 										},
@@ -211,8 +211,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 112,
-											"top": 80,
+											"left": 56,
+											"top": 64,
 											"width": 10,
 											"height": 10
 										},
@@ -227,8 +227,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 112,
-											"top": 80,
+											"left": 56,
+											"top": 64,
 											"width": 10,
 											"height": 10
 										},
@@ -252,10 +252,10 @@
 														"$ref": "AAAAAAF1c1GaGvdo3Uo="
 													},
 													"font": "Arial;13;0",
-													"left": 117,
-													"top": 123,
-													"width": 239,
-													"height": 52,
+													"left": 61,
+													"top": 107,
+													"width": 527,
+													"height": 26,
 													"text": "text = \"JHotDraw 8 is modular. Small pieces (down to code snippets) can easily be ripped out and reused in other projects.\"",
 													"horizontalAlignment": 0,
 													"wordWrap": true,
@@ -264,16 +264,16 @@
 												}
 											],
 											"font": "Arial;13;0",
-											"left": 112,
-											"top": 118,
-											"width": 249,
-											"height": 62
+											"left": 56,
+											"top": 102,
+											"width": 537,
+											"height": 36
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 112,
-									"top": 80,
-									"width": 249,
+									"left": 56,
+									"top": 64,
+									"width": 537,
 									"height": 105,
 									"nameCompartment": {
 										"$ref": "AAAAAAF1c1GaGvdr0fY="
@@ -295,6 +295,665 @@
 									"propertyValueCompartment": {
 										"$ref": "AAAAAAF1c1GaG/d0L/s="
 									}
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V1qlx5a5Pt4=",
+									"_parent": {
+										"$ref": "AAAAAAF1c1FkSPbtvVM="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V1qlxpa30qg="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V1qlx5a6GHM=",
+											"_parent": {
+												"$ref": "AAAAAAF2V1qlx5a5Pt4="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V1qlxpa30qg="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V1qlyJa7LV4=",
+													"_parent": {
+														"$ref": "AAAAAAF2V1qlx5a6GHM="
+													},
+													"font": "Arial;13;0",
+													"left": 61,
+													"top": 205,
+													"width": 535,
+													"height": 13,
+													"text": "«requirement»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V1qlyJa8M70=",
+													"_parent": {
+														"$ref": "AAAAAAF2V1qlx5a6GHM="
+													},
+													"font": "Arial;13;1",
+													"left": 61,
+													"top": 220,
+													"width": 535,
+													"height": 13,
+													"text": "Prevent NullPointerException at runtime"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V1qlyJa91oE=",
+													"_parent": {
+														"$ref": "AAAAAAF2V1qlx5a6GHM="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -256,
+													"top": -96,
+													"width": 119.1962890625,
+													"height": 13,
+													"text": "(from Requirements)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V1qlyJa+Efg=",
+													"_parent": {
+														"$ref": "AAAAAAF2V1qlx5a6GHM="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -256,
+													"top": -96,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 56,
+											"top": 200,
+											"width": 545,
+											"height": 38,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V1qlyJa7LV4="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V1qlyJa8M70="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V1qlyJa91oE="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V1qlyJa+Efg="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V1qlyJa/Wow=",
+											"_parent": {
+												"$ref": "AAAAAAF2V1qlx5a5Pt4="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V1qlxpa30qg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -48,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V1qlyJbAzb8=",
+											"_parent": {
+												"$ref": "AAAAAAF2V1qlx5a5Pt4="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V1qlxpa30qg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -48,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V1qlyJbB+Xc=",
+											"_parent": {
+												"$ref": "AAAAAAF2V1qlx5a5Pt4="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V1qlxpa30qg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -48,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V1qlyJbCqAM=",
+											"_parent": {
+												"$ref": "AAAAAAF2V1qlx5a5Pt4="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V1qlxpa30qg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -128,
+											"top": -48,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V1qlyJbDQgM=",
+											"_parent": {
+												"$ref": "AAAAAAF2V1qlx5a5Pt4="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V1qlxpa30qg="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V1zAGZbnXC0=",
+													"_parent": {
+														"$ref": "AAAAAAF2V1qlyJbDQgM="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V1qlxpa30qg="
+													},
+													"font": "Arial;13;0",
+													"left": 61,
+													"top": 243,
+													"width": 535,
+													"height": 26,
+													"text": "text = \"All nullable reference types in JHotDraw 8 are annotated, so that potential NullPointerExceptions can be prevented at compile time.\"",
+													"horizontalAlignment": 0,
+													"wordWrap": true,
+													"property": "text",
+													"value": "\"All nullable reference types in JHotDraw 8 are annotated, so that potential NullPointerExceptions can be prevented at compile time.\""
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 56,
+											"top": 238,
+											"width": 545,
+											"height": 36
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 56,
+									"top": 200,
+									"width": 545,
+									"height": 74,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V1qlx5a6GHM="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V1qlyJa/Wow="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V1qlyJbAzb8="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V1qlyJbB+Xc="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V1qlyJbCqAM="
+									},
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V1qlyJbDQgM="
+									}
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V2h/EJf3ZDk=",
+									"_parent": {
+										"$ref": "AAAAAAF1c1FkSPbtvVM="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2h/D5f166Q="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V2h/EJf486A=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2h/EJf3ZDk="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2h/EJf5QjE=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2h/EJf486A="
+													},
+													"font": "Arial;13;0",
+													"left": 61,
+													"top": 405,
+													"width": 527,
+													"height": 13,
+													"text": "«requirement»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2h/EJf6Ii8=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2h/EJf486A="
+													},
+													"font": "Arial;13;1",
+													"left": 61,
+													"top": 420,
+													"width": 527,
+													"height": 13,
+													"text": "No third-party libraries"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2h/EJf7Hck=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2h/EJf486A="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -192,
+													"top": 144,
+													"width": 119.1962890625,
+													"height": 13,
+													"text": "(from Requirements)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2h/EJf8PS0=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2h/EJf486A="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -192,
+													"top": 144,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 56,
+											"top": 400,
+											"width": 537,
+											"height": 38,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V2h/EJf5QjE="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V2h/EJf6Ii8="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V2h/EJf7Hck="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V2h/EJf8PS0="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V2h/EJf97iE=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2h/EJf3ZDk="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": 72,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V2h/EJf+xFM=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2h/EJf3ZDk="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": 72,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V2h/EZf/tdU=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2h/EJf3ZDk="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": 72,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V2h/EZgALYo=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2h/EJf3ZDk="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": 72,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V2h/EZgB2qA=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2h/EJf3ZDk="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V2lQm5gk/+w=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2h/EZgB2qA="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V2h/D5f166Q="
+													},
+													"font": "Arial;13;0",
+													"left": 61,
+													"top": 443,
+													"width": 527,
+													"height": 13,
+													"text": "text = \"JHotDraw 8 avoids the use of third-party libraries (except for JavaFX).\"",
+													"horizontalAlignment": 0,
+													"property": "text",
+													"value": "\"JHotDraw 8 avoids the use of third-party libraries (except for JavaFX).\""
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 56,
+											"top": 438,
+											"width": 537,
+											"height": 23
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 56,
+									"top": 400,
+									"width": 537,
+									"height": 61,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V2h/EJf486A="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V2h/EJf97iE="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V2h/EJf+xFM="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V2h/EZf/tdU="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V2h/EZgALYo="
+									},
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V2h/EZgB2qA="
+									}
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V5LUX5oec0Y=",
+									"_parent": {
+										"$ref": "AAAAAAF1c1FkSPbtvVM="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V5LUX5ocxrA="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V5LUX5ofonc=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5LUX5oec0Y="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5LUX5ocxrA="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5LUX5ogwvU=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5LUX5ofonc="
+													},
+													"font": "Arial;13;0",
+													"left": 61,
+													"top": 309,
+													"width": 583,
+													"height": 13,
+													"text": "«requirement»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5LUX5ohoBs=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5LUX5ofonc="
+													},
+													"font": "Arial;13;1",
+													"left": 61,
+													"top": 324,
+													"width": 583,
+													"height": 13,
+													"text": "Prevent UnsupportedOperationException on collections at runtime"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5LUX5oiS50=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5LUX5ofonc="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -224,
+													"top": -16,
+													"width": 119.1962890625,
+													"height": 13,
+													"text": "(from Requirements)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5LUX5ojbcQ=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5LUX5ofonc="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -224,
+													"top": -16,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 56,
+											"top": 304,
+											"width": 593,
+											"height": 38,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V5LUX5ogwvU="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V5LUX5ohoBs="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V5LUX5oiS50="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V5LUX5ojbcQ="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V5LUX5okCKs=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5LUX5oec0Y="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5LUX5ocxrA="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -112,
+											"top": -8,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V5LUX5olXvw=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5LUX5oec0Y="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5LUX5ocxrA="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -112,
+											"top": -8,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V5LUX5omNK8=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5LUX5oec0Y="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5LUX5ocxrA="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -112,
+											"top": -8,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V5LUX5onYGw=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5LUX5oec0Y="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5LUX5ocxrA="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -112,
+											"top": -8,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V5LUX5ooIC8=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5LUX5oec0Y="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5LUX5ocxrA="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V5U+KppNR94=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5LUX5ooIC8="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V5LUX5ocxrA="
+													},
+													"font": "Arial;13;0",
+													"left": 61,
+													"top": 347,
+													"width": 583,
+													"height": 39,
+													"text": "text = \"When JHotDraw 8 works with a read-only view of a collection or with an immutable collection, then it wraps them into marker interfaces, so that potential UnsupportedOperationExceptions can be prevented at compile time. \"",
+													"horizontalAlignment": 0,
+													"wordWrap": true,
+													"property": "text",
+													"value": "\"When JHotDraw 8 works with a read-only view of a collection or with an immutable collection, then it wraps them into marker interfaces, so that potential UnsupportedOperationExceptions can be prevented at compile time. \""
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 56,
+											"top": 342,
+											"width": 593,
+											"height": 49
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 56,
+									"top": 304,
+									"width": 593,
+									"height": 87,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V5LUX5ofonc="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V5LUX5okCKs="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V5LUX5olXvw="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V5LUX5omNK8="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V5LUX5onYGw="
+									},
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V5LUX5ooIC8="
+									}
 								}
 							]
 						},
@@ -306,9 +965,1433 @@
 							},
 							"name": "Modularity",
 							"text": "JHotDraw 8 is modular. Small pieces (down to code snippets) can easily be ripped out and reused in other projects."
+						},
+						{
+							"_type": "SysMLRequirement",
+							"_id": "AAAAAAF2V1qlxpa30qg=",
+							"_parent": {
+								"$ref": "AAAAAAF1NholQwGtujQ="
+							},
+							"name": "Prevent NullPointerException at runtime",
+							"text": "All nullable reference types in JHotDraw 8 are annotated, so that potential NullPointerExceptions can be prevented at compile time."
+						},
+						{
+							"_type": "SysMLRequirement",
+							"_id": "AAAAAAF2V2h/D5f166Q=",
+							"_parent": {
+								"$ref": "AAAAAAF1NholQwGtujQ="
+							},
+							"name": "No third-party libraries",
+							"text": "JHotDraw 8 avoids the use of third-party libraries (except for JavaFX)."
+						},
+						{
+							"_type": "SysMLRequirement",
+							"_id": "AAAAAAF2V5LUX5ocxrA=",
+							"_parent": {
+								"$ref": "AAAAAAF1NholQwGtujQ="
+							},
+							"name": "Prevent UnsupportedOperationException on collections at runtime",
+							"text": "When JHotDraw 8 works with a read-only view of a collection or with an immutable collection, then it wraps them into marker interfaces, so that potential UnsupportedOperationExceptions can be prevented at compile time. "
 						}
 					],
 					"documentation": "The Requirements Model describes the requirements for the desired solution.\n\nIt mostly consists of requirements diagrams, tables and illustrations.\n\n"
+				},
+				{
+					"_type": "UMLModel",
+					"_id": "AAAAAAF1NXJmMiDNQIo=",
+					"_parent": {
+						"$ref": "AAAAAAF1NXJmMCATIqw="
+					},
+					"name": "Decisions",
+					"ownedElements": [
+						{
+							"_type": "SysMLRequirementDiagram",
+							"_id": "AAAAAAF2V2MobZcBg9k=",
+							"_parent": {
+								"$ref": "AAAAAAF1NXJmMiDNQIo="
+							},
+							"name": "Design Decisions Nullity",
+							"ownedViews": [
+								{
+									"_type": "UMLFrameView",
+									"_id": "AAAAAAF2V2MobZcCg2k=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V2MobZcD1ts=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2MobZcCg2k="
+											},
+											"font": "Arial;13;0",
+											"left": 37.7890625,
+											"top": 13,
+											"width": 140.43896484375,
+											"height": 13,
+											"text": "Design Decisions Nullity"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V2MobZcEzfE=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2MobZcCg2k="
+											},
+											"font": "Arial;13;1",
+											"left": 13,
+											"top": 13,
+											"width": 19.7890625,
+											"height": 13,
+											"text": "req"
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 8,
+									"top": 8,
+									"width": 692,
+									"height": 592,
+									"nameLabel": {
+										"$ref": "AAAAAAF2V2MobZcD1ts="
+									},
+									"frameTypeLabel": {
+										"$ref": "AAAAAAF2V2MobZcEzfE="
+									}
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V2NUUZeuRKc=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2NUUZesWZw="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V2NUUZevDZc=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2NUUZeuRKc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2NUUZesWZw="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2NUUZew+N4=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2NUUZevDZc="
+													},
+													"font": "Arial;13;0",
+													"left": 85,
+													"top": 101,
+													"width": 296.8671875,
+													"height": 13,
+													"text": "«design decision»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2NUUpex0+A=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2NUUZevDZc="
+													},
+													"font": "Arial;13;1",
+													"left": 85,
+													"top": 116,
+													"width": 296.8671875,
+													"height": 13,
+													"text": "JHotDraw 8 provides its own nullity annotations"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2NUUpeyXUw=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2NUUZevDZc="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -64,
+													"top": -80,
+													"width": 94.62451171875,
+													"height": 13,
+													"text": "(from Decisions)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V2NUUpezrRY=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2NUUZevDZc="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -64,
+													"top": -80,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 80,
+											"top": 96,
+											"width": 306.8671875,
+											"height": 38,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V2NUUZew+N4="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V2NUUpex0+A="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V2NUUpeyXUw="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V2NUUpezrRY="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V2NUUpe0sSY=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2NUUZeuRKc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2NUUZesWZw="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -32,
+											"top": -40,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V2NUUpe1W34=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2NUUZeuRKc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2NUUZesWZw="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -32,
+											"top": -40,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V2NUUpe2L44=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2NUUZeuRKc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2NUUZesWZw="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -32,
+											"top": -40,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V2NUUpe3YWw=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2NUUZeuRKc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2NUUZesWZw="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -32,
+											"top": -40,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V2NUUpe4rAs=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2NUUZeuRKc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2NUUZesWZw="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V2a9RJffa6k=",
+													"_parent": {
+														"$ref": "AAAAAAF2V2NUUpe4rAs="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V2NUUZesWZw="
+													},
+													"font": "Arial;13;0",
+													"left": 85,
+													"top": 139,
+													"width": 296.8671875,
+													"height": 65,
+													"text": "text = \"For unknown reasons, Java SE does not provide nullity annotations. To avoid a dependency on third-party libraries, we provide the annotations by ourselves. Static analysis tools can (typically) easily be configured to use our annotations.\"",
+													"horizontalAlignment": 0,
+													"wordWrap": true,
+													"property": "text",
+													"value": "\"For unknown reasons, Java SE does not provide nullity annotations. To avoid a dependency on third-party libraries, we provide the annotations by ourselves. Static analysis tools can (typically) easily be configured to use our annotations.\""
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 80,
+											"top": 134,
+											"width": 306.8671875,
+											"height": 75
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 80,
+									"top": 96,
+									"width": 306.8671875,
+									"height": 113,
+									"autoResize": true,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V2NUUZevDZc="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V2NUUpe0sSY="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V2NUUpe1W34="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V2NUUpe2L44="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V2NUUpe3YWw="
+									},
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V2NUUpe4rAs="
+									}
+								},
+								{
+									"_type": "HyperlinkView",
+									"_id": "AAAAAAF2V2cO/Zfm09Y=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2cO/ZfkQW8="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V2cO/ZfnwiA=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2cO/Zfm09Y="
+											},
+											"font": "Arial;13;0",
+											"left": 117.39453125,
+											"top": 261,
+											"width": 506.56201171875,
+											"height": 13,
+											"text": "https://stackoverflow.com/questions/4963300/which-notnull-java-annotation-should-i-use"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V2cO/Zfol6c=",
+											"_parent": {
+												"$ref": "AAAAAAF2V2cO/Zfm09Y="
+											},
+											"font": "Arial;13;1",
+											"left": 85,
+											"top": 261,
+											"width": 23.39453125,
+											"height": 13,
+											"text": "link"
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 80,
+									"top": 256,
+									"width": 549.95654296875,
+									"height": 23,
+									"nameLabel": {
+										"$ref": "AAAAAAF2V2cO/ZfnwiA="
+									},
+									"typeLabel": {
+										"$ref": "AAAAAAF2V2cO/Zfol6c="
+									}
+								},
+								{
+									"_type": "UMLNoteLinkView",
+									"_id": "AAAAAAF2V2dRqJfxU1g=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"font": "Arial;13;0",
+									"head": {
+										"$ref": "AAAAAAF2V2NUUZeuRKc="
+									},
+									"tail": {
+										"$ref": "AAAAAAF2V2cO/Zfm09Y="
+									},
+									"lineStyle": 1,
+									"points": "341:255;292:209"
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V4ZVbpgrRow=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2h/D5f166Q="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V4ZVbpgs5QE=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4ZVbpgrRow="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V4ZVbpgtUgA=",
+													"_parent": {
+														"$ref": "AAAAAAF2V4ZVbpgs5QE="
+													},
+													"font": "Arial;13;0",
+													"left": 477,
+													"top": 101,
+													"width": 140.13720703125,
+													"height": 13,
+													"text": "«requirement»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V4ZVbpgulHI=",
+													"_parent": {
+														"$ref": "AAAAAAF2V4ZVbpgs5QE="
+													},
+													"font": "Arial;13;1",
+													"left": 477,
+													"top": 116,
+													"width": 140.13720703125,
+													"height": 13,
+													"text": "No third-party libraries"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V4ZVbpgvppc=",
+													"_parent": {
+														"$ref": "AAAAAAF2V4ZVbpgs5QE="
+													},
+													"font": "Arial;13;0",
+													"left": 477,
+													"top": 131,
+													"width": 140.13720703125,
+													"height": 13,
+													"text": "(from Requirements)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V4ZVbpgwc2I=",
+													"_parent": {
+														"$ref": "AAAAAAF2V4ZVbpgs5QE="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -152,
+													"top": -124,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 472,
+											"top": 96,
+											"width": 150.13720703125,
+											"height": 53,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V4ZVbpgtUgA="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V4ZVbpgulHI="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V4ZVbpgvppc="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V4ZVbpgwc2I="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V4ZVbpgx7n4=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4ZVbpgrRow="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -76,
+											"top": -62,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V4ZVbpgyAsk=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4ZVbpgrRow="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -76,
+											"top": -62,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V4ZVbpgzF3s=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4ZVbpgrRow="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -76,
+											"top": -62,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V4ZVbpg0/vo=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4ZVbpgrRow="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -76,
+											"top": -62,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V4ZVb5g1bEU=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4ZVbpgrRow="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V4ZVd5hVCsg=",
+													"_parent": {
+														"$ref": "AAAAAAF2V4ZVb5g1bEU="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V2h/D5f166Q="
+													},
+													"font": "Arial;13;0",
+													"left": 477,
+													"top": 154,
+													"width": 446.7099609375,
+													"height": 13,
+													"text": "text = \"JHotDraw 8 avoids the use of third-party libraries (except for JavaFX).\"",
+													"horizontalAlignment": 0,
+													"property": "text",
+													"value": "\"JHotDraw 8 avoids the use of third-party libraries (except for JavaFX).\""
+												}
+											],
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": 472,
+											"top": 149,
+											"width": 456.7099609375,
+											"height": 23
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 472,
+									"top": 96,
+									"width": 150.13720703125,
+									"height": 53,
+									"autoResize": true,
+									"showNamespace": true,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V4ZVbpgs5QE="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V4ZVbpgx7n4="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V4ZVbpgyAsk="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V4ZVbpgzF3s="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V4ZVbpg0/vo="
+									},
+									"suppressPropertyValues": true,
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V4ZVb5g1bEU="
+									}
+								},
+								{
+									"_type": "SysMLSatisfyView",
+									"_id": "AAAAAAF2V4a5iJhexRs=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2MobZcBg9k="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V4a5iJhcy2Q="
+									},
+									"subViews": [
+										{
+											"_type": "EdgeLabelView",
+											"_id": "AAAAAAF2V4a5iJhf4wU=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4a5iJhexRs="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V4a5iJhcy2Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": 427,
+											"top": 112,
+											"height": 13,
+											"alpha": 1.5707963267948966,
+											"distance": 15,
+											"hostEdge": {
+												"$ref": "AAAAAAF2V4a5iJhexRs="
+											},
+											"edgePosition": 1
+										},
+										{
+											"_type": "EdgeLabelView",
+											"_id": "AAAAAAF2V4a5iJhgKrE=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4a5iJhexRs="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V4a5iJhcy2Q="
+											},
+											"font": "Arial;13;0",
+											"left": 401,
+											"top": 97,
+											"width": 51.3017578125,
+											"height": 13,
+											"alpha": 1.5707963267948966,
+											"distance": 30,
+											"hostEdge": {
+												"$ref": "AAAAAAF2V4a5iJhexRs="
+											},
+											"edgePosition": 1,
+											"text": "«satisfy»"
+										},
+										{
+											"_type": "EdgeLabelView",
+											"_id": "AAAAAAF2V4a5iJhhJt0=",
+											"_parent": {
+												"$ref": "AAAAAAF2V4a5iJhexRs="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V4a5iJhcy2Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": 430,
+											"top": 141,
+											"height": 13,
+											"alpha": -1.5707963267948966,
+											"distance": 15,
+											"hostEdge": {
+												"$ref": "AAAAAAF2V4a5iJhexRs="
+											},
+											"edgePosition": 1
+										}
+									],
+									"font": "Arial;13;0",
+									"head": {
+										"$ref": "AAAAAAF2V4ZVbpgrRow="
+									},
+									"tail": {
+										"$ref": "AAAAAAF2V2NUUZeuRKc="
+									},
+									"lineStyle": 1,
+									"points": "387:137;471:129",
+									"showVisibility": true,
+									"nameLabel": {
+										"$ref": "AAAAAAF2V4a5iJhf4wU="
+									},
+									"stereotypeLabel": {
+										"$ref": "AAAAAAF2V4a5iJhgKrE="
+									},
+									"propertyLabel": {
+										"$ref": "AAAAAAF2V4a5iJhhJt0="
+									}
+								}
+							]
+						},
+						{
+							"_type": "SysMLRequirementDiagram",
+							"_id": "AAAAAAF2V5B7AJi2NtE=",
+							"_parent": {
+								"$ref": "AAAAAAF1NXJmMiDNQIo="
+							},
+							"name": "Design Decisions Marker Interfaces for Collections",
+							"ownedViews": [
+								{
+									"_type": "UMLFrameView",
+									"_id": "AAAAAAF2V5B7AJi3M4k=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V5B7AJi47UY=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJi3M4k="
+											},
+											"font": "Arial;13;0",
+											"left": 37.7890625,
+											"top": 13,
+											"width": 292.1669921875,
+											"height": 13,
+											"text": "Design Decisions Marker Interfaces for Collections"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V5B7AJi5lcU=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJi3M4k="
+											},
+											"font": "Arial;13;1",
+											"left": 13,
+											"top": 13,
+											"width": 19.7890625,
+											"height": 13,
+											"text": "req"
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 8,
+									"top": 8,
+									"width": 692,
+									"height": 592,
+									"nameLabel": {
+										"$ref": "AAAAAAF2V5B7AJi47UY="
+									},
+									"frameTypeLabel": {
+										"$ref": "AAAAAAF2V5B7AJi5lcU="
+									}
+								},
+								{
+									"_type": "HyperlinkView",
+									"_id": "AAAAAAF2V5B7AJjGo4o=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2cO/ZfkQW8="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V5B7AJjHU1Q=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjGo4o="
+											},
+											"font": "Arial;13;0",
+											"left": 85.39453125,
+											"top": 261,
+											"width": 665.5263671875,
+											"height": 13,
+											"text": "https://softwareengineering.stackexchange.com/questions/221762/why-doesnt-java-8-include-immutable-collections"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF2V5B7AJjIQ7o=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjGo4o="
+											},
+											"font": "Arial;13;1",
+											"left": 53,
+											"top": 261,
+											"width": 23.39453125,
+											"height": 13,
+											"text": "link"
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 48,
+									"top": 256,
+									"width": 708.9208984375,
+									"height": 23,
+									"nameLabel": {
+										"$ref": "AAAAAAF2V5B7AJjHU1Q="
+									},
+									"typeLabel": {
+										"$ref": "AAAAAAF2V5B7AJjIQ7o="
+									}
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V5B7AJjKHvc=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V2h/D5f166Q="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V5B7AJjLn7Q=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjKHvc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5B7AJjMMD8=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5B7AJjLn7Q="
+													},
+													"font": "Arial;13;0",
+													"left": 501,
+													"top": 93,
+													"width": 140.13720703125,
+													"height": 13,
+													"text": "«requirement»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5B7AJjNCIY=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5B7AJjLn7Q="
+													},
+													"font": "Arial;13;1",
+													"left": 501,
+													"top": 108,
+													"width": 140.13720703125,
+													"height": 13,
+													"text": "No third-party libraries"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5B7AJjOvg0=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5B7AJjLn7Q="
+													},
+													"font": "Arial;13;0",
+													"left": 501,
+													"top": 123,
+													"width": 140.13720703125,
+													"height": 13,
+													"text": "(from Requirements)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5B7AJjPDR0=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5B7AJjLn7Q="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -104,
+													"top": -140,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 496,
+											"top": 88,
+											"width": 150.13720703125,
+											"height": 53,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V5B7AJjMMD8="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V5B7AJjNCIY="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V5B7AJjOvg0="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V5B7AJjPDR0="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V5B7AJjQirs=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjKHvc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -52,
+											"top": -70,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V5B7AJjRZX8=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjKHvc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -52,
+											"top": -70,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V5B7AJjS+lw=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjKHvc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -52,
+											"top": -70,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V5B7AJjTzVs=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjKHvc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -52,
+											"top": -70,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V5B7AJjUUAE=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5B7AJjKHvc="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V2h/D5f166Q="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V5B7AJjV/lE=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5B7AJjUUAE="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V2h/D5f166Q="
+													},
+													"font": "Arial;13;0",
+													"left": 501,
+													"top": 146,
+													"width": 446.7099609375,
+													"height": 13,
+													"text": "text = \"JHotDraw 8 avoids the use of third-party libraries (except for JavaFX).\"",
+													"horizontalAlignment": 0,
+													"property": "text",
+													"value": "\"JHotDraw 8 avoids the use of third-party libraries (except for JavaFX).\""
+												}
+											],
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": 496,
+											"top": 141,
+											"width": 456.7099609375,
+											"height": 23
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 496,
+									"top": 88,
+									"width": 150.13720703125,
+									"height": 53,
+									"autoResize": true,
+									"showNamespace": true,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V5B7AJjLn7Q="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V5B7AJjQirs="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V5B7AJjRZX8="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V5B7AJjS+lw="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V5B7AJjTzVs="
+									},
+									"suppressPropertyValues": true,
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V5B7AJjUUAE="
+									}
+								},
+								{
+									"_type": "SysMLRequirementView",
+									"_id": "AAAAAAF2V5DedpnnFQE=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V5DedpnlQQg="
+									},
+									"subViews": [
+										{
+											"_type": "UMLNameCompartmentView",
+											"_id": "AAAAAAF2V5DedpnoJyA=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5DedpnnFQE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5DedpnlQQg="
+											},
+											"subViews": [
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5DedpnpfQo=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5DedpnoJyA="
+													},
+													"font": "Arial;13;0",
+													"left": 53,
+													"top": 85,
+													"width": 357.6015625,
+													"height": 13,
+													"text": "«design decision»"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5DedpnqaEc=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5DedpnoJyA="
+													},
+													"font": "Arial;13;1",
+													"left": 53,
+													"top": 100,
+													"width": 357.6015625,
+													"height": 13,
+													"text": "Marker interfaces for read-only and immutable collections"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5DedpnrNA0=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5DedpnoJyA="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -192,
+													"top": -32,
+													"width": 94.62451171875,
+													"height": 13,
+													"text": "(from Decisions)"
+												},
+												{
+													"_type": "LabelView",
+													"_id": "AAAAAAF2V5DedpnsWBg=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5DedpnoJyA="
+													},
+													"visible": false,
+													"font": "Arial;13;0",
+													"left": -192,
+													"top": -32,
+													"height": 13,
+													"horizontalAlignment": 1
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 48,
+											"top": 80,
+											"width": 367.6015625,
+											"height": 38,
+											"stereotypeLabel": {
+												"$ref": "AAAAAAF2V5DedpnpfQo="
+											},
+											"nameLabel": {
+												"$ref": "AAAAAAF2V5DedpnqaEc="
+											},
+											"namespaceLabel": {
+												"$ref": "AAAAAAF2V5DedpnrNA0="
+											},
+											"propertyLabel": {
+												"$ref": "AAAAAAF2V5DedpnsWBg="
+											}
+										},
+										{
+											"_type": "UMLAttributeCompartmentView",
+											"_id": "AAAAAAF2V5DedpntmhI=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5DedpnnFQE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5DedpnlQQg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -16,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLOperationCompartmentView",
+											"_id": "AAAAAAF2V5DedpnuqJA=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5DedpnnFQE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5DedpnlQQg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -16,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLReceptionCompartmentView",
+											"_id": "AAAAAAF2V5DedpnvCmI=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5DedpnnFQE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5DedpnlQQg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -16,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "UMLTemplateParameterCompartmentView",
+											"_id": "AAAAAAF2V5Dedpnw1sE=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5DedpnnFQE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5DedpnlQQg="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": -96,
+											"top": -16,
+											"width": 10,
+											"height": 10
+										},
+										{
+											"_type": "SysMLPropertyValueCompartmentView",
+											"_id": "AAAAAAF2V5DedpnxUho=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5DedpnnFQE="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5DedpnlQQg="
+											},
+											"subViews": [
+												{
+													"_type": "SysMLPropertyValueCompartmentItemView",
+													"_id": "AAAAAAF2V5IFu5oVj78=",
+													"_parent": {
+														"$ref": "AAAAAAF2V5DedpnxUho="
+													},
+													"model": {
+														"$ref": "AAAAAAF2V5DedpnlQQg="
+													},
+													"font": "Arial;13;0",
+													"left": 53,
+													"top": 123,
+													"width": 357.6015625,
+													"height": 65,
+													"text": "text = \"Java does provide read-only and immutable collections, but for unknown reasons, these collections have no marker interfaces that help to prevent runtime errors. To avoid a dependency on third-party libraries we provide the marker interfaces on our own.\"",
+													"horizontalAlignment": 0,
+													"wordWrap": true,
+													"property": "text",
+													"value": "\"Java does provide read-only and immutable collections, but for unknown reasons, these collections have no marker interfaces that help to prevent runtime errors. To avoid a dependency on third-party libraries we provide the marker interfaces on our own.\""
+												}
+											],
+											"font": "Arial;13;0",
+											"left": 48,
+											"top": 118,
+											"width": 367.6015625,
+											"height": 75
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 48,
+									"top": 80,
+									"width": 367.6015625,
+									"height": 113,
+									"autoResize": true,
+									"nameCompartment": {
+										"$ref": "AAAAAAF2V5DedpnoJyA="
+									},
+									"suppressAttributes": true,
+									"suppressOperations": true,
+									"attributeCompartment": {
+										"$ref": "AAAAAAF2V5DedpntmhI="
+									},
+									"operationCompartment": {
+										"$ref": "AAAAAAF2V5DedpnuqJA="
+									},
+									"receptionCompartment": {
+										"$ref": "AAAAAAF2V5DedpnvCmI="
+									},
+									"templateParameterCompartment": {
+										"$ref": "AAAAAAF2V5Dedpnw1sE="
+									},
+									"propertyValueCompartment": {
+										"$ref": "AAAAAAF2V5DedpnxUho="
+									}
+								},
+								{
+									"_type": "SysMLSatisfyView",
+									"_id": "AAAAAAF2V5eYTppcLHU=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"model": {
+										"$ref": "AAAAAAF2V5eYTZpapJU="
+									},
+									"subViews": [
+										{
+											"_type": "EdgeLabelView",
+											"_id": "AAAAAAF2V5eYTppd6wY=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5eYTppcLHU="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5eYTZpapJU="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": 454,
+											"top": 100,
+											"height": 13,
+											"alpha": 1.5707963267948966,
+											"distance": 15,
+											"hostEdge": {
+												"$ref": "AAAAAAF2V5eYTppcLHU="
+											},
+											"edgePosition": 1
+										},
+										{
+											"_type": "EdgeLabelView",
+											"_id": "AAAAAAF2V5eYTppe5yM=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5eYTppcLHU="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5eYTZpapJU="
+											},
+											"font": "Arial;13;0",
+											"left": 428,
+											"top": 85,
+											"width": 51.3017578125,
+											"height": 13,
+											"alpha": 1.5707963267948966,
+											"distance": 30,
+											"hostEdge": {
+												"$ref": "AAAAAAF2V5eYTppcLHU="
+											},
+											"edgePosition": 1,
+											"text": "«satisfy»"
+										},
+										{
+											"_type": "EdgeLabelView",
+											"_id": "AAAAAAF2V5eYTppf8Do=",
+											"_parent": {
+												"$ref": "AAAAAAF2V5eYTppcLHU="
+											},
+											"model": {
+												"$ref": "AAAAAAF2V5eYTZpapJU="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"left": 455,
+											"top": 129,
+											"height": 13,
+											"alpha": -1.5707963267948966,
+											"distance": 15,
+											"hostEdge": {
+												"$ref": "AAAAAAF2V5eYTppcLHU="
+											},
+											"edgePosition": 1
+										}
+									],
+									"font": "Arial;13;0",
+									"head": {
+										"$ref": "AAAAAAF2V5B7AJjKHvc="
+									},
+									"tail": {
+										"$ref": "AAAAAAF2V5DedpnnFQE="
+									},
+									"lineStyle": 1,
+									"points": "416:124;495:119",
+									"showVisibility": true,
+									"nameLabel": {
+										"$ref": "AAAAAAF2V5eYTppd6wY="
+									},
+									"stereotypeLabel": {
+										"$ref": "AAAAAAF2V5eYTppe5yM="
+									},
+									"propertyLabel": {
+										"$ref": "AAAAAAF2V5eYTppf8Do="
+									}
+								},
+								{
+									"_type": "UMLNoteLinkView",
+									"_id": "AAAAAAF2V5oVuppwwws=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5B7AJi2NtE="
+									},
+									"font": "Arial;13;0",
+									"head": {
+										"$ref": "AAAAAAF2V5DedpnnFQE="
+									},
+									"tail": {
+										"$ref": "AAAAAAF2V5B7AJjGo4o="
+									},
+									"lineStyle": 1,
+									"points": "385:255;305:193"
+								}
+							]
+						},
+						{
+							"_type": "SysMLRequirement",
+							"_id": "AAAAAAF2V2NUUZesWZw=",
+							"_parent": {
+								"$ref": "AAAAAAF1NXJmMiDNQIo="
+							},
+							"name": "JHotDraw 8 provides its own nullity annotations",
+							"ownedElements": [
+								{
+									"_type": "SysMLSatisfy",
+									"_id": "AAAAAAF2V4a5iJhcy2Q=",
+									"_parent": {
+										"$ref": "AAAAAAF2V2NUUZesWZw="
+									},
+									"source": {
+										"$ref": "AAAAAAF2V2NUUZesWZw="
+									},
+									"target": {
+										"$ref": "AAAAAAF2V2h/D5f166Q="
+									}
+								}
+							],
+							"stereotype": {
+								"$ref": "AAAAAAF0SHfc+4MbPHo="
+							},
+							"text": "For unknown reasons, Java SE does not provide nullity annotations. To avoid a dependency on third-party libraries, we provide the annotations by ourselves. Static analysis tools can (typically) easily be configured to use our annotations."
+						},
+						{
+							"_type": "Hyperlink",
+							"_id": "AAAAAAF2V2cO/ZfkQW8=",
+							"_parent": {
+								"$ref": "AAAAAAF1NXJmMiDNQIo="
+							},
+							"name": "Hyperlink1",
+							"url": "https://softwareengineering.stackexchange.com/questions/221762/why-doesnt-java-8-include-immutable-collections"
+						},
+						{
+							"_type": "SysMLRequirement",
+							"_id": "AAAAAAF2V5DedpnlQQg=",
+							"_parent": {
+								"$ref": "AAAAAAF1NXJmMiDNQIo="
+							},
+							"name": "Marker interfaces for read-only and immutable collections",
+							"ownedElements": [
+								{
+									"_type": "SysMLSatisfy",
+									"_id": "AAAAAAF2V5eYTZpapJU=",
+									"_parent": {
+										"$ref": "AAAAAAF2V5DedpnlQQg="
+									},
+									"source": {
+										"$ref": "AAAAAAF2V5DedpnlQQg="
+									},
+									"target": {
+										"$ref": "AAAAAAF2V2h/D5f166Q="
+									}
+								}
+							],
+							"stereotype": {
+								"$ref": "AAAAAAF0SHfc+4MbPHo="
+							},
+							"text": "Java does provide read-only and immutable collections, but for unknown reasons, these collections have no marker interfaces that help to prevent runtime errors. To avoid a dependency on third-party libraries we provide the marker interfaces on our own."
+						}
+					]
 				},
 				{
 					"_type": "UMLModel",
@@ -4453,14 +6536,6 @@
 						"$ref": "AAAAAAF1NXJmMCATIqw="
 					},
 					"name": "Assumptions"
-				},
-				{
-					"_type": "UMLModel",
-					"_id": "AAAAAAF1NXJmMiDNQIo=",
-					"_parent": {
-						"$ref": "AAAAAAF1NXJmMCATIqw="
-					},
-					"name": "Decisions"
 				},
 				{
 					"_type": "UMLDependency",
@@ -10853,7 +12928,7 @@
 														"$ref": "AAAAAAF0h5h3XoerCfc="
 													},
 													"font": "Arial;13;0",
-													"left": 343,
+													"left": 341,
 													"top": 280,
 													"width": 42.9990234375,
 													"height": 13,
@@ -10876,7 +12951,7 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 369,
+													"left": 367,
 													"top": 266,
 													"height": 13,
 													"alpha": 1.5707963267948966,
@@ -10897,7 +12972,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 355,
+													"left": 353,
 													"top": 309,
 													"height": 13,
 													"alpha": -1.5707963267948966,
@@ -10948,7 +13023,7 @@
 														"$ref": "AAAAAAF0h5iWnIe9mAE="
 													},
 													"font": "Arial;13;0",
-													"left": 375,
+													"left": 374,
 													"top": 217,
 													"width": 63.9462890625,
 													"height": 13,
@@ -10971,7 +13046,7 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 416,
+													"left": 415,
 													"top": 206,
 													"height": 13,
 													"alpha": 1.5707963267948966,
@@ -10992,7 +13067,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 387,
+													"left": 386,
 													"top": 240,
 													"height": 13,
 													"alpha": -1.5707963267948966,
@@ -11316,7 +13391,7 @@
 														"$ref": "AAAAAAF2Vq7WHiuQ+No="
 													},
 													"font": "Arial;13;0",
-													"left": 512,
+													"left": 510,
 													"top": 221,
 													"width": 35.5341796875,
 													"height": 13,
@@ -11339,7 +13414,7 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 544,
+													"left": 542,
 													"top": 218,
 													"height": 13,
 													"alpha": 1.5707963267948966,
@@ -11360,7 +13435,7 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 500,
+													"left": 498,
 													"top": 228,
 													"height": 13,
 													"alpha": -1.5707963267948966,
@@ -104884,6 +106959,7 @@
 													"specification": "Defines an Instance operation that lets clients access its unique instance. Instance is a class operation (that is, a class method in Smalltalk and a static member function in C++).\n\nMay be responsible for creating its own unique instance."
 												}
 											],
+											"type": "",
 											"aggregation": "composite"
 										}
 									]
@@ -114136,6 +116212,7 @@
 													"specification": "Presents the Model on the screen.\n\nUpdates the representation when a property of the model changes.\n\nProvides properties and operations that affect the presentation."
 												}
 											],
+											"type": "",
 											"aggregation": "composite"
 										},
 										{
@@ -114156,6 +116233,7 @@
 													"specification": "Provides user interaction for the View.\n\nImplements user interface behavior by changing properties in the model and the view, and/or by calling operations in the model and the view."
 												}
 											],
+											"type": "",
 											"aggregation": "composite"
 										}
 									]
