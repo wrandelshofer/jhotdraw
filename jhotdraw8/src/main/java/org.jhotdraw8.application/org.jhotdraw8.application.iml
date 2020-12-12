@@ -12,6 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="org.junit.jupiter:junit-jupiter:5.5.2" level="project" />
-    <orderEntry type="library" exported="" name="org.openjfx:javafx:15" level="project" />
+    <orderEntry type="library" exported="" name="org.openjfx:javafx:15.0.1mac" level="project" />
   </component>
 </module>

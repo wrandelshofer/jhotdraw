@@ -38,6 +38,9 @@ public class GrapherApplication extends AbstractFileBasedApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // See
+        // https://bugs.openjdk.java.net/browse/JDK-8091497
+
         if (Screen.getPrimary().getOutputScaleX() >= 2.0) {
             // The following settings improve font rendering quality on
             // retina displays (no color fringes around characters).
