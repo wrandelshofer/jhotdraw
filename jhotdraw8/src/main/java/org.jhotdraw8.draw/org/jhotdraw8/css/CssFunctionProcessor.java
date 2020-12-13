@@ -27,7 +27,7 @@ import java.util.function.Consumer;
  * References:
  * <ul>
  * <li>CSS Values and Units Module, Functional Notations.
- * <a href="https://www.w3.org/TR/css-values-3/#functional-notations">w3.org</a></li>
+ * <a href="https://www.w3.org/TR/2019/CR-css-values-3-20190606/#functional-notations">w3.org</a></li>
  * <li>CSS Custom Properties for Cascading Variables Module Level 1.  Using Cascading Variables: the var() notation.
  * <a href="https://www.w3.org/TR/css-variables-1/#using-variables">w3.org</a></li>
  * </ul>

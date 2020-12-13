@@ -156,7 +156,7 @@ import java.util.Map;
  * <p>
  * References:
  * <ul>
- * <li><a href="http://www.w3.org/TR/2014/CR-css-syntax-3/#parsing">
+ * <li><a href="https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#parsing">
  * CSS Syntax Module Level 3, Chapter 5. Parsing</a></li>
  * <li><a href="https://www.w3.org/TR/CSS2/grammar.html#q25.0">
  * W3C CSS2, Appendix G.1 Grammar of CSS 2.1</a></li>
@@ -166,16 +166,15 @@ import java.util.Map;
  */
 public class CssParser {
 
-    public final static String ALL_NAMESPACES_PREFIX = "*";
-    public final static String DEFAULT_NAMESPACE_PREFIX = "|";
+    public static final String ALL_NAMESPACES_PREFIX = "*";
+    public static final String DEFAULT_NAMESPACE_PREFIX = "|";
+    public static final String NAMESPACE_AT_RULE = "namespace";
     private final Map<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
-    @NonNull
-    private List<ParseException> exceptions = new ArrayList<>();
+    private @NonNull List<ParseException> exceptions = new ArrayList<>();
 
-    @NonNull
-    private FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
-        @NonNull final String ident = tt.currentStringNonNull();
+        final @NonNull String ident = tt.currentStringNonNull();
         switch (ident) {
             case "not":
                 final SimpleSelector simpleSelector = parseSimpleSelector(tt);
@@ -202,8 +201,7 @@ public class CssParser {
         }
     }
 
-    @NonNull
-    public List<ParseException> getParseExceptions() {
+    public @NonNull List<ParseException> getParseExceptions() {
         return exceptions;
     }
 
@@ -211,7 +209,7 @@ public class CssParser {
      * Some special at-rules contain information for the parser.
      */
     private void interpretAtRule(AtRule atRule) {
-        if ("namespace".equals(atRule.getAtKeyword())) {
+        if (NAMESPACE_AT_RULE.equals(atRule.getAtKeyword())) {
             ListCssTokenizer tt = new ListCssTokenizer(atRule.getHeader());
             final String prefix;
             if (tt.next() == CssTokenType.TT_IDENT) {
@@ -227,8 +225,7 @@ public class CssParser {
         }
     }
 
-    @NonNull
-    private AtRule parseAtRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull AtRule parseAtRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_AT_KEYWORD) {
             throw tt.createParseException("AtRule: At-Keyword expected.");
         }
@@ -254,8 +251,7 @@ public class CssParser {
         }
     }
 
-    @NonNull
-    private AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextNoSkip('[', "AttributeSelector: '[' expected.");
         tt.requireNextNoSkip(CssTokenType.TT_IDENT, "AttributeSelector: Identifier expected.");
 
@@ -403,8 +399,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    @NonNull
-    private Declaration parseDeclaration(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull Declaration parseDeclaration(@NonNull CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
             throw tt.createParseException("Declaration: property name expected.");
         }
@@ -430,8 +425,7 @@ public class CssParser {
      * @return the declaration list
      * @throws IOException if parsing fails
      */
-    @NonNull
-    public List<Declaration> parseDeclarationList(@NonNull String css) throws IOException {
+    public @NonNull List<Declaration> parseDeclarationList(@NonNull String css) throws IOException {
         return CssParser.this.parseDeclarationList(new StringReader(css));
     }
 
@@ -442,8 +436,7 @@ public class CssParser {
      * @return the declaration list
      * @throws IOException if parsing fails
      */
-    @NonNull
-    public List<Declaration> parseDeclarationList(Reader css) throws IOException {
+    public @NonNull List<Declaration> parseDeclarationList(Reader css) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css);
         try {
@@ -454,8 +447,7 @@ public class CssParser {
         return new ArrayList<>();
     }
 
-    @NonNull
-    private List<Declaration> parseDeclarationList(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull List<Declaration> parseDeclarationList(@NonNull CssTokenizer tt) throws IOException, ParseException {
         List<Declaration> declarations = new ArrayList<>();
 
         while (tt.next() != CssTokenType.TT_EOF
@@ -508,8 +500,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    @NonNull
-    private PseudoClassSelector parsePseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull PseudoClassSelector parsePseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != ':') {
             throw tt.createParseException("Pseudo Class Selector: ':' expected of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
         }
@@ -544,8 +535,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    @NonNull
-    private Selector parseSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull Selector parseSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         SimpleSelector simpleSelector = parseSimpleSelector(tt);
         Selector selector = simpleSelector;
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -584,8 +574,7 @@ public class CssParser {
         return selector;
     }
 
-    @NonNull
-    public SelectorGroup parseSelectorGroup(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    public @NonNull SelectorGroup parseSelectorGroup(@NonNull CssTokenizer tt) throws IOException, ParseException {
         List<Selector> selectors = new ArrayList<>();
         selectors.add(parseSelector(tt));
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -603,8 +592,7 @@ public class CssParser {
         return new SelectorGroup(selectors);
     }
 
-    @NonNull
-    private SimpleSelector parseSimpleSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull SimpleSelector parseSimpleSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
 
@@ -670,8 +658,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    @NonNull
-    private StyleRule parseStyleRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull StyleRule parseStyleRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
         SelectorGroup selectorGroup;
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
@@ -695,32 +682,27 @@ public class CssParser {
         return new StyleRule(selectorGroup, declarations);
     }
 
-    @NonNull
-    public Stylesheet parseStylesheet(@NonNull URL css) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull URL css) throws IOException {
         try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             return parseStylesheet(in);
         }
     }
 
-    @NonNull
-    public Stylesheet parseStylesheet(@NonNull URI css) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull URI css) throws IOException {
         return parseStylesheet(css.toURL());
     }
 
-    @NonNull
-    public Stylesheet parseStylesheet(@NonNull String css) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull String css) throws IOException {
         return parseStylesheet(new StringReader(css));
     }
 
-    @NonNull
-    public Stylesheet parseStylesheet(Reader css) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(Reader css) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css);
         return parseStylesheet(tt);
     }
 
-    @NonNull
-    public Stylesheet parseStylesheet(@NonNull CssTokenizer tt) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt) throws IOException {
         List<Rule> rules = new ArrayList<>();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             try {
@@ -752,8 +734,7 @@ public class CssParser {
         return new Stylesheet(rules);
     }
 
-    @NonNull
-    private List<CssToken> parseTerms(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull List<CssToken> parseTerms(@NonNull CssTokenizer tt) throws IOException, ParseException {
         List<CssToken> terms = new ArrayList<>();
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
@@ -791,8 +772,7 @@ public class CssParser {
      * @param namespacePrefix a namespace prefix, null is treated as the {@link #DEFAULT_NAMESPACE_PREFIX}.
      * @return a namespace URL or the special value '*' or the prefix, the namespace can be null
      */
-    @Nullable
-    private String resolveNamespacePrefix(@Nullable String namespacePrefix) {
+    private @Nullable String resolveNamespacePrefix(@Nullable String namespacePrefix) {
         if (namespacePrefix == null) {
             return prefixToNamespaceMap.get(DEFAULT_NAMESPACE_PREFIX);
         } else if (ALL_NAMESPACES_PREFIX.equals(namespacePrefix)) {

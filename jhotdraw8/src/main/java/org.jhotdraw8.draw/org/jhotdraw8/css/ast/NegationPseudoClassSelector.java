@@ -19,7 +19,7 @@ import org.jhotdraw8.css.SelectorModel;
  * Note also that since pseudo-elements are not simple selectors,
  * they are not a valid argument to {@code :not()}.
  * <p>
- * See <a href="https://www.w3.org/TR/selectors-3/#negation">negation pseudo-class</a>.
+ * See <a href="https://www.w3.org/TR/2018/REC-selectors-3-20181106/#negation">negation pseudo-class</a>.
  */
 public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 

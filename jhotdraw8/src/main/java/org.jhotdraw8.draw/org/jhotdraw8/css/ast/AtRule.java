@@ -13,17 +13,15 @@ import org.jhotdraw8.css.CssToken;
 import java.util.List;
 
 /**
- * A "at-rule" consists of an "at-keyword", a list of header tokens and a list of body tokens.
+ * A "at-rule" consists of an "at-keyword", a list of header tokens and a
+ * list of body tokens.
  *
  * @author Werner Randelshofer
  */
 public class AtRule extends Rule {
-    @NonNull
-    private final String atKeyword;
-    @NonNull
-    private final ImmutableList<CssToken> header;
-    @NonNull
-    private final ImmutableList<CssToken> body;
+    private final @NonNull String atKeyword;
+    private final @NonNull ImmutableList<CssToken> header;
+    private final @NonNull ImmutableList<CssToken> body;
 
     public AtRule(@NonNull String atKeyword,
                   @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body) {
@@ -32,9 +30,8 @@ public class AtRule extends Rule {
         this.body = ImmutableLists.ofCollection(body);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         StringBuilder buf = new StringBuilder("AtRule: ");
         buf.append(atKeyword);
         if (!header.isEmpty()) {
@@ -56,18 +53,15 @@ public class AtRule extends Rule {
         return buf.toString();
     }
 
-    @NonNull
-    public String getAtKeyword() {
+    public @NonNull String getAtKeyword() {
         return atKeyword;
     }
 
-    @NonNull
-    public ReadOnlyList<CssToken> getHeader() {
+    public @NonNull ReadOnlyList<CssToken> getHeader() {
         return header;
     }
 
-    @NonNull
-    public ReadOnlyList<CssToken> getBody() {
+    public @NonNull ReadOnlyList<CssToken> getBody() {
         return body;
     }
 

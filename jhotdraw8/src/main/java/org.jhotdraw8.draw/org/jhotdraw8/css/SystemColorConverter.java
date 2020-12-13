@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
  * <p>
  * References:<br>
  *     <ul>
- *         <li><a href="https://www.w3.org/TR/css-color-4/#css-system-colors">CSS System colors</a></li>
+ *         <li><a href="https://www.w3.org/TR/2020/WD-css-color-4-20201112/">CSS System colors</a></li>
  *     </ul>
  * </p>
  */

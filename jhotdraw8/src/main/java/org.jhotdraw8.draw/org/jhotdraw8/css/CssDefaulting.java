@@ -6,7 +6,7 @@ package org.jhotdraw8.css;
  * <p>
  * References:
  * <dl>
- *     <dt>Defaulting</dt><dd><a href="http://www.w3.org/TR/css-cascade-4/#defaulting">
+ *     <dt>Defaulting</dt><dd><a href="https://www.w3.org/TR/2020/WD-css-cascade-4-20200818/#defaulting">
  *         CSS Cascading and Inheritance Level 4, Chapter 7. Defaulting</a></dd>
  * </dl>
  */

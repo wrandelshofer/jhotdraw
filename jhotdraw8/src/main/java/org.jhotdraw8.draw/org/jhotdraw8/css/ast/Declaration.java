@@ -29,14 +29,6 @@ public class Declaration extends AST {
     private int startPos = -1;
     private int endPos = -1;
 
-    public Declaration(@Nullable String namespace, @NonNull String propertyName, CssToken term) {
-        this(namespace, propertyName, Arrays.asList(term));
-    }
-
-    public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms) {
-        this(namespace, propertyName, terms, -1, -1);
-    }
-
     public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
         this.namespace = namespace;
         this.propertyName = propertyName;
