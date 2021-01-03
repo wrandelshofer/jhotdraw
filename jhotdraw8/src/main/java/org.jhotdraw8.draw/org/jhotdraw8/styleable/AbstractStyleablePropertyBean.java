@@ -61,7 +61,14 @@ public abstract class AbstractStyleablePropertyBean
 
                 @Override
                 public Integer get(Object key) {
-                    return super.computeIfAbsent((Key<?>) key, k1 -> nextIndex.getAndIncrement());
+                    Integer v;
+                    if ((v =super. get(key)) == null) {
+                        Integer newValue;
+                        newValue = nextIndex.getAndIncrement();
+                            put((Key<?>)key, newValue);
+                            return newValue;
+                    }
+                    return v;
                 }
             };
 
