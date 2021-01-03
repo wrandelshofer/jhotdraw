@@ -89,7 +89,8 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  * DELIM         = ? any other character not matched by the above rules,
  *                   and neither a single nor a double quote ? ;
  *
- * ident         = [ '-' ] , nmstart , { nmchar } ;
+ * ident         = [ '-' ] , nmstart , { nmchar }
+ *               | [ '--' ] , { nmchar } ;
  * name          = { nmchar }- ;
  * nmstart       = '_' | letter | nonascii | escape ;
  * nonascii      = ? U+00A0 through U+10FFFF ? ;
@@ -390,7 +391,7 @@ public class StreamCssTokenizer implements CssTokenizer {
                     } else {
                         stringBuilder.setLength(0);
                         stringBuilder.append("--");
-                        if (nameMacro(next2, stringBuilder)) {
+                        if (next2==TT_EOF||nameMacro(next2, stringBuilder)) {
                             currentToken = TT_IDENT;
                             stringValue = stringBuilder.toString();
                         } else {

@@ -72,9 +72,8 @@ public class StreamCssTokenizerTest {
                 dynamicTest("7", () -> testTokenizer("<!--", "-14:<!--")),
                 dynamicTest("8", () -> testTokenizer("-->", "-15:-->")),
                 dynamicTest("9", () -> testTokenizer("->", "-:- >:>")),
-                dynamicTest("9heavy", () -> testTokenizer("=>", "=:= >:>")),
-                dynamicTest("9heavy+ident", () -> testTokenizer("=>hallo", "=:= >:> -2:hallo")),
-                dynamicTest("10", () -> testTokenizer("--", "-:- -:-")),
+                dynamicTest("10heavy", () -> testTokenizer("=>", "=:= >:>")),
+                dynamicTest("10heavy+ident", () -> testTokenizer("=>hallo", "=:= >:> -2:hallo")),
                 dynamicTest("11", () -> testTokenizer(">", ">:>")),
                 dynamicTest("12", () -> testTokenizer("<!--a", "-14:<!-- -2:a")),
                 dynamicTest("13", () -> testTokenizer("-->a", "-15:--> -2:a")),
@@ -123,7 +122,9 @@ public class StreamCssTokenizerTest {
                 dynamicTest("56", () -> testTokenizer("url(http://www.w3.org/css.html   )", "-12:http://www.w3.org/css.html")),
                 dynamicTest("57", () -> testTokenizer("url(   http://www.w3.org/css.html)", "-12:http://www.w3.org/css.html")),
                 dynamicTest("58", () -> testTokenizer("url(   http://www. w3.html)", "-6:http://www. -2:w3 .:. -2:html ):)")),
-                dynamicTest("59", () -> testTokenizer("--main-color", "-2:--main-color"))
+                dynamicTest("59", () -> testTokenizer("--main-color", "-2:--main-color")),
+                dynamicTest("60", () -> testTokenizer("--", "-2:--")),
+                dynamicTest("61", () -> testTokenizer("--1", "-2:--1"))
                 //
         );
     }

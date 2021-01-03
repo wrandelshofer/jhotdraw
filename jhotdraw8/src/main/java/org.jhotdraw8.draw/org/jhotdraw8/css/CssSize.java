@@ -21,7 +21,7 @@ import java.util.Objects;
  * References:
  * <dl>
  * <dt>CSS Syntax Module Level 3, Chapter 4. Tokenization</dt>
- * <dd><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">link</a></dd>
+ * <dd><a href="https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/">link</a></dd>
  * </dl>
  *
  * @author Werner Randelshofer
