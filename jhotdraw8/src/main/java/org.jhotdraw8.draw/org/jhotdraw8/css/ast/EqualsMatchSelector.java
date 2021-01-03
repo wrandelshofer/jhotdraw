@@ -19,12 +19,9 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class EqualsMatchSelector extends AbstractAttributeSelector {
-    @Nullable
-    private final String namespace;
-    @NonNull
-    private final String attributeName;
-    @NonNull
-    private final String attributeValue;
+    private final @Nullable String namespace;
+    private final @NonNull String attributeName;
+    private final @NonNull String attributeValue;
 
     public EqualsMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String attributeValue) {
         this.namespace = namespace;
@@ -32,15 +29,13 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
         this.attributeValue = attributeValue;
     }
 
-    @Nullable
     @Override
-    protected <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
+    protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
         return model.attributeValueEquals(element, namespace, attributeName, attributeValue) ? element : null;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "[" + attributeName + "=" + attributeValue + ']';
     }
 
