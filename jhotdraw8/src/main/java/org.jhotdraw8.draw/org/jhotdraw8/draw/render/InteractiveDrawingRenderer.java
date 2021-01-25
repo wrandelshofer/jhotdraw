@@ -321,13 +321,13 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, tolerance)) { // only drill down if the parent contains the point
                     boolean test = figurePredicate.test(f1);
+                    boolean addedDecomposedFigure=false;
                     if (!test||decompose&&f1.isDecomposable()) {
                         if (n instanceof Parent) {
-                            foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate);
+                            addedDecomposedFigure= foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate);
                         }
                     }
-                    if (test&&!foundAFigure) {
-                        // only add if we did successfully decompose
+                    if (test&&!addedDecomposedFigure) {
                         found.add(f1);
                         foundAFigure=true;
                     }

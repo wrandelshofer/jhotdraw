@@ -23,23 +23,20 @@ import java.text.ParseException;
  * @author Werner Randelshofer
  */
 public class XmlUriConverter implements Converter<URI> {
-    public XmlUriConverter() {
-        System.out.println("new instance "+getClass());
-    }
 
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable URI value) throws IOException {
-        out.append(value == null ? CssTokenType.IDENT_NONE : value.toString());
+        out.append(value == null ? CssTokenType.IDENT_NONE :
+                (idSupplier==null?value:idSupplier.relativize(value)).toString());
     }
 
     @Override
     public @Nullable URI fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        if (in == null) return null;
         String str = in.toString().trim();
         in.position(in.limit());// fully consume the buffer
         if (CssTokenType.IDENT_NONE.equals(str)) return null;
         try {
-            return new URI(str);
+            return idResolver==null?new URI(str):idResolver.absolutize(new URI(str));
         } catch (URISyntaxException e) {
             throw new ParseException(e.getMessage(), 0);
         }
