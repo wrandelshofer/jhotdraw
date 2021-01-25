@@ -115,9 +115,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     @NonNull
     protected IdFactory idFactory = new SimpleIdFactory();
 
-    @NonNull
-    private Function<URI, URI> uriResolver = new UriResolver(null, null);
-
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
      *                    ImageView. If an ImageView does not have an URL,
@@ -336,14 +333,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     protected abstract String getSvgVersion();
 
-    @Nullable
-    public Function<URI, URI> getUriResolver() {
-        return uriResolver;
-    }
-
-    public void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
-        this.uriResolver = uriResolver;
-    }
 
     private void initIdFactoryRecursively(@NonNull javafx.scene.Node node) throws IOException {
         String id = node.getId();
@@ -747,7 +736,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         URI uri = (URI) node.getProperties().get(imageUriKey);
         String href = null;
         if (uri != null) {
-            href = uriResolver.apply(uri).toString();
+            href = idFactory.relativize(uri).toString();
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();

@@ -91,8 +91,6 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
      */
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
-
-    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
     private boolean doAddNotifyAndUpdateCss = true;
 
     public SimpleXmlDomReader(FigureFactory factory, IdFactory idFactory) {
@@ -120,8 +118,9 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
     }
 
     public @Nullable Figure fromDocument(@NonNull Document doc, @Nullable Drawing oldDrawing, URI documentHome) throws IOException {
-        setUriResolver(new UriResolver(documentHome, null));
         idFactory.reset();
+        idFactory.setDocumentHome(documentHome);
+
         if (oldDrawing != null) {
             if (isClipping(doc.getDocumentElement())) {
                 for (Figure f : oldDrawing.preorderIterable()) {
@@ -161,14 +160,6 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
         throw new IOException("no figure for id:" + id);
         }*/
         return f;
-    }
-
-    private @NonNull Function<URI, URI> getUriResolver() {
-        return uriResolver;
-    }
-
-    protected void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
-        this.uriResolver = uriResolver;
     }
 
     protected boolean isClipping(Element elem) throws IOException {
@@ -222,12 +213,12 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
 
     @Override
     public @NonNull Set<Figure> read(@NonNull Clipboard clipboard, @NonNull DrawingModel model, @NonNull Drawing drawing, @Nullable Figure layer) throws IOException {
-        setUriResolver(new UriResolver(null, drawing.get(Drawing.DOCUMENT_HOME)));
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
             Figure newDrawing = read((String) content, drawing, drawing.get(Drawing.DOCUMENT_HOME));
             idFactory.reset();
+            idFactory.setDocumentHome(null);
             for (Figure f : drawing.preorderIterable()) {
                 idFactory.createId(f);
             }
@@ -431,10 +422,6 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
                     }
                 }
 
-                if (value instanceof URI) {
-                    value = uriResolver.apply((URI) value);
-                }
-
                 figure.set(key, value);
             }
         }
@@ -570,7 +557,7 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
                     String href = m.group(1);
 
                     URI uri = URI.create(href);
-                    uri = uriResolver.apply(uri);
+                    uri = idFactory.absolutize(uri);
 
                     ImmutableList<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
                     List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());

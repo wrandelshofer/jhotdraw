@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.io;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URI;
@@ -13,68 +14,54 @@ import java.nio.file.Paths;
 import java.util.function.Function;
 
 /**
- * Takes an URI and resolves it against the specified internal URI, then
- * relativizes it against the specified external URI.
+ * Provides utility methods for absolutizing and relativizing URIs.
  *
  * @author Werner Randelshofer
  */
-public class UriResolver implements Function<URI, URI> {
-
-    @Nullable
-    private final URI internal;
-    @Nullable
-    private final URI external;
+public class UriResolver  {
 
     /**
-     * Creates a new instance.
-     *
-     * @param internal the internal URI
-     * @param externl  the external URI
+     * Prevent instantiation.
      */
-    public UriResolver(@Nullable URI internal, @Nullable URI externl) {
-        this.internal = internal;
-        this.external = externl;
+    private UriResolver() {
     }
 
-    @Nullable
-    @Override
-    public URI apply(URI uri) {
-        URI resolved = uri;
-        if (internal != null) {
-            // Paths is better at resolving URIs than URI.relativize().
-            if ("file".equals(internal.getScheme()) &&
-                    ("file".equals(resolved.getScheme()) || resolved.getScheme() == null)) {
-                resolved = Paths.get(internal).resolve(Paths.get(resolved.getPath())).normalize().toUri();
+    public static @NonNull URI relativize(@NonNull URI base, @NonNull URI uri) {
+        URI relativized = uri;
+        // Paths is better at relativizing URIs than URI.relativize().
+        if ("file".equals(base.getScheme()) &&
+                ("file".equals(relativized.getScheme()) || relativized.getScheme() == null)) {
+            Path other = Paths.get(relativized.getPath());
+            Path relativizedPath;
+            if (other.isAbsolute()) {
+                relativizedPath = Paths.get(base).relativize(other);
             } else {
-                resolved = internal.resolve(resolved);
+                relativizedPath = other;
             }
-        }
-        if (external != null) {
-            // Paths is better at relativizing URIs than URI.relativize().
-            if ("file".equals(external.getScheme()) &&
-                    ("file".equals(resolved.getScheme()) || resolved.getScheme() == null)) {
-                Path other = Paths.get(resolved.getPath());
-                Path relativizedPath;
-                if (other.isAbsolute()) {
-                    relativizedPath = Paths.get(external).relativize(other);
-                } else {
-                    relativizedPath = other;
-                }
-                if (relativizedPath.isAbsolute()) {
-                    resolved = relativizedPath.toUri();
-                } else {
-                    try {
-                        resolved = new URI(null, null, relativizedPath.toString()
-                                , null, null);
-                    } catch (URISyntaxException e) {
-                        resolved = uri;// we tried hard, but we failed
-                    }
-                }
+            if (relativizedPath.isAbsolute()) {
+                relativized = relativizedPath.toUri();
             } else {
-                resolved = external.relativize(resolved);
+                try {
+                    relativized = new URI(null, null, relativizedPath.toString()
+                            , null, null);
+                } catch (URISyntaxException e) {
+                    relativized = base;// we tried hard, but we failed
+                }
             }
+        } else {
+            relativized = base.relativize(relativized);
         }
-        return resolved;
+        return relativized;
     }
-
+    public static @NonNull URI absolutize(@NonNull URI base, @NonNull URI uri) {
+        URI absolutized = uri;
+        // Paths is better at resolving URIs than URI.relativize().
+        if ("file".equals(base.getScheme()) &&
+                ("file".equals(absolutized.getScheme()) || absolutized.getScheme() == null)) {
+            absolutized = Paths.get(base).resolve(Paths.get(absolutized.getPath())).normalize().toUri();
+        } else {
+            absolutized = base.resolve(absolutized);
+        }
+        return absolutized;
+    }
 }

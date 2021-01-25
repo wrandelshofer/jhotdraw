@@ -7,6 +7,7 @@ package org.jhotdraw8.io;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,9 +38,26 @@ public class SimpleIdFactory implements IdFactory {
         return objectToId.get(object);
     }
 
+    @Nullable
+    private URI documentHome;
+
+    public void setDocumentHome(@Nullable URI documentHome) {
+        this.documentHome=documentHome;
+    }
+
+    @Override
+    public @NonNull URI relativize(@NonNull URI uri) {
+        return documentHome==null?uri:UriResolver.relativize(documentHome,uri);
+    }
+
     @Override
     public Object getObject(String id) {
         return idToObject.get(id);
+    }
+
+    @Override
+    public @NonNull URI absolutize(@NonNull URI uri) {
+        return documentHome==null?uri:UriResolver.absolutize(documentHome,uri);
     }
 
     public Object putIdAndObject(String id, Object object) {

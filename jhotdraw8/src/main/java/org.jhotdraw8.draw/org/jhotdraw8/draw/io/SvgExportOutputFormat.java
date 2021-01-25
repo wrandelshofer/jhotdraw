@@ -109,7 +109,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     @NonNull
     private AbstractFXSvgWriter createExporter() {
         AbstractFXSvgWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
-        exporter.setUriResolver(getUriResolver());
         exporter.setExportInvisibleElements(getNonNull(SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY));
         return exporter;
     }
@@ -158,7 +157,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     @Override
     public void write(@NonNull Map<DataFormat, Object> clipboard, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), null));
+        idFactory.setDocumentHome(null);
         StringWriter out = new StringWriter();
         Document doc = toDocument(null, drawing, selection);
         try {

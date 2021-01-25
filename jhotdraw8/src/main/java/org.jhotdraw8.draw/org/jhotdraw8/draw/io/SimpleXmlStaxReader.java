@@ -47,7 +47,6 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
     private String idAttribute = "id";
-    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     public SimpleXmlStaxReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
@@ -84,7 +83,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     @Override
     public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
-        setUriResolver(new UriResolver(documentHome, null));
+        idFactory.setDocumentHome(documentHome);
         XMLInputFactory dbf = XMLInputFactory.newInstance();
 
         // We do not want that the reader creates a socket connection,
@@ -213,7 +212,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
                         String href = m.group(1);
 
                         URI uri = URI.create(href);
-                        uri = uriResolver.apply(uri);
+                        uri = idFactory.absolutize(uri);
                         Figure drawing = stack.getFirst();
                         ImmutableList<URI> listOrNull = drawing.get(figureFactory.getStylesheetsKey());
                         List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
@@ -246,9 +245,4 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
     public void setNamespaceURI(@Nullable String namespaceURI) {
         this.namespaceURI = namespaceURI;
     }
-
-    protected void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
-        this.uriResolver = uriResolver;
-    }
-
 }

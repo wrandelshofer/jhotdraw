@@ -49,7 +49,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 /**
  * SimpleXmlWriter.
@@ -85,7 +84,6 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
      */
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
-    private @NonNull Function<URI, URI> uriResolver = new UriResolver(null, null);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -121,14 +119,6 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         return df;
     }
 
-    private @NonNull Function<URI, URI> getUriResolver() {
-        return uriResolver;
-    }
-
-    protected void setUriResolver(@NonNull Function<URI, URI> uriResolver) {
-        this.uriResolver = uriResolver;
-    }
-
     public boolean isNamespaceAware() {
         return namespaceURI != null;
     }
@@ -158,8 +148,8 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
             XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
             XMLStreamWriter w = xmlOutputFactory.createXMLStreamWriter(result);
 
-            setUriResolver(new UriResolver(null, documentHome));
-            writeClipping(w, internal, selection);
+            // FIXME set document home on
+            writeClipping(w, internal, selection, documentHome);
 
             w.close();
             return doc;
@@ -171,7 +161,6 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
 
     public Document toDocument(@Nullable URI documentHome, @NonNull Drawing internal) throws IOException {
         try {
-            setUriResolver(new UriResolver(null, documentHome));
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setNamespaceAware(true);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
@@ -208,11 +197,12 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
     public void write(@NonNull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
+        URI  documentHome=null;
         try {
             if (selection == null || selection.isEmpty()) {
-                writeDocument(w, null, drawing);
+                writeDocument(w,  documentHome, drawing);
             } else {
-                writeClipping(w, drawing, selection);
+                writeClipping(w, drawing, selection, documentHome);
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -221,7 +211,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         out.put(getDataFormat(), sw.toString());
     }
 
-    protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection) throws IOException, XMLStreamException {
+    protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection, URI documentHome) throws IOException, XMLStreamException {
         // bring selection in z-order
         Set<Figure> s = new HashSet<>(selection);
         ArrayList<Figure> ordered = new ArrayList<>(selection.size());
@@ -232,6 +222,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         }
         Clipping external = new ClippingFigure();
         idFactory.reset();
+        idFactory.setDocumentHome(documentHome);
         final String docElemName = figureFactory.getElementNameByFigure(external);
         w.writeStartDocument();
         w.setDefaultNamespace(namespaceURI);
@@ -246,9 +237,9 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
 
     protected void writeDocument(@NonNull XMLStreamWriter w, @Nullable URI documentHome, @NonNull Drawing internal) throws XMLStreamException {
         try {
-            setUriResolver(new UriResolver(null, documentHome));
             Drawing external = figureFactory.toExternalDrawing(internal);
             idFactory.reset();
+            idFactory.setDocumentHome(documentHome);
             final String docElemName = figureFactory.getElementNameByFigure(external);
             w.writeStartDocument();
             w.setDefaultNamespace(namespaceURI);
@@ -268,13 +259,6 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
 
     private void writeElementAttribute(@NonNull XMLStreamWriter w, @NonNull Figure figure, MapAccessor<Object> k) throws IOException, XMLStreamException {
         Object value = figure.get(k);
-        if (value instanceof URI) {
-            try {
-                value = uriResolver.apply((URI) value);
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-        }
         if (!k.isTransient() && !figureFactory.isDefaultValue(figure, k, value)) {
             String name = figureFactory.getAttributeNameByKey(figure, k);
             if (figureFactory.getObjectIdAttribute().equals(name)) {
@@ -353,7 +337,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
             if (stylesheets != null) {
                 for (Object stylesheet : stylesheets) {
                     if (stylesheet instanceof URI) {
-                        stylesheet = uriResolver.apply((URI) stylesheet);
+                        stylesheet = idFactory.relativize((URI) stylesheet);
 
                         String stylesheetString = stylesheet.toString();
                         String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);

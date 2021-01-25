@@ -7,13 +7,15 @@ package org.jhotdraw8.io;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.net.URI;
+
 /**
  * IdFactory.
  *
  * @author Werner Randelshofer
  */
 public interface IdFactory extends IdResolver, IdSupplier {
-
+void setDocumentHome(@Nullable URI documentHome);
     /**
      * Creates an id for the specified object. If the object already has an id,
      * then that id is returned.

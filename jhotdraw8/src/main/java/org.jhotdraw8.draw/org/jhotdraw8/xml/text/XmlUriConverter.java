@@ -23,6 +23,9 @@ import java.text.ParseException;
  * @author Werner Randelshofer
  */
 public class XmlUriConverter implements Converter<URI> {
+    public XmlUriConverter() {
+        System.out.println("new instance "+getClass());
+    }
 
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable URI value) throws IOException {

@@ -47,18 +47,6 @@ public abstract class AbstractExportOutputFormat extends AbstractPropertyBean im
     protected abstract String getExtension();
 
 
-    @Nullable
-    private Function<URI, URI> uriResolver = new UriResolver(null, null);
-
-    @Nullable
-    public Function<URI, URI> getUriResolver() {
-        return uriResolver;
-    }
-
-    public void setUriResolver(@Nullable Function<URI, URI> uriResolver) {
-        this.uriResolver = uriResolver;
-    }
-
     public boolean isExportDrawing() {
         return getNonNull(EXPORT_DRAWING_KEY);
     }
@@ -95,7 +83,6 @@ public abstract class AbstractExportOutputFormat extends AbstractPropertyBean im
     protected abstract void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
     protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -120,7 +107,6 @@ public abstract class AbstractExportOutputFormat extends AbstractPropertyBean im
      * @throws java.io.IOException in case of failure
      */
     protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing, @NonNull List<Page> pages, @NonNull Map<Key<?>, Object> hints) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
         for (Page page : pages) {
@@ -192,7 +178,6 @@ public abstract class AbstractExportOutputFormat extends AbstractPropertyBean im
     protected abstract boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException;
 
     protected void writeSlices(@Nullable Path dir, @NonNull Drawing drawing) throws IOException {
-        setUriResolver(new UriResolver(drawing.get(Drawing.DOCUMENT_HOME), dir == null ? null : dir.toUri()));
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Slice) {
