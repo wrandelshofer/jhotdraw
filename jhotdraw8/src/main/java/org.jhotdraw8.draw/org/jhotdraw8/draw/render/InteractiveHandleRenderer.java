@@ -134,15 +134,15 @@ public class InteractiveHandleRenderer {
      * @param pointInLocal     The point in local coordinates
      * @param tolerance The maximal distance the point is allowed to be away
      *                  from the node, in view coordinates
-     * @return true if the node contains the point
+     * @return a distance if the node contains the point, null otherwise
      */
-    public static boolean contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
+    public static Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
         double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(LINE45DEG, LINE45DEG).magnitude();
 
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
             if (shape.contains(pointInLocal)) {
-                return true;
+                return 0.0;
             }
 
             double widthFactor;
@@ -190,21 +190,23 @@ public class InteractiveHandleRenderer {
                 return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
                         cap, join, (float) shape.getStrokeMiterLimit()
                 ).createStrokedShape(Shapes.awtShapeFromFX(shape))
-                        .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()));
+                        .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()))
+                        ? tolerance:null;
             } else {
-                return false;
+                return null;
             }
         } else if (node instanceof Group) {
             if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 for (Node child : ((Group) node).getChildren()) {
-                    if (contains(child, child.parentToLocal(pointInLocal), tolerance)) {
-                        return true;
+                    Double distance = contains(child, child.parentToLocal(pointInLocal), tolerance);
+                    if (distance!=null) {
+                        return distance;
                     }
                 }
             }
-            return false;
+            return null;
         } else { // foolishly assumes that all other nodes are rectangular and opaque
-            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance);
+            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance)?0.0:null;
         }
     }
 
@@ -266,7 +268,7 @@ public class InteractiveHandleRenderer {
                 return handle;
             } else {
                 if (false) {
-                    if (contains(node, new Point2D(vx, vy), tolerance)) {
+                    if (contains(node, new Point2D(vx, vy), tolerance)!=null) {
                         return handle;
                     }
                 }

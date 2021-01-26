@@ -22,6 +22,8 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.util.Resources;
 
+import java.util.Map;
+
 /**
  * A tool to select and manipulate figures.
  * <p>
@@ -136,8 +138,7 @@ public class SelectionTool extends AbstractTool {
     protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         requestFocus();
         mouseDragged = false;
-        Bounds b = getNode().getBoundsInParent();
-        Drawing drawing = view.getDrawing();
+
         double vx = event.getX();
         double vy = event.getY();
 
@@ -163,12 +164,13 @@ public class SelectionTool extends AbstractTool {
             } else {
 
                 // "alt" modifier finds a figure behind the current selection.
-                if (isSelectBehindEnabled() && (event.isAltDown())) {
+                if (isSelectBehindEnabled() && event.isAltDown()) {
                     // Select a figure behind the current selection
                     pressedFigure = null;
                     Figure firstFigure = null;
                     boolean selectionFound = false;
-                    for (Figure f : view.findFigures(vx, vy, false)) {
+                    for (Map.Entry<Figure,Double> e : view.findFigures(vx, vy, false)) {
+                        Figure f=e.getKey();
                         if (f.isShowing()) {
                             if (firstFigure == null) {
                                 firstFigure = f;

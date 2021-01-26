@@ -67,6 +67,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
@@ -198,12 +199,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate) {
+    public @NonNull List<Map.Entry<Figure,Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate) {
         return drawingRenderer.findFigures(vx, vy, decompose,predicate);
     }
 
     @Override
-    public @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    public @NonNull List<Map.Entry<Figure,Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         return drawingRenderer.findFiguresInside(vx, vy, vwidth, vheight, decompose, Figure::isSelectable);
     }
 

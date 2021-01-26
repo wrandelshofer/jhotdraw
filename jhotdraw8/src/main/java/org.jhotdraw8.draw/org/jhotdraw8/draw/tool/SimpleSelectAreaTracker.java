@@ -16,6 +16,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.util.Resources;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
@@ -101,7 +103,8 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
 
         double w = x - event.getX();
         double h = y - event.getY();
-        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false);
+        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false)
+                .stream().map(Map.Entry::getKey).collect(Collectors.toList());
         if (event.isShiftDown()) {
             if (dv.getSelectedFigures().containsAll(f)) {
                 if (event.isMetaDown()) {

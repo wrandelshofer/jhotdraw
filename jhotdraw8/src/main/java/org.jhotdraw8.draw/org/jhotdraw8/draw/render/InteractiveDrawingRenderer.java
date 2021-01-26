@@ -36,6 +36,7 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.tree.TreeModelEvent;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -137,17 +138,23 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         if (worldNode != null) {
             Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
                     getDrawingView().viewToWorld(vx, vy));
+            Figure closestFigure=null;
+            double closestDistance=Double.POSITIVE_INFINITY;
             for (Figure f : figures) {
                 if (f.isShowing()) {
                     Node n = getNode(f);
                     if (n != null) {
                         Point2D pointInLocal = n.sceneToLocal(pointInScene);
-                        if (contains(n, pointInLocal, radius)) {
-                            return f;
+                        Double distance = contains(n, pointInLocal, radius);
+                        if (distance !=null&&distance<closestDistance) {
+                            closestFigure=f;
+                            closestDistance=distance;
+                            if (distance==0.0)break;
                         }
                     }
                 }
             }
+            return closestFigure;
         }
 
         return null;
@@ -206,7 +213,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                 continue;
             }
             Point2D pl = n.parentToLocal(pp);
-            if (contains(n, pl, tolerance)) {
+            if (contains(n, pl, tolerance)!=null) {
                 Figure f = nodeToFigureMap.get(n);
                 if (f == null || !predicate.test(f)) {
                     if (n instanceof Parent) {
@@ -221,27 +228,27 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return null;
     }
 
-    public @NonNull List<Figure> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate) {
+    public @NonNull List<Map.Entry<Figure,Double>> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
-        List<Figure> list = new ArrayList<>();
+        List<Map.Entry<Figure,Double>> list = new ArrayList<>();
         double tolerance = getEditor().getTolerance();
         findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose,
                 predicate, tolerance);
         return list;
     }
 
-    public @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
+    public @NonNull List<Map.Entry<Figure,Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
-        List<Figure> list = new ArrayList<>();
+        List<Map.Entry<Figure,Double>> list = new ArrayList<>();
         findFiguresInsideRecursive((Parent) figureToNodeMap.get(getDrawing()), r, list, decompose, predicate);
         return list;
     }
 
-    private boolean findFiguresInsideRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Figure> found, boolean decompose, Predicate<Figure> predicate) {
+    private boolean findFiguresInsideRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Map.Entry<Figure,Double>> found, boolean decompose, Predicate<Figure> predicate) {
         boolean foundAFigure=false;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
@@ -257,11 +264,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                     boolean foundDecomposedFigure=false;
                     if (!test || decompose && f1.isDecomposable()) {
                         if (n instanceof Parent) {
-                            foundAFigure|=foundDecomposedFigure|= findFiguresInsideRecursive((Parent) n, pl, found, decompose, predicate);
+                            foundAFigure|= foundDecomposedFigure = findFiguresInsideRecursive((Parent) n, pl, found, decompose, predicate);
                         }
                     }
                     if (test&&!foundDecomposedFigure) {
-                        found.add(f1);
+                        // XXX 0.0 is not correct, because we only checked the bounds
+                        found.add(new AbstractMap.SimpleImmutableEntry<>(f1,0.0));
                         foundAFigure=true;
                     }
                 }
@@ -310,7 +318,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return foundAFigure;
     }
 
-    private boolean findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Figure> found, boolean decompose,
+    private boolean findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Map.Entry<Figure,Double>> found, boolean decompose,
                                       Predicate<Figure> figurePredicate,  double tolerance) {
         boolean foundAFigure=false;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
@@ -319,7 +327,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null) {
                 Point2D pl = n.parentToLocal(pp);
-                if (contains(n, pl, tolerance)) { // only drill down if the parent contains the point
+                Double distance=contains(n, pl, tolerance);
+                if (distance!=null) { // only drill down if the parent contains the point
                     boolean test = figurePredicate.test(f1);
                     boolean addedDecomposedFigure=false;
                     if (!test||decompose&&f1.isDecomposable()) {
@@ -328,13 +337,13 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                         }
                     }
                     if (test&&!addedDecomposedFigure) {
-                        found.add(f1);
+                        found.add(new AbstractMap.SimpleImmutableEntry<>(f1,distance));
                         foundAFigure=true;
                     }
                 }
             } else {
                 Point2D pl = n.parentToLocal(pp);
-                if (contains(n, pl, tolerance)) { // only drill down if the parent intersects the point
+                if (contains(n, pl, tolerance)!=null) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
                         foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate,tolerance);
                     }

@@ -32,6 +32,7 @@ import org.jhotdraw8.draw.tool.Tool;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -272,8 +273,21 @@ public interface DrawingView extends RenderContext {
      */
     @Nullable
     default Figure findFigure(double vx, double vy, Set<Figure> figures) {
-        List<Figure> result = findFigures(vx, vy, false, figures::contains);
-        return result.isEmpty()?null:result.get(0);
+        List<Map.Entry<Figure,Double>> result = findFigures(vx, vy, false, figures::contains);
+        return getClosestFigure(result);
+    }
+
+    default Figure getClosestFigure( List<Map.Entry<Figure,Double>> result) {
+        double closestDistance=Double.POSITIVE_INFINITY;
+        Figure closestFigure=null;
+        for (Map.Entry<Figure, Double> entry : result) {
+            if (entry.getValue()<closestDistance) {
+                closestDistance=entry.getValue();
+                closestFigure=entry.getKey();
+                if (closestDistance==0.0)break;
+            }
+        }
+        return closestFigure;
     }
 
     /**
@@ -299,8 +313,8 @@ public interface DrawingView extends RenderContext {
      */
     @Nullable
     default Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
-        List<Figure> result = findFigures(vx, vy, false, predicate);
-        return result.isEmpty()?null:result.get(0);
+        List<Map.Entry<Figure,Double>> result = findFigures(vx, vy, false, predicate);
+        return getClosestFigure(result);
     }
 
 
@@ -324,10 +338,12 @@ public interface DrawingView extends RenderContext {
      * @param vx        x in view coordinates
      * @param vy        y in view coordinates
      * @param decompose whether to decompose the figures
-     * @return A list of figures from front to back
+     * @return A list of figures from front to back.
+     *    Each entry contains the figure and the distance of the figure to vx,vy.
+     *    Distance 0 means that vx,vy is inside the figure.
      */
     @NonNull
-    default List<Figure> findFigures(double vx, double vy, boolean decompose) {
+    default List<Map.Entry<Figure,Double>> findFigures(double vx, double vy, boolean decompose) {
         return findFigures(vx,vy,decompose,Figure::isSelectable);
     }
 
@@ -338,10 +354,12 @@ public interface DrawingView extends RenderContext {
      * @param vx        x in view coordinates
      * @param vy        y in view coordinates
      * @param decompose whether to decompose the figures
-     * @return A list of figures from front to back
+     * @return A list of figures from front to back.
+     *    Each entry contains the figure and the distance of the figure to vx,vy.
+     *    Distance 0 means that vx,vy is inside the figure.
      */
     @NonNull
-    List<Figure> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate);
+    List<Map.Entry<Figure,Double>> findFigures(double vx, double vy, boolean decompose,Predicate<Figure> predicate);
 
     /**
      * Returns all figures that lie within the specified bounds given in view
@@ -353,9 +371,11 @@ public interface DrawingView extends RenderContext {
      * @param vwidth    width in view coordinates
      * @param vheight   height in view coordinates
      * @param decompose whether to decompose the figures
-     * @return A list of figures from front to back
+     * @return A list of figures from front to back.
+     *    Each entry contains the figure and the distance of the figure to vx,vy.
+     *    Distance 0 means that vx,vy is inside the figure.
      */
-    @NonNull List<Figure> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    @NonNull List<Map.Entry<Figure,Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     /**
      * Returns all figures that intersect the specified bounds given in view
@@ -423,10 +443,12 @@ public interface DrawingView extends RenderContext {
      *
      * @param pointInView point in view coordinates
      * @param decompose   whether to decompose the figures
-     * @return A list of figures from front to back
+     * @return A list of figures from front to back.
+     *    Each entry contains the figure and the distance of the figure to vx,vy.
+     *    Distance 0 means that pointInView is inside the figure.
      */
     @NonNull
-    default List<Figure> findFigures(@NonNull Point2D pointInView, boolean decompose) {
+    default List<Map.Entry<Figure,Double>> findFigures(@NonNull Point2D pointInView, boolean decompose) {
         return findFigures(pointInView.getX(), pointInView.getY(), decompose);
     }
 
@@ -437,10 +459,12 @@ public interface DrawingView extends RenderContext {
      *
      * @param rectangleInView rectangle in view coordinates
      * @param decompose       whether to decompose the figures
-     * @return A list of figures from front to back
+     * @return A list of figures from front to back.
+     *    Each entry contains the figure and the distance of the figure to vx,vy.
+     *    Distance 0 means that pointInView is inside the figure.
      */
     @NonNull
-    default List<Figure> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default List<Map.Entry<Figure,Double>> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresInside(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 

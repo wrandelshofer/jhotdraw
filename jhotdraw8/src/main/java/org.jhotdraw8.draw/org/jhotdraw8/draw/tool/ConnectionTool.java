@@ -24,7 +24,9 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.util.Resources;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * ConnectionTool.
@@ -129,7 +131,8 @@ public class ConnectionTool extends AbstractTool {
             // must clear end target, otherwise findConnector won't work as expected
             model.set(figure, LineConnectionFigure.END_TARGET, null);
             if (!event.isMetaDown()) {
-                List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+                List<Figure> list = view.findFigures(pointInViewCoordinates, true)
+                        .stream().map(Map.Entry::getKey).collect(Collectors.toList());
                 SearchLoop:
                 for (Figure f1 : list) {
                     for (Figure ff : f1.breadthFirstIterable()) {
@@ -175,7 +178,8 @@ public class ConnectionTool extends AbstractTool {
         Connector newConnector = null;
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
-            List<Figure> list = view.findFigures(pointInViewCoordinates, true);
+            List<Figure> list = view.findFigures(pointInViewCoordinates, true)
+                    .stream().map(Map.Entry::getKey).collect(Collectors.toList());
 
             SearchLoop:
             for (Figure f1 : list) {

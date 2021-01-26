@@ -21,6 +21,8 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -159,7 +161,8 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 }
             } else {
                 List<Figure> list;
-                list = view.findFigures(pointInViewCoordinates, true);
+                list = view.findFigures(pointInViewCoordinates, true)
+                .stream().map(Map.Entry::getKey).collect(Collectors.toList());
 
                 SearchLoop:
                 for (Figure f1 : list) {
