@@ -49,7 +49,6 @@ public class PathConnector extends LocatorConnector {
 
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
-            double grow;
             switch (target.getStyledNonNull(STROKE_TYPE)) {
                 case CENTERED:
                 default:
@@ -69,6 +68,7 @@ public class PathConnector extends LocatorConnector {
         }
 
         IntersectionResultEx i = IntersectLinePathIterator.intersectLinePathIteratorEx(s.getX(), s.getY(), e.getX(), e.getY(), pit);
+        System.err.println("intersect? "+i.peekLast());
         return i.peekLast();
     }
 }

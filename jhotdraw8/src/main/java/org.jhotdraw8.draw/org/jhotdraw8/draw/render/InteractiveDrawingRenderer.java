@@ -225,8 +225,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
         List<Figure> list = new ArrayList<>();
+        double tolerance = getEditor().getTolerance();
         findFiguresRecursive((Parent) figureToNodeMap.get(getDrawing()), pp, list, decompose,
-                predicate);
+                predicate, tolerance);
         return list;
     }
 
@@ -310,9 +311,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private boolean findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Figure> found, boolean decompose,
-                                      Predicate<Figure> figurePredicate) {
+                                      Predicate<Figure> figurePredicate,  double tolerance) {
         boolean foundAFigure=false;
-        double tolerance = getEditor().getTolerance();
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
@@ -324,7 +324,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                     boolean addedDecomposedFigure=false;
                     if (!test||decompose&&f1.isDecomposable()) {
                         if (n instanceof Parent) {
-                            addedDecomposedFigure= foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate);
+                            addedDecomposedFigure= foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate,tolerance);
                         }
                     }
                     if (test&&!addedDecomposedFigure) {
@@ -336,7 +336,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                 Point2D pl = n.parentToLocal(pp);
                 if (contains(n, pl, tolerance)) { // only drill down if the parent intersects the point
                     if (n instanceof Parent) {
-                        foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate);
+                        foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate,tolerance);
                     }
                 }
             }

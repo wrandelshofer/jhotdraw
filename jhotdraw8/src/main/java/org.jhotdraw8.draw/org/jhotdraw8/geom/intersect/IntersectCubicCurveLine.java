@@ -260,7 +260,9 @@ public class IntersectCubicCurveLine {
                                                                  double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
                                                                  double epsilon) {
         IntersectionResult result = intersectCubicCurveLine(
-                a0x, a0y, a1x, a1y, p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, epsilon);
+                p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y,
+                a0x, a0y, a1x, a1y,
+                epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
             double x = ip.getX();

@@ -127,7 +127,7 @@ public class InteractiveHandleRenderer {
     }
 
     /**
-     * Returns true if the node contains the specified point within a a
+     * Returns true if the node contains the specified point within a
      * tolerance.
      *
      * @param node      The node
