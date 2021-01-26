@@ -107,9 +107,12 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
+                double width=getDefaultWidth();
+                double height=getDefaultHeight();
+
                 CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
                 CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1
-                        + defaultWidth, y1 + defaultHeight)), Constrainer.DIRECTION_NEAREST);
+                        + width, y1 + height)), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
                 }
