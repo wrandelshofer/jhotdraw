@@ -1225,6 +1225,44 @@ new-inline-tags: section
     <modular-jar module="org.jhotdraw8.samples.teddy"/>
   </target>
 
+  <macrodef name="modular-package">
+    <attribute name="name"/>
+    <attribute name="module"/>
+    <attribute name="mainclass"/>
+    <sequential>
+      <delete dir="${build}/packages"/>
+      <path id="modulepath">
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+        <fileset dir="${build}/modules" includes="**/*.jar"/>
+      </path>
+      <mkdir dir="${build}/packages/input"/>
+      <mkdir dir="${build}/packages"/>
+      <exec executable="${jpackage}">
+        <arg value="--name"/>
+        <arg value="@{name}"/>
+        <arg value="-p"/>
+        <arg pathref="modulepath"/>
+        <arg value="-m"/>
+        <arg value="@{module}/@{mainclass}"/>
+        <arg value="-d"/>
+        <arg value="${build}/packages"/>
+        <arg value="--type"/>
+        <arg value="app-image"/>
+      </exec>
+      <copy todir="${build}/packages/@{name}.app/Contents/runtime/Contents/Home/lib" flatten="true">
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.dylib"/>
+      </copy>
+    </sequential>
+  </macrodef>
+
+  <target name="do-package-modules" depends="init">
+    <modular-package
+            name="Grapher"
+            module="org.jhotdraw8.samples.grapher"
+            mainclass="org.jhotdraw8.samples.grapher.GrapherMain"
+    />
+  </target>
+
   <target name="do-dist" depends="init">
     <mkdir dir="${dist}/class"/>
     <mkdir dir="${dist}/module"/>

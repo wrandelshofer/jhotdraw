@@ -74,7 +74,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
     protected void initProperties() {
         super.initProperties();
         set(NAME_KEY, "Grapher");
-        set(COPYRIGHT_KEY, "Copyright © 2020 The authors and contributors of JHotDraw.");
+        set(COPYRIGHT_KEY, "Copyright © 2021 The authors and contributors of JHotDraw.");
         set(LICENSE_KEY, "MIT License.");
 
         List<URIExtensionFilter> exportExtensions = new ArrayList<>();

@@ -54,7 +54,7 @@ public abstract class AbstractStyleablePropertyBean
     @NonNull
     protected Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
-            IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<>() {
+            IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<Key<?>, Integer>() {
                 private final static long serialVersionUID = 0L;
                 @NonNull
                 final AtomicInteger nextIndex = new AtomicInteger();
@@ -62,7 +62,7 @@ public abstract class AbstractStyleablePropertyBean
                 @Override
                 public Integer get(Object key) {
                     Integer v;
-                    if ((v =super. get(key)) == null) {
+                    if ((v = super.get(key)) == null) {
                         Integer newValue;
                         newValue = nextIndex.getAndIncrement();
                             put((Key<?>)key, newValue);
