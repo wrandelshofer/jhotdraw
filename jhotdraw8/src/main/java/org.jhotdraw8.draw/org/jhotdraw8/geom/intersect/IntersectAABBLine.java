@@ -16,6 +16,19 @@ public class IntersectAABBLine {
         return intersectLineAABBEx(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), rminx, rminy, rmaxx, rmaxy);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param a0
+     * @param a1
+     * @param rminx
+     * @param rminy
+     * @param rmaxx
+     * @param rmaxy
+     * @return
+     */
     @NonNull
     public static IntersectionResultEx intersectLineAABBEx(@NonNull Point2D a0, @NonNull Point2D a1,
                                                            double rminx, double rminy, double rmaxx, double rmaxy) {
@@ -51,6 +64,19 @@ public class IntersectAABBLine {
         return new IntersectionResultEx(result);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param rminx
+     * @param rminy
+     * @param rmaxx
+     * @param rmaxy
+     * @param a0
+     * @param a1
+     * @return
+     */
     @NonNull
     public static IntersectionResultEx intersectAABBLineEx(
             double rminx, double rminy, double rmaxx, double rmaxy,

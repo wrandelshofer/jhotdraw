@@ -46,6 +46,22 @@ public class IntersectEllipseEllipse {
         return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param cx1
+     * @param cy1
+     * @param rx1
+     * @param ry1
+     * @param cx2
+     * @param cy2
+     * @param rx2
+     * @param ry2
+     * @param epsilon
+     * @return
+     */
     @NonNull
     public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
         double[] a = {

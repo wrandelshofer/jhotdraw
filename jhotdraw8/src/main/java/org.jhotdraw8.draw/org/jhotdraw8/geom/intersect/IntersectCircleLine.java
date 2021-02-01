@@ -108,6 +108,10 @@ public class IntersectCircleLine {
      * This method computes the argument of the circle function with atan2
      * and thus may be unnecessarily slow if you only need the argument
      * of the line function.
+     * <p>
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
      *
      * @param x0
      * @param y0

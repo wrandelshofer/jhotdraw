@@ -53,6 +53,10 @@ public class IntersectCirclePoint {
 
     /**
      * Computes the intersection between a point and a circle.
+     * <p>
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
      *
      * @param point  the point
      * @param center the center of the circle

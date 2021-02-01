@@ -51,6 +51,24 @@ public class IntersectLineQuadCurve {
                 p2x, p2y, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param a0x
+     * @param a0y
+     * @param a1x
+     * @param a1y
+     * @param p0x
+     * @param p0y
+     * @param p1x
+     * @param p1y
+     * @param p2x
+     * @param p2y
+     * @param epsilon
+     * @return
+     */
     @NonNull
     public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
                                                             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
@@ -137,6 +155,19 @@ public class IntersectLineQuadCurve {
         return intersectQuadCurveLine(p0, p1, p2, a0, a1, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param p0
+     * @param p1
+     * @param p2
+     * @param a0
+     * @param a1
+     * @param epsilon
+     * @return
+     */
     public static IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1,
                                                             double epsilon) {
 

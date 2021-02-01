@@ -62,6 +62,21 @@ public class IntersectCubicCurveQuadCurve {
         return intersectQuadCurveCubicCurve(a0, a1, a2, b0, b1, b2, b3, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param a0
+     * @param a1
+     * @param a2
+     * @param b0
+     * @param b1
+     * @param b2
+     * @param b3
+     * @param epsilon
+     * @return
+     */
     public static IntersectionResult intersectQuadCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2,
                                                                   @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3, double epsilon) {
         final Point2D c12, c11, c10;

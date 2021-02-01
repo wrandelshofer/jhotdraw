@@ -122,6 +122,22 @@ public class IntersectEllipseLine {
         return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param x0
+     * @param y0
+     * @param x1
+     * @param y1
+     * @param cx
+     * @param cy
+     * @param rx
+     * @param ry
+     * @param epsilon
+     * @return
+     */
     @NonNull
     public static IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
                                                           double cx, double cy, double rx, double ry,

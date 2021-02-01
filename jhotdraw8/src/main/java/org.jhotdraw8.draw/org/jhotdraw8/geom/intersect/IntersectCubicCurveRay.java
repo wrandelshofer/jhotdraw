@@ -43,6 +43,22 @@ public class IntersectCubicCurveRay {
         return intersectCubicCurveRay(a0, a1, a2, a3, bo, bd, Double.MAX_VALUE, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param p0
+     * @param p1
+     * @param p2
+     * @param p3
+     * @param ao
+     * @param ad
+     * @param maxT
+     * @param epsilon
+     * @return
+     */
+
     public static IntersectionResult intersectCubicCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
                                                             @NonNull Point2D ao, @NonNull Point2D ad, double maxT, double epsilon) {
         final Point2D.Double topLeft = Intersections.topLeft(ao, Points2D.add(ao, ad)); // used to determine if point is on line segment

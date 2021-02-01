@@ -116,6 +116,9 @@ public class IntersectCircleCircle {
      *         Circle 1 is same as circle 2 up to the given epsilon.
      *     </dd>
      * </dl>
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
      *
      * @param c1x the center of circle 1
      * @param c1y the center of circle 1

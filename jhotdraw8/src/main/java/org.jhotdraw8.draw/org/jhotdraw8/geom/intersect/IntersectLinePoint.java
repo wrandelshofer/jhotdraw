@@ -50,6 +50,10 @@ public class IntersectLinePoint {
      * <li>{@literal 2·a·t1 + b = 0, 0 ≤ t1 ≤ 1 }<br>
      * : derivative</li>
      * </ol>
+     * <p>
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
      *
      * @param x0 point 0 of the line
      * @param y0 point 0 of the line

@@ -88,6 +88,21 @@ public class IntersectCubicCurveEllipse {
         return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param p0
+     * @param p1
+     * @param p2
+     * @param p3
+     * @param ec
+     * @param rx
+     * @param ry
+     * @param epsilon
+     * @return
+     */
     @NonNull
     public static IntersectionResult intersectCubicCurveEllipse(
             @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,

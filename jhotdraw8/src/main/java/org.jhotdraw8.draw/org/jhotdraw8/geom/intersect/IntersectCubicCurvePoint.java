@@ -91,6 +91,10 @@ public class IntersectCubicCurvePoint {
      * : derivative
      * </li>
      * </ol>
+     * <p>
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
      *
      * @param x0 x-coordinate of control point P0 of the bezier curve
      * @param y0 y-coordinate of control point P0 of the bezier curve

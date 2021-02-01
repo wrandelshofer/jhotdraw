@@ -42,6 +42,20 @@ public class IntersectCubicCurveLine {
         return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Geom.REAL_THRESHOLD);
     }
 
+    /**
+     * The code of this method has been derived from intersection.js by
+     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
+     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     *
+     * @param p0
+     * @param p1
+     * @param p2
+     * @param p3
+     * @param a0
+     * @param a1
+     * @param epsilon
+     * @return
+     */
     public static IntersectionResult intersectCubicCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
                                                              @NonNull Point2D a0, @NonNull Point2D a1, double epsilon) {
         final Point2D.Double topLeft = Intersections.topLeft(a0, a1); // used to determine if point is on line segment
