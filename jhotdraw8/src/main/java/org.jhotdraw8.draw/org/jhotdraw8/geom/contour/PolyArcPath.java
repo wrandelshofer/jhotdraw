@@ -114,30 +114,32 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
 
     public PathIterator getPathIterator(AffineTransform at) {
         PathIteratorPathBuilder b = new PathIteratorPathBuilder(getWindingRule());
-        PlineVertex prev = PolyArcPath.this.get(PolyArcPath.this.size() - 1);
-        for (PlineVertex vertex : PolyArcPath.this) {
-            if (prev.bulgeIsZero()) {
-                if (b.isEmpty()) {
-                    b.moveTo(vertex.getX(), vertex.getY());
+        if (size() > 0) {
+            PlineVertex prev = PolyArcPath.this.get(PolyArcPath.this.size() - 1);
+            for (PlineVertex vertex : PolyArcPath.this) {
+                if (prev.bulgeIsZero()) {
+                    if (b.isEmpty()) {
+                        b.moveTo(vertex.getX(), vertex.getY());
+                    } else {
+                        b.lineTo(vertex.getX(), vertex.getY());
+                    }
                 } else {
-                    b.lineTo(vertex.getX(), vertex.getY());
+                    double bulge = prev.bulge();
+                    BulgeConversionFunctions.ArcRadiusAndCenter circle = BulgeConversionFunctions.computeCircle(
+                            prev.getX(), prev.getY(),
+                            vertex.getX(), vertex.getY(),
+                            bulge);
+                    if (b.isEmpty()) {
+                        b.moveTo(prev.getX(), prev.getY());
+                    }
+                    b.arcTo(circle.getRadius(), circle.getRadius(), 0,
+                            vertex.getX(), vertex.getY(), false, bulge > 0);
                 }
-            } else {
-                double bulge = prev.bulge();
-                BulgeConversionFunctions.ArcRadiusAndCenter circle = BulgeConversionFunctions.computeCircle(
-                        prev.getX(), prev.getY(),
-                        vertex.getX(), vertex.getY(),
-                        bulge);
-                if (b.isEmpty()) {
-                    b.moveTo(prev.getX(), prev.getY());
-                }
-                b.arcTo(circle.getRadius(), circle.getRadius(), 0,
-                        vertex.getX(), vertex.getY(), false, bulge > 0);
+                prev = vertex;
             }
-            prev = vertex;
-        }
-        if (PolyArcPath.this.isClosed()) {
-            b.closePath();
+            if (PolyArcPath.this.isClosed()) {
+                b.closePath();
+            }
         }
         return b.build();
     }
