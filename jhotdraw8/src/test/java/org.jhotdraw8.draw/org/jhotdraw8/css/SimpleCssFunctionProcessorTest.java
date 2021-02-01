@@ -74,6 +74,10 @@ class SimpleCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
                 dynamicTest("902", () -> doTestProcess("var(--foo,fallback)", "fallback")),
                 dynamicTest("903", () -> doTestProcess("var(x,fallback)", null)),
                 dynamicTest("904", () -> doTestProcess("var(--endless-recursion,fallback)", null)),
+                dynamicTest("910", () -> doTestProcess("var(--recursion-base,fallback)", "\"recursion base\"")),
+                dynamicTest("911", () -> doTestProcess("var(--recursive-1,fallback)", "\"recursion base\"")),
+                dynamicTest("912", () -> doTestProcess("var(--recursive-2,fallback)", "\"recursion base\"")),
+                //
                 dynamicTest("1001", () -> doTestProcess("linear-gradient(from 0 0 to 6 6, repeat, var(--fill-gray) 60% var(--background-color) 60%)",
                         null))
         );

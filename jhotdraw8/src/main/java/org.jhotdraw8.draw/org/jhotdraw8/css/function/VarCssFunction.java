@@ -47,9 +47,6 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
     public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
                         @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
-        if (recursionStack.contains(this)) {
-            throw tt.createParseException("〈var〉: Recursion not allowed.");
-        }
 
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈var〉: function var() expected.");
         if (!getName().equals(tt.currentString())) {

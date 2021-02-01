@@ -46,6 +46,13 @@ abstract class AbstractCssFunctionProcessorTest {
         DocumentSelectorModel model = new DocumentSelectorModel();
         Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         customProperties.put("--blarg", ImmutableLists.of(new CssToken(CssTokenType.TT_STRING, "blarg")));
+        customProperties.put("--recursion-base", ImmutableLists.of(new CssToken(CssTokenType.TT_STRING, "recursion base")));
+        customProperties.put("--recursive-1", ImmutableLists.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
+                new CssToken(CssTokenType.TT_IDENT, "--recursion-base"),
+                new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
+        customProperties.put("--recursive-2", ImmutableLists.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
+                new CssToken(CssTokenType.TT_IDENT, "--recursive-1"),
+                new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
         customProperties.put("--endless-recursion", ImmutableLists.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
                 new CssToken(CssTokenType.TT_IDENT, "--endless-recursion"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
