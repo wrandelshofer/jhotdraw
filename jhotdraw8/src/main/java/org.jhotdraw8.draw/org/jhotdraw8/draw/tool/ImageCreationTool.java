@@ -1,6 +1,6 @@
 /*
  * @(#)ImageCreationTool.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.tool;
 
@@ -9,7 +9,6 @@ import javafx.stage.FileChooser;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
@@ -26,7 +25,6 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.AbstractMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

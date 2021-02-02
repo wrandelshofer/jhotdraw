@@ -1,10 +1,14 @@
+/*
+ * @(#)AABB.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.geom;
 
 /**
  * Axis aligned bounding box (AABB).
  */
 public class AABB {
-   private final double minX;
+    private final double minX;
     private final double minY;
     private final double maxX;
     private final double maxY;

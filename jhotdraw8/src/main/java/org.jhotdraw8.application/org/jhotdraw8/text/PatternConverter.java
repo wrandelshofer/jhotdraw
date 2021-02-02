@@ -1,6 +1,6 @@
 /*
  * @(#)PatternConverter.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.text;
 
@@ -394,7 +394,7 @@ public class PatternConverter implements Converter<Object[]> {
 
                 child.toString(value, out, factory, indices);
 
-                // update list item indices 
+                // update list item indices
                 for (int k = index + 1; k <= maxIndex; k++) {
                     indices[k] += step;
                 }
@@ -423,7 +423,7 @@ public class PatternConverter implements Converter<Object[]> {
                     child.fromString(buf, factory, value, indices);
                     repeat++;
 
-                    // update list item indices 
+                    // update list item indices
                     for (int k = index + 1; k <= maxIndex; k++) {
                         indices[k] += step;
                     }

@@ -1,6 +1,6 @@
 /*
  * @(#)AbstractExportOutputFormat.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
 
@@ -21,10 +21,8 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
-import org.jhotdraw8.io.UriResolver;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -32,7 +30,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 

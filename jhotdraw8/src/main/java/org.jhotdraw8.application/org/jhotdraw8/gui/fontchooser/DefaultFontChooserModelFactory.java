@@ -1,6 +1,6 @@
 /*
  * @(#)DefaultFontChooserModelFactory.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.fontchooser;
 
@@ -307,7 +307,7 @@ public class DefaultFontChooserModelFactory {
                         "Miriam",
                         "Segoe UI")));
 
-        // Scripts 
+        // Scripts
         root.add(
                 new FontCollection(labels.getString("FontCollection.script"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:

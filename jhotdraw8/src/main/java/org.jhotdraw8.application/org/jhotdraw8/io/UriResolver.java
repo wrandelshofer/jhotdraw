@@ -1,17 +1,15 @@
 /*
  * @(#)UriResolver.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Function;
 
 /**
  * Provides utility methods for absolutizing and relativizing URIs.

@@ -1,6 +1,6 @@
 /*
  * @(#)ClampedDoubleProperty.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.beans;
 
@@ -32,7 +32,7 @@ public class ClampedDoubleProperty extends SimpleDoubleProperty {
 
     @Override
     public double get() {
-        // note we must override get too, so that values are still clamped, 
+        // note we must override get too, so that values are still clamped,
         // when we are bound to another property
         return max(minValue, min(super.get(), maxValue));
     }

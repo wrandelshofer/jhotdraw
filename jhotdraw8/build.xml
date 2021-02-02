@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!--
   ~ @(#)build.xml
-  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
   -->
 
 <!-- You may freely edit this file. See commented blocks below for --><!-- some examples of how to customize the build. --><!-- (If you delete it and reopen the project it will be recreated.) --><!-- By default, only the Clean and Build commands use this build script. -->
@@ -9,9 +9,9 @@
     <import file="nbproject/build-impl.xml"/>
     <!--
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
-    before and after some main targets. Those of them relevant for JavaFX project are: 
+    There exist several targets which are by default empty and which can be
+    used for execution of your tasks. These targets are usually executed
+    before and after some main targets. Those of them relevant for JavaFX project are:
 
       -pre-init:                 called before initialization of project properties
       -post-init:                called after initialization of project properties

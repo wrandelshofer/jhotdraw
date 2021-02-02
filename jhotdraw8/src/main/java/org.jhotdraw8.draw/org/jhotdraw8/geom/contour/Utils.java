@@ -1,3 +1,7 @@
+/*
+ * @(#)Utils.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -22,7 +26,6 @@ public class Utils {
     public static final double tau = 2.0 * Math.PI;
     // absolute threshold to be used for pruning invalid slices for offset
     public static final double offsetThreshold = 1e-4;
-
 
 
     /// Perpendicular dot product. Equivalent to dot(v0, perp(v1)).
@@ -195,7 +198,7 @@ public class Utils {
     /// Returns the closest point that lies on the line segment from p0 to p1 to the point given.
 
     static Point2D.Double closestPointOnLineSeg(Point2D.Double p0, Point2D.Double p1,
-                                         Point2D.Double point) {
+                                                Point2D.Double point) {
         // Dot product used to find angles
         // See: http://geomalgorithms.com/a02-_lines.html
         Point2D.Double v = Points2D.subtract(p1,p0);

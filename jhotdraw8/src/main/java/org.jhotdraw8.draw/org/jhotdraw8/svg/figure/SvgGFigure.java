@@ -1,6 +1,6 @@
 /*
- * @(#)GroupFigure.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SvgGFigure.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.svg.figure;
 
@@ -9,7 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Grouping;
+import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.ResizableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 

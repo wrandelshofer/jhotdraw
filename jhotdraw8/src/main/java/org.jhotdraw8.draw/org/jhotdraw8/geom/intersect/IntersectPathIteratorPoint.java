@@ -1,3 +1,7 @@
+/*
+ * @(#)IntersectPathIteratorPoint.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -60,44 +64,44 @@ public class IntersectPathIteratorPoint {
             IntersectionResultEx rayCheck;
             int type = pit.currentSegment(seg);
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
-                rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Geom.REAL_THRESHOLD);
-                break;
-            case PathIterator.SEG_CUBICTO:
-                x = seg[4];
-                y = seg[5];
-                boundaryCheck = IntersectCubicCurvePoint.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
-                rayCheck = IntersectCubicCurveRay.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Geom.REAL_THRESHOLD);
-                //IntersectCubicCurveRa
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_LINETO:
-                x = seg[0];
-                y = seg[1];
-                boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
-                rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Geom.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_MOVETO:
-                lastx = firstx = seg[0];
-                lasty = firsty = seg[1];
-                boundaryCheck = null;
-                rayCheck = null;
-                break;
-            case PathIterator.SEG_QUADTO:
-                x = seg[2];
-                y = seg[3];
-                boundaryCheck = IntersectPointQuadCurve.intersectQuadCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
-                rayCheck = IntersectQuadCurveRay.intersectRayQuadCurveEx(px, py, 1, 0, Double.MAX_VALUE,
-                        lastx, lasty, seg[0], seg[1], x, y, Geom.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported segment type: " + type);
+                case PathIterator.SEG_CLOSE:
+                    boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
+                    rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Geom.REAL_THRESHOLD);
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    boundaryCheck = IntersectCubicCurvePoint.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
+                    rayCheck = IntersectCubicCurveRay.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Geom.REAL_THRESHOLD);
+                    //IntersectCubicCurveRa
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
+                    rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Geom.REAL_THRESHOLD);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    boundaryCheck = null;
+                    rayCheck = null;
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    boundaryCheck = IntersectPointQuadCurve.intersectQuadCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
+                    rayCheck = IntersectQuadCurveRay.intersectRayQuadCurveEx(px, py, 1, 0, Double.MAX_VALUE,
+                            lastx, lasty, seg[0], seg[1], x, y, Geom.REAL_THRESHOLD);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Unsupported segment type: " + type);
             }
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -117,14 +121,14 @@ public class IntersectPathIteratorPoint {
                 }
             }
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                clockwiseCrossingsSum += clockwiseCrossings;
-                counterClockwiseCrossingsSum += counterClockwiseCrossings;
-                clockwiseCrossings = counterClockwiseCrossings = 0;
-                break;
-            case PathIterator.SEG_MOVETO:
-                clockwiseCrossings = counterClockwiseCrossings = 0;
-                break;
+                case PathIterator.SEG_CLOSE:
+                    clockwiseCrossingsSum += clockwiseCrossings;
+                    counterClockwiseCrossingsSum += counterClockwiseCrossings;
+                    clockwiseCrossings = counterClockwiseCrossings = 0;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    clockwiseCrossings = counterClockwiseCrossings = 0;
+                    break;
             }
 
         }

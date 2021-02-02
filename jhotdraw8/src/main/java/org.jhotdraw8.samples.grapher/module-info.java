@@ -1,6 +1,6 @@
 /*
  * @(#)module-info.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 import org.jhotdraw8.samples.grapher.spi.GrapherResourceBundleProvider;
 

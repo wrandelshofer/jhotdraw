@@ -1,3 +1,8 @@
+/*
+ * @(#)light-theme.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
+
 #drawingView {
-    -fx-background-color: rgb(200,200,200);
+    -fx-background-color: rgb(200, 200, 200);
 }

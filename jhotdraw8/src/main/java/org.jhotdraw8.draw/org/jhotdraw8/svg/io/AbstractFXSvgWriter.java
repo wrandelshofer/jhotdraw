@@ -1,6 +1,6 @@
 /*
- * @(#)AbstractSvgSceneGraphExporter.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)AbstractFXSvgWriter.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.svg.io;
 
@@ -61,7 +61,6 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
-import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
@@ -99,7 +98,6 @@ import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";

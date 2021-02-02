@@ -1,3 +1,7 @@
+/*
+ * @(#)FXGeom.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.geom;
 
 import javafx.geometry.BoundingBox;
@@ -359,14 +363,14 @@ public class FXGeom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-            case PathIterator.SEG_MOVETO:
-                moveToX = coords[0];
-                moveToY = coords[1];
-                break;
-            case PathIterator.SEG_CLOSE:
-                coords[0] = moveToX;
-                coords[1] = moveToY;
-                break;
+                case PathIterator.SEG_MOVETO:
+                    moveToX = coords[0];
+                    moveToY = coords[1];
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    coords[0] = moveToX;
+                    coords[1] = moveToY;
+                    break;
             }
             IntersectionResultEx chop = IntersectLineLine.intersectLineLineEx(
                     prevX, prevY,

@@ -1,3 +1,7 @@
+/*
+ * @(#)IntersectLinePathIterator.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -34,38 +38,38 @@ public class IntersectLinePathIterator {
         for (; !pit.isDone(); pit.next()) {
             IntersectionResultEx inter;
             switch (pit.currentSegment(seg)) {
-            case PathIterator.SEG_CLOSE:
-                inter = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastx, lasty, firstx, firsty);
-                break;
-            case PathIterator.SEG_CUBICTO:
-                x = seg[4];
-                y = seg[5];
-                inter = IntersectCubicCurveLine.intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_LINETO:
-                x = seg[0];
-                y = seg[1];
-                inter = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastx, lasty, x, y);
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_MOVETO:
-                inter = null;
-                lastx = firstx = seg[0];
-                lasty = firsty = seg[1];
-                break;
-            case PathIterator.SEG_QUADTO:
-                x = seg[2];
-                y = seg[3];
-                inter = IntersectLineQuadCurve.intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y);
-                lastx = x;
-                lasty = y;
-                break;
-            default:
-                inter = null;
-                break;
+                case PathIterator.SEG_CLOSE:
+                    inter = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastx, lasty, firstx, firsty);
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    inter = IntersectCubicCurveLine.intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    inter = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastx, lasty, x, y);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    inter = null;
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    inter = IntersectLineQuadCurve.intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                default:
+                    inter = null;
+                    break;
             }
 
             if (inter != null && inter.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -84,7 +88,6 @@ public class IntersectLinePathIterator {
 
         return new IntersectionResultEx(status, result);
     }
-
 
 
     @NonNull

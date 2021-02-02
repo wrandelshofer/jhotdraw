@@ -1,6 +1,6 @@
 /*
- * @(#)NodeReaderSpi.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)NodeReaderProvider.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.app.spi;

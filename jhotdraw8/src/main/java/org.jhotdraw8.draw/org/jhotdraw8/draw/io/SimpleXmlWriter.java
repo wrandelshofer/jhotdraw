@@ -1,6 +1,6 @@
 /*
- * @(#)SimpleXmlIO.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SimpleXmlWriter.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
 
@@ -19,7 +19,6 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;

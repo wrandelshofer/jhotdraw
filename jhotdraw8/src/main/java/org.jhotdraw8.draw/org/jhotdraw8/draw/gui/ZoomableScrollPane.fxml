@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  ~ @(#)ZoomableScrollPane.fxml
+  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>

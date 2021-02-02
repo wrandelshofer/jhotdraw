@@ -1,3 +1,7 @@
+/*
+ * @(#)IntersectionPointEx.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.geom.intersect;
 
 import java.awt.geom.Point2D;
@@ -64,7 +68,6 @@ public class IntersectionPointEx extends IntersectionPoint {
     public int getSegmentB() {
         return segmentB;
     }
-
 
 
     /**

@@ -1,6 +1,6 @@
 /*
  * @(#)ImmutableDirectedGraph.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 
@@ -59,7 +59,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     /**
      * Holds the arrow objects.
      * <p>
-     * The arrows are stored in consecutive runs for each vertex,    
+     * The arrows are stored in consecutive runs for each vertex,
      * starting at the offset given by {@code nextOffset}.
      * <p>
      * See {@link #next}.

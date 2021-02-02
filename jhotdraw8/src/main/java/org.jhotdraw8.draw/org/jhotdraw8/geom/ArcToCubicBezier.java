@@ -1,6 +1,6 @@
 /*
- * @(#)A2C.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ArcToCubicBezier.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.geom;
@@ -11,19 +11,6 @@ import org.jhotdraw8.util.function.Double6Consumer;
 
 import java.util.ArrayList;
 
-/**
- * Converts SVG arcTo command to cubicTo commands.
- * <p>
- * This implementation has been derived from the svgpath library.
- * <p>
- * References:
- * <dl>
- *     <dt>svgpath<dt>
- *     <dd>Copyright (C) 2013-2015 by Vitaly Puzrin. MIT License.<br>
- *       <a href="https://github.com/fontello/svgpath">svgpath</a>
- *     </dd>
- * </dl>
- */
 public class ArcToCubicBezier {
     private final static double TAU = Math.PI * 2.0;
 

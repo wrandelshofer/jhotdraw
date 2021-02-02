@@ -1,6 +1,6 @@
 /*
- * @(#)EditorView.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)EditorActivity.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw;
 

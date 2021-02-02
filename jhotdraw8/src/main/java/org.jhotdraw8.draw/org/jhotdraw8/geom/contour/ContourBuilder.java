@@ -1,6 +1,6 @@
 /*
- * @(#)CavalierContours.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ContourBuilder.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.contour;
 
@@ -51,66 +51,6 @@ import static org.jhotdraw8.geom.contour.Utils.realPrecision;
 import static org.jhotdraw8.geom.contour.Utils.sliceJoinThreshold;
 import static org.jhotdraw8.geom.contour.Utils.unitPerp;
 
-/**
- * Computes an offset path using the algorithm of the library
- * CavalierContours by Jedidiah Buck McCready <a href="#1">[1]</a>.
- * <p>
- * Algorithm:
- * <ol>
- *     <li>Generate raw offset segments from the input polyline, pline.</li>
- *     <li>Create the raw offset polyline, pline1, by trimming/joining raw
- *     offset segments acquired in step 1.</li>
- *     <li>If the input polyline, pline, has self intersections or is an open
- *     polyline then repeat steps 1 and 2 with the offset negated (e.g. if the
- *     offset was 0.5 then create raw offset polyline with offset of -0.5),
- *     this is known as pline2.</li>
- *     <li>Find all self-intersects of pline1. If step 3 was performed then
- *     also find all intersects between pline1 and pline2. If pline is an open
- *     polyline then also find intersects between pline1 and circles at the
- *     start and end vertex points of pline with radius equal to the offset.</li>
- *     <li>Create a set of open polylines by slicing pline1 at all of the
- *     intersect points found in step 4.</li>
- *     <li>Discard all open polyline slices whose minimum distance to pline is
- *     less than the offset.</li>
- *     <li>Stitch together the remaining open polyline slices found in step 6,
- *     closing the final stitched results if pline is closed.</li>
- * </ol>
- * The algorithm is mostly based on Liu et al. <a href="3">[3]</a> with some
- * differences since the algorithm they describe for GCPP (general closest
- * point pair) clippin g fails for certain inputs with large offsets.
- * <p>
- * The key clarifications/differences are:
- * <ul>
- *     <li>When raw offset segments are extended to form a raw offset polyline
- *     they are always joined by an arc to form a rounded constant distance
- *     from the input polyline.</li>
- *     <li>Dual offset clipping is only applied if input polyline is open or
- *     has self intersects, it is not required for a closed polyline with no
- *     self intersects.</li>
- *     <li>If the polyline is open then a circle is formed at each end point
- *     with radius equal to the offset, the intersects between those circles
- *     and the raw offset polyline are included when forming slices.</li>
- *     <li>GCPP (general closest point pair) clipping is never performed and
- *     instead slices are formed from intersects, then they are discarded if
- *     too close to the original polyline, and finally stitched back together.</li>
- *     <li>No special handling is done for adjacent segments that overlap
- *     (it is not required given the slice and stitch method).</li>
- *     <li>Collapsing arc segments (arcs whose radius is less than the offset
- *     value) are converted into a line and specially marked for joining purposes.</li>
- * </ul>
- * <p>
- * References
- * <ol>
- *     <li><a id="1"></a> Jedidia Buck McCready. (2019). Cavalier Contours.
- *          Copyright © 2019 MIT License.
- *     <a href="https://github.com/jbuckmccready/CavalierContours">github</a></li>
- *     <li><a id="2"></a>Bulge conversions: <a href="http://www.lee-mac.com/bulgeconversion.html">link</a></li>
- *     <li><a id="3"></a>Liu, X.-Z., Yong, J.-H., Zheng, G.-Q., & Sun, J.-G. (2007).
- *     An offset algorithm for polyline curves. Computers in Industry, 58(3),
- *     240–254. doi:10.1016/j.compind.2006.06.002</li>
- * </ol>
- * </p>
- */
 public class ContourBuilder {
 
 

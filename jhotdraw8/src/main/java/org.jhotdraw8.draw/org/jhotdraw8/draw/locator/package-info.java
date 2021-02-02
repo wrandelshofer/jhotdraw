@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Provides interfaces and classes for locating a point on a figure.

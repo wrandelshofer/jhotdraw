@@ -1,9 +1,10 @@
-/* @(#)SimpleDrawingView.css
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)SimpleDrawingView.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 
 /**
- * This CSS is used by {@code SimpleDrawingView} to style JavaFX Nodes which are 
+ * This CSS is used by {@code SimpleDrawingView} to style JavaFX Nodes which are
  * laid over a drawing, such as {@code Tool}s and {@code Handle}s.
  */
 

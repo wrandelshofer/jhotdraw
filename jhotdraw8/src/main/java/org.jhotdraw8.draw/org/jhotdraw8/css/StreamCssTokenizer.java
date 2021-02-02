@@ -1,6 +1,6 @@
 /*
  * @(#)StreamCssTokenizer.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css;
 
@@ -777,9 +777,9 @@ public class StreamCssTokenizer implements CssTokenizer {
             //
             //    subtract offset 0x10000: (Note: wwww = uuuuu - 1).
             //            0000wwwwxxxxxxyyyyyyyyyy
-            //       
+            //
             //    UTF-16: 110110_wwww_xxxxxx 110111_yy_yyyyyyyy
-            //            
+            //
             int wxy = ch - 0x10000;
             int high = 0b110110_0000_000000 | (wxy >> 10);
             int low = 0b110111_0000000000 | (wxy & 0b11_11111111);

@@ -1,3 +1,8 @@
+/*
+ * @(#)user-agent.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
+
 /* @(#)user-agent.css
  *
  * User-Agent stylesheet for grapher drawings.
@@ -6,6 +11,7 @@
 Drawing {
     background: white;
 }
+
 Label {
     text-fill: black;
 }

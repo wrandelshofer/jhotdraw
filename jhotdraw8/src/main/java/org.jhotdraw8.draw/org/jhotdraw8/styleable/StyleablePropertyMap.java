@@ -1,6 +1,6 @@
 /*
  * @(#)StyleablePropertyMap.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.styleable;
 
@@ -82,7 +82,7 @@ public class StyleablePropertyMap {
     /**
      * Holds the user agent getProperties.
      */
-    private ReadOnlyMapProperty<Key<?>, Object> userAgent;// 
+    private ReadOnlyMapProperty<Key<?>, Object> userAgent;//
     /**
      * Holds the outputReadonly getProperties.
      */

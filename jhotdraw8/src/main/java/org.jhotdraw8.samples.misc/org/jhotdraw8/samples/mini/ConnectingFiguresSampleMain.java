@@ -1,6 +1,6 @@
 /*
  * @(#)ConnectingFiguresSampleMain.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.samples.mini;
 
@@ -36,7 +36,7 @@ public class ConnectingFiguresSampleMain extends Application {
         drawingView.setDrawing(drawing);
 
         // A DrawingView can display a Drawing. But it does not directly support editing.
-        // To add support for editing, add it to a DrawingEditor, 
+        // To add support for editing, add it to a DrawingEditor,
         // and activate a  Tool on the drawing editor.
         DrawingEditor drawingEditor = new SimpleDrawingEditor();
         drawingEditor.drawingViewsProperty().add(drawingView);

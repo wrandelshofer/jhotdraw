@@ -1,6 +1,6 @@
 /*
- * @(#)SimpleXmlReaderNew.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SimpleXmlStaxReader.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.draw.io;
@@ -21,7 +21,6 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.UriResolver;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

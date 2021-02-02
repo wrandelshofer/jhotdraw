@@ -1,6 +1,6 @@
 /*
  * @(#)BrowseFileDirectoryAction.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app.action.file;
 
@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;

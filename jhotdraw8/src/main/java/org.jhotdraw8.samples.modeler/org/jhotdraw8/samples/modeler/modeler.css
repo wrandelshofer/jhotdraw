@@ -1,6 +1,6 @@
-/* @(#)diagrammer.css
- * Copyright (c) 2015 The authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/*
+ * @(#)modeler.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 
 /* The layout of the grapher is as follows:
@@ -20,7 +20,7 @@
   /*    -fx-font-size: 13px; */
 }
 .track .split-pane-divider {
-      -fx-padding: 0 1px 0 1px;  
+    -fx-padding: 0 1px 0 1px;
 }
 .tools  {
 }
@@ -44,9 +44,9 @@
 }
 
 
-.main > .split-pane-divider {  
-  -fx-padding: 0 1px 0 1px;  
-} 
+.main > .split-pane-divider {
+    -fx-padding: 0 1px 0 1px;
+}
 
 /* A control which is placed flush to all sides
  * does not need a border.

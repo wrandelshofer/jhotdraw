@@ -1,6 +1,6 @@
 /*
  * @(#)SvgExportOutputFormat.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
 
@@ -32,7 +32,6 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
-import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.svg.TransformFlattener;
 import org.jhotdraw8.svg.io.AbstractFXSvgWriter;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;

@@ -1,6 +1,6 @@
 /*
  * @(#)Figure.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -16,8 +16,13 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.*;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.collection.ImmutableSets;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ReadOnlySet;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;

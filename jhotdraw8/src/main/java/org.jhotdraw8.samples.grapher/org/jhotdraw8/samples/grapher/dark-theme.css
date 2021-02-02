@@ -1,10 +1,15 @@
+/*
+ * @(#)dark-theme.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
+
 .root {
     /* The base color for objects.
      */
     -fx-base: #323232;
 
-   /* Color for highlighting/accenting objects.
-   */
+    /* Color for highlighting/accenting objects.
+    */
     -fx-accent: #3f628a;
 
     /* Used for the inside of text boxes, password boxes, lists, trees, and

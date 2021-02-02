@@ -1,9 +1,14 @@
 /*
+ * @(#)inspector.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
+
+/*
  * Empty Stylesheet file.
  */
 
 .inspector * {
-  -fx-font-size: 13px;
+    -fx-font-size: 13px;
 }
 
 /* A ScrollPane which is placed flush to top right left
@@ -20,7 +25,7 @@
   -fx-background-insets: 0, 0 0 1 0;
 }
 
-/* A ScrollPane which is placed flush 
+/* A ScrollPane which is placed flush
  * should have no borders drawn
  */
 .flushTopRightLeft {

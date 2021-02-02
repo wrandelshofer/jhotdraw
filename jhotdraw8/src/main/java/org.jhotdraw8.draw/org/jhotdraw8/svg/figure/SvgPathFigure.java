@@ -1,6 +1,6 @@
 /*
- * @(#)LineFigure.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SvgPathFigure.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.svg.figure;
 
@@ -12,13 +12,21 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.AbstractLeafFigure;
+import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.PathIterableFigure;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXTransformPathBuilder;
+import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;

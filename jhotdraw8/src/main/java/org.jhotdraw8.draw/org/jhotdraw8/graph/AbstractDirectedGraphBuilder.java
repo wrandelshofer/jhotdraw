@@ -1,6 +1,6 @@
 /*
  * @(#)AbstractDirectedGraphBuilder.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 
@@ -221,7 +221,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
             // move moveArrowId to arrowId
             arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = arrowHeads[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
             arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
-            // if there is a pointer in lastArrows to moveArrowId, make it point to arrowId. 
+            // if there is a pointer in lastArrows to moveArrowId, make it point to arrowId.
             boolean fixed = false;
             for (int v = 0; v < vertexCount; v++) {
                 if (lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] > 0
@@ -231,7 +231,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
                     break;
                 }
             }
-            // if there is a pointer in arrows to moveArrowId, make it point to arrowId. 
+            // if there is a pointer in arrows to moveArrowId, make it point to arrowId.
             if (!fixed) {
                 for (int e = 0; e < arrowCount; e++) {
                     if (arrowHeads[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] == moveArrowId) {

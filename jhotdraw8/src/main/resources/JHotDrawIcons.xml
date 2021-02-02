@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ @(#)JHotDrawIcons.xml
+  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <Drawing xmlns="http://jhotdraw.org/samples/grapher" background="rgba(255,255,255,0)" height="88" id="drawing1"
          width="164">
   <Layer id="content">

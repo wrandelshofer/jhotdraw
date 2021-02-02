@@ -1,6 +1,6 @@
 /*
- * @(#)SimpleXmlIO.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SimpleXmlDomReader.java
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
 
@@ -24,7 +24,6 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.UriResolver;
 import org.jhotdraw8.util.Exceptions;
 import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Attr;
@@ -51,7 +50,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

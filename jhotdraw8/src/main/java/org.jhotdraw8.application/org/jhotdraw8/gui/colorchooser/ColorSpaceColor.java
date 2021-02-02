@@ -1,6 +1,6 @@
 /*
  * @(#)ColorSpaceColor.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.gui.colorchooser;
 

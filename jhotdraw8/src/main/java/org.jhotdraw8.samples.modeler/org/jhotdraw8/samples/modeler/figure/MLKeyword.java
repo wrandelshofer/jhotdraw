@@ -1,6 +1,6 @@
 /*
  * @(#)MLKeyword.java
- * Copyright © 2020 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.samples.modeler.figure;
 
@@ -59,7 +59,7 @@ public enum MLKeyword {
     PRIMITIVE("primitive"),// UML, box header
     PROFILE("profile"),// UML, box header
     REFERENCE("reference"),// UML, dashed-line label
-    REPRESENTATION("representation"),//dashed-line label 
+    REPRESENTATION("representation"),//dashed-line label
     SELECTION("selection"),// UML, note label
     SIGNAL("signal"),// UML, box header
     SINGLE_EXECUTOIN("singleExecution"),// UML, inside box
