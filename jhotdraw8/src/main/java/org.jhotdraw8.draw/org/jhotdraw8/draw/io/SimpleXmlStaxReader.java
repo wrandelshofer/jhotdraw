@@ -214,13 +214,10 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
                         Figure drawing = stack.getFirst();
                         synchronized (drawing) {
                             ImmutableList<URI> listOrNull = drawing.get(figureFactory.getStylesheetsKey());
-                            System.out.println("drawing: " + Integer.toHexString(drawing.hashCode()));
-                            System.out.println("list1:" + listOrNull);
                             List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                             stylesheets.add(uri);
                             drawing.set(figureFactory.getStylesheetsKey(), ImmutableLists.ofCollection(stylesheets));
                             ImmutableList<URI> listOrNull2 = drawing.get(figureFactory.getStylesheetsKey());
-                            System.out.println("list2:" + listOrNull2);
                         }
                     }
                 });
