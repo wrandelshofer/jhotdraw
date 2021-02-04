@@ -9,10 +9,9 @@ module org.jhotdraw8.application {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
     requires java.logging;
-    requires java.desktop;
+    requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
-    requires transitive javafx.swing;
 
     exports org.jhotdraw8.app;
     exports org.jhotdraw8.annotation;

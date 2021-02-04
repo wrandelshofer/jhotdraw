@@ -5,7 +5,6 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -98,6 +97,8 @@ import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+
+import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
 public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
     public final static String SVG_MIME_TYPE = "image/svg+xml";
@@ -738,7 +739,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                ImageIO.write(SwingFXUtils.fromFXImage(node.getImage(), null), "PNG", bout);
+                ImageIO.write(fromFXImage(node.getImage(), null), "PNG", bout);
                 bout.close();
                 byte[] imageData = bout.toByteArray();
 

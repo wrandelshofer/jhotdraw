@@ -11,10 +11,9 @@ module org.jhotdraw8.draw {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
     requires java.logging;
-    requires java.desktop;
+    requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
-    requires transitive javafx.swing;
     requires transitive org.jhotdraw8.application;
 
     opens org.jhotdraw8.draw.inspector;
