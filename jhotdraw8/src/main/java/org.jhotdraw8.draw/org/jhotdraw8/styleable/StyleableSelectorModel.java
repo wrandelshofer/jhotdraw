@@ -84,6 +84,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
     @Override
     public boolean hasPseudoClass(@NonNull Styleable element, @NonNull String pseudoClass) {
+        // Warning: PseudoClass is not thread safe!
         return element.getPseudoClassStates().contains(PseudoClass.getPseudoClass(pseudoClass));
     }
 

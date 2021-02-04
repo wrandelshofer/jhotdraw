@@ -47,6 +47,7 @@ import org.jhotdraw8.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.tree.TreePresentationModel;
 import org.jhotdraw8.xml.text.XmlWordListConverter;
+import org.jhotdraw8.xml.text.XmlWordSetConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,7 +78,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreePresentationModel<Figure> model;
     private Node node;
     @FXML
-    private TreeTableColumn<Figure, ImmutableSet<PseudoClass>> pseudoClassesColumn;
+    private TreeTableColumn<Figure, ImmutableSet<String>> pseudoClassesColumn;
     @FXML
     private TreeTableColumn<Figure, ImmutableList<String>> styleClassesColumn;
     private final InvalidationListener treeSelectionHandler = change -> {
@@ -98,6 +99,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     @NonNull
     private final XmlWordListConverter wordListConverter = new XmlWordListConverter();
+    private final XmlWordSetConverter wordSetConverter = new XmlWordSetConverter();
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
@@ -151,12 +153,12 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 }
         );
         // Type arguments needed for Java 8!
-        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<PseudoClass>>((DrawingModel) model.getTreeModel(),
-                        cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS_STATES) {
+        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<String>>((DrawingModel) model.getTreeModel(),
+                        cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
                     @Nullable
                     @Override
-                    public ImmutableSet<PseudoClass> getValue() {
-                        return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
+                    public ImmutableSet<String> getValue() {
+                        return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClass());
                     }
                 }
         );
@@ -276,11 +278,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 };
             }
         });
-        CssSetConverter<PseudoClass> pseudoClassConverter = new CssSetConverter<>(new CssPseudoClassConverter(false));
         // Type arguments needed for Java 8!
-        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<Figure, ImmutableSet<PseudoClass>>() {
+        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<Figure, ImmutableSet<String>>() {
             {
-                setConverter(new StringConverterAdapter<>(pseudoClassConverter));
+                setConverter(new StringConverterAdapter<ImmutableSet<String>>(wordSetConverter));
             }
 
         });

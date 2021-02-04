@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.PseudoClass;
@@ -11,15 +12,13 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
-import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.key.ObservableWordListKey;
+import org.jhotdraw8.draw.key.ObservableWordSetKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.reflect.TypeToken;
 
 /**
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
@@ -53,9 +52,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @NonNull
-    ObjectFigureKey<ImmutableSet<PseudoClass>> PSEUDO_CLASS_STATES = new ObjectFigureKey<>("pseudoClassStates",
-            new TypeToken<ImmutableSet<PseudoClass>>() {
-            }, ImmutableSets.emptySet());
+    ObservableWordSetKey PSEUDO_CLASS = new ObservableWordSetKey("pseudoClass", ImmutableSets.emptySet());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.
@@ -108,8 +105,18 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
+    default ObservableSet<String> getPseudoClass() {
+        return getNonNull(PSEUDO_CLASS).asObservableSet();
+    }
+
+    @Override
     default ObservableSet<PseudoClass> getPseudoClassStates() {
-        return getNonNull(PSEUDO_CLASS_STATES).asObservableSet();
+        // Note: PseudoClass is not thread safe
+        ObservableSet<PseudoClass> pseudoClasses = FXCollections.observableSet();
+        for (String str : getNonNull(PSEUDO_CLASS)) {
+            pseudoClasses.add(PseudoClass.getPseudoClass(str));
+        }
+        return pseudoClasses;
     }
 
     @Nullable

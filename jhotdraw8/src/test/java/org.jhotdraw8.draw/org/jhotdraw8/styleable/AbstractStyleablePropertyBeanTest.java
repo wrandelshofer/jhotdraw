@@ -98,6 +98,13 @@ public class AbstractStyleablePropertyBeanTest {
         public ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
+
+        @Override
+        public ObservableSet<String> getPseudoClass() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+
     }
 
 }

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.styleable;
 
+import javafx.collections.ObservableSet;
+import javafx.css.PseudoClass;
 import javafx.css.StyleOrigin;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
@@ -118,5 +120,19 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @return True if a value is present.
      */
     <T> boolean containsMapAccessor(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key);
+
+    /**
+     * Return the pseudo-classes of this Styleable. CSS assumes this set is read-only.
+     * <p>
+     * The pseudo classes should be the same as the ones returned by
+     * {@link Styleable#getPseudoClassStates()}.
+     * <p>
+     * The constructor of {@link PseudoClass} is not thread safe, this is why
+     * this method should be preferred over {@link Styleable#getPseudoClassStates()}.
+     *
+     * @return the pseudo-classes
+     */
+    @NonNull
+    ObservableSet<String> getPseudoClass();
 
 }

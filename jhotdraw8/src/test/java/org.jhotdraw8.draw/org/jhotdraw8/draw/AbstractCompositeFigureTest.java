@@ -205,6 +205,10 @@ public class AbstractCompositeFigureTest {
         public ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
+        @Override
+        public ObservableSet<String> getPseudoClass() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
 
         @Override
         public boolean isDeletable() {

@@ -223,8 +223,9 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             return true;
         }
 
+        // XXX Pseudo class is not thread safe!
         // XXX we unnecessarily create many pseudo class states!
-        return element.getPseudoClassStates().contains(PseudoClass.getPseudoClass(pseudoClass));
+            return element.getPseudoClass().contains(pseudoClass);
     }
 
     @Override

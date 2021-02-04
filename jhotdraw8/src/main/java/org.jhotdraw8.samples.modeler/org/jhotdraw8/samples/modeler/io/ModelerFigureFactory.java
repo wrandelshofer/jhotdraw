@@ -223,7 +223,7 @@ public class ModelerFigureFactory extends AbstractFigureFactory {
         addConverter(BezierFigure.PATH, new XmlBezierNodeListConverter(true));
         addConverter(SecondStrokableFigure.SECOND_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
 
-        removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
+        removeKey(StyleableFigure.PSEUDO_CLASS);
 
         addConverterForType(MLCompartmentalizedData.class, new XmlUmlCompartmentalizedDataConverter(false));
 

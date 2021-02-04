@@ -214,7 +214,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(MarkerStrokableFigure.MARKER_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
 
-        removeKey(StyleableFigure.PSEUDO_CLASS_STATES);
+        removeKey(StyleableFigure.PSEUDO_CLASS);
 
         checkConverters();
     }
