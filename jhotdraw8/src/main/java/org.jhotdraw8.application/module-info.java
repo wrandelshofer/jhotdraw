@@ -13,7 +13,6 @@ module org.jhotdraw8.application {
     requires transitive java.prefs;
     requires transitive javafx.fxml;
     requires transitive javafx.swing;
-    requires jdk.javadoc;
 
     exports org.jhotdraw8.app;
     exports org.jhotdraw8.annotation;

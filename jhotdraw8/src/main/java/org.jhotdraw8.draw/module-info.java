@@ -15,7 +15,6 @@ module org.jhotdraw8.draw {
     requires transitive java.prefs;
     requires transitive javafx.fxml;
     requires transitive javafx.swing;
-    requires jdk.javadoc;
     requires transitive org.jhotdraw8.application;
 
     opens org.jhotdraw8.draw.inspector;
