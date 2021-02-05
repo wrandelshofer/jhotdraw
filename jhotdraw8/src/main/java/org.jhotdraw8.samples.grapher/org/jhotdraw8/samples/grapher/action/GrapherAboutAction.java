@@ -6,6 +6,10 @@ package org.jhotdraw8.samples.grapher.action;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
@@ -61,23 +65,27 @@ public class GrapherAboutAction extends AbstractApplicationAction {
         String license = app.get(LICENSE_KEY);
 
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                (vendor == null ? "" : vendor)
-                        + (license == null ? "" : "\n" + license)
-                        + "\n\nRunning on"
-                        + "\n  Java: " + System.getProperty("java.version")
-                        + ", " + System.getProperty("java.vendor")
-                        + "\n  JVM: " + System.getProperty("java.vm.version")
-                        + ", " + System.getProperty("java.vm.vendor")
-                        + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
-                        + ", " + System.getProperty("os.arch")
-                        + "\n\nModules:"
-                        + "\n"
-                        + getDependencies()
-        );
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        VBox graphic = new VBox();
+        TextArea textArea = new TextArea(
+                (name == null ? "unnamed" : name) + (version == null ? "" : " " + version)
+                +  (vendor == null ? "" :"\n" + vendor)
+                + (license == null ? "" : "\n" + license)
+                + "\n\nRunning on"
+                + "\n  Java: " + System.getProperty("java.version")
+                + ", " + System.getProperty("java.vendor")
+                + "\n  JVM: " + System.getProperty("java.vm.version")
+                + ", " + System.getProperty("java.vm.vendor")
+                + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
+                + ", " + System.getProperty("os.arch")
+                + "\n\nModules:\n"
+                + getDependencies());
+        textArea.setEditable(false);
+        graphic.getChildren().add(textArea);
+        alert.setGraphic(graphic);
         alert.getDialogPane().setMaxWidth(640.0);
-        alert.setHeaderText((name == null ? "unnamed" : name) + (version == null ? "" : " " + version));
-        alert.setGraphic(null);
+        alert.setHeaderText("");
+        //alert.setGraphic(null);
         alert.initModality(Modality.NONE);
         alert.showingProperty().addListener((observable, oldValue, newValue) -> {
                     if (!newValue) {

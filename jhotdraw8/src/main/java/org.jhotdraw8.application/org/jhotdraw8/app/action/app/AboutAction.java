@@ -39,10 +39,6 @@ public static final String ID = "application.about";
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
-        if (app == null) {
-            return;
-        }
-
         addDisabler(this);
 
         String name = app.get(NAME_KEY);

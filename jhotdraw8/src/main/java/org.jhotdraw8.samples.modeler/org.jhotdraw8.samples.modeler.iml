@@ -12,5 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="org.jhotdraw8.draw" />
+    <orderEntry type="library" scope="TEST" name="org.junit.jupiter:junit-jupiter:5.5.2" level="project" />
   </component>
 </module>
