@@ -254,11 +254,11 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
      * is null, is too small or of a type which the image pixels cannot
      * be easily converted into.
      *
-     * @param img the JavaFX {@code Image} to be converted
+     * @param img  the JavaFX {@code Image} to be converted
      * @param bimg an optional {@code BufferedImage} object that may be
-     *        used to store the returned pixel data
+     *             used to store the returned pixel data
      * @return a {@code BufferedImage} containing a snapshot of the JavaFX
-     *         {@code Image}, or null if the {@code Image} is not readable.
+     * {@code Image}, or null if the {@code Image} is not readable.
      */
     public static BufferedImage fromFXImage(Image img, BufferedImage bimg) {
         // This method has been copied from class SwingFXUtils.
@@ -304,13 +304,13 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         if (bimg == null) {
             bimg = new BufferedImage(iw, ih, prefBimgType);
         }
-        DataBufferInt db = (DataBufferInt)bimg.getRaster().getDataBuffer();
+        DataBufferInt db = (DataBufferInt) bimg.getRaster().getDataBuffer();
         int data[] = db.getData();
         int offset = bimg.getRaster().getDataBuffer().getOffset();
-        int scan =  0;
+        int scan = 0;
         SampleModel sm = bimg.getRaster().getSampleModel();
         if (sm instanceof SinglePixelPackedSampleModel) {
-            scan = ((SinglePixelPackedSampleModel)sm).getScanlineStride();
+            scan = ((SinglePixelPackedSampleModel) sm).getScanlineStride();
         }
 
         WritablePixelFormat<IntBuffer> pf = getAssociatedPixelFormat(bimg);
@@ -320,11 +320,10 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     //
     private static boolean checkFXImageOpaque(PixelReader pr, int iw, int ih) {
-        // This method has been copied from class SwingFXUtils.
-        for (int x = 0; x < iw; x++) {
-            for (int y = 0; y < ih; y++) {
-                Color color = pr.getColor(x,y);
-                if (color.getOpacity() != 1.0) {
+        for (int y = 0; y < ih; y++) {
+            for (int x = 0; x < iw; x++) {
+                int argb = pr.getArgb(x, y);
+                if ((argb & 0xff000000) != 0xff000000) {
                     return false;
                 }
             }
@@ -338,8 +337,8 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
      * as a potential default storage space if it is not null and is compatible.
      *
      * @param fxFormat the PixelFormat of the source FX Image
-     * @param bimg an optional existing {@code BufferedImage} to be used
-     *             for storage if it is compatible, or null
+     * @param bimg     an optional existing {@code BufferedImage} to be used
+     *                 for storage if it is compatible, or null
      * @return
      */
     static int
@@ -352,8 +351,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
                     bimgType == BufferedImage.TYPE_INT_ARGB_PRE ||
                     (isOpaque &&
                             (bimgType == BufferedImage.TYPE_INT_BGR ||
-                                    bimgType == BufferedImage.TYPE_INT_RGB)))
-            {
+                                    bimgType == BufferedImage.TYPE_INT_RGB))) {
                 // We will allow the caller to give us a BufferedImage
                 // that has an alpha channel, but we might not otherwise
                 // construct one ourselves.
