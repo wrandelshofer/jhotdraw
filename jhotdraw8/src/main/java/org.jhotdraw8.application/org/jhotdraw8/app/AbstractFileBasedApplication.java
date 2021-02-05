@@ -15,6 +15,7 @@ import javafx.collections.ObservableMap;
 import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
@@ -22,6 +23,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -220,7 +223,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 v -> menuItemMap.computeIfAbsent(v, k -> {
                     final CheckMenuItem menuItem = new CheckMenuItem();
                     menuItem.textProperty().bind(
-                            CustomBinding.formatted(getLabels().getString("frame.title"),
+                            CustomBinding.formatted(getResources().getString("frame.title"),
                                     v.titleProperty(), get(NAME_KEY), v.disambiguationProperty(), new SimpleBooleanProperty())
                     );
                     menuItem.setOnAction(evt -> {
@@ -270,16 +273,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     }
 
     /**
-     * Gets the resource bundle.
-     *
-     * @return the resource bundle
-     */
-    protected Resources getLabels() {
-        return ApplicationLabels.getResources();
-    }
-
-
-    /**
      * Called immediately when a views needs to be activated.
      *
      * @param view the view
@@ -316,7 +309,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 activeActivity.set(activity);
             }
         });
-        stage.titleProperty().bind(CustomBinding.formatted(getLabels().getString("frame.title"),
+        stage.titleProperty().bind(CustomBinding.formatted(getResources().getString("frame.title"),
                 activity.titleProperty(), get(NAME_KEY), activity.disambiguationProperty(), activity.modifiedProperty()));
         activity.titleProperty().addListener(this::onTitleChanged);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
@@ -386,6 +379,10 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         }
         Scene scene = new Scene(borderPane);
         scene.getStylesheets().addAll(getStylesheets());
+        Node frameIcon = getResources().getSmallIconProperty("frame", getClass());
+        if (frameIcon instanceof ImageView) {
+            stage.getIcons().setAll(((ImageView) frameIcon).getImage());
+        }
 
         stage.setScene(scene);
         return stage;

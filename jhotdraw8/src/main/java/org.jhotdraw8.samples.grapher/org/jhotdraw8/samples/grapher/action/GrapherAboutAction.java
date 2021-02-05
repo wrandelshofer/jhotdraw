@@ -5,12 +5,15 @@
 package org.jhotdraw8.samples.grapher.action;
 
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Window;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
@@ -53,17 +56,10 @@ public class GrapherAboutAction extends AbstractApplicationAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
-        if (app == null) {
-            return;
-        }
-
-        addDisabler(this);
-
         String name = app.get(NAME_KEY);
         String version = app.get(VERSION_KEY);
         String vendor = app.get(COPYRIGHT_KEY);
         String license = app.get(LICENSE_KEY);
-
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         VBox graphic = new VBox();
@@ -85,14 +81,12 @@ public class GrapherAboutAction extends AbstractApplicationAction {
         alert.setGraphic(graphic);
         alert.getDialogPane().setMaxWidth(640.0);
         alert.setHeaderText("");
-        //alert.setGraphic(null);
-        alert.initModality(Modality.NONE);
-        alert.showingProperty().addListener((observable, oldValue, newValue) -> {
-                    if (!newValue) {
-                        removeDisabler(this);
-                    }
-                }
-        );
+        if (event.getSource() instanceof Node) {
+            Scene scene = ((Node) event.getSource()).getScene();
+            Window window = scene==null?null:scene.getWindow();
+            alert.initOwner(window);
+            alert.initModality(Modality.WINDOW_MODAL);
+        }
         alert.getDialogPane().getScene().getStylesheets().addAll(
                 getApplication().getStylesheets()
         );

@@ -200,9 +200,4 @@ public interface Application extends Disableable, PropertyBean {
     default void setResources(@NonNull Resources newValue) {
         resourcesProperty().set(newValue);
     }
-
-
-
-
-
 }
