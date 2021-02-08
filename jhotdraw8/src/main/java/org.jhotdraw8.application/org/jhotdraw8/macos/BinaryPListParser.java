@@ -27,6 +27,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -55,11 +56,12 @@ import java.util.GregorianCalendar;
  */
 public class BinaryPListParser {
 
-    private final static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
     /**
      * Time interval based dates are measured in seconds from 2001-01-01.
      */
-    private final static long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001, 0, 1, 1, 0, 0).getTimeInMillis();
+    private static final long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001,
+            Calendar.JANUARY, 1, 1, 0, 0).getTimeInMillis();
     /**
      * Factory for generating XML data types.
      */
@@ -205,10 +207,9 @@ public class BinaryPListParser {
             return objectTable.get(objref[i]);
         }
 
-        @NonNull
         @Override
-        public String toString() {
-            StringBuffer buf = new StringBuffer("Array{");
+        public @NonNull String toString() {
+            StringBuilder buf = new StringBuilder("Array{");
             for (int i = 0; i < objref.length; i++) {
                 if (i > 0) {
                     buf.append(',');
@@ -217,7 +218,7 @@ public class BinaryPListParser {
                         && objectTable.get(objref[i]) != this) {
                     buf.append(objectTable.get(objref[i]));
                 } else {
-                    buf.append("*" + objref[i]);
+                    buf.append("*").append(objref[i]);
                 }
             }
             buf.append('}');
@@ -242,27 +243,26 @@ public class BinaryPListParser {
             return objectTable.get(objref[i]);
         }
 
-        @NonNull
         @Override
-        public String toString() {
-            StringBuffer buf = new StringBuffer("BPLDict{");
+        public @NonNull String toString() {
+            StringBuilder buf = new StringBuilder("BPLDict{");
             for (int i = 0; i < keyref.length; i++) {
                 if (i > 0) {
                     buf.append(',');
                 }
                 if (keyref[i] < 0 || keyref[i] >= objectTable.size()) {
-                    buf.append("#" + keyref[i]);
+                    buf.append("#").append(keyref[i]);
                 } else if (objectTable.get(keyref[i]) == this) {
-                    buf.append("*" + keyref[i]);
+                    buf.append("*").append(keyref[i]);
                 } else {
                     buf.append(objectTable.get(keyref[i]));
                     //buf.append(keyref[i]);
                 }
                 buf.append(":");
                 if (objref[i] < 0 || objref[i] >= objectTable.size()) {
-                    buf.append("#" + objref[i]);
+                    buf.append("#").append(objref[i]);
                 } else if (objectTable.get(objref[i]) == this) {
-                    buf.append("*" + objref[i]);
+                    buf.append("*").append(objref[i]);
                 } else {
                     buf.append(objectTable.get(objref[i]));
                     //buf.append(objref[i]);
@@ -289,7 +289,7 @@ public class BinaryPListParser {
      */
     public Document parse(@NonNull File file) throws IOException {
         RandomAccessFile raf = null;
-        byte[] buf = null;
+        byte[] buf;
         try {
             raf = new RandomAccessFile(file, "r");
 
@@ -330,20 +330,14 @@ public class BinaryPListParser {
         // Parse the OBJECT TABLE
         // ----------------------
         objectTable = new ArrayList<>();
-        DataInputStream in = null;
-        try {
-            in = new DataInputStream(
-                    pos = new PosByteArrayInputStream(buf));
+        try (DataInputStream in = new DataInputStream(
+                pos = new PosByteArrayInputStream(buf))) {
             parseObjectTable(in);
-        } finally {
-            if (in != null) {
-                in.close();
-            }
         }
 
         // Convert the object table to XML and return it
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
+        DocumentBuilder builder;
         try {
             builder = dbf.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
@@ -365,8 +359,7 @@ public class BinaryPListParser {
         return pos.getPos() + 8;
     }
 
-    @Nullable
-    private PosByteArrayInputStream pos;
+    private @Nullable PosByteArrayInputStream pos;
 
     private static class PosByteArrayInputStream extends ByteArrayInputStream {
 
@@ -806,8 +799,7 @@ public class BinaryPListParser {
             try {
                 datatypeFactory = DatatypeFactory.newInstance();
             } catch (DatatypeConfigurationException ex) {
-                InternalError ie = new InternalError("Can't create XML datatype factory.", ex);
-                throw ie;
+                throw new InternalError("Can't create XML datatype factory.", ex);
             }
         }
         return datatypeFactory;
