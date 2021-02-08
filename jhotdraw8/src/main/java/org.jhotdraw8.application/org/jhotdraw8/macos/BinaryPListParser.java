@@ -731,18 +731,13 @@ public class BinaryPListParser {
      * int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
      */
     private void parseInt(@NonNull DataInputStream in, int count) throws IOException {
-        if (count > 8) {
-            throw new IOException("parseInt: unsupported byte count: " + count);
+        byte[] bytes = new byte[count];
+        in.readFully(bytes);
+        BigInteger bigInteger = new BigInteger(bytes);
+        if (bigInteger.bitLength()>31) {
+            throw new IOException("parseInt: int value has too many bits: " + bigInteger);
         }
-        long value = 0;
-        for (int i = 0; i < count; i++) {
-            int b = in.read();
-            if (b == -1) {
-                throw new IOException("parseInt: Illegal EOF in value");
-            }
-            value = (value << 8) | b;
-        }
-        objectTable.add(value);
+        objectTable.add(bigInteger.intValue());
     }
 
     /**
