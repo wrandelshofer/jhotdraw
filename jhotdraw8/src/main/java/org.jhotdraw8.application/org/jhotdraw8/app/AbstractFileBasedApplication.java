@@ -364,7 +364,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
     protected @NonNull Stage createStage(@NonNull FileBasedActivity activity) {
         Stage stage = new Stage();
-        stage.initStyle(StageStyle.UNIFIED);
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(activity.getNode());
         if (!isSystemMenuSupported) {
