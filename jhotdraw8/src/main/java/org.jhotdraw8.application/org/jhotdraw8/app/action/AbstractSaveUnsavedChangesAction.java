@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
 import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_KEY;
@@ -53,10 +55,10 @@ import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
+    private Logger LOGGER = Logger.getLogger(AbstractSaveUnsavedChangesAction.class.getName());
 
 
-@Nullable
-    private Node oldFocusOwner = null;
+    private @Nullable Node oldFocusOwner = null;
 
     /**
      * Creates a new instance.
@@ -72,8 +74,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         onActionOnViewPerformed(activity);
     }
 
-    @Nullable
-    protected URIChooser getChooser(FileBasedActivity view) {
+    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
@@ -145,7 +146,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                 alert.show();
             } else {
 
-                doIt(v).thenRun(() -> {
+                doIt(v).whenComplete((result, exception) -> {
                     // FIXME check success
                     v.removeDisabler(workState);
                     if (oldFocusOwner != null) {
@@ -156,14 +157,13 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    @Nullable
-    protected Node getFocusOwner(@NonNull Node node) {
+    protected @Nullable Node getFocusOwner(@NonNull Node node) {
 
         Scene scene = node.getScene();
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected void saveView(@NonNull final FileBasedActivity v, WorkState workState) {
+    protected void saveView(final @NonNull FileBasedActivity v, WorkState workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -201,7 +201,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    protected void saveViewToURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
+    protected void saveViewToURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
         v.write(uri, dataFormat, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
@@ -209,7 +209,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                     oldFocusOwner.requestFocus();
                 }
             } else if (exception != null) {
-                Throwable value = exception;
+                LOGGER.log(Level.WARNING, exception, () -> "Couldn't save file: " + uri);
                 Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);

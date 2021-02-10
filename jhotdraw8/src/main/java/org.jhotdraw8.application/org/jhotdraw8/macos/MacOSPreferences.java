@@ -160,7 +160,8 @@ public class MacOSPreferences {
     }
 
     private static boolean isOSX() {
-        return true;
+        final String osName = System.getProperty("os.name");
+        return osName != null && osName.toLowerCase().startsWith("mac");
     }
 
     private static void updateCache(@NonNull File file, @NonNull HashMap<String, Object> cache) {

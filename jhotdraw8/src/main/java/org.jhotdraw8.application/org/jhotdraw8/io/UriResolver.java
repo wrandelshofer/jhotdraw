@@ -29,7 +29,7 @@ public class UriResolver  {
         // Paths is better at relativizing URIs than URI.relativize().
         if ("file".equals(base.getScheme()) &&
                 ("file".equals(relativized.getScheme()) || relativized.getScheme() == null)) {
-            Path other = Paths.get(relativized.getPath());
+            Path other = Paths.get(relativized);
             Path relativizedPath;
             if (other.isAbsolute()) {
                 relativizedPath = Paths.get(base).relativize(other);
