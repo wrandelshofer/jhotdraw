@@ -13,6 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssStop;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +42,11 @@ public class CssLinearGradient implements Paintable {
         this.proportional = proportional;
         this.cycleMethod = cycleMethod;
         this.cstops = stops;
+    }
+
+    public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod,
+                             Collection<CssStop> stops) {
+        this(startX, startY, endX, endY, proportional, cycleMethod, stops.toArray(new CssStop[0]));
     }
 
     public CssLinearGradient(@NonNull LinearGradient linearGradient) {

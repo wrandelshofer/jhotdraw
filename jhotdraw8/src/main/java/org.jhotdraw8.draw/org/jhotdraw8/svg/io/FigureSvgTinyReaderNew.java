@@ -5,17 +5,23 @@
 
 package org.jhotdraw8.svg.io;
 
+import javafx.scene.paint.CycleMethod;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.CheckedRunnable;
+import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
+import org.jhotdraw8.css.CssLinearGradient;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDefaultableValueConverter;
+import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.css.text.CssStop;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -78,6 +84,7 @@ import java.util.stream.Collectors;
  */
 public class FigureSvgTinyReaderNew {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+    public static final String XML_NAMESPACE = "http://www.w3.org/2000/svg";
     private static final Logger LOGGER = Logger.getLogger(FigureSvgTinyReaderNew.class.getName());
     /**
      * Maps from an attribute name to an accessor.
@@ -87,6 +94,13 @@ public class FigureSvgTinyReaderNew {
      * Maps from an element name to a figure factory.
      */
     private final Map<QName, Supplier<Figure>> figureMap = new LinkedHashMap<>();
+
+    /**
+     * Converters for non-figure elements.
+     */
+    private final CssSizeConverter sizeConverter = new CssSizeConverter(true);
+
+    private final CssColorConverter colorConverter = new CssColorConverter(true);
     /**
      * Maps from a type to a converter.
      */
@@ -173,9 +187,10 @@ public class FigureSvgTinyReaderNew {
     }
 
     public Figure read(@NonNull InputStream in, @NonNull URI documentHome) throws IOException {
-    return     read(new StreamSource(in));
+        return read(new StreamSource(in));
     }
-        public Figure read(@NonNull Source in) throws IOException {
+
+    public Figure read(@NonNull Source in) throws IOException {
         try {
 
             XMLInputFactory dbf = XMLInputFactory.newInstance();
@@ -197,21 +212,21 @@ public class FigureSvgTinyReaderNew {
             Loop:
             while (true) {
                 switch (r.next()) {
-                case XMLStreamReader.END_DOCUMENT:
-                    break Loop;
-                case XMLStreamReader.START_ELEMENT:
-                    if (SVG_NAMESPACE.equals(r.getNamespaceURI())
-                            && "svg".equals(r.getLocalName())) {
-                        root = readElement(r, null, ctx);
-                    }
-                    break Loop;
-                case XMLStreamConstants.DTD:
-                case XMLStreamConstants.COMMENT:
-                case XMLStreamConstants.PROCESSING_INSTRUCTION:
-                case XMLStreamConstants.CHARACTERS:
-                    break;
-                default:
-                    throw new XMLStreamException("Expected an <svg> element. Found: " + r.getEventType());
+                    case XMLStreamReader.END_DOCUMENT:
+                        break Loop;
+                    case XMLStreamReader.START_ELEMENT:
+                        if (SVG_NAMESPACE.equals(r.getNamespaceURI())
+                                && "svg".equals(r.getLocalName())) {
+                            root = readElement(r, null, ctx);
+                        }
+                        break Loop;
+                    case XMLStreamConstants.DTD:
+                    case XMLStreamConstants.COMMENT:
+                    case XMLStreamConstants.PROCESSING_INSTRUCTION:
+                    case XMLStreamConstants.CHARACTERS:
+                        break;
+                    default:
+                        throw new XMLStreamException("Expected an <svg> element. Found: " + r.getEventType());
                 }
             }
             if (root == null) {
@@ -286,19 +301,19 @@ public class FigureSvgTinyReaderNew {
         Loop:
         while (true) {
             switch (r.next()) {
-            case XMLStreamReader.END_DOCUMENT:
-            case XMLStreamReader.END_ELEMENT:
-                break Loop;
-            case XMLStreamReader.START_ELEMENT:
-                readElement(r, parent, ctx);
-                break;
-            case XMLStreamConstants.DTD:
-            case XMLStreamConstants.COMMENT:
-            case XMLStreamConstants.PROCESSING_INSTRUCTION:
-            case XMLStreamConstants.CHARACTERS:
-                break;
-            default:
-                throw new XMLStreamException("Expected an element. Found: " + r.getEventType());
+                case XMLStreamReader.END_DOCUMENT:
+                case XMLStreamReader.END_ELEMENT:
+                    break Loop;
+                case XMLStreamReader.START_ELEMENT:
+                    readElement(r, parent, ctx);
+                    break;
+                case XMLStreamConstants.DTD:
+                case XMLStreamConstants.COMMENT:
+                case XMLStreamConstants.PROCESSING_INSTRUCTION:
+                case XMLStreamConstants.CHARACTERS:
+                    break;
+                default:
+                    throw new XMLStreamException("Expected an element. Found: " + r.getEventType());
             }
         }
     }
@@ -321,19 +336,24 @@ public class FigureSvgTinyReaderNew {
                 }
                 return node;
             } else {
-                switch (localName) {
-                case "title":
-                    readTitle(r, parent, ctx);
-                    return parent;
-                case "desc":
-                    readDesc(r, parent, ctx);
-                    return parent;
-                case "style":
-                    readStyle(r, parent, ctx);
-                    return parent;
-                default:
-                    logWarning(r, "Don't understand SVG element: " + localName + ".");
-                    readChildElements(r, parent, ctx);
+                switch (localName == null ? "" : localName) {
+                    case "title":
+                        readTitle(r, parent, ctx);
+                        return parent;
+                    case "desc":
+                        readDesc(r, parent, ctx);
+                        return parent;
+                    case "style":
+                        readStyle(r, parent, ctx);
+                        return parent;
+                    case "linearGradient":
+                        readLinearGradient(r, parent, ctx);
+                        return parent;
+                    case "text":
+                        return parent;
+                    default:
+                        logWarning(r, "Don't understand SVG element: " + localName + ".");
+                        readChildElements(r, parent, ctx);
                 }
             }
         } else {
@@ -341,6 +361,154 @@ public class FigureSvgTinyReaderNew {
             skipElement(r, ctx);
         }
         return null;
+    }
+
+    private void readLinearGradient(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
+        String id = null;
+        boolean proportional = true;
+        CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
+        CssSize x1 = CssSize.ZERO;
+        CssSize x2 = CssSize.ZERO;
+        CssSize y1 = CssSize.ONE;
+        CssSize y2 = CssSize.ZERO;
+        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
+            String namespace = r.getAttributeNamespace(i);
+            if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
+                String localName = r.getAttributeLocalName(i);
+                String value = r.getAttributeValue(i);
+                try {
+                    switch (localName) {
+                        case "id":
+                            id = value;
+                            break;
+                        case "gradientUnits":
+                            switch (value) {
+                                case "userSpaceOnUse":
+                                    proportional = false;
+                                    break;
+                                case "objectBoundingBox":
+                                    proportional = true;
+                                    break;
+                                default:
+                                    logWarning(r, "linearGradient: Unsupported gradientUnits=\"" + value + "=\"");
+                                    break;
+                            }
+                            break;
+                        case "spreadMethod":
+                            switch (value) {
+                                case "pad":
+                                    cycleMethod = CycleMethod.NO_CYCLE;
+                                    break;
+                                case "reflect":
+                                    cycleMethod = CycleMethod.REFLECT;
+                                    break;
+                                case "repeat":
+                                    cycleMethod = CycleMethod.REPEAT;
+                                    break;
+                                default:
+                                    logWarning(r, "linearGradient: Unsupported spreadMethod=\"" + value + "=\"");
+                                    break;
+                            }
+                            break;
+
+                        case "x1":
+                            x1 = sizeConverter.fromString(value);
+                            break;
+                        case "x2":
+                            x2 = sizeConverter.fromString(value);
+                            break;
+                        case "y1":
+                            y1 = sizeConverter.fromString(value);
+                            break;
+                        case "y2":
+                            y2 = sizeConverter.fromString(value);
+                            break;
+                        default:
+                            logWarning(r, "linearGradient: Skipping SVG attribute " + localName);
+                            break;
+                    }
+                } catch (ParseException | IOException e) {
+                    logWarning(r, "linearGradient: Could not parse attribute " + localName + "=\"" + value + "\"W");
+                }
+            } else {
+                logWarning(r, "linearGradient: Skipping foreign attribute " + r.getAttributeName(i));
+            }
+        }
+
+        final List<CssStop> stops = readStops(r, ctx);
+        if (id != null && x1 != null && y1 != null && x2 != null && y2 != null) {
+            ctx.idFactory.putIdAndObject(id,
+                    new CssLinearGradient(x1.getConvertedValue(), y1.getConvertedValue(), x2.getConvertedValue(), y2.getConvertedValue(),
+                            proportional, cycleMethod, stops));
+        }
+    }
+
+    private List<CssStop> readStops(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        List<CssStop> stops = new ArrayList<>();
+        int depth = 1;// we are currently inside START_ELEMENT
+        Loop:
+        while (true) {
+            switch (r.next()) {
+                case XMLStreamReader.START_ELEMENT:
+                    if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
+                        final String localName = r.getLocalName();
+                        switch (localName == null ? "" : localName) {
+                            case "stop":
+                                final CssStop cssStop = readStop(r, ctx);
+                                if (cssStop != null) stops.add(cssStop);
+                                break;
+                            default:
+                                logWarning(r, "Skipping SVG element " + r.getName() + ".");
+                                break;
+                        }
+                    } else {
+                        LOGGER.fine("Skipping foreign element " + r.getName() + ".");
+                    }
+                    depth++;
+                    break;
+                case XMLStreamReader.END_ELEMENT:
+                    depth--;
+                    if (depth == 0) {
+                        break Loop;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return stops;
+    }
+
+    private CssStop readStop(XMLStreamReader r, Context ctx) throws XMLStreamException {
+        CssColor stopColor = null;
+        CssSize offset = null;
+        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
+            String namespace = r.getAttributeNamespace(i);
+            if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
+                String localName = r.getAttributeLocalName(i);
+                String value = r.getAttributeValue(i);
+                try {
+                    switch (localName) {
+                        case "stop-color":
+                            stopColor = colorConverter.fromString(value);
+                            break;
+                        case "offset":
+                            offset = sizeConverter.fromString(value);
+                            break;
+                        default:
+                            logWarning(r, "stop: Skipping SVG attribute " + localName);
+                            break;
+                    }
+                } catch (ParseException | IOException e) {
+                    logWarning(r, "stop: Could not parse attribute " + localName + "=\"" + value + "\"W");
+                }
+            } else {
+                logWarning(r, "stop: Skipping foreign attribute " + r.getAttributeName(i));
+            }
+        }
+        if (stopColor != null && offset != null) {
+            return new CssStop(offset.getConvertedValue(), stopColor);
+        } else return null;
     }
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
@@ -353,18 +521,18 @@ public class FigureSvgTinyReaderNew {
                 String localName = r.getAttributeLocalName(i);
                 String value = r.getAttributeValue(i);
                 switch (localName) {
-                case "id":
-                    id = value;
-                    break;
-                case "type":
-                    type = value;
-                    break;
-                case "media":
-                    media = value;
-                    break;
-                default:
-                    logWarning(r, "Skipping SVG attribute " + localName);
-                    break;
+                    case "id":
+                        id = value;
+                        break;
+                    case "type":
+                        type = value;
+                        break;
+                    case "media":
+                        media = value;
+                        break;
+                    default:
+                        logWarning(r, "Skipping SVG attribute " + localName);
+                        break;
                 }
             } else {
                 logWarning(r, "Skipping foreign attribute " + r.getAttributeName(i));
@@ -382,25 +550,25 @@ public class FigureSvgTinyReaderNew {
         Loop:
         for (int eventType = r.next(); eventType != XMLStreamConstants.END_DOCUMENT; eventType = r.next()) {
             switch (eventType) {
-            case XMLStreamConstants.CHARACTERS:
-            case XMLStreamConstants.CDATA:
-            case XMLStreamConstants.SPACE:
-                if (depth == 1) {
-                    buf.append(r.getText());
-                }
-                break;
-            case XMLStreamConstants.START_ELEMENT:
-                readElement(r, parent, ctx);
-                depth++;
-                break;
-            case XMLStreamConstants.END_ELEMENT:
-                depth--;
-                if (depth == 0) {
-                    break Loop;
-                }
-                break;
-            default:
-                break;
+                case XMLStreamConstants.CHARACTERS:
+                case XMLStreamConstants.CDATA:
+                case XMLStreamConstants.SPACE:
+                    if (depth == 1) {
+                        buf.append(r.getText());
+                    }
+                    break;
+                case XMLStreamConstants.START_ELEMENT:
+                    readElement(r, parent, ctx);
+                    depth++;
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    depth--;
+                    if (depth == 0) {
+                        break Loop;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         return buf.toString();
@@ -440,25 +608,24 @@ public class FigureSvgTinyReaderNew {
         Loop:
         while (true) {
             switch (r.next()) {
-            case XMLStreamReader.START_ELEMENT:
-                if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
-                    logWarning(r, "Skipping element " + r.getName() + ".");
-                } else {
-                    LOGGER.fine("Skipping element " + r.getName() + ".");
-                }
-                depth++;
-                break;
-            case XMLStreamReader.END_ELEMENT:
-                depth--;
-                if (depth == 0) {
-                    break Loop;
-                }
-                break;
-            default:
-                break;
+                case XMLStreamReader.START_ELEMENT:
+                    if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
+                        logWarning(r, "Skipping element " + r.getName() + ".");
+                    } else {
+                        LOGGER.fine("Skipping element " + r.getName() + ".");
+                    }
+                    depth++;
+                    break;
+                case XMLStreamReader.END_ELEMENT:
+                    depth--;
+                    if (depth == 0) {
+                        break Loop;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-
     }
 
     private static class Context {

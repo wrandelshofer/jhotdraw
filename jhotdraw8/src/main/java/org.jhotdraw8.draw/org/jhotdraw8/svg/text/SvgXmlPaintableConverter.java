@@ -37,12 +37,14 @@ public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> im
     public Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Objects.requireNonNull(idResolver);
         if (tt.next() == CssTokenType.TT_URL) {
-            Object object = idResolver.getObject(tt.currentStringNonNull());
-            if (object instanceof Paintable) {
-                return (Paintable) object;
-            } else {
-                throw tt.createParseException("<Paintable> expected.");
+            final String urlString = tt.currentStringNonNull();
+            if (urlString.startsWith("#")) {
+                final Object object = idResolver.getObject(urlString.substring(1));
+                if (object instanceof Paintable) return (Paintable) object;
             }
+            throw new ParseException("Paintable: Could not resolve " + urlString, tt.getStartPosition());
+        } else {
+            tt.pushBack();
         }
         tt.pushBack();
         return cssPaintableConverter.parseNonNull(tt, idResolver);
