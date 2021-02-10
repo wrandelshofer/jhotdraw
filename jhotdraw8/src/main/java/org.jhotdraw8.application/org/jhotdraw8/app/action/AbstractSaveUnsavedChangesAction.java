@@ -202,7 +202,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     protected void saveViewToURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, @Nullable final URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
-        v.write(uri, chooser == null ? null : dataFormat, Collections.emptyMap(), workState).handle((result, exception) -> {
+        v.write(uri, dataFormat, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {
