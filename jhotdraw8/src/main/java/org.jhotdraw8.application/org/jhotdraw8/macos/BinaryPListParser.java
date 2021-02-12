@@ -463,7 +463,7 @@ public class BinaryPListParser {
                 }
                 case 1: {
                     int count = 1 << (marker & 0xf);
-                    parseInt(in, count);
+                    parseInteger(in, count);
                     break;
                 }
                 case 2: {
@@ -723,14 +723,17 @@ public class BinaryPListParser {
     /**
      * int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
      */
-    private void parseInt(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseInteger(@NonNull DataInputStream in, int count) throws IOException {
         byte[] bytes = new byte[count];
         in.readFully(bytes);
         BigInteger bigInteger = new BigInteger(bytes);
-        if (bigInteger.bitLength()>31) {
-            throw new IOException("parseInt: int value has too many bits: " + bigInteger);
+        if (bigInteger.bitLength()<32) {
+            objectTable.add(bigInteger.intValue());
+        } else if (bigInteger.bitLength()<64) {
+            objectTable.add(bigInteger.longValue());
+        }else {
+            objectTable.add(bigInteger);
         }
-        objectTable.add(bigInteger.intValue());
     }
 
     /**

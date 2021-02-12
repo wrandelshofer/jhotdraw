@@ -40,6 +40,9 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.fxml;
     exports org.jhotdraw8.tree;
 
+    // XXX Remove me - this is here for debugging only
+    opens org.jhotdraw8.macos;
+
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;

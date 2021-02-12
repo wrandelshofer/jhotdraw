@@ -52,7 +52,7 @@ public class FXSvgTinyReaderOldTest {
     @BeforeAll
     public static void startJFX() throws InterruptedException, ExecutionException, TimeoutException {
         Platform.setImplicitExit(false);
-        new JFXPanel(); // Initializes the JavaFx Platform
+//        new JFXPanel(); // Initializes the JavaFx Platform
     }
 
 
