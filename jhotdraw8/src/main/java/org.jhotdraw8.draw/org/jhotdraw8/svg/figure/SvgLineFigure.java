@@ -21,6 +21,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.svg.text.SvgShapeRendering;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -33,7 +34,7 @@ import java.awt.geom.PathIterator;
  */
 public class SvgLineFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
-        SvgElementFigure, SvgCompositableFigure {
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -106,23 +107,37 @@ public class SvgLineFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        Line lineNode = (Line) node;
-        applyHideableFigureProperties(ctx, node);
-        applyStyleableFigureProperties(ctx, node);
-        applyTransformableFigureProperties(ctx, node);
-        applySvgDefaultableFigureProperties(ctx, lineNode);
-        applySvgCompositableFigureProperties(ctx,lineNode);
+        Line n = (Line) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double startX = getNonNull(X1).getConvertedValue(unit);
         double startY = getNonNull(Y1).getConvertedValue(unit);
         double endX = getNonNull(X2).getConvertedValue(unit);
         double endY = getNonNull(Y2).getConvertedValue(unit);
-        lineNode.setStartX(startX);
-        lineNode.setStartY(startY);
-        lineNode.setEndX(endX);
-        lineNode.setEndY(endY);
-        lineNode.applyCss();
+        // Zero size disables rendering
+        if (startX==endX&&startY==endY) {
+            n.setVisible(false);
+            return;
+        }
 
+        applyHideableFigureProperties(ctx, node);
+        applyStyleableFigureProperties(ctx, node);
+        applyTransformableFigureProperties(ctx, node);
+        applySvgDefaultableStrokeProperties(ctx, n);
+        applySvgDefaultableCompositingProperties(ctx,n);
+        n.setStartX(startX);
+        n.setStartY(startY);
+        n.setEndX(endX);
+        n.setEndY(endY);
+        n.applyCss();
+
+        // stroke is translated by 0.5 pixels down right
+        SvgShapeRendering shapeRendering = getDefaultableStyled(SHAPE_RENDERING_KEY);
+        if (shapeRendering==SvgShapeRendering.CRISP_EDGES) {
+            // stroke is translated by 0.5 pixels down right
+            // FIXME do this only for stroke and only on low-dpi renderings
+            n.setTranslateX(0.5);
+            n.setTranslateY(0.5);
+        }
     }
 
     @Override

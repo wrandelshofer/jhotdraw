@@ -6,6 +6,7 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -31,6 +32,9 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     public CssMappedConverter(String name, @NonNull Map<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
+    public CssMappedConverter(String name, @NonNull ReadOnlyMap<String, E> fromStringMap) {
+        this(name, fromStringMap, false);
+    }
 
     public CssMappedConverter(String name, @NonNull Map<String, E> fromStringMap, boolean nullable) {
         this.fromStringMap = new LinkedHashMap<>();
@@ -41,6 +45,9 @@ public class CssMappedConverter<E> implements CssConverter<E> {
         }
         this.name = name;
         this.nullable = nullable;
+    }
+    public CssMappedConverter(String name, @NonNull ReadOnlyMap<String, E> fromStringMap, boolean nullable) {
+       this(name,fromStringMap.asMap(),nullable);
     }
 
     @Nullable

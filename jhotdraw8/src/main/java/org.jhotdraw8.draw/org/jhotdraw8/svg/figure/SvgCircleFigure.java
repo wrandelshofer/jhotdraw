@@ -6,11 +6,13 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -19,9 +21,9 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.PathIterator;
 
 /**
@@ -43,37 +45,27 @@ public class SvgCircleFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Circle n = new Circle();
-        n.setManaged(false);
-        return n;
+        Group g=new Group();
+        Circle n0 = new Circle();
+        Circle n1 = new Circle();
+        n0.setManaged(false);
+        n1.setManaged(false);
+        g.getChildren().addAll(n0,n1);
+        return g;
     }
+
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        Circle shape = new Circle();
-        shape.setCenterX(getStyledNonNull(CX).getConvertedValue());
-        shape.setCenterY(getStyledNonNull(CY).getConvertedValue());
-        /*
-        double strokeWidth = getStyledNonNull(STROKE_WIDTH).getConvertedValue();
-        double offset;
-        switch (getStyledNonNull(STROKE_TYPE)) {
-        case CENTERED:
-        default:
-            offset = 0;
-            break;
-        case INSIDE:
-            offset = -strokeWidth * 0.5;
-            break;
-        case OUTSIDE:
-            offset = strokeWidth * 0.5;
-            break;
-        }
-        shape.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue() + offset);
-        shape.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue() + offset);
+        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        double r = getStyledNonNull(R).getConvertedValue(unit);
+        Ellipse2D.Double shape=new Ellipse2D.Double(
+                getStyledNonNull(CX).getConvertedValue(unit)-r,
+                getStyledNonNull(CY).getConvertedValue(unit)-r,
+                r*2,r*2
+        );
 
-         */
-        shape.setRadius(getStyledNonNull(R).getConvertedValue());
-        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
+        return shape.getPathIterator(tx);
     }
 
 
@@ -113,23 +105,33 @@ public class SvgCircleFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        Circle n = (Circle) node;
-        double r = getStyledNonNull(R).getConvertedValue();
-        if (r == 0) {
+        Group g=(Group)node;
+        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        double r = getStyledNonNull(R).getConvertedValue(unit);
+        if (r <= 0) {
             // r==0 disables rendering
-            n.setVisible(false);
+            g.setVisible(false);
             return;
         }
-        applyHideableFigureProperties(ctx, node);
-        applyStyleableFigureProperties(ctx, node);
-        applyTransformableFigureProperties(ctx, node);
-        applySvgDefaultableFigureProperties(ctx, n);
-        n.setCenterX(getStyledNonNull(CX).getConvertedValue());
-        n.setCenterY(getStyledNonNull(CY).getConvertedValue());
-        n.setRadius(r);
-        n.applyCss();
+        Circle n0 = (Circle) g.getChildren().get(0);
+        Circle n1 = (Circle) g.getChildren().get(1);
 
+        applyHideableFigureProperties(ctx, g);
+        applyStyleableFigureProperties(ctx, g);
+        applyTransformableFigureProperties(ctx, g);
+        applySvgDefaultableCompositingProperties(ctx,g);
+        applySvgShapeProperties(ctx,n0,n1);
 
+        double cx = getStyledNonNull(CX).getConvertedValue(unit);
+        double cy = getStyledNonNull(CY).getConvertedValue(unit);
+        n0.setCenterX(cx);
+        n0.setCenterY(cy);
+        n0.setRadius(r);
+        n0.applyCss();
+        n1.setCenterX(cx);
+        n1.setCenterY(cy);
+        n1.setRadius(r);
+        n1.applyCss();
     }
 
     @Override

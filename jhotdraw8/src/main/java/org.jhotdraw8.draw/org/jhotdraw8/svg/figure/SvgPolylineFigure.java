@@ -6,6 +6,7 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
@@ -14,6 +15,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -39,7 +41,7 @@ import java.util.List;
  */
 public class SvgPolylineFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
-        SvgElementFigure,SvgCompositableFigure {
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -48,9 +50,13 @@ public class SvgPolylineFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Polyline n = new Polyline();
-        n.setManaged(false);
-        return n;
+        Group g=new Group();
+        Polyline n0 = new Polyline();
+        Polyline n1 = new Polyline();
+        n0.setManaged(false);
+        n1.setManaged(false);
+        g.getChildren().addAll(n0,n1);
+        return g;
     }
 
     @Override
@@ -65,6 +71,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
                     p.lineTo(points.get(i), points.get(i + 1));
                 }
             }
+            p.closePath();
         }
         return p.getPathIterator(tx);
     }
@@ -119,16 +126,24 @@ public class SvgPolylineFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        Polyline n = (Polyline) node;
+        Group g=(Group)node;
+        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        ImmutableList<Double> points = get(POINTS);
+        if (points==null||points.isEmpty()||points.size()%2==1) {
+            g.setVisible(false);
+            return;
+        }
+        Polyline n0 = (Polyline) g.getChildren().get(0);
+        Polyline n1 = (Polyline) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
-        applySvgDefaultableFigureProperties(ctx, n);
-        applySvgCompositableFigureProperties(ctx,n);
+        applySvgDefaultableCompositingProperties(ctx,node);
+        applySvgShapeProperties(ctx,n0,n1);
+        n0.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
+        n1.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
 
-        ImmutableList<Double> points = get(POINTS);
-        n.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
 
     }
 

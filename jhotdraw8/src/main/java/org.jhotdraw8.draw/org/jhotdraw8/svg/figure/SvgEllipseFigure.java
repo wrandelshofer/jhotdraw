@@ -6,11 +6,13 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -19,9 +21,9 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.PathIterator;
 
 /**
@@ -30,8 +32,9 @@ import java.awt.geom.PathIterator;
  * @author Werner Randelshofer
  */
 public class SvgEllipseFigure extends AbstractLeafFigure
-        implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure,
-        SvgElementFigure, SvgDefaultableFigure, SvgCompositableFigure {
+        implements StyleableFigure, LockableFigure, SvgTransformableFigure,
+        PathIterableFigure, HideableFigure, SvgPathLengthFigure,
+        SvgElementFigure, SvgDefaultableFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -43,37 +46,25 @@ public class SvgEllipseFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Ellipse n = new Ellipse();
-        n.setManaged(false);
-        return n;
+        Group g=new Group();
+        Ellipse n0 = new Ellipse();
+        Ellipse n1 = new Ellipse();
+        n0.setManaged(false);
+        n1.setManaged(false);
+        g.getChildren().addAll(n0,n1);
+        return g;
     }
-
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        Ellipse shape = new Ellipse();
-        shape.setCenterX(getStyledNonNull(CX).getConvertedValue());
-        shape.setCenterY(getStyledNonNull(CY).getConvertedValue());
-        /*
-        double strokeWidth = getStyledNonNull(STROKE_WIDTH).getConvertedValue();
-        double offset;
-        switch (getStyledNonNull(STROKE_TYPE)) {
-        case CENTERED:
-        default:
-            offset = 0;
-            break;
-        case INSIDE:
-            offset = -strokeWidth * 0.5;
-            break;
-        case OUTSIDE:
-            offset = strokeWidth * 0.5;
-            break;
-        }
-        shape.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue() + offset);
-        shape.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue() + offset);
-         */
-        shape.setRadiusX(getStyledNonNull(RX).getConvertedValue());
-        shape.setRadiusY(getStyledNonNull(RY).getConvertedValue());
-        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
+        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        double rx = getStyledNonNull(RX).getConvertedValue(unit);
+        double ry = getStyledNonNull(RY).getConvertedValue(unit);
+        Ellipse2D.Double shape=new Ellipse2D.Double(
+                getStyledNonNull(CX).getConvertedValue(unit)-rx,
+                getStyledNonNull(CY).getConvertedValue(unit)-ry,
+                rx*2,ry*2
+        );
+        return shape.getPathIterator(tx);
     }
 
 
@@ -99,7 +90,7 @@ public class SvgEllipseFigure extends AbstractLeafFigure
                 getNonNull(CX).subtract(rx),
                 getNonNull(CY).subtract(ry),
                 rx.multiply(2.0),
-                rx.multiply(2.0));
+                ry.multiply(2.0));
     }
 
     @Override
@@ -119,18 +110,35 @@ public class SvgEllipseFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        Ellipse n = (Ellipse) node;
+        Group g=(Group)node;
+        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        double rx = getStyledNonNull(RX).getConvertedValue(unit);
+        double ry = getStyledNonNull(RY).getConvertedValue(unit);
+        if (rx <= 0||ry<=0) {
+            g.setVisible(false);
+            return;
+        }
+        Ellipse n0 = (Ellipse) g.getChildren().get(0);
+        Ellipse n1 = (Ellipse) g.getChildren().get(1);
+
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
-        applySvgDefaultableFigureProperties(ctx,n);
-        applySvgCompositableFigureProperties(ctx,node);
-        n.setCenterX(getStyledNonNull(CX).getConvertedValue());
-        n.setCenterY(getStyledNonNull(CY).getConvertedValue());
-        n.setRadiusX(getStyledNonNull(RX).getConvertedValue());
-        n.setRadiusY(getStyledNonNull(RY).getConvertedValue());
-        n.applyCss();
+        applySvgDefaultableCompositingProperties(ctx,node);
+        applySvgShapeProperties(ctx,n0,n1);
 
+        double cx = getStyledNonNull(CX).getConvertedValue(unit);
+        double cy = getStyledNonNull(CY).getConvertedValue(unit);
+        n0.setCenterX(cx);
+        n0.setCenterY(cy);
+        n0.setRadiusX(rx);
+        n0.setRadiusY(ry);
+        n0.applyCss();
+        n1.setCenterX(cx);
+        n1.setCenterY(cy);
+        n1.setRadiusX(rx);
+        n1.setRadiusY(ry);
+        n1.applyCss();
     }
 
     @Override

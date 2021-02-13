@@ -92,7 +92,7 @@ public interface TextLayoutableFigure extends Figure {
     }
 
     /**
-     * Updates a Laeled node with fontable properties.
+     * Updates a Labeled node with fontable properties.
      *
      * @param ctx  context
      * @param text a text node

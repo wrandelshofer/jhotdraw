@@ -5,10 +5,14 @@
 
 package org.jhotdraw8.svg.figure;
 
+import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
@@ -16,7 +20,10 @@ import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssDoubleConverter;
+import org.jhotdraw8.css.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssMappedConverter;
+import org.jhotdraw8.css.text.CssPercentageConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
@@ -26,8 +33,13 @@ import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
 import org.jhotdraw8.svg.text.SvgDisplay;
 import org.jhotdraw8.svg.text.SvgFontSize;
 import org.jhotdraw8.svg.text.SvgFontSizeConverter;
+import org.jhotdraw8.svg.text.SvgShapeRendering;
 import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
+import org.jhotdraw8.svg.text.SvgTextAnchor;
 import org.jhotdraw8.svg.text.SvgVisibility;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
+
+import java.util.List;
 
 /**
  * The following attributes can be defined on all SVG figures using the "defaulting"
@@ -62,16 +74,47 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             }, new SvgCssPaintableConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), null);
     /**
+     * stroke-dasharray.
+     * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDasharrayProperty">link</a>
+     */
+    DefaultableStyleableKey<ImmutableList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
+            new TypeToken<CssDefaultableValue<ImmutableList<Double>>>() {
+            }, new CssListConverter<Double>(new CssDoubleConverter(false), ", "),
+            new CssDefaultableValue<ImmutableList<Double>>(CssDefaulting.INHERIT, null), null);
+    /**
+     * stroke-dashoffset.
+     * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDashoffsetProperty">link</a>
+     */
+    DefaultableStyleableKey<Double> STROKE_DASHOFFSET_KEY =
+            new DefaultableStyleableKey<Double>("stroke-dashoffset",
+                    new TypeToken<CssDefaultableValue<Double>>() {
+                    },
+                    new CssPercentageConverter(false),
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
+    /**
      * fill-opacity.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillOpacityProperty">link</a>
      */
-    DefaultableStyleableKey<CssSize> FILL_OPACITY_KEY = new DefaultableStyleableKey<>("fill-opacity",
-            new TypeToken<CssDefaultableValue<CssSize>>() {
-            }, new CssSizeConverter(false),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssSize.ONE);
+    DefaultableStyleableKey<Double> FILL_OPACITY_KEY =
+            new DefaultableStyleableKey<Double>("fill-opacity",
+                    new TypeToken<CssDefaultableValue<Double>>() {
+                    },
+                    new CssPercentageConverter(false),
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
+    /**
+     * stroke-opacity.
+     * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeOpacityProperty">link</a>
+     */
+    DefaultableStyleableKey<Double> STROKE_OPACITY_KEY =
+            new DefaultableStyleableKey<Double>("stroke-opacity",
+                    new TypeToken<CssDefaultableValue<Double>>() {
+                    },
+                    new CssPercentageConverter(false),
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
     /**
      * font-size.
-     * <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">link</a>
+     * <p>
+     * <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">W3 Font Size Property</a>
      */
     DefaultableStyleableKey<SvgFontSize> FONT_SIZE_KEY = new DefaultableStyleableKey<>("font-size",
             new TypeToken<CssDefaultableValue<SvgFontSize>>() {
@@ -79,6 +122,38 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
             new SvgFontSize(SvgFontSize.SizeKeyword.MEDIUM, null)
     );
+    /**
+     * text-anchor.
+     * <p>
+     * <a href="https://www.w3.org/TR/SVGTiny12/text.html#TextAlignmentProperties">
+     * SVG Tiny 1.2, Text Alignment Properties</a>
+     */
+    @NonNull DefaultableStyleableKey<SvgTextAnchor> TEXT_ANCHOR =
+            new DefaultableStyleableKey<SvgTextAnchor>("text-anchor",
+                    new TypeToken<CssDefaultableValue<SvgTextAnchor>>() {
+                    },
+                    new CssEnumConverter<>(SvgTextAnchor.class),
+                    new CssDefaultableValue<>(SvgTextAnchor.START), SvgTextAnchor.START
+            );
+    /**
+     * shape-rendering.
+     * <p>
+     * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#ShapeRenderingProperty">">
+     * SVG Tiny 1.2, The 'shape-rendering' property</a>
+     */
+    @NonNull DefaultableStyleableKey<SvgShapeRendering> SHAPE_RENDERING_KEY =
+            new DefaultableStyleableKey<SvgShapeRendering>("shape-rendering",
+                    new TypeToken<CssDefaultableValue<SvgShapeRendering>>() {
+                    },
+                    new CssMappedConverter<>("shape-rendering",
+                            ImmutableMaps.of("auto", SvgShapeRendering.AUTO,
+                                    "optimizeSpeed", SvgShapeRendering.OPTIMIZE_SPEED,
+                                    "crispEdges", SvgShapeRendering.CRISP_EDGES,
+                                    "geometricPrecision", SvgShapeRendering.GEOMETRIC_PRECISION)),
+                    new CssDefaultableValue<>(SvgShapeRendering.GEOMETRIC_PRECISION), SvgShapeRendering.AUTO
+            );
+
+
     /**
      * stroke-miterlimit.
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#LineJoin">link</a>
@@ -89,6 +164,32 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new CssDoubleConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
             4.0);
+    /**
+     * stroke-linecap.
+     * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#LineJoin">link</a>
+     */
+    DefaultableStyleableKey<StrokeLineCap> STROKE_LINECAP_KEY = new DefaultableStyleableKey<StrokeLineCap>("stroke-linecap",
+            new TypeToken<CssDefaultableValue<StrokeLineCap>>() {
+            },
+            new CssMappedConverter<>("stroke-linecap",
+                    ImmutableMaps.of("butt", StrokeLineCap.BUTT,
+                            "round", StrokeLineCap.ROUND,
+                            "square", StrokeLineCap.SQUARE)),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT),
+            StrokeLineCap.BUTT);
+    /**
+     * stroke-linejoin.
+     * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#LineJoin">link</a>
+     */
+    DefaultableStyleableKey<StrokeLineJoin> STROKE_LINEJOIN_KEY = new DefaultableStyleableKey<StrokeLineJoin>("stroke-linejoin",
+            new TypeToken<CssDefaultableValue<StrokeLineJoin>>() {
+            },
+            new CssMappedConverter<>("stroke-linejoin",
+                    ImmutableMaps.of("miter", StrokeLineJoin.MITER,
+                            "round", StrokeLineJoin.ROUND,
+                            "bevel", StrokeLineJoin.BEVEL)),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT),
+            StrokeLineJoin.MITER);
     /**
      * stroke-width.
      * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#StrokeWidth">link</a>
@@ -148,7 +249,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      *     <dt>SVG 2</dt><dd><a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/render.html#VisibilityControl">link</a></dd>
      * </dl>
      */
-    DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<SvgDisplay>("display",
+    @NonNull DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<SvgDisplay>("display",
             new TypeToken<CssDefaultableValue<SvgDisplay>>() {
             },
             new CssMappedConverter<SvgDisplay>("display",
@@ -158,27 +259,93 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
 
 
     /**
-     * Updates a shape node.
+     * Applies stroke properties to a {@link Shape} node.
      *
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applySvgDefaultableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
-        Paintable fill = getDefaultableStyled(FILL_KEY);
-        shape.setFill(Paintable.getPaint(fill, ctx));
-
+    default void applySvgDefaultableStrokeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         Paintable stroke = getDefaultableStyled(STROKE_KEY);
         shape.setStroke(Paintable.getPaint(stroke, ctx));
 
-        BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
-        if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to nul
-            bmValue = null;
-        }
-        if (shape.getBlendMode() != bmValue) {// Workaround: only set value if different
-            shape.setBlendMode(bmValue);
-        }
-
         CssSize sw = getDefaultableStyledNonNull(STROKE_WIDTH_KEY);
         shape.setStrokeWidth(sw.getConvertedValue(ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY)));
+
+        shape.setOpacity(getDefaultableStyledNonNull(STROKE_OPACITY_KEY));
+
+        SvgShapeRendering shapeRendering = getDefaultableStyled(SHAPE_RENDERING_KEY);
+        if (shapeRendering == SvgShapeRendering.CRISP_EDGES) {
+            // stroke is translated by 0.5 pixels down right
+            shape.setTranslateX(0.5);
+            shape.setTranslateY(0.5);
+        }
+        shape.setStrokeLineCap(getDefaultableStyledNonNull(STROKE_LINECAP_KEY));
+        shape.setStrokeLineJoin(getDefaultableStyledNonNull(STROKE_LINEJOIN_KEY));
+        shape.setStrokeMiterLimit(getDefaultableStyledNonNull(STROKE_MITERLIMIT_KEY));
+        shape.setStrokeDashOffset(getDefaultableStyledNonNull(STROKE_DASHOFFSET_KEY));
+        ImmutableList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
+        if (dasharray == null) {
+            shape.getStrokeDashArray().clear();
+        } else {
+            shape.getStrokeDashArray().setAll(dasharray.asCollection());
+        }
+
+    }
+
+    /**
+     * Applies fill properties to a {@link Shape} node.
+     *
+     * @param ctx   the render context
+     * @param shape a shape node
+     */
+    default void applySvgDefaultableFillProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+        Paintable fill = getDefaultableStyled(FILL_KEY);
+        shape.setFill(Paintable.getPaint(fill, ctx));
+
+        Double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
+        shape.setOpacity(fillOpacity);
+    }
+
+
+    /**
+     * opacity.
+     * <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/masking.html#ObjectAndGroupOpacityProperties">link</a>
+     */
+    @NonNull DefaultableStyleableKey<Double> OPACITY_KEY =
+            new DefaultableStyleableKey<Double>("opacity",
+                    new TypeToken<CssDefaultableValue<Double>>() {
+                    },
+                    new CssPercentageConverter(false),
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
+
+    /**
+     * Updates a figure node with all effect properties defined in this
+     * interface.
+     * <p>
+     * Applies the following properties:
+     * {@link #OPACITY_KEY}.
+     * <p>
+     * This method is intended to be used by {@link #updateNode}.
+     *
+     * @param ctx  the render context
+     * @param node a node which was created with method {@link #createNode}.
+     */
+    default void applySvgDefaultableCompositingProperties(RenderContext ctx, @NonNull Node node) {
+        node.setOpacity(getDefaultableStyledNonNull(OPACITY_KEY));
+        BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
+        if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to null
+            bmValue = null;
+        }
+        if (node.getBlendMode() != bmValue) {// Workaround: only set value if different
+            node.setBlendMode(bmValue);
+        }
+    }
+
+    default void applySvgShapeProperties(RenderContext ctx, Shape fillShape, Shape strokeShape) {
+        fillShape.setStroke(null);
+        strokeShape.setFill(null);
+        applySvgDefaultableFillProperties(ctx, fillShape);
+        applySvgDefaultableStrokeProperties(ctx, strokeShape);
+
     }
 }

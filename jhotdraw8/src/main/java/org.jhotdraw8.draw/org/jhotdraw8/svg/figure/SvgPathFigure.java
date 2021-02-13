@@ -6,12 +6,13 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -39,7 +40,7 @@ import java.text.ParseException;
  */
 public class SvgPathFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
-        SvgElementFigure, SvgCompositableFigure {
+        SvgElementFigure {
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -48,9 +49,13 @@ public class SvgPathFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Path n = new Path();
-        n.setManaged(false);
-        return n;
+        Group g=new Group();
+        javafx.scene.shape.Path n0 = new javafx.scene.shape.Path();
+        javafx.scene.shape.Path n1 = new javafx.scene.shape.Path();
+        n0.setManaged(false);
+        n1.setManaged(false);
+        g.getChildren().addAll(n0,n1);
+        return g;
     }
 
     @Override
@@ -119,13 +124,16 @@ public class SvgPathFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        Path n = (Path) node;
+        Group g=(Group)node;
+        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        javafx.scene.shape.Path n0 = (javafx.scene.shape.Path) g.getChildren().get(0);
+        javafx.scene.shape.Path n1 = (javafx.scene.shape.Path) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
-        applySvgDefaultableFigureProperties(ctx, n);
-        applySvgCompositableFigureProperties(ctx,n);
+        applySvgDefaultableCompositingProperties(ctx,node);
+        applySvgShapeProperties(ctx,n0,n1);
 
         FXPathBuilder bb = new FXPathBuilder();
         String d = get(D);
@@ -136,8 +144,8 @@ public class SvgPathFigure extends AbstractLeafFigure
                 // bail
             }
         }
-        n.getElements().setAll(bb.getElements());
-
+        n0.getElements().setAll(bb.getElements());
+        n1.getElements().setAll(bb.getElements());
     }
 
     @Override

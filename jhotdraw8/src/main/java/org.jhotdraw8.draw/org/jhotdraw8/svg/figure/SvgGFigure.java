@@ -30,7 +30,7 @@ import java.util.List;
 public class SvgGFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,
         SvgDefaultableFigure,
-        SvgElementFigure, SvgCompositableFigure {
+        SvgElementFigure {
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
@@ -74,7 +74,7 @@ public class SvgGFigure extends AbstractCompositeFigure
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
-        applySvgCompositableFigureProperties(ctx,n);
+        applySvgDefaultableCompositingProperties(ctx,n);
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {

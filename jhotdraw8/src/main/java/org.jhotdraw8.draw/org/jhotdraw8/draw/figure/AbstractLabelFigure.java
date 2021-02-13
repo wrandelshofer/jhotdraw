@@ -41,14 +41,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         TextFontableFigure, TextLayoutableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
         PaddableFigure {
 
-    @NonNull
-    public final static CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
-    @NonNull
-    public final static CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
-    @Nullable
-    private Bounds cachedLayoutBounds;
+    public static final @NonNull CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
+    public static final @NonNull CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
+    private @Nullable Bounds cachedLayoutBounds;
 
     public AbstractLabelFigure() {
         this(0, 0);
@@ -68,9 +64,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setManaged(false);
         g.setAutoSizeChildren(false);
@@ -83,34 +78,29 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return g;
     }
 
-    @Nullable
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
-    @Nullable
-    protected Bounds getCachedLayoutBounds() {
+    protected @Nullable Bounds getCachedLayoutBounds() {
         return cachedLayoutBounds;
     }
 
-    @Nullable
-    protected Bounds setCachedLayoutBounds(Bounds newValue) {
+    protected @Nullable Bounds setCachedLayoutBounds(Bounds newValue) {
         Bounds oldValue = cachedLayoutBounds;
         cachedLayoutBounds = newValue;
         return oldValue;
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         Bounds boundsInLocal = getCachedLayoutBounds();
         return boundsInLocal == null ? computeLayoutBounds() : boundsInLocal;
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -120,13 +110,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      *
      * @return the layout bounds
      */
-    @NonNull
-    public Bounds computeLayoutBounds() {
+    public @NonNull Bounds computeLayoutBounds() {
         return computeLayoutBounds(new SimpleRenderContext(), new Text());
     }
 
-    @NonNull
-    protected Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
+    protected @NonNull Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = getStyledNonNull(PADDING).getConvertedValue();
@@ -145,8 +133,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @return the layout bounds of the text
      */
-    @NonNull
-    protected Bounds getTextBounds(@Nullable RenderContext ctx) {
+    protected @NonNull Bounds getTextBounds(@Nullable RenderContext ctx) {
         Text textNode = new Text();
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
@@ -156,8 +143,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         Text tn = new Text();
-        tn.setX(getStyledNonNull(ORIGIN).getX().getConvertedValue());
-        tn.setY(getStyledNonNull(ORIGIN).getY().getConvertedValue());
+        tn.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
+        tn.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());
         tn.setBoundsType(TextBoundsType.VISUAL);
         applyTextFontableFigureProperties(null, tn);
         applyTextLayoutableFigureProperties(null, tn);
@@ -169,8 +156,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
-    @Nullable
-    protected abstract String getText(RenderContext ctx);
+    protected abstract @Nullable String getText(RenderContext ctx);
 
 
     @Override

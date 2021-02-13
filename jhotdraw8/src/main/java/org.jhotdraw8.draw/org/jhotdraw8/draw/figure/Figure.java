@@ -200,11 +200,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 if (Modifier.isStatic(f.getModifiers())
                         && MapAccessor.class.isAssignableFrom(f.getType())) {
                     MapAccessor<?> k = (MapAccessor<?>) f.get(null);
+                    if (k==null){
+                        throw new RuntimeException(clazz+" has null value for key: "+f);
+                    }
                     keys.add(k);
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException ex) {
-            throw new RuntimeException("class can not read its own keys", ex);
+            throw new RuntimeException(clazz+" has non-public keys", ex);
         }
     }
 
