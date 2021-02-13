@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 
+import javax.xml.transform.Source;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,18 +20,12 @@ import java.nio.file.Files;
 /**
  * Reads an SVG "Tiny" 1.2 file and creates JavaFX nodes from it.
  */
-public class FXSvgTinyReaderNew {
+public class FXSvgTinyReader {
 
-    public Node read(@NonNull java.nio.file.Path p) throws IOException {
-        try (InputStream in = new BufferedInputStream(Files.newInputStream(p))) {
-            return read(in, p.getParent().toUri());
-        } catch (IOException e) {
-            throw new IOException("Error reading file \"" + p.toAbsolutePath() + "\".", e);
-        }
-    }
 
-    public Node read(@NonNull InputStream in, @NonNull URI documentHome) throws IOException {
-        Figure figure = new FigureSvgTinyReaderNew().read(in, documentHome);
+
+    public Node read(@NonNull Source in) throws IOException {
+        Figure figure = new FigureSvgTinyReader().read(in);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node node = r.render(figure);
         node.setManaged(true);

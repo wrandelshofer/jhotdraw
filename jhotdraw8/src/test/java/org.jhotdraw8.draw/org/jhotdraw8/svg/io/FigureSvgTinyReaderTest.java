@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.svg.io;
 
+import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -44,15 +44,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class FigureSvgStaxReaderTest {
+public class FigureSvgTinyReaderTest {
 
     /**
      * Set this constant to the path of the directory into which you checked
@@ -65,10 +67,24 @@ public class FigureSvgStaxReaderTest {
 
     private static final boolean INTERACTIVE = true;
 
+    public static class Launcher extends Application {
+public Launcher() {
+
+}
+        @Override
+        public void start(Stage primaryStage) throws Exception {
+        }
+        public void launch() {
+            Application.launch();
+        }
+    };
     @BeforeAll
-    public static void startJFX() throws InterruptedException, ExecutionException, TimeoutException {
+    public static void startJavaFX() throws InterruptedException, ExecutionException, TimeoutException {
         Platform.setImplicitExit(false);
-//        new JFXPanel(); // Initializes the JavaFx Platform
+            Launcher launcher = new Launcher();
+        new Thread(()-> {
+            launcher.launch();
+        }).start();
     }
 
 
@@ -125,8 +141,11 @@ public class FigureSvgStaxReaderTest {
     private void doIconTest(Path testFile) throws Exception {
         System.out.println(testFile);
         System.out.println(testFile.toAbsolutePath());
-        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
-        Figure testNode = instance.read(testFile);
+        FigureSvgTinyReader instance = new FigureSvgTinyReader();
+        instance.setBestEffort(true);
+        Figure testNode = instance.read(new StreamSource(testFile.toFile()));
+        System.err.println(instance.getCopyOfErrors().stream().collect(Collectors.joining("\n")));
+
         Drawing drawing = (Drawing) testNode;
         assertEquals(new CssSize(22), drawing.get(Drawing.WIDTH), "width");
         assertEquals(new CssSize(22), drawing.get(Drawing.HEIGHT), "height");
@@ -155,20 +174,20 @@ public class FigureSvgStaxReaderTest {
                                 "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
                                 " baseProfile=\"tiny\" version=\"1.2\">\n" +
                                 " <g fill=\"#ff0000\">\n" +
-                        "  <rect id=\"r\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
+                                "  <rect id=\"r\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
                                 "</g>\n"
-                                +"</svg>\n",
+                                + "</svg>\n",
                         "r", SvgRectFigure.FILL_KEY,
                         CssColor.valueOf("#ff0000")))
         );
     }
 
     private <T> void testDefaultable(String svg, String id, DefaultableStyleableMapAccessor<T> key, T expected) throws IOException {
-        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
+        FigureSvgTinyReader instance = new FigureSvgTinyReader();
         Figure drawing = instance.read(new StreamSource(new StringReader(svg)));
         for (Figure f : drawing.depthFirstIterable()) {
             if (f instanceof DefaultableFigure) {
-                DefaultableFigure df=(DefaultableFigure)f;
+                DefaultableFigure df = (DefaultableFigure) f;
                 if (id.equals(f.getId())) {
                     T actual = df.getDefaultableStyled(key);
                     assertEquals(expected, actual);
@@ -177,13 +196,6 @@ public class FigureSvgStaxReaderTest {
         }
     }
 
-    private void doIconTest(URL testFile) throws Exception {
-        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
-        Figure testNode = instance.read(new StreamSource(testFile.toString()));
-        Drawing drawing = (Drawing) testNode;
-        assertEquals(new CssSize(22), drawing.get(Drawing.WIDTH), "width");
-        assertEquals(new CssSize(22), drawing.get(Drawing.HEIGHT), "height");
-    }
 
 
 
@@ -191,10 +203,12 @@ public class FigureSvgStaxReaderTest {
         System.out.println(testFile);
         System.out.println(referenceFile);
 
-        FigureSvgTinyReaderNew instance = new FigureSvgTinyReaderNew();
-        Figure testFigure = instance.read(testFile);
+        FigureSvgTinyReader instance = new FigureSvgTinyReader();
+        instance.setBestEffort(true);
+        Figure testFigure = instance.read(new StreamSource(testFile.toFile()));
+            System.out.println(instance.getCopyOfErrors().stream().collect(Collectors.joining("\n")));
         dump(testFigure, 0);
-        Figure referenceFigure = instance.read(referenceFile);
+        Figure referenceFigure = instance.read(new StreamSource(referenceFile.toFile()));
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node testNode = r.render(testFigure);
         Node referenceNode = r.render(referenceFigure);

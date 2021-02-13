@@ -189,7 +189,6 @@ public class BiArcApproSampleMain extends Application {
     }
 
     private void approxBezierCurve(ObservableList<PathElement> inf1, double x, double y, double x1, double y1, double x2, double y2, double x3, double y3) {
-        ObservableList<PathElement> inf2 = inflectionPointsPath2.getElements();
         ObservableList<PathElement> appr = approxPath.getElements();
         for (double t : BezierCurves.inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3)) {
