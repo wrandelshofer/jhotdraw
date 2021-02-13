@@ -24,30 +24,39 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
 
     public ImmutableHashSet(@NonNull Collection<? extends E> copyMe) {
         switch (copyMe.size()) {
-            case 0:
-                backingSet = Collections.emptySet();
-                break;
-            case 1:
-                backingSet = Collections.singleton(copyMe.iterator().next());
-                break;
-            default:
+        case 0:
+            backingSet = Collections.emptySet();
+            break;
+        case 1:
+            backingSet = Collections.singleton(copyMe.iterator().next());
+            break;
+        default:
+            if (copyMe.getClass() == LinkedHashSet.class) {
+                // We clone the linked hash set, this should be faster than rehashing it.
+                // However we might waste memory because the linked hash set might
+                // be very sparse.
+                @SuppressWarnings("unchecked")
+                Set<E> unchecked = (Set<E>) ((LinkedHashSet<? extends E>) copyMe).clone();
+                this.backingSet = unchecked;
+            } else {
                 this.backingSet = new LinkedHashSet<>(copyMe);
+            }
         }
     }
 
     public ImmutableHashSet(@NonNull ReadOnlyCollection<? extends E> copyMe) {
         switch (copyMe.size()) {
-            case 0:
-                backingSet = Collections.emptySet();
-                break;
-            case 1:
-                backingSet = Collections.singleton(copyMe.iterator().next());
-                break;
-            default:
-                this.backingSet = new LinkedHashSet<>(Math.max(2 * copyMe.size(), 11));
-                for (E e : copyMe) {
-                    backingSet.add(e);
-                }
+        case 0:
+            backingSet = Collections.emptySet();
+            break;
+        case 1:
+            backingSet = Collections.singleton(copyMe.iterator().next());
+            break;
+        default:
+            this.backingSet = new LinkedHashSet<>(Math.max(2 * copyMe.size(), 11));
+            for (E e : copyMe) {
+                backingSet.add(e);
+            }
         }
     }
 
@@ -58,17 +67,17 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
     @SuppressWarnings("unchecked")
     ImmutableHashSet(Object[] a, int offset, int length) {
         switch (length) {
-            case 0:
-                backingSet = Collections.emptySet();
-                break;
-            case 1:
-                backingSet = Collections.singleton((E) a[offset]);
-                break;
-            default:
-                this.backingSet = new LinkedHashSet<>(Math.max(2 * length, 11));
-                for (int i = offset, n = offset + length; i < n; i++) {
-                    backingSet.add((E) a[i]);
-                }
+        case 0:
+            backingSet = Collections.emptySet();
+            break;
+        case 1:
+            backingSet = Collections.singleton((E) a[offset]);
+            break;
+        default:
+            this.backingSet = new LinkedHashSet<>(Math.max(2 * length, 11));
+            for (int i = offset, n = offset + length; i < n; i++) {
+                backingSet.add((E) a[i]);
+            }
         }
 
     }

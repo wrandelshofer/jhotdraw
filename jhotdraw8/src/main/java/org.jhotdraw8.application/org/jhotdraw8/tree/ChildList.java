@@ -6,7 +6,7 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IndexedArraySet;
+import org.jhotdraw8.collection.AbstractIndexedArraySet;
 
 /**
  * A child list for implementations of the {@link TreeNode} interface.
@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.IndexedArraySet;
  * This list maintains the parent of tree nodes that are added/removed
  * from the child list, as described in {@link TreeNode#getChildren()}.
  */
-public class ChildList<E extends TreeNode<E>> extends IndexedArraySet<E> {
+public class ChildList<E extends TreeNode<E>> extends AbstractIndexedArraySet<E> {
 
     private final E parent;
 
@@ -23,20 +23,10 @@ public class ChildList<E extends TreeNode<E>> extends IndexedArraySet<E> {
 
     }
 
-
     @SuppressWarnings("unchecked")
     @Override
-    public int indexOf(Object o) {
-        if (((E) o).getParent() == parent) {
-            return super.indexOf(o);// linear search!
-        }
-        return -1;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean contains(Object o) {
-        return ((E) o).getParent() == parent;
+    protected Boolean onContains(E e) {
+        return e.getParent() == parent;
     }
 
     @Override
@@ -53,19 +43,10 @@ public class ChildList<E extends TreeNode<E>> extends IndexedArraySet<E> {
         e.setParent(null);
     }
 
-    @Override
-    protected boolean doAdd(int index, @NonNull E element, boolean checkForDuplicates) {
-        if (parent.isSuitableChild(element) &&
-                element.isSuitableParent(parent)) {
-            E oldParent = element.getParent();
-            if (oldParent != parent) {
-                return super.doAdd(index, element, false);
-            } else {
-                return super.doAdd(index, element, true);// linear search!
-            }
-        } else {
-            return false;
-        }
-    }
 
+    @Override
+    protected boolean mayBeAdded(@NonNull E element) {
+        return parent.isSuitableChild(element) &&
+                element.isSuitableParent(parent);
+    }
 }
