@@ -7,6 +7,7 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -64,6 +65,22 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<Paintable>>() {
             }, new SvgCssPaintableConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssColor.BLACK);
+    /**
+     * fill-rule.
+     * <p>
+     * <a href="https://www.w3.org/TR/SVG11/painting.html#FillRuleProperty">">
+     * SVG Tiny 1.2, The 'fill-rule' property</a>
+     */
+    @NonNull DefaultableStyleableKey<FillRule> FILL_RULE_KEY =
+            new DefaultableStyleableKey<FillRule>("fill-rule",
+                    new TypeToken<CssDefaultableValue<FillRule>>() {
+                    },
+                    new CssMappedConverter<>("fill-rule",
+                            ImmutableMaps.of("nonzero", FillRule.NON_ZERO,
+                                    "evenodd", FillRule.EVEN_ODD
+                            )),
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), FillRule.NON_ZERO
+            );
 
     /**
      * font-family.
@@ -74,7 +91,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<ImmutableList<String>>>() {
             }, new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
-           ImmutableLists.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+            ImmutableLists.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
 
     /**
@@ -362,7 +379,18 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
         if (dasharray == null) {
             shape.getStrokeDashArray().clear();
         } else {
-            shape.getStrokeDashArray().setAll(dasharray.asCollection());
+            boolean allZeros = true;
+            for (Double value : dasharray) {
+                if (value > 0) {
+                    allZeros = false;
+                    break;
+                }
+            }
+            if (allZeros) {
+                shape.getStrokeDashArray().clear();
+            } else {
+                shape.getStrokeDashArray().setAll(dasharray.asCollection());
+            }
         }
 
     }
@@ -370,12 +398,12 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     default void applySvgShapeProperties(RenderContext ctx, Shape fillShape, Shape strokeShape) {
         double strokeOpacity = getDefaultableStyledNonNull(STROKE_OPACITY_KEY);
         double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
-        if (strokeOpacity==fillOpacity) {
+        if (strokeOpacity == fillOpacity) {
             applySvgDefaultableFillProperties(ctx, fillShape);
             applySvgDefaultableStrokeProperties(ctx, fillShape);
             fillShape.setVisible(true);
             strokeShape.setVisible(false);
-        }else {
+        } else {
             fillShape.setStroke(null);
             strokeShape.setFill(null);
             applySvgDefaultableFillProperties(ctx, fillShape);

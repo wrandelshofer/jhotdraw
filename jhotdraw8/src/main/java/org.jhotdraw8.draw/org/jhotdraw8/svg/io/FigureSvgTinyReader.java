@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.svg.io;
 
+import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
@@ -431,6 +432,7 @@ public class FigureSvgTinyReader {
     private void readStop(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         CssColor stopColor = null;
         CssSize offset = null;
+        CssSize stopOpacity = CssSize.ONE;
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
             if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
@@ -444,8 +446,11 @@ public class FigureSvgTinyReader {
                     case "offset":
                         offset = sizeConverter.fromString(value);
                         break;
+                    case "stop-opacity":
+                        stopOpacity = sizeConverter.fromString(value);
+                        break;
                     default:
-                        handleError(r, "stop: Skipping SVG attribute " + localName);
+                        handleError(r, "stop: Skipping SVG attribute " + localName + "=\"" + value + "\"W");
                         break;
                     }
                 } catch (ParseException | IOException e) {
@@ -459,6 +464,13 @@ public class FigureSvgTinyReader {
             if (!parent.getSupportedKeys().contains(stopsKey)) {
                 handleError(r, "stop: Cannot add stop to parent element " + parent.getTypeSelector());
             } else {
+                if (stopOpacity.getConvertedValue() != 1.0) {
+                    Color color = stopColor.getColor();
+                    stopColor = CssColor.ofColor(
+                            new Color(color.getRed(), color.getGreen(), color.getBlue(), stopOpacity.getConvertedValue())
+                    );
+                }
+
                 CssStop stop = new CssStop(offset.getConvertedValue(), stopColor);
                 parent.put(stopsKey, ImmutableLists.add(parent.get(stopsKey), stop));
             }

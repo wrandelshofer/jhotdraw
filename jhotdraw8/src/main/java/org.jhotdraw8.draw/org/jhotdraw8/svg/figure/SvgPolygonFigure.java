@@ -143,8 +143,6 @@ public class SvgPolygonFigure extends AbstractLeafFigure
         applySvgShapeProperties(ctx,n0,n1);
         n0.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
         n1.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
-
-
     }
 
     @Override

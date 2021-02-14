@@ -13,6 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.NonNullKey;
 import org.jhotdraw8.collection.SimpleNonNullKey;
 import org.jhotdraw8.css.CssColor;
@@ -30,10 +31,12 @@ import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.figure.ResizableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.SimpleNonNullStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
+import org.jhotdraw8.text.MappedConverter;
 
 import java.util.ArrayList;
 
@@ -55,11 +58,30 @@ public class SvgLinearGradientFigure extends AbstractCompositeFigure
     public static final @NonNull CssSizeStyleableKey Y1 = new CssSizeStyleableKey("y1", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey X2 = new CssSizeStyleableKey("x2", CssSize.ONE);
     public static final @NonNull CssSizeStyleableKey Y2 = new CssSizeStyleableKey("y2", CssSize.ZERO);
-    /*
+
+    /**
+     * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementGradientUnitsAttribute">w3.org</a>
+     */
     public static final @NonNull SimpleNonNullStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
-            new NonNullObjectKey<>("gradientUnits", SvgGradientUnits.class,
-                    SvgGradientUnits.OBJECT_BOUNDING_BOX);
-*/
+            new SimpleNonNullStyleableKey<>("gradientUnits", SvgGradientUnits.class,
+                    SvgGradientUnits.OBJECT_BOUNDING_BOX,
+                    new MappedConverter<SvgGradientUnits>(ImmutableMaps.of(
+                            "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
+                            "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
+                    ).asMap()));
+
+    /**
+     * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
+     */
+    public static final @NonNull SimpleNonNullStyleableKey<CycleMethod> SPREAD_METHOD =
+            new SimpleNonNullStyleableKey<>("spreadMethod", CycleMethod.class,
+                    CycleMethod.NO_CYCLE,
+                    new MappedConverter<CycleMethod>(ImmutableMaps.of(
+                            "pad", CycleMethod.NO_CYCLE,
+                            "reflect", CycleMethod.REFLECT,
+                            "repeat", CycleMethod.REPEAT
+                    ).asMap()));
+
 
     public static final @NonNull NonNullKey<ImmutableList<CssStop>> STOPS = new SimpleNonNullKey<ImmutableList<CssStop>>("stops",
             new TypeToken<>() {
@@ -94,24 +116,26 @@ public class SvgLinearGradientFigure extends AbstractCompositeFigure
         double x2 = getStyledNonNull(X2).getConvertedValue(unit);
         double y1 = getStyledNonNull(Y1).getConvertedValue(unit);
         double y2 = getStyledNonNull(Y2).getConvertedValue(unit);
-        SvgGradientUnits gradientUnits = SvgGradientUnits.OBJECT_BOUNDING_BOX;// getStyledNonNull(GRADIENT_UNITS);
+        SvgGradientUnits gradientUnits = getStyledNonNull(GRADIENT_UNITS);
 
         ImmutableList<CssStop> cssStops = getNonNull(STOPS);
         ArrayList<Stop> stops = new ArrayList<>(cssStops.size());
-        for (CssStop stop : cssStops) {
-            CssColor color = stop.getColor();
+        for (CssStop cssStop : cssStops) {
+            CssColor color = cssStop.getColor();
             if (SvgCssPaintableConverter.CURRENT_COLOR_KEYWORD.equals(color.getName())) {
                 color = getDefaultableStyledNonNull(COLOR_KEY);
             }
-            Double offset = stop.getOffset();
+            Double offset = cssStop.getOffset();
             if (color != null && offset != null) {
                 stops.add(new Stop(offset, color.getColor()));
             }
         }
 
-        new LinearGradient(x1, y1, x2, y2, gradientUnits == SvgGradientUnits.OBJECT_BOUNDING_BOX,
-                CycleMethod.NO_CYCLE, stops);
-        return CssColor.BLACK.getPaint();
+        CycleMethod spreadMethod = getStyledNonNull(SPREAD_METHOD);
+
+        return new LinearGradient(x1, y1, x2, y2, gradientUnits == SvgGradientUnits.OBJECT_BOUNDING_BOX,
+                spreadMethod, stops);
+
     }
 
     @Override

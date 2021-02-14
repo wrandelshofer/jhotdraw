@@ -8,6 +8,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.FillRule;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -146,6 +147,10 @@ public class SvgPathFigure extends AbstractLeafFigure
         }
         n0.getElements().setAll(bb.getElements());
         n1.getElements().setAll(bb.getElements());
+
+        FillRule fillRule = getDefaultableStyled(FILL_RULE_KEY);
+        n0.setFillRule(fillRule);
+        n1.setFillRule(fillRule);
     }
 
     @Override

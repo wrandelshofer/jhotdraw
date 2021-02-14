@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class AbstractStyleableKey<T> extends AbstractKey<T> {
+public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
 
     static final long serialVersionUID = 1L;
     private final @NonNull String cssName;
