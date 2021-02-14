@@ -794,11 +794,11 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 id = selectorModel.getId(f);
                 type = selectorModel.getType(f);
                 first = false;
-                styleClasses.addAll(selectorModel.getStyleClasses(f));
+                styleClasses.addAll(selectorModel.getStyleClasses(f).asCollection());
             } else {
                 id = null;
                 type = Objects.equals(selectorModel.getType(f), type) ? type : null;
-                styleClasses.retainAll(selectorModel.getStyleClasses(f));
+                styleClasses.retainAll(selectorModel.getStyleClasses(f).asCollection());
             }
         }
 

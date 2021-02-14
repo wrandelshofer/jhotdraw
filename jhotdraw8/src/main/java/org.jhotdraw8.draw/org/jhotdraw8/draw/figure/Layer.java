@@ -33,7 +33,7 @@ public interface Layer extends Figure {
     }
 
     @Override
-    default String getTypeSelector() {
+    default @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

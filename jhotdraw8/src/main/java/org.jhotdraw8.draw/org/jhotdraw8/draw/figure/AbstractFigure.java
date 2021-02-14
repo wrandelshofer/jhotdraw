@@ -8,8 +8,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -22,12 +20,9 @@ import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -98,19 +93,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
 
-    @Override
-    public @NonNull List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>();
-        for (MapAccessor<?> key : getSupportedKeys()) {
-            if (key instanceof WriteableStyleableMapAccessor<?>) {
-                WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) key;
 
-                CssMetaData<? extends Styleable, ?> md = sk.getCssMetaData();
-                list.add(md);
-            }
-        }
-        return list;
-    }
 
     @Override
     public final @Nullable Drawing getDrawing() {

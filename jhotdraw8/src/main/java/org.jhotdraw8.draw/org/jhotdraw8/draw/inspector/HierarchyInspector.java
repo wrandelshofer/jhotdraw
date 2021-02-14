@@ -24,7 +24,6 @@ import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
@@ -76,7 +75,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     @FXML
     private TreeTableColumn<Figure, ImmutableSet<String>> pseudoClassesColumn;
     @FXML
-    private TreeTableColumn<Figure, ImmutableList<String>> styleClassesColumn;
+    private TreeTableColumn<Figure, ImmutableSet<String>> styleClassesColumn;
     private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
@@ -138,12 +137,12 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue() == null ? null : cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         // Type arguments needed for Java 8!
-        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
+        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
-            @Override
-            public @Nullable ImmutableList<String> getValue() {
-                return figure == null ? null : ImmutableLists.ofCollection(figure.getStyleClass());
-            }
+                    @Override
+                    public @Nullable ImmutableSet<String> getValue() {
+                        return figure == null ? null : ImmutableSets.ofCollection(figure.getStyleClasses());
+                    }
                 }
         );
         // Type arguments needed for Java 8!
@@ -151,7 +150,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
             @Override
             public @Nullable ImmutableSet<String> getValue() {
-                return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClass());
+                return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
             }
                 }
         );
@@ -206,14 +205,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered.
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         // Type arguments needed for Java 8!
-        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
+        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<String>>, TreeTableCell<Figure, ImmutableSet<String>>>() {
 
             @Override
-            public @NonNull TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
+            public @NonNull TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
                 // Type arguments needed for Java 8!
-                return new TextFieldTreeTableCell<Figure, ImmutableList<String>>() {
+                return new TextFieldTreeTableCell<Figure, ImmutableSet<String>>() {
                     {
-                        setConverter(new StringConverterAdapter<>(wordListConverter));
+                        setConverter(new StringConverterAdapter<>(wordSetConverter));
                     }
 
                     private final @NonNull Set<String> syntheticClasses = new HashSet<>();
@@ -226,8 +225,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void commitEdit(@NonNull ImmutableList<String> newValue) {
-                        ImmutableList<String> newValueSet = ImmutableLists.removeAll(newValue, syntheticClasses);
+                    public void commitEdit(@NonNull ImmutableSet<String> newValue) {
+                        ImmutableSet<String> newValueSet = ImmutableSets.removeAll(newValue, syntheticClasses);
                         super.commitEdit(newValueSet);
                     }
 
@@ -236,13 +235,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         Figure figure = getTreeTableRow().getItem();
                         figure.get(StyleableFigure.STYLE_CLASS);
                         syntheticClasses.clear();
-                        syntheticClasses.addAll(figure.getStyleClass());
-                        syntheticClasses.removeAll(figure.getNonNull(StyleableFigure.STYLE_CLASS).asList());
+                        syntheticClasses.addAll(figure.getStyleClasses().asCollection());
+                        syntheticClasses.removeAll(figure.getNonNull(StyleableFigure.STYLE_CLASS).asSet());
                         super.startEdit();
                     }
 
                     @Override
-                    public void updateItem(ImmutableList<String> t, boolean empty) {
+                    public void updateItem(ImmutableSet<String> t, boolean empty) {
                         super.updateItem(t, empty);
                         TreeTableRow<Figure> row = getTreeTableRow();
                         boolean isEditable = false;
@@ -254,7 +253,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes!
                             if (figure != null) {
-                                setText(wordListConverter.toString(ImmutableLists.ofCollection(figure.getStyleClass())));
+                                setText(wordListConverter.toString(ImmutableLists.ofCollection(figure.getStyleClasses())));
                             }
                         }
                         if (isEditable) {

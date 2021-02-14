@@ -94,7 +94,7 @@ import org.jhotdraw8.xml.text.XmlRectangle2DConverter;
 import org.jhotdraw8.xml.text.XmlSvgPathConverter;
 import org.jhotdraw8.xml.text.XmlUriConverter;
 import org.jhotdraw8.xml.text.XmlUrlConverter;
-import org.jhotdraw8.xml.text.XmlWordListConverter;
+import org.jhotdraw8.xml.text.XmlWordSetConverter;
 
 import java.net.URI;
 import java.net.URL;
@@ -204,8 +204,8 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
         addConverterForType(CssStrokeStyle.class, new CssStrokeStyleConverter(false));
 
-        addConverter(PageFigure.PAPER_SIZE,new CssPaperSizeConverter());
-        addConverter(StyleableFigure.STYLE_CLASS, new XmlWordListConverter());
+        addConverter(PageFigure.PAPER_SIZE, new CssPaperSizeConverter());
+        addConverter(StyleableFigure.STYLE_CLASS, new XmlWordSetConverter());
         addConverter(TextStrokeableFigure.TEXT_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));

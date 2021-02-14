@@ -4,17 +4,11 @@
  */
 package org.jhotdraw8.styleable;
 
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
-import javafx.css.Styleable;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -68,7 +62,7 @@ public class AbstractStyleablePropertyBeanTest {
         }
 
         @Override
-        public @NonNull ObservableList<String> getStyleClass() {
+        public @NonNull ReadOnlySet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -77,26 +71,16 @@ public class AbstractStyleablePropertyBeanTest {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
+
         @Override
-        public @NonNull List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        public @NonNull StyleableBean getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull Styleable getStyleableParent() {
+        public @NonNull ReadOnlySet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-
-        @Override
-        public @NonNull ObservableSet<PseudoClass> getPseudoClassStates() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public ObservableSet<String> getPseudoClass() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
 
     }
 

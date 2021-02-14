@@ -9,7 +9,8 @@ import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.AbstractFileBasedApplication;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.NonNullBooleanKey;
+import org.jhotdraw8.collection.NonNullKey;
+import org.jhotdraw8.collection.SimpleNonNullKey;
 import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
@@ -90,7 +91,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
         setResources(GrapherLabels.getResources());
     }
 
-    public static final @NonNull NonNullBooleanKey DARK_MODE_KEY = new NonNullBooleanKey("darkMode", false);
+    public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new SimpleNonNullKey<>("darkMode", Boolean.class, Boolean.FALSE);
 
     @Override
     protected void startUserAgentStylesheet() {

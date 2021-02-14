@@ -3,19 +3,17 @@
  */
 package org.jhotdraw8.draw;
 
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.css.PseudoClass;
-import javafx.css.Styleable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.styleable.StyleableBean;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -179,7 +177,7 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public @NonNull ObservableList<String> getStyleClass() {
+        public @NonNull ReadOnlySet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -189,17 +187,12 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public @NonNull Styleable getStyleableParent() {
+        public @NonNull StyleableBean getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull ObservableSet<PseudoClass> getPseudoClassStates() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public ObservableSet<String> getPseudoClass() {
+        public @NonNull ReadOnlySet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

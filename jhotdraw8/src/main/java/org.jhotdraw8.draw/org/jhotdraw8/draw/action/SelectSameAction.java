@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -53,13 +54,13 @@ public class SelectSameAction extends AbstractDrawingViewAction {
         }
 
         String stype = prototype.getTypeSelector();
-        List<String> sclass = prototype.getStyleClass();
+        ReadOnlySet<String> sclass = prototype.getStyleClasses();
 
         List<Figure> selectedSame = new ArrayList<>();
         for (Figure f : view.getDrawing().preorderIterable()) {
             if (f.isSelectable() && f.isShowing()) {
                 if (Objects.equals(f.getTypeSelector(), stype)
-                        && Objects.equals(f.getStyleClass(), sclass) && f != prototype) {
+                        && Objects.equals(f.getStyleClasses(), sclass) && f != prototype) {
                     selectedSame.add(f);
                 }
             }

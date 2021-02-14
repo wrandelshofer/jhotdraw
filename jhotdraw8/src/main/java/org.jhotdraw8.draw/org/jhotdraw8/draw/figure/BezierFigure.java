@@ -53,6 +53,7 @@ public class BezierFigure extends AbstractLeafFigure
         PathIterableFigure {
 
     public static final BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
+
     public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.

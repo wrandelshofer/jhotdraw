@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.AbstractKey;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 
@@ -17,10 +17,11 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class AbstractStyleableKey<T> extends ObjectKey<T> {
+public class AbstractStyleableKey<T> extends AbstractKey<T> {
 
     static final long serialVersionUID = 1L;
-
+    private final @NonNull String cssName;
+    private final @Nullable String namespace;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -59,7 +60,6 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
     public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Type type, boolean isNullable, T defaultValue) {
         this(namespace, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, isNullable, defaultValue);
     }
-
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
@@ -76,9 +76,6 @@ public class AbstractStyleableKey<T> extends ObjectKey<T> {
         this.cssName = cssName;
         this.namespace = namespace;
     }
-
-    private final @NonNull String cssName;
-    private final @Nullable String namespace;
 
     public @NonNull String getCssName() {
         return cssName;

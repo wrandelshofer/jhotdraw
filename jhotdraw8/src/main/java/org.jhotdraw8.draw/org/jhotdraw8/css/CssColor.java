@@ -110,7 +110,7 @@ public class CssColor implements Paintable {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!CssColor.class.isAssignableFrom(obj.getClass())) {
             return false;
         }
         final CssColor other = (CssColor) obj;

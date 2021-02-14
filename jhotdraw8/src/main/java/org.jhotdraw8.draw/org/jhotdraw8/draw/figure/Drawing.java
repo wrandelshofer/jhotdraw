@@ -9,13 +9,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ListKey;
+import org.jhotdraw8.collection.SimpleNonNullListKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
-import org.jhotdraw8.draw.key.NullableObjectKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
@@ -42,7 +42,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.
      */
-    @NonNull Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
+    @NonNull Key<URI> DOCUMENT_HOME = new SimpleNullableKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
 
     /**
@@ -58,7 +58,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new ListKey<URI>("authorStylesheets",
+    @NonNull Key<ImmutableList<URI>> AUTHOR_STYLESHEETS = new SimpleNonNullListKey<URI>("authorStylesheets",
             new TypeToken<ImmutableList<URI>>() {
             });
     /**
@@ -72,7 +72,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new ListKey<URI>("userAgentStylesheets", new TypeToken<ImmutableList<URI>>() {
+    @NonNull Key<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new SimpleNonNullListKey<URI>("userAgentStylesheets", new TypeToken<ImmutableList<URI>>() {
     });
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
@@ -80,7 +80,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull Key<ImmutableList<String>> INLINE_STYLESHEETS = new ListKey<String>("inlineStylesheets", new TypeToken<ImmutableList<String>>() {
+    @NonNull Key<ImmutableList<String>> INLINE_STYLESHEETS = new SimpleNonNullListKey<String>("inlineStylesheets", new TypeToken<ImmutableList<String>>() {
     });
     /**
      * Defines the canvas width.

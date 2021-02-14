@@ -29,6 +29,7 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
 
     static final long serialVersionUID = 1L;
     private final @NonNull CssMetaData<? extends Styleable, @NonNull String> cssMetaData;
+    private final @NonNull CssStringConverter converter;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -40,6 +41,7 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
         this(name, "");
     }
 
+
     /**
      * Creates a new instance with the specified name and default value.
      *
@@ -49,7 +51,6 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
     public StringStyleableKey(@NonNull String name, @NonNull String defaultValue) {
         this(name, defaultValue, null);
     }
-
 
     /**
      * Creates a new instance with the specified name, mask and default value.
@@ -79,15 +80,13 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
     }
 
     @Override
+    public @NonNull Converter<String> getCssConverter() {
+        return converter;
+    }
+
+    @Override
     public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
         return cssMetaData;
 
-    }
-
-    private final @NonNull CssStringConverter converter;
-
-    @Override
-    public @NonNull Converter<String> getCssConverter() {
-        return converter;
     }
 }

@@ -17,7 +17,7 @@ import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -33,10 +33,10 @@ import java.util.function.Supplier;
 
 
 public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
-    public static final @NonNull Key<URIChooser> OPEN_CHOOSER_KEY = new ObjectKey<>("openChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new ObjectKey<>("openChooserFactory",
+    public static final @NonNull Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleNullableKey<>("openChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("openChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
-            }, null);
+            });
 
     public AbstractOpenFileAction(@NonNull FileBasedApplication app) {
         super(app);

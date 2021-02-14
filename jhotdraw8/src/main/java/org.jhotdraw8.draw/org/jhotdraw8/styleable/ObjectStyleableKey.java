@@ -9,7 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.AbstractKey;
 import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.Converter;
@@ -18,7 +18,7 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
-public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyleableMapAccessor<T> {
+public class ObjectStyleableKey<T> extends AbstractKey<T> implements WriteableStyleableMapAccessor<T> {
     private static final long serialVersionUID = 0L;
 
     private final @NonNull Converter<T> converter;

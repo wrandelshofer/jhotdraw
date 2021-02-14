@@ -19,13 +19,13 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.key.ObservableWordListKey;
+import org.jhotdraw8.draw.key.ObservableWordSetKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.event.Listener;
@@ -78,7 +78,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private Button removeButton;
 
     @SuppressWarnings("unchecked")
-    private @NonNull ObservableWordListKey tagsKey = StyleableFigure.STYLE_CLASS;
+    private @NonNull ObservableWordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;
@@ -97,7 +97,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 tagName = tagName.trim();
                 for (Figure f : getSelectedFigures()) {
                     @SuppressWarnings("unchecked")
-                    ImmutableList<String> tags = f.get(tagsKey);
+                    ImmutableSet<String> tags = f.get(tagsKey);
                     Collection<String> newTags = listFactory.get();
                     boolean contains = false;
                     for (String t : tags) {
@@ -108,7 +108,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
+                        getModel().set(f, tagsKey, ImmutableSets.ofCollection(newTags));
                     }
                 }
                 updateList();
@@ -176,7 +176,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 tagName = tagName.trim();
                 for (Figure f : getSelectedFigures()) {
                     @SuppressWarnings("unchecked")
-                    ImmutableList<String> tags = f.get(tagsKey);
+                    ImmutableSet<String> tags = f.get(tagsKey);
                     Collection<String> newTags = listFactory.get();
                     boolean contains = false;
                     for (String t : tags) {
@@ -187,7 +187,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getModel().set(f, tagsKey, ImmutableLists.ofCollection(newTags));
+                        getModel().set(f, tagsKey, ImmutableSets.ofCollection(newTags));
                     }
                 }
                 updateList();
@@ -202,17 +202,17 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
         boolean first = true;
         for (Figure f : newValue) {
-            ImmutableList<String> tags = f.getNonNull(tagsKey);
+            ImmutableSet<String> tags = f.getNonNull(tagsKey);
             if (first) {
-                intersection.addAll(tags.asList());
+                intersection.addAll(tags.asSet());
                 first = false;
             } else {
                 if (!intersection.isEmpty()) {
-                    intersection.retainAll(tags.asList());
+                    intersection.retainAll(tags.asSet());
                 }
             }
             if (!tags.isEmpty()) {
-                union.addAll(tags.asList());
+                union.addAll(tags.asSet());
             }
         }
 

@@ -12,10 +12,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
-import org.jhotdraw8.collection.BooleanKey;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
-import org.jhotdraw8.collection.StringKey;
+import org.jhotdraw8.collection.NullableKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.event.Listener;
@@ -48,33 +47,33 @@ public interface Tool extends PropertyBean, Disableable {
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.
      */
-    StringKey NAME = new StringKey("name");
+    NullableKey<String> NAME = new SimpleNullableKey<String>("name", String.class);
     /**
      * The key used for storing the {@code String} name for the action, used for
      * a menu or button.
      */
-    StringKey LABEL = new StringKey("label");
+    NullableKey<String> LABEL = new SimpleNullableKey<String>("label", String.class);
     /**
      * The key used for storing a short {@code String} description for the
      * action, used for tooltip text.
      */
-    StringKey SHORT_DESCRIPTION = new StringKey("ShortDescription");
+    NullableKey<String> SHORT_DESCRIPTION = new SimpleNullableKey<String>("ShortDescription", String.class);
     /**
      * The key used for storing a longer {@code String} description for the
      * action, could be used for context-sensitive help.
      */
-    StringKey LONG_DESCRIPTION = new StringKey("LongDescription");
+    NullableKey<String> LONG_DESCRIPTION = new SimpleNullableKey<String>("LongDescription", String.class);
     /**
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.
      */
-    Key<Node> SMALL_ICON = new ObjectKey<>("SmallIcon", Node.class);
+    Key<Node> SMALL_ICON = new SimpleNullableKey<>("SmallIcon", Node.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
      * accelerator for the action.
      */
-    Key<KeyCombination> ACCELERATOR_KEY = new ObjectKey<>("AcceleratorKey", KeyCombination.class);
+    Key<KeyCombination> ACCELERATOR_KEY = new SimpleNullableKey<>("AcceleratorKey", KeyCombination.class);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
@@ -82,7 +81,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @since 1.3
      */
-    Key<KeyCombination> MNEMONIC_KEY = new ObjectKey<>("MnemonicKey", KeyCombination.class);
+    Key<KeyCombination> MNEMONIC_KEY = new SimpleNullableKey<>("MnemonicKey", KeyCombination.class);
 
     /**
      * The key used for storing a {@code Boolean} that corresponds to the
@@ -91,15 +90,15 @@ public interface Tool extends PropertyBean, Disableable {
      * {@code RadioButton</code> and <code>CheckBox} make use of this but
      * instances of {@code Menu} don't.
      */
-    BooleanKey SELECTED_KEY = new BooleanKey("SwingSelectedKey");
+    Key<Boolean> SELECTED_KEY = new SimpleNullableKey<>("SelectedKey", Boolean.class);
 
     /**
      * The key used for large icon, such as {@code ImageView}. This is typically
      * used by buttons.
      */
-    Key<Node> LARGE_ICON_KEY = new ObjectKey<>("SwingLargeIconKey", Node.class);
+    Key<Node> LARGE_ICON_KEY = new SimpleNullableKey<>("LargeIconKey", Node.class);
 
-    Key<String> STYLE_CLASS_KEY = new StringKey("StyleClass");
+    Key<String> STYLE_CLASS_KEY = new SimpleNullableKey<String>("StyleClass", String.class);
 
     // ---
     // Properties

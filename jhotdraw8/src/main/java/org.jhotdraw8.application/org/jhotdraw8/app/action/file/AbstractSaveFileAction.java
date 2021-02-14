@@ -18,7 +18,7 @@ import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -44,10 +44,10 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
 
     private boolean saveAs;
     private Node oldFocusOwner;
-    public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>("saveChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new ObjectKey<>("saveChooserFactory",
+    public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new SimpleNullableKey<>("saveChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("saveChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
-            }, null);
+            });
 
     /**
      * Creates a new instance.

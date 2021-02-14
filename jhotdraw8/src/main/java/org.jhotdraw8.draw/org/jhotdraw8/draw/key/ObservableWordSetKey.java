@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.SimpleNonNullKey;
 import org.jhotdraw8.reflect.TypeToken;
 
 /**
@@ -13,7 +14,7 @@ import org.jhotdraw8.reflect.TypeToken;
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordSetKey extends ObjectFigureKey<@NonNull ImmutableSet<String>> {
+public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> {
 
     private static final long serialVersionUID = 1L;
 

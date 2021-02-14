@@ -51,7 +51,7 @@ import org.jhotdraw8.app.action.file.OpenFileAction;
 import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.OSXCollator;
@@ -97,10 +97,10 @@ import static java.lang.Math.min;
  */
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {
 
-    private static final @NonNull Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new ObjectKey<>("focusListener",
+    private static final @NonNull Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleNullableKey<>("focusListener",
             new TypeToken<ChangeListener<Boolean>>() {
-            }, null);
-    private static final @NonNull Key<Stage> STAGE_KEY = new ObjectKey<>("stage", Stage.class);
+            });
+    private static final @NonNull Key<Stage> STAGE_KEY = new SimpleNullableKey<>("stage", Stage.class);
     public static final @NonNull String WINDOW_MENU_ID = "window";
     public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
     private Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());

@@ -8,7 +8,7 @@ import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.AbstractKey;
 import org.jhotdraw8.text.Converter;
 
 import java.lang.reflect.Type;
@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadOnlyStyleableMapAccessor<T> {
+public class SimpleReadOnlyStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
     private final @NonNull String cssName;
     private static final long serialVersionUID = 1L;
 

@@ -4,17 +4,12 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
-import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSets;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
-import org.jhotdraw8.draw.key.ObservableWordListKey;
 import org.jhotdraw8.draw.key.ObservableWordSetKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -43,7 +38,7 @@ public interface StyleableFigure extends Figure {
      * Default value: {@code null}.
      */
     @NonNull
-    ObservableWordListKey STYLE_CLASS = new ObservableWordListKey("class", ImmutableLists.emptyList());
+    ObservableWordSetKey STYLE_CLASS = new ObservableWordSetKey("class", ImmutableSets.emptySet());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -88,7 +83,7 @@ public interface StyleableFigure extends Figure {
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EXPORT) {
             String styleId = getId();
             node.setId(styleId == null ? "" : styleId);
-            node.getStyleClass().setAll(getStyleClass());
+            node.getStyleClass().setAll(getStyleClasses().asObservableSet());
             node.getProperties().put(TYPE_SELECTOR_NODE_KEY, getTypeSelector());
         }
     }
@@ -99,24 +94,15 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
-    default ObservableList<String> getStyleClass() {
-        return getNonNull(STYLE_CLASS).asObservableList();
+    default @NonNull ReadOnlySet<String> getStyleClasses() {
+        return getNonNull(STYLE_CLASS);
     }
 
     @Override
-    default ObservableSet<String> getPseudoClass() {
-        return getNonNull(PSEUDO_CLASS).asObservableSet();
+    default @NonNull ReadOnlySet<String> getPseudoClassStates() {
+        return getNonNull(PSEUDO_CLASS);
     }
 
-    @Override
-    default ObservableSet<PseudoClass> getPseudoClassStates() {
-        // Note: PseudoClass is not thread safe
-        ObservableSet<PseudoClass> pseudoClasses = FXCollections.observableSet();
-        for (String str : getNonNull(PSEUDO_CLASS)) {
-            pseudoClasses.add(PseudoClass.getPseudoClass(str));
-        }
-        return pseudoClasses;
-    }
 
     @Override
     default @Nullable String getId() {

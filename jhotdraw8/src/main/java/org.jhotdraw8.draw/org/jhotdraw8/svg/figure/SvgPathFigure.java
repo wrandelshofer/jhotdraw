@@ -149,7 +149,7 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

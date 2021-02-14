@@ -9,6 +9,7 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.ReadOnlySet;
 
 import java.text.ParseException;
 import java.util.List;
@@ -210,7 +211,7 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the style classes or an empty set.
      */
-    @NonNull Set<String> getStyleClasses(@NonNull T element);
+    @NonNull ReadOnlySet<String> getStyleClasses(@NonNull T element);
 
     /**
      * Returns the style type of the element.
@@ -274,30 +275,6 @@ public interface SelectorModel<T> {
      */
     void reset(T elem);
 
-    /**
-     * Sets an attribute value.
-     *
-     * @param element The element
-     * @param origin  The style origin
-     * @param namespace    an optional namespace (null means any namespace)
-     * @param name    The attribute name
-     * @param value   The attribute value. Null removes the attribute from the
-     *                element.
-     * /
-    default void setAttributeAsString(@NonNull T element, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable String value) {
-    if (value == null) {
-    setAttribute(element, origin, namespace, name, null);
-    } else {
-    List<CssToken> list = new ArrayList<>();
-    StreamCssTokenizer tt = new StreamCssTokenizer(value);
-    try {
-    while (tt.nextNoSkip() != CssTokenType.TT_EOF) list.add(tt.getToken());
-    } catch (IOException e) {
-    throw new RuntimeException("unexpected exception", e);
-    }
-    setAttribute(element, origin, namespace, name, ImmutableArrayList.ofCollection(list));
-    }
-    }*/
 
     /**
      * Sets an attribute value.

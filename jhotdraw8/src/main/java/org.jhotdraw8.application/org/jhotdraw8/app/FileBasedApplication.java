@@ -5,9 +5,11 @@
 package org.jhotdraw8.app;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.NonNullBooleanKey;
+import org.jhotdraw8.collection.NonNullKey;
+import org.jhotdraw8.collection.SimpleNonNullKey;
 
 public interface FileBasedApplication extends Application {
     @NonNull
-    NonNullBooleanKey ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new NonNullBooleanKey("allowMultipleActivitiesWithSameURI", false);
+    NonNullKey<Boolean> ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new SimpleNonNullKey<Boolean>("allowMultipleActivitiesWithSameURI", Boolean.class,
+            Boolean.FALSE);
 }

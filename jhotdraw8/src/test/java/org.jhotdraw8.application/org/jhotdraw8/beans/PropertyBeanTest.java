@@ -6,7 +6,7 @@ package org.jhotdraw8.beans;
 
 import javafx.beans.value.ObservableValue;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +27,7 @@ public class PropertyBeanTest {
     @Test
     public void testGetObservableValue() {
         System.out.println("getObservableValue");
-        Key<String> key = new ObjectKey<String>("key", String.class);
+        Key<String> key = new SimpleNullableKey<String>("key", String.class);
         PropertyBean bean = new SimplePropertyBean();
         ObservableValue<String> ov = bean.valueAt( key);
         String[] newValue = new String[1];

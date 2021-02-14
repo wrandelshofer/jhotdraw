@@ -32,7 +32,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class ObjectKey<T> implements Key<T> {
+public abstract class AbstractKey<T> implements Key<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -64,11 +64,11 @@ public class ObjectKey<T> implements Key<T> {
      * @param name  The name of the key.
      * @param clazz The type of the value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Type clazz) {
+    public AbstractKey(@NonNull String name, @NonNull Type clazz) {
         this(name, clazz, null);
     }
 
-    public ObjectKey(@NonNull String name, @NonNull TypeToken<T> clazz, T initialValue) {
+    public AbstractKey(@NonNull String name, @NonNull TypeToken<T> clazz, T initialValue) {
         this(name, clazz.getType(), initialValue);
     }
 
@@ -80,7 +80,7 @@ public class ObjectKey<T> implements Key<T> {
      * @param clazz        The type of the value.
      * @param initialValue The default value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable T initialValue) {
+    public AbstractKey(@NonNull String name, @NonNull Type clazz, @Nullable T initialValue) {
         this(name, clazz, true, initialValue);
     }
 
@@ -88,21 +88,21 @@ public class ObjectKey<T> implements Key<T> {
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
-     * @param name           The name of the key.
-     * @param clazz          The type of the value.
-     * @param isNullable     Whether the value may be set to null
-     * @param initialValue   The default value.
+     * @param name         The name of the key.
+     * @param clazz        The type of the value.
+     * @param isNullable   Whether the value may be set to null
+     * @param initialValue The default value.
      */
-    public ObjectKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T initialValue) {
+    public AbstractKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T initialValue) {
         this(name, clazz, isNullable, false, initialValue);
     }
 
-    public ObjectKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T initialValue) {
+    public AbstractKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T initialValue) {
         this(name, clazz, isNullable, false, initialValue);
     }
 
 
-    public ObjectKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
+    public AbstractKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
         Objects.requireNonNull(name, "name is null");
         Objects.requireNonNull(clazz, "clazz is null");
         if (!isNullable && initialValue == null) {

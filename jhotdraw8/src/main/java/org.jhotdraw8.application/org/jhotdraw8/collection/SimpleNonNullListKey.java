@@ -4,22 +4,23 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.reflect.TypeToken;
 
 /**
- * DoubleKey.
+ * An abstract {@link Key} that stores a list of values.
  *
  * @author Werner Randelshofer
  */
-public class ListKey<E> extends ObjectKey<ImmutableList<E>> {
+public class SimpleNonNullListKey<E> extends SimpleNonNullKey<ImmutableList<E>> {
 
     private static final long serialVersionUID = 1L;
 
-    public ListKey(String key, TypeToken<ImmutableList<E>> type) {
+    public SimpleNonNullListKey(String key, TypeToken<ImmutableList<E>> type) {
         super(key, type, ImmutableLists.emptyList());
     }
 
-    public ListKey(String key, TypeToken<ImmutableList<E>> type, ImmutableList<E> defaultValue) {
+    public SimpleNonNullListKey(String key, TypeToken<ImmutableList<E>> type, @NonNull ImmutableList<E> defaultValue) {
         super(key, type, defaultValue);
     }
 }

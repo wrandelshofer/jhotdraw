@@ -18,10 +18,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.SimpleNonNullKey;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.ObjectFigureKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
@@ -69,7 +69,7 @@ public interface TransformableFigure extends TransformCachingFigure {
      * Default value: {@code Rotate.Z_AXIS}.
      */
     @NonNull
-    ObjectFigureKey<Point3D> ROTATION_AXIS = new ObjectFigureKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
+    SimpleNonNullKey<Point3D> ROTATION_AXIS = new SimpleNonNullKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.

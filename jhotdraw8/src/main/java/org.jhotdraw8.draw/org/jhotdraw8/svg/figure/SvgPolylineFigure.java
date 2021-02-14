@@ -148,7 +148,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

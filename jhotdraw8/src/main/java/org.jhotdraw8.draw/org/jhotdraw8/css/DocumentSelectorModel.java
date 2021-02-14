@@ -7,16 +7,15 @@ package org.jhotdraw8.css;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -94,13 +93,13 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public @NonNull Set<String> getStyleClasses(@NonNull Element elem) {
+    public ReadOnlySet<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
-            return Collections.emptySet();
+            return ImmutableSets.emptySet();
         }
         String[] clazzes = value.split(" +");
-        return new HashSet<>(Arrays.asList(clazzes));
+        return ImmutableSets.of(clazzes);
     }
 
     /**

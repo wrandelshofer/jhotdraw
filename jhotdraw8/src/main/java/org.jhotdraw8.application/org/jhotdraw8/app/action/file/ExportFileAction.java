@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.reflect.TypeToken;
@@ -31,10 +31,10 @@ public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
     private final Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialogFactory;
-    public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new ObjectKey<>("exportChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new ObjectKey<>("exportChooserFactory",
+    public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new SimpleNullableKey<>("exportChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("exportChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
-            }, null);
+            });
 
     /**
      * Creates a new instance.

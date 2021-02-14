@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.AbstractSelectorModel;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -28,7 +29,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -91,13 +91,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public boolean hasStyleClass(@NonNull Figure element, @NonNull String clazz) {
-        return element.getStyleClass().contains(clazz);
+        return element.getStyleClasses().contains(clazz);
     }
 
     @Override
-    public @NonNull Set<String> getStyleClasses(@NonNull Figure element) {
-        Collection<String> styleClasses = element.getStyleClass();
-        return (styleClasses == null) ? Collections.emptySet() : new HashSet<>(element.getStyleClass());
+    public ReadOnlySet<String> getStyleClasses(@NonNull Figure element) {
+        return element.getStyleClasses();
     }
 
     private WriteableStyleableMapAccessor<?> findKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
@@ -217,7 +216,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
         // XXX Pseudo class is not thread safe!
         // XXX we unnecessarily create many pseudo class states!
-            return element.getPseudoClass().contains(pseudoClass);
+        return element.getPseudoClassStates().contains(pseudoClass);
     }
 
     @Override

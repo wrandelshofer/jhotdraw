@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class TransientKey<T> extends ObjectKey<T> {
+public class TransientKey<T> extends AbstractKey<T> implements NullableKey<T> {
 
     private static final long serialVersionUID = 1L;
 

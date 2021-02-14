@@ -122,6 +122,33 @@ public class ImmutableSets {
         }
     }
 
+    /**
+     * Removes all members from the given collection which are contained in
+     * the provided collection {@code c}.
+     *
+     * @param collection a collection
+     * @param c          collection {@code c}.
+     * @param <T>        the type of the collections
+     * @return a new immutable collection which contains all elements of
+     * {@code collection} without the elements that are contained in {@code c}.
+     */
+    public static @NonNull <T> ImmutableSet<T> removeAll(@NonNull ReadOnlyCollection<T> collection, Collection<T> c) {
+        if (collection.isEmpty()) {
+            return emptySet();
+        }
+        if (c.isEmpty()) {
+            return ofCollection(collection);
+        }
+
+        LinkedHashSet<T> tmp = new LinkedHashSet<>(collection.size());
+        for (T elem : collection) {
+            if (!c.contains(elem)) {
+                tmp.add(elem);
+            }
+        }
+        return ofCollection(tmp);
+    }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static @NonNull <T> ImmutableSet<T> remove(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {

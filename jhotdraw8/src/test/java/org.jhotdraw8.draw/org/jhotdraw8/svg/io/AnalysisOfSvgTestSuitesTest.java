@@ -113,6 +113,7 @@ public class AnalysisOfSvgTestSuitesTest {
      * @throws IOException
      */
     @TestFactory
+    @Disabled
     public @NonNull Stream<DynamicTest> w3cSvgTiny12TestSuiteTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(W3C_SVG_12_TINY_TEST_SUITE))) {
             System.err.println("Please fix the path to W3C SVG 1.2 Tiny Test Suite: " +

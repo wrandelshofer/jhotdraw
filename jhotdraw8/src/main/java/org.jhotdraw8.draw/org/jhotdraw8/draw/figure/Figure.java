@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.css.Styleable;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -38,6 +37,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.styleable.StyleableBean;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.tree.TreeNode;
 
@@ -775,7 +775,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     @Override
-    default @Nullable Styleable getStyleableParent() {
+    default @Nullable StyleableBean getStyleableParent() {
         return getParent();
     }
 
@@ -1015,8 +1015,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return point in world coordinates
      */
     default @NonNull Point2D localToWorld(@NonNull Point2D p) {
-        final Transform ltw = getLocalToWorld();
-        return ltw == null ? p : ltw.transform(p);
+        return getLocalToWorld().transform(p);
     }
 
     /**
@@ -1030,8 +1029,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return bounds in parent coordinates
      */
     default @NonNull Bounds localToParent(@NonNull Bounds p) {
-        final Transform ltw = getLocalToParent();
-        return ltw == null ? p : ltw.transform(p);
+        return getLocalToParent().transform(p);
     }
 
     /**
@@ -1045,8 +1043,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return bounds in world coordinates
      */
     default @NonNull Bounds localToWorld(@NonNull Bounds p) {
-        final Transform ltw = getLocalToWorld();
-        return ltw == null ? p : ltw.transform(p);
+        return getLocalToWorld().transform(p);
     }
 
     /**

@@ -22,7 +22,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.util.Resources;
 
@@ -49,10 +49,10 @@ public interface Application extends Disableable, PropertyBean {
     String MODEL_PROPERTY = "model";
     String STYLESHEETS_PROPERTY = "stylesheets";
 
-    Key<String> NAME_KEY = new ObjectKey<>("name", String.class);
-    Key<String> VERSION_KEY = new ObjectKey<>("version", String.class);
-    Key<String> COPYRIGHT_KEY = new ObjectKey<>("copyright", String.class);
-    Key<String> LICENSE_KEY = new ObjectKey<>("license", String.class);
+    Key<String> NAME_KEY = new SimpleNullableKey<>("name", String.class);
+    Key<String> VERSION_KEY = new SimpleNullableKey<>("version", String.class);
+    Key<String> COPYRIGHT_KEY = new SimpleNullableKey<>("copyright", String.class);
+    Key<String> LICENSE_KEY = new SimpleNullableKey<>("license", String.class);
 
     /**
      * Contains all {@link Activity} objects that are managed by this

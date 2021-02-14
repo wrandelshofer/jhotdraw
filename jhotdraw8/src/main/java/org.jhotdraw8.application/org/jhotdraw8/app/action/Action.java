@@ -14,8 +14,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ObjectKey;
-import org.jhotdraw8.collection.StringKey;
+import org.jhotdraw8.collection.NullableKey;
+import org.jhotdraw8.collection.SimpleNullableKey;
 
 /**
  * Action.
@@ -31,33 +31,33 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.
      */
-    StringKey ID_KEY = new StringKey("id");
+    NullableKey<String> ID_KEY = new SimpleNullableKey<String>("id", String.class);
     /**
      * The key used for storing the {@code String} name for the action, used for
      * a menu or button.
      */
-    StringKey LABEL = new StringKey("label");
+    NullableKey<String> LABEL = new SimpleNullableKey<String>("label", String.class);
     /**
      * The key used for storing a short {@code String} description for the
      * action, used for tooltip text.
      */
-    StringKey SHORT_DESCRIPTION = new StringKey("ShortDescription");
+    NullableKey<String> SHORT_DESCRIPTION = new SimpleNullableKey<String>("ShortDescription", String.class);
     /**
      * The key used for storing a longer {@code String} description for the
      * action, could be used for context-sensitive help.
      */
-    StringKey LONG_DESCRIPTION = new StringKey("LongDescription");
+    NullableKey<String> LONG_DESCRIPTION = new SimpleNullableKey<String>("LongDescription", String.class);
     /**
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.
      */
-    Key<Node> SMALL_ICON = new ObjectKey<>("SmallIcon", Node.class);
+    Key<Node> SMALL_ICON = new SimpleNullableKey<>("SmallIcon", Node.class, null);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
      * accelerator for the action.
      */
-    Key<KeyCombination> ACCELERATOR_KEY = new ObjectKey<>("AcceleratorKey", KeyCombination.class);
+    Key<KeyCombination> ACCELERATOR_KEY = new SimpleNullableKey<>("AcceleratorKey", KeyCombination.class, null);
 
     /**
      * The key used for storing a {@code KeyCombination} to be used as the
@@ -65,13 +65,13 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @since 1.3
      */
-    Key<KeyCombination> MNEMONIC_KEY = new ObjectKey<>("MnemonicKey", KeyCombination.class);
+    Key<KeyCombination> MNEMONIC_KEY = new SimpleNullableKey<>("MnemonicKey", KeyCombination.class, null);
 
     /**
      * The key used for large icon, such as {@code ImageView}. This is typically
      * used by buttons.
      */
-    Key<Node> LARGE_ICON_KEY = new ObjectKey<>("SwingLargeIconKey", Node.class);
+    Key<Node> LARGE_ICON_KEY = new SimpleNullableKey<>("SwingLargeIconKey", Node.class, null);
 
     /**
      * The selected property.
