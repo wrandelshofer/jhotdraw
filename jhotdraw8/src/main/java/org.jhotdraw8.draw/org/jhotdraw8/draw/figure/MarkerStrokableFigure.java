@@ -44,8 +44,10 @@ public interface MarkerStrokableFigure extends Figure {
      * <p>
      * References:
      * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     @Nullable CssSizeStyleableKey MARKER_STROKE_DASH_OFFSET = new CssSizeStyleableKey("marker-stroke-dashoffset", CssSize.ZERO);
     /**
@@ -53,8 +55,10 @@ public interface MarkerStrokableFigure extends Figure {
      * <p>
      * References:
      * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     EnumStyleableKey<StrokeLineCap> MARKER_STROKE_LINE_CAP = new EnumStyleableKey<>("marker-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
@@ -62,9 +66,10 @@ public interface MarkerStrokableFigure extends Figure {
      * {@code MITER}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     EnumStyleableKey<StrokeLineJoin> MARKER_STROKE_LINE_JOIN = new EnumStyleableKey<>("marker-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
@@ -73,9 +78,10 @@ public interface MarkerStrokableFigure extends Figure {
      * Default value: {@code 4.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     CssSizeStyleableKey MARKER_STROKE_MITER_LIMIT = new CssSizeStyleableKey("marker-stroke-miterlimit", new CssSize(4.0));
     /**
@@ -83,9 +89,10 @@ public interface MarkerStrokableFigure extends Figure {
      * value: {@code Color.BLACK}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     @NonNull
     NullablePaintableStyleableKey MARKER_STROKE = new NullablePaintableStyleableKey("marker-stroke", null);
@@ -101,9 +108,10 @@ public interface MarkerStrokableFigure extends Figure {
      * Default value: {@code 1.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     CssSizeStyleableKey MARKER_STROKE_WIDTH = new CssSizeStyleableKey("marker-stroke-width", CssSize.ONE);
     /**
@@ -112,9 +120,10 @@ public interface MarkerStrokableFigure extends Figure {
      * Default value: {@code 1.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     *<dt>SVG Stroke Properties</dt>
+     *<dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     *</dl>
      * /
      * public static NullableCssSizeStyleableKey STROKE_OPACITY = new
      * NullableCssSizeStyleableKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
@@ -124,9 +133,10 @@ public interface MarkerStrokableFigure extends Figure {
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     ListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableKey<>("marker-stroke-dasharray",
             new TypeToken<ImmutableList<CssSize>>() {

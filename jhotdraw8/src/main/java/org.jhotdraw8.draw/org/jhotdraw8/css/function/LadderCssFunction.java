@@ -42,11 +42,10 @@ import java.util.function.Consumer;
  * interpolation function that results in a single color.
  * <p>
  * References:
- * <ul>
- * <li>JavaFX CSS Reference Guide.
- * <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html">oracle.com</a>
- * </li>
- * </ul>
+ * <dl>
+ * <dt>JavaFX CSS Reference Guide.</dt>
+ * <dd><a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
+ * </dl>
  *
  * @param <T>
  */

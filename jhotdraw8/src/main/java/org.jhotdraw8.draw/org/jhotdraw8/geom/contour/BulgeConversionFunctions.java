@@ -28,13 +28,12 @@ import java.awt.geom.Point2D;
  * An AutoCAD Arc Entity is defined by a center, radius and start & end angle.
  * The arc is always defined to be anticlockwise oriented, that is, following
  * an anticlockwise direction from the start angle to the end angle.
- *
  * <p>
  * References:
- * <ul>
- *  <li>Bulge conversions: http://www.lee-mac.com/bulgeconversion.html</li>
- * </ul>
- * </p>
+ * <dl>
+ *     <dt>Bulge conversions</dt>
+ *     <dd><a href="http://www.lee-mac.com/bulgeconversion.html">lee-mac.com</a></dd>
+ * </dl>
  */
 public class BulgeConversionFunctions {
 

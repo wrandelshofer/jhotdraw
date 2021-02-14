@@ -80,8 +80,10 @@ import java.util.function.Consumer;
  * </pre>
  * <p>
  * References:
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
- * CSS Reference Guide</a>.
+ * <dl>
+ *     <dt>JavaFX CSS Reference Guide</dt>
+ *     <dd><a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.PropertyBean;
+import org.jhotdraw8.beans.ReadOnlyPropertyBean;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.NonNullKey;
 import org.jhotdraw8.collection.NonNullObjectKey;
@@ -27,7 +28,7 @@ import java.time.Instant;
  *
  * @author Werner Randelshofer
  */
-public interface RenderContext extends PropertyBean {
+public interface RenderContext extends ReadOnlyPropertyBean {
 
     // ---
     // keys

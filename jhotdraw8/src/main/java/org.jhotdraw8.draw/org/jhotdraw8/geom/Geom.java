@@ -468,7 +468,7 @@ public class Geom {
      * References:
      * <dl>
      *     <dt>Values of Trigonometric ratios for 0, 30, 45, 60 and 90 degrees</dt>
-     *     <dd><a href="https://mathinstructor.net/2012/08/values-of-trigonometric-ratios-for-0-30-45-60-and-90-degrees/">link</a></dd>
+     *     <dd><a href="https://mathinstructor.net/2012/08/values-of-trigonometric-ratios-for-0-30-45-60-and-90-degrees/">mathinstructor.net</a></dd>
      * </dl>
      *
      * @param aDeg an angle in degrees
@@ -528,7 +528,7 @@ public class Geom {
      * References:
      * <dl>
      *     <dt>Values of Trigonometric ratios for 0, 30, 45, 60 and 90 degrees</dt>
-     *     <dd><a href="https://mathinstructor.net/2012/08/values-of-trigonometric-ratios-for-0-30-45-60-and-90-degrees/">link</a></dd>
+     *     <dd><a href="https://mathinstructor.net/2012/08/values-of-trigonometric-ratios-for-0-30-45-60-and-90-degrees/">mathinstructor.net</a></dd>
      * </dl>
      *
      * @param aDeg an angle in degrees

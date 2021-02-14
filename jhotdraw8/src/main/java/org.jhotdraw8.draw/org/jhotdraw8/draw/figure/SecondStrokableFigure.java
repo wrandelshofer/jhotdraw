@@ -44,18 +44,20 @@ public interface SecondStrokableFigure extends Figure {
      * value: {@code 0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     @Nullable CssSizeStyleableKey SECOND_STROKE_DASH_OFFSET = new CssSizeStyleableKey("second-stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     EnumStyleableKey<StrokeLineCap> SECOND_STROKE_LINE_CAP = new EnumStyleableKey<>("second-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
@@ -63,9 +65,10 @@ public interface SecondStrokableFigure extends Figure {
      * {@code MITER}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     EnumStyleableKey<StrokeLineJoin> SECOND_STROKE_LINE_JOIN = new EnumStyleableKey<>("second-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
@@ -74,9 +77,10 @@ public interface SecondStrokableFigure extends Figure {
      * Default value: {@code 4.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     CssSizeStyleableKey SECOND_STROKE_MITER_LIMIT = new CssSizeStyleableKey("second-stroke-miterlimit", new CssSize(4.0));
     /**
@@ -84,9 +88,10 @@ public interface SecondStrokableFigure extends Figure {
      * value: {@code Color.BLACK}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     @NonNull
     NullablePaintableStyleableKey SECOND_STROKE = new NullablePaintableStyleableKey("second-stroke", null);
@@ -102,9 +107,10 @@ public interface SecondStrokableFigure extends Figure {
      * Default value: {@code 1.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     CssSizeStyleableKey SECOND_STROKE_WIDTH = new CssSizeStyleableKey("second-stroke-width", CssSize.ONE);
     /**
@@ -113,9 +119,10 @@ public interface SecondStrokableFigure extends Figure {
      * Default value: {@code 1.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     *<dt>SVG Stroke Properties</dt>
+     *<dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     *</dl>
      * /
      * public static NullableCssSizeStyleableKey STROKE_OPACITY = new
      * NullableCssSizeStyleableKey("stroke-opacity", DirtyMask.of(DirtyBits.NODE),
@@ -125,9 +132,10 @@ public interface SecondStrokableFigure extends Figure {
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     ListStyleableKey<CssSize> SECOND_STROKE_DASH_ARRAY = new ListStyleableKey<>("second-stroke-dasharray",
             new TypeToken<ImmutableList<CssSize>>() {

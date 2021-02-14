@@ -9,8 +9,10 @@ package org.jhotdraw8.svg.text;
  * shape-rendering property.
  * <p>
  * References
- * <br><a href="https://www.w3.org/TR/SVGMobile12/painting.html#ShapeRenderingProperty">
- *     shape-rendering</a>
+ * <dl>
+ *     <dt>SVG Mobile 1.2, shape-rendering</dt>
+ *     <dd><a href="https://www.w3.org/TR/SVGMobile12/painting.html#ShapeRenderingProperty">w3.org</a></dd>
+ * </dl>
  */
 public enum SvgShapeRendering {
     AUTO,OPTIMIZE_SPEED,CRISP_EDGES,GEOMETRIC_PRECISION

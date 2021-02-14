@@ -9,7 +9,10 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
+import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 
@@ -29,6 +32,7 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
     // Field declarations
     // ---
     protected final Map<Figure, Node> figureToNodeMap = new HashMap<>();
+
 
     // ---
     // Behavior

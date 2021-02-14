@@ -22,8 +22,11 @@ import java.util.List;
 /**
  * Exports a JavaFX scene graph to SVG Tiny 1.2.
  * <p>
- * References:<br>
- * <a href="https://www.w3.org/TR/SVGTiny12/">SVG 1.1</a>
+ * References:
+ * <dl>
+ *     <dt>SVG Tiny 1.2</dt>
+ *     <dd><a href="https://www.w3.org/TR/SVGTiny12/">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

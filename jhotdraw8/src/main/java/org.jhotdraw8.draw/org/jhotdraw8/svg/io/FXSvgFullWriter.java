@@ -19,8 +19,12 @@ import java.util.List;
 /**
  * Exports a JavaFX scene graph to SVG 1.1 "Full".
  * <p>
- * References:<br>
- * <a href="https://www.w3.org/TR/SVG11/">SVG 1.1</a>
+ * References:
+ * <dl>
+ *     <dt>SVG 1.1</dt>
+ *     <dd><a href="https://www.w3.org/TR/SVG11/">w3.org</a></dd>
+ * </dl>
+ *
  *
  * @author Werner Randelshofer
  */

@@ -26,8 +26,8 @@ import java.util.function.Consumer;
  * <p>
  * References:
  * <dl>
- * <dt>SVG Strokes</dt><dd><a href="https://www.w3.org/TR/svg-strokes/#SpecifyingStrokeAlignment">
- *     § 2.2. Specifying stroke alignment: the ‘stroke-alignment’ property</a></dd>
+ * <dt>SVG Strokes, § 2.2. Specifying stroke alignment: the ‘stroke-alignment’ property</dt>
+ * <dd><a href="https://www.w3.org/TR/svg-strokes/#SpecifyingStrokeAlignment">w3.org</a></dd>
  * </dl>
  */
 public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType> {

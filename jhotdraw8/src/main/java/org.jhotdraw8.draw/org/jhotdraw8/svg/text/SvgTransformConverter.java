@@ -47,9 +47,10 @@ import static java.lang.Math.tan;
  * </pre>
  * <p>
  * References:
- * <a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/coords.html#TransformAttribute">
- * SVG Tiny 1.2, The 'transform' attribute.
- * </a>
+ * <dl>
+ *     <dt>SVG Tiny 1.2, The 'transform' attribute.</dt>
+ *     <dd><a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/coords.html#TransformAttribute">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

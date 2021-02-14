@@ -562,12 +562,6 @@ public class BezierCurves {
 
     /**
      * Computes the inflection points of the given cubic curve.
-     * <p>
-     * References:
-     * <ol>
-     *     <li><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow</a></a></li>
-     * </ol>
-     * </p>
      */
     public static DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
         return inflectionPoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
@@ -577,10 +571,10 @@ public class BezierCurves {
      * Computes the inflection points of the given cubic curve.
      * <p>
      * References:
-     * <ol>
-     *     <li><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow</a></a></li>
-     * </ol>
-     * </p>
+     * <dl>
+     *     <dt>stackoverflow, Calculating the Inflection Point of a Cubic Bezier Curve</dt>
+     *     <dd><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow.com</a></dd>
+     * </dl>
      */
     public static DoubleArrayList inflectionPoints(double x0, double y0,
                                                    double x1, double y1,

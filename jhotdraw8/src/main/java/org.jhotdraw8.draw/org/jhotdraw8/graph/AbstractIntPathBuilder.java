@@ -34,10 +34,6 @@ public abstract class AbstractIntPathBuilder {
      * <p>
      * This method uses a breadth first search and returns the first result that
      * it finds.
-     * <p>
-     * References:<br>
-     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
-     * Wikipedia</a>
      *
      * @param start the start vertex
      * @param goal  the goal vertex
@@ -59,9 +55,12 @@ public abstract class AbstractIntPathBuilder {
      * This method uses a breadth first search and returns the first result that
      * it finds.
      * <p>
-     * References:<br>
-     * <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
-     * Wikipedia</a>
+     * References:
+     * <dl>
+     *     <dt>Wikipedia, Dijkstra's algorithm, Practical optimizations and infinite graphs</dt>
+     *     <dd><a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     *      wikipedia.org</a></dd>
+     * </dl>
      *
      * @param start         the start vertex
      * @param goalPredicate the goal predicate

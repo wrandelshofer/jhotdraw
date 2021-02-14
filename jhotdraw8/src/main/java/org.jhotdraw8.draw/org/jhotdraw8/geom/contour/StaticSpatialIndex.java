@@ -25,10 +25,12 @@ import static java.lang.Math.min;
  * The spatial index is implemented using a Hilbert R-tree [1].
  * <p>
  * References:
- * <ul>
- *  <li>[1] <a href="https://en.wikipedia.org/wiki/Hilbert_R-tree">Hilbert R-Tree</a></li>
- *  <li>[2] <a href="http://threadlocalmutex.com/?p=126">Hilbert curves in O(log(n)) time</a></li>
- * </ul>
+ * <dl>
+ *     <dt>[1] Wikipedia, Hilbert R-Tree</dt>
+ *     <dd><a href="https://en.wikipedia.org/wiki/Hilbert_R-tree">wikipedia.org</a></dd>
+ *     <dt>[2] Hilbert curves in O(log(n)) time</dt>
+ *     <dd><a href="http://threadlocalmutex.com/?p=126">threadlocalmutex.com</a></dd>
+ * </dl>
  * </p>
  */
 public class StaticSpatialIndex {

@@ -21,13 +21,11 @@ public interface Paintable {
         return getPaint();
     }
 
-    @Nullable
-    static Paint getPaint(@Nullable Paintable p) {
+    static @Nullable Paint getPaint(@Nullable Paintable p) {
         return p == null ? null : p.getPaint();
     }
 
-    @Nullable
-    static Paint getPaint(@Nullable Paintable p, RenderContext ctx) {
+    static @Nullable Paint getPaint(@Nullable Paintable p, RenderContext ctx) {
         return p == null ? null : p.getPaint(ctx);
     }
 }

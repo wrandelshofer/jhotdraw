@@ -15,14 +15,14 @@ import static java.lang.Math.min;
  * UnitConverter.
  * <p>
  * References:
- * <ul>
- * <li><a href="https://www.w3.org/TR/css3-values/#absolute-length">
- * Absolute lengths: the cm, mm, Q, in, pt, pc, px units</a></li>
- * <li><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">
- * Viewport-percentage lengths: the vw, vh, vmin, vmax units</a></li>
- * <li><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">
- * Font-relative lengths: the em, ex, ch, rem units</a></li>
- * </ul>
+ * <dl>
+ *     <dt>Absolute lengths: the cm, mm, Q, in, pt, pc, px units</dt>
+ *     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
+ *     <dt>Viewport-percentage lengths: the vw, vh, vmin, vmax units</dt>
+ *     <dd><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">w3.org</a></dd>
+ *     <dt>Font-relative lengths: the em, ex, ch, rem units</dt>
+ *     <dd><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

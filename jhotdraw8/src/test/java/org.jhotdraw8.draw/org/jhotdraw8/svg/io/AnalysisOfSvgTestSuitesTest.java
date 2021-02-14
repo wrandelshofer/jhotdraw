@@ -125,6 +125,8 @@ public class AnalysisOfSvgTestSuitesTest {
                 .filter(f -> f.getFileName().toString().endsWith(".svg"))
                 .filter(f->!f.getFileName().toString().startsWith("animate-")
                 &&!f.getFileName().toString().startsWith("conf-")
+                &&!f.getFileName().toString().startsWith("coords-")
+                &&!f.getFileName().toString().startsWith("extend-")
                 &&!f.getFileName().toString().startsWith("fonts-")
                 &&!f.getFileName().toString().startsWith("interact-")
                 &&!f.getFileName().toString().startsWith("intro-compat-")
@@ -134,7 +136,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 &&!f.getFileName().toString().startsWith("script-")
                 &&!f.getFileName().toString().startsWith("udom-")
                 )
-                .filter(f->f.getFileName().toString().startsWith("shapes-"))
+                .filter(f->f.getFileName().toString().startsWith("paint-"))
                 .map(f -> new OrderedPair<Path, Path>(f,
                         f.getParent().getParent().resolve(
                                 Path.of("png",

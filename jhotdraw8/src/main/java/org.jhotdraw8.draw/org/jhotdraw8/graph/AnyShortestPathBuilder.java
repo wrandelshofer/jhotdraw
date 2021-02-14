@@ -53,7 +53,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
     }
 
     /**
-     * Searches shortest path using Dijkstra.
+     * Searches shortest path using Dijkstra's algorithm.
      * <p>
      * This algorithm does not update an entry in the priority queue.
      * Whenever a distance of a vertex is reduced, we add one more
@@ -61,8 +61,11 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
      * in the priority queue, we only consider the one with the minimum
      * distance.
      * <p>
-     * References: <a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/"
-     * geeksforgeeks.org</a>
+     * References:
+     * <dl>
+     *     <dt>Geeks for Geeks, Dijkstra’s Shortest Path Algorithm using priority_queue of STL</dt>
+     *     <dd><a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/">geeksforgeeks.org</a></dd>
+     * </dl>
      */
     public static <V, A> BackLink<V, A> searchShortestPathArcsDouble(@NonNull Iterable<V> starts,
                                                                      @NonNull Predicate<V> goalPredicate,
@@ -205,7 +208,7 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
     }
 
     /**
-     * Searches shortest path using Dijkstra.
+     * Searches shortest path using Dijkstra's algorithm.
      * <p>
      * This algorithm does not update an entry in the priority queue.
      * Whenever a distance of a vertex is reduced, we add one more
@@ -213,8 +216,11 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
      * in the priority queue, we only consider the one with the minimum
      * distance.
      * <p>
-     * References: <a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/"
-     * geeksforgeeks.org</a>
+     * References:
+     * <dl>
+     *     <dt>Geeks for Geeks, Dijkstra’s Shortest Path Algorithm using priority_queue of STL</dt>
+     *     <dd><a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/">geeksforgeeks.org</a></dd>
+     * </dl>
      */
     @Nullable
     protected BackLink<V, A> search(@NonNull V start,

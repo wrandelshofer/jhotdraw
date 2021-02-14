@@ -201,8 +201,11 @@ import java.util.Objects;
  * [83]  PublicID       ::=  'PUBLIC' S PubidLiteral
  * </pre>
  * <p>
- * References:<br>
- * <a href="https://www.w3.org/TR/xml/">Extensible Markup Language (XML) 1.0 (Fifth Edition)</a>
+ * References:
+ * <dl>
+ *     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition)</dt>
+ *     <dd><a href="https://www.w3.org/TR/xml/">w3.org</a></dd>
+ * </dl>
  */
 public class IndentingXMLStreamWriter implements XMLStreamWriter {
     public static final String DEFAULT_PREFIX = "";

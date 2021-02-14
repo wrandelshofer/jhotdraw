@@ -34,24 +34,22 @@ public class SvgDefsFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "defs";
+    public static final String TYPE_SELECTOR = "defs";
 
     public SvgDefsFigure() {
         set(VISIBLE, false);
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         g.setAutoSizeChildren(false);
         g.setManaged(false);
         return g;
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

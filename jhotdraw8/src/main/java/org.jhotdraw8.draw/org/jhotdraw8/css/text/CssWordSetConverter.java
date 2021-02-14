@@ -32,14 +32,12 @@ import java.util.TreeSet;
  * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
  * <p>
  * References:
- * <ul>
- * <li><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">
- * HTML 5, Common Microsyntaxes, Space-separated tokens
- * </a></li>
- * <li><a href="https://www.w3.org/TR/xmlschema-2/#token">
- * XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken
- * </a></li>
- * </ul>
+ * <dl>
+ *     <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
+ *     <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
+ *     <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken</dt>
+ *     <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */
@@ -47,24 +45,25 @@ public class CssWordSetConverter implements Converter<ImmutableSet<String>> {
 
     private final PatternConverter formatter = new PatternConverter("{0,list,{1,word}|[ \n\r\t]+}", new CssConverterFactory());
 
-    public final static Comparator<String> NFD_COMPARATOR
-            = (o1, o2) -> Normalizer.normalize(o1, Normalizer.Form.NFD).compareTo(
-            Normalizer.normalize(o2, Normalizer.Form.NFD));
+    public static final Comparator<String> NFD_COMPARATOR
+            = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
     @Override
-    public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @NonNull TT value) throws IOException {
+    public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+        if (value!=null) {
         Set<String> tokens = new TreeSet<>(NFD_COMPARATOR);
-        tokens.addAll(value.asSet());
+            tokens.addAll(value.asSet());
         Object[] v = new Object[tokens.size() + 1];
         v[0] = value.size();
         value.copyInto(v, 1);
         formatter.toString(out, v);
+        }
     }
 
     @Override
     public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
-        ImmutableSet<String> l = ImmutableSets.ofArray(v, 1, (int) v[0]);
+        ImmutableSet<String> l = v==null||v.length==0?ImmutableSets.emptySet():ImmutableSets.ofArray(v, 1, (int) v[0]);
         return l;
     }
 

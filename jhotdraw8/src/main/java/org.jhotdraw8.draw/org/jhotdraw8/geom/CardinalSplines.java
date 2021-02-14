@@ -48,8 +48,12 @@ public class CardinalSplines {
      *     <li>C = B + (E - A) * c / 3</li>
      *     <li>D = E - (F - B) * c/ 3</li>
      * </ul>
-     * References:<br>
-     *     <a href="https://stackoverflow.com/questions/31274246/converting-a-cubic-bezier-curves-into-a-cardinal-spline-and-back">stackoverflow</a>
+     * References:
+     * <dl>
+     *     <dt>Stackoverflow, Converting a Cubic Bezier Curves into a Cardinal Spline and back</dt>
+     *     <dd><a href="https://stackoverflow.com/questions/31274246/converting-a-cubic-bezier-curves-into-a-cardinal-spline-and-back">stackoverflow.com</a></dd>
+     * </dl>
+     *
      *
      * @param p the points of the cardinal spline
      * @param c the tension of the cardinal spline

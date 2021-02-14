@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 /**
- * WordListConverter converts an ImmutableObservableList of Strings into a
+ * WordListConverter converts an ImmutableSet of Strings into a
  * String.
  * <p>
  * The word list is actually a "set ofCollection space separated tokens", as specified in
@@ -31,14 +31,13 @@ import java.util.TreeSet;
  * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
  * <p>
  * References:
- * <ul>
- * <li><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">
- * HTML 5, Common Microsyntaxes, Space-separated tokens
- * </a></li>
- * <li><a href="https://www.w3.org/TR/xmlschema-2/#token">
- * XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken
- * </a></li>
- * </ul>
+ * <dl>
+ * <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
+ * <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
+ *
+ * <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken</dt>
+ * <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

@@ -39,11 +39,11 @@ public abstract class Selector extends AST {
      * {@code specificity=100*a+10*b+c}.
      * <p>
      * References:
-     * <ul>
-     * <li><a href="https://www.w3.org/TR/2011/REC-css3-selectors-20110929/">CSS
-     * Syntax Selectors Level 3, Chapter 9. Calculating a selector's
-     * specificity</a></li>
-     * </ul>
+     * <dl>
+     *     <dt>CSS Syntax Selectors Level 3, Chapter 9. Calculating a selector's
+     *       specificity</dt>
+     * <dd><a href="https://www.w3.org/TR/2011/REC-css3-selectors-20110929/">w3.org</a></dd>
+     * </dl>
      *
      * @return the specificity
      */

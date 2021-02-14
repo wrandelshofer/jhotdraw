@@ -34,10 +34,10 @@ import java.io.Reader;
  *
  * <p>
  * References:
- * <ul>
- * <li><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">CSS Syntax
- * Module Level 3, Chapter 3.3. Preprocessing the input stream</a></li>
- * </ul>
+ * <dl>
+ * <dt>Module Level 3, Chapter 3.3. Preprocessing the input stream</dt>
+ * <dd><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

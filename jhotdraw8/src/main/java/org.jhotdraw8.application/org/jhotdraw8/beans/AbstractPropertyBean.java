@@ -7,7 +7,10 @@ package org.jhotdraw8.beans;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonNullMapAccessor;
 
 import java.util.LinkedHashMap;
 
@@ -28,4 +31,15 @@ public abstract class AbstractPropertyBean implements PropertyBean {
     public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
+
+    @Override
+    public <T> @Nullable T get(@NonNull MapAccessor<T> key) {
+        return PropertyBean.super.get(key);
+    }
+
+    @Override
+    public <T> @NonNull T getNonNull(@NonNull NonNullMapAccessor<T> key) {
+        return PropertyBean.super.getNonNull(key);
+    }
+
 }

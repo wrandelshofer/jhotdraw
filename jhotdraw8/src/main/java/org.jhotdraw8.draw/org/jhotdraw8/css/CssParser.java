@@ -155,12 +155,12 @@ import java.util.Map;
  * </pre>
  * <p>
  * References:
- * <ul>
- * <li><a href="https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#parsing">
- * CSS Syntax Module Level 3, Chapter 5. Parsing</a></li>
- * <li><a href="https://www.w3.org/TR/CSS2/grammar.html#q25.0">
- * W3C CSS2, Appendix G.1 Grammar of CSS 2.1</a></li>
- * </ul>
+ * <dl>
+ * <dt>CSS Syntax Module Level 3, Chapter 5. Parsing</dt>
+ * <dd><a href="https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#parsing">w3.org</a></dd>
+ * <dt>W3C CSS2, Appendix G.1 Grammar of CSS 2.1</dt>
+ * <dd><a href="https://www.w3.org/TR/CSS2/grammar.html#q25.0">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

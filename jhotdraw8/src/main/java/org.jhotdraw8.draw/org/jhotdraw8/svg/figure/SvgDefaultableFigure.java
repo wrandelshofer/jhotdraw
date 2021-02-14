@@ -20,6 +20,7 @@ import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssEnumConverter;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -39,9 +40,6 @@ import org.jhotdraw8.svg.text.SvgShapeRendering;
 import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
 import org.jhotdraw8.svg.text.SvgTextAnchor;
 import org.jhotdraw8.svg.text.SvgVisibility;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
-
-import java.util.List;
 
 import static org.jhotdraw8.svg.io.SvgFontFamilyConverter.GENERIC_FONT_FAMILY_SANS_SERIF;
 
@@ -50,6 +48,14 @@ import static org.jhotdraw8.svg.io.SvgFontFamilyConverter.GENERIC_FONT_FAMILY_SA
  * mechanism.
  */
 public interface SvgDefaultableFigure extends DefaultableFigure {
+    /**
+     * color.
+     * <a href="https://www.w3.org/TR/SVGTiny12/painting.html#ColorProperty">link</a>
+     */
+    DefaultableStyleableKey<CssColor> COLOR_KEY = new DefaultableStyleableKey<>("color",
+            new TypeToken<CssDefaultableValue<CssColor>>() {
+            }, new CssColorConverter(true),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssColor.BLACK);
     /**
      * fill.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillProperty">link</a>
@@ -262,8 +268,8 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <p>
      * References:
      * <dl>
-     *     <dt>SVG Tiny 1.2</dt><dd><a href="https://www.w3.org/TR/SVGTiny12/painting.html#DisplayProperty">link</a></dd>
-     *     <dt>SVG 2</dt><dd><a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/render.html#VisibilityControl">link</a></dd>
+     *     <dt>SVG Tiny 1.2</dt><dd><a href="https://www.w3.org/TR/SVGTiny12/painting.html#DisplayProperty">w3.org</a></dd>
+     *     <dt>SVG 2</dt><dd><a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/render.html#VisibilityControl">w3.org</a></dd>
      * </dl>
      */
     @NonNull DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<SvgDisplay>("display",

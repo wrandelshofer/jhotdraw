@@ -13,9 +13,11 @@ import org.jhotdraw8.draw.figure.Figure;
 /**
  * SVG font size.
  * <p>
- *     References:
- * <br><a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">CSS-Fonts-3</a>
- *
+ * References:
+ * <dl>
+ *     <dt>CSS-Fonts-3</dt>
+ *     <dd><a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">w3.org</a></dd>
+ * </dl>
  */
 public class SvgFontSize {
     public enum SizeKeyword {

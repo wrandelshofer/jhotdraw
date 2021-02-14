@@ -6,15 +6,12 @@ package org.jhotdraw8.svg.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssLinearGradient;
 import org.jhotdraw8.css.CssRadialGradient;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.AbstractCssConverter;
-import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssLinearGradientConverter;
 import org.jhotdraw8.css.text.CssRadialGradientConverter;
 import org.jhotdraw8.io.IdResolver;
@@ -27,7 +24,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * CssPaintableConverter.
+ * SvgCssPaintableConverter.
  * <p>
  * Parses the following EBNF from the
  * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
@@ -44,13 +41,12 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
+    /** The currentColor keyword. */
+    public static final String CURRENT_COLOR_KEYWORD = "currentColor";
 
-    @NonNull
-    private static final CssColorConverter colorConverter = new CssColorConverter(false);
-    @NonNull
-    private static final CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter(false);
-    @NonNull
-    private static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
+    private static final @NonNull SvgColorConverter colorConverter = new SvgColorConverter(false);
+    private static final @NonNull SvgCssLinearGradientConverter linearGradientConverter = new SvgCssLinearGradientConverter(false);
+    private static final @NonNull CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
 
     public SvgCssPaintableConverter(boolean nullable) {
         super(nullable);
@@ -58,11 +54,11 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
 
     @Override
     protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        if (value instanceof CssColor) {
-            CssColor c = (CssColor) value;
+        if (value instanceof SvgColor) {
+            SvgColor c = (SvgColor) value;
             colorConverter.produceTokens(c, idSupplier, out);
-        } else if (value instanceof CssLinearGradient) {
-            CssLinearGradient lg = (CssLinearGradient) value;
+        } else if (value instanceof SvgLinearGradient) {
+            SvgLinearGradient lg = (SvgLinearGradient) value;
             linearGradientConverter.produceTokens(lg, idSupplier, out);
         } else if (value instanceof CssRadialGradient) {
             CssRadialGradient lg = (CssRadialGradient) value;
@@ -72,9 +68,8 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
         }
     }
 
-    @NonNull
     @Override
-    public Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_FUNCTION) {
             switch (tt.currentStringNonNull()) {
             case CssLinearGradientConverter.LINEAR_GRADIENT_FUNCTION:
@@ -91,9 +86,8 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
         return colorConverter.parseNonNull(tt, idResolver);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
                 + "\n" + colorConverter.getHelpText()
                 + "\n" + linearGradientConverter.getHelpText()

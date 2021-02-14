@@ -10,10 +10,11 @@ import org.jhotdraw8.annotation.NonNull;
 /**
  * The CssColorConverter converts system colors into color values.
  * <p>
- * References:<br>
- *     <ul>
- *         <li><a href="https://www.w3.org/TR/2020/WD-css-color-4-20201112/">CSS System colors</a></li>
- *     </ul>
+ * References:
+ *     <dl>
+ *         <dt>CSS System colors</dt>
+ *         <dd><a href="https://www.w3.org/TR/2020/WD-css-color-4-20201112/">w3.org</a></dd>
+ *     </dl>
  * </p>
  */
 public interface SystemColorConverter {

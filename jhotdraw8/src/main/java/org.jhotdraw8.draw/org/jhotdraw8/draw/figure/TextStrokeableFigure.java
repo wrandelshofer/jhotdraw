@@ -43,18 +43,20 @@ public interface TextStrokeableFigure extends Figure {
      * value: {@code 0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     @Nullable CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     EnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
@@ -62,9 +64,10 @@ public interface TextStrokeableFigure extends Figure {
      * {@code MITER}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     EnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
@@ -72,9 +75,10 @@ public interface TextStrokeableFigure extends Figure {
      * value: {@code 4.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", new CssSize(10.0));
     /**
@@ -82,9 +86,10 @@ public interface TextStrokeableFigure extends Figure {
      * value: {@code null}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     @Nullable NullablePaintableStyleableKey TEXT_STROKE = new NullablePaintableStyleableKey("text-stroke", null);
     /**
@@ -99,9 +104,10 @@ public interface TextStrokeableFigure extends Figure {
      * Default value: {@code 1.0}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     CssSizeStyleableKey TEXT_STROKE_WIDTH = new CssSizeStyleableKey("text-stroke-width", CssSize.ONE);
 
@@ -109,9 +115,10 @@ public interface TextStrokeableFigure extends Figure {
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
      * References:
-     * <p>
-     * <a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">SVG
-     * Stroke Properties</a>
+     * <dl>
+     * <dt>SVG Stroke Properties</dt>
+     * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
+     * </dl>
      */
     ListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new ListStyleableKey<>("text-stroke-dasharray",
             new TypeToken<ImmutableList<CssSize>>() {

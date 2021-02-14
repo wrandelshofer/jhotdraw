@@ -152,13 +152,14 @@ public class XmlUtil {
     }
 
     /**
-     * Reads the specified input into a document. Each Node contains a
-     * "location" attribute specifying the file, the line number and the column
-     * number of the node.
+     * Reads the specified input into a document. Adds a "location" attribute to each node,
+     * specifying the file, the line number and the column number of the node.
      * <p>
      * References:
-     * <a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">
-     * Stackoverflow</a>.
+     * <dl>
+     *     <dt>Stackoverflow, is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node</dt>
+     *     <dd><a href="https://stackoverflow.com/questions/2798376/is-there-a-way-to-parse-xml-via-sax-dom-with-line-numbers-available-per-node">stackoverflow.com</a>.</dd>
+     * </dl>
      *
      * @param inputSource    the input source
      * @param namespaceAware whether to be name space aware

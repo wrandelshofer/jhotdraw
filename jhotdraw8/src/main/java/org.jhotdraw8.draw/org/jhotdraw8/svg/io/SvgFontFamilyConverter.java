@@ -39,11 +39,11 @@ import java.util.function.Consumer;
  * References:
  * <dl>
  *     <dt>SVG Tiny 1.2, Font Properties</dt>
- *     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a></dd>
+ *     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">w3.org</a></dd>
  *     <dt>Extensible Stylesheet Language (XSL) Version 1.1, Common Font Properties</dt>
- *     <dd><a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#common-font-properties">link</a></dd>
- *     <dt>Cascading Style Sheets, level 2 CSS2 Specification, Font Family</dt>
- *     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">link</a></dd>
+ *     <dd><a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#common-font-properties">w3.org</a></dd>
+ *     <dt>Cascading Style Sheets, Level 2, CSS2 Specification, Font Family</dt>
+ *     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">w3.org</a></dd>
  * </dl>
  */
 public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String>> {

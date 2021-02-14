@@ -8,10 +8,10 @@ package org.jhotdraw8.css;
  * Defines CSS 3 token types.
  * <p>
  * References:
- * <ul>
- * <li><a href="https://www.w3.org/TR/css-syntax-3/#tokenization">
- * CSS Syntax Module Level 3, Tokenization</a></li>
- * </ul>
+ * <dl>
+ * <dt>CSS Syntax Module Level 3, Tokenization</dt>
+ * <dd><a href="https://www.w3.org/TR/css-syntax-3/#tokenization">w3.org</a></a></dd>
+ * </dl>
  */
 public class CssTokenType {
 

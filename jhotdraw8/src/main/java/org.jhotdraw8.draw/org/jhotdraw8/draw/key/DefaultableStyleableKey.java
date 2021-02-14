@@ -77,7 +77,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
     /**
      * Returns the initial value of the attribute.
      * <p>
-     * We use the definition from CSS <a href="#css">defaulting</a>:
+     * We use the definition from CSS initial value:
      * <p>
      * "Each property has an initial value, defined in
      * the property's definition table. If the property
@@ -86,7 +86,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      * property is its initial value."
      * <p>
      * We intentionally do <b>not</b> use the definition from SVG
-     * <a href="#css">initial value</a>:
+     * initial value:
      * <p>
      * <strike>"The initial value of an attribute or property is
      * the value used when that attribute or property is not
@@ -94,10 +94,11 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      * <p>
      * References:
      * <dl>
-     *     <dt><a id="css">CSS Initial Value</a></dt><dd><a href="http://www.w3.org/TR/css-cascade-4/#defaulting">
-     *         CSS Cascading and Inheritance Level 4, Chapter 7.1 Initial Values</a></dd>
-     *     <dd><a id="svg">SVG Initial Value</a></dd><dt><a href="https://www.w3.org/TR/SVG/types.html#definitions">
-     *         SVG, Chapter 4: Basic Data Types and Interfaces, 4.1 Definitions, Initial Value</a></dt>
+     *     <dt>CSS Cascading and Inheritance Level 4, Chapter 7.1 Initial Values></dt>
+     *     <dd><a href="https://www.w3.org/TR/css-cascade-4/#initial-values">w3.org</a></dd>
+     *
+     *     <dt>SVG, Chapter 4: Basic Data Types and Interfaces, 4.1 Definitions, Initial Value</dt>
+     *     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dt>
      * </dl>
      *
      * @return the initial value.
