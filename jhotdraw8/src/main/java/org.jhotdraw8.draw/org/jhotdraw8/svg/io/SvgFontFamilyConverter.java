@@ -38,10 +38,21 @@ import java.util.function.Consumer;
  * <p>
  * References:
  * <dl>
- *     <dd>Font Family</dd><dt><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">CSS Fonts</a></dt>
+ *     <dt>SVG Tiny 1.2, Font Properties</dt>
+ *     <dd><a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a></dd>
+ *     <dt>Extensible Stylesheet Language (XSL) Version 1.1, Common Font Properties</dt>
+ *     <dd><a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#common-font-properties">link</a></dd>
+ *     <dt>Cascading Style Sheets, level 2 CSS2 Specification, Font Family</dt>
+ *     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">link</a></dd>
  * </dl>
  */
 public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String>> {
+
+    public static final String GENERIC_FONT_FAMILY_SERIF = "serif";
+    public static final String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
+    public static final String GENERIC_FONT_FAMILY_CURSIVE = "cursive";
+    public static final String GENERIC_FONT_FAMILY_FANTASY = "fantasy";
+    public static final String GENERIC_FONT_FAMILY_MONOSPACE = "monospace";
 
     @Nullable
     @Override
@@ -92,12 +103,11 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
             }
             switch (s) {
-            case "inherit":
-            case "serif":
-            case "sans-serif":
-            case "cursive":
-            case "fantasy":
-            case "monospace":
+            case GENERIC_FONT_FAMILY_SERIF:
+            case GENERIC_FONT_FAMILY_SANS_SERIF:
+            case GENERIC_FONT_FAMILY_CURSIVE:
+            case GENERIC_FONT_FAMILY_FANTASY:
+            case GENERIC_FONT_FAMILY_MONOSPACE:
                 out.accept(new CssToken(CssTokenType.TT_IDENT, s));
                 break;
             default:
@@ -115,7 +125,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨font-family⟩: ｛⟨family-name｜generic-family⟩,｝⟨family-name｜generic-family⟩｜inherit"
+        return "Format of ⟨font-family⟩: ｛⟨family-name｜generic-family⟩,｝⟨family-name｜generic-family⟩"
                 + "\n  with ⟨family-name⟩: ⟨string⟩"
                 + "\n  with ⟨generic-family⟩: serif｜sans-serif｜cursive｜fantasy｜monospace"
                 ;

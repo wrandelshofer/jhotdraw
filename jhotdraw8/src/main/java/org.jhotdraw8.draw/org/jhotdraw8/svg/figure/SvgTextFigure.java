@@ -53,6 +53,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     public static final @NonNull String TYPE_SELECTOR = "text";
     public static final @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
+
     @Nullable
     private Bounds cachedLayoutBounds;
 

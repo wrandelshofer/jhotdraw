@@ -13,6 +13,7 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
@@ -29,6 +30,7 @@ import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.svg.io.SvgFontFamilyConverter;
 import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
 import org.jhotdraw8.svg.text.SvgDisplay;
 import org.jhotdraw8.svg.text.SvgFontSize;
@@ -41,21 +43,13 @@ import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import java.util.List;
 
+import static org.jhotdraw8.svg.io.SvgFontFamilyConverter.GENERIC_FONT_FAMILY_SANS_SERIF;
+
 /**
  * The following attributes can be defined on all SVG figures using the "defaulting"
  * mechanism.
  */
 public interface SvgDefaultableFigure extends DefaultableFigure {
-    /**
-     * stroke-alignment.
-     * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#SpecifyingStrokeAlignment">link</a>
-     */
-    DefaultableStyleableKey<StrokeType> STROKE_ALIGNMENT_KEY = new DefaultableStyleableKey<>(
-            "stroke-alignment",
-            new TypeToken<CssDefaultableValue<StrokeType>>() {
-            },
-            new SvgStrokeAlignmentConverter(false),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), StrokeType.CENTERED);
     /**
      * fill.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillProperty">link</a>
@@ -66,6 +60,29 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssColor.BLACK);
 
     /**
+     * font-family.
+     * <p>
+     * <a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a>
+     */
+    DefaultableStyleableKey<ImmutableList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
+            new TypeToken<CssDefaultableValue<ImmutableList<String>>>() {
+            }, new SvgFontFamilyConverter(),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT),
+           ImmutableLists.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+    );
+
+    /**
+     * font-size.
+     * <p>
+     * <a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a>
+     */
+    DefaultableStyleableKey<SvgFontSize> FONT_SIZE_KEY = new DefaultableStyleableKey<>("font-size",
+            new TypeToken<CssDefaultableValue<SvgFontSize>>() {
+            }, new SvgFontSizeConverter(),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT),
+            new SvgFontSize(SvgFontSize.SizeKeyword.MEDIUM, null)
+    );
+    /**
      * stroke.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#StrokeProperty">link</a>
      */
@@ -73,6 +90,17 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<Paintable>>() {
             }, new SvgCssPaintableConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), null);
+
+    /**
+     * stroke-alignment.
+     * <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150409/#SpecifyingStrokeAlignment">link</a>
+     */
+    DefaultableStyleableKey<StrokeType> STROKE_ALIGNMENT_KEY = new DefaultableStyleableKey<>(
+            "stroke-alignment",
+            new TypeToken<CssDefaultableValue<StrokeType>>() {
+            },
+            new SvgStrokeAlignmentConverter(false),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), StrokeType.CENTERED);
     /**
      * stroke-dasharray.
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDasharrayProperty">link</a>
@@ -111,17 +139,6 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     },
                     new CssPercentageConverter(false),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
-    /**
-     * font-size.
-     * <p>
-     * <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">W3 Font Size Property</a>
-     */
-    DefaultableStyleableKey<SvgFontSize> FONT_SIZE_KEY = new DefaultableStyleableKey<>("font-size",
-            new TypeToken<CssDefaultableValue<SvgFontSize>>() {
-            }, new SvgFontSizeConverter(),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT),
-            new SvgFontSize(SvgFontSize.SizeKeyword.MEDIUM, null)
-    );
     /**
      * text-anchor.
      * <p>
@@ -256,7 +273,53 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     ImmutableMaps.of("inline", SvgDisplay.INLINE).asMap(), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!
             SvgDisplay.INLINE);
+    /**
+     * opacity.
+     * <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/masking.html#ObjectAndGroupOpacityProperties">link</a>
+     */
+    @NonNull DefaultableStyleableKey<Double> OPACITY_KEY =
+            new DefaultableStyleableKey<Double>("opacity",
+                    new TypeToken<CssDefaultableValue<Double>>() {
+                    },
+                    new CssPercentageConverter(false),
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
 
+    /**
+     * Updates a figure node with all effect properties defined in this
+     * interface.
+     * <p>
+     * Applies the following properties:
+     * {@link #OPACITY_KEY}.
+     * <p>
+     * This method is intended to be used by {@link #updateNode}.
+     *
+     * @param ctx  the render context
+     * @param node a node which was created with method {@link #createNode}.
+     */
+    default void applySvgDefaultableCompositingProperties(RenderContext ctx, @NonNull Node node) {
+        node.setOpacity(getDefaultableStyledNonNull(OPACITY_KEY));
+        BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
+        if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to null
+            bmValue = null;
+        }
+        if (node.getBlendMode() != bmValue) {// Workaround: only set value if different
+            node.setBlendMode(bmValue);
+        }
+    }
+
+    /**
+     * Applies fill properties to a {@link Shape} node.
+     *
+     * @param ctx   the render context
+     * @param shape a shape node
+     */
+    default void applySvgDefaultableFillProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+        Paintable fill = getDefaultableStyled(FILL_KEY);
+        shape.setFill(Paintable.getPaint(fill, ctx));
+
+        double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
+        shape.setOpacity(fillOpacity);
+    }
 
     /**
      * Applies stroke properties to a {@link Shape} node.
@@ -292,60 +355,21 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
 
     }
 
-    /**
-     * Applies fill properties to a {@link Shape} node.
-     *
-     * @param ctx   the render context
-     * @param shape a shape node
-     */
-    default void applySvgDefaultableFillProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
-        Paintable fill = getDefaultableStyled(FILL_KEY);
-        shape.setFill(Paintable.getPaint(fill, ctx));
-
-        Double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
-        shape.setOpacity(fillOpacity);
-    }
-
-
-    /**
-     * opacity.
-     * <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/masking.html#ObjectAndGroupOpacityProperties">link</a>
-     */
-    @NonNull DefaultableStyleableKey<Double> OPACITY_KEY =
-            new DefaultableStyleableKey<Double>("opacity",
-                    new TypeToken<CssDefaultableValue<Double>>() {
-                    },
-                    new CssPercentageConverter(false),
-                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
-
-    /**
-     * Updates a figure node with all effect properties defined in this
-     * interface.
-     * <p>
-     * Applies the following properties:
-     * {@link #OPACITY_KEY}.
-     * <p>
-     * This method is intended to be used by {@link #updateNode}.
-     *
-     * @param ctx  the render context
-     * @param node a node which was created with method {@link #createNode}.
-     */
-    default void applySvgDefaultableCompositingProperties(RenderContext ctx, @NonNull Node node) {
-        node.setOpacity(getDefaultableStyledNonNull(OPACITY_KEY));
-        BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
-        if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to null
-            bmValue = null;
-        }
-        if (node.getBlendMode() != bmValue) {// Workaround: only set value if different
-            node.setBlendMode(bmValue);
-        }
-    }
-
     default void applySvgShapeProperties(RenderContext ctx, Shape fillShape, Shape strokeShape) {
-        fillShape.setStroke(null);
-        strokeShape.setFill(null);
-        applySvgDefaultableFillProperties(ctx, fillShape);
-        applySvgDefaultableStrokeProperties(ctx, strokeShape);
-
+        double strokeOpacity = getDefaultableStyledNonNull(STROKE_OPACITY_KEY);
+        double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
+        if (strokeOpacity==fillOpacity) {
+            applySvgDefaultableFillProperties(ctx, fillShape);
+            applySvgDefaultableStrokeProperties(ctx, fillShape);
+            fillShape.setVisible(true);
+            strokeShape.setVisible(false);
+        }else {
+            fillShape.setStroke(null);
+            strokeShape.setFill(null);
+            applySvgDefaultableFillProperties(ctx, fillShape);
+            applySvgDefaultableStrokeProperties(ctx, strokeShape);
+            fillShape.setVisible(true);
+            strokeShape.setVisible(true);
+        }
     }
 }

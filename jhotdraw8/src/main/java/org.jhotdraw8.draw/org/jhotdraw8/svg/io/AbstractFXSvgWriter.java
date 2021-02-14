@@ -101,18 +101,17 @@ import java.util.Objects;
 import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
 public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
-    public final static String SVG_MIME_TYPE = "image/svg+xml";
-    public final static String SVG_NS = "http://www.w3.org/2000/svg";
-    protected final static String XLINK_NS = "http://www.w3.org/1999/xlink";
-    protected final static String XLINK_Q = "xlink";
+    public static final String SVG_MIME_TYPE = "image/svg+xml";
+    public static final String SVG_NS = "http://www.w3.org/2000/svg";
+    protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
+    protected static final String XLINK_Q = "xlink";
     protected final XmlNumberConverter nb = new XmlNumberConverter();
-    private final Object imageUriKey;
+    private final @Nullable Object imageUriKey;
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
-    private final Object skipKey;
+    private final @Nullable Object skipKey;
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
-    @NonNull
-    protected IdFactory idFactory = new SimpleIdFactory();
+    protected @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -121,7 +120,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
      * @param skipKey     this property is used to retrieve a Boolean from a Node.
      *                    If the Boolean is true, then the node is skipped.
      */
-    public AbstractFXSvgWriter(Object imageUriKey, Object skipKey) {
+    public AbstractFXSvgWriter(@Nullable Object imageUriKey, @Nullable Object skipKey) {
         this.imageUriKey = imageUriKey;
         this.skipKey = skipKey;
     }
@@ -140,8 +139,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
      *                       values
      * @return Returns the actual bounds of the paragraph.
      */
-    @NonNull
-    private Rectangle2D.Double drawParagraph(@NonNull XMLStreamWriter w,
+    private @NonNull Rectangle2D.Double drawParagraph(@NonNull XMLStreamWriter w,
                                              FontRenderContext frc, @NonNull String
                                                      paragraph, @NonNull AttributedCharacterIterator styledText,
                                              float verticalPos, float maxVerticalPos, float leftMargin,
@@ -187,7 +185,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             List<TextLayout> layouts = new ArrayList<>();
             List<Float> penPositions = new ArrayList<>();
 
-            int first = layouts.size();
+            int first = 0;
 
             while (!lineComplete && verticalPos <= maxVerticalPos) {
                 float wrappingWidth = rightMargin - horizontalPos;
@@ -278,6 +276,20 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         return paragraphBounds;
     }
 
+    /**
+     * Writes text as a series of tspan elements.
+     *
+     * @param w the writer
+     * @param str the text
+     * @param textRect the bounding rectangles of the text
+     * @param tfont the font of the text
+     * @param tabSize the tabulator size
+     * @param isUnderlined whether the text is underlined
+     * @param isStrikethrough whether the text is striked through
+     * @param textAlignment the alignment of the text
+     * @param lineSpacing the line spacing of the text
+     * @throws XMLStreamException on write failure
+     */
     private void drawText(@NonNull XMLStreamWriter w, @Nullable String str,
                           @NonNull Bounds textRect,
                           @NonNull Font tfont, int tabSize, boolean isUnderlined,
@@ -291,7 +303,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         float verticalPos = (float) textRect.getMinY();
         float maxVerticalPos = (float) (textRect.getMinY() + textRect.getHeight());
         if (leftMargin < rightMargin) {
-            //float tabWidth = (float) (getTabSize() * g.getFontMetrics(font).charWidth('m'));
             float tabWidth = (float) (tabSize * font.getStringBounds("m", frc).getWidth());
             float[] tabStops = new float[(int) (textRect.getWidth() / tabWidth)];
             for (int i = 0; i < tabStops.length; i++) {
@@ -673,9 +684,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeFillAttributes(@NonNull XMLStreamWriter w, @NonNull Shape node) throws XMLStreamException {
-        Paint fill = node.getFill();
+    private void writeFillAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException {
+        Paint fill = shape.getFill();
         String id = idFactory.getId(fill);
+        double fillOpacity = shape.getOpacity();
+
         if (id != null) {
             w.writeAttribute("fill", "url(#" + id + ")");
         } else {
@@ -683,18 +696,20 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             if (fill instanceof Color) {
                 Color c = (Color) fill;
                 if (!c.isOpaque()) {
-                    w.writeAttribute("fill-opacity", nb.toString(c.getOpacity()));
+                    fillOpacity*=c.getOpacity();
                 }
             }
         }
-
+        if (fillOpacity!=1) {
+            w.writeAttribute("fill-opacity", nb.toString(fillOpacity));
+        }
 
         final FillRule fillRule;
-        if (node instanceof Path) {
-            Path path = (Path) node;
+        if (shape instanceof Path) {
+            Path path = (Path) shape;
             fillRule = path.getFillRule();
-        } else if (node instanceof SVGPath) {
-            SVGPath path = (SVGPath) node;
+        } else if (shape instanceof SVGPath) {
+            SVGPath path = (SVGPath) shape;
             fillRule = path.getFillRule();
         } else {
             fillRule = FillRule.NON_ZERO;
@@ -1051,6 +1066,13 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     }
 
     private void writeRectangleStartElement(@NonNull XMLStreamWriter w, @NonNull Rectangle node) throws XMLStreamException {
+        if (!  node.getStrokeDashArray().isEmpty()) {
+        // If the rectangle has a non-empty stroke dasharray, then
+        // we must render it as an SVG path, because SVG uses a different
+        // rendering algorithm.
+
+            // FIXME convert to path and then return
+        };
         w.writeStartElement("rect");
         if (node.getX() != 0.0) {
             w.writeAttribute("x", nb.toString(node.getX()));
@@ -1065,10 +1087,10 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("height", nb.toString(node.getHeight()));
         }
         if (node.getArcWidth() != 0.0) {
-            w.writeAttribute("rx", nb.toString(node.getArcWidth()));
+            w.writeAttribute("rx", nb.toString(node.getArcWidth()*0.5));
         }
         if (node.getArcHeight() != 0.0) {
-            w.writeAttribute("ry", nb.toString(node.getArcHeight()));
+            w.writeAttribute("ry", nb.toString(node.getArcHeight()*0.5));
         }
     }
 
@@ -1220,6 +1242,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             return;
         }
 
+        double strokeOpacity = shape.getOpacity();
 
         String id = idFactory.getId(stroke);
         if (id != null) {
@@ -1229,9 +1252,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             if (stroke instanceof Color) {
                 Color c = (Color) stroke;
                 if (!c.isOpaque()) {
-                    w.writeAttribute("stroke-opacity", nb.toString(c.getOpacity()));
+                    strokeOpacity*=c.getOpacity();
                 }
             }
+        }
+        if (strokeOpacity!=1) {
+            w.writeAttribute("stroke-opacity", nb.toString(strokeOpacity));
         }
 
         if (shape.getStrokeWidth() != 1) {
@@ -1370,23 +1396,38 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         case JUSTIFY:
             break;
         }
+
+        if (node.getWrappingWidth() <= 0) {
+            // If the text has no wrapping width, we can write the
+            // text directly into the body of the "text" element.
+            switch (node.getTextAlignment()) {
+            case LEFT:
+            case JUSTIFY:
+                w.writeAttribute("x", nb.toString(node.getX()));
+                break;
+            case CENTER:
+                w.writeAttribute("x", nb.toString(node.getX()+node.getBoundsInLocal().getWidth()*0.5));
+                break;
+            case RIGHT:
+                w.writeAttribute("x", nb.toString(node.getX()+node.getBoundsInLocal().getWidth()));
+                break;
+            }
+            w.writeAttribute("y", nb.toString(node.getY()));
+        }
     }
 
     private void writeTextChildElements(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
         double lineSpacing = node.getLineSpacing();//+node.getFont().getSize()*0.15625;
         Bounds textRect = node.getLayoutBounds();
         if (node.getWrappingWidth() <= 0) {
-            // If the text has no wrapping width, we create a wider
-            // textRect, so that our code does not introduce line breaks.
-            // Alternatively, we could implement a different drawText method,
-            // that does not create line breaks.
-            textRect = new BoundingBox(textRect.getMinX(), textRect.getMinY(),
-                    textRect.getWidth() * 2,
-                    textRect.getHeight());
+            // If the text has no wrapping width, we can write the
+            // text directly into the body of the "text" element
+            w.writeCharacters(node.getText());
+        } else {
+            drawText(w, node.getText(), textRect, node.getFont(), 8,
+                    node.isUnderline(), node.isStrikethrough(),
+                    node.getTextAlignment(), lineSpacing);
         }
-        drawText(w, node.getText(), textRect, node.getFont(), 8,
-                node.isUnderline(), node.isStrikethrough(),
-                node.getTextAlignment(), lineSpacing);
     }
 
     private void writeTextStartElement(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {

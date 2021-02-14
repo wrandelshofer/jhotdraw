@@ -46,17 +46,22 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class FigureSvgTinyReaderTestSuitesTest {
+/**
+ * The tests in this class are disabled. They are used for analysing tests
+ * from the tests suites. The tests refer to external folders which are
+ * not shipped with JHotDraw 8.
+ */
+public class AnalysisOfSvgTestSuitesTest {
 
     /**
-     * Set this constant to the path of the directory into which you checked
+     * Set this constant to the path of the folder into which you checked
      * out the web-platform-tests/wpt repository from github.
      * <p>
      * <a href="https://github.com/web-platform-tests/wpt">github</a>
      */
     private static final String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
     /**
-     * Set this constant to the path of the directory into which you checked
+     * Set this constant to the path of the folder into which you checked
      * out the SVG Tiny 1.2 test suite.
      * <p>
      * <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
@@ -85,8 +90,6 @@ public class FigureSvgTinyReaderTestSuitesTest {
         }
     }
 
-    ;
-
     @BeforeAll
     public static void startJavaFX() throws InterruptedException, ExecutionException, TimeoutException {
         Platform.setImplicitExit(false);
@@ -113,7 +116,8 @@ public class FigureSvgTinyReaderTestSuitesTest {
     @TestFactory
     public @NonNull Stream<DynamicTest> w3cSvgTiny12TestSuiteTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(W3C_SVG_12_TINY_TEST_SUITE))) {
-            System.err.println("Please fix the path to web-platform-tests: " + WPT_PATH);
+            System.err.println("Please fix the path to W3C SVG 1.2 Tiny Test Suite: " +
+                    Path.of(W3C_SVG_12_TINY_TEST_SUITE).toAbsolutePath());
             return Stream.empty();
         }
 
@@ -162,7 +166,8 @@ public class FigureSvgTinyReaderTestSuitesTest {
     @TestFactory
     public @NonNull Stream<DynamicTest> webPlatformTestFactory() throws IOException {
         if (!Files.isDirectory(Path.of(WPT_PATH))) {
-            System.err.println("Please fix the path to web-platform-tests: " + WPT_PATH);
+            System.err.println("Please fix the path to web-platform-tests: " +
+                    Path.of(WPT_PATH).toAbsolutePath());
             return Stream.empty();
         }
 
