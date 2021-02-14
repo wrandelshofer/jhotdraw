@@ -37,9 +37,8 @@ public class CssBoundingBoxConverter extends AbstractCssConverter<BoundingBox> {
         this.withComma = withComma;
     }
 
-    @NonNull
     @Override
-    public BoundingBox parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull BoundingBox parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, width, height;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();

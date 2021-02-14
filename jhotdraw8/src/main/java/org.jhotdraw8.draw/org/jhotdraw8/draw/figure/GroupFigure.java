@@ -27,20 +27,18 @@ public class GroupFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Group";
+    public static final String TYPE_SELECTOR = "Group";
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         javafx.scene.Group n = new javafx.scene.Group();
         n.setAutoSizeChildren(false);
         n.setManaged(false);
         return n;
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

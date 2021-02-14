@@ -35,8 +35,7 @@ public class IntersectQuadCurveRay {
      * @param maxT maximal parameter value for ray 'a'
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectRayQuadCurve(@NonNull Point2D ao, @NonNull Point2D ad, double maxT, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
+    public static @NonNull IntersectionResult intersectRayQuadCurve(@NonNull Point2D ao, @NonNull Point2D ad, double maxT, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
         return intersectRayQuadCurve(
                 ao.getX(), ao.getY(),
                 ad.getX(), ad.getY(), maxT,
@@ -45,9 +44,8 @@ public class IntersectQuadCurveRay {
                 p2.getX(), p2.getY());
     }
 
-    @NonNull
-    public static IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
-                                                           double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
+    public static @NonNull IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
+                                                                    double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         return intersectRayQuadCurve(
                 aox, aoy,
                 aox, aoy, maxT,
@@ -56,10 +54,9 @@ public class IntersectQuadCurveRay {
                 p2x, p2y, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
-                                                           double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
-                                                           double epsilon) {
+    public static @NonNull IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
+                                                                    double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
+                                                                    double epsilon) {
         /* steps:
          * 1. Rotate the bezier curve so that the line coincides with the x-axis.
          *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
@@ -138,8 +135,7 @@ public class IntersectQuadCurveRay {
      * @param ad point 1 of 'a'
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D ao, @NonNull Point2D ad, double maxT) {
+    public static @NonNull IntersectionResult intersectQuadCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D ao, @NonNull Point2D ad, double maxT) {
         return intersectQuadCurveRay(p0, p1, p2, ao, ad, maxT, Geom.REAL_THRESHOLD);
     }
 
@@ -220,15 +216,13 @@ public class IntersectQuadCurveRay {
         return new IntersectionResult(status, result);
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveRay(
+    public static @NonNull IntersectionResult intersectQuadCurveRay(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double box, double boy, double bdx, double bdy, double maxT) {
         return intersectQuadCurveRay(ax0, ay0, ax1, ay1, ax2, ay2, box, boy, bdx, bdy, maxT, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveRay(
+    public static @NonNull IntersectionResult intersectQuadCurveRay(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double box, double boy, double bdx, double bdy, double maxT, double epsilon) {
         return intersectQuadCurveRay(new Point2D.Double(ax0, ay0), new Point2D.Double(ax1, ay1), new Point2D.Double(ax2, ay2),

@@ -62,8 +62,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return the first element or null if the list is empty
      */
-    @Nullable
-    default E peekFirst() {
+    default @Nullable E peekFirst() {
         return isEmpty() ? null : get(0);
     }
 
@@ -72,8 +71,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return the last element or null if the list is empty
      */
-    @Nullable
-    default E peekLast() {
+    default @Nullable E peekLast() {
         int index = size() - 1;
         return index < 0 ? null : get(index);
     }
@@ -83,9 +81,8 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return an iterator.
      */
-    @NonNull
     @Override
-    default Iterator<E> iterator() {
+    default @NonNull Iterator<E> iterator() {
         return new ReadOnlyListIterator<>(this);
     }
 
@@ -94,9 +91,8 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return an iterator.
      */
-    @NonNull
     @Override
-    default Spliterator<E> spliterator() {
+    default @NonNull Spliterator<E> spliterator() {
         return new ReadOnlyListIterator<>(this);
     }
 
@@ -105,8 +101,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return an iterator.
      */
-    @NonNull
-    default Enumerator<E> enumerator() {
+    default @NonNull Enumerator<E> enumerator() {
         return new ReadOnlyListIterator<>(this);
     }
 
@@ -115,8 +110,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return a list iterator.
      */
-    @NonNull
-    default ListIterator<E> listIterator() {
+    default @NonNull ListIterator<E> listIterator() {
         return new ReadOnlyListIterator<>(this);
     }
 
@@ -125,8 +119,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return a list iterator.
      */
-    @NonNull
-    default ListIterator<E> listIterator(int index) {
+    default @NonNull ListIterator<E> listIterator(int index) {
         return new ReadOnlyListIterator<>(this, index, size());
     }
 
@@ -135,8 +128,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return a new ArrayList.
      */
-    @NonNull
-    default ArrayList<E> toArrayList() {
+    default @NonNull ArrayList<E> toArrayList() {
         return new ArrayList<>(this.asList());
     }
 
@@ -145,8 +137,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped list
      */
-    @NonNull
-    default List<E> asList() {
+    default @NonNull List<E> asList() {
         return new ListWrapper<>(this);
     }
 
@@ -155,8 +146,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped list
      */
-    @NonNull
-    default ObservableList<E> asObservableList() {
+    default @NonNull ObservableList<E> asObservableList() {
         return new ObservableListWrapper<>(this);
     }
 

@@ -12,10 +12,8 @@ import org.jhotdraw8.geom.contour.PolyArcPathBuilder;
 public class ContourPathBuilder extends AbstractPathBuilder {
     private final double offset;
 
-    @NonNull
-    private final PathBuilder consumer;
-    @NonNull
-    private PolyArcPathBuilder papb = new PolyArcPathBuilder();
+    private final @NonNull PathBuilder consumer;
+    private @NonNull PolyArcPathBuilder papb = new PolyArcPathBuilder();
 
     public ContourPathBuilder(@NonNull PathBuilder consumer, double offset) {
         this.offset = offset;

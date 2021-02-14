@@ -32,18 +32,13 @@ public class CssInsetsStyleableMapAccessor
         extends AbstractStyleableMapAccessor<@NonNull CssInsets>
         implements NonNullMapAccessor<@NonNull CssInsets> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<@NonNull Styleable, @NonNull CssInsets> cssMetaData;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> topKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> rightKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> bottomKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> leftKey;
+    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull CssInsets> cssMetaData;
+    private final @NonNull NonNullMapAccessor<CssSize> topKey;
+    private final @NonNull NonNullMapAccessor<CssSize> rightKey;
+    private final @NonNull NonNullMapAccessor<CssSize> bottomKey;
+    private final @NonNull NonNullMapAccessor<CssSize> leftKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -84,15 +79,13 @@ public class CssInsetsStyleableMapAccessor
 
     private final Converter<CssInsets> converter = new CssInsetsConverter(false);
 
-    @NonNull
     @Override
-    public Converter<CssInsets> getCssConverter() {
+    public @NonNull Converter<CssInsets> getCssConverter() {
         return converter;
     }
 
-    @Nullable
     @Override
-    public CssInsets get(@NonNull Map<? super Key<?>, Object> a) {
+    public @Nullable CssInsets get(@NonNull Map<? super Key<?>, Object> a) {
         final CssSize top = topKey.get(a);
         final CssSize right = rightKey.get(a);
         final CssSize bottom = bottomKey.get(a);
@@ -124,9 +117,8 @@ public class CssInsetsStyleableMapAccessor
         }
     }
 
-    @Nullable
     @Override
-    public CssInsets remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @Nullable CssInsets remove(@NonNull Map<? super Key<?>, Object> a) {
         CssInsets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);

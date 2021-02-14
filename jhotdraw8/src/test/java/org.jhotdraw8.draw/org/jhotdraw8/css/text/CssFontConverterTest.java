@@ -20,8 +20,7 @@ class CssFontConverterTest {
     /**
      * Test of fromString method, of class CssFontConverter.
      */
-    static
-    public void doTestFromString(CssFont expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssFont expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -35,8 +34,7 @@ class CssFontConverterTest {
     /**
      * Test of toString method, of class CssFontConverter.
      */
-    static
-    public void doTestToString(CssFont value, String expected) throws Exception {
+    public static void doTestToString(CssFont value, String expected) throws Exception {
         System.out.println("toString " + value);
         CssFontConverter instance = new CssFontConverter(false);
         String actual = instance.toString(value);
@@ -48,15 +46,13 @@ class CssFontConverterTest {
     /**
      * Test of fromString and toString methods, of class CssFontConverter.
      */
-    static
-    public void doTest(CssFont value, @NonNull String str) throws Exception {
+    public static void doTest(CssFont value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFactory() {
+    public @NonNull List<DynamicTest> testFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(
                         new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(12)),

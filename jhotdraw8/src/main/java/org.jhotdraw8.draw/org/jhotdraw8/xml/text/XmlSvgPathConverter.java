@@ -33,9 +33,8 @@ import java.text.ParseException;
  */
 public class XmlSvgPathConverter implements Converter<SVGPath> {
 
-    @NonNull
     @Override
-    public SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);
@@ -52,9 +51,8 @@ public class XmlSvgPathConverter implements Converter<SVGPath> {
         out.append(content == null ? "none" : content);
     }
 
-    @NonNull
     @Override
-    public SVGPath getDefaultValue() {
+    public @NonNull SVGPath getDefaultValue() {
         SVGPath p = new SVGPath();
         return p;
     }

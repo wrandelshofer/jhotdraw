@@ -14,9 +14,8 @@ public class IntersectRectangleRectangle {
     private IntersectRectangleRectangle() {
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectRectangleRectangleEx(double ax, double ay, double aw, double ah,
-                                                                     double bx, double by, double bw, double bh) {
+    public static @NonNull IntersectionResultEx intersectRectangleRectangleEx(double ax, double ay, double aw, double ah,
+                                                                              double bx, double by, double bw, double bh) {
         return intersectRectangleRectangleEx(
                 new Point2D.Double(ax, ay), new Point2D.Double(ax + aw, ay + ah),
                 new Point2D.Double(bx, by), new Point2D.Double(bx + bw, by + bh));
@@ -32,8 +31,7 @@ public class IntersectRectangleRectangle {
      * @param b1 corner point 1 of rectangle 'b'
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectRectangleRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static @NonNull IntersectionResultEx intersectRectangleRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(a0, a1);
         bottomRight = Intersections.bottomRight(a0, a1);

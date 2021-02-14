@@ -194,9 +194,8 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
         }
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Transform⟩: ⟨Affine⟩｜⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨Shear⟩｜⟨Matrix⟩"
                 + "\nFormat of ⟨Affine⟩: affine(⟨xx⟩,⟨xy⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨ty⟩)"
                 + "\n                  ｜affine(⟨xx⟩,⟨xy⟩,⟨xz⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨yz⟩,⟨ty⟩, ⟨zx⟩,⟨zy⟩,⟨zz⟩,⟨tz⟩)"
@@ -210,9 +209,8 @@ public class CssTransformConverter extends AbstractCssConverter<Transform> {
                 ;
     }
 
-    @NonNull
     @Override
-    public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
         String func = tt.currentStringNonNull();
         int funcPos = tt.getStartPosition();

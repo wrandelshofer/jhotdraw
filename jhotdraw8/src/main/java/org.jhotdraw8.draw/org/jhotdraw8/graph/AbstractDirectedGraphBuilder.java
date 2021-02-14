@@ -50,13 +50,13 @@ import java.util.Arrays;
  */
 public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
-    protected final static int ARROWS_NEXT_FIELD = 1;
-    protected final static int ARROWS_NUM_FIELDS = 2;
-    protected final static int ARROWS_VERTEX_FIELD = 0;
-    protected final static int LASTARROW_COUNT_FIELD = 0;
-    protected final static int LASTARROW_NUM_FIELDS = 2;
-    protected final static int LASTARROW_POINTER_FIELD = 1;
-    protected final static int SENTINEL = -1;
+    protected static final int ARROWS_NEXT_FIELD = 1;
+    protected static final int ARROWS_NUM_FIELDS = 2;
+    protected static final int ARROWS_VERTEX_FIELD = 0;
+    protected static final int LASTARROW_COUNT_FIELD = 0;
+    protected static final int LASTARROW_NUM_FIELDS = 2;
+    protected static final int LASTARROW_POINTER_FIELD = 1;
+    protected static final int SENTINEL = -1;
 
     protected int arrowCount;
     /**

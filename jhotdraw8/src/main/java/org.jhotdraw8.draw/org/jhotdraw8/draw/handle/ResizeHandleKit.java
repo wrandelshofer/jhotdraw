@@ -43,10 +43,11 @@ public class ResizeHandleKit {
     /**
      * Creates handles for each corner of a figure and adds them to the provided
      * collection.
-     *  @param f          the figure which will own the handles
-     * @param handles    the list to which the handles should be added
+     *
+     * @param f       the figure which will own the handles
+     * @param handles the list to which the handles should be added
      */
-    static public void addCornerResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
+    public static void addCornerResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
         handles.add(northEast(f));
@@ -56,10 +57,11 @@ public class ResizeHandleKit {
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
-     *  @param f          the figure which will own the handles
-     * @param handles    the list to which the handles should be added
+     *
+     * @param f       the figure which will own the handles
+     * @param handles the list to which the handles should be added
      */
-    static public void addEdgeResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
+    public static void addEdgeResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
         handles.add(east(f));
@@ -69,10 +71,11 @@ public class ResizeHandleKit {
     /**
      * Fills the given collection with handles at each the north, south, east,
      * and west of the figure.
-     *  @param f          the figure which will own the handles
-     * @param handles    the list to which the handles should be added
+     *
+     * @param f       the figure which will own the handles
+     * @param handles the list to which the handles should be added
      */
-    static public void addResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
+    public static void addResizeHandles(Figure f, @NonNull Collection<Handle> handles) {
         addCornerResizeHandles(f, handles);
         addEdgeResizeHandles(f, handles);
     }
@@ -80,11 +83,10 @@ public class ResizeHandleKit {
     /**
      * Creates a handle for the specified figure.
      *
-     * @param owner      the figure which will own the handle
+     * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle south(Figure owner) {
+    public static @NonNull Handle south(Figure owner) {
         return new SouthHandle(owner);
     }
 
@@ -94,8 +96,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle southEast(Figure owner) {
+    public static @NonNull Handle southEast(Figure owner) {
         return new SouthEastHandle(owner);
     }
 
@@ -105,8 +106,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle southWest(Figure owner) {
+    public static @NonNull Handle southWest(Figure owner) {
         return new SouthWestHandle(owner);
     }
 
@@ -116,8 +116,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle north(Figure owner) {
+    public static @NonNull Handle north(Figure owner) {
         return new NorthHandle(owner);
     }
 
@@ -127,8 +126,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle northEast(Figure owner) {
+    public static @NonNull Handle northEast(Figure owner) {
         return new NorthEastHandle(owner);
     }
 
@@ -138,8 +136,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle northWest(Figure owner) {
+    public static @NonNull Handle northWest(Figure owner) {
         return new NorthWestHandle(owner);
     }
 
@@ -149,8 +146,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle east(Figure owner) {
+    public static @NonNull Handle east(Figure owner) {
         return new EastHandle(owner);
     }
 
@@ -160,8 +156,7 @@ public class ResizeHandleKit {
      * @param owner      the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle west(Figure owner) {
+    public static @NonNull Handle west(Figure owner) {
         return new WestHandle(owner);
     }
 
@@ -186,10 +181,8 @@ public class ResizeHandleKit {
         WEST_SHAPE.setContent(square + "M 4.5,0 4.5,9");
     }
 
-    @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @NonNull
-    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
+    private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
 

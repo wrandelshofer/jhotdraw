@@ -31,8 +31,7 @@ public interface Inspector<S> {
         subjectProperty().set(s);
     }
 
-    @Nullable
-    default S getSubject() {
+    default @Nullable S getSubject() {
         return subjectProperty().get();
     }
 

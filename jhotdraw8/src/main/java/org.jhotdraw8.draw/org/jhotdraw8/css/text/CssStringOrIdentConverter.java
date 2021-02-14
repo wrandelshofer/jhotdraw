@@ -24,9 +24,8 @@ import java.text.ParseException;
  */
 public class CssStringOrIdentConverter implements Converter<String> {
 
-    @Nullable
     @Override
-    public String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
             throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
@@ -77,9 +76,8 @@ public class CssStringOrIdentConverter implements Converter<String> {
         }
     }
 
-    @NonNull
     @Override
-    public String getDefaultValue() {
+    public @NonNull String getDefaultValue() {
         return "";
     }
 }

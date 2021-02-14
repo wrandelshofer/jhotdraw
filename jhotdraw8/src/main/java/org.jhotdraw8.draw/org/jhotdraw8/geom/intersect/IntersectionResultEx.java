@@ -49,9 +49,8 @@ public class IntersectionResultEx extends ImmutableArrayList<IntersectionPointEx
     }
 
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         StringBuilder b = new StringBuilder();
         b.append("Intersection{").append(status).append(", points=");
         b.append(super.toString());

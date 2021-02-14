@@ -55,42 +55,33 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * The horizontal position of the text. Default value: {@code baseline}
      */
-    @NonNull
-    public final static EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
+    public static final @NonNull EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
-    @NonNull
-    public final static CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
-    @NonNull
-    public final static CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
+    public static final @NonNull CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
+    public static final @NonNull CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
 
     /**
      * The perpendicular offset of the label.
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    @NonNull
-    public final static CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", CssSize.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
-    @NonNull
-    public final static CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", CssSize.ZERO);
-    @NonNull
-    public final static CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
+    public static final @NonNull CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", CssSize.ZERO);
+    public static final @NonNull CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.
      */
-    @NonNull
-    public final static EnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
+    public static final @NonNull EnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
     /**
      * The position relative to the parent (respectively the offset).
      */
-    @NonNull
-    public static final CssPoint2DStyleableKey LABEL_TRANSLATE = new CssPoint2DStyleableKey(
+    public static final @NonNull CssPoint2DStyleableKey LABEL_TRANSLATE = new CssPoint2DStyleableKey(
             "labelTranslation", new CssPoint2D(0, 0));
     private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
@@ -153,9 +144,8 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      *
      * @return a list of connected figures
      */
-    @NonNull
     @Override
-    public ReadOnlySet<Figure> getLayoutSubjects() {
+    public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
         return labelTarget == null ? ImmutableSets.emptySet() : ImmutableSets.of(labelTarget);
     }

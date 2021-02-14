@@ -25,9 +25,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class IntersectEllipseLineTest {
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testLineEllipseFactory() {
+    public @NonNull List<DynamicTest> testLineEllipseFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectLineEllipse_5args(
                         new Line(10, 40, 200, 40), new Ellipse(100, 100, 60, 60), new double[]{0.47368421052631576})),

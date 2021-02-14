@@ -31,8 +31,7 @@ class CssStrokeConverterTest {
     /**
      * Test of fromString method, of class CssStrokeStyleConverter.
      */
-    static
-    public void doTestFromString(CssStrokeStyle expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssStrokeStyle expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
 
         CharBuffer buf = CharBuffer.wrap(string);
@@ -47,8 +46,7 @@ class CssStrokeConverterTest {
     /**
      * Test of toString method, of class CssStrokeStyleConverter.
      */
-    static
-    public void doTestToString(CssStrokeStyle value, String expected) throws Exception {
+    public static void doTestToString(CssStrokeStyle value, String expected) throws Exception {
         System.out.println("toString " + value);
         CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
         String actual = instance.toString(value);
@@ -60,16 +58,14 @@ class CssStrokeConverterTest {
     /**
      * Test of fromString and toString methods, of class CssStrokeStyleConverter.
      */
-    static
-    public void doTest(CssStrokeStyle value, @NonNull String str) throws Exception {
+    public static void doTest(CssStrokeStyle value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFactory() {
+    public @NonNull List<DynamicTest> testFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(
                         new CssStrokeStyle(),

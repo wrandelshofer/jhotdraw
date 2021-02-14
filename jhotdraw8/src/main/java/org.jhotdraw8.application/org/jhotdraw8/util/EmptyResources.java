@@ -17,8 +17,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 public class EmptyResources implements Resources {
-    @Nullable
-    private Resources parent;
+    private @Nullable Resources parent;
     private final ResourceBundle emptyResourceBundle;
 
     {
@@ -69,9 +68,8 @@ public class EmptyResources implements Resources {
                 key);
     }
 
-    @Nullable
     @Override
-    public Resources getParent() {
+    public @Nullable Resources getParent() {
         return parent;
     }
 

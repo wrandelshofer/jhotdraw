@@ -43,14 +43,11 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  */
 public class PolyPointMoveHandle extends AbstractHandle {
 
-    @Nullable
-    private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
-    @Nullable
-    private static final Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
+    private static final @Nullable Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
+    private static final @Nullable Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private Set<Figure> groupReshapeableFigures;
-    @NonNull
-    private final Region node;
+    private final @NonNull Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
@@ -89,11 +86,10 @@ public class PolyPointMoveHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
-            node.resize(size, size);
+        node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();
         node.setBorder(REGION_BORDER.apply(Color.WHITE));
         node.setBackground(REGION_BACKGROUND.apply(color.getColor()));

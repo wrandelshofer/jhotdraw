@@ -21,8 +21,7 @@ public interface MarkerEndableFigure extends Figure {
     @Nullable NullableSvgPathStyleableKey MARKER_END_SHAPE = new NullableSvgPathStyleableKey("marker-end-shape", null);
     DoubleStyleableKey MARKER_END_SCALE_FACTOR = new DoubleStyleableKey("marker-end-scale-factor", 1.0);
 
-    @Nullable
-    default String getMarkerEndShape() {
+    default @Nullable String getMarkerEndShape() {
         return getStyled(MARKER_END_SHAPE);
     }
 

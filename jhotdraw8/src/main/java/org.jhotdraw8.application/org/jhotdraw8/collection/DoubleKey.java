@@ -11,7 +11,7 @@ package org.jhotdraw8.collection;
  */
 public class DoubleKey extends ObjectKey<Double> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public DoubleKey(String key) {
         super(key, Double.class);

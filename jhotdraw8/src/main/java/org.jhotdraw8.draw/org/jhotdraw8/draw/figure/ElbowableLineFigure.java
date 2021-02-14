@@ -27,8 +27,7 @@ public interface ElbowableLineFigure extends Figure {
      *
      * @return an offset
      */
-    @Nullable
-    default CssSize getElbowOffset() {
+    default @Nullable CssSize getElbowOffset() {
         return getStyled(ELBOW_OFFSET);
     }
 

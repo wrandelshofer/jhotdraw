@@ -17,7 +17,7 @@ import org.jhotdraw8.css.text.CssSymmetricPoint2DConverterOLD;
 public class SymmetricPoint2DStyleableMapAccessor extends Point2DStyleableMapAccessor
         implements NonNullMapAccessor<@NonNull Point2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public SymmetricPoint2DStyleableMapAccessor(@NonNull String name,
                                                 @NonNull NonNullMapAccessor<@NonNull Double> xKey,

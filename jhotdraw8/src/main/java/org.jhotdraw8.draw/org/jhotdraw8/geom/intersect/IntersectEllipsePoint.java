@@ -31,8 +31,7 @@ public class IntersectEllipsePoint {
      * @return computed intersection. Status can be{@link IntersectionStatus#INTERSECTION},
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
-    @NonNull
-    public static IntersectionResult intersectPointEllipse(@NonNull Point2D point, @NonNull Point2D center, double rx, double ry) {
+    public static @NonNull IntersectionResult intersectPointEllipse(@NonNull Point2D point, @NonNull Point2D center, double rx, double ry) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         double px = point.getX();

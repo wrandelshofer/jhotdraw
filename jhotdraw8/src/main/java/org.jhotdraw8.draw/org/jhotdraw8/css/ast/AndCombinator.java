@@ -23,15 +23,13 @@ public class AndCombinator extends Combinator {
         super(simpleSelector, selector);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "(" + firstSelector + " && " + secondSelector + ")";
     }
 
-    @Nullable
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, T element) {
         T firstResult = firstSelector.match(model, element);
         return (firstResult != null && secondSelector.match(model, element) != null) ? firstResult : null;
     }

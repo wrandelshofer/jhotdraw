@@ -18,8 +18,7 @@ class CssPoint2DConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverter.
      */
-    static
-    public void doTestFromString(CssPoint2D expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssPoint2D expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -33,8 +32,7 @@ class CssPoint2DConverterTest {
     /**
      * Test of toString method, of class CssPoint2DConverter.
      */
-    static
-    public void doTestToString(CssPoint2D value, String expected) throws Exception {
+    public static void doTestToString(CssPoint2D value, String expected) throws Exception {
         System.out.println("toString " + value);
         CssPoint2DConverter instance = new CssPoint2DConverter(false);
         String actual = instance.toString(value);
@@ -46,15 +44,13 @@ class CssPoint2DConverterTest {
     /**
      * Test of fromString and toString methods, of class CssPoint2DConverter.
      */
-    static
-    public void doTest(CssPoint2D value, @NonNull String str) throws Exception {
+    public static void doTest(CssPoint2D value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(new CssPoint2D(40, 40, "cm"), "40cm 40cm"))
         );

@@ -21,15 +21,13 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E> {
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
-    @NonNull
     @Override
-    final public CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
+    public final @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
         return treeModelListeners;
     }
 
-    @NonNull
     @Override
-    final public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
+    public final @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;
     }
 }

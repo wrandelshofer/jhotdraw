@@ -12,9 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class CssPrettyPrinterTest {
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testPrettyPrinterFactory() {
+    public @NonNull List<DynamicTest> testPrettyPrinterFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testPrettyPrint("", "")),
                 dynamicTest("2", () -> testPrettyPrint("* {}", "* {}")),

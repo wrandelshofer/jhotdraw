@@ -22,7 +22,7 @@ public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "LabelConnection";
+    public static final String TYPE_SELECTOR = "LabelConnection";
 
     public SimpleLabelConnectionFigure(@NonNull Point2D position, String text) {
         this(position.getX(), position.getY(), text);
@@ -43,9 +43,8 @@ public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
         return get(TEXT);
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

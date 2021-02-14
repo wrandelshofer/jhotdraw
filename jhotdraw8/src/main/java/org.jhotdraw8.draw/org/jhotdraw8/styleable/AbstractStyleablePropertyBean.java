@@ -25,13 +25,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class AbstractStyleablePropertyBean
         implements StyleablePropertyBean {
-    protected final static Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
+    protected static final Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
 
     protected final StyleableMap<Key<?>, Object> properties =
             createStyleableMap();
 
-    @NonNull
-    private SimpleStyleableMap<Key<?>, Object> createStyleableMap() {
+    private @NonNull SimpleStyleableMap<Key<?>, Object> createStyleableMap() {
         // Explicit type arguments needed for Java 8!
         return new SimpleStyleableMap<Key<?>, Object>(createKeyMap()) {
             @Override
@@ -51,13 +50,11 @@ public abstract class AbstractStyleablePropertyBean
      * This implementation creates one key map for this class, and shares
      * it with all instances of this class.
      */
-    @NonNull
-    protected Map<Key<?>, Integer> createKeyMap() {
+    protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<Key<?>, Integer>() {
-                private final static long serialVersionUID = 0L;
-                @NonNull
-                final AtomicInteger nextIndex = new AtomicInteger();
+                private static final long serialVersionUID = 0L;
+                final @NonNull AtomicInteger nextIndex = new AtomicInteger();
 
                 @Override
                 public Integer get(Object key) {
@@ -65,8 +62,8 @@ public abstract class AbstractStyleablePropertyBean
                     if ((v = super.get(key)) == null) {
                         Integer newValue;
                         newValue = nextIndex.getAndIncrement();
-                            put((Key<?>)key, newValue);
-                            return newValue;
+                        put((Key<?>) key, newValue);
+                        return newValue;
                     }
                     return v;
                 }
@@ -79,15 +76,13 @@ public abstract class AbstractStyleablePropertyBean
     /**
      * Returns the user properties.
      */
-    @NonNull
     @Override
-    public final ObservableMap<Key<?>, Object> getProperties() {
+    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 
-    @Nullable
     @Override
-    public <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
+    public @Nullable <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
         if (key instanceof WriteableStyleableMapAccessor) {
             WriteableStyleableMapAccessor<T> skey = (WriteableStyleableMapAccessor<T>) key;
             return new KeyMapEntryStyleableProperty<>(this, properties, skey, skey.getCssName(), skey.getCssMetaData());
@@ -96,17 +91,15 @@ public abstract class AbstractStyleablePropertyBean
         }
     }
 
-    @NonNull
-    protected StyleableMap<Key<?>, Object> getStyleableMap() {
+    protected @NonNull StyleableMap<Key<?>, Object> getStyleableMap() {
         return properties;
     }
 
     /**
      * Returns the style value.
      */
-    @Nullable
     @Override
-    public <T> T getStyled(@NonNull MapAccessor<T> key) {
+    public @Nullable <T> T getStyled(@NonNull MapAccessor<T> key) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
         T ret = key.get(map.getStyledMap());// key may invoke get multiple times!
@@ -130,18 +123,16 @@ public abstract class AbstractStyleablePropertyBean
     /**
      * Sets the style value.
      */
-    @Nullable
     @Override
-    public <T> T setStyled(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key, T newValue) {
+    public @Nullable <T> T setStyled(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key, T newValue) {
         StyleableMap<Key<?>, Object> map = getStyleableMap();
         @SuppressWarnings("unchecked")
         T ret = key.put(map.getMap(origin), newValue);
         return ret;
     }
 
-    @Nullable
     @Override
-    public <T> T remove(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key) {
+    public @Nullable <T> T remove(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key) {
         @SuppressWarnings("unchecked")
         T ret = key.remove(getStyleableMap().getMap(origin));
         return ret;

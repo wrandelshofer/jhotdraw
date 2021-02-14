@@ -43,7 +43,7 @@ import java.util.TreeSet;
  */
 public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
-    public final static Comparator<String> NFD_COMPARATOR
+    public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
     @Override

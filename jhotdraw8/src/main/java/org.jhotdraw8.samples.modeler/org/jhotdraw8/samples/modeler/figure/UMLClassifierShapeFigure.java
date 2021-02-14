@@ -129,20 +129,17 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "MLClassifier";
+    public static final String TYPE_SELECTOR = "MLClassifier";
 
-    public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = MLConstants.COMPARTMENTS;
-    @Nullable
-    public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
-    @Nullable
-    public final static StringStyleableKey NAME = MLConstants.NAME;
-    public final static BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", false);
-    public final static BooleanStyleableKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
+    public static final MLCompartmentedDataStyleableFigureKey COMPARTMENTS = MLConstants.COMPARTMENTS;
+    public static final @Nullable NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
+    public static final @Nullable StringStyleableKey NAME = MLConstants.NAME;
+    public static final BooleanStyleableKey COMPARTMENT_LABELS_VISIBLE = new BooleanStyleableKey("compartmentLabelsVisible", false);
+    public static final BooleanStyleableKey KEYWORD_LABEL_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
     /**
      * The line spacing. Default value: {@code 0.0}
      */
-    @Nullable
-    public final static CssSizeStyleableKey LINE_SPACING = TextLayoutableFigure.LINE_SPACING;
+    public static final @Nullable CssSizeStyleableKey LINE_SPACING = TextLayoutableFigure.LINE_SPACING;
     /**
      * This key is used to tag editable nodes.
      */
@@ -153,9 +150,8 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
     public UMLClassifierShapeFigure() {
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(RenderContext ctx) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
         Path p = new Path();
@@ -164,9 +160,8 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         return g;
     }
 
-    @Nullable
     @Override
-    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
+    public @Nullable TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
         if (node == null) {
             return null;
         }
@@ -322,22 +317,20 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
 
     }
 
-    @NonNull
-    private EnumSet<MLModifier> computeClassifierModifiers(@Nullable String keyword) {
+    private @NonNull EnumSet<MLModifier> computeClassifierModifiers(@Nullable String keyword) {
         EnumSet<MLModifier> classifierModifiers = EnumSet.noneOf(MLModifier.class);
         if (keyword != null) {
             switch (keyword) {
-                case "interface":
-                case "abstract class":
-                    classifierModifiers.add(MLModifier.ABSTRACT);
-                    break;
+            case "interface":
+            case "abstract class":
+                classifierModifiers.add(MLModifier.ABSTRACT);
+                break;
             }
         }
         return classifierModifiers;
     }
 
-    @NonNull
-    private EnumSet<MLModifier> computeOperationModifiers(@Nullable String operation) {
+    private @NonNull EnumSet<MLModifier> computeOperationModifiers(@Nullable String operation) {
         EnumSet<MLModifier> operationModifiers = EnumSet.noneOf(MLModifier.class);
         if (operation != null) {
             if (operation.contains("{abstract}")) {
@@ -412,9 +405,8 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -432,9 +424,8 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (path == null) {
             layout(new SimpleRenderContext());
         }

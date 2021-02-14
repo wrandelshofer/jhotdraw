@@ -51,9 +51,8 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
     }
 
 
-    @NonNull
     @Override
-    public SvgFontSize parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull SvgFontSize parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         SvgFontSize.SizeKeyword sizeKeyword;
         CssSize cssSize;
         if (tt.next() == CssTokenType.TT_IDENT) {

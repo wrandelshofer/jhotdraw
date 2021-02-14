@@ -22,14 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CssFont {
 
     private final String family;
-    @Nullable
-    private final FontWeight weight;
-    @Nullable
-    private final FontPosture posture;
-    @NonNull
-    private final CssSize size;
-    @NonNull
-    private final Font font;
+    private final @Nullable FontWeight weight;
+    private final @Nullable FontPosture posture;
+    private final @NonNull CssSize size;
+    private final @NonNull Font font;
 
     public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
         this.family = family;
@@ -47,27 +43,23 @@ public class CssFont {
         return family;
     }
 
-    @Nullable
-    public FontWeight getWeight() {
+    public @Nullable FontWeight getWeight() {
         return weight;
     }
 
-    @Nullable
-    public FontPosture getPosture() {
+    public @Nullable FontPosture getPosture() {
         return posture;
     }
 
-    @NonNull
-    public CssSize getSize() {
+    public @NonNull CssSize getSize() {
         return size;
     }
 
-    @NonNull
-    public Font getFont() {
+    public @NonNull Font getFont() {
         return font;
     }
 
-    private final static Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
+    private static final Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
 
     public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
         return cachedFonts.computeIfAbsent(family
@@ -80,8 +72,7 @@ public class CssFont {
         return font(family, weight, posture, new CssSize(size));
     }
 
-    @NonNull
-    public static CssFont font(String family, double size) {
+    public static @NonNull CssFont font(String family, double size) {
         return font(family, null, null, new CssSize(size));
     }
 
@@ -119,9 +110,8 @@ public class CssFont {
         return this.posture == other.posture;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssFont{" +
                 "family='" + family + '\'' +
                 ", weight=" + weight +

@@ -27,8 +27,7 @@ public class IntersectCircleRectangle {
      * @param r1 corner point 1 of the rectangle
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static @NonNull IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D r0, @NonNull Point2D r1) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1,
                 Math.min(r0.getX(), r1.getX()),
                 Math.min(r0.getY(), r1.getY()),
@@ -36,18 +35,15 @@ public class IntersectCircleRectangle {
                 Math.max(r0.getY(), r1.getY()));
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Rectangle2D.Double r) {
+    public static @NonNull IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Rectangle2D.Double r) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1, r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectRectangleLineEx(@NonNull Rectangle2D.Double r, @NonNull Point2D a0, @NonNull Point2D a1) {
+    public static @NonNull IntersectionResultEx intersectRectangleLineEx(@NonNull Rectangle2D.Double r, @NonNull Point2D a0, @NonNull Point2D a1) {
         return IntersectAABBLine.intersectAABBLineEx(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY(), a0, a1);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectCircleRectangleEx(double c1x, double c1y, double r1, double x, double y, double w, double h) {
+    public static @NonNull IntersectionResultEx intersectCircleRectangleEx(double c1x, double c1y, double r1, double x, double y, double w, double h) {
         return intersectCircleRectangleEx(new Point2D.Double(c1x, c1y), r1, new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
     }
 
@@ -64,8 +60,7 @@ public class IntersectCircleRectangle {
      * @param r1 corner point 1 of the rectangle
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectCircleRectangleEx(@NonNull Point2D c, double r, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static @NonNull IntersectionResultEx intersectCircleRectangleEx(@NonNull Point2D c, double r, @NonNull Point2D r0, @NonNull Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);
         bottomRight = Intersections.bottomRight(r0, r1);

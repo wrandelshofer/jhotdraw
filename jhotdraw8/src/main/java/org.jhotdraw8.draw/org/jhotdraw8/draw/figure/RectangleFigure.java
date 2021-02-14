@@ -35,14 +35,11 @@ public class RectangleFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Rectangle";
+    public static final String TYPE_SELECTOR = "Rectangle";
 
-    @NonNull
-    public final static CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);
-    @Nullable
-    public final static SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
+    public static final @NonNull CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);
+    public static final @Nullable SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public RectangleFigure() {
         this(0, 0, 1, 1);
@@ -72,9 +69,8 @@ public class RectangleFigure extends AbstractLeafFigure
     }
 
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Rectangle n = new Rectangle();
         n.setManaged(false);
         return n;
@@ -97,15 +93,13 @@ public class RectangleFigure extends AbstractLeafFigure
         rectangleNode.setArcHeight(getStyledNonNull(ARC_HEIGHT).getConvertedValue());
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

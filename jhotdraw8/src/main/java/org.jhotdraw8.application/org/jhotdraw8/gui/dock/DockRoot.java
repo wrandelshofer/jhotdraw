@@ -33,13 +33,11 @@ public interface DockRoot extends DockParent {
      */
     ObjectProperty<Dockable> draggedDockable = new SimpleObjectProperty<>();
 
-    @NonNull
-    static ObjectProperty<Dockable> draggedDockableProperty() {
+    static @NonNull ObjectProperty<Dockable> draggedDockableProperty() {
         return draggedDockable;
     }
 
-    @Nullable
-    static Dockable getDraggedDockable() {
+    static @Nullable Dockable getDraggedDockable() {
         return draggedDockable.get();
     }
 
@@ -59,8 +57,7 @@ public interface DockRoot extends DockParent {
     @NonNull
     ObjectProperty<Predicate<Dockable>> dockablePredicateProperty();
 
-    @NonNull
-    default Predicate<Dockable> getDockablePredicate() {
+    default @NonNull Predicate<Dockable> getDockablePredicate() {
         return dockablePredicateProperty().get();
     }
 

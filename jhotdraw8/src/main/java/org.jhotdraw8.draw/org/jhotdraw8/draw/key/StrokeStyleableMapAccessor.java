@@ -34,23 +34,16 @@ import java.util.function.Function;
  */
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStrokeStyle> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, CssStrokeStyle> cssMetaData;
+    private final @NonNull CssMetaData<?, CssStrokeStyle> cssMetaData;
 
-    @NonNull
-    private final MapAccessor<CssSize> dashOffsetKey;
-    @NonNull
-    private final MapAccessor<ImmutableList<CssSize>> dashArrayKey;
-    @NonNull
-    private final MapAccessor<StrokeType> typeKey;
-    @NonNull
-    private final MapAccessor<StrokeLineJoin> lineJoinKey;
-    @NonNull
-    private final MapAccessor<StrokeLineCap> lineCapKey;
-    @NonNull
-    private final MapAccessor<CssSize> miterLimitKey;
+    private final @NonNull MapAccessor<CssSize> dashOffsetKey;
+    private final @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey;
+    private final @NonNull MapAccessor<StrokeType> typeKey;
+    private final @NonNull MapAccessor<StrokeLineJoin> lineJoinKey;
+    private final @NonNull MapAccessor<StrokeLineCap> lineCapKey;
+    private final @NonNull MapAccessor<CssSize> miterLimitKey;
 
     public StrokeStyleableMapAccessor(String name,
                                       @NonNull MapAccessor<StrokeType> typeKey,
@@ -102,9 +95,8 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
 
     private final Converter<CssStrokeStyle> converter = new CssStrokeStyleConverter(false);
 
-    @NonNull
     @Override
-    public Converter<CssStrokeStyle> getCssConverter() {
+    public @NonNull Converter<CssStrokeStyle> getCssConverter() {
         return converter;
     }
 

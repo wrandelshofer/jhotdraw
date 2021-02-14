@@ -24,13 +24,10 @@ import java.util.Objects;
 public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
-    @Nullable
-    protected K key;
-    @Nullable
-    protected ObservableMap<K, V> map;
+    protected @Nullable K key;
+    protected @Nullable ObservableMap<K, V> map;
     protected Class<T> tClazz;
-    @Nullable
-    private WeakMapChangeListener<K, V> weakListener;
+    private @Nullable WeakMapChangeListener<K, V> weakListener;
 
     public MapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
@@ -40,9 +37,8 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         map.addListener(weakListener = new WeakMapChangeListener<>(this));
     }
 
-    @Nullable
     @Override
-    public T get() {
+    public @Nullable T get() {
         @SuppressWarnings("unchecked")
         T temp = (T) map.get(key);
         return temp;
@@ -61,9 +57,8 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         super.set(value);
     }
 
-    @Nullable
     @Override
-    public Object getBean() {
+    public @Nullable Object getBean() {
         return map;
     }
 

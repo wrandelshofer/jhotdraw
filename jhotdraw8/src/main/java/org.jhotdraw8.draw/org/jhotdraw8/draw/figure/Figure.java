@@ -160,8 +160,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-    @NonNull
-    static Bounds bounds(@NonNull Collection<? extends Figure> selection) {
+    static @NonNull Bounds bounds(@NonNull Collection<? extends Figure> selection) {
         double minx = Double.POSITIVE_INFINITY;
         double miny = Double.POSITIVE_INFINITY;
         double maxx = Double.NEGATIVE_INFINITY;
@@ -264,8 +263,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param selection a set of figures
      * @return bounds
      */
-    @Nullable
-    static Bounds visualBounds(@NonNull Collection<Figure> selection) {
+    static @Nullable Bounds visualBounds(@NonNull Collection<Figure> selection) {
         Bounds b = null;
 
         for (Figure f : selection) {
@@ -500,8 +498,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
-    @NonNull
-    default Bounds getLayoutBounds() {
+    default @NonNull Bounds getLayoutBounds() {
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
@@ -509,8 +506,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The bounds that should be used for clipping and intersection tests
      * of this figure.
      */
-    @NonNull
-    default Bounds getVisualBounds() {
+    default @NonNull Bounds getVisualBounds() {
         return getLayoutBounds();
     }
 
@@ -537,8 +533,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the local bounds
      */
-    @NonNull
-    default Bounds getLayoutBoundsInParent() {
+    default @NonNull Bounds getLayoutBoundsInParent() {
         return FXTransforms.transformedBoundingBox(getLocalToParent(), getLayoutBounds());
     }
 
@@ -554,8 +549,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the bounds in parent coordinates
      */
-    @NonNull
-    default Bounds getBoundsInParent() {
+    default @NonNull Bounds getBoundsInParent() {
         return FXTransforms.transformedBoundingBox(getLocalToParent(), getBoundsInLocal());
     }
 
@@ -571,8 +565,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the bounds in world coordinates
      */
-    @NonNull
-    default Bounds getBoundsInWorld() {
+    default @NonNull Bounds getBoundsInWorld() {
         return FXTransforms.transformedBoundingBox(getLocalToWorld(), getBoundsInLocal());
     }
 
@@ -582,8 +575,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the bounds in world coordinates
      */
-    @NonNull
-    default Bounds getLayoutBoundsInWorld() {
+    default @NonNull Bounds getLayoutBoundsInWorld() {
         return FXTransforms.transformedBoundingBox(getLocalToWorld(), getLayoutBounds());
     }
 
@@ -593,8 +585,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the bounds in world coordinates
      */
-    @NonNull
-    default Bounds getVisualBoundsInWorld() {
+    default @NonNull Bounds getVisualBoundsInWorld() {
         return FXTransforms.transformedBoundingBox(getLocalToWorld(), getVisualBounds());
     }
 
@@ -604,8 +595,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return The center of the figure
      */
-    @NonNull
-    default Point2D getCenterInLocal() {
+    default @NonNull Point2D getCenterInLocal() {
         Bounds b = getLayoutBounds();
         return FXGeom.center(b);
     }
@@ -615,8 +605,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return The center of the figure
      */
-    @NonNull
-    default Point2D getCenterInParent() {
+    default @NonNull Point2D getCenterInParent() {
         Bounds b = getLayoutBoundsInParent();
         return FXGeom.center(b);
     }
@@ -666,8 +655,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the drawing or null if no ancestor is a drawing. Returns this, if
      * this figure is a drawing.
      */
-    @Nullable
-    default Drawing getDrawing() {
+    default @Nullable Drawing getDrawing() {
         return getAncestor(Drawing.class);
     }
 
@@ -677,8 +665,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the drawing or null if no ancestor is a layer. Returns this, if
      * this figure is a layer.
      */
-    @Nullable
-    default Layer getLayer() {
+    default @Nullable Layer getLayer() {
         return getAncestor(Layer.class);
     }
 
@@ -706,8 +693,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     Transform getLocalToWorld();
 
     @Override
-    @Nullable
-    default Figure getParent() {
+    default @Nullable Figure getParent() {
         return parentProperty().get();
     }
 
@@ -771,8 +757,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of layout subjects
      */
-    @NonNull
-    default ReadOnlySet<Figure> getLayoutSubjects() {
+    default @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         return ImmutableSets.emptySet();
     }
 
@@ -781,8 +766,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return the root
      */
-    @Nullable
-    default Figure getRoot() {
+    default @Nullable Figure getRoot() {
         Figure parent = this;
         while (parent.getParent() != null) {
             parent = parent.getParent();
@@ -790,9 +774,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         return parent;
     }
 
-    @Nullable
     @Override
-    default Styleable getStyleableParent() {
+    default @Nullable Styleable getStyleableParent() {
         return getParent();
     }
 
@@ -808,8 +791,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return an unmodifiable set of keys
      */
-    @NonNull
-    default Set<MapAccessor<?>> getSupportedKeys() {
+    default @NonNull Set<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedMapAccessors(this.getClass());
     }
 
@@ -1032,8 +1014,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p point in local coordinates
      * @return point in world coordinates
      */
-    @NonNull
-    default Point2D localToWorld(@NonNull Point2D p) {
+    default @NonNull Point2D localToWorld(@NonNull Point2D p) {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -1048,8 +1029,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p bounds in local coordinates
      * @return bounds in parent coordinates
      */
-    @NonNull
-    default Bounds localToParent(@NonNull Bounds p) {
+    default @NonNull Bounds localToParent(@NonNull Bounds p) {
         final Transform ltw = getLocalToParent();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -1064,8 +1044,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param p bounds in local coordinates
      * @return bounds in world coordinates
      */
-    @NonNull
-    default Bounds localToWorld(@NonNull Bounds p) {
+    default @NonNull Bounds localToWorld(@NonNull Bounds p) {
         final Transform ltw = getLocalToWorld();
         return ltw == null ? p : ltw.transform(p);
     }
@@ -1323,14 +1302,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-    @NonNull
-    default Point2D worldToLocal(@NonNull Point2D pointInWorld) {
+    default @NonNull Point2D worldToLocal(@NonNull Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
         return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : wtl.transform(pointInWorld);
     }
 
-    @NonNull
-    default CssPoint2D worldToLocal(@NonNull CssPoint2D pointInWorld) {
+    default @NonNull CssPoint2D worldToLocal(@NonNull CssPoint2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
         return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : new CssPoint2D(wtl.transform(pointInWorld.getConvertedValue()));
     }
@@ -1345,14 +1322,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param pointInWorld point in drawing coordinates
      * @return point in local coordinates
      */
-    @NonNull
-    default Point2D worldToParent(@NonNull Point2D pointInWorld) {
+    default @NonNull Point2D worldToParent(@NonNull Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
         return FXTransforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
     }
 
-    @NonNull
-    default Point2D worldToParent(double x, double y) {
+    default @NonNull Point2D worldToParent(double x, double y) {
         final Transform wtp = getWorldToParent();
         return FXTransforms.isIdentityOrNull(wtp) ? new Point2D(x, y) : wtp.transform(x, y);
     }

@@ -16,6 +16,7 @@ import java.net.URI;
  */
 public interface IdFactory extends IdResolver, IdSupplier {
 void setDocumentHome(@Nullable URI documentHome);
+
     /**
      * Creates an id for the specified object. If the object already has an id,
      * then that id is returned.
@@ -23,8 +24,7 @@ void setDocumentHome(@Nullable URI documentHome);
      * @param object the object
      * @return the id
      */
-    @Nullable
-    default String createId(Object object) {
+    default @Nullable String createId(Object object) {
         return createId(object, "");
     }
 

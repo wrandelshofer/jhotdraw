@@ -62,9 +62,8 @@ public class UnorderedPair<V> implements Pair<V, V> {
         return Objects.hashCode(a) + Objects.hashCode(b);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';
     }
 

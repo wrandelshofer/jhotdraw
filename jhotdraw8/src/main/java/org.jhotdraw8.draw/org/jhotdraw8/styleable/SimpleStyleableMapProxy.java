@@ -12,11 +12,8 @@ import java.util.AbstractMap;
 import java.util.Set;
 
 class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
-    @NonNull
-    private final SimpleStyleableMap<K, V> target;
-    @Nullable
-
-    private final StyleOrigin origin;
+    private final @NonNull SimpleStyleableMap<K, V> target;
+    private final @Nullable StyleOrigin origin;
     private final int originOrdinal;
 
     public SimpleStyleableMapProxy(@NonNull SimpleStyleableMap<K, V> target, @Nullable StyleOrigin origin) {
@@ -47,8 +44,7 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    @NonNull
-    public Set<Entry<K, V>> entrySet() {
+    public @NonNull Set<Entry<K, V>> entrySet() {
         return target.entrySet(origin);
     }
 

@@ -33,11 +33,9 @@ import org.jhotdraw8.tree.TreeModelEvent;
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {
 
-    @NonNull
-    protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
+    protected final @NonNull ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
 
-    @NonNull
-    public ObjectProperty<DrawingView> subjectProperty() {
+    public @NonNull ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }
 
@@ -54,8 +52,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         invalidateTextArea(event.getSource());
     };
 
-    @NonNull
-    private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
+    private final @NonNull ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {
             oldValue.removeListener(modelInvalidationHandler);
             oldValue.removeTreeModelListener(treeModelListener);
@@ -80,15 +77,13 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     }
 
-    @Nullable
     @Override
-    protected Object get(@NonNull Figure f, @NonNull WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected @Nullable Object get(@NonNull Figure f, @NonNull WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
         return getDrawingModel().get(f, finalSelectedAccessor);
     }
 
-    @Nullable
     @Override
-    protected WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
+    protected @Nullable WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
         if (selectorModel instanceof FigureSelectorModel) {
             FigureSelectorModel m = (FigureSelectorModel) selectorModel;
             return m.getAccessor(f, propertyNamespace, propertyName);
@@ -96,9 +91,8 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return null;
     }
 
-    @Nullable
     @Override
-    protected Converter<?> getConverter(SelectorModel<Figure> selectorModel, @NonNull Figure f, String namespace, String name) {
+    protected @Nullable Converter<?> getConverter(SelectorModel<Figure> selectorModel, @NonNull Figure f, String namespace, String name) {
         if (selectorModel instanceof FigureSelectorModel) {
             FigureSelectorModel m = (FigureSelectorModel) selectorModel;
             return m.getConverter(f, namespace, name);
@@ -106,34 +100,29 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return null;
     }
 
-    @Nullable
-    protected Drawing getDrawing() {
+    protected @Nullable Drawing getDrawing() {
         DrawingView view = getSubject();
         return view == null ? null : view.getDrawing();
     }
 
-    @Nullable
-    protected DrawingModel getDrawingModel() {
+    protected @Nullable DrawingModel getDrawingModel() {
         DrawingView view = getSubject();
         return view == null ? null : view.getModel();
     }
 
-    @NonNull
     @Override
-    protected Iterable<Figure> getEntities() {
+    protected @NonNull Iterable<Figure> getEntities() {
         return getDrawing().breadthFirstIterable();
     }
 
-    @Nullable
     @Override
-    protected Figure getRoot() {
+    protected @Nullable Figure getRoot() {
         DrawingView subject = getSubject();
         return subject == null ? null : subject.getDrawing();
     }
 
-    @Nullable
     @Override
-    protected StylesheetsManager<Figure> getStyleManager() {
+    protected @Nullable StylesheetsManager<Figure> getStyleManager() {
         Drawing d = getDrawing();
         return d == null ? null : d.getStyleManager();
     }

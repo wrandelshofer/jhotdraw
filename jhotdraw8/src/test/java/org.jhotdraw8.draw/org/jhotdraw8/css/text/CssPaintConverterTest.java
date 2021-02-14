@@ -35,8 +35,7 @@ public class CssPaintConverterTest {
     /**
      * Test of fromString method, of class CssPaintConverter.
      */
-    static
-    public void testFromString(@Nullable Paintable expected, @NonNull String string) throws Exception {
+    public static void testFromString(@Nullable Paintable expected, @NonNull String string) throws Exception {
         System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -48,9 +47,8 @@ public class CssPaintConverterTest {
 
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),

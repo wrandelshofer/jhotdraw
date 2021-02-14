@@ -33,9 +33,8 @@ import java.text.ParseException;
  */
 public class DefaultConverter implements Converter<Object> {
 
-    @Nullable
     @Override
-    public Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String str = buf.toString();
         buf.position(buf.limit());
         return "null".equals(str) ? null : str;
@@ -46,9 +45,8 @@ public class DefaultConverter implements Converter<Object> {
         out.append(value == null ? "null" : value.toString());
     }
 
-    @NonNull
     @Override
-    public String getDefaultValue() {
+    public @NonNull String getDefaultValue() {
         return "null";
     }
 }

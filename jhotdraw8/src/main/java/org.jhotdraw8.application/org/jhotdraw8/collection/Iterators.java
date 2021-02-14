@@ -27,8 +27,7 @@ public class Iterators {
      * @param iterable the iterable
      * @return the list
      */
-    @NonNull
-    public static <T> List<T> toList(Iterable<T> iterable) {
+    public static @NonNull <T> List<T> toList(Iterable<T> iterable) {
         if (iterable instanceof List<?>) {
             return (List<T>) iterable;
         }

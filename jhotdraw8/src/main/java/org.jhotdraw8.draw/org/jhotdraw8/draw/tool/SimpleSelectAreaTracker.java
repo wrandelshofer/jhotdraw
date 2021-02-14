@@ -54,14 +54,13 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
      * This tool draws a JavaFX {@code Rectangle} with style class
      * "tool-rubberband".
      */
-    public final static String STYLECLASS_TOOL_RUBBERBAND = "tool-rubberband";
+    public static final String STYLECLASS_TOOL_RUBBERBAND = "tool-rubberband";
 
     private static final long serialVersionUID = 1L;
     /**
      * The rubberband.
      */
-    @NonNull
-    private Rectangle rubberband = new Rectangle();
+    private @NonNull Rectangle rubberband = new Rectangle();
 
     double x;
     double y;

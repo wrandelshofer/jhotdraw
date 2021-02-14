@@ -34,8 +34,7 @@ public class IntersectLineQuadCurve {
      * @param a1 point 0 of 'a'
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectLineQuadCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
+    public static @NonNull IntersectionResult intersectLineQuadCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
         return intersectLineQuadCurve(
                 a0.getX(), a0.getY(),
                 a1.getX(), a1.getY(),
@@ -44,9 +43,8 @@ public class IntersectLineQuadCurve {
                 p2.getX(), p2.getY());
     }
 
-    @NonNull
-    public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
-                                                            double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
+    public static @NonNull IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
+                                                                     double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         return intersectLineQuadCurve(
                 a0x, a0y,
                 a1x, a1y,
@@ -73,10 +71,9 @@ public class IntersectLineQuadCurve {
      * @param epsilon
      * @return
      */
-    @NonNull
-    public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
-                                                            double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
-                                                            double epsilon) {
+    public static @NonNull IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
+                                                                     double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
+                                                                     double epsilon) {
         /* steps:
          * 1. Rotate the bezier curve so that the line coincides with the x-axis.
          *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
@@ -154,8 +151,7 @@ public class IntersectLineQuadCurve {
      * @param a1 point 1 of 'a'
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1) {
+    public static @NonNull IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1) {
         return intersectQuadCurveLine(p0, p1, p2, a0, a1, Geom.REAL_THRESHOLD);
     }
 
@@ -249,15 +245,13 @@ public class IntersectLineQuadCurve {
         return new IntersectionResult(status, result);
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveLine(
+    public static @NonNull IntersectionResult intersectQuadCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1) {
         return intersectQuadCurveLine(ax0, ay0, ax1, ay1, ax2, ay2, bx0, by0, bx1, by1, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveLine(
+    public static @NonNull IntersectionResult intersectQuadCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1, double epsilon) {
         return intersectQuadCurveLine(new Point2D.Double(ax0, ay0), new Point2D.Double(ax1, ay1), new Point2D.Double(ax2, ay2),

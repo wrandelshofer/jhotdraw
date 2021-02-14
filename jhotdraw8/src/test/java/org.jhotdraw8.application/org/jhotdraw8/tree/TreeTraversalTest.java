@@ -17,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class TreeTraversalTest {
 
-    @NonNull
-    private static SimpleTreeNode<String> createTree() {
+    private static @NonNull SimpleTreeNode<String> createTree() {
         //       F
         //     ↙︎  ↘︎
         //    B     G

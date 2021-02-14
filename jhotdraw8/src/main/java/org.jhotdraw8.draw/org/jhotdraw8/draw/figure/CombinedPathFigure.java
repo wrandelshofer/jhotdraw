@@ -44,24 +44,21 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure, FillRulableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    @NonNull
-    public final static NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, true, null);
+    public static final @NonNull NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, true, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "CombinedPath";
+    public static final String TYPE_SELECTOR = "CombinedPath";
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Path n = new Path();
         n.setManaged(false);
         return n;
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
+    public @NonNull Connector findConnector(Point2D pointInLocal, Figure connectingFigure) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
@@ -110,9 +107,8 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
         if (op != null) {
             return getPathIteratorCAG(ctx, tx, op);
@@ -128,8 +124,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
     }
 
-    @NonNull
-    private PathIterator getPathIteratorCAG(RenderContext ctx, AffineTransform tx, @NonNull CagOperation op) {
+    private @NonNull PathIterator getPathIteratorCAG(RenderContext ctx, AffineTransform tx, @NonNull CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {
@@ -162,9 +157,8 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         return iter;
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

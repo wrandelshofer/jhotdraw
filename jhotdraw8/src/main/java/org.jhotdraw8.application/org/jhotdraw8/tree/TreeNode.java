@@ -42,8 +42,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @NonNull
-    default Iterable<T> ancestorIterable() {
+    default @NonNull Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
         return i;
@@ -55,8 +54,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @NonNull
-    default Iterable<T> breadthFirstIterable() {
+    default @NonNull Iterable<T> breadthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked")
@@ -103,9 +101,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * this type is present. Returns {@code this} if this object is of type
      * {@literal <T>}.
      */
-    @NonNull
-    @Nullable
-    default <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
+    default @NonNull @Nullable <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
         while (ancestor != null && !ancestorType.isInstance(ancestor)) {
@@ -153,8 +149,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return The first child. Returns null if the figure has no getChildren.
      */
-    @Nullable
-    default T getFirstChild() {
+    default @Nullable T getFirstChild() {
         return getChildren().isEmpty() //
                 ? null//
                 : getChildren().get(getChildren().size() - 1);
@@ -165,8 +160,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return The last child. Returns null if the figure has no getChildren.
      */
-    @Nullable
-    default T getLastChild() {
+    default @Nullable T getLastChild() {
         return getChildren().isEmpty() ? null : getChildren().get(0);
     }
 
@@ -197,9 +191,8 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return path including this node
      */
-    @NonNull
     @SuppressWarnings("unchecked")
-    default List<T> getPath() {
+    default @NonNull List<T> getPath() {
         LinkedList<T> path = new LinkedList<>();
         for (T node = (T) this; node != null; node = node.getParent()) {
             path.addFirst(node);
@@ -213,8 +206,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @NonNull
-    default Iterable<T> postorderIterable() {
+    default @NonNull Iterable<T> postorderIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
@@ -229,8 +221,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @NonNull
-    default Iterable<T> depthFirstIterable() {
+    default @NonNull Iterable<T> depthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked")
@@ -245,8 +236,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @NonNull
-    default Iterable<T> preorderIterable() {
+    default @NonNull Iterable<T> preorderIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
@@ -261,8 +251,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    @NonNull
-    default PreorderSpliterator<T> preorderSpliterator() {
+    default @NonNull PreorderSpliterator<T> preorderSpliterator() {
         @SuppressWarnings("unchecked") T t = (T) this;
         return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
     }
@@ -272,8 +261,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
 
-        @Nullable
-        private T node;
+        private @Nullable T node;
 
         private AncestorIterator(@Nullable T node) {
             this.node = node;
@@ -284,9 +272,8 @@ public interface TreeNode<T extends TreeNode<T>> {
             return node != null;
         }
 
-        @Nullable
         @Override
-        public T next() {
+        public @Nullable T next() {
             if (node == null) {
                 throw new NoSuchElementException();
             }

@@ -33,20 +33,14 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
-    @NonNull
-    public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    @NonNull
-    public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    @NonNull
-    public final static NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", "M 0,0 h 1 v -1 h -1 Z");
-    @NonNull
-    public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    @NonNull
-    public final static CssSizeStyleableKey X = RectangleFigure.X;
-    @NonNull
-    public final static CssSizeStyleableKey Y = RectangleFigure.Y;
+    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    public static final @NonNull NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", "M 0,0 h 1 v -1 h -1 Z");
+    public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
+    public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
+    public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
 
-    public final static BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
+    public static final BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
     private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
 
     private transient Path2D.Float pathElements;
@@ -66,23 +60,20 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Path n = new Path();
         n.setManaged(false);
         return n;
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         if (pathElements == null) {
             pathElements = new Path2D.Float();
         }

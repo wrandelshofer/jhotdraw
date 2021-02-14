@@ -17,18 +17,14 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public abstract class AbstractInspector<S> implements Inspector<S> {
 
-    @NonNull
-    protected final ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
-    @NonNull
-    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
+    protected final @NonNull ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
+    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
 
-    @NonNull
-    public ObjectProperty<S> subjectProperty() {
+    public @NonNull ObjectProperty<S> subjectProperty() {
         return subject;
     }
 
-    @NonNull
-    public BooleanProperty showingProperty() {
+    public @NonNull BooleanProperty showingProperty() {
         return showing;
     }
 }

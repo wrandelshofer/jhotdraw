@@ -45,18 +45,15 @@ public class FontTypeface {
         regular.set(value);
     }
 
-    @NonNull
-    public StringProperty nameProperty() {
+    public @NonNull StringProperty nameProperty() {
         return name;
     }
 
-    @NonNull
-    public BooleanProperty regularProperty() {
+    public @NonNull BooleanProperty regularProperty() {
         return regular;
     }
 
-    @NonNull
-    public StringProperty shortNameProperty() {
+    public @NonNull StringProperty shortNameProperty() {
         return shortName;
     }
 

@@ -46,9 +46,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @FXML
     private TextArea textArea;
 
-    @NonNull
     @Override
-    public CompletionStage<Void> clear() {
+    public @NonNull CompletionStage<Void> clear() {
         textArea.setText(null);
         return CompletableFuture.completedFuture(null);
     }
@@ -84,9 +83,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
         textArea.textProperty().addListener((observable -> modified.set(true)));
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
+    public @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -116,9 +114,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
         return textArea.fontProperty();
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
+    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         final String text = textArea.getText();
         return FXWorker.run(() -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {

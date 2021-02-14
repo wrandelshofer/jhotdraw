@@ -24,9 +24,8 @@ public class PointLocator extends AbstractLocator {
         this.key = key;
     }
 
-    @NonNull
     @Override
-    public Point2D locate(@NonNull Figure owner) {
+    public @NonNull Point2D locate(@NonNull Figure owner) {
         return owner.getNonNull(key).getConvertedValue();
     }
 }

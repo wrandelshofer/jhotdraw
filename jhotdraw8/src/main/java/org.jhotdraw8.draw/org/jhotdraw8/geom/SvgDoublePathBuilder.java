@@ -13,8 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class SvgDoublePathBuilder implements PathBuilder {
 
-    @NonNull
-    private StringBuilder buf = new StringBuilder();
+    private @NonNull StringBuilder buf = new StringBuilder();
 
     @Override
     public void arcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
@@ -114,8 +113,7 @@ public class SvgDoublePathBuilder implements PathBuilder {
         PathBuilder.super.smoothQuadTo(x, y); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @NonNull
-    public String build() {
+    public @NonNull String build() {
         return buf.toString();
     }
 

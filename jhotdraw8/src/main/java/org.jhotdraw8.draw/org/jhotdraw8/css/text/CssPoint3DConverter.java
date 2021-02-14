@@ -39,9 +39,8 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
         this.withComma = withComma;
     }
 
-    @NonNull
     @Override
-    public CssPoint3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull CssPoint3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, z;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -52,16 +51,15 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
         return new CssPoint3D(x, y, z);
     }
 
-    @NonNull
-    private CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
+    private @NonNull CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumberNonNull().doubleValue());
-            case CssTokenType.TT_DIMENSION:
-                String s = tt.currentStringNonNull();
-                return new CssSize(tt.currentNumberNonNull().doubleValue(), s == null ? UnitConverter.DEFAULT : s);
-            default:
-                throw new ParseException(" ⟨CssPoint3D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+        case CssTokenType.TT_NUMBER:
+            return new CssSize(tt.currentNumberNonNull().doubleValue());
+        case CssTokenType.TT_DIMENSION:
+            String s = tt.currentStringNonNull();
+            return new CssSize(tt.currentNumberNonNull().doubleValue(), s == null ? UnitConverter.DEFAULT : s);
+        default:
+            throw new ParseException(" ⟨CssPoint3D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
         }
     }
 

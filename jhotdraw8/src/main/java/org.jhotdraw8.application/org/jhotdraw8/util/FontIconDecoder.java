@@ -26,8 +26,7 @@ import java.util.regex.Pattern;
  */
 public class FontIconDecoder implements ResourceDecoder {
 
-    @NonNull
-    private final Pattern keyPattern;
+    private final @NonNull Pattern keyPattern;
     private final String valuePrefix;
     private final Font font;
 
@@ -79,9 +78,8 @@ public class FontIconDecoder implements ResourceDecoder {
                 && (Node.class.isAssignableFrom(type));
     }
 
-    @NonNull
     @Override
-    public <T> T decode(String key, @NonNull String propertyValue, Class<T> type, Class<?> baseClass) {
+    public @NonNull <T> T decode(String key, @NonNull String propertyValue, Class<T> type, Class<?> baseClass) {
 
         // We must set the font before we set the text, so that JavaFx does not need to retrieve
         // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
@@ -93,8 +91,7 @@ public class FontIconDecoder implements ResourceDecoder {
         return t;
     }
 
-    @NonNull
-    private String decodeValue(String key, @NonNull String propertyValue) {
+    private @NonNull String decodeValue(String key, @NonNull String propertyValue) {
         String str = propertyValue.substring(valuePrefix.length()).trim();
         if (!str.startsWith("U+")) {
             throw new InternalError("illegal property value \"" + propertyValue + "\" for key " + key);

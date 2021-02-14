@@ -36,7 +36,7 @@ public static final String ID = "file.clear";
     }
 
     @Override
-    public CompletionStage<Void> doIt(@NonNull final FileBasedActivity view) {
+    public CompletionStage<Void> doIt(final @NonNull FileBasedActivity view) {
         return view.clear();
     }
 }

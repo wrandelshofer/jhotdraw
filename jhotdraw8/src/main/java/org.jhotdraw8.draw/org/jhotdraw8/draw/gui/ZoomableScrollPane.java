@@ -71,8 +71,7 @@ import java.util.ResourceBundle;
  *     ..foreground
  * </pre>
  */
-@NonNull
-public class ZoomableScrollPane {
+public @NonNull class ZoomableScrollPane {
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "scaleFactor", 1.0);
     private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
     private final ObjectProperty<Insets> insets = new SimpleObjectProperty<>(this, "insets", new Insets(24, 24, 24, 24));
@@ -300,8 +299,7 @@ public class ZoomableScrollPane {
         }
     }
 
-    @NonNull
-    private static DoubleBinding createContentRectTranslateBinding(ScrollBar scrollBar) {
+    private static @NonNull DoubleBinding createContentRectTranslateBinding(ScrollBar scrollBar) {
         return CustomBinding.computeDouble(
                 () -> getScrollBarPosition(scrollBar),
                 scrollBar.valueProperty(),
@@ -310,24 +308,20 @@ public class ZoomableScrollPane {
                 scrollBar.visibleAmountProperty());
     }
 
-    @NonNull
-    public static URL getFxmlResource() {
+    public static @NonNull URL getFxmlResource() {
         return ZoomableScrollPane.class.getResource("/org/jhotdraw8/draw/gui/ZoomableScrollPane.fxml");
     }
 
-    @NonNull
-    public final ReadOnlyDoubleProperty viewportWidthProperty() {
+    public final @NonNull ReadOnlyDoubleProperty viewportWidthProperty() {
         return viewportPane.widthProperty();
     }
 
-    @NonNull
-    public final ReadOnlyDoubleProperty viewportHeightProperty() {
+    public final @NonNull ReadOnlyDoubleProperty viewportHeightProperty() {
         return viewportPane.heightProperty();
     }
 
 
-    @NonNull
-    public final DoubleProperty zoomFactorProperty() {
+    public final @NonNull DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
 
@@ -336,13 +330,11 @@ public class ZoomableScrollPane {
     }
 
 
-    @NonNull
-    public final ReadOnlyDoubleProperty viewWidthProperty() {
+    public final @NonNull ReadOnlyDoubleProperty viewWidthProperty() {
         return horizontalScrollBar.maxProperty();
     }
 
-    @NonNull
-    public final ReadOnlyDoubleProperty viewHeightProperty() {
+    public final @NonNull ReadOnlyDoubleProperty viewHeightProperty() {
         return verticalScrollBar.maxProperty();
     }
 
@@ -354,18 +346,15 @@ public class ZoomableScrollPane {
         return viewportHeightProperty().getValue();
     }
 
-    @NonNull
-    public ObservableList<Node> getContentChildren() {
+    public @NonNull ObservableList<Node> getContentChildren() {
         return content.getChildren();
     }
 
-    @NonNull
-    public ObservableList<Node> getBackgroundChildren() {
+    public @NonNull ObservableList<Node> getBackgroundChildren() {
         return background.getChildren();
     }
 
-    @NonNull
-    public ObservableList<Node> getForegroundChildren() {
+    public @NonNull ObservableList<Node> getForegroundChildren() {
         return foreground.getChildren();
     }
 
@@ -376,13 +365,11 @@ public class ZoomableScrollPane {
      *
      * @return visible content rectangle in content coordinates
      */
-    @NonNull
-    public Bounds getVisibleContentRect() {
+    public @NonNull Bounds getVisibleContentRect() {
         return visibleContentRect.get();
     }
 
-    @NonNull
-    public Bounds getViewRect() {
+    public @NonNull Bounds getViewRect() {
         return getContentToView().transform(getVisibleContentRect());
     }
 
@@ -404,8 +391,7 @@ public class ZoomableScrollPane {
         return Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)) + min, min, max);
     }
 
-    @NonNull
-    public Bounds getViewportRect() {
+    public @NonNull Bounds getViewportRect() {
         return viewportPane.getBoundsInParent();
     }
 
@@ -421,8 +407,7 @@ public class ZoomableScrollPane {
         zoomFactor.set(newValue);
     }
 
-    @NonNull
-    public final Bounds getViewportBounds() {
+    public final @NonNull Bounds getViewportBounds() {
         return viewportPane.getLayoutBounds();
     }
 
@@ -462,13 +447,11 @@ public class ZoomableScrollPane {
                 boundsInWorld.getWidth(), boundsInWorld.getHeight());
     }
 
-    @NonNull
-    public Transform getContentToView() {
+    public @NonNull Transform getContentToView() {
         return contentToViewProperty().getValue();
     }
 
-    @NonNull
-    public Transform getViewToContent() {
+    public @NonNull Transform getViewToContent() {
         try {
             return getContentToView().createInverse();
         } catch (NonInvertibleTransformException e) {
@@ -491,19 +474,15 @@ public class ZoomableScrollPane {
     private final Property<Transform> contentToView = new SimpleObjectProperty<>(this, "contentToView");
 
 
-
-    @NonNull
-    public ReadOnlyProperty<Transform> contentToViewProperty() {
+    public @NonNull ReadOnlyProperty<Transform> contentToViewProperty() {
         return contentToView;
     }
 
-    @NonNull
-    public DoubleProperty contentWidthProperty() {
+    public @NonNull DoubleProperty contentWidthProperty() {
         return content.prefWidthProperty();
     }
 
-    @NonNull
-    public DoubleProperty contentHeightProperty() {
+    public @NonNull DoubleProperty contentHeightProperty() {
         return content.prefHeightProperty();
     }
 

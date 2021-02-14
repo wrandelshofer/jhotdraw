@@ -18,10 +18,8 @@ import java.util.Objects;
  * @author Werner Randelshofer
  */
 public class OrderedPairNonNull<U, V> implements Pair<U, V> {
-    @NonNull
-    private final U a;
-    @NonNull
-    private final V b;
+    private final @NonNull U a;
+    private final @NonNull V b;
 
     public OrderedPairNonNull(@NonNull U a, @NonNull V b) {
         this.a = a;
@@ -32,8 +30,7 @@ public class OrderedPairNonNull<U, V> implements Pair<U, V> {
         return a;
     }
 
-    @NonNull
-    public V second() {
+    public @NonNull V second() {
         return b;
     }
 

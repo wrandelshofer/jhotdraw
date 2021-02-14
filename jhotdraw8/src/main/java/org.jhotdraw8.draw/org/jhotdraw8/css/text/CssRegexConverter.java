@@ -37,9 +37,8 @@ public class CssRegexConverter extends AbstractCssConverter<RegexReplace> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public RegexReplace parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull RegexReplace parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨" + REPLACE_FUNCTION + "⟩: function expected.");
         if (!REPLACE_FUNCTION.equals(tt.currentStringNonNull())) {
             throw tt.createParseException("⟨" + REPLACE_FUNCTION + "⟩: " + REPLACE_FUNCTION + "() function expected.");

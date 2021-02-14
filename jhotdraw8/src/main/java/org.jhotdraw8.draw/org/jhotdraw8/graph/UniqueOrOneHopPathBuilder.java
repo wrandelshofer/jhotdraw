@@ -60,12 +60,11 @@ public class UniqueOrOneHopPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
     }
 
 
-    @Nullable
-    protected BackLink<V, A> search(@NonNull V root,
-                                    @NonNull Predicate<V> goal,
-                                    @NonNull Function<V, Iterable<V>> nextNodesFunction,
-                                    @NonNull AddToSet<V> visited,
-                                    int maxLength) {
+    protected @Nullable BackLink<V, A> search(@NonNull V root,
+                                              @NonNull Predicate<V> goal,
+                                              @NonNull Function<V, Iterable<V>> nextNodesFunction,
+                                              @NonNull AddToSet<V> visited,
+                                              int maxLength) {
 
         Queue<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
 

@@ -31,12 +31,10 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
         implements WriteableStyleableMapAccessor<@NonNull ImmutableList<T>>,
         NonNullMapAccessor<@NonNull ImmutableList<T>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, @NonNull ImmutableList<T>> cssMetaData;
-    @NonNull
-    private Converter<@NonNull ImmutableList<T>> converter;
+    private final @NonNull CssMetaData<?, @NonNull ImmutableList<T>> cssMetaData;
+    private @NonNull Converter<@NonNull ImmutableList<T>> converter;
 
     /**
      * Creates a new instance with the specified name and with an empty list as the

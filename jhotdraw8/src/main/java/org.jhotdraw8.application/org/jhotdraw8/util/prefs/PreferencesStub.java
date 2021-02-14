@@ -24,8 +24,7 @@ import java.util.prefs.Preferences;
 public class PreferencesStub
         extends Preferences {
 
-    @NonNull
-    private final HashMap<String, Object> map = new HashMap<>();
+    private final @NonNull HashMap<String, Object> map = new HashMap<>();
     private final boolean isUserNode;
 
     public PreferencesStub(boolean isUserNode) {
@@ -37,9 +36,8 @@ public class PreferencesStub
         map.put(key, value);
     }
 
-    @NonNull
     @Override
-    public String get(String key, String def) {
+    public @NonNull String get(String key, String def) {
         return (String) (map.getOrDefault(key, def));
     }
 
@@ -108,33 +106,28 @@ public class PreferencesStub
         map.put(key, value);
     }
 
-    @NonNull
     @Override
-    public byte[] getByteArray(String key, byte[] def) {
+    public @NonNull byte[] getByteArray(String key, byte[] def) {
         return (byte[]) (map.getOrDefault(key, def));
     }
 
-    @NonNull
     @Override
-    public String[] keys() throws BackingStoreException {
+    public @NonNull String[] keys() throws BackingStoreException {
         return map.keySet().toArray(new String[0]);
     }
 
-    @NonNull
     @Override
-    public String[] childrenNames() throws BackingStoreException {
+    public @NonNull String[] childrenNames() throws BackingStoreException {
         return new String[0];
     }
 
-    @Nullable
     @Override
-    public Preferences parent() {
+    public @Nullable Preferences parent() {
         return null;
     }
 
-    @Nullable
     @Override
-    public Preferences node(String pathName) {
+    public @Nullable Preferences node(String pathName) {
         return null;
     }
 
@@ -148,15 +141,13 @@ public class PreferencesStub
         // empty
     }
 
-    @NonNull
     @Override
-    public String name() {
+    public @NonNull String name() {
         return "Stub";
     }
 
-    @NonNull
     @Override
-    public String absolutePath() {
+    public @NonNull String absolutePath() {
         return "Stub";
     }
 
@@ -165,9 +156,8 @@ public class PreferencesStub
         return isUserNode;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Stub";
     }
 

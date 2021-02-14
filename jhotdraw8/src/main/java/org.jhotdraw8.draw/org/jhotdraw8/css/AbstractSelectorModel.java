@@ -14,8 +14,7 @@ import java.util.Set;
 public abstract class AbstractSelectorModel<E> implements SelectorModel<E> {
     private final MapProperty<String, Set<E>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
 
-    @NonNull
-    public MapProperty<String, Set<E>> additionalPseudoClassStatesProperty() {
+    public @NonNull MapProperty<String, Set<E>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
     }
 

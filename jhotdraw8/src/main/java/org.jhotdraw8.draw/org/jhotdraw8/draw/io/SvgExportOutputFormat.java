@@ -72,12 +72,12 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
 
-    public final static DataFormat SVG_FORMAT;
-    public final static String SVG_MIME_TYPE = "image/svg+xml";
-    private final static String SKIP_KEY = "skip";
-    private final static String XLINK_NS = "http://www.w3.org/1999/xlink";
-    private final static String XLINK_Q = "xlink";
-    private final static String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+    public static final DataFormat SVG_FORMAT;
+    public static final String SVG_MIME_TYPE = "image/svg+xml";
+    private static final String SKIP_KEY = "skip";
+    private static final String XLINK_NS = "http://www.w3.org/1999/xlink";
+    private static final String XLINK_Q = "xlink";
+    private static final String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType(SVG_MIME_TYPE);
@@ -88,16 +88,14 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     private final String SVG_NS = "http://www.w3.org/2000/svg";
-    @Nullable
-    private final String namespaceQualifier = null;
+    private final @Nullable String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final CssSizeConverter sc = new CssSizeConverter(false);
     private final Converter<ImmutableList<CssSize>> nbList = new CssListConverter<>(new CssSizeConverter(false));
     private final SvgPaintConverter paint = new SvgPaintConverter(true);
     private final Converter<CssSize> sznb = new CssSizeConverter(false);
     private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
-    @NonNull
-    private IdFactory idFactory = new SimpleIdFactory();
+    private @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;
 
@@ -105,16 +103,14 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         this.exporterFactory = exporterFactory;
     }
 
-    @NonNull
-    private AbstractFXSvgWriter createExporter() {
+    private @NonNull AbstractFXSvgWriter createExporter() {
         AbstractFXSvgWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setExportInvisibleElements(getNonNull(SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY));
         return exporter;
     }
 
-    @NonNull
     @Override
-    protected String getExtension() {
+    protected @NonNull String getExtension() {
         return "svg";
     }
 

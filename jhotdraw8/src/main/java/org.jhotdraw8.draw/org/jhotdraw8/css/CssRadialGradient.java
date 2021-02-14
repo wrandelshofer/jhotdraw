@@ -105,8 +105,7 @@ public class CssRadialGradient implements Paintable {
         return getRadialGradient();
     }
 
-    @NonNull
-    public Iterable<CssStop> getStops() {
+    public @NonNull Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
 
@@ -180,9 +179,8 @@ public class CssRadialGradient implements Paintable {
         return Arrays.deepEquals(this.cstops, other.cstops);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssRadialGradient{" + "focusAngle=" + focusAngle + ", focusDistance=" + focusDistance + "centerX=" + centerX + ", centerY=" + centerY + ", radius=" + radius + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
     }
 }

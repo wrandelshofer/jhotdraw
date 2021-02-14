@@ -27,8 +27,7 @@ import java.util.concurrent.ExecutionException;
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 
-    @NonNull
-    protected Application app;
+    protected @NonNull Application app;
 
     /**
      * Creates a new instance.
@@ -42,8 +41,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    @NonNull
-    protected String createErrorMessage(@Nullable Throwable t) {
+    protected @NonNull String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
             if (t.getCause() != null
@@ -63,8 +61,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         return buf.toString();
     }
 
-    @NonNull
-    public final Application getApplication() {
+    public final @NonNull Application getApplication() {
         return app;
     }
 
@@ -82,8 +79,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      */
     protected abstract void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app);
 
-    @NonNull
-    protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
+    protected @NonNull Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
         TextArea textArea = new TextArea(message);
         textArea.setEditable(false);
         textArea.setWrapText(true);

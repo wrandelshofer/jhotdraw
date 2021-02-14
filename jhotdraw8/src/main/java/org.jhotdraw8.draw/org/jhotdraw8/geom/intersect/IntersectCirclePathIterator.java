@@ -14,8 +14,7 @@ public class IntersectCirclePathIterator {
     private IntersectCirclePathIterator() {
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectPathIteratorCircleEx(@NonNull PathIterator pit, double cx, double cy, double r) {
+    public static @NonNull IntersectionResultEx intersectPathIteratorCircleEx(@NonNull PathIterator pit, double cx, double cy, double r) {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
         final double[] seg = new double[6];
@@ -25,7 +24,7 @@ public class IntersectCirclePathIterator {
         for (; !pit.isDone(); pit.next()) {
             IntersectionResultEx inter;
             switch (pit.currentSegment(seg)) {
-                case PathIterator.SEG_CLOSE:
+            case PathIterator.SEG_CLOSE:
                     inter = IntersectCircleLine.intersectLineCircleEx(lastx, lasty, firstx, firsty, cx, cy, r);
                     // FIXME add segment number to t
                     result.addAll(inter.asList());

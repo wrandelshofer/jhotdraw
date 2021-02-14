@@ -35,9 +35,8 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public Number parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Number parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
             return tt.currentNumberNonNull().doubleValue();
@@ -68,9 +67,8 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value));
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Number⟩: ⟨number⟩";
     }
 

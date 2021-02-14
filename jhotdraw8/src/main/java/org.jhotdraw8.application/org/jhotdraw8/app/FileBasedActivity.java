@@ -67,8 +67,7 @@ public interface FileBasedActivity extends Activity {
      */
     @NonNull ObjectProperty<URI> uriProperty();
 
-    @Nullable
-    default URI getURI() {
+    default @Nullable URI getURI() {
         return uriProperty().get();
     }
 
@@ -88,8 +87,7 @@ public interface FileBasedActivity extends Activity {
      */
     @NonNull ObjectProperty<DataFormat> dataFormatProperty();
 
-    @Nullable
-    default DataFormat getDataFormat() {
+    default @Nullable DataFormat getDataFormat() {
         return dataFormatProperty().get();
     }
 

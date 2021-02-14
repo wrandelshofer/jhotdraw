@@ -35,14 +35,12 @@ public class ListWrapper<E> extends AbstractList<E> {
     }
 
     @Override
-    @NonNull
-    public Object[] toArray() {
+    public @NonNull Object[] toArray() {
         return backingList.toArray();
     }
 
     @Override
-    @NonNull
-    public <T> T[] toArray(@NonNull T[] a) {
+    public @NonNull <T> T[] toArray(@NonNull T[] a) {
         return backingList.toArray(a);
     }
 }

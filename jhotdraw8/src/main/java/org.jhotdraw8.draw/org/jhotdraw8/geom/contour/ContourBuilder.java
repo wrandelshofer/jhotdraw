@@ -718,8 +718,7 @@ public class ContourBuilder {
         return result;
     }
 
-    @NonNull
-    private Map<Integer, List<Point2D.Double>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
+    private @NonNull Map<Integer, List<Point2D.Double>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
             @NonNull PolyArcPath originalPline,
             @NonNull PolyArcPath rawOffsetPline,
             @NonNull PolyArcPath dualRawOffsetPline,
@@ -988,8 +987,7 @@ public class ContourBuilder {
      * @param offset offset
      * @return offset polyline
      */
-    @NonNull
-    public List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset) {
+    public @NonNull List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset) {
         return parallelOffset(pline, offset, true);
     }
 
@@ -1001,9 +999,8 @@ public class ContourBuilder {
      * @param mayHaveSelfIntersects true if the polyline may have self-intersects
      * @return list of offset polylines
      */
-    @NonNull
-    private List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset,
-                                             boolean mayHaveSelfIntersects) {
+    private @NonNull List<PolyArcPath> parallelOffset(@NonNull PolyArcPath pline, double offset,
+                                                      boolean mayHaveSelfIntersects) {
 
         if (pline.size() < 2) {
             return new ArrayList<>();
@@ -1235,7 +1232,7 @@ public class ContourBuilder {
     }
 
     protected List<PolyArcPath> stitchOffsetSlicesTogether(
-            @NonNull final List<OpenPolylineSlice> slices,
+            final @NonNull List<OpenPolylineSlice> slices,
             boolean closedPolyline,
             int origMaxIndex,
             double joinThreshold) {

@@ -28,7 +28,7 @@ import org.jhotdraw8.geom.FXTransforms;
  */
 public class AnchorOutlineHandle extends AbstractHandle {
 
-    private final static double invsqrt2 = 1 / Math.sqrt(2);
+    private static final double invsqrt2 = 1 / Math.sqrt(2);
     private final double growInView = 8.0;
 
     private Polygon node;
@@ -47,9 +47,8 @@ public class AnchorOutlineHandle extends AbstractHandle {
         return false;
     }
 
-    @Nullable
     @Override
-    public Cursor getCursor() {
+    public @Nullable Cursor getCursor() {
         return null;
     }
 

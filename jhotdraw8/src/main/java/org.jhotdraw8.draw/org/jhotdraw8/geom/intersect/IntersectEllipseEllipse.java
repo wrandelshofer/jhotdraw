@@ -27,8 +27,7 @@ public class IntersectEllipseEllipse {
      * @param ry2 the y-radius of ellipse 2
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectEllipseEllipse(@NonNull Point2D c1, double rx1, double ry1, @NonNull Point2D c2, double rx2, double ry2) {
+    public static @NonNull IntersectionResult intersectEllipseEllipse(@NonNull Point2D c1, double rx1, double ry1, @NonNull Point2D c2, double rx2, double ry2) {
         return intersectEllipseEllipse(c1.getX(), c1.getY(), rx1, ry1, c2.getX(), c2.getY(), rx2, ry2);
     }
 
@@ -45,8 +44,7 @@ public class IntersectEllipseEllipse {
      * @param ry2 the y-radius of ellipse 2
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
+    public static @NonNull IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
         return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Geom.REAL_THRESHOLD);
     }
 
@@ -66,8 +64,7 @@ public class IntersectEllipseEllipse {
      * @param epsilon
      * @return
      */
-    @NonNull
-    public static IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
+    public static @NonNull IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
         double[] a = {
                 ry1 * ry1,
                 0,

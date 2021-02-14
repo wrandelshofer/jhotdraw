@@ -46,8 +46,7 @@ import java.util.function.Consumer;
  */
 public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGradient> {
 
-    @NonNull
-    private final static CssColorConverter colorConverter = new CssColorConverter(false);
+    private static final @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
     public static final String RADIAL_GRADIENT_FUNCTION = "radial-gradient";
 
     public CssRadialGradientConverter(boolean nullable) {
@@ -154,9 +153,8 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
     }
 
-    @NonNull
     @Override
-    public CssRadialGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull CssRadialGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨RadialGradient⟩: \"radial-gradient(\"  expected");
         switch (tt.currentStringNonNull()) {
         case RADIAL_GRADIENT_FUNCTION:
@@ -314,8 +312,7 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         return new CssRadialGradient(focusAngle, focusDistance, centerX, centerY, radius, isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
     }
 
-    @NonNull
-    private CssStop parseColorStop(@NonNull CssTokenizer tt, IdResolver idResolver) throws IOException, ParseException {
+    private @NonNull CssStop parseColorStop(@NonNull CssTokenizer tt, IdResolver idResolver) throws IOException, ParseException {
         CssColor color = colorConverter.parse(tt, idResolver);
         Double offset = null;
         switch (tt.next()) {
@@ -331,9 +328,8 @@ public class CssRadialGradientConverter extends AbstractCssConverter<CssRadialGr
         return new CssStop(offset, color);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨RadialGradient⟩: radial-gradient(［⟨RadialGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
                 + "\nFormat of ⟨RadialGradientParameters⟩: ［⟨FocusAngle⟩］［, ⟨FocusDistance⟩］［, ⟨Center⟩］, ⟨Radius⟩"
                 + "\nFormat of ⟨FocusAngle⟩: focus-angle ⟨angle⟩deg"

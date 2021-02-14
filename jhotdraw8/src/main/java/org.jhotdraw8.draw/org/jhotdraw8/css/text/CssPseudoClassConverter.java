@@ -42,9 +42,8 @@ public class CssPseudoClassConverter extends AbstractCssConverter<PseudoClass> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public PseudoClass parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull PseudoClass parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, " ⟨PseudoClass⟩: ⟨identifier⟩ expected");
         return PseudoClass.getPseudoClass(tt.currentStringNonNull());
     }

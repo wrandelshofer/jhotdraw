@@ -30,18 +30,13 @@ import java.util.function.Function;
  */
 public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccessor<BoundingBox> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, BoundingBox> cssMetaData;
-    @NonNull
-    private final MapAccessor<Double> xKey;
-    @NonNull
-    private final MapAccessor<Double> yKey;
-    @NonNull
-    private final MapAccessor<Double> widthKey;
-    @NonNull
-    private final MapAccessor<Double> heightKey;
+    private final @NonNull CssMetaData<?, BoundingBox> cssMetaData;
+    private final @NonNull MapAccessor<Double> xKey;
+    private final @NonNull MapAccessor<Double> yKey;
+    private final @NonNull MapAccessor<Double> widthKey;
+    private final @NonNull MapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -90,9 +85,8 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         return converter;
     }
 
-    @NonNull
     @Override
-    public BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
@@ -105,9 +99,8 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         heightKey.put(a, value.getHeight());
     }
 
-    @NonNull
     @Override
-    public BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

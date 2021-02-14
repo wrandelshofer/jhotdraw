@@ -26,10 +26,9 @@ import java.util.function.Function;
  */
 public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> implements WriteableStyleableMapAccessor<Rectangle2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Rectangle2D> cssMetaData;
+    private final @NonNull CssMetaData<?, Rectangle2D> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the

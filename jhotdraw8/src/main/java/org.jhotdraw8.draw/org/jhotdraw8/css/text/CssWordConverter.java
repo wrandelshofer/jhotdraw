@@ -31,9 +31,8 @@ public class CssWordConverter implements Converter<String> {
         }
     }
 
-    @NonNull
     @Override
-    public String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
@@ -46,9 +45,8 @@ public class CssWordConverter implements Converter<String> {
         return out.toString();
     }
 
-    @NonNull
     @Override
-    public String getDefaultValue() {
+    public @NonNull String getDefaultValue() {
         return "";
     }
 }

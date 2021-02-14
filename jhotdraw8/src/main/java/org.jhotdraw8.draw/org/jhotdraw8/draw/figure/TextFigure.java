@@ -40,8 +40,8 @@ public class TextFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Text";
-    public final static CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
+    public static final String TYPE_SELECTOR = "Text";
+    public static final CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
 
     private Text textNode;
 
@@ -58,9 +58,8 @@ public class TextFigure extends AbstractLeafFigure
         set(ORIGIN, new CssPoint2D(x, y));
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         // FIXME the text node should be computed during layout
         if (textNode == null) {
             layout(new SimpleRenderContext());
@@ -70,9 +69,8 @@ public class TextFigure extends AbstractLeafFigure
         return new BoundingBox(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-    @NonNull
     @Override
-    public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
+    public @NonNull TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
@@ -84,8 +82,7 @@ public class TextFigure extends AbstractLeafFigure
         updateNode(ctx, textNode);
     }
 
-    @NonNull
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -102,9 +99,8 @@ public class TextFigure extends AbstractLeafFigure
         reshapeInLocal(Transform.translate(x.getConvertedValue() - b.getMinX(), y.getConvertedValue() - b.getMinY()));
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Text n = new Text();
         n.setManaged(false);
         return n;
@@ -131,15 +127,13 @@ public class TextFigure extends AbstractLeafFigure
         tn.setText(get(TEXT));
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

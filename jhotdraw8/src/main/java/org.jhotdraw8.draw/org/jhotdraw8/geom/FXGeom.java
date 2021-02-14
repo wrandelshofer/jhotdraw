@@ -44,8 +44,7 @@ public class FXGeom {
      * @param shape an AWT shape
      * @return JavaFX bounds
      */
-    @NonNull
-    public static BoundingBox getBounds(@NonNull java.awt.Shape shape) {
+    public static @NonNull BoundingBox getBounds(@NonNull java.awt.Shape shape) {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
@@ -59,18 +58,15 @@ public class FXGeom {
      *              b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    @NonNull
-    public static Point2D lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
+    public static @NonNull Point2D lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 
-    @NonNull
-    public static Point2D lerp(double x0, double y0, double x1, double y1, double t) {
+    public static @NonNull Point2D lerp(double x0, double y0, double x1, double y1, double t) {
         return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
-    @NonNull
-    public static BoundingBox add(@NonNull Bounds a, @NonNull Bounds b) {
+    public static @NonNull BoundingBox add(@NonNull Bounds a, @NonNull Bounds b) {
         double x = min(a.getMinX(), b.getMinX());
         double y = min(a.getMinY(), b.getMinY());
         return new BoundingBox(x, y, max(a.getMaxX(), b.getMaxX()) - x, max(a.getMaxY(), b.getMaxY()) - y);
@@ -82,8 +78,7 @@ public class FXGeom {
      * @param r the bounds
      * @return the center
      */
-    @NonNull
-    public static Point2D center(@NonNull Bounds r) {
+    public static @NonNull Point2D center(@NonNull Bounds r) {
         return new Point2D(
                 r.getMinX() + r.getWidth() * 0.5,
                 r.getMinY() + r.getHeight() * 0.5
@@ -123,8 +118,7 @@ public class FXGeom {
      * @param r a rectangle
      * @return JavaFX bounds
      */
-    @NonNull
-    public static Bounds getBounds(@NonNull Rectangle2D r) {
+    public static @NonNull Bounds getBounds(@NonNull Rectangle2D r) {
         return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
@@ -150,8 +144,7 @@ public class FXGeom {
      * @param v the vertical expansion
      * @return the new rectangle
      */
-    @NonNull
-    public static Bounds grow(@NonNull Bounds r, double h, double v) {
+    public static @NonNull Bounds grow(@NonNull Bounds r, double h, double v) {
         return new BoundingBox(
                 r.getMinX() - h,
                 r.getMinY() - v,
@@ -167,14 +160,12 @@ public class FXGeom {
      * @return the new rectangle
      * @see #grow(Bounds, double, double)
      */
-    @NonNull
-    public static Bounds grow(@NonNull Bounds r, double hv) {
+    public static @NonNull Bounds grow(@NonNull Bounds r, double hv) {
         return grow(r, hv, hv);
 
     }
 
-    @NonNull
-    public static Bounds union(@NonNull Bounds a, @NonNull Bounds... bs) {
+    public static @NonNull Bounds union(@NonNull Bounds a, @NonNull Bounds... bs) {
         double minx = a.getMinX();
         double miny = a.getMinY();
         double maxx = a.getMaxX();
@@ -214,8 +205,7 @@ public class FXGeom {
      * @param p the vector
      * @return the normalized vector
      */
-    @NonNull
-    public static Point3D homogenize(@NonNull Point3D p) {
+    public static @NonNull Point3D homogenize(@NonNull Point3D p) {
         return new Point3D(//
                 p.getX() / p.getZ(),//
                 p.getY() / p.getZ(),
@@ -235,8 +225,7 @@ public class FXGeom {
      * @param p the vector
      * @return the normalized vector
      */
-    @NonNull
-    public static Point2D homogenize2D(@NonNull Point3D p) {
+    public static @NonNull Point2D homogenize2D(@NonNull Point3D p) {
         double z = p.getZ();
         return new Point2D(//
                 p.getX() / z,//
@@ -244,8 +233,7 @@ public class FXGeom {
         );
     }
 
-    @NonNull
-    public static Bounds intersection(@NonNull Bounds a, @NonNull Bounds b) {
+    public static @NonNull Bounds intersection(@NonNull Bounds a, @NonNull Bounds b) {
         double minx = Math.max(a.getMinX(), b.getMinX());
         double miny = Math.max(a.getMinY(), b.getMinY());
         double maxx = Math.min(a.getMaxX(), b.getMaxX());
@@ -253,8 +241,7 @@ public class FXGeom {
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
-    @NonNull
-    private static Rectangle2D add(@NonNull Rectangle2D r, double newx, double newy) {
+    private static @NonNull Rectangle2D add(@NonNull Rectangle2D r, double newx, double newy) {
         double x1 = Math.min(r.getMinX(), newx);
         double x2 = Math.max(r.getMaxX(), newx);
         double y1 = Math.min(r.getMinY(), newy);
@@ -282,8 +269,7 @@ public class FXGeom {
      * @param angle the angle of the ray starting at the center of the rectangle
      * @return a point on the rectangle
      */
-    @NonNull
-    public static Point2D angleToPoint(@NonNull Rectangle2D r, double angle) {
+    public static @NonNull Point2D angleToPoint(@NonNull Rectangle2D r, double angle) {
         double si = sin(angle);
         double co = cos(angle);
         double e = 0.0001;
@@ -304,8 +290,7 @@ public class FXGeom {
         return new Point2D(r.getMinX() + x, r.getMinY() + y);
     }
 
-    @NonNull
-    public static Point2D center(@NonNull java.awt.geom.Rectangle2D r) {
+    public static @NonNull Point2D center(@NonNull java.awt.geom.Rectangle2D r) {
         return new Point2D(r.getCenterX(), r.getCenterY());
     }
 
@@ -315,8 +300,7 @@ public class FXGeom {
      * @param r the bounds
      * @return the center
      */
-    @NonNull
-    public static Point2D center(@NonNull Rectangle2D r) {
+    public static @NonNull Point2D center(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
                 + r.getHeight() * 0.5);
     }
@@ -343,8 +327,7 @@ public class FXGeom {
      * @param p     the point
      * @return a point on the shape
      */
-    @NonNull
-    public static Point2D chop(@NonNull Shape shape, @NonNull Point2D p) {
+    public static @NonNull Point2D chop(@NonNull Shape shape, @NonNull Point2D p) {
         java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
         java.awt.geom.Point2D.Double ctr = new java.awt.geom.Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 
@@ -429,8 +412,7 @@ public class FXGeom {
         return new Point2D(cx, cy);
     }
 
-    @NonNull
-    public static Point2D east(@NonNull Rectangle2D r) {
+    public static @NonNull Point2D east(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth(), r.getMinY()
                 + r.getHeight() / 2);
     }
@@ -446,8 +428,7 @@ public class FXGeom {
         return sqrt(Geom.lengthSquared(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
-    @NonNull
-    public static Point2D north(@NonNull Rectangle2D r) {
+    public static @NonNull Point2D north(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY());
     }
 
@@ -487,8 +468,7 @@ public class FXGeom {
      * @param angle the angle
      * @return a point on the oval
      */
-    @NonNull
-    public static Point2D ovalAngleToPoint(@NonNull Rectangle2D r, double angle) {
+    public static @NonNull Point2D ovalAngleToPoint(@NonNull Rectangle2D r, double angle) {
         Point2D center = center(r);
         Point2D p = polarToPoint(angle, r.getWidth() / 2.0, r.getHeight() / 2.0);
         return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
@@ -503,8 +483,7 @@ public class FXGeom {
      * @param l2y point 2 on the line
      * @return the perpendicular vector of length {@code 1}
      */
-    @NonNull
-    public static Point2D perp(double l1x, double l1y, double l2x, double l2y) {
+    public static @NonNull Point2D perp(double l1x, double l1y, double l2x, double l2y) {
         // matlab: v    = p2 - p1
         //         cv    = cross([v 1] * [0 0 1])
         //         m     = distance/norm(cv);
@@ -541,8 +520,7 @@ public class FXGeom {
      * @param fy    the y coordinate of the point in polar coordinates
      * @return the point in Cartesian coordinates
      */
-    @NonNull
-    public static Point2D polarToPoint(double angle, double fx, double fy) {
+    public static @NonNull Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
         double co = cos(angle);
         return new Point2D((int) (fx * co), (int) (fy * si));
@@ -557,20 +535,17 @@ public class FXGeom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    @NonNull
-    public static Point2D shiftPerp(@NonNull Point2D l1, @NonNull Point2D l2, @NonNull Point2D p, double distance) {
+    public static @NonNull Point2D shiftPerp(@NonNull Point2D l1, @NonNull Point2D l2, @NonNull Point2D p, double distance) {
 
         return shiftPerp(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
     }
 
-    @NonNull
-    public static Point2D south(@NonNull Rectangle2D r) {
+    public static @NonNull Point2D south(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
                 + r.getHeight());
     }
 
-    @NonNull
-    static BoundingBox subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
+    static @NonNull BoundingBox subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
         return new BoundingBox(
                 b.getMinX() + i.getLeft(),
                 b.getMinY() + i.getTop(),
@@ -595,8 +570,7 @@ public class FXGeom {
         return x * x + y * y;
     }
 
-    @NonNull
-    public static String toString(@Nullable Bounds b) {
+    public static @NonNull String toString(@Nullable Bounds b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
@@ -641,8 +615,7 @@ public class FXGeom {
      * @param v the vertical expansion
      * @return the new rectangle
      */
-    @NonNull
-    public static Rectangle2D grow(@NonNull Rectangle2D r, double h, double v) {
+    public static @NonNull Rectangle2D grow(@NonNull Rectangle2D r, double h, double v) {
         return new Rectangle2D(
                 r.getMinX() - h,
                 r.getMinY() - v,
@@ -656,8 +629,7 @@ public class FXGeom {
      * @param vector a vector
      * @return the perpendicular vector
      */
-    @NonNull
-    public static Point2D perp(@NonNull Point2D vector) {
+    public static @NonNull Point2D perp(@NonNull Point2D vector) {
         return new Point2D(vector.getY(), -vector.getX());
     }
 
@@ -687,8 +659,7 @@ public class FXGeom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    @NonNull
-    public static Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
+    public static @NonNull Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
         // matlab: v    = p2 - p1
         //         line = cross([v 1] * [0 0 1])
         //         m     = distance/norm(cv);
@@ -721,13 +692,11 @@ public class FXGeom {
         return Δx * Δx + Δy * Δy;
     }
 
-    @NonNull
-    public static String toString(@Nullable Rectangle2D b) {
+    public static @NonNull String toString(@Nullable Rectangle2D b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-    @NonNull
-    public static Point2D west(@NonNull Rectangle2D r) {
+    public static @NonNull Point2D west(@NonNull Rectangle2D r) {
         return new Point2D(r.getMinX(), r.getMinY() + r.getHeight() / 2);
     }
 
@@ -748,15 +717,14 @@ public class FXGeom {
      * @param yd the y-coordinate of point d on line 2
      * @return the intersection point or null
      */
-    @Nullable
-    public static Point2D intersect(double xa, // line 1 point 1 x
-                                    double ya, // line 1 point 1 y
-                                    double xb, // line 1 point 2 x
-                                    double yb, // line 1 point 2 y
-                                    double xc, // line 2 point 1 x
-                                    double yc, // line 2 point 1 y
-                                    double xd, // line 2 point 2 x
-                                    double yd) { // line 2 point 2 y
+    public static @Nullable Point2D intersect(double xa, // line 1 point 1 x
+                                              double ya, // line 1 point 1 y
+                                              double xb, // line 1 point 2 x
+                                              double yb, // line 1 point 2 y
+                                              double xc, // line 2 point 1 x
+                                              double yc, // line 2 point 1 y
+                                              double xd, // line 2 point 2 x
+                                              double yd) { // line 2 point 2 y
 
         // source: http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html
         // eq: for lines AB and CD
@@ -815,8 +783,7 @@ public class FXGeom {
      *              at the intersection point
      * @return the intersection point or null
      */
-    @Nullable
-    public static Point2D intersect(
+    public static @Nullable Point2D intersect(
             double xa, // line 1 point 1 x
             double ya, // line 1 point 1 y
             double xb, // line 1 point 2 x
@@ -880,13 +847,11 @@ public class FXGeom {
         }
     }
 
-    @NonNull
-    public static Point2D divide(@NonNull Point2D p, double factor) {
+    public static @NonNull Point2D divide(@NonNull Point2D p, double factor) {
         return new Point2D(p.getX() / factor, p.getY() / factor);
     }
 
-    @NonNull
-    public static Transform toDeltaTransform(@NonNull Transform t) {
+    public static @NonNull Transform toDeltaTransform(@NonNull Transform t) {
         Transform d = new Affine(t.getMxx(), t.getMxy(), 0.0,
                 t.getMyx(), t.getMyy(), 0.0);
         return d;
@@ -907,8 +872,7 @@ public class FXGeom {
      * @param p2 point 2
      * @return the cross product
      */
-    @NonNull
-    public static Point3D hcross(@NonNull Point2D p1, @NonNull Point2D p2) {
+    public static @NonNull Point3D hcross(@NonNull Point2D p1, @NonNull Point2D p2) {
         return hcross(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
@@ -928,8 +892,7 @@ public class FXGeom {
      * @param y2 y2
      * @return the cross product
      */
-    @NonNull
-    public static Point3D hcross(double x1, double y1, double x2, double y2) {
+    public static @NonNull Point3D hcross(double x1, double y1, double x2, double y2) {
         return new Point3D(//
                 y1 * 1 - 1 * y2,//
                 1 * x2 - x1 * 1,//

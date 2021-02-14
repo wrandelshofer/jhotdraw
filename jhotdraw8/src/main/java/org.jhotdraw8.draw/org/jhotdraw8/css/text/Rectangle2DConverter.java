@@ -37,9 +37,8 @@ public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
         this.withComma = withComma;
     }
 
-    @NonNull
     @Override
-    public Rectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Rectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, width, height;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Rectangle2D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();

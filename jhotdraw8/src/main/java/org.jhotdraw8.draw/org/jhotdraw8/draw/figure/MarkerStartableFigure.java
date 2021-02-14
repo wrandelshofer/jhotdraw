@@ -21,8 +21,7 @@ public interface MarkerStartableFigure extends Figure {
     @NonNull NullableSvgPathStyleableKey MARKER_START_SHAPE = new NullableSvgPathStyleableKey("marker-start-shape", null);
     @NonNull DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
 
-    @Nullable
-    default String getMarkerStartShape() {
+    default @Nullable String getMarkerStartShape() {
         return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);
     }
 

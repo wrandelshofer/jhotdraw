@@ -25,10 +25,9 @@ import java.util.function.Function;
  */
 public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Paintable> cssMetaData;
+    private final @NonNull CssMetaData<?, Paintable> cssMetaData;
     private Converter<Paintable> converter;
 
     /**

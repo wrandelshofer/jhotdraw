@@ -26,15 +26,13 @@ public class StringConverterAdapter<T> extends StringConverter<T> {
         this.converter = converter;
     }
 
-    @NonNull
     @Override
-    public String toString(T object) {
+    public @NonNull String toString(T object) {
         return converter.toString(object);
     }
 
-    @Nullable
     @Override
-    public T fromString(@NonNull String string) {
+    public @Nullable T fromString(@NonNull String string) {
         try {
             return converter.fromString(string);
         } catch (ParseException | IOException ex) {

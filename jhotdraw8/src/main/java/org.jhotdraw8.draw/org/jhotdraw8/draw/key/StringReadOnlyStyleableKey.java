@@ -27,9 +27,8 @@ import java.util.function.Function;
  */
 public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssMetaData<? extends Styleable, String> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -86,12 +85,10 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
 
     }
 
-    @NonNull
-    private final CssStringConverter converter;
+    private final @NonNull CssStringConverter converter;
 
-    @NonNull
     @Override
-    public Converter<String> getCssConverter() {
+    public @NonNull Converter<String> getCssConverter() {
 
         return converter;
     }

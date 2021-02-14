@@ -28,8 +28,7 @@ public class AnyShortestPathBuilderTest {
     public AnyShortestPathBuilderTest() {
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
@@ -80,9 +79,8 @@ public class AnyShortestPathBuilderTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestVertexPath() {
+    public @NonNull List<DynamicTest> testFindShortestVertexPath() {
         return Arrays.asList(
                 dynamicTest("0", () -> doFindShortestVertexPath(1, 1, VertexPath.of(1), 0.0)),
                 dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexPath.of(1, 3, 6, 5), 20.0)),
@@ -108,9 +106,8 @@ public class AnyShortestPathBuilderTest {
         }
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
+    public @NonNull List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
         return Arrays.asList(
                 dynamicTest("0", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(1, 6), ArrowPath.of())),
                 dynamicTest("1", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 6), ArrowPath.of(9.0, 2.0))),
@@ -157,9 +154,8 @@ public class AnyShortestPathBuilderTest {
         assertEquals(expResult, actualShortestPath.getKey());
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestArrowPath() throws Exception {
+    public @NonNull List<DynamicTest> testFindShortestArrowPath() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindShortestArrowPath(1, 5, ArrowPath.of(9.0, 2.0, 9.0))),
                 dynamicTest("2", () -> doFindShortestArrowPath(1, 4, ArrowPath.of(9.0, 11.0))),
@@ -179,8 +175,7 @@ public class AnyShortestPathBuilderTest {
         assertEquals(expResult, result.getKey());
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph2() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
         DirectedGraphBuilder<Integer, Double> b = new DirectedGraphBuilder<>();
         b.addVertex(1);
         b.addVertex(2);
@@ -198,9 +193,8 @@ public class AnyShortestPathBuilderTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
+    public @NonNull List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 5), VertexPath.of(1, 3, 6, 5), 20.0)),
                 dynamicTest("2", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VertexPath.of(1, 3, 4), 20.0)),
@@ -222,9 +216,8 @@ public class AnyShortestPathBuilderTest {
         assertEquals(expCost, actual.getValue().doubleValue());
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindArrowPathOverWaypoints() throws Exception {
+    public @NonNull List<DynamicTest> testFindArrowPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 5), ArrowPath.of(9.0, 2.0, 9.0), 20.0)),
                 dynamicTest("2", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 4), ArrowPath.of(9.0, 11.0), 20.0)),

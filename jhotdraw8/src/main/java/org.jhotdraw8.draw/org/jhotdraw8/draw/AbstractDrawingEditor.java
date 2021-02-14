@@ -28,10 +28,8 @@ import java.util.HashSet;
 import java.util.prefs.Preferences;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
-    @NonNull
-    private final ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
-    @NonNull
-    private final IntegerProperty handleSize = new SimpleIntegerProperty(
+    private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
+    private final @NonNull IntegerProperty handleSize = new SimpleIntegerProperty(
             this, HANDLE_SIZE_PROPERTY,
             Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_SIZE_PROPERTY, 5)) {
         @Override
@@ -41,8 +39,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    @NonNull
-    private final IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
+    private final @NonNull IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
             this, HANDLE_STROKE_WDITH_PROPERTY,
             Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_STROKE_WDITH_PROPERTY, 1)) {
         @Override
@@ -52,8 +49,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    @NonNull
-    private final NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
+    private final @NonNull NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
             CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
         @Override
         public void set(CssColor newValue) {
@@ -111,72 +107,62 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         });
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<String> helpTextProperty() {
+    public @NonNull ObjectProperty<String> helpTextProperty() {
         return helpText;
     }
 
-    @NonNull
     @Override
-    public IntegerProperty handleSizeProperty() {
+    public @NonNull IntegerProperty handleSizeProperty() {
         return handleSize;
     }
 
-    @NonNull
     @Override
-    public IntegerProperty handleStrokeWidthProperty() {
+    public @NonNull IntegerProperty handleStrokeWidthProperty() {
         return handleStrokeWidth;
     }
 
-    @NonNull
     @Override
-    public NonNullObjectProperty<CssColor> handleColorProperty() {
+    public @NonNull NonNullObjectProperty<CssColor> handleColorProperty() {
         return handleColor;
     }
 
-    @NonNull
     @Override
-    public NonNullObjectProperty<HandleType> handleTypeProperty() {
+    public @NonNull NonNullObjectProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<HandleType> leadHandleTypeProperty() {
+    public @NonNull ObjectProperty<HandleType> leadHandleTypeProperty() {
         return leadHandleType;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<HandleType> anchorHandleTypeProperty() {
+    public @NonNull ObjectProperty<HandleType> anchorHandleTypeProperty() {
         return anchorHandleType;
     }
 
-    @NonNull
     @Override
-    public NonNullObjectProperty<HandleType> multiHandleTypeProperty() {
+    public @NonNull NonNullObjectProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;
     }
 
 
-    @NonNull
     @Override
-    public SetProperty<DrawingView> drawingViewsProperty() {
+    public @NonNull SetProperty<DrawingView> drawingViewsProperty() {
         return drawingViews;
     }
 
 
-    @Nullable
-    private final Listener<ToolEvent> defaultToolActivator = (event) -> {
+    private final @Nullable Listener<ToolEvent> defaultToolActivator = (event) -> {
         switch (event.getEventType()) {
-            case TOOL_DONE:
-                if (getDefaultTool() != event.getSource() && getDefaultTool() != null) {
-                    setActiveTool(getDefaultTool());
-                }
-                break;
-            default:
-                break;
+        case TOOL_DONE:
+            if (getDefaultTool() != event.getSource() && getDefaultTool() != null) {
+                setActiveTool(getDefaultTool());
+            }
+            break;
+        default:
+            break;
         }
     };
 
@@ -213,21 +199,18 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
 
 
-    @NonNull
     @Override
-    public ObjectProperty<DrawingView> activeDrawingViewProperty() {
+    public @NonNull ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<Tool> activeToolProperty() {
+    public @NonNull ObjectProperty<Tool> activeToolProperty() {
         return activeTool;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<Tool> defaultToolProperty() {
+    public @NonNull ObjectProperty<Tool> defaultToolProperty() {
         return defaultTool;
     }
 }

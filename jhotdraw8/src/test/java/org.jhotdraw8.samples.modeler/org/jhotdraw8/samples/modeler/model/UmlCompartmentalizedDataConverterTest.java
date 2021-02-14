@@ -22,9 +22,8 @@ class UmlCompartmentalizedDataConverterTest {
         assertEquals(expected, actual);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> parseNonNullFactory() {
+    public @NonNull List<DynamicTest> parseNonNullFactory() {
         return Arrays.asList(
                 // empty data
                 dynamicTest("1", () -> parseNonNull("{}",

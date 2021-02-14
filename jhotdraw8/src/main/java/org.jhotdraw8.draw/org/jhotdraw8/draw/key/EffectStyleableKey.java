@@ -22,7 +22,7 @@ import org.jhotdraw8.text.Converter;
  */
 public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements WriteableStyleableMapAccessor<Effect> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
     private final CssEffectConverter converter = new CssEffectConverter();
     private final CssMetaData<? extends Styleable, Effect> cssMetaData;
 
@@ -59,9 +59,8 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
 
     }
 
-    @NonNull
     @Override
-    public Converter<Effect> getCssConverter() {
+    public @NonNull Converter<Effect> getCssConverter() {
         return converter;
     }
 }

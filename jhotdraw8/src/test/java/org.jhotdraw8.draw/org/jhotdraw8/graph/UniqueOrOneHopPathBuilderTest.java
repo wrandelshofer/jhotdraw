@@ -26,8 +26,7 @@ public class UniqueOrOneHopPathBuilderTest {
     public UniqueOrOneHopPathBuilderTest() {
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
@@ -59,8 +58,7 @@ public class UniqueOrOneHopPathBuilderTest {
         return builder;
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createDiamondGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createDiamondGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |
@@ -104,9 +102,8 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindUniqueVertexPath() {
+    public @NonNull List<DynamicTest> testFindUniqueVertexPath() {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -131,9 +128,8 @@ public class UniqueOrOneHopPathBuilderTest {
         assertEquals(expPath, result);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindUniqueMultiGoalPath() throws Exception {
+    public @NonNull List<DynamicTest> testFindUniqueMultiGoalPath() throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -166,8 +162,7 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph2() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
         DirectedGraphBuilder<Integer, Double> b = new DirectedGraphBuilder<>();
         b.addVertex(1);
         b.addVertex(2);
@@ -185,9 +180,8 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindUniqueVertexPathOverWaypoints() throws Exception {
+    public @NonNull List<DynamicTest> testFindUniqueVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 3, 5), null)),
                 dynamicTest("2", () -> doFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 4), VertexPath.of(1, 4))),

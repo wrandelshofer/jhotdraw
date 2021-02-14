@@ -39,9 +39,8 @@ public final class ReadOnlyTransformationList<E, F> extends AbstractReadOnlyList
         return mapf.apply(backingList.get(index));
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<F> i = backingList.iterator();
 
@@ -63,9 +62,8 @@ public final class ReadOnlyTransformationList<E, F> extends AbstractReadOnlyList
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull
     @Override
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return (Spliterator<E>) backingList.spliterator();
     }
 
@@ -81,8 +79,7 @@ public final class ReadOnlyTransformationList<E, F> extends AbstractReadOnlyList
         }
     }
 
-    @NonNull
-    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ReadOnlyTransformationList<>(backingList.readOnlySubList(fromIndex, toIndex), mapf);
     }
 }

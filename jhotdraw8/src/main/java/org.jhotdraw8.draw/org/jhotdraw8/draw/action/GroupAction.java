@@ -31,8 +31,7 @@ public class GroupAction extends AbstractDrawingViewAction {
 
     public static final String ID = "edit.group";
     public static final String COMBINE_PATHS_ID = "edit.combinePaths";
-    @Nullable
-    public final Supplier<Figure> groupFactory;
+    public final @Nullable Supplier<Figure> groupFactory;
 
     /**
      * Creates a new instance.

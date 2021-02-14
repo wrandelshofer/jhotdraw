@@ -19,8 +19,7 @@ public class FontChooserModel {
 
     private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>();
 
-    @NonNull
-    public ListProperty<FontCollection> fontCollectionsProperty() {
+    public @NonNull ListProperty<FontCollection> fontCollectionsProperty() {
         return fontCollections;
     }
 
@@ -32,8 +31,7 @@ public class FontChooserModel {
         fontCollections.set(value);
     }
 
-    @Nullable
-    public FontCollection getAllFonts() {
+    public @Nullable FontCollection getAllFonts() {
         return fontCollections.isEmpty() ? null : fontCollections.get(0);
     }
 }

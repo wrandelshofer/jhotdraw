@@ -15,7 +15,7 @@ import org.jhotdraw8.collection.ObjectKey;
  */
 public class NullableObjectKey<T> extends ObjectKey<T> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance with the specified name, type token class, default

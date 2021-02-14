@@ -48,9 +48,8 @@ public class BezierCurves {
      * @param t  the time
      * @return the point at time t
      */
-    @NonNull
-    public static Point2D.Double evalCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
-                                                double t) {
+    public static @NonNull Point2D.Double evalCubicCurve(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+                                                         double t) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -94,9 +93,8 @@ public class BezierCurves {
         return new Point2D.Double(x123 - x012, y123 - y012);
     }
 
-    @NonNull
-    public static Point2D.Double evalCubicCurve(CubicCurve2D.Double c,
-                                                double t) {
+    public static @NonNull Point2D.Double evalCubicCurve(CubicCurve2D.Double c,
+                                                         double t) {
         return evalCubicCurve(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2, t);
     }
 
@@ -111,8 +109,7 @@ public class BezierCurves {
      * @param t  the time
      * @return the point at time t
      */
-    @NonNull
-    public static Point2D.Double evalLine(double x0, double y0, double x1, double y1, double t) {
+    public static @NonNull Point2D.Double evalLine(double x0, double y0, double x1, double y1, double t) {
         return new Point2D.Double(lerp(x0, x1, t), lerp(y0, y1, t));
     }
 
@@ -129,8 +126,7 @@ public class BezierCurves {
      * @param t  the time
      * @return the point at time t
      */
-    @NonNull
-    public static Point2D.Double evalQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
+    public static @NonNull Point2D.Double evalQuadCurve(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -144,8 +140,7 @@ public class BezierCurves {
         return new Point2D.Double(x012, y012);
     }
 
-    @NonNull
-    public static Point2D.Double evalQuadCurveTangent(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
+    public static @NonNull Point2D.Double evalQuadCurveTangent(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -176,12 +171,11 @@ public class BezierCurves {
      * @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
      * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if joining failed
      */
-    @Nullable
-    public static double[] mergeCubicCurve(final double x0, final double y0, final double x01, final double y01,
-                                           final double x012, final double y012, final double x0123, final double y0123,
-                                           final double x123, final double y123,
-                                           final double x23, final double y23, final double x3, final double y3,
-                                           double tolerance) {
+    public static @Nullable double[] mergeCubicCurve(final double x0, final double y0, final double x01, final double y01,
+                                                     final double x012, final double y012, final double x0123, final double y0123,
+                                                     final double x123, final double y123,
+                                                     final double x23, final double y23, final double x3, final double y3,
+                                                     double tolerance) {
 
         final double t = (x012 - x123 == 0) ? (y012 - y0123) / (y012 - y123) : (x012 - x0123) / (x012 - x123);
         final Point2D.Double ctrl1, ctrl2;
@@ -215,10 +209,9 @@ public class BezierCurves {
      * @param tolerance distance (radius) at which the joined point may be off from x012,y012.
      * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2), null if joining failed
      */
-    @Nullable
-    public static double[] mergeQuadCurve(final double x0, final double y0, final double x01, final double y01,
-                                          final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
-                                          double tolerance) {
+    public static @Nullable double[] mergeQuadCurve(final double x0, final double y0, final double x01, final double y01,
+                                                    final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
+                                                    double tolerance) {
         final Point2D.Double start = new Point2D.Double(x0, y0);
         @NonNull Point2D b0 = new Point2D.Double(x2, y2);
 

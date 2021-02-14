@@ -32,11 +32,10 @@ public class IntersectRayRay {
      * @param bd directoin of ray 'b'
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectRayRayEx(@NonNull Point2D ao,
-                                                         @NonNull Point2D ad,
-                                                         @NonNull Point2D bo,
-                                                         @NonNull Point2D bd) {
+    public static @NonNull IntersectionResultEx intersectRayRayEx(@NonNull Point2D ao,
+                                                                  @NonNull Point2D ad,
+                                                                  @NonNull Point2D bo,
+                                                                  @NonNull Point2D bd) {
         return intersectRayRayEx(ao.getX(), ao.getY(), ad.getX(), ad.getY(), bo.getX(), bo.getY(), bd.getX(), bd.getY());
 
     }

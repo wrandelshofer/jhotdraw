@@ -45,18 +45,13 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     /**
      * When nonnull this comparator is used to sort the list.
      */
-    @Nullable
-    private final Comparator<T> comparatorForSorting;
+    private final @Nullable Comparator<T> comparatorForSorting;
 
     private final CssConverter<T> elementConverter;
-    @NonNull
-    private final ImmutableList<CssToken> delimiter;
-    @NonNull
-    private final ImmutableList<CssToken> prefix;
-    @NonNull
-    private final ImmutableList<CssToken> suffix;
-    @NonNull
-    private final Set<Integer> delimiterChars;
+    private final @NonNull ImmutableList<CssToken> delimiter;
+    private final @NonNull ImmutableList<CssToken> prefix;
+    private final @NonNull ImmutableList<CssToken> suffix;
+    private final @NonNull Set<Integer> delimiterChars;
 
     public CssListConverter(CssConverter<T> elementConverter) {
         this(elementConverter, ", ");
@@ -197,9 +192,8 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         }
     }
 
-    @Nullable
     @Override
-    public ImmutableList<T> getDefaultValue() {
+    public @Nullable ImmutableList<T> getDefaultValue() {
         return ImmutableLists.emptyList();
     }
 

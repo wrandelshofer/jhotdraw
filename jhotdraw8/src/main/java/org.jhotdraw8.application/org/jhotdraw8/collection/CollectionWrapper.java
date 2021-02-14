@@ -22,8 +22,7 @@ public class CollectionWrapper<E> extends AbstractCollection<E> {
     }
 
     @Override
-    @NonNull
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return backingCollection.iterator();
     }
 

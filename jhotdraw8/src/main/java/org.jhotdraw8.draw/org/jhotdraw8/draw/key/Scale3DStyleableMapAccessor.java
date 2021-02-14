@@ -30,16 +30,12 @@ import java.util.function.Function;
 public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Point3D>
         implements NonNullMapAccessor<@NonNull Point3D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Point3D> cssMetaData;
-    @NonNull
-    private final MapAccessor<Double> xKey;
-    @NonNull
-    private final MapAccessor<Double> yKey;
-    @NonNull
-    private final MapAccessor<Double> zKey;
+    private final @NonNull CssMetaData<?, Point3D> cssMetaData;
+    private final @NonNull MapAccessor<Double> xKey;
+    private final @NonNull MapAccessor<Double> yKey;
+    private final @NonNull MapAccessor<Double> zKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -98,9 +94,8 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
         return converter;
     }
 
-    @NonNull
     @Override
-    public Point3D get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Point3D get(@NonNull Map<? super Key<?>, Object> a) {
         return new Point3D(xKey.get(a), yKey.get(a), zKey.get(a));
     }
 
@@ -111,9 +106,8 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
         zKey.put(a, value.getZ());
     }
 
-    @NonNull
     @Override
-    public Point3D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Point3D remove(@NonNull Map<? super Key<?>, Object> a) {
         Point3D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

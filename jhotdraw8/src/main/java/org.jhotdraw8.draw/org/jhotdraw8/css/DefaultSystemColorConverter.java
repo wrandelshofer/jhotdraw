@@ -14,7 +14,7 @@ import java.util.Map;
  * The default color converter provides a fixed set of system colors.
  */
 public class DefaultSystemColorConverter extends MappedSystemColorConverter {
-    public final static Map<String, Color> LIGHT_SYSTEM_COLORS;
+    public static final Map<String, Color> LIGHT_SYSTEM_COLORS;
 
     static {
         Map<String, Color> map = new HashMap<>();

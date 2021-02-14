@@ -21,8 +21,7 @@ public class SimpleObservable implements ObservableMixin {
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
-    @NonNull
-    public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
+    public @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;
     }
 }

@@ -9,7 +9,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -29,8 +28,6 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
-import org.jhotdraw8.css.text.CssPseudoClassConverter;
-import org.jhotdraw8.css.text.CssSetConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -68,8 +65,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     private final CachingCollator collator = new CachingCollator(new OSXCollator());
 
-    @Nullable
-    private DrawingView drawingView;
+    private @Nullable DrawingView drawingView;
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
     private boolean isUpdatingSelectionInView;
@@ -97,8 +93,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, Boolean> visibleColumn;
     private boolean willUpdateSelectionInTree;
 
-    @NonNull
-    private final XmlWordListConverter wordListConverter = new XmlWordListConverter();
+    private final @NonNull XmlWordListConverter wordListConverter = new XmlWordListConverter();
     private final XmlWordSetConverter wordSetConverter = new XmlWordSetConverter();
 
     public HierarchyInspector() {
@@ -145,21 +140,19 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // Type arguments needed for Java 8!
         styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableList<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
-                    @Nullable
-                    @Override
-                    public ImmutableList<String> getValue() {
-                        return figure == null ? null : ImmutableLists.ofCollection(figure.getStyleClass());
-                    }
+            @Override
+            public @Nullable ImmutableList<String> getValue() {
+                return figure == null ? null : ImmutableLists.ofCollection(figure.getStyleClass());
+            }
                 }
         );
         // Type arguments needed for Java 8!
         pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
-                    @Nullable
-                    @Override
-                    public ImmutableSet<String> getValue() {
-                        return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClass());
-                    }
+            @Override
+            public @Nullable ImmutableSet<String> getValue() {
+                return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClass());
+            }
                 }
         );
 
@@ -169,9 +162,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 // Type arguments needed for Java 8!
                 new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
 
-                    @NonNull
                     @Override
-                    public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
+                    public @NonNull TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
                         // Type arguments needed for Java 8!
                         return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
                             @Override
@@ -216,17 +208,15 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // Type arguments needed for Java 8!
         styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableList<String>>, TreeTableCell<Figure, ImmutableList<String>>>() {
 
-            @NonNull
             @Override
-            public TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
+            public @NonNull TreeTableCell<Figure, ImmutableList<String>> call(TreeTableColumn<Figure, ImmutableList<String>> paramTableColumn) {
                 // Type arguments needed for Java 8!
                 return new TextFieldTreeTableCell<Figure, ImmutableList<String>>() {
                     {
                         setConverter(new StringConverterAdapter<>(wordListConverter));
                     }
 
-                    @NonNull
-                    private final Set<String> syntheticClasses = new HashSet<>();
+                    private final @NonNull Set<String> syntheticClasses = new HashSet<>();
 
                     @Override
                     public void cancelEdit() {

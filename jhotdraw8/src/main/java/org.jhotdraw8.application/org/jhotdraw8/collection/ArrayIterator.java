@@ -98,9 +98,8 @@ public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Spliterat
         return false;
     }
 
-    @Nullable
     @Override
-    public Spliterator<E> trySplit() {
+    public @Nullable Spliterator<E> trySplit() {
         int lo = index, mid = (lo + getSize()) >>> 1;
         return (lo >= mid)
                 ? null

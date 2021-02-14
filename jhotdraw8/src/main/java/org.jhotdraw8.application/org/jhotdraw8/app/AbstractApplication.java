@@ -98,9 +98,8 @@ public abstract class AbstractApplication extends javafx.application.Application
         return disabled;
     }
 
-    @NonNull
     @Override
-    public ObservableSet<Object> disablers() {
+    public @NonNull ObservableSet<Object> disablers() {
         return disablers;
     }
 
@@ -163,9 +162,8 @@ public abstract class AbstractApplication extends javafx.application.Application
         });
     }
 
-    @NonNull
     @Override
-    public IntegerProperty maxNumberOfRecentUrisProperty() {
+    public @NonNull IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
@@ -179,15 +177,13 @@ public abstract class AbstractApplication extends javafx.application.Application
         return actions;
     }
 
-    @NonNull
     @Override
-    public ReadOnlySetProperty<Activity> activitiesProperty() {
+    public @NonNull ReadOnlySetProperty<Activity> activitiesProperty() {
         return activities;
     }
 
-    @NonNull
     @Override
-    public ReadOnlyListProperty<String> stylesheetsProperty() {
+    public @NonNull ReadOnlyListProperty<String> stylesheetsProperty() {
         return stylesheets;
     }
 

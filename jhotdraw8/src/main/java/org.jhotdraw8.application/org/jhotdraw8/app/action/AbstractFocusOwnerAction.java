@@ -21,11 +21,9 @@ import org.jhotdraw8.app.Application;
  */
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 
-@Nullable
-    private Node target = null;
+private @Nullable Node target = null;
 
-    @Nullable
-    private final ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
+    private final @Nullable ChangeListener<Activity> activeViewListener = (observable, oldValue, newValue) -> {
         disabled.unbind();
         if (newValue == null || newValue.getNode() == null) {
             disabled.set(true);

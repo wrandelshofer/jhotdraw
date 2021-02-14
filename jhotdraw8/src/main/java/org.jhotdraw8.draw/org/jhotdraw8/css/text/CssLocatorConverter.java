@@ -37,9 +37,8 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public Locator parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Locator parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "Locator: function 'relative(' expected.");
         if (!RELATIVE_FUNCTION.equals(tt.currentStringNonNull())) {
             throw tt.createParseException("Locator: function 'relative(' expected.");
@@ -78,9 +77,8 @@ public class CssLocatorConverter extends AbstractCssConverter<Locator> {
         return new BoundsLocator(x, y);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
     }
 

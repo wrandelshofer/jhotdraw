@@ -23,8 +23,7 @@ public class IntersectEllipsePolygon {
      * @param points the points of the polygon
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectEllipsePolygon(@NonNull Point2D c, double rx, double ry, @NonNull List<Point2D.Double> points) {
+    public static @NonNull IntersectionResult intersectEllipsePolygon(@NonNull Point2D c, double rx, double ry, @NonNull List<Point2D.Double> points) {
         List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 

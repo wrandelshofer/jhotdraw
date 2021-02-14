@@ -15,32 +15,32 @@ public class HandleType {
      * A Handle of this type should highlight a figure, but should not provide
      * user interaction.
      */
-    public final static HandleType SELECT = new HandleType();
+    public static final HandleType SELECT = new HandleType();
     /**
      * A Handle of this type should highlight a figure, but should not provide
      * user interaction.
      */
-    public final static HandleType LEAD = new HandleType();
+    public static final HandleType LEAD = new HandleType();
     /**
      * A Handle of this type should highlight a figure, but should not provide
      * user interaction.
      */
-    public final static HandleType ANCHOR = new HandleType();
+    public static final HandleType ANCHOR = new HandleType();
     /**
      * Handles of this type should allow to move (translate) a figure.
      */
-    public final static HandleType MOVE = new HandleType();
+    public static final HandleType MOVE = new HandleType();
     /**
      * Handle of this type should allow to reshape (resize) a figure.
      */
-    public final static HandleType RESIZE = new HandleType();
+    public static final HandleType RESIZE = new HandleType();
     /**
      * Handle of this type should allow to transform (scale and rotate) a
      * figure.
      */
-    public final static HandleType TRANSFORM = new HandleType();
+    public static final HandleType TRANSFORM = new HandleType();
     /**
      * Handle of this type should allow to edit a point of a figure.
      */
-    public final static HandleType POINT = new HandleType();
+    public static final HandleType POINT = new HandleType();
 }

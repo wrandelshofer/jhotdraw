@@ -38,8 +38,7 @@ public class DepthFirstSpliteratorTest {
      *
      * @return
      */
-    @NonNull
-    static DirectedGraph<Integer, Double> createGraph() {
+    static @NonNull DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
@@ -59,8 +58,7 @@ public class DepthFirstSpliteratorTest {
         return builder;
     }
 
-    @NonNull
-    public Object[][] anyPathProvider() {
+    public @NonNull Object[][] anyPathProvider() {
         return new Object[][]{
                 {1, 5, Arrays.asList(1, 6, 5)},
                 {1, 4, Arrays.asList(1, 6, 5, 3, 4)},

@@ -35,9 +35,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return getAttributeAsString(elem, namespace, name);
     }
 
-    @Nullable
     @Override
-    public List<CssToken> getAttribute(@NonNull Element element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
+    public @Nullable List<CssToken> getAttribute(@NonNull Element element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         String str = getAttributeAsString(element, origin, namespace, name);
         if (str == null) {
             return null;
@@ -94,9 +93,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return false;
     }
 
-    @NonNull
     @Override
-    public Set<String> getStyleClasses(@NonNull Element elem) {
+    public @NonNull Set<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
             return Collections.emptySet();
@@ -211,9 +209,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return false;
     }
 
-    @NonNull
     @Override
-    public Element getParent(@NonNull Element elem) {
+    public @NonNull Element getParent(@NonNull Element elem) {
         Node n = elem.getParentNode();
         while (n != null && !(n instanceof Element)) {
             n = n.getParentNode();
@@ -221,9 +218,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return (Element) n;
     }
 
-    @NonNull
     @Override
-    public Element getPreviousSibling(@NonNull Element element) {
+    public @NonNull Element getPreviousSibling(@NonNull Element element) {
         Node n = element.getPreviousSibling();
         while (n != null && !(n instanceof Element)) {
             n = n.getPreviousSibling();
@@ -247,9 +243,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return element.getAttribute(attributeName);
     }
 
-    @NonNull
     @Override
-    public Set<QualifiedName> getAttributeNames(@NonNull Element element) {
+    public @NonNull Set<QualifiedName> getAttributeNames(@NonNull Element element) {
         Set<QualifiedName> attr = new LinkedHashSet<>();
         NamedNodeMap nnm = element.getAttributes();
         for (int i = 0, n = nnm.getLength(); i < n; i++) {
@@ -259,15 +254,13 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         return attr;
     }
 
-    @NonNull
     @Override
-    public Set<QualifiedName> getComposedAttributeNames(@NonNull Element element) {
+    public @NonNull Set<QualifiedName> getComposedAttributeNames(@NonNull Element element) {
         return getAttributeNames(element);
     }
 
-    @NonNull
     @Override
-    public Set<QualifiedName> getDecomposedAttributeNames(@NonNull Element element) {
+    public @NonNull Set<QualifiedName> getDecomposedAttributeNames(@NonNull Element element) {
         return getAttributeNames(element);
     }
 

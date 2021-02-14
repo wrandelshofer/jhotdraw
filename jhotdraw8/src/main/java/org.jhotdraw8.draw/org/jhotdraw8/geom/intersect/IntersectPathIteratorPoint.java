@@ -42,8 +42,7 @@ public class IntersectPathIteratorPoint {
      * @param tolerance radius around the point which counts as a hit.
      * @return the intersection
      */
-    @NonNull
-    public static IntersectionResult intersectPathIteratorPoint(@NonNull PathIterator pit, double px, double py, double tolerance) {
+    public static @NonNull IntersectionResult intersectPathIteratorPoint(@NonNull PathIterator pit, double px, double py, double tolerance) {
         List<IntersectionPoint> result = new ArrayList<>();
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;

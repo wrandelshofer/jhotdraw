@@ -25,15 +25,13 @@ public class AdjacentSiblingCombinator extends Combinator {
         super(firstSelector, secondSelector);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return firstSelector + " + " + secondSelector;
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);
         if (result != null) {
             result = firstSelector.match(model, model.getPreviousSibling(result));

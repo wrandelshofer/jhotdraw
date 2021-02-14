@@ -23,8 +23,7 @@ import org.jhotdraw8.binding.CustomBinding;
 public class TabPaneTrack extends AbstractDockParent implements Track {
 
     private final TabPane tabPane = new TabPane();
-    @NonNull
-    private ResizePane resizePane = new ResizePane();
+    private @NonNull ResizePane resizePane = new ResizePane();
 
     static class MyTab extends Tab {
         private final DockableDragHandler dockableDragHandler;
@@ -75,16 +74,14 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
                 false);
     }
 
-    @NonNull
-    protected ChangeListener<DockParent> onParentChanged() {
+    protected @NonNull ChangeListener<DockParent> onParentChanged() {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
             resizePane.setResizeAxis(newv == null ? TrackAxis.Y : newv.getDockAxis());
         };
     }
 
-    @NonNull
-    private MyTab makeTab(DockChild c) {
+    private @NonNull MyTab makeTab(DockChild c) {
         if (c instanceof Dockable) {
             Dockable k = (Dockable) c;
             MyTab tab = new MyTab(k, k.getText(), k.getNode());
@@ -96,9 +93,8 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
     }
 
 
-    @NonNull
     @Override
-    public TrackAxis getDockAxis() {
+    public @NonNull TrackAxis getDockAxis() {
         return TrackAxis.Z;
     }
 

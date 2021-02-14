@@ -40,12 +40,11 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
         super(nextNodesFunction, costf);
     }
 
-    @Nullable
-    protected BackLink<V, A> search(@NonNull V start,
-                                    @NonNull Predicate<V> goalPredicate,
-                                    double maxCost,
-                                    @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
-                                    @NonNull ToDoubleTriFunction<V, V, A> costf) {
+    protected @Nullable BackLink<V, A> search(@NonNull V start,
+                                              @NonNull Predicate<V> goalPredicate,
+                                              double maxCost,
+                                              @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
+                                              @NonNull ToDoubleTriFunction<V, V, A> costf) {
 
         // Priority queue: back-links with shortest distance from start come first.
         PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
@@ -103,8 +102,7 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
     protected static class MyBackLink<VV, AA> extends BackLink<VV, AA> {
 
         protected final VV vertex;
-        @Nullable
-        protected MyBackLink<VV, AA> parent;
+        protected @Nullable MyBackLink<VV, AA> parent;
         protected AA arrow;
         /**
          * Accumulated cost up to this node.
@@ -132,8 +130,7 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             this.cost = cost;
         }
 
-        @Nullable
-        public MyBackLink<VV, AA> getParent() {
+        public @Nullable MyBackLink<VV, AA> getParent() {
             return parent;
         }
 
@@ -150,9 +147,8 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             return arrow;
         }
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             return "BackLink{" +
                     "vertex=" + vertex +
                     ", cost=" + cost +

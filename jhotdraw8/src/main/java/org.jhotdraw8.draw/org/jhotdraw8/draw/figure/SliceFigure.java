@@ -43,24 +43,16 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Slice";
+    public static final String TYPE_SELECTOR = "Slice";
 
-    @NonNull
-    public final static CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
-    @NonNull
-    public final static CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    @NonNull
-    public final static CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", CssSize.ZERO);
-    @NonNull
-    public final static CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
+    public static final @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
+    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public static final @NonNull CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", CssSize.ZERO);
+    public static final @NonNull CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
     public SliceFigure() {
         this(0, 0, 1, 1);
@@ -85,15 +77,13 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
         }
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         return new BoundingBox(get(X).getConvertedValue(), get(Y).getConvertedValue(), get(WIDTH).getConvertedValue(), get(HEIGHT).getConvertedValue());
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(get(X), get(Y), get(WIDTH), get(HEIGHT));
     }
 
@@ -112,9 +102,8 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
         set(HEIGHT, height.abs());
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Rectangle node = new Rectangle();
         node.setFill(new Color(0, 1.0, 0, 0.5));
         node.setStroke(Color.DARKRED);
@@ -136,9 +125,8 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
         rectangleNode.setHeight(getNonNull(HEIGHT).getConvertedValue());
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

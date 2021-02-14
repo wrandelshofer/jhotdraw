@@ -37,13 +37,11 @@ public class PointAndTangent {
         return tangentY;
     }
 
-    @NonNull
-    public Point2D getPoint() {
+    public @NonNull Point2D getPoint() {
         return new Point2D(x, y);
     }
 
-    @NonNull
-    public Point2D getTangent() {
+    public @NonNull Point2D getTangent() {
         return new Point2D(tangentX, tangentY);
     }
 }

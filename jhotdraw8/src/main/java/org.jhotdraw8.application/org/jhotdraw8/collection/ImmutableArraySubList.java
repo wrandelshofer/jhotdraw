@@ -23,10 +23,9 @@ import java.util.Spliterator;
  */
 final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
 
-    final static ImmutableArraySubList<Object> EMPTY = new ImmutableArraySubList<>(true, new Object[0]);
+    static final ImmutableArraySubList<Object> EMPTY = new ImmutableArraySubList<>(true, new Object[0]);
 
-    @NonNull
-    private final Object[] array;
+    private final @NonNull Object[] array;
     private final int size;
     private final int offset;
 
@@ -90,8 +89,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return false;
     }
 
-    @NonNull
-    public E get(int index) {
+    public @NonNull E get(int index) {
         @SuppressWarnings("unchecked")
         E value = (E) array[offset + index];
         return value;
@@ -101,8 +99,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return size;
     }
 
-    @NonNull
-    public <T> T[] toArray(@NonNull T[] a) {
+    public @NonNull <T> T[] toArray(@NonNull T[] a) {
         if (a.length < size) {
             @SuppressWarnings("unchecked")
             T[] t = (T[]) Arrays.copyOf(array, size, a.getClass());
@@ -116,19 +113,16 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
     }
 
 
-    @NonNull
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return new ArrayIterator<>(array, offset, offset + size);
     }
 
-    @NonNull
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new ArrayIterator<>(array, offset, offset + size);
     }
 
-    @NonNull
     @Override
-    public ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
         if (fromIndex < 0) {
             throw new IndexOutOfBoundsException("fromIndex = " + fromIndex);
         }
@@ -143,9 +137,8 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return new ImmutableArraySubList<>(true, this.array, offset + fromIndex, offset + toIndex);
     }
 
-    @NonNull
     @Override
-    public Object[] toArray() {
+    public @NonNull Object[] toArray() {
         Object[] dest = new Object[size];
         System.arraycopy(array, offset, dest, 0, size);
         return dest;

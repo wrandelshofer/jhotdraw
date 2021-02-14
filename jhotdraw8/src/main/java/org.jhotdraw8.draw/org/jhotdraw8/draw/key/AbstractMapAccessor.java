@@ -28,22 +28,18 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
     /**
      * Holds a String representation of the name.
      */
-    @Nullable
-    private final String name;
+    private final @Nullable String name;
     /**
      * Holds the default value.
      */
-    @Nullable
-    private final T defaultValue;
+    private final @Nullable T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @NonNull
-    private final Type type;
+    private final @NonNull Type type;
 
-    @NonNull
-    private final List<MapAccessor<?>> subAccessors;
+    private final @NonNull List<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -85,18 +81,15 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      *
      * @return name string.
      */
-    @Nullable
     @Override
-    public String getName() {
+    public @Nullable String getName() {
         return name;
     }
 
-    @NonNull
     @Override
-    public Type getValueType() {
+    public @NonNull Type getValueType() {
         return type;
     }
-
 
 
     /**
@@ -104,25 +97,22 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      *
      * @return the default value.
      */
-    @Nullable
     @Override
-    public T getDefaultValue() {
+    public @Nullable T getDefaultValue() {
         return defaultValue;
     }
 
     /**
      * Returns the name string.
      */
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getValueType() + "}";
     }
 
-    @NonNull
     @Override
-    public Collection<MapAccessor<?>> getSubAccessors() {
+    public @NonNull Collection<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 

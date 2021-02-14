@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MacOSSystemColorConverter extends MappedSystemColorConverter {
-    public final static Map<String, Color> DARK_SYSTEM_COLORS;
+    public static final Map<String, Color> DARK_SYSTEM_COLORS;
 
     static {
         Map<String, Color> map = new HashMap<>();

@@ -23,8 +23,7 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
  */
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 
-    @Nullable
-    private final Node target;
+    private final @Nullable Node target;
 
 
     /**
@@ -47,8 +46,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
         this.target = target;
     }
 
-    @Nullable
-    public EditableComponent getEditableComponent() {
+    public @Nullable EditableComponent getEditableComponent() {
         if (target != null) {
             return tryAsEditableComponent(target);
         }
@@ -67,8 +65,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
         return null;
     }
 
-    @Nullable
-    private EditableComponent tryAsEditableComponent(Node n) {
+    private @Nullable EditableComponent tryAsEditableComponent(Node n) {
         if (n instanceof TextInputControl) {
             TextInputControl tic = (TextInputControl) n;
             return new TextInputControlAdapter(tic);
@@ -136,9 +133,8 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
             control.selectAll();
         }
 
-        @NonNull
         @Override
-        public ReadOnlyBooleanProperty selectionEmptyProperty() {
+        public @NonNull ReadOnlyBooleanProperty selectionEmptyProperty() {
             throw new UnsupportedOperationException("unsupported");
         }
 

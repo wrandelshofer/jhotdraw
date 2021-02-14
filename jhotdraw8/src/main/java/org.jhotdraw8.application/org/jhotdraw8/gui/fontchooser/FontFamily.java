@@ -20,8 +20,7 @@ public class FontFamily {
 
     private final ObservableList<FontTypeface> typefaces = FXCollections.observableArrayList();
 
-    @NonNull
-    public ObservableList<FontTypeface> getTypefaces() {
+    public @NonNull ObservableList<FontTypeface> getTypefaces() {
         return typefaces;
     }
 
@@ -33,8 +32,7 @@ public class FontFamily {
         name.set(value);
     }
 
-    @NonNull
-    public StringProperty nameProperty() {
+    public @NonNull StringProperty nameProperty() {
         return name;
     }
 

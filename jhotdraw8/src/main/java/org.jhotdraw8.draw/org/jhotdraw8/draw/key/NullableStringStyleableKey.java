@@ -26,9 +26,8 @@ import java.util.function.Function;
 public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String> {
 
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssMetaData<? extends Styleable, String> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssMetaData<? extends Styleable, String> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with a null String
@@ -71,12 +70,10 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
 
     }
 
-    @NonNull
-    private final CssStringConverter converter;
+    private final @NonNull CssStringConverter converter;
 
-    @NonNull
     @Override
-    public Converter<String> getCssConverter() {
+    public @NonNull Converter<String> getCssConverter() {
         return converter;
     }
 }

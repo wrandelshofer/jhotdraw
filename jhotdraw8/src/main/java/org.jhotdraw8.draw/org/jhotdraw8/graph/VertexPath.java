@@ -22,8 +22,7 @@ import java.util.Objects;
  */
 public class VertexPath<V> {
 
-    @NonNull
-    private final ImmutableList<V> vertices;
+    private final @NonNull ImmutableList<V> vertices;
 
     public VertexPath(@NonNull Collection<? extends V> elements) {
         this.vertices = ImmutableLists.ofCollection(elements);
@@ -58,8 +57,7 @@ public class VertexPath<V> {
         return vertices.get(vertices.size() - 2);
     }
 
-    @NonNull
-    public ImmutableList<V> getVertices() {
+    public @NonNull ImmutableList<V> getVertices() {
         return vertices;
     }
 
@@ -94,9 +92,8 @@ public class VertexPath<V> {
         return vertices.size();
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "VertexPath{" + vertices + '}';
     }
 
@@ -107,15 +104,13 @@ public class VertexPath<V> {
      * @param vertices the vertices
      * @return the vertex path
      */
-    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <VV> VertexPath<VV> of(VV... vertices) {
+    public static @NonNull <VV> VertexPath<VV> of(VV... vertices) {
         return new VertexPath<>(vertices);
     }
 
-    @NonNull
-    public VertexPath<V> appendPath(@NonNull VertexPath<V> nextPath) {
+    public @NonNull VertexPath<V> appendPath(@NonNull VertexPath<V> nextPath) {
         if (isEmpty()) {
             return nextPath;
         }

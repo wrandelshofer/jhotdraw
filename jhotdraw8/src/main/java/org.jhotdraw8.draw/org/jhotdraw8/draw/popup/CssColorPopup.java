@@ -28,8 +28,7 @@ public class CssColorPopup {
     private final ColorPicker colorPicker;
     private BiConsumer<Boolean, CssColor> callback;
 
-    @NonNull
-    private final ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
+    private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
 
     public CssColorPopup() {
         Resources labels = DrawLabels.getResources();
@@ -71,8 +70,7 @@ public class CssColorPopup {
         return currentColor.get();
     }
 
-    @Nullable
-    public ObjectProperty<CssColor> currentColorProperty() {
+    public @Nullable ObjectProperty<CssColor> currentColorProperty() {
         return currentColor;
     }
 

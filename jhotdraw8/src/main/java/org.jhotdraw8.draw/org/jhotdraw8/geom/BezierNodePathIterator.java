@@ -18,8 +18,7 @@ import java.util.List;
  */
 public class BezierNodePathIterator implements PathIterator {
 
-    @NonNull
-    private final List<BezierNode> nodes;
+    private final @NonNull List<BezierNode> nodes;
     private int index;
     private final AffineTransform affine;
     private final int size;
@@ -83,8 +82,7 @@ public class BezierNodePathIterator implements PathIterator {
         }
     }
 
-    @NonNull
-    private double[] temp_double = new double[6];
+    private @NonNull double[] temp_double = new double[6];
 
     /**
      * Returns the coordinates and type of the current path segment in the

@@ -67,23 +67,21 @@ public class FileURIChooser implements URIChooser {
         return mode;
     }
 
-    @NonNull
-    public FileChooser getFileChooser() {
+    public @NonNull FileChooser getFileChooser() {
         return chooser;
     }
 
-    @Nullable
     @Override
-    public URI showDialog(Window parent) {
+    public @Nullable URI showDialog(Window parent) {
         updateFilters();
         File f = null;
         switch (mode) {
-            case OPEN:
-                f = chooser.showOpenDialog(parent);
-                break;
-            case SAVE:
-                f = chooser.showSaveDialog(parent);
-                break;
+        case OPEN:
+            f = chooser.showOpenDialog(parent);
+            break;
+        case SAVE:
+            f = chooser.showSaveDialog(parent);
+            break;
         }
         return f == null ? null : f.toURI();
     }
@@ -92,9 +90,8 @@ public class FileURIChooser implements URIChooser {
         this.filters.setAll(filters);
     }
 
-    @Nullable
     @Override
-    public DataFormat getDataFormat() {
+    public @Nullable DataFormat getDataFormat() {
         for (URIExtensionFilter f : filters) {
             if (f.getFileChooserExtensionFilter() == chooser.getSelectedExtensionFilter()) {
                 return f.getDataFormat();

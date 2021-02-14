@@ -52,12 +52,12 @@ public class BezierFigure extends AbstractLeafFigure
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public final static BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
-    public final static BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", ImmutableLists.emptyList());
+    public static final BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
+    public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Bezier";
+    public static final String TYPE_SELECTOR = "Bezier";
 
     public BezierFigure() {
         setStyled(StyleOrigin.USER_AGENT, FILL, null);
@@ -85,23 +85,20 @@ public class BezierFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(RenderContext ctx) {
         Path n = new Path();
         n.setManaged(false);
         return n;
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         // XXX should be cached
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -116,8 +113,7 @@ public class BezierFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @NonNull
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -125,25 +121,21 @@ public class BezierFigure extends AbstractLeafFigure
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return new BezierNodePath(getStyledNonNull(PATH), getStyledNonNull(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
-    @NonNull
-    public Point2D getPoint(int index, int coord) {
+    public @NonNull Point2D getPoint(int index, int coord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @NonNull
-    public Point2D getPointOnPath(float f, int i) {
+    public @NonNull Point2D getPointOnPath(float f, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

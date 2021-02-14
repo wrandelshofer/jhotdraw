@@ -38,9 +38,8 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
     // ---
     // Behaviors
     // ---
-    @NonNull
     @Override
-    public Node getNode() {
+    public @NonNull Node getNode() {
         return node;
     }
 }

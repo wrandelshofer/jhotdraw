@@ -76,8 +76,7 @@ public class FXPathPointsBuilder extends AbstractPathBuilder {
         needsSquareAtLastPoint = true;
     }
 
-    @NonNull
-    public Path build() {
+    public @NonNull Path build() {
         if (needsSquareAtLastPoint) {
             addSquare(getLastX(), getLastY());
             needsSquareAtLastPoint = false;

@@ -26,8 +26,7 @@ import static java.lang.Math.max;
  */
 public class StreamPosTokenizer /*extends StreamTokenizer*/ {
 
-    @Nullable
-    private Reader reader = null;
+    private @Nullable Reader reader = null;
 
     /**
      * Position of the next character that will be read from the file. rlw
@@ -38,11 +37,9 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Start and end position of the current token. rlw
      */
     private int startpos = -1, endpos = -1;
-    @NonNull
-    private IntArrayList unread = new IntArrayList();
+    private @NonNull IntArrayList unread = new IntArrayList();
 
-    @NonNull
-    private char[] buf = new char[20];
+    private @NonNull char[] buf = new char[20];
 
     /**
      * The next character to be considered by the next method. May also be
@@ -68,15 +65,11 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private boolean slashStarCommentsP = false;
 
     // rlw
-    @NonNull
-    private char[] slashSlash = new char[]{'/', '/'};
-    @NonNull
-    private char[] slashStar = new char[]{'/', '*'};
-    @NonNull
-    private char[] starSlash = new char[]{'*', '/'};
+    private @NonNull char[] slashSlash = new char[]{'/', '/'};
+    private @NonNull char[] slashStar = new char[]{'/', '*'};
+    private @NonNull char[] starSlash = new char[]{'*', '/'};
 
-    @NonNull
-    private byte[] ctype = new byte[256];
+    private @NonNull byte[] ctype = new byte[256];
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
     private static final byte CT_ALPHA = 4;
@@ -151,8 +144,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @see java.io.StreamTokenizer#TT_WORD
      * @see java.io.StreamTokenizer#ttype
      */
-    @Nullable
-    public String sval;
+    public @Nullable String sval;
 
     /**
      * If the current token is a number, this field contains the value of that
@@ -1140,19 +1132,18 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @see java.io.StreamTokenizer#sval
      * @see java.io.StreamTokenizer#ttype
      */
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         String ret;
         switch (ttype) {
-            case TT_EOF:
-                ret = "EOF";
-                break;
-            case TT_EOL:
-                ret = "EOL";
-                break;
-            case TT_WORD:
-                ret = sval;
+        case TT_EOF:
+            ret = "EOF";
+            break;
+        case TT_EOL:
+            ret = "EOL";
+            break;
+        case TT_WORD:
+            ret = sval;
                 break;
             case TT_NUMBER:
                 ret = "n=" + nval;

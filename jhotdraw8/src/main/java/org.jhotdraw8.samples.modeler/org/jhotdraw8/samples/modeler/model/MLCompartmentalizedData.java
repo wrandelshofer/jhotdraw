@@ -21,8 +21,7 @@ import java.util.Objects;
  * Thus this is effectively a map of type {@literal Map<String,List<String>>>}.
  */
 public class MLCompartmentalizedData {
-    @NonNull
-    private final ImmutableMap<String, ImmutableList<String>> map;
+    private final @NonNull ImmutableMap<String, ImmutableList<String>> map;
 
     public MLCompartmentalizedData() {
         this.map = ImmutableMaps.emptyMap();
@@ -36,8 +35,7 @@ public class MLCompartmentalizedData {
         this.map = ImmutableMaps.ofMap(map);
     }
 
-    @NonNull
-    public ImmutableMap<String, ImmutableList<String>> getMap() {
+    public @NonNull ImmutableMap<String, ImmutableList<String>> getMap() {
         return map;
     }
 
@@ -58,9 +56,8 @@ public class MLCompartmentalizedData {
         return Objects.hash(map);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "MLCompartmentalizedData{" +
                 map +
                 '}';

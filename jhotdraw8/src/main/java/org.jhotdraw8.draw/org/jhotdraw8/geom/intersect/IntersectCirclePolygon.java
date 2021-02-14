@@ -22,8 +22,7 @@ public class IntersectCirclePolygon {
      * @param points the points of the polygon
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectCirclePolygonEx(@NonNull Point2D c, double r, @NonNull List<Point2D.Double> points) {
+    public static @NonNull IntersectionResultEx intersectCirclePolygonEx(@NonNull Point2D c, double r, @NonNull List<Point2D.Double> points) {
         List<IntersectionPointEx> result = new ArrayList<>();
         int length = points.size();
         IntersectionResultEx inter = null;

@@ -116,7 +116,7 @@ public static final String ID = "file.openRecent";
         openViewFromURI(view, uri, format);
     }
 
-    private void onException(@NonNull final FileBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
+    private void onException(final @NonNull FileBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
         Throwable value = exception;
         exception.printStackTrace();
         Resources labels = ApplicationLabels.getResources();
@@ -133,7 +133,7 @@ public static final String ID = "file.openRecent";
         }
     }
 
-    protected void openViewFromURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, DataFormat format) {
+    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, DataFormat format) {
         final Application app = getApplication();
         WorkState workState = new SimpleWorkState(getLabel());
         v.addDisabler(workState);

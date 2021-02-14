@@ -28,9 +28,8 @@ import java.util.function.Function;
 public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull String>
         implements WriteableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
 
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssMetaData<? extends Styleable, @NonNull String> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssMetaData<? extends Styleable, @NonNull String> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with an empty String

@@ -37,8 +37,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     /**
      * The rubber band.
      */
-    @Nullable
-    private ArrayList<Point2D> points;
+    private @Nullable ArrayList<Point2D> points;
 
     private final Point2DListStyleableKey key;
 
@@ -145,9 +144,8 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         createdFigure = null;
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "PolyCreationTool"
                 + "\n  Click on the drawing view. The tool will create a new polygon with a point at that location."
                 + "\n  Continue clicking on the drawing view. The tool will add each clicked point to the created polygon."

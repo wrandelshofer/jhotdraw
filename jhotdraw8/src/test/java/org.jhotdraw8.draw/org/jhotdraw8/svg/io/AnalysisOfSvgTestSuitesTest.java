@@ -43,7 +43,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
@@ -190,8 +189,7 @@ public class AnalysisOfSvgTestSuitesTest {
 
     }
 
-    @NonNull
-    protected String getLastTwoPathElements(Path p) {
+    protected @NonNull String getLastTwoPathElements(Path p) {
         return p.getName(p.getNameCount() - 2).toString()
                 + "/" + p.getName(p.getNameCount() - 1).toString();
     }

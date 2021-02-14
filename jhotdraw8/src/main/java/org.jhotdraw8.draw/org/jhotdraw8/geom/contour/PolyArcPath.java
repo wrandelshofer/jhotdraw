@@ -35,7 +35,7 @@ import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
  * calculations.
  */
 public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Override
     public PolyArcPath clone() {

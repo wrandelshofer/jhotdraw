@@ -19,10 +19,8 @@ import java.util.stream.Collectors;
  */
 public class Stylesheet extends AST {
 
-    @NonNull
-    private final ImmutableList<Rule> rules;
-    @NonNull
-    private final ImmutableList<StyleRule> styleRules;
+    private final @NonNull ImmutableList<Rule> rules;
+    private final @NonNull ImmutableList<StyleRule> styleRules;
 
     public Stylesheet(@NonNull List<Rule> rules) {
         this.rules = ImmutableLists.ofCollection(rules);
@@ -38,8 +36,7 @@ public class Stylesheet extends AST {
      *
      * @return the rules
      */
-    @NonNull
-    public ReadOnlyList<StyleRule> getStyleRules() {
+    public @NonNull ReadOnlyList<StyleRule> getStyleRules() {
         return styleRules;
     }
 
@@ -48,14 +45,12 @@ public class Stylesheet extends AST {
      *
      * @return the rules
      */
-    @NonNull
-    public ReadOnlyList<Rule> getRules() {
+    public @NonNull ReadOnlyList<Rule> getRules() {
         return rules;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         StringBuilder buf = new StringBuilder();
         boolean first = true;
         for (Rule r : rules) {

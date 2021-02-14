@@ -34,12 +34,9 @@ import java.util.List;
  */
 public class BezierNodeTangentHandle extends AbstractHandle {
 
-    @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.DASHED, null, null));
-    @NonNull
-    private final Polyline node;
+    private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.DASHED, null, null));
+    private final @NonNull Polyline node;
 
     private Point2D pickLocation;
     private final int pointIndex;
@@ -65,14 +62,12 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     }
 
-    @Nullable
     @Override
-    public Cursor getCursor() {
+    public @Nullable Cursor getCursor() {
         return null;
     }
 
-    @NonNull
-    private Point2D getLocation() {
+    private @NonNull Point2D getLocation() {
         return getBezierNode().getC0();
 
     }
@@ -81,9 +76,8 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Polyline getNode(@NonNull DrawingView view) {
+    public @NonNull Polyline getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         node.setStroke(color.getColor());
         return node;

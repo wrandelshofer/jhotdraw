@@ -39,16 +39,12 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class RelativeControlPointHandle extends AbstractHandle {
-    @Nullable
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
+    public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    @NonNull
-    private final Region node;
+    private final @NonNull Region node;
     /**
      * Relative origin.
      * <ul>
@@ -58,8 +54,7 @@ public class RelativeControlPointHandle extends AbstractHandle {
      * <li>1,1=bottom right</li>
      * </ul>
      */
-    @NonNull
-    private Point2D origin = new Point2D(0, 0);
+    private @NonNull Point2D origin = new Point2D(0, 0);
     private Point2D pickLocation;
     private final MapAccessor<Point2D> pointKey;
     private final MapAccessor<Point2D> controlPointKey;
@@ -93,9 +88,8 @@ public class RelativeControlPointHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);

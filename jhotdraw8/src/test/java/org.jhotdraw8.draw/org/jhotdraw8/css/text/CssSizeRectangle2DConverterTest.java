@@ -50,9 +50,8 @@ public class CssSizeRectangle2DConverterTest {
         assertEquals(string, actualString);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44")),
                 dynamicTest("2", () -> testFromString(new CssRectangle2D(new CssSize(0, "cm"),

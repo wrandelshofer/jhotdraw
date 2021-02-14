@@ -32,12 +32,11 @@ public class TextAreaFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "TextArea";
+    public static final String TYPE_SELECTOR = "TextArea";
     private Path path;
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(RenderContext ctx) {
         Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);
@@ -47,9 +46,8 @@ public class TextAreaFigure extends AbstractLeafFigure
         return n;
     }
 
-    @NonNull
     @Override
-    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, Node node) {
+    public @NonNull TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
@@ -99,9 +97,8 @@ public class TextAreaFigure extends AbstractLeafFigure
 
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -119,9 +116,8 @@ public class TextAreaFigure extends AbstractLeafFigure
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (path == null) {
             layout(new SimpleRenderContext());
         }

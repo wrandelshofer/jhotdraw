@@ -31,12 +31,10 @@ import java.util.function.Function;
 public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull ImmutableList<@NonNull Point2D>>
         implements WriteableStyleableMapAccessor<@NonNull ImmutableList<@NonNull Point2D>>, NonNullMapAccessor<ImmutableList<@NonNull Point2D>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, ImmutableList<@NonNull Point2D>> cssMetaData;
-    @NonNull
-    private final Converter<ImmutableList<@NonNull Point2D>> converter;
+    private final @NonNull CssMetaData<?, ImmutableList<@NonNull Point2D>> cssMetaData;
+    private final @NonNull Converter<ImmutableList<@NonNull Point2D>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -78,9 +76,8 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
         return cssMetaData;
     }
 
-    @NonNull
     @Override
-    public Converter<ImmutableList<Point2D>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<Point2D>> getCssConverter() {
         return converter;
     }
 

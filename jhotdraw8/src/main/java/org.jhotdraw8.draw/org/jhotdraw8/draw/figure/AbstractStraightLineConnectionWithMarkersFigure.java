@@ -88,9 +88,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         }
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         final Line line = new Line();
         final Path startMarker = new Path();
@@ -103,18 +102,15 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     public abstract double getMarkerCenterScaleFactor();
 
-    @Nullable
-    public abstract String getMarkerCenterShape();
+    public abstract @Nullable String getMarkerCenterShape();
 
     public abstract double getMarkerEndScaleFactor();
 
-    @Nullable
-    public abstract String getMarkerEndShape();
+    public abstract @Nullable String getMarkerEndShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    @Nullable
-    public abstract String getMarkerStartShape();
+    public abstract @Nullable String getMarkerStartShape();
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {

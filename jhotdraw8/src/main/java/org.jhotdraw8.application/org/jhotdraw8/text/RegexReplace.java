@@ -18,10 +18,8 @@ import java.util.regex.Pattern;
  */
 public class RegexReplace {
 
-    @Nullable
-    private final String find;
-    @Nullable
-    private final String replace;
+    private final @Nullable String find;
+    private final @Nullable String replace;
     private transient Pattern pattern;
 
     public RegexReplace() {
@@ -33,24 +31,20 @@ public class RegexReplace {
         this.replace = replace;
     }
 
-    @Nullable
-    public String getFind() {
+    public @Nullable String getFind() {
         return find;
     }
 
-    @Nullable
-    public String getReplace() {
+    public @Nullable String getReplace() {
         return replace;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "/" + escape(find) + "/" + escape(replace) + "/";
     }
 
-    @NonNull
-    private String escape(@Nullable String str) {
+    private @NonNull String escape(@Nullable String str) {
         return str == null ? "" : str.replace("/", "\\/");
     }
 
@@ -60,8 +54,7 @@ public class RegexReplace {
      * @param str the string
      * @return the replaced string
      */
-    @Nullable
-    public String apply(@Nullable String str) {
+    public @Nullable String apply(@Nullable String str) {
         if (str == null) {
             return str;
         }

@@ -49,10 +49,8 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  */
 public class BezierNodeMoveHandle extends AbstractHandle {
 
-    @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
     private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
     private static final Path REGION_SHAPE_QUADRATIC = new Path();
@@ -67,8 +65,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     private Set<Figure> groupReshapeableFigures;
-    @NonNull
-    private final Region node;
+    private final @NonNull Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
@@ -107,8 +104,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         return Cursor.OPEN_HAND;
     }
 
-    @NonNull
-    private Point2D getLocation() {
+    private @NonNull Point2D getLocation() {
         return getBezierNode().getC0();
 
     }
@@ -117,9 +113,8 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public @NonNull Region getNode(DrawingView view) {
         return node;
     }
 

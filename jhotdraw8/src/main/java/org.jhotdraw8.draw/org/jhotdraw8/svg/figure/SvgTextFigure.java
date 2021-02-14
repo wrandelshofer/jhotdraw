@@ -54,8 +54,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
 
-    @Nullable
-    private Bounds cachedLayoutBounds;
+    private @Nullable Bounds cachedLayoutBounds;
 
     public SvgTextFigure() {
         this(0, 0);
@@ -75,9 +74,8 @@ public class SvgTextFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setManaged(false);
         g.setAutoSizeChildren(false);
@@ -85,14 +83,13 @@ public class SvgTextFigure extends AbstractLeafFigure
         n0.setManaged(false);
         Text n1 = new Text();
         n1.setManaged(false);
-        g.getProperties().put("fillNode",n0);
-        g.getProperties().put("strokeNode",n1);
+        g.getProperties().put("fillNode", n0);
+        g.getProperties().put("strokeNode", n1);
         return g;
     }
 
 
-    @Nullable
-    protected Bounds getCachedLayoutBounds() {
+    protected @Nullable Bounds getCachedLayoutBounds() {
         return cachedLayoutBounds;
     }
 
@@ -101,16 +98,14 @@ public class SvgTextFigure extends AbstractLeafFigure
         return TYPE_SELECTOR;
     }
 
-    @Nullable
-    protected Bounds setCachedLayoutBounds(Bounds newValue) {
+    protected @Nullable Bounds setCachedLayoutBounds(Bounds newValue) {
         Bounds oldValue = cachedLayoutBounds;
         cachedLayoutBounds = newValue;
         return oldValue;
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         Bounds boundsInLocal = getCachedLayoutBounds();
         return boundsInLocal == null ? computeLayoutBounds() : boundsInLocal;
     }
@@ -120,9 +115,8 @@ public class SvgTextFigure extends AbstractLeafFigure
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -132,16 +126,14 @@ public class SvgTextFigure extends AbstractLeafFigure
      *
      * @return the layout bounds
      */
-    @NonNull
-    public Bounds computeLayoutBounds() {
+    public @NonNull Bounds computeLayoutBounds() {
         return computeLayoutBounds(new SimpleRenderContext(), new Text());
     }
 
-    @NonNull
-    protected Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
+    protected @NonNull Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
-        Insets i = new Insets(0,0,0,0);
+        Insets i = new Insets(0, 0, 0, 0);
 
         return new BoundingBox(
                 b.getMinX() - i.getLeft(),
@@ -157,8 +149,7 @@ public class SvgTextFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @return the layout bounds of the text
      */
-    @NonNull
-    protected Bounds getTextBounds(@Nullable RenderContext ctx) {
+    protected @NonNull Bounds getTextBounds(@Nullable RenderContext ctx) {
         Text textNode = new Text();
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
@@ -181,8 +172,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
-    @Nullable
-    protected String getText(RenderContext ctx) {
+    protected @Nullable String getText(RenderContext ctx) {
         return get(TEXT);
     }
 

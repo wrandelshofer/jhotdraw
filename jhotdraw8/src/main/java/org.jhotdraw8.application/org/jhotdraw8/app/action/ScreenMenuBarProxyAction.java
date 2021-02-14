@@ -17,10 +17,8 @@ import org.jhotdraw8.app.Application;
  */
 public class ScreenMenuBarProxyAction extends AbstractAction {
 
-    @NonNull
-    private final Application app;
-    @Nullable
-    private Action currentAction;
+    private final @NonNull Application app;
+    private @Nullable Action currentAction;
 
     public ScreenMenuBarProxyAction(@NonNull Application app, String id) {
         this.app = app;

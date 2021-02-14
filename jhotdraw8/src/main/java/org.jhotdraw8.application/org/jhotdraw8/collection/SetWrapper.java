@@ -25,9 +25,8 @@ public class SetWrapper<E> extends AbstractSet<E> {
         this.backingSet = backingSet;
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return backingSet.iterator();
     }
 

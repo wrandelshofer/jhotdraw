@@ -199,8 +199,7 @@ public class HitTestSampleMain extends Application {
         mouse.setFill(getColor(r));
     }
 
-    @NonNull
-    private Color getColor(IntersectionResult r) {
+    private @NonNull Color getColor(IntersectionResult r) {
         switch (r.getStatus()) {
         case INTERSECTION:
             return Color.RED;

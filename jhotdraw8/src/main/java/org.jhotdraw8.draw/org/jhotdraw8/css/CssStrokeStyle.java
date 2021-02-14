@@ -84,9 +84,8 @@ public class CssStrokeStyle {
         return Objects.hash(dashOffset, dashArray, type, lineJoin, lineCap, miterLimit);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssStrokeStyle{" +
                 ", type=" + type +
                 ", lineJoin=" + lineJoin +

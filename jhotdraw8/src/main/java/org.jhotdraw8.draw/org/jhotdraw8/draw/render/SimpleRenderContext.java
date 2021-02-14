@@ -19,19 +19,15 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SimpleRenderContext implements RenderContext {
-    @NonNull
-    private Map<Figure, Node> nodeMap = new HashMap<>();
-    @NonNull
-    private ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    private @NonNull Map<Figure, Node> nodeMap = new HashMap<>();
+    private @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
     @Override
     public Node getNode(Figure figure) {
         return nodeMap.computeIfAbsent(figure, f -> f.createNode(this));
     }
 
-    @NonNull
-
-    public ObservableMap<Key<?>, Object> getProperties() {
+    public @NonNull ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 

@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class CssParserTest {
 
-    private final static String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+    private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
     /**
      * Test of CSS syntax.
@@ -111,9 +111,8 @@ public class CssParserTest {
      *
      * @return examples
      */
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testCssSyntaxFactory() {
+    public @NonNull List<DynamicTest> testCssSyntaxFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testCssSyntax(true, ":nth-child(3n + 1) {}", //
                         "<xml/>",//
@@ -229,9 +228,8 @@ public class CssParserTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testAtRuleFactory() {
+    public @NonNull List<DynamicTest> testAtRuleFactory() {
         return Arrays.asList(
                 // at rules
                 dynamicTest("1", () -> testAtRule(true, "@charset \"UTF-8\"; AB {x:y}", //
@@ -349,9 +347,8 @@ public class CssParserTest {
     /**
      * Tests selectors.
      */
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testSelectorSyntaxFactory() {
+    public @NonNull List<DynamicTest> testSelectorSyntaxFactory() {
         return Arrays.asList(
                 dynamicTest("type selector", () -> testSelectorSyntax(true, "a {x:1;}", //
                         "<xml><a/><b/></xml>",//
@@ -384,9 +381,8 @@ public class CssParserTest {
     /**
      * Test selectors with name space.
      */
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testSelectorSyntaxNSFactory() {
+    public @NonNull List<DynamicTest> testSelectorSyntaxNSFactory() {
         return Arrays.asList(
                 dynamicTest("type selector not ns aware", () -> testSelectorSyntaxNS(true, "a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//

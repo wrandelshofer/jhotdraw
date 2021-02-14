@@ -45,46 +45,40 @@ public class FXTransforms {
      */
     public static final Transform IDENTITY = new Translate();
 
-    @NonNull
-    public static Transform concat(@Nullable Transform a, @Nullable Transform b) {
+    public static @NonNull Transform concat(@Nullable Transform a, @Nullable Transform b) {
         Transform t = (a == null || a.isIdentity()) ? b : (b == null || b.isIdentity() ? a : a.createConcatenation(b));
         return t == null ? IDENTITY : t;
     }
 
 
-    @NonNull
-    public static Transform createReshapeTransform(@NonNull Bounds src, @NonNull Bounds dest) {
+    public static @NonNull Transform createReshapeTransform(@NonNull Bounds src, @NonNull Bounds dest) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
                 dest.getMinX(), dest.getMinY(), dest.getWidth(), dest.getHeight()
         );
     }
 
-    @NonNull
-    public static Transform createReshapeTransform(@NonNull Bounds src, double destX, double destY, double destW, double destH) {
+    public static @NonNull Transform createReshapeTransform(@NonNull Bounds src, double destX, double destY, double destW, double destH) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
                 destX, destY, destW, destH
         );
     }
 
-    @NonNull
-    public static Transform createReshapeTransform(@NonNull Rectangle2D src, double destX, double destY, double destW, double destH) {
+    public static @NonNull Transform createReshapeTransform(@NonNull Rectangle2D src, double destX, double destY, double destW, double destH) {
         return createReshapeTransform(
                 src.getMinX(), src.getMinY(), src.getWidth(), src.getHeight(),
                 destX, destY, destW, destH
         );
     }
 
-    @NonNull
-    public static Transform createReshapeTransform(@NonNull CssRectangle2D csssrc, @NonNull CssSize destX, @NonNull CssSize destY, @NonNull CssSize destW, @NonNull CssSize destH) {
+    public static @NonNull Transform createReshapeTransform(@NonNull CssRectangle2D csssrc, @NonNull CssSize destX, @NonNull CssSize destY, @NonNull CssSize destW, @NonNull CssSize destH) {
         return createReshapeTransform(csssrc.getConvertedValue(),
                 destX.getConvertedValue(), destY.getConvertedValue(), destW.getConvertedValue(), destH.getConvertedValue()
         );
     }
 
-    @NonNull
-    static Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
+    static @NonNull Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
         double scaleX = dw / sw;
         double scaleY = dh / sh;
 
@@ -105,8 +99,7 @@ public class FXTransforms {
      * @param transform a transformation
      * @return decomposed transformation
      */
-    @NonNull
-    public static List<Transform> decompose(@NonNull Transform transform) {
+    public static @NonNull List<Transform> decompose(@NonNull Transform transform) {
         List<Transform> list = new ArrayList<>();
         if (transform.isIdentity()) {
         } else if (transform instanceof Translate) {
@@ -174,26 +167,22 @@ public class FXTransforms {
         }
     }
 
-    @Nullable
-    public static AffineTransform toAWT(@Nullable Transform t) {
+    public static @Nullable AffineTransform toAWT(@Nullable Transform t) {
         if (t == null) {
             return null;
         }
         return new AffineTransform(t.getMxx(), t.getMyx(), t.getMxy(), t.getMyy(), t.getTx(), t.getTy());
     }
 
-    @NonNull
-    public static Bounds transform(@Nullable Transform tx, @NonNull Bounds b) {
+    public static @NonNull Bounds transform(@Nullable Transform tx, @NonNull Bounds b) {
         return tx == null ? b : tx.transform(b);
     }
 
-    @NonNull
-    public static Point2D transform(@Nullable Transform tx, @NonNull Point2D b) {
+    public static @NonNull Point2D transform(@Nullable Transform tx, @NonNull Point2D b) {
         return tx == null ? b : tx.transform(b);
     }
 
-    @NonNull
-    public static Point2D transform(@Nullable Transform tx, double x, double y) {
+    public static @NonNull Point2D transform(@Nullable Transform tx, double x, double y) {
         return tx == null ? new Point2D(x, y) : tx.transform(x, y);
     }
 
@@ -207,8 +196,7 @@ public class FXTransforms {
      * @param pivot   the pivot of the rotation
      * @return a rotation transform
      */
-    @NonNull
-    public static Transform rotate(@NonNull Point2D tangent, @NonNull Point2D pivot) {
+    public static @NonNull Transform rotate(@NonNull Point2D tangent, @NonNull Point2D pivot) {
         double theta = Geom.atan2(tangent.getY(), tangent.getX());
         return rotateRadians(theta, pivot.getX(), pivot.getY());
     }
@@ -238,8 +226,7 @@ public class FXTransforms {
      * @param pivotY   the pivot of the rotation
      * @return a rotation transform
      */
-    @NonNull
-    public static Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
+    public static @NonNull Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
         double theta = Geom.atan2(tangentY, tangentX);
         return rotateRadians(theta, pivotX, pivotY);
     }
@@ -262,8 +249,7 @@ public class FXTransforms {
      * @param y2 y-coordinate of p2 of the line
      * @return the transformation matrix
      */
-    @NonNull
-    public static Transform createProjectPointOnLineTransform(double x1, double y1, double x2, double y2) {
+    public static @NonNull Transform createProjectPointOnLineTransform(double x1, double y1, double x2, double y2) {
         double vx = x2 - x1;
         double vy = y2 - y1;
         double vxx = vx * vx;
@@ -280,8 +266,7 @@ public class FXTransforms {
         return new Affine(xx, xy, tx, yx, yy, ty);
     }
 
-    @NonNull
-    public static Point2D projectPointOnLine(double ax, double ay, double x1, double y1, double x2, double y2) {
+    public static @NonNull Point2D projectPointOnLine(double ax, double ay, double x1, double y1, double x2, double y2) {
         double vx = x2 - x1;
         double vy = y2 - y1;
         double vxx = vx * vx;
@@ -301,8 +286,7 @@ public class FXTransforms {
         return new Point2D(bx, by);
     }
 
-    @NonNull
-    public static CssRectangle2D transform(@NonNull Transform transform, @NonNull CssRectangle2D b) {
+    public static @NonNull CssRectangle2D transform(@NonNull Transform transform, @NonNull CssRectangle2D b) {
         Bounds tb = transform.transform(b.getConvertedBoundsValue());
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         return new CssRectangle2D(

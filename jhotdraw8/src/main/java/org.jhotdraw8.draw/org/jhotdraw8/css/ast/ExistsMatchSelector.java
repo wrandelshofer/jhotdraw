@@ -19,25 +19,21 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
-    @Nullable
-    private final String namespace;
-    @NonNull
-    private final String attributeName;
+    private final @Nullable String namespace;
+    private final @NonNull String attributeName;
 
     public ExistsMatchSelector(@Nullable String namespace, @NonNull String attributeName) {
         this.namespace = namespace;
         this.attributeName = attributeName;
     }
 
-    @Nullable
     @Override
-    protected <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
+    protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
         return model.hasAttribute(element, namespace, attributeName) ? element : null;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "[" + namespace + ":" + attributeName + ']';
     }
 

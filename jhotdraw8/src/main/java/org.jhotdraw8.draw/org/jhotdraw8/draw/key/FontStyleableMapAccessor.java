@@ -33,18 +33,13 @@ import java.util.function.Function;
 public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull CssFont>
         implements NonNullMapAccessor<@NonNull CssFont> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, @NonNull CssFont> cssMetaData;
-    @NonNull
-    private final MapAccessor<String> familyKey;
-    @NonNull
-    private final MapAccessor<FontWeight> weightKey;
-    @NonNull
-    private final MapAccessor<FontPosture> postureKey;
-    @NonNull
-    private final MapAccessor<@NonNull CssSize> sizeKey;
+    private final @NonNull CssMetaData<?, @NonNull CssFont> cssMetaData;
+    private final @NonNull MapAccessor<String> familyKey;
+    private final @NonNull MapAccessor<FontWeight> weightKey;
+    private final @NonNull MapAccessor<FontPosture> postureKey;
+    private final @NonNull MapAccessor<@NonNull CssSize> sizeKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -87,9 +82,8 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
 
     private final Converter<CssFont> converter = new CssFontConverter(false);
 
-    @NonNull
     @Override
-    public Converter<CssFont> getCssConverter() {
+    public @NonNull Converter<CssFont> getCssConverter() {
         return converter;
     }
 

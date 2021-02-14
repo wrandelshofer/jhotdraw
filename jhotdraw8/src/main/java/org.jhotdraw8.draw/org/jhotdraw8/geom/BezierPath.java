@@ -63,13 +63,11 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * We cache a Path2D.Double instance to speed up Shape operations.
      */
-    @Nullable
-    private transient Path2D.Double generalPath;
+    private transient @Nullable Path2D.Double generalPath;
     /**
      * We cache a Rectangle2D.Double instance to speed up getBounds operations.
      */
-    @Nullable
-    private transient Rectangle2D.Double bounds;
+    private transient @Nullable Rectangle2D.Double bounds;
     /**
      * We cache the index of the outermost node to speed up method
      * indexOfOutermostNode();
@@ -196,8 +194,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             y[index] = p.y;
         }
 
-        @NonNull
-        public Point2D.Double getControlPoint(int index) {
+        public @NonNull Point2D.Double getControlPoint(int index) {
             return new Point2D.Double(x[index], y[index]);
         }
 
@@ -216,9 +213,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
-        @NonNull
         @Override
-        public Object clone() {
+        public @NonNull Object clone() {
             try {
                 Node that = (Node) super.clone();
                 that.x = this.x.clone();
@@ -230,9 +226,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             }
         }
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             StringBuilder buf = new StringBuilder();
             buf.append(super.toString());
             buf.append('[');
@@ -361,8 +356,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param ctrlIndex Either C0_MASK, C1_MASK or C2_MASK.
      * @return Returns a clone of the control point.
      */
-    @NonNull
-    public Point2D.Double get(int nodeIndex, int ctrlIndex) {
+    public @NonNull Point2D.Double get(int nodeIndex, int ctrlIndex) {
         Node c = get(nodeIndex);
         return new Point2D.Double(
                 c.x[ctrlIndex],
@@ -392,8 +386,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @return the path
      */
-    @NonNull
-    public Path2D.Double toGeneralPath() {
+    public @NonNull Path2D.Double toGeneralPath() {
         Path2D.Double gp = new Path2D.Double();
         gp.setWindingRule(windingRule);
         if (size() == 0) {
@@ -496,15 +489,13 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         return generalPath.intersects(r);
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform at) {
+    public @NonNull PathIterator getPathIterator(AffineTransform at) {
         return new BezierPathIterator(this, at);
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform at, double flatness) {
+    public @NonNull PathIterator getPathIterator(AffineTransform at, double flatness) {
         return new FlatteningPathIterator(new BezierPathIterator(this, at), flatness);
     }
 
@@ -520,9 +511,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         return generalPath.intersects(x, y, w, h);
     }
 
-    @NonNull
     @Override
-    public Rectangle2D.Double getBounds2D() {
+    public @NonNull Rectangle2D.Double getBounds2D() {
         if (bounds == null) {
             double x1, y1, x2, y2;
             int size = size();
@@ -716,9 +706,8 @@ public class BezierPath extends ArrayList<BezierPath.Node>
     /**
      * Creates a deep copy of the BezierPath.
      */
-    @NonNull
     @Override
-    public BezierPath clone() {
+    public @NonNull BezierPath clone() {
         BezierPath that = (BezierPath) super.clone();
         for (int i = 0, n = this.size(); i < n; i++) {
             that.set(i, (Node) this.get(i).clone());
@@ -768,8 +757,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @return the center
      */
-    @NonNull
-    public Point2D.Double getCenter() {
+    public @NonNull Point2D.Double getCenter() {
         double sx = 0;
         double sy = 0;
         for (Node p : this) {
@@ -789,8 +777,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param p the point
      * @return the chopped point
      */
-    @NonNull
-    public Point2D.Double chop(@NonNull Point2D.Double p) {
+    public @NonNull Point2D.Double chop(@NonNull Point2D.Double p) {
         javafx.geometry.Point2D chopped = FXGeom.chop(this, new javafx.geometry.Point2D(p.x, p.y));
         return new Point2D.Double(chopped.getX(), chopped.getY());
     }
@@ -828,8 +815,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @param flatness the flatness
      * @return the point
      */
-    @Nullable
-    public Point2D.Double getPointOnPath(double relative, double flatness) {
+    public @Nullable Point2D.Double getPointOnPath(double relative, double flatness) {
         // This method works only for straight lines
         if (size() == 0) {
             return null;
@@ -1332,8 +1318,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      *
      * @return Point array.
      */
-    @NonNull
-    public Point2D.Double[] toPolygonArray() {
+    public @NonNull Point2D.Double[] toPolygonArray() {
         Point2D.Double[] points = new Point2D.Double[size()];
         for (int i = 0, n = size(); i < n; i++) {
             points[i] = new Point2D.Double(get(i).x[0], get(i).y[0]);

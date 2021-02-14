@@ -26,9 +26,8 @@ public class SplitPaneTrack
     }
 
 
-    @NonNull
     @Override
-    public TrackAxis getDockAxis() {
+    public @NonNull TrackAxis getDockAxis() {
         return splitPane.getOrientation() == Orientation.HORIZONTAL ? TrackAxis.X : TrackAxis.Y;
     }
 
@@ -38,13 +37,11 @@ public class SplitPaneTrack
         return true;
     }
 
-    @NonNull
-    public static SplitPaneTrack createVerticalTrack() {
+    public static @NonNull SplitPaneTrack createVerticalTrack() {
         return new SplitPaneTrack(VERTICAL);
     }
 
-    @NonNull
-    public static SplitPaneTrack createHorizontalTrack() {
+    public static @NonNull SplitPaneTrack createHorizontalTrack() {
         return new SplitPaneTrack(Orientation.HORIZONTAL);
     }
 }

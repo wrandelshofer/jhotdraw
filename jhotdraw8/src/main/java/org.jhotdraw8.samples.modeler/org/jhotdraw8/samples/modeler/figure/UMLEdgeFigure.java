@@ -48,14 +48,11 @@ public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "MLEdge";
-    @Nullable
-    public final static NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
-    @Nullable
-    public final static NullableBooleanStyleableKey SOURCE_OWNED = MLConstants.SOURCE_OWNED;
-    @Nullable
-    public final static NullableBooleanStyleableKey TARGET_OWNED = MLConstants.TARGET_OWNED;
-    public final static BooleanStyleableKey KEYWORD_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
+    public static final String TYPE_SELECTOR = "MLEdge";
+    public static final @Nullable NullableStringStyleableKey KEYWORD = MLConstants.KEYWORD;
+    public static final @Nullable NullableBooleanStyleableKey SOURCE_OWNED = MLConstants.SOURCE_OWNED;
+    public static final @Nullable NullableBooleanStyleableKey TARGET_OWNED = MLConstants.TARGET_OWNED;
+    public static final BooleanStyleableKey KEYWORD_VISIBLE = MLConstants.KEYWORD_LABEL_VISIBLE;
 
     public UMLEdgeFigure() {
         this(0, 0, 1, 1);
@@ -69,9 +66,8 @@ public class UMLEdgeFigure extends AbstractElbowLineConnectionWithMarkersFigure
         super(startX, startY, endX, endY);
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

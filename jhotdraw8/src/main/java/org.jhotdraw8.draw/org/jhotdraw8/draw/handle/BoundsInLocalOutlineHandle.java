@@ -50,9 +50,8 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         return false;
     }
 
-    @Nullable
     @Override
-    public Cursor getCursor() {
+    public @Nullable Cursor getCursor() {
         return null;
     }
 

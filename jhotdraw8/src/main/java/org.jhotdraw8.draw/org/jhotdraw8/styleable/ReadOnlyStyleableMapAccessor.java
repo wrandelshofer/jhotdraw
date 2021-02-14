@@ -62,8 +62,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return namespace uri string.
      */
-    @Nullable
-    default String getCssNamespace() {
+    default @Nullable String getCssNamespace() {
         return null;
     }
 
@@ -76,8 +75,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @param camelCaseName string
      * @return cssName string.
      */
-    @NonNull
-    static String toCssName(@NonNull String camelCaseName) {
+    static @NonNull String toCssName(@NonNull String camelCaseName) {
         final StringBuilder b = new StringBuilder();
         final String name = camelCaseName;
         boolean insertDash = false;

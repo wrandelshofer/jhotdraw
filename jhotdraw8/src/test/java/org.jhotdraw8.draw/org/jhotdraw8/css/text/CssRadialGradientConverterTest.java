@@ -17,8 +17,7 @@ class CssRadialGradientConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    static
-    public void doTestFromString(CssRadialGradient expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssRadialGradient expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -29,9 +28,8 @@ class CssRadialGradientConverterTest {
         assertEquals(expected, actual);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new CssRadialGradient(), "radial-gradient()"))
         );

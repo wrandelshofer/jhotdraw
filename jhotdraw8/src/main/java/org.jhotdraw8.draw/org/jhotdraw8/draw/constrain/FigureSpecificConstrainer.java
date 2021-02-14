@@ -61,13 +61,11 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     // ----
     // property methods
     // ----
-    @NonNull
-    public ObservableMap<Class<?>, Constrainer> constrainerMapProperty() {
+    public @NonNull ObservableMap<Class<?>, Constrainer> constrainerMapProperty() {
         return constrainerMap;
     }
 
-    @NonNull
-    public NonNullObjectProperty<Constrainer> defaultConstrainerProperty() {
+    public @NonNull NonNullObjectProperty<Constrainer> defaultConstrainerProperty() {
         return defaultConstrainer;
     }
 
@@ -124,9 +122,8 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
         return getConstrainer(f).constrainAngle(f, angle);
     }
 
-    @NonNull
     @Override
-    public Node getNode() {
+    public @NonNull Node getNode() {
         return node;
     }
 

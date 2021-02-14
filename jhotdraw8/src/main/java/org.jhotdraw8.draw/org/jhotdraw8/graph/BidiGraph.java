@@ -25,13 +25,11 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param vertex a vertex
      * @return a collection view on the direct predecessor arrows of vertex
      */
-    @NonNull
-    default Collection<A> getPrevArrows(@NonNull V vertex) {
+    default @NonNull Collection<A> getPrevArrows(@NonNull V vertex) {
         class PrevArrowIterator implements Iterator<A> {
 
             private int index;
-            @NonNull
-            private final V vertex;
+            private final @NonNull V vertex;
             private final int prevCount;
 
             public PrevArrowIterator(@NonNull V vertex) {
@@ -44,17 +42,15 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
                 return index < prevCount;
             }
 
-            @NonNull
             @Override
-            public A next() {
+            public @NonNull A next() {
                 return getPrevArrow(vertex, index++);
             }
         }
 
         return new AbstractCollection<A>() {
-            @NonNull
             @Override
-            public Iterator<A> iterator() {
+            public @NonNull Iterator<A> iterator() {
                 return new PrevArrowIterator(vertex);
             }
 
@@ -71,13 +67,11 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param vertex a vertex
      * @return a collection view on the direct predecessor vertices of vertex
      */
-    @NonNull
-    default Collection<V> getPrevVertices(@NonNull V vertex) {
+    default @NonNull Collection<V> getPrevVertices(@NonNull V vertex) {
         class PrevVertexIterator implements Iterator<V> {
 
             private int index;
-            @NonNull
-            private final V vertex;
+            private final @NonNull V vertex;
             private final int prevCount;
 
             public PrevVertexIterator(@NonNull V vertex) {
@@ -90,17 +84,15 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
                 return index < prevCount;
             }
 
-            @NonNull
             @Override
-            public V next() {
+            public @NonNull V next() {
                 return getPrev(vertex, index++);
             }
 
         }
         return new AbstractCollection<V>() {
-            @NonNull
             @Override
-            public Iterator<V> iterator() {
+            public @NonNull Iterator<V> iterator() {
                 return new PrevVertexIterator(vertex);
             }
 

@@ -140,8 +140,7 @@ public class PatternConverter implements Converter<Object[]> {
         toString(out, idSupplier, value);
     }
 
-    @NonNull
-    public String format(Object... value) {
+    public @NonNull String format(Object... value) {
         StringBuilder buf = new StringBuilder();
         try {
             toString(buf, new SimpleIdFactory(), value);
@@ -160,9 +159,8 @@ public class PatternConverter implements Converter<Object[]> {
         ast.toString(value, out, factory, indices);
     }
 
-    @NonNull
     @Override
-    public Object[] fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Object[] fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         int[] indices = new int[numIndices];
         for (int i = 0; i < indices.length; i++) {
             indices[i] = i;
@@ -191,12 +189,10 @@ public class PatternConverter implements Converter<Object[]> {
      */
     static class AST {
 
-        @NonNull
-        protected List<AST> children = new ArrayList<>();
+        protected @NonNull List<AST> children = new ArrayList<>();
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             return "AST{" + children + '}';
         }
 
@@ -220,8 +216,7 @@ public class PatternConverter implements Converter<Object[]> {
             }
         }
 
-        @NonNull
-        static String escape(int charAt) {
+        static @NonNull String escape(int charAt) {
             if (charAt == -1) {
                 return "end of file";
             }
@@ -233,8 +228,7 @@ public class PatternConverter implements Converter<Object[]> {
             }
         }
 
-        @NonNull
-        static String escape(@NonNull String charAt) {
+        static @NonNull String escape(@NonNull String charAt) {
             StringBuilder buf = new StringBuilder();
             for (int i = 0, n = charAt.length(); i < n; i++) {
             }
@@ -258,9 +252,8 @@ public class PatternConverter implements Converter<Object[]> {
         protected String style;
         protected Converter<Object> converter;
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             if (type.isEmpty() && style.isEmpty()) {
                 return "Arg{" + index + '}';
             } else {
@@ -303,9 +296,8 @@ public class PatternConverter implements Converter<Object[]> {
 
         protected double[] limits;
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             return "ArgChoice{" + index + " limits=" + limits
                     + "' children=" + children
                     + '}';
@@ -364,9 +356,8 @@ public class PatternConverter implements Converter<Object[]> {
 
         protected int maxIndex;
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             return "ArgList{" + index + " children=" + children
                     + '}';
         }
@@ -454,12 +445,10 @@ public class PatternConverter implements Converter<Object[]> {
 
     static class RegexChars extends Regex {
 
-        @Nullable
-        protected String chars;
+        protected @Nullable String chars;
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             if (minRepeat == 1 && maxRepeat == 1) {
                 return "\"" + chars + "\"";
             } else {
@@ -498,12 +487,10 @@ public class PatternConverter implements Converter<Object[]> {
 
     static class RegexCharclass extends Regex {
 
-        @Nullable
-        protected String chars;
+        protected @Nullable String chars;
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             return "RegCharclass[" + chars + "] repeat=" + minRepeat
                     + ".." + maxRepeat + '}';
         }
@@ -543,9 +530,8 @@ public class PatternConverter implements Converter<Object[]> {
 
     static class RegexChoice extends Regex {
 
-        @NonNull
         @Override
-        public String toString() {
+        public @NonNull String toString() {
             return "RegChoice{children='" + children + " repeat=" + minRepeat
                     + ".." + maxRepeat + '}';
         }
@@ -585,13 +571,11 @@ public class PatternConverter implements Converter<Object[]> {
 
     }
 
-    @NonNull
-    static AST parseTextFormatPattern(@NonNull String pattern) throws IOException {
+    static @NonNull AST parseTextFormatPattern(@NonNull String pattern) throws IOException {
         return parseTextFormatPattern(pattern, new AST(), 0);
     }
 
-    @NonNull
-    private static AST parseTextFormatPattern(@NonNull String pattern, @NonNull AST parent, int offset) throws IOException {
+    private static @NonNull AST parseTextFormatPattern(@NonNull String pattern, @NonNull AST parent, int offset) throws IOException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(pattern));
         tt.resetSyntax();
         tt.quoteChar('\'');
@@ -967,9 +951,8 @@ public class PatternConverter implements Converter<Object[]> {
         parent.children.add(argument);
     }
 
-    @NonNull
     @Override
-    public Object[] getDefaultValue() {
+    public @NonNull Object[] getDefaultValue() {
         return new Object[0];
     }
 }

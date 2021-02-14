@@ -23,7 +23,7 @@ public class LabelFigure extends AbstractLabelFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Label";
+    public static final String TYPE_SELECTOR = "Label";
 
     public LabelFigure() {
         this(0, 0, "");
@@ -43,9 +43,8 @@ public class LabelFigure extends AbstractLabelFigure
         }
     }
 
-    @NonNull
     @Override
-    public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
+    public @NonNull TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
@@ -64,9 +63,8 @@ public class LabelFigure extends AbstractLabelFigure
     }
 
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

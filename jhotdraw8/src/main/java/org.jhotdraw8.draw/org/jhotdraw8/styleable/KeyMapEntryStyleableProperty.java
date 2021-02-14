@@ -22,14 +22,11 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    @NonNull
-    private final WriteableStyleableMapAccessor<T> key;
+    private final @NonNull WriteableStyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
-    @NonNull
-    private final ObservableMap<Key<?>, Object> mapp;
+    private final @NonNull ObservableMap<Key<?>, Object> mapp;
     private final String name;
-    @NonNull
-    private final StyleableMap<Key<?>, Object> map;
+    private final @NonNull StyleableMap<Key<?>, Object> map;
     private final Object bean;
 
     public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
@@ -74,9 +71,8 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
         key.put(map.getMap(origin), value);
     }
 
-    @Nullable
     @Override
-    public StyleOrigin getStyleOrigin() {
+    public @Nullable StyleOrigin getStyleOrigin() {
         //ARGH!!! this does not work!!
         //return map.getStyleOrigin(key);
         return null;

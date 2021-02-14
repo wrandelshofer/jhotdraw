@@ -26,15 +26,13 @@ public class IdSelector extends SimpleSelector {
         this.id = id;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Id:" + id;
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasId(element, id)) //
                 ? element : null;
     }

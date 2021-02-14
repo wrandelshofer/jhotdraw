@@ -58,8 +58,7 @@ public interface Connector {
      * @param target     the target
      * @return A point on the target figure in world coordinates.
      */
-    @NonNull
-    default Point2D getPositionInWorld(Figure connection, @NonNull Figure target) {
+    default @NonNull Point2D getPositionInWorld(Figure connection, @NonNull Figure target) {
         return target.localToWorld(getPositionInLocal(connection, target));
     }
 
@@ -71,8 +70,7 @@ public interface Connector {
      * @param target     the target
      * @return A point on the target figure in parent coordinates.
      */
-    @NonNull
-    default Point2D getPositionInParent(Figure connection, @NonNull Figure target) {
+    default @NonNull Point2D getPositionInParent(Figure connection, @NonNull Figure target) {
         return FXTransforms.transform(target.getLocalToParent(), getPositionInLocal(connection, target));
     }
 
@@ -167,8 +165,7 @@ public interface Connector {
      * @return the intersection in the interval [0,1], null if no intersection.
      * In case of multiple intersections returns the largest value.
      */
-    @Nullable
-    default IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default @Nullable IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getLayoutBounds();

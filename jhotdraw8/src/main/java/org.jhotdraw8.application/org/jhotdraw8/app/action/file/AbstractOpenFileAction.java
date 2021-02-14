@@ -33,10 +33,8 @@ import java.util.function.Supplier;
 
 
 public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
-    @NonNull
-    public final static Key<URIChooser> OPEN_CHOOSER_KEY = new ObjectKey<>("openChooser", URIChooser.class);
-    @NonNull
-    public final static Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new ObjectKey<>("openChooserFactory",
+    public static final @NonNull Key<URIChooser> OPEN_CHOOSER_KEY = new ObjectKey<>("openChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new ObjectKey<>("openChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
             }, null);
 
@@ -44,8 +42,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         super(app);
     }
 
-    @Nullable
-    protected URIChooser getChooser(FileBasedActivity view) {
+    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(OPEN_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(OPEN_CHOOSER_FACTORY_KEY);
@@ -115,10 +112,10 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(@NonNull final FileBasedActivity v, @NonNull final URI uri, @NonNull final URIChooser chooser, WorkState workState) {
+    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
         Map<Key<?>, Object> options = getReadOptions();
-            app.removeDisabler(workState);
+        app.removeDisabler(workState);
         if (options == null) {
             return; // The user has decided, that he/she does not want to open a file after all.
         }

@@ -93,18 +93,17 @@ public class IntersectionSampleMain extends Application {
         }
     }
 
-    @Nullable
-    private Map.Entry<Shape, List<Handle>> createShapeAndHandles(@Nullable final String shapeName, Color shapeColor, Color handleColor) {
+    private @Nullable Map.Entry<Shape, List<Handle>> createShapeAndHandles(final @Nullable String shapeName, Color shapeColor, Color handleColor) {
         Shape shape = null;
         List<Handle> handles = new ArrayList<>();
         if (shapeName != null) {
             switch (shapeName) {
-                case "Circle": {
-                    Circle circle = new Circle(100, 100, 60);
-                    shape = circle;
-                    Handle centerHandle = new Handle(handleColor);
-                    centerHandle.updateHandle = () -> centerHandle.setPosition(circle.getCenterX(), circle.getCenterY());
-                    centerHandle.updateShape = (p) -> {
+            case "Circle": {
+                Circle circle = new Circle(100, 100, 60);
+                shape = circle;
+                Handle centerHandle = new Handle(handleColor);
+                centerHandle.updateHandle = () -> centerHandle.setPosition(circle.getCenterX(), circle.getCenterY());
+                centerHandle.updateShape = (p) -> {
                         circle.setCenterX(p.getX());
                         circle.setCenterY(p.getY());
                     };

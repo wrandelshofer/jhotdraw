@@ -110,9 +110,8 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
         }
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩"
                 + "\nFormat of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)"
                 + "\nFormat of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩)"
@@ -123,9 +122,8 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                 ;
     }
 
-    @NonNull
     @Override
-    public Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
         String func = tt.currentStringNonNull();
         int funcPos = tt.getStartPosition();

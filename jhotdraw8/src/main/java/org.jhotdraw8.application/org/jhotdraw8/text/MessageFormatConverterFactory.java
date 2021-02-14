@@ -55,19 +55,18 @@ public class MessageFormatConverterFactory implements ConverterFactory {
         this.locale = locale;
     }
 
-    @NonNull
     @Override
-    public Converter<?> apply(@Nullable String type, @Nullable String style) {
+    public @NonNull Converter<?> apply(@Nullable String type, @Nullable String style) {
         if (type == null || type.isEmpty()) {
             return new DefaultConverter();
         }
         switch (type) {
-            case "word":
-                return new XmlWordConverter();
-            case "number":
-                if (style == null || style.isEmpty()) {
-                    return new ConverterFormatAdapter(NumberFormat.getInstance(locale));
-                }
+        case "word":
+            return new XmlWordConverter();
+        case "number":
+            if (style == null || style.isEmpty()) {
+                return new ConverterFormatAdapter(NumberFormat.getInstance(locale));
+            }
                 switch (style) {
                     case "integer":
                         return new ConverterFormatAdapter(NumberFormat.getIntegerInstance(locale));

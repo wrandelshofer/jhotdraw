@@ -29,29 +29,24 @@ import java.util.Set;
 public abstract class AbstractStyleableMapAccessor<T>
         implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
-    @NonNull
-    private final String cssName;
+    private final @NonNull String cssName;
     private static final long serialVersionUID = 1L;
 
     /**
      * Holds a String representation of the name.
      */
-    @Nullable
-    private final String name;
+    private final @Nullable String name;
     /**
      * Holds the default value.
      */
-    @Nullable
-    private final T defaultValue;
+    private final @Nullable T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @Nullable
-    private final Type type;
+    private final @Nullable Type type;
 
-    @NonNull
-    private final Set<MapAccessor<?>> subAccessors;
+    private final @NonNull Set<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -106,9 +101,8 @@ public abstract class AbstractStyleableMapAccessor<T>
         return name;
     }
 
-    @NonNull
     @Override
-    public Type getValueType() {
+    public @NonNull Type getValueType() {
         return type;
     }
 
@@ -118,15 +112,13 @@ public abstract class AbstractStyleableMapAccessor<T>
      *
      * @return the default value.
      */
-    @Nullable
     @Override
-    public T getDefaultValue() {
+    public @Nullable T getDefaultValue() {
         return defaultValue;
     }
 
-    @Nullable
     @Override
-    public final T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
+    public final @Nullable T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
         T oldValue = get(a);
         set(a, value);
         return oldValue;
@@ -136,16 +128,14 @@ public abstract class AbstractStyleableMapAccessor<T>
     /**
      * Returns the name string.
      */
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getValueType() + "}";
     }
 
-    @NonNull
     @Override
-    public Set<MapAccessor<?>> getSubAccessors() {
+    public @NonNull Set<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 
@@ -155,8 +145,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         return false;
     }
 
-    @NonNull
-    public String getCssName() {
+    public @NonNull String getCssName() {
         return cssName;
     }
 }

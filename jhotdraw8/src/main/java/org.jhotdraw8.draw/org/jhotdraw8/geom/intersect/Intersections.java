@@ -15,7 +15,7 @@ class Intersections {
      * Values closer to zero than epsilon are treated as zero .
      * Machine precision for double is 2^-53.
      */
-    public final static double EPSILON = 1.0 / (1L << 33);
+    public static final double EPSILON = 1.0 / (1L << 33);
 
     /**
      * Prevent instantiation.
@@ -23,8 +23,7 @@ class Intersections {
     private Intersections() {
     }
 
-    @NonNull
-    private static double[] addZeroAndOne(@NonNull double[] clampedRoots) {
+    private static @NonNull double[] addZeroAndOne(@NonNull double[] clampedRoots) {
         double[] roots = new double[clampedRoots.length + 2];
         int numRoots = 0;
         Arrays.sort(clampedRoots);
@@ -47,8 +46,7 @@ class Intersections {
      * @param e2 polynomial e2 of degree 5
      * @return the Bézout determinant polynomial
      */
-    @NonNull
-    public static Polynomial bezout(double[] e1, double[] e2) {
+    public static @NonNull Polynomial bezout(double[] e1, double[] e2) {
         double AB = e1[0] * e2[1] - e2[0] * e1[1];
         double AC = e1[0] * e2[2] - e2[0] * e1[2];
         double AD = e1[0] * e2[3] - e2[0] * e1[3];
@@ -81,13 +79,11 @@ class Intersections {
      * @param b corner point b
      * @return the bottom right corner
      */
-    @NonNull
-    public static Point2D.Double bottomRight(@NonNull Point2D a, @NonNull Point2D b) {
+    public static @NonNull Point2D.Double bottomRight(@NonNull Point2D a, @NonNull Point2D b) {
         return new Point2D.Double(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
     }
 
-    @NonNull
-    public static Point2D.Double bottomRight(double ax, double ay, double bx, double by) {
+    public static @NonNull Point2D.Double bottomRight(double ax, double ay, double bx, double by) {
         return new Point2D.Double(Math.max(ax, bx), Math.max(ay, by));
     }
 
@@ -124,13 +120,11 @@ class Intersections {
      * @param b corner point b
      * @return the top left corner
      */
-    @NonNull
-    public static Point2D.Double topLeft(@NonNull Point2D a, @NonNull Point2D b) {
+    public static @NonNull Point2D.Double topLeft(@NonNull Point2D a, @NonNull Point2D b) {
         return new Point2D.Double(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
     }
 
-    @NonNull
-    public static Point2D.Double topLeft(double ax, double ay, double bx, double by) {
+    public static @NonNull Point2D.Double topLeft(double ax, double ay, double bx, double by) {
         return new Point2D.Double(Math.min(ax, bx), Math.min(ay, by));
     }
 

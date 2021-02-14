@@ -32,18 +32,13 @@ import static java.lang.Double.max;
 public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Rectangle2D>
         implements NonNullMapAccessor<@NonNull Rectangle2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Rectangle2D> cssMetaData;
-    @NonNull
-    private final NonNullMapAccessor<Double> xKey;
-    @NonNull
-    private final NonNullMapAccessor<Double> yKey;
-    @NonNull
-    private final NonNullMapAccessor<Double> widthKey;
-    @NonNull
-    private final NonNullMapAccessor<Double> heightKey;
+    private final @NonNull CssMetaData<?, Rectangle2D> cssMetaData;
+    private final @NonNull NonNullMapAccessor<Double> xKey;
+    private final @NonNull NonNullMapAccessor<Double> yKey;
+    private final @NonNull NonNullMapAccessor<Double> widthKey;
+    private final @NonNull NonNullMapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -85,15 +80,13 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
 
     private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
-    @NonNull
     @Override
-    public Converter<Rectangle2D> getCssConverter() {
+    public @NonNull Converter<Rectangle2D> getCssConverter() {
         return converter;
     }
 
-    @NonNull
     @Override
-    public Rectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Rectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new Rectangle2D(xKey.getNonNull(a), yKey.getNonNull(a), max(0.0, widthKey.getNonNull(a)), max(0.0, heightKey.getNonNull(a)));
     }
 
@@ -106,9 +99,8 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
         heightKey.put(a, value.getHeight());
     }
 
-    @NonNull
     @Override
-    public Rectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Rectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
         Rectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

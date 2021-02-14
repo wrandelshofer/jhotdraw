@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class NullableBooleanKey extends NullableObjectKey<Boolean> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
 
     /**

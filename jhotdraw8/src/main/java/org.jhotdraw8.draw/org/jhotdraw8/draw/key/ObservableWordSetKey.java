@@ -15,7 +15,7 @@ import org.jhotdraw8.reflect.TypeToken;
  */
 public class ObservableWordSetKey extends ObjectFigureKey<@NonNull ImmutableSet<String>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance with the specified name and with null as the

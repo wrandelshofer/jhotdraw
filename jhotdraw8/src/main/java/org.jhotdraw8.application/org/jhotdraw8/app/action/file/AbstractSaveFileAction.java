@@ -42,12 +42,10 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-private boolean saveAs;
+    private boolean saveAs;
     private Node oldFocusOwner;
-    @NonNull
-    public final static Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>("saveChooser", URIChooser.class);
-    @NonNull
-    public final static Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new ObjectKey<>("saveChooserFactory",
+    public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new ObjectKey<>("saveChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new ObjectKey<>("saveChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
             }, null);
 
@@ -76,8 +74,7 @@ private boolean saveAs;
         resources.configureAction(this, id);
     }
 
-    @Nullable
-    protected URIChooser getChooser(FileBasedActivity view) {
+    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
@@ -99,7 +96,7 @@ private boolean saveAs;
         saveFileChooseUri(activity, workState);
     }
 
-    protected void saveFileChooseUri(@NonNull final FileBasedActivity v, WorkState workState) {
+    protected void saveFileChooseUri(final @NonNull FileBasedActivity v, WorkState workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -138,7 +135,7 @@ private boolean saveAs;
         }
     }
 
-    protected void saveFileChooseOptions(@NonNull final FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
+    protected void saveFileChooseOptions(final @NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
         Map<Key<?>, Object> options = null;
         Dialog<Map<Key<?>, Object>> dialog = null;
         try {
@@ -167,7 +164,7 @@ private boolean saveAs;
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(@NonNull final FileBasedActivity view, @NonNull final URI uri, final DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
+    protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
@@ -197,8 +194,7 @@ private boolean saveAs;
         });
     }
 
-    @Nullable
-    protected Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected @Nullable Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return null;
     }
 

@@ -124,8 +124,7 @@ public interface DrawingEditor {
      *
      * @return the active drawing view or empty
      */
-    @Nullable
-    default DrawingView getActiveDrawingView() {
+    default @Nullable DrawingView getActiveDrawingView() {
         return activeDrawingViewProperty().get();
     }
 
@@ -152,8 +151,7 @@ public interface DrawingEditor {
      *
      * @return the active tool or null
      */
-    @Nullable
-    default Tool getActiveTool() {
+    default @Nullable Tool getActiveTool() {
         return activeToolProperty().get();
     }
 
@@ -171,8 +169,7 @@ public interface DrawingEditor {
      *
      * @return the default tool or null
      */
-    @Nullable
-    default Tool getDefaultTool() {
+    default @Nullable Tool getDefaultTool() {
         return defaultToolProperty().get();
     }
 
@@ -258,8 +255,7 @@ public interface DrawingEditor {
         handleTypeProperty().set(newValue);
     }
 
-    @Nullable
-    default HandleType getHandleType() {
+    default @Nullable HandleType getHandleType() {
         return handleTypeProperty().get();
     }
 
@@ -282,8 +278,7 @@ public interface DrawingEditor {
         anchorHandleTypeProperty().set(newValue);
     }
 
-    @Nullable
-    default HandleType getAnchorHandleType() {
+    default @Nullable HandleType getAnchorHandleType() {
         return anchorHandleTypeProperty().get();
     }
 
@@ -291,8 +286,7 @@ public interface DrawingEditor {
         leadHandleTypeProperty().set(newValue);
     }
 
-    @Nullable
-    default HandleType getLeadHandleType() {
+    default @Nullable HandleType getLeadHandleType() {
         return leadHandleTypeProperty().get();
     }
 
@@ -327,8 +321,7 @@ public interface DrawingEditor {
         multiHandleTypeProperty().set(newValue);
     }
 
-    @Nullable
-    default HandleType getMultiHandleType() {
+    default @Nullable HandleType getMultiHandleType() {
         return multiHandleTypeProperty().get();
     }
 }

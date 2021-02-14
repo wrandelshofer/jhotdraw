@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class GraphSearchTest {
-    @NonNull
-    private DirectedGraph<String, Integer> createDisjointGraph() {
+    private @NonNull DirectedGraph<String, Integer> createDisjointGraph() {
         DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
         builder.addVertex("a");
         builder.addVertex("b");
@@ -34,8 +33,7 @@ class GraphSearchTest {
         return builder;
     }
 
-    @NonNull
-    private DirectedGraph<String, Integer> createLoopGraph() {
+    private @NonNull DirectedGraph<String, Integer> createLoopGraph() {
         DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
         builder.addVertex("a");
         builder.addVertex("b");
@@ -49,8 +47,7 @@ class GraphSearchTest {
         return builder;
     }
 
-    @NonNull
-    private DirectedGraph<String, Integer> createNonMSTGraph() {
+    private @NonNull DirectedGraph<String, Integer> createNonMSTGraph() {
         // Graph with more edges than the minimal spanning tree:
         // A--1--B     C
         // |   / |   / |
@@ -77,8 +74,7 @@ class GraphSearchTest {
         return builder;
     }
 
-    @NonNull
-    private DirectedGraph<String, Integer> createMSTGraph() {
+    private @NonNull DirectedGraph<String, Integer> createMSTGraph() {
         // Graph with only the edges for minimal spanning tree:
         // A--1--B     C
         //     / |   / |
@@ -102,9 +98,8 @@ class GraphSearchTest {
         return builder;
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindDisjointSets() {
+    public @NonNull List<DynamicTest> testFindDisjointSets() {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindDisjointSets(createDisjointGraph(), 2)),
                 dynamicTest("2", () -> doFindDisjointSets(createLoopGraph(), 1))
@@ -148,9 +143,8 @@ class GraphSearchTest {
     void sortTopologicallyInt() {
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testSearchStronglyConnectedComponents() {
+    public @NonNull List<DynamicTest> testSearchStronglyConnectedComponents() {
         return Arrays.asList(
                 dynamicTest("1", () -> doSearchStronglyConnectedComponents(createDisjointGraph(), 4)),
                 dynamicTest("2", () -> doSearchStronglyConnectedComponents(createLoopGraph(), 1))

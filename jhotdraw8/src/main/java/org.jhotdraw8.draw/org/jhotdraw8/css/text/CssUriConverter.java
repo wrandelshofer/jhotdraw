@@ -50,9 +50,8 @@ public class CssUriConverter extends AbstractCssConverter<URI> {
         return helpText;
     }
 
-    @NonNull
     @Override
-    public URI parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull URI parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_URL) {
             throw new ParseException("Css URL expected. " + new CssToken(tt.current(), tt.currentString()), tt.getStartPosition());
         }
@@ -68,9 +67,8 @@ public class CssUriConverter extends AbstractCssConverter<URI> {
         out.accept(new CssToken(CssTokenType.TT_URL, value.toString()));
     }
 
-    @NonNull
     @Override
-    public URI getDefaultValue() {
+    public @NonNull URI getDefaultValue() {
         return null;
     }
 

@@ -16,13 +16,10 @@ import org.jhotdraw8.event.Event;
  */
 public class FigurePropertyChangeEvent extends Event<Figure> {
 
-    private final static long serialVersionUID = 1L;
-    @NonNull
-    private final Key<?> key;
-    @Nullable
-    private final Object oldValue;
-    @Nullable
-    private final Object newValue;
+    private static final long serialVersionUID = 1L;
+    private final @NonNull Key<?> key;
+    private final @Nullable Object oldValue;
+    private final @Nullable Object newValue;
 
     public <T> FigurePropertyChangeEvent(@NonNull Figure source, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         super(source);
@@ -36,19 +33,16 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
      *
      * @return the key or null
      */
-    @NonNull
-    public Key<?> getKey() {
+    public @NonNull Key<?> getKey() {
         return key;
     }
 
-    @Nullable
-    public <T> T getOldValue() {
+    public @Nullable <T> T getOldValue() {
         @SuppressWarnings("unchecked") T oldValue = (T) this.oldValue;
         return oldValue;
     }
 
-    @Nullable
-    public <T> T getNewValue() {
+    public @Nullable <T> T getNewValue() {
         @SuppressWarnings("unchecked") T newValue = (T) this.newValue;
         return newValue;
     }

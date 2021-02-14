@@ -56,10 +56,9 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      * @param maxLength the maximal length of a path
      * @return the enumerated paths
      */
-    @NonNull
-    public List<VertexPath<V>> findAllVertexPaths(@NonNull V start,
-                                                  @NonNull Predicate<V> goal,
-                                                  int maxLength) {
+    public @NonNull List<VertexPath<V>> findAllVertexPaths(@NonNull V start,
+                                                           @NonNull Predicate<V> goal,
+                                                           int maxLength) {
         List<MyBackLink<V, A>> backlinks = new ArrayList<>();
         searchAll(new MyBackLink<>(start, null, 1), goal,
                 getNextNodesFunction(),
@@ -88,12 +87,11 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
-    @Nullable
-    public BackLink<V, A> search(@NonNull V root,
-                                 @NonNull Predicate<V> goal,
-                                 @NonNull Function<V, Iterable<V>> nextNodesFunction,
-                                 @NonNull AddToSet<V> visited,
-                                 int maxLength) {
+    public @Nullable BackLink<V, A> search(@NonNull V root,
+                                           @NonNull Predicate<V> goal,
+                                           @NonNull Function<V, Iterable<V>> nextNodesFunction,
+                                           @NonNull AddToSet<V> visited,
+                                           int maxLength) {
         Queue<MyBackLink<V, A>> queue = new ArrayDeque<>(16);
         MyBackLink<V, A> rootBackLink = new MyBackLink<>(root, null, maxLength);
         if (visited.add(root)) {

@@ -48,11 +48,11 @@ import java.util.Map;
  */
 public class SelectionTool extends AbstractTool {
 
-    public final static String ID = "tool.selectFigure";
+    public static final String ID = "tool.selectFigure";
     // ---
     // Property names
     // ---
-    public final static String SELECT_BEHIND_ENABLED = "selectBehindEnabled";
+    public static final String SELECT_BEHIND_ENABLED = "selectBehindEnabled";
     // ---
     // Fields
     // ---
@@ -65,8 +65,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
-    @Nullable
-    private Tracker tracker;
+    private @Nullable Tracker tracker;
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
@@ -87,8 +86,7 @@ public class SelectionTool extends AbstractTool {
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
     private boolean mouseDragged;
-    @Nullable
-    private Figure pressedFigure;
+    private @Nullable Figure pressedFigure;
     private HandleType handleType;
     private HandleType leadHandleType;
     private HandleType anchorHandleType;
@@ -119,8 +117,7 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Properties
     // ---
-    @NonNull
-    public BooleanProperty selectBehindEnabledProperty() {
+    public @NonNull BooleanProperty selectBehindEnabledProperty() {
         return selectBehindEnabled;
     }
 
@@ -419,9 +416,8 @@ public class SelectionTool extends AbstractTool {
     protected void onZoomFinished(ZoomEvent event, DrawingView dv) {
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "SelectionTool"
                 + "\n  Click on the drawing view. The tool will select the figure at that location."
                 + "\nOr:"

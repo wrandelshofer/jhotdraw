@@ -23,12 +23,9 @@ import java.util.function.Function;
  */
 public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterator<Arc<V, A>> {
 
-    @NonNull
-    private final Function<V, Iterable<Arc<V, A>>> nextFunction;
-    @NonNull
-    private final Deque<Arc<V, A>> deque;
-    @NonNull
-    private final AddToSet<Arc<V, A>> visited;
+    private final @NonNull Function<V, Iterable<Arc<V, A>>> nextFunction;
+    private final @NonNull Deque<Arc<V, A>> deque;
+    private final @NonNull AddToSet<Arc<V, A>> visited;
 
     /**
      * Creates a new instance.

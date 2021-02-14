@@ -18,14 +18,14 @@ import org.jhotdraw8.text.Converter;
 import java.util.Objects;
 
 /**
- * NullableEnumStyleableKey.
+ * EnumStyleableKey.
  *
  * @author Werner Randelshofer
  */
 public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStyleableKey<@NonNull T>
         implements WriteableStyleableMapAccessor<@NonNull T>, NonNullMapAccessor<@NonNull T> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final CssMetaData<?, T> cssMetaData;
 
@@ -56,12 +56,10 @@ public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStylea
 
     }
 
-    @NonNull
-    private final Converter<T> converter;
+    private final @NonNull Converter<T> converter;
 
-    @NonNull
     @Override
-    public Converter<T> getCssConverter() {
+    public @NonNull Converter<T> getCssConverter() {
         return converter;
     }
 }

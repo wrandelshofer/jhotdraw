@@ -27,10 +27,9 @@ import java.util.function.Function;
  */
 public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WriteableStyleableMapAccessor<ImmutableList<Double>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, ImmutableList<Double>> cssMetaData;
+    private final @NonNull CssMetaData<?, ImmutableList<Double>> cssMetaData;
     private Converter<ImmutableList<Double>> converter;
 
     /**

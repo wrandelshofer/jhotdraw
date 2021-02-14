@@ -24,11 +24,9 @@ import java.util.function.Function;
 
 public class ListStyleableKey<T> extends ListKey<T>
         implements WriteableStyleableMapAccessor<@NonNull ImmutableList<T>>, NonNullMapAccessor<@NonNull ImmutableList<T>> {
-    private final static long serialVersionUID = 0L;
-    @NonNull
-    private final Converter<@NonNull ImmutableList<T>> converter;
-    @NonNull
-    private final CssMetaData<? extends Styleable, @NonNull ImmutableList<T>> cssMetaData;
+    private static final long serialVersionUID = 0L;
+    private final @NonNull Converter<@NonNull ImmutableList<T>> converter;
+    private final @NonNull CssMetaData<? extends Styleable, @NonNull ImmutableList<T>> cssMetaData;
     private final String cssName;
 
     public ListStyleableKey(@NonNull String key, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
@@ -71,15 +69,13 @@ public class ListStyleableKey<T> extends ListKey<T>
         return cssMetaData;
     }
 
-    @NonNull
     @Override
-    public Converter<ImmutableList<T>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<T>> getCssConverter() {
         return converter;
     }
 
-    @NonNull
     @Override
-    public String getCssName() {
+    public @NonNull String getCssName() {
         return cssName;
     }
 }

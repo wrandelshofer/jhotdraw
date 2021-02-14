@@ -26,15 +26,13 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
         this.functionIdentifier = functionIdentifier;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "FunctionPseudoClass:" + functionIdentifier + "(" + ")";
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasPseudoClass(element, functionIdentifier)) //
                 ? element : null;
     }

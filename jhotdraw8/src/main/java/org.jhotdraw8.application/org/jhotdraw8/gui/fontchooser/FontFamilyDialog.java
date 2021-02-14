@@ -63,19 +63,16 @@ public class FontFamilyDialog extends Dialog<String> {
     /**
      * This model is shared by all font dialogs.
      */
-    @Nullable
-    private static FontChooserModel model = null;
+    private static @Nullable FontChooserModel model = null;
 
-    @Nullable
-    public static FontChooserModel getModel() {
+    public static @Nullable FontChooserModel getModel() {
         if (model == null) {
             model = new PreferencesFontChooserModelFactory().create();
         }
         return model;
     }
 
-    @Nullable
-    private String onButton(@Nullable ButtonType buttonType) {
+    private @Nullable String onButton(@Nullable ButtonType buttonType) {
         new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
             return controller.getSelectedFontName();

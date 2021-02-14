@@ -23,12 +23,9 @@ import java.util.function.Function;
  */
 public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
-    @NonNull
-    private final Function<V, Iterable<V>> nextFunction;
-    @NonNull
-    private final Deque<V> deque;
-    @NonNull
-    private final AddToSet<V> visited;
+    private final @NonNull Function<V, Iterable<V>> nextFunction;
+    private final @NonNull Deque<V> deque;
+    private final @NonNull AddToSet<V> visited;
 
     /**
      * Creates a new instance.

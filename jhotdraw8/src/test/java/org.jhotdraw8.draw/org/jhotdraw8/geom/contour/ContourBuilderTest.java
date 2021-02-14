@@ -22,9 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class ContourBuilderTest {
-    @NonNull
     @TestFactory
-    public List<DynamicTest> offsetPathTestFactory() {
+    public @NonNull List<DynamicTest> offsetPathTestFactory() {
         return Arrays.asList(
                 dynamicTest("shape with coincident line - angle from seg 0 to 1 > 180°, angle from seg 1 to 2 = 360°", () -> doTest(
                         polylineOf(false, new double[][]{{220.0, 40.0, 0.0}, {190.0, 110.0, 0.0}, {210.0, 90.0, 0.0}, {200.0, 100.0, 0.0}, {280.0, 180.0, 0.0}}),

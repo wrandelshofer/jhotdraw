@@ -83,9 +83,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         CssPoint2D start = getNonNull(START);
         CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(//
@@ -102,9 +101,8 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      *
      * @return an unmodifiable set of connected figures
      */
-    @NonNull
     @Override
-    public ReadOnlySet<Figure> getLayoutSubjects() {
+    public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
@@ -191,8 +189,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
                 && get(START_TARGET) != null && get(END_CONNECTOR) != null && get(END_TARGET) != null);
     }
 
-    @NonNull
-    public ReadOnlyBooleanWrapper connectedProperty() {
+    public @NonNull ReadOnlyBooleanWrapper connectedProperty() {
         return connected;
     }
 }

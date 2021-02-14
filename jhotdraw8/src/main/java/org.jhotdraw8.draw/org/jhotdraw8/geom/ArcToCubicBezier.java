@@ -12,7 +12,7 @@ import org.jhotdraw8.util.function.Double6Consumer;
 import java.util.ArrayList;
 
 public class ArcToCubicBezier {
-    private final static double TAU = Math.PI * 2.0;
+    private static final double TAU = Math.PI * 2.0;
 
     /**
      * Approximate one unit arc segment with bézier curves,

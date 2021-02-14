@@ -31,10 +31,9 @@ import java.util.function.Function;
 public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
         implements WriteableStyleableMapAccessor<ImmutableList<Transform>>, NonNullMapAccessor<ImmutableList<Transform>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, ImmutableList<Transform>> cssMetaData;
+    private final @NonNull CssMetaData<?, ImmutableList<Transform>> cssMetaData;
     private Converter<ImmutableList<Transform>> converter;
 
     /**

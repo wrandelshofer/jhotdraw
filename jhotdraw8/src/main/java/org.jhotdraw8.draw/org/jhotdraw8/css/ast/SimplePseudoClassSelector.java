@@ -26,15 +26,13 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
         this.pseudoClass = pseudoClass;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "PseudoClass:" + pseudoClass;
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasPseudoClass(element, pseudoClass)) //
                 ? element : null;
     }

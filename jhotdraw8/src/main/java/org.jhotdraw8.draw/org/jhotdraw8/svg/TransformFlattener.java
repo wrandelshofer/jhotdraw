@@ -49,8 +49,7 @@ public class TransformFlattener {
 
     }
 
-    @NonNull
-    private Translate flattenTranslate(@NonNull Node node) {
+    private @NonNull Translate flattenTranslate(@NonNull Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
             if ((t instanceof Translate)) {

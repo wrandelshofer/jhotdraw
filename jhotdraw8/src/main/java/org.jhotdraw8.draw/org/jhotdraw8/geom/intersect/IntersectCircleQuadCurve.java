@@ -23,20 +23,17 @@ public class IntersectCircleQuadCurve {
      * @param r  the radius of the circle
      * @return the computed result
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurveCircle(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double r) {
+    public static @NonNull IntersectionResult intersectQuadCurveCircle(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double r) {
         return IntersectEllipseQuadCurve.intersectQuadCurveEllipse(p0, p1, p2, c, r, r);
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveCircle(
+    public static @NonNull IntersectionResult intersectQuadCurveCircle(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {
         return IntersectEllipseQuadCurve.intersectQuadCurveEllipse(new Point2D.Double(x0, y0), new Point2D.Double(x1, y1), new Point2D.Double(x2, y2), new Point2D.Double(cx, cy), r, r);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectQuadCurveCircleEx(
+    public static @NonNull IntersectionResultEx intersectQuadCurveCircleEx(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {
         return IntersectEllipseQuadCurve.intersectQuadCurveEllipseEx(x0, y0, x1, y1, x2, y2, cx, cy, r, r);

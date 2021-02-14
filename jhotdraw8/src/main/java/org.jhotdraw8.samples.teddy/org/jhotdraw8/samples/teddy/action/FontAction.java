@@ -19,7 +19,7 @@ import java.util.Optional;
 public class FontAction extends AbstractActivityAction<FontableActivity> {
 
     private FontDialog fontDialog;
-    public final static String ID = "format.font";
+    public static final String ID = "format.font";
 
     /**
      * Creates a new instance which acts on the specified activity of the

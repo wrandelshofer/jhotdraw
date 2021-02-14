@@ -26,8 +26,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class CssRegexConverterTest {
 
-    static
-    public void testFromStringApply(@NonNull String inputCssRegex, String inputValue, String expectedValue) throws Exception {
+    public static void testFromStringApply(@NonNull String inputCssRegex, String inputValue, String expectedValue) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
         RegexReplace rgx = c.fromString(inputCssRegex);
         String actualValue = rgx.apply(inputValue);
@@ -35,8 +34,7 @@ public class CssRegexConverterTest {
     }
 
 
-    static
-    public void testRegexFromStringReplace(@NonNull String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
+    public static void testRegexFromStringReplace(@NonNull String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
         CssRegexConverter c = new CssRegexConverter(false);
         RegexReplace rgx = c.fromString(inputCssRegex);
         assertEquals(rgx.getFind(), expectedFind, "find");
@@ -66,9 +64,8 @@ public class CssRegexConverterTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testRegexFromStringReplaceFactory() {
+    public @NonNull List<DynamicTest> testRegexFromStringReplaceFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplace("replace('' '')", "", "")),
                 dynamicTest("2", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
@@ -89,9 +86,8 @@ public class CssRegexConverterTest {
         );
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testRegexFromStringApplyFactory() {
+    public @NonNull List<DynamicTest> testRegexFromStringApplyFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromStringApply("replace('' '')", "", "")),
                 dynamicTest("2", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
@@ -103,9 +99,8 @@ public class CssRegexConverterTest {
         );
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testRegexFromStringReplaceNullableFactory() {
+    public @NonNull List<DynamicTest> testRegexFromStringReplaceNullableFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplaceNullable("replace('' '')", false)),
                 dynamicTest("2", () -> testRegexFromStringReplaceNullable("none", true))

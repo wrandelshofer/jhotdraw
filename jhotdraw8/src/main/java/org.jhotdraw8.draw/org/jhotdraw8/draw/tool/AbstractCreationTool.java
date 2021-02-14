@@ -26,8 +26,7 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
     /**
      * The created figure.
      */
-    @Nullable
-    protected F createdFigure;
+    protected @Nullable F createdFigure;
 
     public AbstractCreationTool(String name, Resources rsrc, Supplier<? extends F> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc);
@@ -57,8 +56,7 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      * @param newFigure the figure
      * @return a suitable parent for the figure
      */
-    @Nullable
-    protected Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
+    protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Figure activeParent = dv.getActiveParent();
         if (activeParent != null && activeParent.isEditable() && activeParent.isAllowsChildren()

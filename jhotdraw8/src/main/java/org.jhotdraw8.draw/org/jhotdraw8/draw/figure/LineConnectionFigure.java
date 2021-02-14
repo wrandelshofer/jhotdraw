@@ -36,7 +36,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "LineConnection";
+    public static final String TYPE_SELECTOR = "LineConnection";
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
@@ -81,17 +81,15 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         }
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Line n = new Line();
         n.setManaged(false);
         return n;
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

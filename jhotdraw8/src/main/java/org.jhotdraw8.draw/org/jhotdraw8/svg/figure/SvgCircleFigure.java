@@ -41,7 +41,7 @@ public class SvgCircleFigure extends AbstractLeafFigure
     public static final @NonNull String TYPE_SELECTOR = "circle";
     public static final @NonNull CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.ZERO);
-    public final static @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.ONE);
+    public static final @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.ONE);
 
     @Override
     public Node createNode(RenderContext ctx) {

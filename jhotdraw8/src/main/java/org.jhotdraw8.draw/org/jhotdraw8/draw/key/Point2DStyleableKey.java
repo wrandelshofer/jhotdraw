@@ -25,10 +25,9 @@ import java.util.function.Function;
  */
 public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WriteableStyleableMapAccessor<Point2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Point2D> cssMetaData;
+    private final @NonNull CssMetaData<?, Point2D> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -70,9 +69,8 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
 
     private final Converter<Point2D> converter = new Point2DConverter(false);
 
-    @NonNull
     @Override
-    public Converter<Point2D> getCssConverter() {
+    public @NonNull Converter<Point2D> getCssConverter() {
         return converter;
     }
 }

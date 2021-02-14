@@ -69,8 +69,8 @@ public class XmlUtil {
     public static final String LOCATION_ATTRIBUTE = "location";
     public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
     private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
-    private final static String SEPARATOR = "\0";
-    private final static Properties DEFAULT_PROPERTIES = new Properties();
+    private static final String SEPARATOR = "\0";
+    private static final Properties DEFAULT_PROPERTIES = new Properties();
 
     static {
         DEFAULT_PROPERTIES.put(OutputKeys.INDENT, "yes");
@@ -129,8 +129,7 @@ public class XmlUtil {
         return XmlUtil.read(inputSource, namespaceAware);
     }
 
-    @NonNull
-    public static Document readWithLocations(@NonNull Path in, boolean namespaceAware) throws IOException {
+    public static @NonNull Document readWithLocations(@NonNull Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.readWithLocations(inputSource, namespaceAware);
     }
@@ -166,8 +165,7 @@ public class XmlUtil {
      * @return the document
      * @throws java.io.IOException in case of failure
      */
-    @NonNull
-    public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
+    public static @NonNull Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             // Create transformer SAX source that adds current element position to
             // the element as attributes.
@@ -190,8 +188,7 @@ public class XmlUtil {
         }
     }
 
-    @Nullable
-    public static Locator getLocator(@NonNull Node node) {
+    public static @Nullable Locator getLocator(@NonNull Node node) {
         final NamedNodeMap attributes = node.getAttributes();
         Node attrNode = attributes == null ? null : attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
         if (attrNode != null) {
@@ -276,8 +273,7 @@ public class XmlUtil {
      * @param node a node
      * @return a stream
      */
-    @NonNull
-    public static Stream<Node> preorderStream(Node node) {
+    public static @NonNull Stream<Node> preorderStream(Node node) {
         return StreamSupport.stream(new PreorderSpliterator<>(n -> {
             final NodeList childNodes = n.getChildNodes();
             return () -> new ChildIterator<>(childNodes.getLength(), childNodes::item);

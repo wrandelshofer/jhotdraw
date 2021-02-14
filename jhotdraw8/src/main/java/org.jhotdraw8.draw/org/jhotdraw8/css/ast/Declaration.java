@@ -19,12 +19,9 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class Declaration extends AST {
-    @Nullable
-    private final String namespace;
-    @NonNull
-    private final String propertyName;
-    @NonNull
-    private final ImmutableList<CssToken> terms;
+    private final @Nullable String namespace;
+    private final @NonNull String propertyName;
+    private final @NonNull ImmutableList<CssToken> terms;
     private int startPos = -1;
     private int endPos = -1;
 
@@ -36,23 +33,19 @@ public class Declaration extends AST {
         this.endPos = endPos;
     }
 
-    @Nullable
-    public String getNamespace() {
+    public @Nullable String getNamespace() {
         return namespace;
     }
 
-    @NonNull
-    public String getPropertyName() {
+    public @NonNull String getPropertyName() {
         return propertyName;
     }
 
-    @NonNull
-    public ImmutableList<CssToken> getTerms() {
+    public @NonNull ImmutableList<CssToken> getTerms() {
         return terms;
     }
 
-    @NonNull
-    public String getTermsAsString() {
+    public @NonNull String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
         for (CssToken t : terms) {
@@ -61,9 +54,8 @@ public class Declaration extends AST {
         return buf.toString();
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
 
         return propertyName + ":" + getTermsAsString();
     }

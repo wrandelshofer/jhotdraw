@@ -18,8 +18,8 @@ public class DirtyMask {
      */
     private final int bitmask;
 
-    public final static DirtyMask EMPTY = new DirtyMask(0);
-    public final static DirtyMask ALL = new DirtyMask(~0);
+    public static final DirtyMask EMPTY = new DirtyMask(0);
+    public static final DirtyMask ALL = new DirtyMask(~0);
 
     /**
      * Prevent instantiation.
@@ -28,8 +28,7 @@ public class DirtyMask {
         this.bitmask = bitmask;
     }
 
-    @NonNull
-    public static DirtyMask of(@NonNull DirtyBits... bits) {
+    public static @NonNull DirtyMask of(@NonNull DirtyBits... bits) {
         int mask = 0;
         for (DirtyBits bit : bits) {
             mask |= bit.getMask();
@@ -71,19 +70,16 @@ public class DirtyMask {
      * @param that that mask
      * @return a new mask
      */
-    @NonNull
-    public DirtyMask add(@NonNull DirtyMask that) {
+    public @NonNull DirtyMask add(@NonNull DirtyMask that) {
         return new DirtyMask(this.bitmask | that.bitmask);
     }
 
-    @NonNull
-    public DirtyMask add(@NonNull DirtyBits bits) {
+    public @NonNull DirtyMask add(@NonNull DirtyBits bits) {
         return new DirtyMask(this.bitmask | bits.getMask());
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "DirtyMask{" + "bitmask=" + Integer.toBinaryString(bitmask) + '}';
     }
 

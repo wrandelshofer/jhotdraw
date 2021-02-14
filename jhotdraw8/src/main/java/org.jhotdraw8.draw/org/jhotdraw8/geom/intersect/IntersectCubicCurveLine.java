@@ -20,8 +20,7 @@ public class IntersectCubicCurveLine {
     private IntersectCubicCurveLine() {
     }
 
-    @NonNull
-    public static IntersectionResult intersectCubicCurveLine(
+    public static @NonNull IntersectionResult intersectCubicCurveLine(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y,
             double epsilon) {
@@ -41,8 +40,7 @@ public class IntersectCubicCurveLine {
      * @param b1 point 1 of 'a'
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectCubicCurveLine(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static @NonNull IntersectionResult intersectCubicCurveLine(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D b0, @NonNull Point2D b1) {
         return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Geom.REAL_THRESHOLD);
     }
 
@@ -165,8 +163,7 @@ public class IntersectCubicCurveLine {
      * @param a1y point 2 of 'a'
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectLineCubicCurve(
+    public static @NonNull IntersectionResult intersectLineCubicCurve(
             double a0x, double a0y, double a1x, double a1y,
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
             double epsilon) {
@@ -193,8 +190,7 @@ public class IntersectCubicCurveLine {
      * @param epsilon
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectLineCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, double epsilon) {
+    public static @NonNull IntersectionResult intersectLineCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, double epsilon) {
         final double a0x, a0y, a1x, a1y;
         a0x = a0.getX();
         a0y = a0.getY();

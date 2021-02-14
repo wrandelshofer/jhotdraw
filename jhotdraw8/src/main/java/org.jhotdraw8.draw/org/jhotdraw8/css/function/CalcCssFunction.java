@@ -42,7 +42,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public final static String NAME = "calc";
+    public static final String NAME = "calc";
 
     public CalcCssFunction() {
         this(NAME);
@@ -64,8 +64,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
         produceNumberPercentageOrDimension(out, dim, line, start, end);
     }
 
-    @Nullable
-    private CssSize parseCalcFunction(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    private @Nullable CssSize parseCalcFunction(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: " + getName() + "() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
             throw new ParseException("〈" + getName() + "〉: " + getName() + "() function expected.", tt.getStartPosition());
@@ -75,8 +74,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
         return dim;
     }
 
-    @Nullable
-    private CssSize parseCalcSum(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    private @Nullable CssSize parseCalcSum(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize dim = parseCalcProduct(element, tt, functionProcessor);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
@@ -110,8 +108,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
         return dim;
     }
 
-    @Nullable
-    private CssSize parseCalcProduct(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    private @Nullable CssSize parseCalcProduct(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize dim = parseCalcValue(element, tt, functionProcessor);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
@@ -155,8 +152,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
         }
     }
 
-    @Nullable
-    protected CssSize parseCalcValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssSize parseCalcValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
             return new CssSize(tt.currentNumberNonNull().doubleValue());

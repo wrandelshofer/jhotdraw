@@ -25,10 +25,9 @@ import java.util.function.Function;
  */
 public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Insets> cssMetaData;
+    private final @NonNull CssMetaData<?, Insets> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -70,9 +69,8 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
 
     private final Converter<Insets> converter = new InsetsConverter(false);
 
-    @NonNull
     @Override
-    public Converter<Insets> getCssConverter() {
+    public @NonNull Converter<Insets> getCssConverter() {
         return converter;
     }
 }

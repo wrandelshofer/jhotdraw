@@ -52,8 +52,7 @@ public class ResizePane extends BorderPane {
         userResizable.set(value);
     }
 
-    @NonNull
-    public BooleanProperty userResizableProperty() {
+    public @NonNull BooleanProperty userResizableProperty() {
         return userResizable;
     }
 }

@@ -17,8 +17,7 @@ class Point3DConverterTest {
     /**
      * Test of fromString method, of class Point3DConverter.
      */
-    static
-    public void doTestFromString(Point3D expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(Point3D expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -32,8 +31,7 @@ class Point3DConverterTest {
     /**
      * Test of toString method, of class Point3DConverter.
      */
-    static
-    public void doTestToString(Point3D value, String expected) throws Exception {
+    public static void doTestToString(Point3D value, String expected) throws Exception {
         System.out.println("toString " + value);
         Point3DConverter instance = new Point3DConverter(false);
         String actual = instance.toString(value);
@@ -45,15 +43,13 @@ class Point3DConverterTest {
     /**
      * Test of fromString and toString methods, of class Point3DConverter.
      */
-    static
-    public void doTest(Point3D value, @NonNull String str) throws Exception {
+    public static void doTest(Point3D value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(new Point3D(1, 2, 3), "1, 2, 3")),
                 dynamicTest("1", () -> doTest(new Point3D(1, 2, 0), "1, 2"))

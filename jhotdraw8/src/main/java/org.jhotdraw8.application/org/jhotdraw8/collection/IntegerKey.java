@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class IntegerKey extends ObjectKey<Integer> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public IntegerKey(@NonNull String key) {
         super(key, Integer.class);

@@ -47,8 +47,7 @@ public class ListViewUtil {
             this.reorderingOnly = reorderingOnly;
         }
 
-        @NonNull
-        private EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
+        private @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
             @Override
             public void handle(@NonNull DragEvent event) {
                 if (event.isConsumed()) {
@@ -148,8 +147,7 @@ public class ListViewUtil {
             }
         };
 
-        @NonNull
-        private EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {
@@ -341,9 +339,8 @@ public class ListViewUtil {
                     clipboard.setContent(content);
                 }
 
-                @NonNull
                 @Override
-                public List<T> read(Clipboard clipboard) {
+                public @NonNull List<T> read(Clipboard clipboard) {
                     // We are not actually interested in the clipboard content.
                     return Collections.emptyList();
                 }

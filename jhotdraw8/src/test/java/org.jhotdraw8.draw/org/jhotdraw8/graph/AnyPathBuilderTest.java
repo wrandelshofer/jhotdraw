@@ -24,8 +24,7 @@ public class AnyPathBuilderTest {
     public AnyPathBuilderTest() {
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
@@ -75,9 +74,8 @@ public class AnyPathBuilderTest {
         assertEquals(expected, actual);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindVertexPath_3args() throws Exception {
+    public @NonNull List<DynamicTest> testFindVertexPath_3args() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindVertexPath_3args(1, 5, VertexPath.of(1, 6, 5))),
                 dynamicTest("2", () -> doFindVertexPath_3args(1, 4, VertexPath.of(1, 2, 4))),
@@ -97,9 +95,8 @@ public class AnyPathBuilderTest {
         assertEquals(expected, actual);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
+    public @NonNull List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindVertexPathOverWaypoints(Arrays.asList(1, 5), VertexPath.of(1, 6, 5))),
                 dynamicTest("2", () -> doFindVertexPathOverWaypoints(Arrays.asList(1, 4), VertexPath.of(1, 2, 4))),
@@ -120,8 +117,7 @@ public class AnyPathBuilderTest {
     }
 
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph2() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
         // __|  1  |  2  |  3  |  4  |  5
         // 1 |       1.0   1.0
         // 2 |             1.0
@@ -147,9 +143,8 @@ public class AnyPathBuilderTest {
         return b;
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindAllPaths() {
+    public @NonNull List<DynamicTest> testFindAllPaths() {
         DirectedGraph<Integer, Double> graph = createGraph2();
 
         return Arrays.asList(

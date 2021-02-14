@@ -14,8 +14,7 @@ public class Exceptions {
      * @param t a throwable
      * @return the error message
      */
-    @Nullable
-    public static String getLocalizedMessage(@NonNull Throwable t) {
+    public static @Nullable String getLocalizedMessage(@NonNull Throwable t) {
         String message = null;
         for (Throwable tt = t; tt != null; tt = tt.getCause()) {
             String msg = tt.getLocalizedMessage();

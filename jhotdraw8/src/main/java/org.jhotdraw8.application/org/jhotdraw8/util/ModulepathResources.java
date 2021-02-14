@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 import java.util.spi.ResourceBundleProvider;
 
 public class ModulepathResources extends ResourceBundle implements Serializable, Resources {
-    private final static long serialVersionUID = 1L;
-    private final static Logger LOG = Logger.getLogger(ModulepathResources.class.getName());
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(ModulepathResources.class.getName());
 
     /**
      * Get the appropriate ResourceBundle subclass.
@@ -32,8 +32,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @return the resource bundle
      * @see ResourceBundle
      */
-    @NonNull
-    public static ModulepathResources getResources(@NonNull String moduleName, @NonNull String baseName)
+    public static @NonNull ModulepathResources getResources(@NonNull String moduleName, @NonNull String baseName)
             throws MissingResourceException {
         return getResources(moduleName, baseName, LocaleUtil.getDefault());
     }
@@ -45,8 +44,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @return the resource bundle
      * @see ResourceBundle
      */
-    @NonNull
-    public static Resources getResources(@NonNull Module module, @NonNull String baseName)
+    public static @NonNull Resources getResources(@NonNull Module module, @NonNull String baseName)
             throws MissingResourceException {
         return getResources(module, baseName, LocaleUtil.getDefault());
     }
@@ -90,19 +88,16 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     /**
      * The base name of the resource bundle.
      */
-    @NonNull
-    private final String baseName;
+    private final @NonNull String baseName;
     /**
      * The locale.
      */
-    @NonNull
-    private final Locale locale;
+    private final @NonNull Locale locale;
 
     /**
      * The parent resources object.
      */
-    @Nullable
-    private Resources parent;
+    private @Nullable Resources parent;
     /**
      * The wrapped resource bundle.
      */
@@ -175,10 +170,8 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
 
-
-    @NonNull
     @Override
-    public ResourceBundle asResourceBundle() {
+    public @NonNull ResourceBundle asResourceBundle() {
         return this;
     }
 
@@ -215,14 +208,12 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @param arguments the arguments
      * @return formatted String
      */
-    @NonNull
-    public String getFormatted(@NonNull String key, Object... arguments) {
+    public @NonNull String getFormatted(@NonNull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
-    @Nullable
     @Override
-    protected Object handleGetObject(@NonNull String key) {
+    protected @Nullable Object handleGetObject(@NonNull String key) {
         Object obj = handleGetObjectRecursively(key);
         if (obj == null) {
             obj = "";
@@ -235,8 +226,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return obj;
     }
 
-    @Nullable
-    public Object handleGetObjectRecursively(@NonNull String key) {
+    public @Nullable Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -248,9 +238,8 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return obj;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "ModulepathResources" + "[" + baseName + "]";
     }
 
@@ -274,9 +263,8 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return Collections.enumeration(keys);
     }
 
-    @Nullable
     @Override
-    public Resources getParent() {
+    public @Nullable Resources getParent() {
         return parent;
     }
 

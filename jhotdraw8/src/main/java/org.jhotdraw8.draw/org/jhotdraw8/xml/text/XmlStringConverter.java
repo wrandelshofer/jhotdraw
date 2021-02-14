@@ -41,9 +41,8 @@ public class XmlStringConverter implements Converter<String> {
         }
     }
 
-    @Nullable
     @Override
-    public String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         if (in != null) {
             String converted = in.toString();
             in.position(in.position() + in.remaining());
@@ -53,9 +52,8 @@ public class XmlStringConverter implements Converter<String> {
         return null;
     }
 
-    @Nullable
     @Override
-    public String getDefaultValue() {
+    public @Nullable String getDefaultValue() {
         return null;
     }
 }

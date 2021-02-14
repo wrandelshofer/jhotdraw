@@ -309,9 +309,8 @@ public class NumberConverter implements Converter<Number> {
         }
     }
 
-    @Nullable
     @Override
-    public Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
         if ((str == null || str.length() == 0) && getAllowsNullValue()) {
             return null;
         }
@@ -662,9 +661,8 @@ public class NumberConverter implements Converter<Number> {
         this.valueClass = valueClass;
     }
 
-    @NonNull
     @Override
-    public Number getDefaultValue() {
+    public @NonNull Number getDefaultValue() {
         return 0.0;
     }
 }

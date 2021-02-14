@@ -135,8 +135,7 @@ public class StyleableMapTest {
     @Test
     public void concurrentUsageTest() {
         ConcurrentHashMap<Character, Integer> sharedKeysMap = new ConcurrentHashMap<>() {
-            @NonNull
-            final AtomicInteger nextIndex = new AtomicInteger();
+            final @NonNull AtomicInteger nextIndex = new AtomicInteger();
 
             @Override
             public Integer get(Object key) {

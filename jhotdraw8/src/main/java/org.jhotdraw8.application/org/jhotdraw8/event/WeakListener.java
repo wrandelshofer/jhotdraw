@@ -19,8 +19,7 @@ import java.util.function.Consumer;
  */
 public final class WeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {
 
-    @NonNull
-    private final WeakReference<Listener<E>> ref;
+    private final @NonNull WeakReference<Listener<E>> ref;
     private Consumer<Listener<E>> removeListener;
 
     public WeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {

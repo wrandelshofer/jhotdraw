@@ -60,9 +60,8 @@ public abstract class AbstractDockParent
         return dockChildren;
     }
 
-    @NonNull
     @Override
-    public Parent getNode() {
+    public @NonNull Parent getNode() {
         return this;
     }
 

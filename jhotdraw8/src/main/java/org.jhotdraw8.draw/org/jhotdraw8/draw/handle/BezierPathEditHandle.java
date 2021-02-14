@@ -21,7 +21,7 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 
 public class BezierPathEditHandle extends PathIterableOutlineHandle {
-    final private MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
 
     public BezierPathEditHandle(PathIterableFigure figure, MapAccessor<ImmutableList<BezierNode>> pointKey) {
         super(figure, true);

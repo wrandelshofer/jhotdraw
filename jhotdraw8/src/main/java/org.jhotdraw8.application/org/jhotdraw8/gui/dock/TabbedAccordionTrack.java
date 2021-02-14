@@ -42,14 +42,10 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
 
     private final BooleanProperty rotated = new SimpleBooleanProperty(false);
     private final TabPane tabPane = new TabPane();
-    @NonNull
-    private final Accordion accordion = new Accordion();
-    @NonNull
-    private final TitledPane titlePane = new TitledPane();
-    @NonNull
-    private final ResizePane resizePane = new ResizePane();
-    @NonNull
-    private final StackPane stackPane = new StackPane() {
+    private final @NonNull Accordion accordion = new Accordion();
+    private final @NonNull TitledPane titlePane = new TitledPane();
+    private final @NonNull ResizePane resizePane = new ResizePane();
+    private final @NonNull StackPane stackPane = new StackPane() {
         @Override
         protected void layoutChildren() {
             if (!isRotated()) {
@@ -92,8 +88,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(), t -> ((TabPaneTrack.MyTab) t).showingProperty(), expandedAndShowing, false);
     }
 
-    @NonNull
-    private TabPaneTrack.MyTab makeTab(DockChild c) {
+    private @NonNull TabPaneTrack.MyTab makeTab(DockChild c) {
         if (c instanceof Dockable) {
             Dockable k = (Dockable) c;
             TabPaneTrack.MyTab tab = new TabPaneTrack.MyTab(c, k.getText(), k.getNode());
@@ -104,8 +99,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         }
     }
 
-    @NonNull
-    protected ChangeListener<DockParent> onParentChanged() {
+    protected @NonNull ChangeListener<DockParent> onParentChanged() {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
             resizePane.setResizeAxis(newv == null ? TrackAxis.Y : newv.getDockAxis());
@@ -173,9 +167,8 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
     }
 
 
-    @NonNull
     @Override
-    public TrackAxis getDockAxis() {
+    public @NonNull TrackAxis getDockAxis() {
         return TrackAxis.Z;
     }
 

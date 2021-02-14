@@ -21,8 +21,7 @@ import org.jhotdraw8.app.Application;
  */
 public abstract class AbstractActivityAction<A extends Activity> extends AbstractApplicationAction {
 
-    @Nullable
-    private final A activity;
+    private final @Nullable A activity;
 
     /**
      * Creates a new instance which acts on the specified activity of the
@@ -37,9 +36,8 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
         this.activity = activity;
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
-    public A getActivity() {
+    public @Nullable A getActivity() {
         return activity;
     }
 

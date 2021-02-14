@@ -19,12 +19,10 @@ import java.lang.reflect.Type;
 import java.util.function.Function;
 
 public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyleableMapAccessor<T> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
-    @NonNull
-    private final Converter<T> converter;
-    @NonNull
-    private final CssMetaData<? extends Styleable, T> cssMetaData;
+    private final @NonNull Converter<T> converter;
+    private final @NonNull CssMetaData<? extends Styleable, T> cssMetaData;
 
     public ObjectStyleableKey(String name, Class<T> clazz, @NonNull Converter<T> converter) {
         this(name, clazz, null, converter);
@@ -56,15 +54,13 @@ public class ObjectStyleableKey<T> extends ObjectKey<T> implements WriteableStyl
         return cssMetaData;
     }
 
-    @NonNull
     @Override
-    public Converter<T> getCssConverter() {
+    public @NonNull Converter<T> getCssConverter() {
         return converter;
     }
 
-    @NonNull
     @Override
-    public String getCssName() {
+    public @NonNull String getCssName() {
         return getName();
     }
 }

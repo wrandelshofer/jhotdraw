@@ -127,8 +127,7 @@ public interface IntDirectedGraph {
      * @param vidx a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    @NonNull
-    default Spliterator.OfInt getNextVertices(int vidx) {
+    default @NonNull Spliterator.OfInt getNextVertices(int vidx) {
         class MySpliterator extends AbstractIntSpliterator {
             int index;
             int limit;
@@ -148,8 +147,7 @@ public interface IntDirectedGraph {
                 return false;
             }
 
-            @Nullable
-            public MySpliterator trySplit() {
+            public @Nullable MySpliterator trySplit() {
                 int hi = limit, lo = index, mid = (lo + hi) >>> 1;
                 return (lo >= mid) ? null : // divide range in half unless too small
                         new MySpliterator(vidx, lo, index = mid);

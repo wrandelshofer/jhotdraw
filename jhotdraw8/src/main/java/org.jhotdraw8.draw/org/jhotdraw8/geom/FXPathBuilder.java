@@ -23,7 +23,7 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class FXPathBuilder extends AbstractPathBuilder {
-    public final static ClosePath CLOSE_PATH = new ClosePath();
+    public static final ClosePath CLOSE_PATH = new ClosePath();
 
     public FXPathBuilder() {
         this(new ArrayList<>());
@@ -70,8 +70,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
         // empty
     }
 
-    @NonNull
-    public Path build() {
+    public @NonNull Path build() {
         pathDone();
         return new Path(elements);
     }

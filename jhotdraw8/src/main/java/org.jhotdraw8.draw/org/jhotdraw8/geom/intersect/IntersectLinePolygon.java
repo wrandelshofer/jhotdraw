@@ -29,8 +29,7 @@ public class IntersectLinePolygon {
      * @param points the points of the polygon
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectLinePolygonEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull List<Point2D.Double> points) {
+    public static @NonNull IntersectionResultEx intersectLinePolygonEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull List<Point2D.Double> points) {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
         int length = points.size();

@@ -64,20 +64,16 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     private class MapProxy extends AbstractMap<Key<?>, Object> {
 
-        @Nullable
-        private Map<Key<?>, Object> target = null;
-        @Nullable
-        private Figure figure = null;
+        private @Nullable Map<Key<?>, Object> target = null;
+        private @Nullable Figure figure = null;
 
-        @NonNull
         @Override
-        public Set<Entry<Key<?>, Object>> entrySet() {
+        public @NonNull Set<Entry<Key<?>, Object>> entrySet() {
             // FIXME should listen on changes of the entry set!
             return target == null ? Collections.emptySet() : target.entrySet();
         }
 
-        @Nullable
-        public Figure getFigure() {
+        public @Nullable Figure getFigure() {
             return figure;
         }
 
@@ -85,8 +81,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             this.figure = figure;
         }
 
-        @Nullable
-        public Map<Key<?>, Object> getTarget() {
+        public @Nullable Map<Key<?>, Object> getTarget() {
             return target;
         }
 
@@ -108,16 +103,13 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     }
 
-    @NonNull
-    private MapProxy mapProxy = new MapProxy();
+    private @NonNull MapProxy mapProxy = new MapProxy();
 
     private boolean isValidating = false;
     private boolean valid = true;
-    @NonNull
-    private final Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
+    private final @NonNull Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
-    @NonNull
-    private final ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
+    private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
         public void set(@Nullable Drawing newValue) {
             Drawing oldValue = get();
@@ -128,8 +120,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             onRootChanged(oldValue, newValue);
         }
     };
-    @NonNull
-    private BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
+    private @NonNull BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
             = (a, b) -> a.add(b);
 
     private void invalidate() {
@@ -153,8 +144,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         fireTreeModelEvent(TreeModelEvent.rootChanged(this, newValue));
     }
 
-    @NonNull
-    private Set<Figure> layoutSubjectChange = new HashSet<>();
+    private @NonNull Set<Figure> layoutSubjectChange = new HashSet<>();
 
     @SuppressWarnings("unchecked")
     private void onPropertyChanged(@NonNull FigurePropertyChangeEvent event) {
@@ -258,8 +248,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    @NonNull
-    public <T> T setNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key, @NonNull T newValue) {
+    public @NonNull <T> T setNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key, @NonNull T newValue) {
         T v = set(figure, key, newValue);
         return Objects.requireNonNull(v);
     }

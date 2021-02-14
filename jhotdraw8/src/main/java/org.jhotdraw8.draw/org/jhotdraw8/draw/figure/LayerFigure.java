@@ -44,7 +44,7 @@ import static java.lang.Math.max;
 public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {
 
-    private final static int MIN_NODES_FOR_CLIPPING = 100;
+    private static final int MIN_NODES_FOR_CLIPPING = 100;
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
@@ -149,9 +149,8 @@ public class LayerFigure extends AbstractCompositeFigure
         childNodes.add(text);
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(RenderContext ctx) {
         Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);
@@ -205,9 +204,8 @@ public class LayerFigure extends AbstractCompositeFigure
      *
      * @return [0, 0, MAX_VALUE, MAX_VALUE].
      */
-    @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public @NonNull Bounds getBoundsInLocal() {
         return new BoundingBox(0, 0, Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

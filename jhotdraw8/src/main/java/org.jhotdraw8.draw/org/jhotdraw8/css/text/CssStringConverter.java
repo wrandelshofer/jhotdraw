@@ -24,8 +24,7 @@ import java.util.function.Consumer;
 public class CssStringConverter extends AbstractCssConverter<String> {
     private final String helpText;
     private final char quoteChar;
-    @NonNull
-    private final String defaultValue;
+    private final @NonNull String defaultValue;
 
     public CssStringConverter() {
         this(false, '\"', null);
@@ -48,9 +47,8 @@ public class CssStringConverter extends AbstractCssConverter<String> {
         return helpText;
     }
 
-    @NonNull
     @Override
-    public String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("Css String expected. " + tt.getToken(), tt.getStartPosition());
         }
@@ -62,9 +60,8 @@ public class CssStringConverter extends AbstractCssConverter<String> {
         out.accept(new CssToken(CssTokenType.TT_STRING, value, quoteChar));
     }
 
-    @NonNull
     @Override
-    public String getDefaultValue() {
+    public @NonNull String getDefaultValue() {
         return defaultValue;
     }
 

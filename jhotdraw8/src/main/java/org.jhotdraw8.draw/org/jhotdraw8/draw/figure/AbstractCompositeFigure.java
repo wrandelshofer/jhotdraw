@@ -36,9 +36,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return true;
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -54,9 +53,8 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @NonNull
     @Override
-    public Bounds getBoundsInLocal() {
+    public @NonNull Bounds getBoundsInLocal() {
         ObservableList<Figure> children = getChildren();
         if (children.isEmpty()) {
             return new BoundingBox(0, 0, 0, 0);
@@ -76,15 +74,13 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBoundsInParent() {
+    public @NonNull Bounds getLayoutBoundsInParent() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;

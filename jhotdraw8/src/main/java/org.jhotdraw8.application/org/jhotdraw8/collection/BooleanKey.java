@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class BooleanKey extends ObjectKey<Boolean> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public BooleanKey(@NonNull String key) {
         super(key, Boolean.class);

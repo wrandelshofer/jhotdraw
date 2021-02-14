@@ -22,8 +22,7 @@ public class IntersectQuadCurveRectangle {
      * @param r1 corner point 1 of the rectangle
      * @return the computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurveRectangle(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static @NonNull IntersectionResult intersectQuadCurveRectangle(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D r0, @NonNull Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);
         bottomRight = Intersections.bottomRight(r0, r1);

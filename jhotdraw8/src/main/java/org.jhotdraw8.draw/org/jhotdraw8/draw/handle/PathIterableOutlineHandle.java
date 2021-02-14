@@ -31,12 +31,9 @@ import java.util.List;
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 
-    @NonNull
-    private final Group node;
-    @NonNull
-    private final Path path2;
-    @NonNull
-    private final Path path1;
+    private final @NonNull Group node;
+    private final @NonNull Path path2;
+    private final @NonNull Path path1;
     private final boolean selectable;
 
     public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable) {
@@ -53,15 +50,13 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         return false;
     }
 
-    @Nullable
     @Override
-    public Cursor getCursor() {
+    public @Nullable Cursor getCursor() {
         return null;
     }
 
-    @NonNull
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public @NonNull Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         path1.setStroke(Color.WHITE);
         path2.setStroke(Paintable.getPaint(color));
@@ -81,9 +76,8 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         return selectable;
     }
 
-    @NonNull
     @Override
-    public PathIterableFigure getOwner() {
+    public @NonNull PathIterableFigure getOwner() {
         return (PathIterableFigure) super.getOwner();
     }
 

@@ -99,12 +99,9 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private static final String INNER_SHADOW = "inner-shadow";
     private static final String SHADOW = "shadow";
 
-    @NonNull
-    private CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class, false);
-    @NonNull
-    private CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class, false);
-    @NonNull
-    private CssColorConverter colorConverter = new CssColorConverter(false);
+    private @NonNull CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class, false);
+    private @NonNull CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class, false);
+    private @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
 
     @Override
     public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
@@ -296,9 +293,8 @@ public class CssEffectConverter implements CssConverter<Effect> {
     }
 
 
-    @Nullable
     @Override
-    public Effect parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Effect parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.nextIsIdentNone()) {
             return null;
         }
@@ -306,8 +302,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return parseEffect(tt);
     }
 
-    @Nullable
-    private Effect parseEffect(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @Nullable Effect parseEffect(@NonNull CssTokenizer tt) throws ParseException, IOException {
         Effect first = null;
         Effect previous = null;
         while (tt.next() == CssTokenType.TT_FUNCTION) {
@@ -364,8 +359,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return first;
     }
 
-    @NonNull
-    private Effect parseBlend(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseBlend(@NonNull CssTokenizer tt) throws ParseException, IOException {
         BlendMode mode = BlendMode.SRC_OVER;
         if (tt.next() == CssTokenType.TT_IDENT) {
             tt.pushBack();
@@ -377,8 +371,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return new Blend(mode);
     }
 
-    @NonNull
-    private Effect parseBloom(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseBloom(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double threshold = 0.3;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
@@ -396,8 +389,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return new Bloom(Geom.clamp(threshold, 0, 1));
     }
 
-    @NonNull
-    private Effect parseBoxBlur(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseBoxBlur(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double width = 5;
         double height = 5;
         int iterations = 1;
@@ -434,8 +426,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return new BoxBlur(width, height, iterations);
     }
 
-    @NonNull
-    private Effect parseColorAdjust(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseColorAdjust(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double hue = 0.0;
         double saturation = 0.0;
         double brightness = 0.0;
@@ -480,13 +471,11 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return new ColorAdjust(hue, saturation, brightness, contrast);
     }
 
-    @NonNull
-    private Effect parseDropShadow(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseDropShadow(@NonNull CssTokenizer tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, true);
     }
 
-    @NonNull
-    private Effect parseGaussianBlur(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseGaussianBlur(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double radius = 5;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
@@ -501,13 +490,11 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return new GaussianBlur(radius);
     }
 
-    @NonNull
-    private Effect parseInnerShadow(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseInnerShadow(@NonNull CssTokenizer tt) throws ParseException, IOException {
         return parseDropShadowOrInnerShadow(tt, false);
     }
 
-    @NonNull
-    private Effect parseGlow(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseGlow(@NonNull CssTokenizer tt) throws ParseException, IOException {
         double level = 0.3;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
@@ -525,8 +512,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return new Glow(Geom.clamp(level, 0, 1));
     }
 
-    @NonNull
-    private Effect parseDropShadowOrInnerShadow(@NonNull CssTokenizer tt, boolean isDropShadow) throws ParseException, IOException {
+    private @NonNull Effect parseDropShadowOrInnerShadow(@NonNull CssTokenizer tt, boolean isDropShadow) throws ParseException, IOException {
         String func = isDropShadow ? DROP_SHADOW : INNER_SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
         Color color = new Color(0, 0, 0, 0.25);
@@ -619,8 +605,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return effect;
     }
 
-    @NonNull
-    private Effect parseShadow(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    private @NonNull Effect parseShadow(@NonNull CssTokenizer tt) throws ParseException, IOException {
         String func = SHADOW;
         BlurType blurType = BlurType.GAUSSIAN;
         Color color = new Color(0, 0, 0, 0.75);
@@ -663,9 +648,8 @@ public class CssEffectConverter implements CssConverter<Effect> {
     }
 
 
-    @Nullable
     @Override
-    public Effect getDefaultValue() {
+    public @Nullable Effect getDefaultValue() {
         return null;
     }
 
@@ -674,9 +658,8 @@ public class CssEffectConverter implements CssConverter<Effect> {
         return true;
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Effect⟩: none｜（⟨Blend⟩｜⟨Bloom⟩｜⟨BoxBlur⟩｜⟨ColorAdjust⟩｜⟨DropShadow⟩｜⟨GaussianBlur⟩｜ ⟨InnerShadow⟩）｛, ⟨Effect⟩｝"
                 + "\nFormat of ⟨Blend⟩: blend(⟨BlendMode⟩)"
                 + "\nFormat of ⟨Bloom⟩: bloom(⟨luminosity⟩%)"

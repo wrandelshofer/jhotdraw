@@ -21,15 +21,13 @@ public class IntersectCubicCurvePoint {
     }
 
 
-    @NonNull
-    public static IntersectionResultEx intersectCubicCurvePointEx(
+    public static @NonNull IntersectionResultEx intersectCubicCurvePointEx(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy) {
         return intersectCubicCurvePointEx(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectCubicCurvePointEx(
+    public static @NonNull IntersectionResultEx intersectCubicCurvePointEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double cx, double cy, double epsilon) {
         IntersectionResult result = intersectCubicCurvePoint(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, cx, cy, epsilon);
@@ -113,8 +111,7 @@ public class IntersectCubicCurvePoint {
      * @param epsilon  the tolerance radius
      * @return the intersection
      */
-    @NonNull
-    public static IntersectionResult intersectCubicCurvePoint(
+    public static @NonNull IntersectionResult intersectCubicCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double epsilon) {
         // Build polynomial

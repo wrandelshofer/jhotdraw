@@ -91,13 +91,11 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder {
         endTangentY = y2 - y1;
     }
 
-    @NonNull
-    public List<PointAndTangent> getStartPoints() {
+    public @NonNull List<PointAndTangent> getStartPoints() {
         return startPoints;
     }
 
-    @NonNull
-    public List<PointAndTangent> getEndPoints() {
+    public @NonNull List<PointAndTangent> getEndPoints() {
         return endPoints;
     }
 }

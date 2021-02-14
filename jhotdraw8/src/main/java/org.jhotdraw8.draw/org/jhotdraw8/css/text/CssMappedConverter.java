@@ -21,10 +21,8 @@ import java.util.function.Consumer;
 
 public class CssMappedConverter<E> implements CssConverter<E> {
 
-    @NonNull
-    private final Map<String, E> fromStringMap;
-    @NonNull
-    private final Map<E, String> toStringMap;
+    private final @NonNull Map<String, E> fromStringMap;
+    private final @NonNull Map<E, String> toStringMap;
     private final boolean nullable;
     private final String name;
 
@@ -32,6 +30,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     public CssMappedConverter(String name, @NonNull Map<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
+
     public CssMappedConverter(String name, @NonNull ReadOnlyMap<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
@@ -50,8 +49,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
        this(name,fromStringMap.asMap(),nullable);
     }
 
-    @Nullable
-    public E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());
         }
@@ -68,9 +66,8 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");
         buf.append(name).append("⟩: ");
         boolean first = true;
@@ -107,9 +104,8 @@ public class CssMappedConverter<E> implements CssConverter<E> {
     }
 
 
-    @Nullable
     @Override
-    public E getDefaultValue() {
+    public @Nullable E getDefaultValue() {
         return null;
     }
 

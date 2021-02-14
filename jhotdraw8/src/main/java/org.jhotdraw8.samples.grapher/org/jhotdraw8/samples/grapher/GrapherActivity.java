@@ -156,13 +156,12 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
  */
 public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
-    private final static String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
+    private static final String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
     /**
      * Counter for incrementing layer names.
      */
-    @NonNull
-    private Map<String, Integer> counters = new HashMap<>();
+    private @NonNull Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
     @FXML
@@ -179,8 +178,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
-    @NonNull
-    private Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
+    private @NonNull Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
         Dockable dockable = new SimpleDockable(r.getString(id + ".toolbar"), inspector.getNode());
         inspector.showingProperty().bind(dockable.showingProperty());
@@ -188,9 +186,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         return dockable;
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> clear() {
+    public @NonNull CompletionStage<Void> clear() {
         Drawing d = new SimpleLayeredDrawing();
         d.set(StyleableFigure.ID, "drawing1");
         LayerFigure layer = new LayerFigure();
@@ -277,8 +274,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         map.put(DistributeVerticallyAction.ID, new DistributeVerticallyAction(editor));
     }
 
-    @NonNull
-    private Supplier<Layer> initToolBar() throws MissingResourceException {
+    private @NonNull Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources labels = GrapherLabels.getResources();
@@ -442,9 +438,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         });
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
+    public @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -509,7 +504,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         });
     }
 
-    private void applyUserAgentStylesheet(@NonNull final Drawing d) {
+    private void applyUserAgentStylesheet(final @NonNull Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
                     ImmutableLists.of(

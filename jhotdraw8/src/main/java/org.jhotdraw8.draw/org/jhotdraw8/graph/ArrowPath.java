@@ -23,8 +23,7 @@ import java.util.Objects;
  */
 public class ArrowPath<A> {
 
-    @NonNull
-    private final ImmutableList<A> arrows;
+    private final @NonNull ImmutableList<A> arrows;
 
     public ArrowPath(@NonNull ReadOnlyCollection<? extends A> elements) {
         this.arrows = ImmutableLists.ofCollection(elements);
@@ -56,15 +55,13 @@ public class ArrowPath<A> {
         return hash;
     }
 
-    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <VV> ArrowPath<VV> of(VV... vertices) {
+    public static @NonNull <VV> ArrowPath<VV> of(VV... vertices) {
         return new ArrowPath<>(ImmutableLists.of(vertices));
     }
 
-    @NonNull
-    public ImmutableList<A> getArrows() {
+    public @NonNull ImmutableList<A> getArrows() {
         return arrows;
     }
 
@@ -73,9 +70,8 @@ public class ArrowPath<A> {
     }
 
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "ArrowPath{" + arrows + '}';
     }
 

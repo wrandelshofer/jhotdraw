@@ -17,12 +17,10 @@ import java.util.Objects;
  */
 public class CssPoint2D {
 
-    public final static CssPoint2D ZERO = new CssPoint2D();
+    public static final CssPoint2D ZERO = new CssPoint2D();
 
-    @NonNull
-    private final CssSize x;
-    @NonNull
-    private final CssSize y;
+    private final @NonNull CssSize x;
+    private final @NonNull CssSize y;
 
     public CssPoint2D(@NonNull CssSize x, @NonNull CssSize y) {
         this.x = x;
@@ -63,13 +61,11 @@ public class CssPoint2D {
         return Objects.equals(this.y, other.y);
     }
 
-    @NonNull
-    public CssSize getX() {
+    public @NonNull CssSize getX() {
         return x;
     }
 
-    @NonNull
-    public CssSize getY() {
+    public @NonNull CssSize getY() {
         return y;
     }
 
@@ -81,28 +77,24 @@ public class CssPoint2D {
         return hash;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssPoint2D{" +
                 "" + x +
                 ", " + y +
                 '}';
     }
 
-    @NonNull
-    public Point2D getConvertedValue() {
+    public @NonNull Point2D getConvertedValue() {
         return new Point2D(x.getConvertedValue(), y.getConvertedValue());
 
     }
 
-    @NonNull
-    public CssPoint2D subtract(@NonNull CssPoint2D that) {
+    public @NonNull CssPoint2D subtract(@NonNull CssPoint2D that) {
         return new CssPoint2D(x.subtract(that.x), y.subtract(that.y));
     }
 
-    @NonNull
-    public CssPoint2D add(@NonNull CssPoint2D that) {
+    public @NonNull CssPoint2D add(@NonNull CssPoint2D that) {
         return new CssPoint2D(x.add(that.x), y.add(that.y));
     }
 }

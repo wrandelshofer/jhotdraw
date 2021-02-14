@@ -17,17 +17,15 @@ import java.util.List;
 public class StyleRule extends Rule {
 
     private final SelectorGroup selectorList;
-    @NonNull
-    private final List<Declaration> declarations;
+    private final @NonNull List<Declaration> declarations;
 
     public StyleRule(SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
         this.selectorList = selectorGroup;
         this.declarations = Collections.unmodifiableList(declarations);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         StringBuilder buf = new StringBuilder("StyleRule: ");
         buf.append(selectorList.toString());
         buf.append("{");
@@ -43,8 +41,7 @@ public class StyleRule extends Rule {
         return selectorList;
     }
 
-    @NonNull
-    public List<Declaration> getDeclarations() {
+    public @NonNull List<Declaration> getDeclarations() {
         return declarations;
     }
 }

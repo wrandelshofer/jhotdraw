@@ -24,21 +24,21 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
         return model;
     }
 
-    private final static char ESCAPE_CHAR = '\\';
-    private final static char UNIT_SEPARATOR = '\t';
-    private final static char RECORD_SEPARATOR = '\n';
-    private final static char UNIT_ESCAPE_CHAR = 't';
-    private final static char RECORD_ESCAPE_CHAR = 'n';
+    private static final char ESCAPE_CHAR = '\\';
+    private static final char UNIT_SEPARATOR = '\t';
+    private static final char RECORD_SEPARATOR = '\n';
+    private static final char UNIT_ESCAPE_CHAR = 't';
+    private static final char RECORD_ESCAPE_CHAR = 'n';
 
     private void escape(@NonNull String string, @NonNull StringBuilder buf) {
         for (char ch : string.toCharArray()) {
             switch (ch) {
-                case ESCAPE_CHAR:
-                    buf.append(ESCAPE_CHAR);
-                    buf.append(ESCAPE_CHAR);
-                    break;
-                case UNIT_SEPARATOR:
-                    buf.append(ESCAPE_CHAR);
+            case ESCAPE_CHAR:
+                buf.append(ESCAPE_CHAR);
+                buf.append(ESCAPE_CHAR);
+                break;
+            case UNIT_SEPARATOR:
+                buf.append(ESCAPE_CHAR);
                     buf.append(UNIT_ESCAPE_CHAR);
                     break;
                 case RECORD_SEPARATOR:
@@ -52,8 +52,7 @@ public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelF
         }
     }
 
-    @NonNull
-    private String resetAndUnescape(@NonNull String string, @NonNull StringBuilder buf) {
+    private @NonNull String resetAndUnescape(@NonNull String string, @NonNull StringBuilder buf) {
         buf.setLength(0);
         unescape(string, buf);
         return buf.toString();

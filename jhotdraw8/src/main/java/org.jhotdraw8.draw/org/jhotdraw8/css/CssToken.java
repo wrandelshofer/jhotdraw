@@ -28,22 +28,19 @@ public class CssToken /*extends AST*/ {
     /**
      * The string value.
      */
-    @Nullable
-    private final String stringValue;
+    private final @Nullable String stringValue;
     /**
      * The numeric value.
      */
-    @Nullable
-    private final Number numericValue;
+    private final @Nullable Number numericValue;
 
     private final int startPos;
     private final int endPos;
     private final int lineNumber;
 
-    @Nullable
-    private final Character preferredQuoteChar;
+    private final @Nullable Character preferredQuoteChar;
 
-    private final static XmlNumberConverter NUMBER_CONVERTER = new XmlNumberConverter();
+    private static final XmlNumberConverter NUMBER_CONVERTER = new XmlNumberConverter();
 
     public CssToken(int ttype, @NonNull String stringValue) {
         this(ttype, stringValue, null, 0, 0, stringValue.length());
@@ -101,24 +98,20 @@ public class CssToken /*extends AST*/ {
         this.preferredQuoteChar = preferredQuoteChar;
     }
 
-    @NonNull
-    public String getStringValueNonNull() {
+    public @NonNull String getStringValueNonNull() {
         return Objects.requireNonNull(stringValue);
     }
 
-    @NonNull
-    public Number getNumericValueNonNull() {
+    public @NonNull Number getNumericValueNonNull() {
         return Objects.requireNonNull(numericValue);
     }
 
-    @Nullable
     @Override
-    public String toString() {
+    public @Nullable String toString() {
         return fromToken();
     }
 
-    @Nullable
-    public String fromToken() {
+    public @Nullable String fromToken() {
         if (ttype >= 0) {
             return stringValue;
         }
@@ -175,23 +168,19 @@ public class CssToken /*extends AST*/ {
         throw new InternalError("Unsupported TTYPE:" + ttype);
     }
 
-    @NonNull
-    private String fromCDC() {
+    private @NonNull String fromCDC() {
         return "<!--";
     }
 
-    @NonNull
-    private String fromCDO() {
+    private @NonNull String fromCDO() {
         return "-->";
     }
 
-    @NonNull
-    private String fromIDENT() {
+    private @NonNull String fromIDENT() {
         return fromIDENT(stringValue);
     }
 
-    @NonNull
-    private String fromIDENT(@NonNull String value) {
+    private @NonNull String fromIDENT(@NonNull String value) {
         StringBuilder out = new StringBuilder();
         Reader r = new StringReader(value);
         try {
@@ -260,8 +249,7 @@ public class CssToken /*extends AST*/ {
         }
     }
 
-    @NonNull
-    private String fromHASHorAT(char hashOrAt, @NonNull String value) {
+    private @NonNull String fromHASHorAT(char hashOrAt, @NonNull String value) {
         StringBuilder out = new StringBuilder();
         out.append(hashOrAt);
         Reader r = new StringReader(value);
@@ -287,15 +275,13 @@ public class CssToken /*extends AST*/ {
     }
 
 
-    private final static CssStringConverter cssStringConverter = new CssStringConverter();
+    private static final CssStringConverter cssStringConverter = new CssStringConverter();
 
-    @NonNull
-    private String fromSTRING() {
+    private @NonNull String fromSTRING() {
         return fromSTRING(stringValue);
     }
 
-    @NonNull
-    private String fromSTRING(@NonNull String value) {
+    private @NonNull String fromSTRING(@NonNull String value) {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
@@ -303,13 +289,11 @@ public class CssToken /*extends AST*/ {
         return fromSTRING(value, quoteChar, quoteChar);
     }
 
-    @NonNull
-    private String fromBAD_URI(String value) {
+    private @NonNull String fromBAD_URI(String value) {
         return fromURL(value);
     }
 
-    @NonNull
-    private String fromBAD_STRING(@NonNull String value) {
+    private @NonNull String fromBAD_STRING(@NonNull String value) {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
@@ -317,18 +301,17 @@ public class CssToken /*extends AST*/ {
         return fromSTRING(value, quoteChar, '\n');
     }
 
-    @NonNull
-    private String fromSTRING(@NonNull String value, final char firstQuoteChar, final char lastQuoteChar) {
+    private @NonNull String fromSTRING(@NonNull String value, final char firstQuoteChar, final char lastQuoteChar) {
         StringBuilder out = new StringBuilder();
         out.append(firstQuoteChar);
         for (char ch : value.toCharArray()) {
             switch (ch) {
-                case ' ':
-                    out.append(ch);
-                    break;
-                case '\\':
-                    out.append('\\');
-                    out.append('\\');
+            case ' ':
+                out.append(ch);
+                break;
+            case '\\':
+                out.append('\\');
+                out.append('\\');
                     break;
                 case '\n':
                     out.append('\\');
@@ -363,23 +346,19 @@ public class CssToken /*extends AST*/ {
         return NUMBER_CONVERTER.toString(numericValue);
     }
 
-    @NonNull
-    private String fromPERCENTAGE() {
+    private @NonNull String fromPERCENTAGE() {
         return Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + "%" : fromNUMBER();
     }
 
-    @NonNull
-    private String fromDIMENSION() {
+    private @NonNull String fromDIMENSION() {
         return !stringValue.isEmpty() && Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + fromIDENT() : fromNUMBER();
     }
 
-    @NonNull
-    private String fromURL() {
+    private @NonNull String fromURL() {
         return fromURL(stringValue);
     }
 
-    @NonNull
-    private String fromURL(@NonNull String stringValue) {
+    private @NonNull String fromURL(@NonNull String stringValue) {
         StringBuilder out = new StringBuilder();
         out.append("url(");
         Reader r = new StringReader(stringValue);
@@ -418,48 +397,39 @@ public class CssToken /*extends AST*/ {
         return out.toString();
     }
 
-    @Nullable
-    private String fromUNICODE_RANGE() {
+    private @Nullable String fromUNICODE_RANGE() {
         return stringValue;
     }
 
-    @Nullable
-    private String fromS() {
+    private @Nullable String fromS() {
         return stringValue;
     }
 
-    @NonNull
-    private String fromCOMMENT() {
+    private @NonNull String fromCOMMENT() {
         return "/" + "*" + stringValue.replace("*" + '/', "* /") + '*' + '/';
     }
 
-    @Nullable
-    private String fromINCLUDE_MATCH() {
+    private @Nullable String fromINCLUDE_MATCH() {
         return stringValue;
     }
 
-    @Nullable
-    private String fromDASH_MATCH() {
+    private @Nullable String fromDASH_MATCH() {
         return stringValue;
     }
 
-    @Nullable
-    private String fromPREFIX_MATCH() {
+    private @Nullable String fromPREFIX_MATCH() {
         return stringValue;
     }
 
-    @Nullable
-    private String fromSUFFIX_MATCH() {
+    private @Nullable String fromSUFFIX_MATCH() {
         return stringValue;
     }
 
-    @Nullable
-    private String fromSUBSTRING_MATCH() {
+    private @Nullable String fromSUBSTRING_MATCH() {
         return stringValue;
     }
 
-    @Nullable
-    private String fromCOLUMN() {
+    private @Nullable String fromCOLUMN() {
         return stringValue;
     }
 
@@ -471,13 +441,11 @@ public class CssToken /*extends AST*/ {
         return endPos;
     }
 
-    @Nullable
-    public String getStringValue() {
+    public @Nullable String getStringValue() {
         return stringValue;
     }
 
-    @Nullable
-    public Number getNumericValue() {
+    public @Nullable Number getNumericValue() {
         return numericValue;
     }
 

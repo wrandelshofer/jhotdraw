@@ -21,7 +21,7 @@ import java.util.function.Function;
  */
 public class NullableIntegerStyleableKey extends SimpleStyleableKey<Integer> implements WriteableStyleableMapAccessor<Integer> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public NullableIntegerStyleableKey(String key) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key));

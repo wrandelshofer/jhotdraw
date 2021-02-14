@@ -164,8 +164,7 @@ public class IntArrayDeque {
         tail = n;
     }
 
-    @NonNull
-    public Iterator<Integer> iterator() {
+    public @NonNull Iterator<Integer> iterator() {
         return new DeqIterator();
     }
 
@@ -228,8 +227,7 @@ public class IntArrayDeque {
         return head == tail;
     }
 
-    @NonNull
-    public String toString() {
+    public @NonNull String toString() {
         Iterator<Integer> it = iterator();
         if (!it.hasNext()) {
             return "[]";

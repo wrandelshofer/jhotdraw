@@ -24,8 +24,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped set
      */
-    @NonNull
-    default Set<E> asSet() {
+    default @NonNull Set<E> asSet() {
         return new SetWrapper<>(this);
     }
 
@@ -34,8 +33,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped set
      */
-    @NonNull
-    default ObservableSet<E> asObservableSet() {
+    default @NonNull ObservableSet<E> asObservableSet() {
         return new ObservableSetWrapper<>(this);
     }
 }

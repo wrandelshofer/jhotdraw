@@ -159,13 +159,12 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
  */
 public class ModelerActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
-    private final static String DIAGRAMMER_NAMESPACE_URI = "http://jhotdraw.org/samples/modeler";
+    private static final String DIAGRAMMER_NAMESPACE_URI = "http://jhotdraw.org/samples/modeler";
     private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
     /**
      * Counter for incrementing layer names.
      */
-    @NonNull
-    private final Map<String, Integer> counters = new HashMap<>();
+    private final @NonNull Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
     @FXML
@@ -182,8 +181,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
-    @NonNull
-    private Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
+    private @NonNull Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = ModelerLabels.getInspectorResources();
         SimpleDockable dockItem = new SimpleDockable(r.getString(id + ".toolbar"),
                 inspector.getNode());
@@ -208,9 +206,8 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         }
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> clear() {
+    public @NonNull CompletionStage<Void> clear() {
         Drawing d = new SimpleLayeredDrawing();
         applyUserAgentStylesheet(d);
         d.set(StyleableFigure.ID, "drawing1");
@@ -291,8 +288,7 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
 
     }
 
-    @NonNull
-    private Supplier<Layer> initToolBar() throws MissingResourceException {
+    private @NonNull Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources labels = ModelerLabels.getResources();
@@ -545,9 +541,8 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
         });
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
+    public @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -587,9 +582,8 @@ public class ModelerActivity extends AbstractFileBasedActivity implements FileBa
 //        PreferencesUtil.installVisibilityPrefsHandlers(prefs, detailsScrollPane, detailsVisible, mainSplitPane, Side.RIGHT);
     }
 
-    @NonNull
     @Override
-    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
+    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(FXSvgFullWriter.SVG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".svg")) {

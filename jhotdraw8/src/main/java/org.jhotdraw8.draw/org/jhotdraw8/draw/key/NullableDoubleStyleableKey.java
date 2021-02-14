@@ -24,9 +24,8 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> implements WriteableStyleableMapAccessor<Double> {
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssMetaData<? extends Styleable, Double> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssMetaData<? extends Styleable, Double> cssMetaData;
 
     private final Converter<Double> converter;
 
@@ -72,9 +71,8 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
 
     }
 
-    @NonNull
     @Override
-    public Converter<Double> getCssConverter() {
+    public @NonNull Converter<Double> getCssConverter() {
         return converter;
     }
 }

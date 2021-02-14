@@ -15,7 +15,7 @@ package org.jhotdraw8.css;
  */
 public class CssTokenType {
 
-    public final static String IDENT_NONE = "none";
+    public static final String IDENT_NONE = "none";
 
     /**
      * The 'initial' keyword is used to indicate that the property's
@@ -24,7 +24,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#initial">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public final static String IDENT_INITIAL = "initial";
+    public static final String IDENT_INITIAL = "initial";
     /**
      * The 'inherit' keyword is used to indicate that the property's
      * specified and computed values are the inherited value.
@@ -32,7 +32,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#inherit">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public final static String IDENT_INHERIT = "inherit";
+    public static final String IDENT_INHERIT = "inherit";
     /**
      * The 'unset' keyword is used to indicate that the property's
      * specified value should be taken from the previous origin level.
@@ -40,7 +40,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#revert">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public final static String IDENT_REVERT = "revert";
+    public static final String IDENT_REVERT = "revert";
     /**
      * The 'revert' keyword is used to indicate 'inherit' if the property
      * is inherited, and 'initial' if not.
@@ -48,7 +48,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#unset">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public final static String IDENT_UNSET = "unset";
+    public static final String IDENT_UNSET = "unset";
 
     /**
      * Defines an at-keyword-token.
@@ -56,22 +56,22 @@ public class CssTokenType {
      *     at-keyword-token = '@', ident-token ;
      * </pre>
      */
-    public final static int TT_AT_KEYWORD = -3;
+    public static final int TT_AT_KEYWORD = -3;
 
     /**
      * Defines a bad-comment-token.
      */
-    public final static int TT_BAD_COMMENT = -7;
+    public static final int TT_BAD_COMMENT = -7;
 
     /**
      * Defines a bad-string-token.
      */
-    public final static int TT_BAD_STRING = -5;
+    public static final int TT_BAD_STRING = -5;
 
     /**
      * Defines a bad-uri-token.
      */
-    public final static int TT_BAD_URI = -6;
+    public static final int TT_BAD_URI = -6;
 
     /**
      * Defines a CDC-token.
@@ -79,7 +79,7 @@ public class CssTokenType {
      *  CDC-token ={@literal "-->"};
      * </pre>
      */
-    public final static int TT_CDC = -15;
+    public static final int TT_CDC = -15;
 
     /**
      * Defines a CDO-token.
@@ -87,7 +87,7 @@ public class CssTokenType {
      *  CDO-token ={@literal "<!--"};
      * </pre>
      */
-    public final static int TT_CDO = -14;
+    public static final int TT_CDO = -14;
 
     /**
      * Defines a column-token.
@@ -95,7 +95,7 @@ public class CssTokenType {
      *  column-token = "||";
      * </pre>
      */
-    public final static int TT_COLUMN = -24;
+    public static final int TT_COLUMN = -24;
 
     /**
      * Defines a comment-token.
@@ -104,7 +104,7 @@ public class CssTokenType {
      *     comment-body = (* anything but '*' followed by '/' *);
      * </pre>
      */
-    public final static int TT_COMMENT = -17;
+    public static final int TT_COMMENT = -17;
 
     /**
      * Defines a dash-match-token.
@@ -112,7 +112,7 @@ public class CssTokenType {
      *  dash-match-token = "|=";
      * </pre>
      */
-    public final static int TT_DASH_MATCH = -20;
+    public static final int TT_DASH_MATCH = -20;
 
     /**
      * Defines a dimension-token.
@@ -120,12 +120,12 @@ public class CssTokenType {
      *     dimension-token = number-token , ident-token ;
      * </pre>
      */
-    public final static int TT_DIMENSION = -11;
+    public static final int TT_DIMENSION = -11;
 
     /**
      * Defines an EOF-token.
      */
-    public final static int TT_EOF = -1;
+    public static final int TT_EOF = -1;
 
     /**
      * Defines a function-token.
@@ -133,7 +133,7 @@ public class CssTokenType {
      *     function-token = ident-token , '(' ;
      * </pre>
      */
-    public final static int TT_FUNCTION = -18;
+    public static final int TT_FUNCTION = -18;
 
     /**
      * Defines a hash-token.
@@ -156,7 +156,7 @@ public class CssTokenType {
      *
      * </pre>
      */
-    public final static int TT_HASH = -8;
+    public static final int TT_HASH = -8;
 
     /**
      * Defines an ident-token.
@@ -180,7 +180,7 @@ public class CssTokenType {
      *               | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
      * </pre>
      */
-    public final static int TT_IDENT = -2;
+    public static final int TT_IDENT = -2;
 
     /**
      * Defines an include-match-token.
@@ -188,7 +188,7 @@ public class CssTokenType {
      *  include-match-token = "~=";
      * </pre>
      */
-    public final static int TT_INCLUDE_MATCH = -19;
+    public static final int TT_INCLUDE_MATCH = -19;
 
     /**
      * Defines a number-token.
@@ -200,7 +200,7 @@ public class CssTokenType {
      * scientific-number ::= decimal-number , ( "E" | "e" ) , integer ;
      * </pre>
      */
-    public final static int TT_NUMBER = -9;
+    public static final int TT_NUMBER = -9;
 
     /**
      * Defines a percentage-token.
@@ -208,7 +208,7 @@ public class CssTokenType {
      *     percentage-token = number-token , '%' ;
      * </pre>
      */
-    public final static int TT_PERCENTAGE = -10;
+    public static final int TT_PERCENTAGE = -10;
 
     /**
      * Defines a prefix-match-token.
@@ -216,7 +216,7 @@ public class CssTokenType {
      *  prefix-match-token = "^=";
      * </pre>
      */
-    public final static int TT_PREFIX_MATCH = -21;
+    public static final int TT_PREFIX_MATCH = -21;
 
     /**
      * Defines a ws*-token.
@@ -230,7 +230,7 @@ public class CssTokenType {
      *     newline = '\n' | "\r\n" | '\r' | '\f' ;
      * </pre>
      */
-    public final static int TT_S = -16;
+    public static final int TT_S = -16;
 
     /**
      * Defines a string-token.
@@ -253,7 +253,7 @@ public class CssTokenType {
      *     newline = '\n' | "\r\n" | '\r' | '\f' ;
      * </pre>
      */
-    public final static int TT_STRING = -4;
+    public static final int TT_STRING = -4;
 
     /**
      * Defines a substring-match-token.
@@ -261,7 +261,7 @@ public class CssTokenType {
      *  substring-match-token = "*=";
      * </pre>
      */
-    public final static int TT_SUBSTRING_MATCH = -23;
+    public static final int TT_SUBSTRING_MATCH = -23;
 
     /**
      * Defines a suffix-match-token.
@@ -269,7 +269,7 @@ public class CssTokenType {
      *  suffix-match-token = "$=";
      * </pre>
      */
-    public final static int TT_SUFFIX_MATCH = -22;
+    public static final int TT_SUFFIX_MATCH = -22;
 
     /**
      * Defines a unicode-range-token.
@@ -284,7 +284,7 @@ public class CssTokenType {
      *     from-to-range = hex-digit, 5 * { hex-digit } , '-' , hex-digit, 5 * { hex-digit } ;
      * </pre>
      */
-    public final static int TT_UNICODE_RANGE = -13;
+    public static final int TT_UNICODE_RANGE = -13;
 
     /**
      * Defines a url-token.
@@ -294,79 +294,79 @@ public class CssTokenType {
      *     url-unquoted-char = not " ' ( ) \ whitespace or non-printable | escape ;
      * </pre>
      */
-    public final static int TT_URL = -12;
+    public static final int TT_URL = -12;
 
     /**
      * Defines the comma "," delim-token.
      */
-    public final static int TT_COMMA = ',';
+    public static final int TT_COMMA = ',';
 
     /**
      * Defines the semicolon ";" delim-token.
      */
-    public final static int TT_SEMICOLON = ';';
+    public static final int TT_SEMICOLON = ';';
 
     /**
      * Defines the point "." delim-token.
      */
-    public final static int TT_POINT = '.';
+    public static final int TT_POINT = '.';
 
     /**
      * Defines the colon ":" delim-token.
      */
-    public final static int TT_COLON = ':';
+    public static final int TT_COLON = ':';
 
     /**
      * Defines the asterisk "*" delim-token.
      */
-    public final static int TT_ASTERISK = '*';
+    public static final int TT_ASTERISK = '*';
 
     /**
      * Defines the left bracket ")" delim-token.
      */
-    public final static int TT_LEFT_BRACKET = '(';
+    public static final int TT_LEFT_BRACKET = '(';
     /**
      * Defines the right round bracket ")" delim-token.
      */
-    public final static int TT_RIGHT_BRACKET = ')';
+    public static final int TT_RIGHT_BRACKET = ')';
     /**
      * Defines the right curly bracket "}" delim-token.
      */
-    public final static int TT_RIGHT_CURLY_BRACKET = '}';
+    public static final int TT_RIGHT_CURLY_BRACKET = '}';
     /**
      * Defines the left curly bracket "{" delim-token.
      */
-    public final static int TT_LEFT_CURLY_BRACKET = '{';
+    public static final int TT_LEFT_CURLY_BRACKET = '{';
     /**
      * Defines the right square bracket "]" delim-token.
      */
-    public final static int TT_RIGHT_SQUARE_BRACKET = ']';
+    public static final int TT_RIGHT_SQUARE_BRACKET = ']';
     /**
      * Defines the left square bracket "[" delim-token.
      */
-    public final static int TT_LEFT_SQUARE_BRACKET = '[';
+    public static final int TT_LEFT_SQUARE_BRACKET = '[';
     /**
      * Defines the equals "=" delim-token.
      */
-    public final static int TT_EQUALS = '=';
+    public static final int TT_EQUALS = '=';
     /**
      * Defines the slash "/" delim-token.
      */
-    public final static int TT_SLASH = '/';
+    public static final int TT_SLASH = '/';
 
     /**
      * Defines the plus "+" delim-token.
      */
-    public final static int TT_PLUS = '+';
+    public static final int TT_PLUS = '+';
     /**
      * Defines the percent "%" delim-token.
      */
-    public final static int TT_PERCENT_DELIM = '%';
+    public static final int TT_PERCENT_DELIM = '%';
 
     /**
      * Defines the vertical line "|" delim-token.
      */
-    public final static int TT_VERTICAL_LINE = '|';
+    public static final int TT_VERTICAL_LINE = '|';
 
     /**
      * Defines the greater than ">" delim-token.

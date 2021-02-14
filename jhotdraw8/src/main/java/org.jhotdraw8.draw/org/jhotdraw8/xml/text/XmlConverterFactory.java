@@ -24,19 +24,18 @@ import org.jhotdraw8.text.XmlWordConverter;
  */
 public class XmlConverterFactory implements ConverterFactory {
 
-    @NonNull
     @Override
-    public Converter<?> apply(@Nullable String type, String style) {
+    public @NonNull Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {
             return new DefaultConverter();
         }
         switch (type) {
-            case "number":
-                return new XmlNumberConverter();
-            case "word":
-                return new XmlWordConverter();
-            default:
-                throw new IllegalArgumentException("illegal type:" + type);
+        case "number":
+            return new XmlNumberConverter();
+        case "word":
+            return new XmlWordConverter();
+        default:
+            throw new IllegalArgumentException("illegal type:" + type);
         }
     }
 

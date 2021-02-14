@@ -54,9 +54,8 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     public static final String GENERIC_FONT_FAMILY_FANTASY = "fantasy";
     public static final String GENERIC_FONT_FAMILY_MONOSPACE = "monospace";
 
-    @Nullable
     @Override
-    public ImmutableList<String> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable ImmutableList<String> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<String> list = new ArrayList<>();
         StringBuffer buf = new StringBuffer();
         Loop:
@@ -117,9 +116,8 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
         }
     }
 
-    @Nullable
     @Override
-    public ImmutableList<String> getDefaultValue() {
+    public @Nullable ImmutableList<String> getDefaultValue() {
         return ImmutableLists.of("serif");
     }
 

@@ -11,7 +11,7 @@ package org.jhotdraw8.graph;
  */
 public class PathBuilderException extends Exception {
 
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     public PathBuilderException(String message) {
         super(message);

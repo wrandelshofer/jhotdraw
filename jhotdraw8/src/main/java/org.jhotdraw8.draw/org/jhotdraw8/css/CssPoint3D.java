@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class CssPoint3D {
 
-    public final static CssPoint3D ZERO = new CssPoint3D();
+    public static final CssPoint3D ZERO = new CssPoint3D();
 
     private final CssSize x;
     private final CssSize y;
@@ -83,9 +83,8 @@ public class CssPoint3D {
         return hash;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssPoint3D{" +
                 "" + x +
                 ", " + y +
@@ -93,8 +92,7 @@ public class CssPoint3D {
                 '}';
     }
 
-    @NonNull
-    public Point3D getConvertedValue() {
+    public @NonNull Point3D getConvertedValue() {
         return new Point3D(x.getConvertedValue(), y.getConvertedValue(), z.getConvertedValue());
 
     }

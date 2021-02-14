@@ -21,10 +21,9 @@ import java.text.ParsePosition;
  */
 public class FormatConverterAdapter extends Format {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final Converter<Object> converter;
+    private final @NonNull Converter<Object> converter;
 
     public FormatConverterAdapter(Converter<?> converter) {
         @SuppressWarnings("unchecked")
@@ -32,16 +31,14 @@ public class FormatConverterAdapter extends Format {
         this.converter = temp;
     }
 
-    @NonNull
     @Override
-    public StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, FieldPosition pos) {
+    public @NonNull StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, FieldPosition pos) {
         toAppendTo.append(converter.toString(obj));
         return toAppendTo;
     }
 
-    @Nullable
     @Override
-    public Object parseObject(@NonNull String source, @NonNull ParsePosition pos) {
+    public @Nullable Object parseObject(@NonNull String source, @NonNull ParsePosition pos) {
         try {
             CharBuffer buf = CharBuffer.wrap(source);
             Object value = converter.fromString(buf, null);

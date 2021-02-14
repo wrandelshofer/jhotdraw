@@ -76,8 +76,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
         return get(END_CONNECTOR) != null && get(END_TARGET) != null;
     }
 
-    @Nullable
-    default Point2D getStartTargetPoint() {
+    default @Nullable Point2D getStartTargetPoint() {
         Connector connector = get(START_CONNECTOR);
         Figure target = get(START_TARGET);
         if (connector != null && target != null) {
@@ -87,8 +86,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
         }
     }
 
-    @Nullable
-    default Point2D getEndTargetPoint() {
+    default @Nullable Point2D getEndTargetPoint() {
         Connector connector = get(END_CONNECTOR);
         Figure target = get(END_TARGET);
         if (connector != null && target != null) {

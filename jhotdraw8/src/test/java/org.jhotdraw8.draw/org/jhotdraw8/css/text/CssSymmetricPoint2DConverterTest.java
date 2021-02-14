@@ -23,8 +23,7 @@ class CssSymmetricPoint2DConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    static
-    public void doTestFromString(Point2D expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(Point2D expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -35,9 +34,8 @@ class CssSymmetricPoint2DConverterTest {
         assertEquals(expected, actual);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new Point2D(10, 20), "10 20")),
                 dynamicTest("2", () -> doTestFromString(new Point2D(10, 10), "10")),

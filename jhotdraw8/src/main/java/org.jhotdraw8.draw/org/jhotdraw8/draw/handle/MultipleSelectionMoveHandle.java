@@ -34,18 +34,13 @@ import org.jhotdraw8.geom.Geom;
  */
 public class MultipleSelectionMoveHandle extends AbstractHandle {
 
-    @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
-    @Nullable
-    private Point2D locationInDrawing;
-    @NonNull
-    private final Region node;
+    private @Nullable Point2D locationInDrawing;
+    private final @NonNull Region node;
     private Point2D oldPoint;
-    @Nullable
-    private Point2D pickLocation;
+    private @Nullable Point2D pickLocation;
     private double relativeX;
     private double relativeY;
 
@@ -75,19 +70,16 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         return Cursor.OPEN_HAND;
     }
 
-    @Nullable
-    private Point2D getLocation(@NonNull DrawingView dv) {
+    private @Nullable Point2D getLocation(@NonNull DrawingView dv) {
         return locationInDrawing == null ? null : dv.worldToView(locationInDrawing);
     }
 
-    @Nullable
-    public Point2D getLocationInView() {
+    public @Nullable Point2D getLocationInView() {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(DrawingView view) {
+    public @NonNull Region getNode(DrawingView view) {
         return node;
     }
 
@@ -178,23 +170,19 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         }
     }
 
-    @NonNull
-    public static MultipleSelectionMoveHandle northEast() {
+    public static @NonNull MultipleSelectionMoveHandle northEast() {
         return new MultipleSelectionMoveHandle(1.0, 0.0);
     }
 
-    @NonNull
-    public static MultipleSelectionMoveHandle northWest() {
+    public static @NonNull MultipleSelectionMoveHandle northWest() {
         return new MultipleSelectionMoveHandle(0.0, 0.0);
     }
 
-    @NonNull
-    public static MultipleSelectionMoveHandle southEast() {
+    public static @NonNull MultipleSelectionMoveHandle southEast() {
         return new MultipleSelectionMoveHandle(1.0, 1.0);
     }
 
-    @NonNull
-    public static MultipleSelectionMoveHandle southWest() {
+    public static @NonNull MultipleSelectionMoveHandle southWest() {
         return new MultipleSelectionMoveHandle(0.0, 1.0);
     }
 }

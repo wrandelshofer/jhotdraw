@@ -38,7 +38,7 @@ public class ImageFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Image";
+    public static final String TYPE_SELECTOR = "Image";
 
     /**
      * The URI of the image.
@@ -46,22 +46,14 @@ public class ImageFigure extends AbstractLeafFigure
      * This property is also set on the ImageView node, so that
      * {@link org.jhotdraw8.draw.io.SvgExportOutputFormat} can pick it up.
      */
-    @NonNull
-    public final static UriStyleableKey IMAGE_URI = new UriStyleableKey("src", null);
-    @NonNull
-    public final static CssSizeStyleableKey X = RectangleFigure.X;
-    @NonNull
-    public final static CssSizeStyleableKey Y = RectangleFigure.Y;
-    @NonNull
-    public final static CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    @NonNull
-    public final static CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    @NonNull
-    public final static CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    @Nullable
-    private Image cachedImage;
-    @Nullable
-    private URI cachedImageUri;
+    public static final @NonNull UriStyleableKey IMAGE_URI = new UriStyleableKey("src", null);
+    public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
+    public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
+    public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
+    public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    private @Nullable Image cachedImage;
+    private @Nullable URI cachedImageUri;
 
     public ImageFigure() {
         this(0, 0, 1, 1);
@@ -75,9 +67,8 @@ public class ImageFigure extends AbstractLeafFigure
         set(BOUNDS, rect);
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 
@@ -97,9 +88,8 @@ public class ImageFigure extends AbstractLeafFigure
                 width.abs(), height.abs()));
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         ImageView n = new ImageView();
         n.setPreserveRatio(false);
         n.setManaged(false);
@@ -124,15 +114,13 @@ public class ImageFigure extends AbstractLeafFigure
         imageView.getProperties().put(IMAGE_URI, get(IMAGE_URI));
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

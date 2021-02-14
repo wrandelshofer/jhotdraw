@@ -50,15 +50,13 @@ public class CssColorConverter implements CssConverter<CssColor> {
         this.nullable = nullable;
     }
 
-    @Nullable
     @Override
-    public CssColor getDefaultValue() {
+    public @Nullable CssColor getDefaultValue() {
         return null;
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Color⟩: " + "⟨name⟩｜#⟨hex⟩｜rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)";
     }
 
@@ -67,9 +65,8 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return nullable;
     }
 
-    @Nullable
     @Override
-    public CssColor parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable CssColor parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CssColor color = null;
 
         if (nullable) {
@@ -227,18 +224,17 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return color;
     }
 
-    @NonNull
-    private CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
+    private @NonNull CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
         try {
             int v = (int) Long.parseLong(hexdigits, 16);
             int r, g, b, a;
             switch (hexdigits.length()) {
-                case 3:
-                    r = (((v & 0xf00) >>> 4) | (v & 0xf00) >>> 8);
-                    g = (((v & 0x0f0)) | (v & 0x0f0) >>> 4);
-                    b = ((v & 0x00f) << 4) | (v & 0x00f);
-                    a = 255;
-                    return new CssColor('#' + hexdigits.toLowerCase(), new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
+            case 3:
+                r = (((v & 0xf00) >>> 4) | (v & 0xf00) >>> 8);
+                g = (((v & 0x0f0)) | (v & 0x0f0) >>> 4);
+                b = ((v & 0x00f) << 4) | (v & 0x00f);
+                a = 255;
+                return new CssColor('#' + hexdigits.toLowerCase(), new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
                 case 4:
                     r = (((v & 0xf000) >>> 8) | (v & 0xf000) >>> 12);
                     g = (((v & 0x0f00) >>> 4) | (v & 0x0f00) >>> 8);

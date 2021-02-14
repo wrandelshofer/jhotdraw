@@ -84,8 +84,7 @@ public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
      * @return a collection view on the direct successor vertices of vertex
      * with the arrow pointing to the vertex
      */
-    @NonNull
-    default Collection<Map.Entry<Integer, A>> getNextIntEntries(int vertexIndex) {
+    default @NonNull Collection<Map.Entry<Integer, A>> getNextIntEntries(int vertexIndex) {
         class NextVertexAndArrowIterator implements Iterator<Map.Entry<Integer, A>> {
 
             private int index;
@@ -102,9 +101,8 @@ public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
                 return index < nextCount;
             }
 
-            @NonNull
             @Override
-            public Map.Entry<Integer, A> next() {
+            public @NonNull Map.Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
                         getNext(vertex, i),
@@ -114,9 +112,8 @@ public interface AttributedIntDirectedGraph<V, A> extends IntDirectedGraph {
 
         }
         return new AbstractCollection<Map.Entry<Integer, A>>() {
-            @NonNull
             @Override
-            public Iterator<Map.Entry<Integer, A>> iterator() {
+            public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {
                 return new NextVertexAndArrowIterator(vertexIndex);
             }
 

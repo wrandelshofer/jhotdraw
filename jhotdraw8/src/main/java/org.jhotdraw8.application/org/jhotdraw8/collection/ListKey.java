@@ -13,7 +13,7 @@ import org.jhotdraw8.reflect.TypeToken;
  */
 public class ListKey<E> extends ObjectKey<ImmutableList<E>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public ListKey(String key, TypeToken<ImmutableList<E>> type) {
         super(key, type, ImmutableLists.emptyList());

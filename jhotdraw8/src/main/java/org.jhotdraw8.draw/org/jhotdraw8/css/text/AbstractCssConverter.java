@@ -24,9 +24,8 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
     }
 
 
-    @Nullable
     @Override
-    public final T parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public final @Nullable T parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (isNullable()) {
             if (tt.nextIsIdentNone()) {
                 return null;
@@ -45,14 +44,12 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
         }
     }
 
-    @NonNull
-    public abstract T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
+    public abstract @NonNull T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
     protected abstract <TT extends T> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException;
 
-    @Nullable
     @Override
-    public T getDefaultValue() {
+    public @Nullable T getDefaultValue() {
         return null;
     }
 

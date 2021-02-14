@@ -38,10 +38,8 @@ import org.jhotdraw8.annotation.NonNull;
 public class NineRegionsScalingBuilder extends AbstractPathBuilder {
 
     private final double minX, minY, maxX, maxY;
-    @NonNull
-    private final Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
-    @NonNull
-    private final PathBuilder target;
+    private final @NonNull Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
+    private final @NonNull PathBuilder target;
 
     /**
      * Creates a new instance.

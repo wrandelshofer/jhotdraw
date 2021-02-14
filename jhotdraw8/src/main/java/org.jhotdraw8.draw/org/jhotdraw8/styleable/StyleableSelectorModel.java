@@ -35,9 +35,8 @@ import java.util.stream.Collectors;
 public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
 
-    @Nullable
     @Override
-    public String getAttributeAsString(@NonNull Styleable element, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
+    public @Nullable String getAttributeAsString(@NonNull Styleable element, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         if (origin == StyleOrigin.USER) {
             String attribute = getAttributeAsString(element, namespace, name);
             return attribute == null ? "" : attribute;
@@ -76,9 +75,8 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return element.getStyleClass().contains(clazz);
     }
 
-    @NonNull
     @Override
-    public Set<String> getStyleClasses(@NonNull Styleable element) {
+    public @NonNull Set<String> getStyleClasses(@NonNull Styleable element) {
         return new HashSet<>(element.getStyleClass());
     }
 
@@ -93,9 +91,8 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return element.getStyleableParent();
     }
 
-    @Nullable
     @Override
-    public Styleable getPreviousSibling(@NonNull Styleable element) {
+    public @Nullable Styleable getPreviousSibling(@NonNull Styleable element) {
         return null;
     }
 
@@ -111,8 +108,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return false;
     }
 
-    @Nullable
-    public List<CssToken> getAttribute(@NonNull Styleable element, StyleOrigin origin, @Nullable String namespace, @NonNull String attributeName) {
+    public @Nullable List<CssToken> getAttribute(@NonNull Styleable element, StyleOrigin origin, @Nullable String namespace, @NonNull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -130,8 +126,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return null;
     }
 
-    @Nullable
-    private Set<String> getWordListAttribute(@NonNull Styleable element, @Nullable String namespace, @NonNull String attributeName) {
+    private @Nullable Set<String> getWordListAttribute(@NonNull Styleable element, @Nullable String namespace, @NonNull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!
         for (CssMetaData<? extends Styleable, ?> i : list) {
@@ -189,9 +184,8 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return actualValue != null && actualValue.endsWith(substring);
     }
 
-    @NonNull
     @Override
-    public Set<QualifiedName> getAttributeNames(@NonNull Styleable element) {
+    public @NonNull Set<QualifiedName> getAttributeNames(@NonNull Styleable element) {
         Set<QualifiedName> attr = new HashSet<>();
         for (CssMetaData<? extends Styleable, ?> item : element.getCssMetaData()) {
             attr.add(new QualifiedName(null, item.getProperty()));
@@ -199,16 +193,14 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return attr;
     }
 
-    @NonNull
     @Override
-    public Set<QualifiedName> getComposedAttributeNames(@NonNull Styleable element) {
+    public @NonNull Set<QualifiedName> getComposedAttributeNames(@NonNull Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }
 
-    @NonNull
     @Override
-    public Set<QualifiedName> getDecomposedAttributeNames(@NonNull Styleable element) {
+    public @NonNull Set<QualifiedName> getDecomposedAttributeNames(@NonNull Styleable element) {
         // FIXME we actually can do this!
         return getAttributeNames(element);
     }

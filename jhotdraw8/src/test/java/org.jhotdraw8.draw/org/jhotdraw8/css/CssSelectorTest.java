@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class CssSelectorTest {
 
-    private final static String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+    private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
     /**
      * Test various selectors.
@@ -103,9 +103,8 @@ public class CssSelectorTest {
         assertEquals(expectedValue, actualValue);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testVariousSelectors() {
+    public @NonNull List<DynamicTest> testVariousSelectors() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSelector("#vertex4 {\n"
                         + "    -jhotdraw-fill: yellow;\n"
@@ -169,9 +168,8 @@ public class CssSelectorTest {
 
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testSelectorSpecificity() {
+    public @NonNull List<DynamicTest> testSelectorSpecificity() {
         return Arrays.asList(
                 dynamicTest("46", () -> testSelectorSpecificity("TubeShape,\n" +
                         "TubeShape.One,\n" +

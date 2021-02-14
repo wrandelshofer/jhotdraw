@@ -25,9 +25,8 @@ import java.util.function.Function;
 public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<@NonNull MLCompartmentalizedData>
         implements WriteableStyleableMapAccessor<@NonNull MLCompartmentalizedData>, NonNullMapAccessor<@NonNull MLCompartmentalizedData> {
 
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssMetaData<? extends Styleable, MLCompartmentalizedData> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssMetaData<? extends Styleable, MLCompartmentalizedData> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -80,12 +79,10 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
 
     }
 
-    @NonNull
-    private final CssUmlCompartmentalizedDataConverter converter;
+    private final @NonNull CssUmlCompartmentalizedDataConverter converter;
 
-    @NonNull
     @Override
-    public Converter<MLCompartmentalizedData> getCssConverter() {
+    public @NonNull Converter<MLCompartmentalizedData> getCssConverter() {
         return converter;
     }
 }

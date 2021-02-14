@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Properties;
 
 class BinaryPListParserTest {
-    private final static Properties INDENT_XML_PROPERTIES = new Properties();
+    private static final Properties INDENT_XML_PROPERTIES = new Properties();
 
     static {
         INDENT_XML_PROPERTIES.put(OutputKeys.INDENT, "yes");
@@ -34,7 +34,7 @@ class BinaryPListParserTest {
         INDENT_XML_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount", "2");
     }
 
-    private final static Properties NO_INDENT_XML_PROPERTIES = new Properties();
+    private static final Properties NO_INDENT_XML_PROPERTIES = new Properties();
 
     static {
         NO_INDENT_XML_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");
@@ -86,7 +86,7 @@ class BinaryPListParserTest {
         return doc;
     }
 
-    private static void normalizeWhitespace(@NonNull final Node node, final boolean stripComments) {
+    private static void normalizeWhitespace(final @NonNull Node node, final boolean stripComments) {
         final NodeList childNodes = node.getChildNodes();
         final List<Node> list = new ArrayList<>();
         for (int i = 0, n = childNodes.getLength(); i < n; i++) {

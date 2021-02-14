@@ -39,8 +39,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
-    @NonNull
-    public static <V, A> DirectedGraphBuilder<V, A> inverseOfDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public static @NonNull <V, A> DirectedGraphBuilder<V, A> inverseOfDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
         final int arrowCount = graph.getArrowCount();
 
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>(graph.getVertexCount(), arrowCount);
@@ -63,8 +62,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param graph a graph
      * @return a new graph
      */
-    @NonNull
-    public static <V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public static @NonNull <V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
         for (V v : graph.getVertices()) {
             b.addVertex(v);
@@ -87,10 +85,9 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param arrowMapper  maps an arrow of source type AA to the target type A
      * @return a new graph
      */
-    @NonNull
-    public static <VV, AA, V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(@NonNull DirectedGraph<VV, AA> graph,
-                                                                            @NonNull Function<VV, V> vertexMapper,
-                                                                            @NonNull Function<AA, A> arrowMapper) {
+    public static @NonNull <VV, AA, V, A> DirectedGraphBuilder<V, A> ofDirectedGraph(@NonNull DirectedGraph<VV, AA> graph,
+                                                                                     @NonNull Function<VV, V> vertexMapper,
+                                                                                     @NonNull Function<AA, A> arrowMapper) {
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
         for (VV vv : graph.getVertices()) {
             V v = vertexMapper.apply(vv);
@@ -113,8 +110,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param vertexPredicate a predicate for the vertices
      * @return a subset of the directed graph
      */
-    @NonNull
-    public static <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(@NonNull DirectedGraph<V, A> graph, @NonNull Predicate<V> vertexPredicate) {
+    public static @NonNull <V, A> DirectedGraphBuilder<V, A> subsetOfDirectedGraph(@NonNull DirectedGraph<V, A> graph, @NonNull Predicate<V> vertexPredicate) {
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
         for (V v : graph.getVertices()) {
             if (vertexPredicate.test(v)) {
@@ -135,18 +131,15 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     /**
      * Maps a vertex to a vertex index.
      */
-    @NonNull
-    private final Map<V, Integer> vertexMap;
+    private final @NonNull Map<V, Integer> vertexMap;
     /**
      * Maps a vertex index to a vertex object.
      */
-    @NonNull
-    private final List<V> vertices;
+    private final @NonNull List<V> vertices;
     /**
      * Maps an arrow index to an arrow object.
      */
-    @NonNull
-    private final List<A> arrows;
+    private final @NonNull List<A> arrows;
 
     /**
      * Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
@@ -272,8 +265,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      *
      * @return the created graph
      */
-    @NonNull
-    public ImmutableDirectedGraph<V, A> build() {
+    public @NonNull ImmutableDirectedGraph<V, A> build() {
         final ImmutableDirectedGraph<V, A> graph = new ImmutableDirectedGraph<>((AttributedIntDirectedGraph<V, A>) this);
         return graph;
     }
@@ -286,16 +278,14 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         arrows.clear();
     }
 
-    @NonNull
     @Override
-    public A getNextArrow(@NonNull V vertex, int index) {
+    public @NonNull A getNextArrow(@NonNull V vertex, int index) {
         int arrowId = getNextArrowIndex(getVertexIndex(vertex), index);
         return getArrow(arrowId);
     }
 
-    @NonNull
     @Override
-    public V getNext(@NonNull V v, int i) {
+    public @NonNull V getNext(@NonNull V v, int i) {
         return getVertex(getNext(getVertexIndex(v), i));
     }
 
@@ -330,9 +320,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return arrows.get(arrowId);
     }
 
-    @NonNull
     @Override
-    public Collection<A> getArrows() {
+    public @NonNull Collection<A> getArrows() {
         class ArrowIterator implements Iterator<A> {
 
             private int index;
@@ -348,16 +337,14 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
             }
 
             @Override
-            @Nullable
-            public A next() {
+            public @Nullable A next() {
                 return getArrow(index++);
             }
 
         }
         return new AbstractCollection<A>() {
-            @NonNull
             @Override
-            public Iterator<A> iterator() {
+            public @NonNull Iterator<A> iterator() {
                 return new ArrowIterator();
             }
 
@@ -369,9 +356,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         };
     }
 
-    @NonNull
     @Override
-    public Collection<V> getVertices() {
+    public @NonNull Collection<V> getVertices() {
         class VertexIterator implements Iterator<V> {
 
             private int index;
@@ -393,9 +379,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
 
         }
         return new AbstractCollection<V>() {
-            @NonNull
             @Override
-            public Iterator<V> iterator() {
+            public @NonNull Iterator<V> iterator() {
                 return new VertexIterator();
             }
 

@@ -49,38 +49,29 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
  * @author Werner Randelshofer
  */
 public class RotateHandle extends AbstractHandle {
-    @Nullable
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
+    public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    @Nullable
-    private static final Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nullable
-    private static final Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
+    private static final @Nullable Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final @Nullable Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
 
     private static final Circle PICK_NODE_SHAPE = new Circle(3);
     private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
-    @Nullable
-    private static final Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
-    @Nullable
-    private static final Border PIVOT_REGION_BORDER = null;
+    private static final @Nullable Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
+    private static final @Nullable Border PIVOT_REGION_BORDER = null;
 
     static {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }
 
-    @NonNull
-    private final Group group;
+    private final @NonNull Group group;
 
     private Set<Figure> groupReshapeableFigures;
-    @NonNull
-    private final Line line;
+    private final @NonNull Line line;
     private double lineLength = 10.0;
     private Point2D pickLocation;
-    @NonNull
-    private final Region pickNode;
-    @NonNull
-    private final Region pivotNode;
+    private final @NonNull Region pickNode;
+    private final @NonNull Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
         super(figure);
@@ -129,9 +120,8 @@ public class RotateHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Group getNode(@NonNull DrawingView view) {
+    public @NonNull Group getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         lineLength = size * 1.5;
         if (pickNode.getWidth() != size) {
@@ -150,14 +140,12 @@ public class RotateHandle extends AbstractHandle {
         return group;
     }
 
-    @NonNull
     @Override
-    public TransformableFigure getOwner() {
+    public @NonNull TransformableFigure getOwner() {
         return (TransformableFigure) super.getOwner();
     }
 
-    @Nullable
-    private Transform getRotateToWorld() {
+    private @Nullable Transform getRotateToWorld() {
         TransformableFigure o = getOwner();
         Transform t = o.getParentToWorld();
 
@@ -172,8 +160,7 @@ public class RotateHandle extends AbstractHandle {
         return t;
     }
 
-    @Nullable
-    private Transform getWorldToRotate() {
+    private @Nullable Transform getWorldToRotate() {
         TransformableFigure o = getOwner();
         Transform t = o.getWorldToParent();
         Point2D center = FXGeom.center(o.getLayoutBounds());

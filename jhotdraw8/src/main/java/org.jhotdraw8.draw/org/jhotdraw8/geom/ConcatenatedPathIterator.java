@@ -20,8 +20,7 @@ import java.util.List;
  */
 public class ConcatenatedPathIterator implements PathIterator {
 
-    @Nullable
-    private PathIterator current;
+    private @Nullable PathIterator current;
     private Deque<PathIterator> iterators;
     private final int windingRule;
 

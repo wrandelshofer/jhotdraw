@@ -15,9 +15,8 @@ import org.jhotdraw8.io.SimpleIdFactory;
  * @author Werner Randelshofer
  */
 public class SimpleFigureIdFactory extends SimpleIdFactory {
-    @Nullable
     @Override
-    public String createId(Object object) {
+    public @Nullable String createId(Object object) {
         String id = getId(object);
 
         if (id == null) {
@@ -36,8 +35,7 @@ public class SimpleFigureIdFactory extends SimpleIdFactory {
         return id;
     }
 
-    @Nullable
-    public String putId(Object object) {
+    public @Nullable String putId(Object object) {
         String id = getId(object);
 
         if (id == null) {

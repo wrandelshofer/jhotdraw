@@ -34,8 +34,7 @@ public interface DockNode {
     @NonNull
     ReadOnlyList<DockChild> getDockChildrenReadOnly();
 
-    @Nullable
-    default DockRoot getDockRoot() {
+    default @Nullable DockRoot getDockRoot() {
         for (DockNode node = this; node != null; node = node.getDockParent()) {
             if (node instanceof DockRoot) {
                 return (DockRoot) node;

@@ -222,8 +222,7 @@ public class OffsetPathSampleMain extends Application {
         }
     }
 
-    @NonNull
-    private PolyArcPath createPline(javafx.scene.shape.Polyline polyline) {
+    private @NonNull PolyArcPath createPline(javafx.scene.shape.Polyline polyline) {
         PolyArcPath pap = new PolyArcPath();
         ObservableList<Double> points = polyline.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {

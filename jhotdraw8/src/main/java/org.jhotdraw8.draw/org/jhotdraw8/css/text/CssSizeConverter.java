@@ -41,9 +41,8 @@ public class CssSizeConverter implements CssConverter<CssSize> {
     }
 
 
-    @Nullable
     @Override
-    public CssSize parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable CssSize parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (nullable) {
             if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
                 return null;
@@ -108,9 +107,8 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         }
     }
 
-    @Nullable
     @Override
-    public CssSize getDefaultValue() {
+    public @Nullable CssSize getDefaultValue() {
         return null;
     }
 
@@ -119,9 +117,8 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         return nullable;
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Size⟩: ⟨size⟩ | ⟨percentage⟩% | ⟨size⟩⟨Units⟩"
                 + "\nFormat of ⟨Units⟩: mm | cm | em | ex | in | pc | px | pt";
     }

@@ -30,7 +30,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */
-    public final static String NAME = "replace";
+    public static final String NAME = "replace";
 
     public ReplaceCssFunction() {
         this(NAME);

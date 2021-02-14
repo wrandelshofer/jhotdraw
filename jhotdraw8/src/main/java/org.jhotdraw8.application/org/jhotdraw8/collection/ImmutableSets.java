@@ -13,8 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ImmutableSets {
-    @NonNull
-    public static <T> ImmutableSet<T> add(@NonNull Collection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> add(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return new ImmutableHashSet<>(Collections.singleton(item));
@@ -25,8 +24,7 @@ public class ImmutableSets {
         }
     }
 
-    @NonNull
-    public static <T> ImmutableSet<T> add(@NonNull ReadOnlyCollection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> add(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return new ImmutableHashSet<>(Collections.singleton(item));
@@ -37,16 +35,14 @@ public class ImmutableSets {
         }
     }
 
-    @NonNull
     @SuppressWarnings("unchecked")
-    public static <T> ImmutableSet<T> emptySet() {
+    public static @NonNull <T> ImmutableSet<T> emptySet() {
         return (ImmutableSet<T>) ImmutableHashSet.EMPTY;
     }
 
-    @NonNull
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> ImmutableSet<T> of(@NonNull T... items) {
+    public static @NonNull <T> ImmutableSet<T> of(@NonNull T... items) {
         switch (items.length) {
         case 0:
             return emptySet();
@@ -57,8 +53,7 @@ public class ImmutableSets {
         }
     }
 
-    @NonNull
-    public static <T> ImmutableSet<T> ofCollection(@NonNull Collection<T> collection) {
+    public static @NonNull <T> ImmutableSet<T> ofCollection(@NonNull Collection<T> collection) {
         switch (collection.size()) {
         case 0:
             return emptySet();
@@ -69,8 +64,7 @@ public class ImmutableSets {
         }
     }
 
-    @NonNull
-    public static <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
+    public static @NonNull <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
         if (collection instanceof ImmutableSet) {
             return (ImmutableSet<T>) collection;
         }
@@ -85,8 +79,7 @@ public class ImmutableSets {
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull
-    public static <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
+    public static @NonNull <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
         switch (length) {
         case 0:
             return emptySet();
@@ -97,9 +90,8 @@ public class ImmutableSets {
         }
     }
 
-    @NonNull
     @SuppressWarnings({"unchecked"})
-    public static <T> ImmutableSet<T> remove(@NonNull Collection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> remove(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return (ImmutableSet<T>) emptySet();
@@ -130,9 +122,8 @@ public class ImmutableSets {
         }
     }
 
-    @NonNull
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> ImmutableSet<T> remove(@NonNull ReadOnlyCollection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> remove(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return (ImmutableSet<T>) emptySet();

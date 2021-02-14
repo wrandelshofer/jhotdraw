@@ -57,8 +57,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    @NonNull
-    public ObjectProperty<Region> targetProperty() {
+    public @NonNull ObjectProperty<Region> targetProperty() {
         return target;
     }
 

@@ -17,10 +17,8 @@ import java.util.function.Function;
  * the proxy performs all changes on the children list via the DrawingModel.
  */
 public class DrawingModelFigureChildrenObservableList extends TransformationList<Figure, Figure> {
-    @NonNull
-    final DrawingModel model;
-    @NonNull
-    final Figure parent;
+    final @NonNull DrawingModel model;
+    final @NonNull Figure parent;
 
     /**
      * Creates a new Transformation list wrapped around the source list.

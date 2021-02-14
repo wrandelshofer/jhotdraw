@@ -34,8 +34,7 @@ public class DefaultFontChooserModelFactory {
         return model;
     }
 
-    @NonNull
-    public CompletableFuture<FontChooserModel> createAsync() {
+    public @NonNull CompletableFuture<FontChooserModel> createAsync() {
         CompletableFuture<FontChooserModel> future = new CompletableFuture<>();
         Task<FontChooserModel> task = new Task<FontChooserModel>() {
             @Override
@@ -57,8 +56,7 @@ public class DefaultFontChooserModelFactory {
         return future;
     }
 
-    @NonNull
-    protected List<FontFamily> loadFonts() {
+    protected @NonNull List<FontFamily> loadFonts() {
         List<FontFamily> allFamilies = new ArrayList<>();
 
         List<String> familyNames = Font.getFamilies();
@@ -91,8 +89,7 @@ public class DefaultFontChooserModelFactory {
         return allFamilies;
     }
 
-    @NonNull
-    protected ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
+    protected @NonNull ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
         ObservableList<FontCollection> root = FXCollections.observableArrayList();
 
         final Resources labels = ApplicationLabels.getGuiResources();
@@ -539,8 +536,7 @@ public class DefaultFontChooserModelFactory {
 
     }
 
-    @NonNull
-    public static ArrayList<FontFamily> collectFamiliesNamed(@NonNull List<FontFamily> allFamilies, String... names) {
+    public static @NonNull ArrayList<FontFamily> collectFamiliesNamed(@NonNull List<FontFamily> allFamilies, String... names) {
         ArrayList<FontFamily> coll = new ArrayList<>();
         HashSet<String> nameMap = new HashSet<>();
         nameMap.addAll(Arrays.asList(names));

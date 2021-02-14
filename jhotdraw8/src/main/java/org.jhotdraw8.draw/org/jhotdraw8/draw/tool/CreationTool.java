@@ -174,9 +174,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         super.activate(editor);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "CreationTool"
                 + "\n  Click on the drawing view. The tool will create a new figure with default size at the clicked location."
                 + "\nOr:"

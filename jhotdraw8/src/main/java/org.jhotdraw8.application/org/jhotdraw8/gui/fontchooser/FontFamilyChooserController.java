@@ -92,8 +92,7 @@ public class FontFamilyChooserController {
         existing.sort(Comparator.comparing(FontFamily::getName));
     }
 
-    @NonNull
-    private FontCollection createFontCollection() {
+    private @NonNull FontCollection createFontCollection() {
         final Resources labels = ApplicationLabels.getGuiResources();
         return new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
     }
@@ -122,8 +121,7 @@ public class FontFamilyChooserController {
         onAction.set(value);
     }
 
-    @Nullable
-    public String getSelectedFontName() {
+    public @Nullable String getSelectedFontName() {
         FontTypeface typeface = typefaceList == null ? null : typefaceList.getSelectionModel().getSelectedItem();
         return typeface == null ? null : typeface.getName();
     }
@@ -207,9 +205,8 @@ public class FontFamilyChooserController {
                     return item;
                 }
 
-                @NonNull
                 @Override
-                public String toString(@NonNull FontCollection item) {
+                public @NonNull String toString(@NonNull FontCollection item) {
                     return (item.isSmartCollection()) ? item.getName() + "•" : item.getName();
                 }
 
@@ -321,13 +318,11 @@ public class FontFamilyChooserController {
 
     }
 
-    @NonNull
-    public ObjectProperty<FontChooserModel> modelProperty() {
+    public @NonNull ObjectProperty<FontChooserModel> modelProperty() {
         return model;
     }
 
-    @NonNull
-    public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
+    public @NonNull ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
     }
 

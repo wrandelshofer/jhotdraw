@@ -20,8 +20,7 @@ public interface MarkerMidableFigure extends Figure {
     @Nullable NullableSvgPathStyleableKey MARKER_MID_SHAPE = new NullableSvgPathStyleableKey("marker-mid-shape", null);
     DoubleStyleableKey MARKER_MID_SCALE_FACTOR = new DoubleStyleableKey("marker-mid-scale-factor", 1.0);
 
-    @Nullable
-    default String getMarkerMidShape() {
+    default @Nullable String getMarkerMidShape() {
         return getStyled(MARKER_MID_SHAPE);
     }
 

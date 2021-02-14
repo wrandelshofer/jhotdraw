@@ -23,8 +23,7 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    @NonNull
-    public static List<Point2D.Double> getConvexHull2D(@NonNull List<Point2D.Double> points) {
+    public static @NonNull List<Point2D.Double> getConvexHull2D(@NonNull List<Point2D.Double> points) {
         return Arrays.asList(getConvexHull2D(points.toArray(new Point2D.Double[0])));
     }
 

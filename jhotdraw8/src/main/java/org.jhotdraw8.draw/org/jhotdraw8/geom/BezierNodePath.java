@@ -80,9 +80,8 @@ public class BezierNodePath implements Shape {
         return getBounds2D().getBounds();
     }
 
-    @NonNull
     @Override
-    public Rectangle2D getBounds2D() {
+    public @NonNull Rectangle2D getBounds2D() {
         double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
                 x2 = Double.NEGATIVE_INFINITY, y2 = Double.NEGATIVE_INFINITY;
         for (BezierNode n : nodes) {
@@ -144,15 +143,13 @@ public class BezierNodePath implements Shape {
         this.nodes = nodes;
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform at) {
+    public @NonNull PathIterator getPathIterator(AffineTransform at) {
         return new BezierNodePathIterator(nodes, closed, windingRule, at);
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(AffineTransform at, double flatness) {
+    public @NonNull PathIterator getPathIterator(AffineTransform at, double flatness) {
         return new FlatteningPathIterator(getPathIterator(at), flatness);
     }
 

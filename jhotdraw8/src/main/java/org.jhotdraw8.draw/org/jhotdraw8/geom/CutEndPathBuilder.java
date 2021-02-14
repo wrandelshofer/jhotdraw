@@ -25,8 +25,7 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     private double cx;
     private double cy;
 
-    @NonNull
-    private PathIteratorPathBuilder path;
+    private @NonNull PathIteratorPathBuilder path;
 
     public CutEndPathBuilder(PathBuilder out, double radius) {
         this.out = out;

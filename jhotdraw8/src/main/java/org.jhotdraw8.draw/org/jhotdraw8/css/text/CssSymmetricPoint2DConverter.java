@@ -38,9 +38,8 @@ public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
         }
     }
 
-    @NonNull
     @Override
-    public CssPoint2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull CssPoint2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         int count = (Integer) v[0];
         switch (count) {
@@ -53,15 +52,13 @@ public class CssSymmetricPoint2DConverter implements Converter<CssPoint2D> {
         }
     }
 
-    @Nullable
     @Override
-    public CssPoint2D getDefaultValue() {
+    public @Nullable CssPoint2D getDefaultValue() {
         return new CssPoint2D(CssSize.ZERO, CssSize.ZERO);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨SymmetricSize2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
     }
 

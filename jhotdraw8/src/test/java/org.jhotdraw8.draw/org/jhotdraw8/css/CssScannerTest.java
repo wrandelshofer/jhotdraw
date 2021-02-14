@@ -52,9 +52,8 @@ public class CssScannerTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testScanner() {
+    public @NonNull List<DynamicTest> testScanner() {
         return Arrays.asList(
                 dynamicTest("abcd abcd", () -> doTestScanner("abcd", "abcd")),
                 //

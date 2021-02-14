@@ -22,10 +22,8 @@ import java.util.function.Function;
  */
 public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
-    @NonNull
-    private final Function<V, Iterable<V>> nextFunction;
-    @NonNull
-    private final Deque<V> deque;
+    private final @NonNull Function<V, Iterable<V>> nextFunction;
+    private final @NonNull Deque<V> deque;
     private final AddToSet<V> visited;
 
     /**

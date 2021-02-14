@@ -21,8 +21,7 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class MultiClipboardOutputFormat implements ClipboardOutputFormat {
-    @Nullable
-    private Supplier<ClipboardOutputFormat>[] formatSuppliers;
+    private @Nullable Supplier<ClipboardOutputFormat>[] formatSuppliers;
 
     private ClipboardOutputFormat[] formats;
 

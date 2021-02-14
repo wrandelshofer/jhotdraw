@@ -155,13 +155,11 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
         fireInvalidated();
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<? extends E> i = backingSetIterator();
-            @Nullable
-            private E current;
+            private @Nullable E current;
 
             @Override
             public boolean hasNext() {
@@ -251,8 +249,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
 
     private static class Change<EE> extends SetChangeListener.Change<EE> {
 
-        @Nullable
-        private final EE value;
+        private final @Nullable EE value;
         private final boolean wasAdded;
 
         public Change(ObservableSet<EE> set, @Nullable EE value, boolean wasAdded) {
@@ -262,16 +259,14 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
         }
 
         @Override
-        @Nullable
         @SuppressWarnings("override.return.invalid")
-        public EE getElementAdded() {
+        public @Nullable EE getElementAdded() {
             return (wasAdded) ? value : null;
         }
 
         @Override
-        @Nullable
         @SuppressWarnings("override.return.invalid")
-        public EE getElementRemoved() {
+        public @Nullable EE getElementRemoved() {
             return (!wasAdded) ? value : null;
         }
 

@@ -40,8 +40,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  */
 public abstract class AbstractExportOutputFormat extends AbstractPropertyBean implements ExportOutputFormat {
 
-    @NonNull
-    protected abstract String getExtension();
+    protected abstract @NonNull String getExtension();
 
 
     public boolean isExportDrawing() {

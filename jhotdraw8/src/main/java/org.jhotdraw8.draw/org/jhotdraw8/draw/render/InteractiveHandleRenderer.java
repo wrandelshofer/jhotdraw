@@ -59,12 +59,9 @@ import java.util.stream.Collectors;
 public class InteractiveHandleRenderer {
     private static final String RENDER_CONTEXT = "renderContenxt";
     private static final String DRAWING_VIEW = "drawingView";
-    private final static double LINE45DEG = Math.sqrt(0.5);
-    @NonNull
-    final
-    private Group handlesPane = new Group();
-    @NonNull
-    final private ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
+    private static final double LINE45DEG = Math.sqrt(0.5);
+    private final @NonNull Group handlesPane = new Group();
+    private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
      */
@@ -74,14 +71,12 @@ public class InteractiveHandleRenderer {
      * sequence they were selected by the user.
      */
     private final SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>()));
-    @NonNull
-    final private ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
+    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
     private final Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
-    @NonNull
-    private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     /**
      * The set of all handles which were produced by selected figures.
      */
@@ -93,14 +88,12 @@ public class InteractiveHandleRenderer {
     private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
-    @NonNull
-    private final NonNullObjectProperty<DrawingModel> model //
+    private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, "model", new SimpleDrawingModel());
     private NonNullObjectProperty<RenderContext> renderContext = new NonNullObjectProperty<>(this, RENDER_CONTEXT, new SimpleRenderContext());
     private boolean recreateHandles;
     private boolean handlesAreValid;
-    @Nullable
-    private Runnable repainter = null;
+    private @Nullable Runnable repainter = null;
 
     public InteractiveHandleRenderer() {
         handlesPane.setManaged(false);
@@ -241,19 +234,16 @@ public class InteractiveHandleRenderer {
     }
 
 
-    @NonNull
-    public ObjectProperty<DrawingEditor> editorProperty() {
+    public @NonNull ObjectProperty<DrawingEditor> editorProperty() {
         return editor;
     }
 
 
-    @NonNull
-    public ObjectProperty<DrawingView> drawingViewProperty() {
+    public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
-    @Nullable
-    public Handle findHandle(double vx, double vy) {
+    public @Nullable Handle findHandle(double vx, double vy) {
         if (recreateHandles) {
             return null;
         }
@@ -285,9 +275,7 @@ public class InteractiveHandleRenderer {
         return editorProperty().get();
     }
 
-    @NonNull
-
-    public Set<Figure> getFiguresWithCompatibleHandle(@NonNull Collection<Figure> figures, Handle master) {
+    public @NonNull Set<Figure> getFiguresWithCompatibleHandle(@NonNull Collection<Figure> figures, Handle master) {
         validateHandles();
         Map<Figure, Figure> result = new HashMap<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {

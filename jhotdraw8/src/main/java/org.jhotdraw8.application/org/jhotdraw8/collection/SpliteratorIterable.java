@@ -32,9 +32,8 @@ public class SpliteratorIterable<T> implements Iterable<T> {
         factory.get().forEachRemaining(action);
     }
 
-    @NonNull
     @Override
-    public Iterator<T> iterator() {
+    public @NonNull Iterator<T> iterator() {
         return Spliterators.iterator(factory.get());
     }
 

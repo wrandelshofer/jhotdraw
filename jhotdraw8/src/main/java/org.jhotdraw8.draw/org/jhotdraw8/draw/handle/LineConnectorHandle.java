@@ -45,13 +45,10 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class LineConnectorHandle extends AbstractConnectorHandle {
-    @Nullable
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
+    public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    @NonNull
-    private Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
-    @Nullable
-    private Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private @NonNull Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private @Nullable Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
 
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
@@ -59,8 +56,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     );
     private static final Circle REGION_SHAPE = new Circle(4);
 
-    @NonNull
-    private final Region targetNode;
+    private final @NonNull Region targetNode;
 
     public LineConnectorHandle(@NonNull ConnectingFigure figure,
                                @NonNull NonNullMapAccessor<CssPoint2D> pointKey,
@@ -77,9 +73,8 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
     }
 
 
-    @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (targetNode.getWidth() != size) {
             targetNode.resize(size, size);

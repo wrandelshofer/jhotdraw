@@ -17,7 +17,7 @@ import org.jhotdraw8.css.text.CssBooleanConverter;
 public class BooleanStyleableKey extends SimpleStyleableKey<@Nullable Boolean>
         implements WriteableStyleableMapAccessor<@Nullable Boolean> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public BooleanStyleableKey(@NonNull String key) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), false);

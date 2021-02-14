@@ -49,9 +49,8 @@ public abstract class AbstractIndexedArraySetTest {
         }
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> addDataFactory() {
+    public @NonNull List<DynamicTest> addDataFactory() {
         return Arrays.asList(
                 dynamicTest("0", () -> testAdd("", 0, 'a', "a", "add(0,[a])")),
                 dynamicTest("1", () -> testAdd("a", 0, 'a', "a", "")),
@@ -99,9 +98,8 @@ public abstract class AbstractIndexedArraySetTest {
         }
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> setDataFactory() {
+    public @NonNull List<DynamicTest> setDataFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSet("a", 0, 'a', "a", "")),
                 dynamicTest("1", () -> testSet("a", 0, 'b', "b", "rep([a]->[b])")),
@@ -125,8 +123,7 @@ public abstract class AbstractIndexedArraySetTest {
 
     private static class ChangeRecorder implements ListChangeListener<Character> {
 
-        @NonNull
-        private StringBuilder buf = new StringBuilder();
+        private @NonNull StringBuilder buf = new StringBuilder();
 
         @Override
         public void onChanged(@NonNull ListChangeListener.Change<? extends Character> c) {
@@ -158,14 +155,12 @@ public abstract class AbstractIndexedArraySetTest {
             }
         }
 
-        @NonNull
-        private String getChanges() {
+        private @NonNull String getChanges() {
             return buf.toString();
         }
     }
 
-    @NonNull
-    private static List<Character> asList(@NonNull String str) {
+    private static @NonNull List<Character> asList(@NonNull String str) {
         ArrayList<Character> l = new ArrayList<>();
         for (char ch : str.toCharArray()) {
             l.add(ch);

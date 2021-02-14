@@ -25,13 +25,11 @@ import java.util.function.Function;
  */
 public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> implements WriteableStyleableMapAccessor<String> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, String> cssMetaData;
+    private final @NonNull CssMetaData<?, String> cssMetaData;
 
-    @NonNull
-    private final Converter<String> converter;
+    private final @NonNull Converter<String> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -77,9 +75,8 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
 
     }
 
-    @NonNull
     @Override
-    public Converter<String> getCssConverter() {
+    public @NonNull Converter<String> getCssConverter() {
         return converter;
     }
 }

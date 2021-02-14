@@ -14,8 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class DepthFirstArcSpliteratorTest {
-    @NonNull
-    protected DirectedGraph<Integer, Integer> createDoubleVertexGraph() {
+    protected @NonNull DirectedGraph<Integer, Integer> createDoubleVertexGraph() {
         final DirectedGraphBuilder<Integer, Integer> builder = new DirectedGraphBuilder<>();
 
         //  (1)->(2)------------->(3)------->(4)----

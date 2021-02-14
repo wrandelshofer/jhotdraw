@@ -14,8 +14,7 @@ import java.util.Iterator;
  * @author Werner Randelshofer
  */
 public class IteratorEnumerator<E> implements Enumerator<E> {
-    @NonNull
-    private final Iterator<? extends E> iterator;
+    private final @NonNull Iterator<? extends E> iterator;
 
     private E current;
 

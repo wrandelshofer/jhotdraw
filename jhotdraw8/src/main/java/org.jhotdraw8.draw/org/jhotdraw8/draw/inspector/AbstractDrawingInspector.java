@@ -17,10 +17,8 @@ import org.jhotdraw8.draw.model.DrawingModel;
  * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingInspector extends AbstractInspector<DrawingView> {
-    @Nullable
-    protected DrawingModel drawingModel;
-    @Nullable
-    protected Drawing drawing;
+    protected @Nullable DrawingModel drawingModel;
+    protected @Nullable Drawing drawing;
 
     private final ChangeListener<Drawing> drawingListener = this::onDrawingChanged;
     private final ChangeListener<DrawingModel> modelListener = this::onDrawingModelChanged;

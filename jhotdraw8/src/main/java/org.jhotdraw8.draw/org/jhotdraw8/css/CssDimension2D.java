@@ -17,12 +17,10 @@ import java.util.Objects;
  */
 public class CssDimension2D {
 
-    public final static CssDimension2D ZERO = new CssDimension2D();
+    public static final CssDimension2D ZERO = new CssDimension2D();
 
-    @NonNull
-    private final CssSize width;
-    @NonNull
-    private final CssSize height;
+    private final @NonNull CssSize width;
+    private final @NonNull CssSize height;
 
     public CssDimension2D(@NonNull CssSize width, @NonNull CssSize height) {
         this.width = width;
@@ -63,13 +61,11 @@ public class CssDimension2D {
         return Objects.equals(this.height, other.height);
     }
 
-    @NonNull
-    public CssSize getWidth() {
+    public @NonNull CssSize getWidth() {
         return width;
     }
 
-    @NonNull
-    public CssSize getHeight() {
+    public @NonNull CssSize getHeight() {
         return height;
     }
 
@@ -81,28 +77,24 @@ public class CssDimension2D {
         return hash;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssPoint2D{" +
                 "" + width +
                 ", " + height +
                 '}';
     }
 
-    @NonNull
-    public Point2D getConvertedValue() {
+    public @NonNull Point2D getConvertedValue() {
         return new Point2D(width.getConvertedValue(), height.getConvertedValue());
 
     }
 
-    @NonNull
-    public CssDimension2D subtract(@NonNull CssDimension2D that) {
+    public @NonNull CssDimension2D subtract(@NonNull CssDimension2D that) {
         return new CssDimension2D(width.subtract(that.width), height.subtract(that.height));
     }
 
-    @NonNull
-    public CssDimension2D add(@NonNull CssDimension2D that) {
+    public @NonNull CssDimension2D add(@NonNull CssDimension2D that) {
         return new CssDimension2D(width.add(that.width), height.add(that.height));
     }
 }

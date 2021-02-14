@@ -85,8 +85,7 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    @NonNull
-    private ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,40%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
+    private @NonNull ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,40%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
         @Override
         public void invalidated() {
             fireInvalidated();
@@ -207,13 +206,11 @@ public class GridConstrainer extends AbstractConstrainer {
         node.getChildren().addAll(minorNode, majorNode);
     }
 
-    @NonNull
-    public DoubleProperty angleProperty() {
+    public @NonNull DoubleProperty angleProperty() {
         return angle;
     }
 
-    @NonNull
-    public BooleanProperty drawGridProperty() {
+    public @NonNull BooleanProperty drawGridProperty() {
         return drawGrid;
     }
 
@@ -237,9 +234,8 @@ public class GridConstrainer extends AbstractConstrainer {
         return majorY.get();
     }
 
-    @NonNull
     @Override
-    public Node getNode() {
+    public @NonNull Node getNode() {
         return node;
     }
 
@@ -255,29 +251,24 @@ public class GridConstrainer extends AbstractConstrainer {
         return y.get();
     }
 
-    @NonNull
-    public ObjectProperty<CssSize> heightProperty() {
+    public @NonNull ObjectProperty<CssSize> heightProperty() {
         return height;
     }
 
-    @NonNull
-    public Property<CssColor> gridColorProperty() {
+    public @NonNull Property<CssColor> gridColorProperty() {
         return gridColorProperty;
     }
 
-    @NonNull
-    public IntegerProperty majorXProperty() {
+    public @NonNull IntegerProperty majorXProperty() {
         return majorX;
     }
 
-    @NonNull
-    public IntegerProperty majorYProperty() {
+    public @NonNull IntegerProperty majorYProperty() {
         return majorY;
     }
 
 
-    @NonNull
-    public BooleanProperty snapToGridProperty() {
+    public @NonNull BooleanProperty snapToGridProperty() {
         return snapToGrid;
     }
 
@@ -311,9 +302,8 @@ public class GridConstrainer extends AbstractConstrainer {
         return snapToGrid.get() && getWidth().getValue() > 0 && getHeight().getValue() > 0;
     }
 
-    @NonNull
     @Override
-    public CssPoint2D translatePoint(Figure f, @NonNull CssPoint2D cssp, @NonNull CssPoint2D dir) {
+    public @NonNull CssPoint2D translatePoint(Figure f, @NonNull CssPoint2D cssp, @NonNull CssPoint2D dir) {
         if (!canSnapToGrid()) {
             Point2D p = cssp.getConvertedValue();
             Point2D covertedDir = dir.getConvertedValue();
@@ -355,9 +345,8 @@ public class GridConstrainer extends AbstractConstrainer {
         return new CssPoint2D(new CssSize(x, wunits), new CssSize(y, hunits));
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D translateRectangle(Figure f, @NonNull CssRectangle2D cssr, @NonNull CssPoint2D cssdir) {
+    public @NonNull CssRectangle2D translateRectangle(Figure f, @NonNull CssRectangle2D cssr, @NonNull CssPoint2D cssdir) {
         if (!canSnapToGrid()) {
             Rectangle2D r = cssr.getConvertedValue();
             Point2D dir = cssdir.getConvertedValue();
@@ -512,18 +501,15 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     }
 
-    @NonNull
-    public ObjectProperty<CssSize> widthProperty() {
+    public @NonNull ObjectProperty<CssSize> widthProperty() {
         return width;
     }
 
-    @NonNull
-    public ObjectProperty<CssSize> xProperty() {
+    public @NonNull ObjectProperty<CssSize> xProperty() {
         return x;
     }
 
-    @NonNull
-    public ObjectProperty<CssSize> yProperty() {
+    public @NonNull ObjectProperty<CssSize> yProperty() {
         return y;
     }
 

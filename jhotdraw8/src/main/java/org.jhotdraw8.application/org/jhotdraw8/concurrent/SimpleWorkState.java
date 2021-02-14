@@ -21,9 +21,8 @@ public class SimpleWorkState implements WorkState, Worker<Void> {
     private volatile boolean cancelled;
 
     private class CompletionTask extends Task<Void> {
-        @NonNull
         @Override
-        protected Void call() throws Exception {
+        protected @NonNull Void call() throws Exception {
             throw new UnsupportedOperationException();
         }
 

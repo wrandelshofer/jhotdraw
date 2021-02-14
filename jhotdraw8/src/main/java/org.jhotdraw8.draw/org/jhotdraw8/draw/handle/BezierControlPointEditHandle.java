@@ -55,15 +55,12 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 public class BezierControlPointEditHandle extends AbstractHandle {
-    @Nullable
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
+    public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
     public static final BorderWidths WIDTH_2 = new BorderWidths(2, 2, 2, 2, false, false, false, false);
 
-    @Nullable
-    private static final Background REGION_BACKGROUND =
+    private static final @Nullable Background REGION_BACKGROUND =
             new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(
+    private static final @Nullable Border REGION_BORDER = new Border(
             new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Path REGION_SHAPE_COLINEAR = new Path();
     private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
@@ -95,8 +92,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     private int controlPointMask;
-    @NonNull
-    private final Region node;
+    private final @NonNull Region node;
     private Point2D pickLocation;
     private final int pointIndex;
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
@@ -136,8 +132,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
-    @NonNull
-    private Point2D getLocation() {
+    private @NonNull Point2D getLocation() {
         return getBezierNode().getC(controlPointMask);
 
     }
@@ -146,9 +141,8 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize() * 0.8;
         if (node.getWidth() != size) {
             node.resize(size, size);

@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class NonNullBooleanKey extends ObjectKey<@NonNull Boolean> implements NonNullMapAccessor<@NonNull Boolean> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public NonNullBooleanKey(@NonNull String key, @NonNull Boolean defaultValue) {
         super(key, Boolean.class, defaultValue);

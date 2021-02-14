@@ -30,8 +30,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param b a vertex
      * @return the arrow or null if b is not next of a
      */
-    @Nullable
-    default A findArrow(@NonNull V a, @NonNull V b) {
+    default @Nullable A findArrow(@NonNull V a, @NonNull V b) {
         int index = findIndexOfNext(a, b);
         return index == -1 ? null : getNextArrow(a, index);
     }
@@ -58,13 +57,11 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct successor vertices of vertex
      */
-    @NonNull
-    default Collection<V> getNextVertices(@NonNull V vertex) {
+    default @NonNull Collection<V> getNextVertices(@NonNull V vertex) {
         class NextVertexIterator implements Iterator<V> {
 
             private int index;
-            @NonNull
-            private final V vertex;
+            private final @NonNull V vertex;
             private final int nextCount;
 
             public NextVertexIterator(@NonNull V vertex) {
@@ -77,17 +74,15 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
                 return index < nextCount;
             }
 
-            @NonNull
             @Override
-            public V next() {
+            public @NonNull V next() {
                 return getNext(vertex, index++);
             }
 
         }
         return new AbstractCollection<V>() {
-            @NonNull
             @Override
-            public Iterator<V> iterator() {
+            public @NonNull Iterator<V> iterator() {
                 return new NextVertexIterator(vertex);
             }
 
@@ -98,8 +93,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         };
     }
 
-    @NonNull
-    default Arc<V, A> getNextArc(@NonNull V v, int index) {
+    default @NonNull Arc<V, A> getNextArc(@NonNull V v, int index) {
         return new Arc<>(v, getNext(v, index), getNextArrow(v, index));
     }
 
@@ -109,13 +103,11 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct successor arrows of vertex
      */
-    @NonNull
-    default Collection<A> getNextArrows(@NonNull V vertex) {
+    default @NonNull Collection<A> getNextArrows(@NonNull V vertex) {
         class NextArrowIterator implements Iterator<A> {
 
             private int index;
-            @NonNull
-            private final V vertex;
+            private final @NonNull V vertex;
             private final int nextCount;
 
             public NextArrowIterator(@NonNull V vertex) {
@@ -128,17 +120,15 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
                 return index < nextCount;
             }
 
-            @NonNull
             @Override
-            public A next() {
+            public @NonNull A next() {
                 return getNextArrow(vertex, index++);
             }
         }
 
         return new AbstractCollection<A>() {
-            @NonNull
             @Override
-            public Iterator<A> iterator() {
+            public @NonNull Iterator<A> iterator() {
                 return new NextArrowIterator(vertex);
             }
 
@@ -155,13 +145,11 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param vertex a vertex
      * @return a collection view on the direct successor arcs of vertex
      */
-    @NonNull
-    default Collection<Arc<V, A>> getNextArcs(@NonNull V vertex) {
+    default @NonNull Collection<Arc<V, A>> getNextArcs(@NonNull V vertex) {
         class NextArcIterator implements Iterator<Arc<V, A>> {
 
             private int index;
-            @NonNull
-            private final V vertex;
+            private final @NonNull V vertex;
             private final int nextCount;
 
             public NextArcIterator(@NonNull V vertex) {
@@ -174,17 +162,15 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
                 return index < nextCount;
             }
 
-            @NonNull
             @Override
-            public Arc<V, A> next() {
+            public @NonNull Arc<V, A> next() {
                 return getNextArc(vertex, index++);
             }
         }
 
         return new AbstractCollection<Arc<V, A>>() {
-            @NonNull
             @Override
-            public Iterator<Arc<V, A>> iterator() {
+            public @NonNull Iterator<Arc<V, A>> iterator() {
                 return new NextArcIterator(vertex);
             }
 
@@ -219,8 +205,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param v2 vertex 2
      * @return a collection view on all arrows
      */
-    @NonNull
-    default Collection<A> getArrows(@NonNull V v1, V v2) {
+    default @NonNull Collection<A> getArrows(@NonNull V v1, V v2) {
         List<A> arrows = new ArrayList<>();
         for (int i = 0, n = getNextCount(v1); i < n; i++) {
             if (getNext(v1, i).equals(v2)) {

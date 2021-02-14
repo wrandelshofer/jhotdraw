@@ -68,13 +68,11 @@ public class FigureTest {
             return null;
         }
 
-        @NonNull
-        public Bounds getLayoutBounds() {
+        public @NonNull Bounds getLayoutBounds() {
             return null;
         }
 
-        @NonNull
-        public CssRectangle2D getCssLayoutBounds() {
+        public @NonNull CssRectangle2D getCssLayoutBounds() {
             return new CssRectangle2D(getLayoutBounds());
         }
 
@@ -86,8 +84,7 @@ public class FigureTest {
             // empty
         }
 
-        @Nullable
-        public Node createNode(RenderContext ctx) {
+        public @Nullable Node createNode(RenderContext ctx) {
             return null;
         }
 
@@ -119,8 +116,7 @@ public class FigureTest {
             return false;
         }
 
-        @Nullable
-        public Connector findConnector(Point2D pointInLocal, Figure prototype) {
+        public @Nullable Connector findConnector(Point2D pointInLocal, Figure prototype) {
             return null;
         }
 
@@ -137,8 +133,7 @@ public class FigureTest {
             return FXCollections.emptyObservableList();
         }
 
-        @Nullable
-        public ObservableSet<Figure> getLayoutObservers() {
+        public @Nullable ObservableSet<Figure> getLayoutObservers() {
             return null;
         }
 
@@ -175,8 +170,7 @@ public class FigureTest {
 
         }
 
-        @Nullable
-        public CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners() {
+        public @Nullable CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners() {
             return null;
         }
 
@@ -209,45 +203,38 @@ public class FigureTest {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public String getTypeSelector() {
+        public @NonNull String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public String getId() {
+        public @NonNull String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public ObservableList<String> getStyleClass() {
+        public @NonNull ObservableList<String> getStyleClass() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public String getStyle() {
+        public @NonNull String getStyle() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        public @NonNull List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public Styleable getStyleableParent() {
+        public @NonNull Styleable getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
-        @NonNull
         @Override
-        public ObservableSet<PseudoClass> getPseudoClassStates() {
+        public @NonNull ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

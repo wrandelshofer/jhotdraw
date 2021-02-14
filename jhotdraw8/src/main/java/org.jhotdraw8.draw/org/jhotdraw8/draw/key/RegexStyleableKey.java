@@ -26,11 +26,9 @@ import java.util.function.Function;
  */
 public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
 
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssRegexConverter converter;
-    @NonNull
-    private final CssMetaData<? extends Styleable, RegexReplace> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssRegexConverter converter;
+    private final @NonNull CssMetaData<? extends Styleable, RegexReplace> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -83,9 +81,8 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
 
     }
 
-    @NonNull
     @Override
-    public Converter<RegexReplace> getCssConverter() {
+    public @NonNull Converter<RegexReplace> getCssConverter() {
         return converter;
     }
 }

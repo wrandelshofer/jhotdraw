@@ -27,8 +27,7 @@ import java.util.LinkedHashMap;
  */
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
-    @NonNull
-    protected final ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
+    protected final @NonNull ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final ObservableMap<Key<?>, Object> properties//
             = FXCollections.observableHashMap();
     protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
@@ -40,9 +39,8 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     public AbstractActivity() {
     }
 
-    @NonNull
     @Override
-    public IntegerProperty disambiguationProperty() {
+    public @NonNull IntegerProperty disambiguationProperty() {
         return disambiguation;
     }
 
@@ -50,9 +48,8 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     protected abstract void initView();
 
-    @NonNull
     @Override
-    public StringProperty titleProperty() {
+    public @NonNull StringProperty titleProperty() {
         return title;
     }
 
@@ -61,9 +58,8 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
         return application;
     }
 
-    @NonNull
     @Override
-    public ObservableMap<Key<?>, Object> getProperties() {
+    public @NonNull ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 

@@ -38,9 +38,8 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
         this.withComma = withComma;
     }
 
-    @NonNull
     @Override
-    public CssPoint2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull CssPoint2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -49,18 +48,17 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
         return new CssPoint2D(x, y);
     }
 
-    @Nullable
-    private CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
+    private @Nullable CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumber().doubleValue());
-            case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
-            case CssTokenType.TT_IDENT:
-                switch (tt.currentStringNonNull()) {
-                    case "NaN":
-                        return new CssSize(Double.NaN);
-                    case "INF":
+        case CssTokenType.TT_NUMBER:
+            return new CssSize(tt.currentNumber().doubleValue());
+        case CssTokenType.TT_DIMENSION:
+            return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
+        case CssTokenType.TT_IDENT:
+            switch (tt.currentStringNonNull()) {
+            case "NaN":
+                return new CssSize(Double.NaN);
+            case "INF":
                         return new CssSize(Double.POSITIVE_INFINITY);
                     case "-INF":
                         return new CssSize(Double.NEGATIVE_INFINITY);

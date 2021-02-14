@@ -27,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class BreadthFirstSpliteratorTest {
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
         builder.addVertex(1);
         builder.addVertex(2);
@@ -49,8 +48,7 @@ public class BreadthFirstSpliteratorTest {
         return builder;
     }
 
-    @NonNull
-    public Object[][] anyPathProvider() {
+    public @NonNull Object[][] anyPathProvider() {
         final DirectedGraph<Integer, Double> graph = createGraph();
 
         return new Object[][]{

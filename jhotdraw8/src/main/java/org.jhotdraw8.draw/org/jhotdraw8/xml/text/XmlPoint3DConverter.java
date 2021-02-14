@@ -35,9 +35,8 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
         }
     }
 
-    @NonNull
     @Override
-    public Point3D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Point3D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
         case 2:
@@ -49,9 +48,8 @@ public class XmlPoint3DConverter implements Converter<Point3D> {
         }
     }
 
-    @NonNull
     @Override
-    public Point3D getDefaultValue() {
+    public @NonNull Point3D getDefaultValue() {
         return new Point3D(0, 0, 0);
     }
 }

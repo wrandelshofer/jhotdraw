@@ -51,18 +51,17 @@ public interface CssTokenizer {
      *
      * @return the current value
      */
-    @Nullable
-    default String currentValue() {
+    default @Nullable String currentValue() {
         switch (current()) {
-            case TT_AT_KEYWORD:
-                return "@" + currentString();
-            case TT_BAD_COMMENT:
-                return "bad comment";
-            case TT_BAD_STRING:
-                return "bad string";
-            case TT_BAD_URI:
-                return "bad uri";
-            case TT_CDC:
+        case TT_AT_KEYWORD:
+            return "@" + currentString();
+        case TT_BAD_COMMENT:
+            return "bad comment";
+        case TT_BAD_STRING:
+            return "bad string";
+        case TT_BAD_URI:
+            return "bad uri";
+        case TT_CDC:
                 return "<!--";
             case TT_CDO:
                 return "-->";
@@ -110,8 +109,7 @@ public interface CssTokenizer {
     @Nullable
     Number currentNumber();
 
-    @NonNull
-    default Number currentNumberNonNull() {
+    default @NonNull Number currentNumberNonNull() {
         Number number = currentNumber();
         if (number == null) {
             throw new AssertionError("currentNumber is null");
@@ -127,8 +125,7 @@ public interface CssTokenizer {
     @Nullable
     String currentString();
 
-    @NonNull
-    default String currentStringNonNull() {
+    default @NonNull String currentStringNonNull() {
         String str = currentString();
         if (str == null) {
             throw new AssertionError("currentString is null");
@@ -249,8 +246,7 @@ public interface CssTokenizer {
      * @return a new list
      * @throws IOException on io exception
      */
-    @NonNull
-    default List<CssToken> toTokenList() throws IOException {
+    default @NonNull List<CssToken> toTokenList() throws IOException {
         List<CssToken> list = new ArrayList<>();
         while (nextNoSkip() != CssTokenType.TT_EOF) {
             list.add(getToken());

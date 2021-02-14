@@ -41,9 +41,8 @@ public class ReversedListTest {
         assertEquals(recorder.getChanges(), expectedChanges);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testAddDataFactory() {
+    public @NonNull List<DynamicTest> testAddDataFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testAdd("", 0, 'a', "a", "add(0,[a])")),
                 dynamicTest("2", () -> testAdd("a", 0, 'b', "ba", "add(0,[b])")),
@@ -71,9 +70,8 @@ public class ReversedListTest {
         assertEquals(recorder.getChanges(), expectedChanges);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testSetDataFactory() {
+    public @NonNull List<DynamicTest> testSetDataFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSet("a", 0, 'b', "b", "rep([a]->[b])")),
                 dynamicTest("2", () -> testSet("ab", 0, 'c', "ca", "rep([b]->[c])")),
@@ -100,9 +98,8 @@ public class ReversedListTest {
         assertEquals(recorder.getChanges(), expectedChanges);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> removeDataFactory() {
+    public @NonNull List<DynamicTest> removeDataFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRemove("a", 0, 'x', "", "rem(0,[a])")),
                 dynamicTest("1", () -> testRemove("a", -1, 'a', "", "rem(0,[a])")),
@@ -120,8 +117,7 @@ public class ReversedListTest {
 
     private static class ChangeRecorder implements ListChangeListener<Character> {
 
-        @NonNull
-        private StringBuilder buf = new StringBuilder();
+        private @NonNull StringBuilder buf = new StringBuilder();
 
         @Override
         public void onChanged(@NonNull ListChangeListener.Change<? extends Character> c) {
@@ -153,14 +149,12 @@ public class ReversedListTest {
             }
         }
 
-        @NonNull
-        private String getChanges() {
+        private @NonNull String getChanges() {
             return buf.toString();
         }
     }
 
-    @NonNull
-    private static ObservableList<Character> asList(@NonNull String str) {
+    private static @NonNull ObservableList<Character> asList(@NonNull String str) {
         ArrayList<Character> l = new ArrayList<>();
         for (char ch : str.toCharArray()) {
             l.add(ch);
@@ -168,8 +162,7 @@ public class ReversedListTest {
         return FXCollections.observableList(l);
     }
 
-    @NonNull
-    private static ObservableList<Character> asReversedList(@NonNull String str) {
+    private static @NonNull ObservableList<Character> asReversedList(@NonNull String str) {
         LinkedList<Character> l = new LinkedList<>();
         for (char ch : str.toCharArray()) {
             l.addFirst(ch);

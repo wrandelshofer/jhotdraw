@@ -52,8 +52,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @throws ParseException on parse exception
      * @throws IOException    on io exception
      */
-    @NonNull
-    default T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    default @NonNull T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         T value = parse(tt, idResolver);
         if (value == null) {
             throw new ParseException("Value expected.", tt.getStartPosition());
@@ -71,8 +70,7 @@ public interface CssConverter<T> extends Converter<T> {
      */
     <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException;
 
-    @NonNull
-    default <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdSupplier idSupplier) throws IOException {
+    default @NonNull <TT extends T> List<CssToken> toTokens(@Nullable TT value, @Nullable IdSupplier idSupplier) throws IOException {
         List<CssToken> list = new ArrayList<>();
         produceTokens(value, idSupplier, list::add);
         return list;
@@ -85,8 +83,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @param <TT>  the value type
      * @return a String
      */
-    @NonNull
-    default <TT extends T> String toString(@Nullable TT value) {
+    default @NonNull <TT extends T> String toString(@Nullable TT value) {
         return toString(value, null);
     }
 
@@ -98,8 +95,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @param <TT>      the value type
      * @return a String
      */
-    @NonNull
-    default <TT extends T> String toString(@Nullable TT value, @Nullable IdFactory idFactory) {
+    default @NonNull <TT extends T> String toString(@Nullable TT value, @Nullable IdFactory idFactory) {
         StringBuilder buf = new StringBuilder();
         try {
             produceTokens(value, idFactory, buf::append);

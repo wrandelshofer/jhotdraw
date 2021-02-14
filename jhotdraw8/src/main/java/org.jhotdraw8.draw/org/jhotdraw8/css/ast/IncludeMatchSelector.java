@@ -20,12 +20,9 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class IncludeMatchSelector extends AbstractAttributeSelector {
-    @Nullable
-    private final String namespace;
-    @NonNull
-    private final String attributeName;
-    @NonNull
-    private final String word;
+    private final @Nullable String namespace;
+    private final @NonNull String attributeName;
+    private final @NonNull String word;
 
     public IncludeMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
         this.namespace = namespace;
@@ -33,15 +30,13 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
         this.word = word;
     }
 
-    @Nullable
     @Override
-    protected <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
+    protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
         return model.attributeValueContainsWord(element, namespace, attributeName, word) ? element : null;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "[" + attributeName + "~=" + word + ']';
     }
 

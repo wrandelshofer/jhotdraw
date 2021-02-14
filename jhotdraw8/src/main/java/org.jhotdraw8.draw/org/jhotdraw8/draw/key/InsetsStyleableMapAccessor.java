@@ -28,18 +28,13 @@ import java.util.function.Function;
  */
 public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Insets> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Insets> cssMetaData;
-    @NonNull
-    private final MapAccessor<Double> topKey;
-    @NonNull
-    private final MapAccessor<Double> rightKey;
-    @NonNull
-    private final MapAccessor<Double> bottomKey;
-    @NonNull
-    private final MapAccessor<Double> leftKey;
+    private final @NonNull CssMetaData<?, Insets> cssMetaData;
+    private final @NonNull MapAccessor<Double> topKey;
+    private final @NonNull MapAccessor<Double> rightKey;
+    private final @NonNull MapAccessor<Double> bottomKey;
+    private final @NonNull MapAccessor<Double> leftKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -88,9 +83,8 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         return converter;
     }
 
-    @NonNull
     @Override
-    public Insets get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Insets get(@NonNull Map<? super Key<?>, Object> a) {
         final Double top = topKey.get(a);
         final Double right = rightKey.get(a);
         final Double bottom = bottomKey.get(a);
@@ -111,9 +105,8 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
         leftKey.put(a, value.getLeft());
     }
 
-    @NonNull
     @Override
-    public Insets remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Insets remove(@NonNull Map<? super Key<?>, Object> a) {
         Insets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);

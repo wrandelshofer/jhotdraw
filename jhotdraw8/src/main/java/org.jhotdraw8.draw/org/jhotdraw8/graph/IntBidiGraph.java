@@ -49,8 +49,7 @@ public interface IntBidiGraph extends IntDirectedGraph {
      * @param vertex a vertex
      * @return an iterable for the direct predecessor vertices of vertex
      */
-    @NonNull
-    default PrimitiveIterator.OfInt getPrevVertexIndicesIterator(int vertex) {
+    default @NonNull PrimitiveIterator.OfInt getPrevVertexIndicesIterator(int vertex) {
         class PrevVertexIterator implements PrimitiveIterator.OfInt {
 
             private int index;
@@ -82,13 +81,11 @@ public interface IntBidiGraph extends IntDirectedGraph {
      * @param vertex a vertex
      * @return a collection view on the direct predecessor vertices of vertex
      */
-    @NonNull
-    default Collection<Integer> getPrevVertices(int vertex) {
+    default @NonNull Collection<Integer> getPrevVertices(int vertex) {
 
         return new AbstractCollection<Integer>() {
-            @NonNull
             @Override
-            public Iterator<Integer> iterator() {
+            public @NonNull Iterator<Integer> iterator() {
                 return getPrevVertexIndicesIterator(vertex);
             }
 

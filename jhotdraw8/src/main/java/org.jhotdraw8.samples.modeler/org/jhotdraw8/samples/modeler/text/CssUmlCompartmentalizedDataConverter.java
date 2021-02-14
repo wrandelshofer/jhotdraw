@@ -31,9 +31,8 @@ public class CssUmlCompartmentalizedDataConverter extends AbstractCssConverter<M
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public MLCompartmentalizedData parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull MLCompartmentalizedData parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         LinkedHashMap<String, ImmutableList<String>> map = new LinkedHashMap<>();
         tt.requireNextToken(CssTokenType.TT_LEFT_CURLY_BRACKET, "Left curly bracket expected.");
         List<String> items = new ArrayList<>();

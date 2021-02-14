@@ -90,8 +90,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
         setResources(GrapherLabels.getResources());
     }
 
-    @NonNull
-    public final static NonNullBooleanKey DARK_MODE_KEY = new NonNullBooleanKey("darkMode", false);
+    public static final @NonNull NonNullBooleanKey DARK_MODE_KEY = new NonNullBooleanKey("darkMode", false);
 
     @Override
     protected void startUserAgentStylesheet() {

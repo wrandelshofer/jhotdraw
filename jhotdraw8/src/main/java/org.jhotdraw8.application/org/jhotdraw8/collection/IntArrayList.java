@@ -77,8 +77,7 @@ public class IntArrayList implements Iterable<Integer> {
      *              provided array)
      * @return the new instance
      */
-    @NonNull
-    public static IntArrayList of(@NonNull int... items) {
+    public static @NonNull IntArrayList of(@NonNull int... items) {
         return new IntArrayList(items);
     }
 
@@ -127,8 +126,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @param out the output collection
      * @return out
      */
-    @NonNull
-    public <T extends Collection<Integer>> T addAllInto(@NonNull T out) {
+    public @NonNull <T extends Collection<Integer>> T addAllInto(@NonNull T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -311,8 +309,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return an iterator over the elements of this list
      */
-    @NonNull
-    public PrimitiveIterator.OfInt iterator() {
+    public @NonNull PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int index = 0;
             private final int size = IntArrayList.this.size;
@@ -338,8 +335,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return a spliterator over the elements of this list
      */
-    @NonNull
-    public Spliterator.OfInt spliterator() {
+    public @NonNull Spliterator.OfInt spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -348,8 +344,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return a stream
      */
-    @NonNull
-    public IntStream stream() {
+    public @NonNull IntStream stream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
 
@@ -358,16 +353,14 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return array
      */
-    @NonNull
-    public int[] toArray() {
+    public @NonNull int[] toArray() {
         int[] result = new int[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return Arrays.toString(items);
     }
 

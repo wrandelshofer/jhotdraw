@@ -16,28 +16,23 @@ public class MLConstants {
     /**
      * "model" namespace is used for marking model elements.
      */
-    @NonNull
-    public static final String MODEL_NAMESPACE_PREFIX = "model";
+    public static final @NonNull String MODEL_NAMESPACE_PREFIX = "model";
     /**
      * "diagram" namespace is used for marking model elements.
      */
-    @NonNull
-    public static final String DIAGRAM_NAMESPACE_PREFIX = "diagram";
+    public static final @NonNull String DIAGRAM_NAMESPACE_PREFIX = "diagram";
     /**
      * The name of a model element.
      */
-    @NonNull
-    public final static StringStyleableKey NAME = new StringStyleableKey(MODEL_NAMESPACE_PREFIX, "name", "unnamed", null);
+    public static final @NonNull StringStyleableKey NAME = new StringStyleableKey(MODEL_NAMESPACE_PREFIX, "name", "unnamed", null);
     /**
      * The keyword of a model element.
      */
-    @NonNull
-    public final static NullableStringStyleableKey KEYWORD = new NullableStringStyleableKey(MODEL_NAMESPACE_PREFIX, "keyword", null);
+    public static final @NonNull NullableStringStyleableKey KEYWORD = new NullableStringStyleableKey(MODEL_NAMESPACE_PREFIX, "keyword", null);
     /**
      * The compartment data of a compartmentable model element.
      */
-    @NonNull
-    public final static MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.MODEL_NAMESPACE_PREFIX, "compartments", new MLCompartmentalizedData());
+    public static final @NonNull MLCompartmentedDataStyleableFigureKey COMPARTMENTS = new MLCompartmentedDataStyleableFigureKey(MLConstants.MODEL_NAMESPACE_PREFIX, "compartments", new MLCompartmentalizedData());
     /**
      * The source owned property of an association model element.
      * <p>
@@ -49,8 +44,7 @@ public class MLConstants {
      * <p>
      * See OMG UML 2.5.1 formal-17-12-05, chapter 11.5.4 Associations.
      */
-    @NonNull
-    public final static NullableBooleanStyleableKey SOURCE_OWNED = new NullableBooleanStyleableKey(MODEL_NAMESPACE_PREFIX, "sourceOwned", null);
+    public static final @NonNull NullableBooleanStyleableKey SOURCE_OWNED = new NullableBooleanStyleableKey(MODEL_NAMESPACE_PREFIX, "sourceOwned", null);
     /**
      * The target owned property of an association model element.
      * <p>
@@ -62,13 +56,11 @@ public class MLConstants {
      * <p>
      * See OMG UML 2.5.1 formal-17-12-05, chapter 11.5.4 Associations.
      */
-    @NonNull
-    public final static NullableBooleanStyleableKey TARGET_OWNED = new NullableBooleanStyleableKey(MODEL_NAMESPACE_PREFIX, "targetOwned", null);
+    public static final @NonNull NullableBooleanStyleableKey TARGET_OWNED = new NullableBooleanStyleableKey(MODEL_NAMESPACE_PREFIX, "targetOwned", null);
 
     /**
      * Whether the diagram element shows the keyword label.
      */
-    @NonNull
-    public final static BooleanStyleableKey KEYWORD_LABEL_VISIBLE = new BooleanStyleableKey(DIAGRAM_NAMESPACE_PREFIX, "keywordLabelVisible", false);
+    public static final @NonNull BooleanStyleableKey KEYWORD_LABEL_VISIBLE = new BooleanStyleableKey(DIAGRAM_NAMESPACE_PREFIX, "keywordLabelVisible", false);
 
 }

@@ -50,7 +50,7 @@ import java.util.function.Consumer;
  * @param <T>
  */
 public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
-    public final static String NAME = "ladder";
+    public static final String NAME = "ladder";
 
     public LadderCssFunction() {
         this(NAME);
@@ -107,8 +107,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
                 : list.get(list.size() - 1);
     }
 
-    @NonNull
-    protected CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @NonNull CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize size = null;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:

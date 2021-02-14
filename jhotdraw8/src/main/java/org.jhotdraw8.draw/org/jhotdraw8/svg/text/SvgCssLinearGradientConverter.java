@@ -45,8 +45,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class SvgCssLinearGradientConverter extends AbstractCssConverter<SvgLinearGradient> {
-    @NonNull
-    private final static CssColorConverter colorConverter = new CssColorConverter(false);
+    private static final @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
     public static final String LINEAR_GRADIENT_FUNCTION = "linear-gradient";
 
     public SvgCssLinearGradientConverter(boolean nullable) {
@@ -215,9 +214,8 @@ public class SvgCssLinearGradientConverter extends AbstractCssConverter<SvgLinea
         out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
     }
 
-    @NonNull
     @Override
-    public SvgLinearGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull SvgLinearGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨LinearGradient⟩: \"linear-gradient(\"  expected");
         switch (tt.currentStringNonNull()) {
         case LINEAR_GRADIENT_FUNCTION:
@@ -288,18 +286,17 @@ public class SvgCssLinearGradientConverter extends AbstractCssConverter<SvgLinea
 
     }
 
-    @NonNull
-    private PointToPoint parsePointToPoint(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull PointToPoint parsePointToPoint(@NonNull CssTokenizer tt) throws IOException, ParseException {
         double startX, startY, endX, endY;
         Boolean isProportional = null;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                startX = tt.currentNumberNonNull().doubleValue();
-                isProportional = false;
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                isProportional = true;
-                startX = tt.currentNumberNonNull().doubleValue() / 100.0;
+        case CssTokenType.TT_NUMBER:
+            startX = tt.currentNumberNonNull().doubleValue();
+            isProportional = false;
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            isProportional = true;
+            startX = tt.currentNumberNonNull().doubleValue() / 100.0;
                 break;
             case CssTokenType.TT_DIMENSION:
                 isProportional = false;
@@ -394,18 +391,17 @@ public class SvgCssLinearGradientConverter extends AbstractCssConverter<SvgLinea
         return new PointToPoint(startX, startY, endX, endY, isProportional);
     }
 
-    @NonNull
-    private PointToPoint parseSideOrCorner(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull PointToPoint parseSideOrCorner(@NonNull CssTokenizer tt) throws IOException, ParseException {
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 1.0;
         Boolean isProportional = true;
         String h = null;
         String v = null;
         while (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentString()) {
-                case "top":
-                    if (v != null) {
-                        throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
-                    }
+            case "top":
+                if (v != null) {
+                    throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
+                }
                     v = tt.currentString();
                     break;
                 case "bottom":
@@ -471,26 +467,24 @@ public class SvgCssLinearGradientConverter extends AbstractCssConverter<SvgLinea
         return new PointToPoint(startX, startY, endX, endY, isProportional);
     }
 
-    @NonNull
-    private CssStop parseColorStop(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull CssStop parseColorStop(@NonNull CssTokenizer tt) throws IOException, ParseException {
         CssColor color = colorConverter.parse(tt, null);
         Double offset = null;
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                offset = tt.currentNumberNonNull().doubleValue();
-                break;
-            case CssTokenType.TT_PERCENTAGE:
-                offset = tt.currentNumberNonNull().doubleValue() / 100.0;
-                break;
-            default:
+        case CssTokenType.TT_NUMBER:
+            offset = tt.currentNumberNonNull().doubleValue();
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            offset = tt.currentNumberNonNull().doubleValue() / 100.0;
+            break;
+        default:
                 tt.pushBack();
         }
         return new CssStop(offset, color);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨LinearGradient⟩: linear-gradient(［⟨LinearGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
                 + "\nFormat of ⟨LinearGradientParameters⟩: ⟨PointToPoint⟩｜⟨SideOrCorners⟩"
                 + "\nFormat of ⟨PointToPoint⟩: from ⟨x1⟩,⟨y1⟩ to ⟨x2⟩,⟨y2⟩｜from ⟨x1⟩%,⟨y1⟩% to ⟨x2⟩%,⟨y2⟩%"

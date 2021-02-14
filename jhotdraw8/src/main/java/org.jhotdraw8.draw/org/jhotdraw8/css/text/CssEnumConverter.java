@@ -24,10 +24,8 @@ import java.util.function.Consumer;
  */
 public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
 
-    @NonNull
-    private final Class<E> enumClass;
-    @NonNull
-    private final String name;
+    private final @NonNull Class<E> enumClass;
+    private final @NonNull String name;
     private final boolean nullable;
 
     public CssEnumConverter(@NonNull Class<E> enumClass) {
@@ -41,8 +39,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
     }
 
 
-    @Nullable
-    public E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException(name + ": identifier expected", tt.getStartPosition());
         }
@@ -59,9 +56,8 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
     }
 
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");
         buf.append(name).append("⟩: ");
         boolean first = true;
@@ -101,16 +97,14 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
         }
     }
 
-    @NonNull
-    public String toString(@Nullable E value) {
+    public @NonNull String toString(@Nullable E value) {
         StringBuilder out = new StringBuilder();
         produceTokens(value, null, token -> out.append(token.fromToken()));
         return out.toString();
     }
 
-    @Nullable
     @Override
-    public E getDefaultValue() {
+    public @Nullable E getDefaultValue() {
         return null;
     }
 

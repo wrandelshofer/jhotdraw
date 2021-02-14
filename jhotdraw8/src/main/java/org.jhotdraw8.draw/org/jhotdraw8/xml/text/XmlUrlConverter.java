@@ -27,17 +27,15 @@ public class XmlUrlConverter implements Converter<URL> {
         out.append(value.toString());
     }
 
-    @NonNull
     @Override
-    public URL fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull URL fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         URL value = new URL(in.toString());
         in.position(in.limit());
         return value;
     }
 
-    @Nullable
     @Override
-    public URL getDefaultValue() {
+    public @Nullable URL getDefaultValue() {
         return null;
     }
 }

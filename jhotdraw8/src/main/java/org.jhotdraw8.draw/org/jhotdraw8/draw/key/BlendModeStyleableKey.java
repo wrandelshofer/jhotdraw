@@ -22,7 +22,7 @@ import org.jhotdraw8.text.Converter;
  */
 public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> implements WriteableStyleableMapAccessor<BlendMode> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     private final CssMetaData<? extends Styleable, BlendMode> cssMetaData;
 

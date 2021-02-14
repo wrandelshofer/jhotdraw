@@ -271,9 +271,8 @@ public interface DrawingView extends RenderContext {
      * @param figures Only searches in the provided list of figures
      * @return A figure or null
      */
-    @Nullable
-    default Figure findFigure(double vx, double vy, Set<Figure> figures) {
-        List<Map.Entry<Figure,Double>> result = findFigures(vx, vy, false, figures::contains);
+    default @Nullable Figure findFigure(double vx, double vy, Set<Figure> figures) {
+        List<Map.Entry<Figure, Double>> result = findFigures(vx, vy, false, figures::contains);
         return getClosestFigure(result);
     }
 
@@ -298,9 +297,8 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A figure or null
      */
-    @Nullable
-    default Figure findFigure(double vx, double vy) {
-        return findFigure(vx,vy,Figure::isSelectable);
+    default @Nullable Figure findFigure(double vx, double vy) {
+        return findFigure(vx, vy, Figure::isSelectable);
     }
 
     /**
@@ -311,9 +309,8 @@ public interface DrawingView extends RenderContext {
      * @param vy y in view coordinates
      * @return A figure or null
      */
-    @Nullable
-    default Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
-        List<Map.Entry<Figure,Double>> result = findFigures(vx, vy, false, predicate);
+    default @Nullable Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
+        List<Map.Entry<Figure, Double>> result = findFigures(vx, vy, false, predicate);
         return getClosestFigure(result);
     }
 
@@ -342,9 +339,8 @@ public interface DrawingView extends RenderContext {
      *    Each entry contains the figure and the distance of the figure to vx,vy.
      *    Distance 0 means that vx,vy is inside the figure.
      */
-    @NonNull
-    default List<Map.Entry<Figure,Double>> findFigures(double vx, double vy, boolean decompose) {
-        return findFigures(vx,vy,decompose,Figure::isSelectable);
+    default @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose) {
+        return findFigures(vx, vy, decompose, Figure::isSelectable);
     }
 
     /**
@@ -431,8 +427,7 @@ public interface DrawingView extends RenderContext {
      * @param pointInView point in view coordinates
      * @return A figure or empty
      */
-    @Nullable
-    default Figure findFigure(@NonNull Point2D pointInView) {
+    default @Nullable Figure findFigure(@NonNull Point2D pointInView) {
         return findFigure(pointInView.getX(), pointInView.getY());
     }
 
@@ -447,8 +442,7 @@ public interface DrawingView extends RenderContext {
      *    Each entry contains the figure and the distance of the figure to vx,vy.
      *    Distance 0 means that pointInView is inside the figure.
      */
-    @NonNull
-    default List<Map.Entry<Figure,Double>> findFigures(@NonNull Point2D pointInView, boolean decompose) {
+    default @NonNull List<Map.Entry<Figure, Double>> findFigures(@NonNull Point2D pointInView, boolean decompose) {
         return findFigures(pointInView.getX(), pointInView.getY(), decompose);
     }
 
@@ -463,8 +457,7 @@ public interface DrawingView extends RenderContext {
      *    Each entry contains the figure and the distance of the figure to vx,vy.
      *    Distance 0 means that pointInView is inside the figure.
      */
-    @NonNull
-    default List<Map.Entry<Figure,Double>> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresInside(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
@@ -477,8 +470,7 @@ public interface DrawingView extends RenderContext {
      * @param decompose       whether to decompose the figures
      * @return A list of figures from front to back
      */
-    @NonNull
-    default List<Figure> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default @NonNull List<Figure> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose, Figure::isSelectable);
     }
 
@@ -511,8 +503,7 @@ public interface DrawingView extends RenderContext {
         toolProperty().set(newValue);
     }
 
-    @Nullable
-    default Tool getTool() {
+    default @Nullable Tool getTool() {
         return toolProperty().get();
     }
 
@@ -520,18 +511,16 @@ public interface DrawingView extends RenderContext {
         activeHandleProperty().set(newValue);
     }
 
-    @Nullable
-    default Handle getActiveHandle() {
+    default @Nullable Handle getActiveHandle() {
         return activeHandleProperty().get();
     }
-    @Nullable
-    default Figure getSelectionLead() {
+
+    default @Nullable Figure getSelectionLead() {
         ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
         return selection.isEmpty() ? null : selection.get(selection.size() - 1);
     }
 
-    @Nullable
-    default Figure getSelectionAnchor() {
+    default @Nullable Figure getSelectionAnchor() {
         Set<Figure> selection = getSelectedFigures();
         return selection.isEmpty() ? null : selection.iterator().next();
     }
@@ -540,8 +529,7 @@ public interface DrawingView extends RenderContext {
         activeParentProperty().set(newValue);
     }
 
-    @Nullable
-    default Figure getActiveParent() {
+    default @Nullable Figure getActiveParent() {
         return activeParentProperty().get();
     }
 
@@ -645,13 +633,11 @@ public interface DrawingView extends RenderContext {
         clipboardInputFormatProperty().set(newValue);
     }
 
-    @Nullable
-    default ClipboardOutputFormat getClipboardOutputFormat() {
+    default @Nullable ClipboardOutputFormat getClipboardOutputFormat() {
         return clipboardOutputFormatProperty().get();
     }
 
-    @Nullable
-    default ClipboardInputFormat getClipboardInputFormat() {
+    default @Nullable ClipboardInputFormat getClipboardInputFormat() {
         return clipboardInputFormatProperty().get();
     }
 

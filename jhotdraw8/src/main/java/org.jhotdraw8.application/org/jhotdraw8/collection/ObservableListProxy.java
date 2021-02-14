@@ -101,8 +101,7 @@ public class ObservableListProxy<A, B> extends TransformationList<A, B> {
 
         private final ListChangeListener.Change<? extends B> change;
         private final Function<B, A> toA;
-        @Nullable
-        private int[] perm;
+        private @Nullable int[] perm;
 
         public ChangeProxy(ObservableList<A> list, ListChangeListener.Change<? extends B> change, Function<B, A> toA) {
             super(list);
@@ -126,9 +125,8 @@ public class ObservableListProxy<A, B> extends TransformationList<A, B> {
             return change.getTo();
         }
 
-        @NonNull
         @Override
-        public List<A> getRemoved() {
+        public @NonNull List<A> getRemoved() {
             @SuppressWarnings("unchecked")
             List<B> temp = (List<B>) change.getRemoved();
             ArrayList<A> list = new ArrayList<>(temp.size());
@@ -148,9 +146,8 @@ public class ObservableListProxy<A, B> extends TransformationList<A, B> {
             return change.wasUpdated();
         }
 
-        @Nullable
         @Override
-        protected int[] getPermutation() {
+        protected @Nullable int[] getPermutation() {
             if (perm == null) {
                 if (change.wasPermutated()) {
                     final int from = change.getFrom();

@@ -31,10 +31,9 @@ public class BezierNodeListStyleableKey
         implements WriteableStyleableMapAccessor<@NonNull ImmutableList<BezierNode>>,
         NonNullMapAccessor<@NonNull ImmutableList<BezierNode>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, ImmutableList<BezierNode>> cssMetaData;
+    private final @NonNull CssMetaData<?, ImmutableList<BezierNode>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -74,9 +73,8 @@ public class BezierNodeListStyleableKey
 
     private final Converter<ImmutableList<BezierNode>> converter = new CssBezierNodeListConverter(false);
 
-    @NonNull
     @Override
-    public Converter<ImmutableList<BezierNode>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<BezierNode>> getCssConverter() {
         return converter;
     }
 

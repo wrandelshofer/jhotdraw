@@ -74,9 +74,8 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
         }
     }
 
-    @Nullable
     @Override
-    public ImmutableSet<T> getDefaultValue() {
+    public @Nullable ImmutableSet<T> getDefaultValue() {
         return ImmutableSets.emptySet();
     }
 

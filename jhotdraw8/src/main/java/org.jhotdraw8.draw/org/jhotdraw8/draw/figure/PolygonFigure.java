@@ -46,9 +46,9 @@ public class PolygonFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Polygon";
+    public static final String TYPE_SELECTOR = "Polygon";
 
-    public final static Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
+    public static final Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
 
     public PolygonFigure() {
         this(0, 0, 1, 1);
@@ -62,9 +62,8 @@ public class PolygonFigure extends AbstractLeafFigure
         set(POINTS, ImmutableLists.of(points));
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -78,14 +77,12 @@ public class PolygonFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @NonNull
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return Shapes.pathIteratorFromPoints(getNonNull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
     }
 
@@ -107,9 +104,8 @@ public class PolygonFigure extends AbstractLeafFigure
         set(POINTS, ImmutableLists.ofCollection(newP));
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Polygon n = new Polygon();
         n.setManaged(false);
         return n;
@@ -136,9 +132,8 @@ public class PolygonFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    @NonNull
     @Override
-    public Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
@@ -167,9 +162,8 @@ public class PolygonFigure extends AbstractLeafFigure
 
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

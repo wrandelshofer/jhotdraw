@@ -40,11 +40,9 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * @author Werner Randelshofer
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
-    @Nullable
-    public static final BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
+    public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    @NonNull
-    private final Region node;
+    private final @NonNull Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
     /**
@@ -52,8 +50,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
      */
     protected double preferredAspectRatio;
     protected CssRectangle2D startBounds;
-    @Nullable
-    private Transform startWorldToLocal;
+    private @Nullable Transform startWorldToLocal;
     private final Function<Color, Border> borderFactory;
 
     public AbstractResizeTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> borderFactory) {
@@ -72,9 +69,8 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);

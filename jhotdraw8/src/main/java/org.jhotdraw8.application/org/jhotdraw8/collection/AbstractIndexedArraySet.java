@@ -309,9 +309,8 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         endChange();
     }
 
-    @NonNull
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public @NonNull List<E> subList(int fromIndex, int toIndex) {
         return new SubObservableList(super.subList(fromIndex, toIndex));
     }
 
@@ -335,40 +334,33 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         return doAdd(size(), e);
     }
 
-    @NonNull
-    public Iterator<E> descendingIterator(int index) {
+    public @NonNull Iterator<E> descendingIterator(int index) {
         return new ObservableDescendingIterator(index);
     }
 
-    @NonNull
     @Override
-    public Iterator<E> descendingIterator() {
+    public @NonNull Iterator<E> descendingIterator() {
         return descendingIterator(size());
     }
 
-    @NonNull
-    public Iterable<E> descending() {
+    public @NonNull Iterable<E> descending() {
         return descending(size());
     }
 
-    @NonNull
-    public Iterable<E> descending(int index) {
+    public @NonNull Iterable<E> descending(int index) {
         return () -> descendingIterator(index);
     }
 
-    @NonNull
-    public Iterable<E> ascending() {
+    public @NonNull Iterable<E> ascending() {
         return ascending(size());
     }
 
-    @NonNull
-    public Iterable<E> ascending(int index) {
+    public @NonNull Iterable<E> ascending(int index) {
         return () -> listIterator(index);
     }
 
-    @NonNull
     @Override
-    public ListIterator<E> listIterator(int index) {
+    public @NonNull ListIterator<E> listIterator(int index) {
         return new ObservableListIterator(index);
     }
 
@@ -625,27 +617,23 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         return doAdd(size(), e);
     }
 
-    @Nullable
     @Override
-    public final E pollFirst() {
+    public final @Nullable E pollFirst() {
         return isEmpty() ? null : removeFirst();
     }
 
-    @Nullable
     @Override
-    public final E pollLast() {
+    public final @Nullable E pollLast() {
         return isEmpty() ? null : removeLast();
     }
 
-    @Nullable
     @Override
-    public final E peekFirst() {
+    public final @Nullable E peekFirst() {
         return isEmpty() ? null : getFirst();
     }
 
-    @Nullable
     @Override
-    public final E peekLast() {
+    public final @Nullable E peekLast() {
         return isEmpty() ? null : getLast();
     }
 
@@ -669,9 +657,8 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         return removeFirst();
     }
 
-    @Nullable
     @Override
-    public final E poll() {
+    public final @Nullable E poll() {
         return pollFirst();
     }
 
@@ -680,9 +667,8 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         return getFirst();
     }
 
-    @Nullable
     @Override
-    public final E peek() {
+    public final @Nullable E peek() {
         return peekFirst();
     }
 
@@ -719,21 +705,18 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
             return sublist.contains(o);
         }
 
-        @NonNull
         @Override
-        public Iterator<E> iterator() {
+        public @NonNull Iterator<E> iterator() {
             return sublist.iterator();
         }
 
-        @NonNull
         @Override
-        public Object[] toArray() {
+        public @NonNull Object[] toArray() {
             return sublist.toArray();
         }
 
-        @NonNull
         @Override
-        public <T> T[] toArray(@NonNull T[] a) {
+        public @NonNull <T> T[] toArray(@NonNull T[] a) {
             return sublist.toArray(a);
         }
 
@@ -832,21 +815,18 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
             return sublist.lastIndexOf(o);
         }
 
-        @NonNull
         @Override
-        public ListIterator<E> listIterator() {
+        public @NonNull ListIterator<E> listIterator() {
             return sublist.listIterator();
         }
 
-        @NonNull
         @Override
-        public ListIterator<E> listIterator(int index) {
+        public @NonNull ListIterator<E> listIterator(int index) {
             return sublist.listIterator(index);
         }
 
-        @NonNull
         @Override
-        public List<E> subList(int fromIndex, int toIndex) {
+        public @NonNull List<E> subList(int fromIndex, int toIndex) {
             return new SubObservableList(sublist.subList(fromIndex, toIndex));
         }
 
@@ -866,15 +846,13 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         }
     }
 
-    @NonNull
     @Override
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);
     }
 
-    @NonNull
     @Override
-    public Stream<E> stream() {
+    public @NonNull Stream<E> stream() {
         return StreamSupport.stream(spliterator(), false);
     }
 

@@ -30,15 +30,13 @@ public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
         this.selector = selector;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "FunctionPseudoClass:" + getFunctionIdentifier() + "(" + ")";
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         final T match = selector.match(model, element);
         return match == null ? element : null;
     }

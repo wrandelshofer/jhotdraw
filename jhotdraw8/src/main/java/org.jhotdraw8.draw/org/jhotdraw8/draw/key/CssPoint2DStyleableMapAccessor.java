@@ -31,15 +31,12 @@ public class CssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<@NonNull CssPoint2D>
         implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final Converter<@NonNull CssPoint2D> converter;
 
-    @NonNull
-    private final CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> cssMetaData;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> xKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> yKey;
+    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> cssMetaData;
+    private final @NonNull NonNullMapAccessor<CssSize> xKey;
+    private final @NonNull NonNullMapAccessor<CssSize> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -81,9 +78,8 @@ public class CssPoint2DStyleableMapAccessor
         this.yKey = yKey;
     }
 
-    @NonNull
     @Override
-    public CssPoint2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull CssPoint2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new CssPoint2D(xKey.get(a), yKey.get(a));
     }
 
@@ -105,9 +101,8 @@ public class CssPoint2DStyleableMapAccessor
         yKey.put(a, value.getY());
     }
 
-    @NonNull
     @Override
-    public CssPoint2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull CssPoint2D remove(@NonNull Map<? super Key<?>, Object> a) {
         CssPoint2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

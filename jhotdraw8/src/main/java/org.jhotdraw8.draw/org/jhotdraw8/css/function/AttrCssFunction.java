@@ -50,7 +50,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public final static String NAME = "attr";
+    public static final String NAME = "attr";
 
     public AttrCssFunction() {
         super(NAME);
@@ -359,8 +359,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         }
     }
 
-    @NonNull
-    private QualifiedName parseAttrName(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private @NonNull QualifiedName parseAttrName(@NonNull CssTokenizer tt) throws IOException, ParseException {
         String name;
         if (tt.next() == CssTokenType.TT_IDENT) {
             name = tt.currentString();

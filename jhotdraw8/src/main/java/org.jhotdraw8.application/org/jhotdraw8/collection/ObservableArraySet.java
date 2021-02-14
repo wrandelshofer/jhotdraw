@@ -11,7 +11,7 @@ import javafx.collections.SetChangeListener;
 import java.util.ArrayList;
 
 public class ObservableArraySet<E> extends ArrayList<E> implements ObservableSet<E> {
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Override
     public void addListener(SetChangeListener<? super E> listener) {

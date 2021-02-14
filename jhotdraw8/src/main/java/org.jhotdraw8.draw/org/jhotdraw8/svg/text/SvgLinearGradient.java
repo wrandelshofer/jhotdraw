@@ -13,7 +13,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssStop;
-import org.jhotdraw8.draw.render.RenderContext;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -112,8 +111,7 @@ public class SvgLinearGradient implements Paintable {
         return getLinearGradient(null);
     }
 
-    @NonNull
-    public Iterable<CssStop> getStops() {
+    public @NonNull Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
 
@@ -183,9 +181,8 @@ public class SvgLinearGradient implements Paintable {
         return Arrays.deepEquals(this.cstops, other.cstops);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssLinearGradient{" + "startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
     }
 }

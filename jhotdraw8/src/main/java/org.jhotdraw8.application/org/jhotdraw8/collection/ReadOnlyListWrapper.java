@@ -36,9 +36,8 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
         return backingList.get(index);
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<? extends E> i = backingList.iterator();
 
@@ -60,9 +59,8 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull
     @Override
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return (Spliterator<E>) backingList.spliterator();
     }
 
@@ -78,8 +76,7 @@ public final class ReadOnlyListWrapper<E> extends AbstractReadOnlyList<E> {
         }
     }
 
-    @NonNull
-    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ReadOnlyListWrapper<>(backingList.subList(fromIndex, toIndex));
     }
 }

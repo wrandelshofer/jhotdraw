@@ -55,8 +55,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private boolean isUpdating;
 
-    @Nullable
-    private Figure item;
+    private @Nullable Figure item;
 
     private TextField editField;
 
@@ -140,8 +139,7 @@ public class LayerCell extends ListCell<Figure> {
      * @param inspector    the layers inspector
      * @return callback
      */
-    @NonNull
-    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
+    public static @NonNull Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
         return list -> new LayerCell(drawingModel, inspector);
     }
 
@@ -166,8 +164,7 @@ public class LayerCell extends ListCell<Figure> {
      *
      * @return the converter
      */
-    @Nullable
-    public final StringConverter<Figure> getConverter() {
+    public final @Nullable StringConverter<Figure> getConverter() {
         return null;//converterProperty().get();
     }
 
@@ -188,13 +185,11 @@ public class LayerCell extends ListCell<Figure> {
         updateItem(getItem(), false);
     }
 
-    @NonNull
-    private String getItemText() {
+    private @NonNull String getItemText() {
         return getItem() == null ? "" : getItem().get(StyleableFigure.ID);
     }
 
-    @NonNull
-    private TextField createTextField() {
+    private @NonNull TextField createTextField() {
         final TextField textField = new TextField();
 
         // Use onAction here rather than onKeyReleased (with check for Enter),

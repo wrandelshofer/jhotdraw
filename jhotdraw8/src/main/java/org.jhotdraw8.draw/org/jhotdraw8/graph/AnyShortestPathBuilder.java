@@ -222,23 +222,19 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
      *     <dd><a href="https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/">geeksforgeeks.org</a></dd>
      * </dl>
      */
-    @Nullable
-    protected BackLink<V, A> search(@NonNull V start,
-                                    @NonNull Predicate<V> goalPredicate,
-                                    double maxCost,
-                                    @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
-                                    @NonNull ToDoubleTriFunction<V, V, A> costf) {
+    protected @Nullable BackLink<V, A> search(@NonNull V start,
+                                              @NonNull Predicate<V> goalPredicate,
+                                              double maxCost,
+                                              @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
+                                              @NonNull ToDoubleTriFunction<V, V, A> costf) {
         return searchShortestPathArcsDouble(Collections.singleton(start),
                 goalPredicate, maxCost, nextf, costf);
     }
 
     protected static class MyBackLinkDouble<VV, AA> extends BackLink<VV, AA> {
-        @NonNull
-        protected final VV vertex;
-        @Nullable
-        protected final MyBackLinkDouble<VV, AA> parent;
-        @Nullable
-        protected final AA arrow;
+        protected final @NonNull VV vertex;
+        protected final @Nullable MyBackLinkDouble<VV, AA> parent;
+        protected final @Nullable AA arrow;
         protected final double cost;
         protected final int length;
 
@@ -277,24 +273,19 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             return length;
         }
 
-        @Nullable
-        public MyBackLinkDouble<VV, AA> getParent() {
+        public @Nullable MyBackLinkDouble<VV, AA> getParent() {
             return parent;
         }
 
-        @NonNull
-        public VV getVertex() {
+        public @NonNull VV getVertex() {
             return vertex;
         }
     }
 
     protected static class MyBackLinkLong<VV, AA> extends BackLink<VV, AA> {
-        @NonNull
-        protected final VV vertex;
-        @Nullable
-        protected final MyBackLinkLong<VV, AA> parent;
-        @Nullable
-        protected final AA arrow;
+        protected final @NonNull VV vertex;
+        protected final @Nullable MyBackLinkLong<VV, AA> parent;
+        protected final @Nullable AA arrow;
         protected final long cost;
         protected final int length;
 
@@ -332,13 +323,11 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             return length;
         }
 
-        @Nullable
-        public MyBackLinkLong<VV, AA> getParent() {
+        public @Nullable MyBackLinkLong<VV, AA> getParent() {
             return parent;
         }
 
-        @NonNull
-        public VV getVertex() {
+        public @NonNull VV getVertex() {
             return vertex;
         }
     }

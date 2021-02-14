@@ -19,16 +19,12 @@ import java.util.Map;
  */
 public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final MapAccessor<Double> xKey;
-    @NonNull
-    private final MapAccessor<Double> yKey;
-    @NonNull
-    private final MapAccessor<Double> widthKey;
-    @NonNull
-    private final MapAccessor<Double> heightKey;
+    private final @NonNull MapAccessor<Double> xKey;
+    private final @NonNull MapAccessor<Double> yKey;
+    private final @NonNull MapAccessor<Double> widthKey;
+    private final @NonNull MapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -48,15 +44,13 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
         this.heightKey = heightKey;
     }
 
-    @NonNull
     @Override
-    public BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
-    @NonNull
     @Override
-    public BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
+    public @NonNull BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         BoundingBox oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -65,9 +59,8 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
         return oldValue;
     }
 
-    @NonNull
     @Override
-    public BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

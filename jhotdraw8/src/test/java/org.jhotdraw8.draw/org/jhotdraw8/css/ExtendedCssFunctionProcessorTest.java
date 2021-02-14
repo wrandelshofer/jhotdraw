@@ -22,8 +22,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
-    @NonNull
-    protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
+    protected @NonNull CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         List<CssFunction<Element>> functions = new ArrayList<>();
         functions.add(new AttrCssFunction<>());
         functions.add(new CalcCssFunction<>());
@@ -35,9 +34,8 @@ class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest 
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testProcessingOfExtendedFunctionsFactory() {
+    public @NonNull List<DynamicTest> testProcessingOfExtendedFunctionsFactory() {
         return Arrays.asList(
                 dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),
                 dynamicTest("302", () -> doTestProcess("concat(\"a\",\"b\")", "\"ab\"")),

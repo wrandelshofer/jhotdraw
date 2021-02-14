@@ -14,7 +14,7 @@ import org.jhotdraw8.event.Event;
  */
 public class HandleEvent extends Event<Handle> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public enum EventType {
 
@@ -35,9 +35,8 @@ public class HandleEvent extends Event<Handle> {
         return eventType;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "HandleEvent{" + "type=" + eventType + " handle=" + getSource()
                 + '}';
     }

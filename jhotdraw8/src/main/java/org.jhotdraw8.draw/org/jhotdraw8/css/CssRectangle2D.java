@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class CssRectangle2D {
 
-    public final static CssRectangle2D ZERO = new CssRectangle2D();
+    public static final CssRectangle2D ZERO = new CssRectangle2D();
 
     private final CssSize width;
     private final CssSize height;
@@ -107,9 +107,8 @@ public class CssRectangle2D {
         return hash;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssRectangle2D{" +
                 "" + x +
                 ", " + y +
@@ -118,30 +117,25 @@ public class CssRectangle2D {
                 '}';
     }
 
-    @NonNull
-    public Rectangle2D getConvertedValue() {
+    public @NonNull Rectangle2D getConvertedValue() {
         return new Rectangle2D(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
 
     }
 
-    @NonNull
-    public Bounds getConvertedBoundsValue() {
+    public @NonNull Bounds getConvertedBoundsValue() {
         return new BoundingBox(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
 
     }
 
-    @NonNull
-    public CssSize getMaxX() {
+    public @NonNull CssSize getMaxX() {
         return x.add(getWidth());
     }
 
-    @NonNull
-    public CssSize getMaxY() {
+    public @NonNull CssSize getMaxY() {
         return y.add(getHeight());
     }
 
-    @NonNull
-    public CssPoint2D getTopLeft() {
+    public @NonNull CssPoint2D getTopLeft() {
         return new CssPoint2D(x, y);
     }
 }

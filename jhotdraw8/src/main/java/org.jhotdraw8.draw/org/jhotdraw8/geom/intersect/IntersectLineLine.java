@@ -28,8 +28,7 @@ public class IntersectLineLine {
      * @return computed intersection with parameters of line 'a' at the intersection point
      * @see IntersectLineLine#intersectLineLineEx(double, double, double, double, double, double, double, double, double)
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineLineEx(
+    public static @NonNull IntersectionResultEx intersectLineLineEx(
             double a0x, double a0y, double a1x, double a1y,
             double b0x, double b0y, double b1x, double b1y) {
         return intersectLineLineEx(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, REAL_THRESHOLD);
@@ -46,14 +45,12 @@ public class IntersectLineLine {
      *
      * @see #intersectLineLineEx(double, double, double, double, double, double, double, double)
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static @NonNull IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
         return intersectLineLineEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(),
                 b0.getX(), b0.getY(), b1.getX(), b1.getY());
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1, double epsilon) {
+    public static @NonNull IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1, double epsilon) {
         return intersectLineLineEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(),
                 b0.getX(), b0.getY(), b1.getX(), b1.getY(), epsilon);
     }
@@ -92,8 +89,7 @@ public class IntersectLineLine {
      * @param b1y end y coordinate of line segment 'b'
      * @return computed intersection with parameters t of 'a' at the intersection point
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineLineEx(
+    public static @NonNull IntersectionResultEx intersectLineLineEx(
             double a0x, double a0y, double a1x, double a1y,
             double b0x, double b0y, double b1x, double b1y, double epsilon) {
 

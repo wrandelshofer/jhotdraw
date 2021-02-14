@@ -29,9 +29,8 @@ public class CssIntegerConverter extends AbstractCssConverter<Integer> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public Integer parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Integer parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
             return tt.currentNumberNonNull().intValue();
@@ -45,9 +44,8 @@ public class CssIntegerConverter extends AbstractCssConverter<Integer> {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value));
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Integer⟩: ⟨integer⟩";
     }
 

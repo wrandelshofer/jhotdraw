@@ -25,8 +25,7 @@ public class FXWorker {
      * @param runnable the runnable
      * @return the CompletableFuture
      */
-    @NonNull
-    public static CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
+    public static @NonNull CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
         return run(ForkJoinPool.commonPool(), runnable);
     }
 
@@ -38,8 +37,7 @@ public class FXWorker {
      * @param executor the executor, if null then a new thread is created
      * @return the CompletableFuture
      */
-    @NonNull
-    public static CompletableFuture<Void> run(@NonNull Executor executor, @NonNull CheckedRunnable runnable) {
+    public static @NonNull CompletableFuture<Void> run(@NonNull Executor executor, @NonNull CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -61,8 +59,7 @@ public class FXWorker {
      * @param supplier the supplier
      * @return the CompletableFuture
      */
-    @NonNull
-    public static <T> CompletableFuture<T> supply(@NonNull CheckedSupplier<T> supplier) {
+    public static @NonNull <T> CompletableFuture<T> supply(@NonNull CheckedSupplier<T> supplier) {
         return supply(ForkJoinPool.commonPool(), supplier);
     }
 
@@ -75,8 +72,7 @@ public class FXWorker {
      * @param executor the executor
      * @return the CompletableFuture
      */
-    @NonNull
-    public static <T> CompletableFuture<T> supply(@NonNull Executor executor, @NonNull CheckedSupplier<T> supplier) {
+    public static @NonNull <T> CompletableFuture<T> supply(@NonNull Executor executor, @NonNull CheckedSupplier<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
             try {

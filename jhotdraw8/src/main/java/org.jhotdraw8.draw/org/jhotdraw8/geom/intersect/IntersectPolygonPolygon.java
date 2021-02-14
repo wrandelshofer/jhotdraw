@@ -21,8 +21,7 @@ public class IntersectPolygonPolygon {
      * @param points2 the points of the second polygon
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectPolygonPolygonEx(@NonNull List<Point2D.Double> points1, @NonNull List<Point2D.Double> points2) {
+    public static @NonNull IntersectionResultEx intersectPolygonPolygonEx(@NonNull List<Point2D.Double> points1, @NonNull List<Point2D.Double> points2) {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
         int length = points1.size();

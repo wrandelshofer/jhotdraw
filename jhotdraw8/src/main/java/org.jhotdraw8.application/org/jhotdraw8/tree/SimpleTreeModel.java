@@ -20,9 +20,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SimpleTreeModel<E> implements TreeModel<E> {
 
-    @NonNull
     @Override
-    public E getChild(E parent, int index) {
+    public @NonNull E getChild(E parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -31,21 +30,18 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @NonNull
     @Override
-    public List<E> getChildren(E node) {
+    public @NonNull List<E> getChildren(E node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @NonNull
     @Override
-    public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
+    public @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @NonNull
     @Override
-    public CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
+    public @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

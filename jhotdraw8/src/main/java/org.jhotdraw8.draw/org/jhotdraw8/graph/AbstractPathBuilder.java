@@ -18,8 +18,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public abstract class AbstractPathBuilder<V, A> {
-    @NonNull
-    private final Function<V, Iterable<V>> nextNodesFunction;
+    private final @NonNull Function<V, Iterable<V>> nextNodesFunction;
     private int maxLength = Integer.MAX_VALUE;
 
     public AbstractPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
@@ -37,8 +36,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    @Nullable
-    public VertexPath<V> findVertexPath(@NonNull V start, @NonNull V goal) {
+    public @Nullable VertexPath<V> findVertexPath(@NonNull V start, @NonNull V goal) {
         return findVertexPath(start, goal::equals);
     }
 
@@ -64,8 +62,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    @Nullable
-    public VertexPath<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
+    public @Nullable VertexPath<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
         BackLink<V, A> current = search(start, goalPredicate, new HashSet<>()::add);
         if (current == null) {
             return null;
@@ -92,24 +89,24 @@ public abstract class AbstractPathBuilder<V, A> {
      *                  determines how the waypoints are traversed
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    @Nullable
-    public VertexPath<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints) {
+    public @Nullable VertexPath<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints) {
         try {
             return findVertexPathOverWaypointsNonNull(waypoints);
         } catch (PathBuilderException e) {
             return null;
         }
     }
-    @Nullable
-    public VertexPath<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints,
-                                                     Runnable clearVisitedSet,
-                                                     AddToSet<V> addToVisitedSet) {
+
+    public @Nullable VertexPath<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints,
+                                                               Runnable clearVisitedSet,
+                                                               AddToSet<V> addToVisitedSet) {
         try {
-            return findVertexPathOverWaypointsNonNull(waypoints,clearVisitedSet,addToVisitedSet);
+            return findVertexPathOverWaypointsNonNull(waypoints, clearVisitedSet, addToVisitedSet);
         } catch (PathBuilderException e) {
             return null;
         }
     }
+
     /**
      * Builds a VertexPath through the graph which traverses the specified
      * waypoints.
@@ -121,8 +118,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath
      * @throws PathBuilderException if the path cannot be constructed
      */
-    @Nullable
-    public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints) throws PathBuilderException {
+    public @Nullable VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints) throws PathBuilderException {
         HashSet<Object> visitedSet = new HashSet<>();
         return findVertexPathOverWaypointsNonNull(waypoints, visitedSet::clear, visitedSet::add);
     }
@@ -141,10 +137,9 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath
      * @throws PathBuilderException if the path cannot be constructed
      */
-    @Nullable
-    public VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints,
-                                                            Runnable clearVisitedSet,
-                                                            AddToSet<V> addToVisitedSet) throws PathBuilderException {
+    public @Nullable VertexPath<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints,
+                                                                      Runnable clearVisitedSet,
+                                                                      AddToSet<V> addToVisitedSet) throws PathBuilderException {
 
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
@@ -170,25 +165,22 @@ public abstract class AbstractPathBuilder<V, A> {
         return new VertexPath<>(pathElements);
     }
 
-    @NonNull
-    public Function<V, Iterable<V>> getNextNodesFunction() {
+    public @NonNull Function<V, Iterable<V>> getNextNodesFunction() {
         return nextNodesFunction;
     }
 
-    @Nullable
-    private BackLink<V, A> search(@NonNull V start,
-                                  @NonNull Predicate<V> goalPredicate,
-                                  @NonNull AddToSet<V> visited) {
+    private @Nullable BackLink<V, A> search(@NonNull V start,
+                                            @NonNull Predicate<V> goalPredicate,
+                                            @NonNull AddToSet<V> visited) {
         return search(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
-    @Nullable
-    protected abstract BackLink<V, A> search(V start,
-                                             Predicate<V> goal,
-                                             Function<V, Iterable<V>> nextNodesFunction,
-                                             @NonNull AddToSet<V> visited, int maxLength);
+    protected abstract @Nullable BackLink<V, A> search(V start,
+                                                       Predicate<V> goal,
+                                                       Function<V, Iterable<V>> nextNodesFunction,
+                                                       @NonNull AddToSet<V> visited, int maxLength);
 
-    protected static abstract class BackLink<VV, AA> {
+    protected abstract static class BackLink<VV, AA> {
         abstract BackLink<VV, AA> getParent();
 
         abstract VV getVertex();

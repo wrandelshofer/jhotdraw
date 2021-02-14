@@ -39,8 +39,7 @@ public class FontCollection {
         this.families.addAll(families);
     }
 
-    @NonNull
-    public ObservableList<FontFamily> getFamilies() {
+    public @NonNull ObservableList<FontFamily> getFamilies() {
         return families;
     }
 
@@ -60,13 +59,11 @@ public class FontCollection {
         smartCollection.set(value);
     }
 
-    @NonNull
-    public StringProperty nameProperty() {
+    public @NonNull StringProperty nameProperty() {
         return name;
     }
 
-    @NonNull
-    public BooleanProperty smartCollectionProperty() {
+    public @NonNull BooleanProperty smartCollectionProperty() {
         return smartCollection;
     }
 

@@ -16,9 +16,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class OffsetPathBuilderTest {
     //5138.5,360.0, 5025.0,360.0, 5025.0,360.0, 5015.0,360.0, 5015.0,360.0, 4845.0,360.0, 4845.0,360.0, 4835.0,360.0, 4835.0,360.0, 4645.0,360.0, 4645.0,360.0, 4635.0,360.0, 4635.0,360.0, 4455.0,360.0, 4455.0,360.0, 4445.0,360.0, 4445.0,360.0, 4361.5,360.0
-    @NonNull
     @TestFactory
-    public List<DynamicTest> offsetPathTestFactory() {
+    public @NonNull List<DynamicTest> offsetPathTestFactory() {
         return Arrays.asList(
                 dynamicTest("test case from editor", () -> doTest(
                         polylineOf(new double[]{

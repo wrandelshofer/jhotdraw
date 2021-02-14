@@ -39,8 +39,7 @@ public class ConnectionTool extends AbstractTool {
     /**
      * The created figure.
      */
-    @Nullable
-    private ConnectingFigure figure;
+    private @Nullable ConnectingFigure figure;
 
     private Supplier<ConnectingFigure> figureFactory;
     private Supplier<Layer> layerFactory;
@@ -50,8 +49,7 @@ public class ConnectionTool extends AbstractTool {
      */
     private double minSize = 2;
 
-    @Nullable
-    private HandleType handleType = null;
+    private @Nullable HandleType handleType = null;
 
     public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory) {
         this(name, rsrc, figureFactory, LayerFigure::new);
@@ -83,8 +81,7 @@ public class ConnectionTool extends AbstractTool {
      * @param newFigure the figure
      * @return a suitable layer for the figure
      */
-    @Nullable
-    protected Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
+    protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Figure activeParent = dv.getActiveParent();
         if (activeParent != null && activeParent.isEditable() && activeParent.isAllowsChildren()) {
@@ -221,9 +218,8 @@ public class ConnectionTool extends AbstractTool {
         figure = null;
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "ConnectionTool"
                 + "\n  Press the mouse on a figure in the drawing view, and drag the mouse to another figure."
                 + " The tool will create a new figure which connects the two figures."

@@ -17,16 +17,14 @@ import java.util.HashMap;
  */
 public class HierarchicalMap<K, V> extends HashMap<K, V> {
 
-    private final static long serialVersionUID = 1L;
-    @Nullable
-    private HierarchicalMap<K, V> parent = null;
+    private static final long serialVersionUID = 1L;
+    private @Nullable HierarchicalMap<K, V> parent = null;
 
     public void setParent(@Nullable HierarchicalMap<K, V> parent) {
         this.parent = parent;
     }
 
-    @Nullable
-    public HierarchicalMap<K, V> getParent() {
+    public @Nullable HierarchicalMap<K, V> getParent() {
         return parent;
     }
 
@@ -37,8 +35,7 @@ public class HierarchicalMap<K, V> extends HashMap<K, V> {
      * @return the value or null
      */
     @Override
-    @Nullable
-    public V get(@Nullable Object key) {
+    public @Nullable V get(@Nullable Object key) {
         if (containsKey(key)) {
             return super.get(key);
         } else {

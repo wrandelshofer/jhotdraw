@@ -50,9 +50,8 @@ public class XMLNumberConverterTest {
         testFromString(doubleValue, stringValue);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToFromString(-0.0, "-0")),
                 dynamicTest("1", () -> testToFromString(0.0, "0")),

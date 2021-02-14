@@ -56,10 +56,9 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
      * @param maxLength the maximal length of a path
      * @return the enumerated paths
      */
-    @NonNull
-    public List<VertexPath<Integer>> findAllVertexPaths(int start,
-                                                        @NonNull IntPredicate goal,
-                                                        int maxLength) {
+    public @NonNull List<VertexPath<Integer>> findAllVertexPaths(int start,
+                                                                 @NonNull IntPredicate goal,
+                                                                 int maxLength) {
         List<MyBackLink> backlinks = new ArrayList<>();
         searchAll(new MyBackLink(start, null, 1), goal,
                 getNextNodesFunction(),
@@ -88,12 +87,11 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
-    @Nullable
-    public BackLink search(@NonNull int root,
-                           @NonNull IntPredicate goal,
-                           @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
-                           @NonNull AddToIntSet visited,
-                           int maxLength) {
+    public @Nullable BackLink search(@NonNull int root,
+                                     @NonNull IntPredicate goal,
+                                     @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                     @NonNull AddToIntSet visited,
+                                     int maxLength) {
         Queue<MyBackLink> queue = new ArrayDeque<>(16);
         MyBackLink rootBackLink = new MyBackLink(root, null, maxLength);
         int[] v = new int[1];

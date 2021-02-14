@@ -10,9 +10,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 /**
  * A {@code Set} that provides precise control where each element is inserted.
  * <p>
@@ -26,8 +23,7 @@ public class IndexedHashSet<E> extends AbstractIndexedArraySet<E> {
      * <p>
      * FIXME implement this as an inline hash array.
      */
-    @NonNull
-    private final Set<E> set=new HashSet<>();
+    private final @NonNull Set<E> set = new HashSet<>();
 
     public IndexedHashSet() {
     }

@@ -28,8 +28,8 @@ import java.util.prefs.Preferences;
  * @author Werner Randelshofer
  */
 public class PreferencesUtil {
-    private final static ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
-    private final static ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
 
     /**
      * Gets the system node for the package of the class if permitted, gets a
@@ -84,7 +84,7 @@ public class PreferencesUtil {
      * @param name  Base name of the preference.
      * @param stage The window for which to track preferences.
      */
-    public static void installStagePrefsHandler(@NonNull final Preferences prefs, final String name, @NonNull Stage stage) {
+    public static void installStagePrefsHandler(final @NonNull Preferences prefs, final String name, @NonNull Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
@@ -100,7 +100,7 @@ public class PreferencesUtil {
      * @param defaultSize This size is used when no preferences are stored yet for
      *                    this window.
      */
-    public static void installStagePrefsHandler(@NonNull final Preferences prefs, final String name, @NonNull Stage stage, @NonNull Dimension2D defaultSize) {
+    public static void installStagePrefsHandler(final @NonNull Preferences prefs, final String name, @NonNull Stage stage, @NonNull Dimension2D defaultSize) {
 
         double prefWidth;
         double prefHeight;
@@ -184,7 +184,7 @@ public class PreferencesUtil {
         visibilityProperty.set(prefs.getBoolean(visibilityProperty.getName(), true));
     }
 
-    public static void installBooleanPropertyHandler(@NonNull final Preferences prefs, final String name, @NonNull BooleanProperty property) {
+    public static void installBooleanPropertyHandler(final @NonNull Preferences prefs, final String name, @NonNull BooleanProperty property) {
         boolean prefValue = prefs.getBoolean(name, true);
         property.setValue(prefValue);
         property.addListener((o, oldValue, newValue) -> prefs.putBoolean(name, newValue));

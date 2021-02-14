@@ -29,9 +29,8 @@ public final class ImmutableSingletonSet<E> extends AbstractReadOnlySet<E> imple
         return Objects.equals(element, o);
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
             boolean consumed;
 

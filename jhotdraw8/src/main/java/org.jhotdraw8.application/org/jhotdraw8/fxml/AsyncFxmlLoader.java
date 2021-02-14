@@ -32,13 +32,11 @@ public class AsyncFxmlLoader {
      * @param location the location of the FXML file
      * @return the FXMLLoader.
      */
-    @NonNull
-    public static CompletionStage<FXMLLoader> load(URL location) {
+    public static @NonNull CompletionStage<FXMLLoader> load(URL location) {
         return load(location, null, ForkJoinPool.commonPool());
     }
 
-    @NonNull
-    public static CompletionStage<FXMLLoader> load(URL location, ResourceBundle resources) {
+    public static @NonNull CompletionStage<FXMLLoader> load(URL location, ResourceBundle resources) {
         return load(location, resources, ForkJoinPool.commonPool());
     }
 
@@ -75,8 +73,7 @@ public class AsyncFxmlLoader {
      * @param executor  the executor on which the task should be executed
      * @return the FXMLLoader.
      */
-    @NonNull
-    public static CompletionStage<FXMLLoader> load(@NonNull URL location, @Nullable ResourceBundle resources, @NonNull Executor executor) {
+    public static @NonNull CompletionStage<FXMLLoader> load(@NonNull URL location, @Nullable ResourceBundle resources, @NonNull Executor executor) {
         return FXWorker.supply(executor,
                 () -> {
                     FXMLLoader loader = new FXMLLoader();

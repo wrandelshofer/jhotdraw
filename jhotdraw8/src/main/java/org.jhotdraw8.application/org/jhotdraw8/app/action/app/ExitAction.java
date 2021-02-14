@@ -46,8 +46,7 @@ public class ExitAction extends AbstractApplicationAction {
 
 public static final String ID = "application.exit";
     private Node oldFocusOwner;
-    @Nullable
-    private FileBasedActivity unsavedView;
+    private @Nullable FileBasedActivity unsavedView;
 
     /**
      * Creates a new instance.
@@ -129,8 +128,7 @@ public static final String ID = "application.exit";
         }
     }
 
-    @Nullable
-    protected URIChooser getChooser(FileBasedActivity view) {
+    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
@@ -228,7 +226,7 @@ public static final String ID = "application.exit";
         }
     }
 
-    protected void saveToFile(@NonNull final URI uri, final DataFormat format, WorkState workState) {
+    protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState workState) {
         final FileBasedActivity v = unsavedView;
         v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
@@ -258,7 +256,7 @@ public static final String ID = "application.exit";
         });
     }
 
-    protected void saveToFileAndReviewNext(@NonNull final URI uri, final DataFormat format, WorkState workState) {
+    protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState workState) {
         final FileBasedActivity v = unsavedView;
         v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {

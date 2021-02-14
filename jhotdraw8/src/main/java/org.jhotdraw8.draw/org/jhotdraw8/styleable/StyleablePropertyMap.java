@@ -97,8 +97,7 @@ public class StyleablePropertyMap {
      */
     private final HashMap<Key<?>, StyleableProperty<?>> styleableProperties = new HashMap<>();
 
-    @NonNull
-    private MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
+    private @NonNull MapChangeListener<Key<?>, Object> inputHandler = new MapChangeListener<Key<?>, Object>() {
 
         @Override
         public void onChanged(@NonNull MapChangeListener.Change<? extends Key<?>, ? extends Object> change) {
@@ -231,8 +230,7 @@ public class StyleablePropertyMap {
      * @param key The key identifying the value.
      * @return The style origin or null if the key is not contained in the map.
      */
-    @Nullable
-    public StyleOrigin getStyleOrigin(Key<?> key) {
+    public @Nullable StyleOrigin getStyleOrigin(Key<?> key) {
         if (inline != null && inline.containsKey(key)) {
             return StyleOrigin.INLINE;
         } else if (author != null && author.containsKey(key)) {
@@ -250,8 +248,7 @@ public class StyleablePropertyMap {
         return bean;
     }
 
-    @Nullable
-    public <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
+    public @Nullable <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
         @SuppressWarnings("unchecked")
         StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
         if (sp == null) {
@@ -269,18 +266,17 @@ public class StyleablePropertyMap {
         return sp;
     }
 
-    @Nullable
-    public <T> T remove(@NonNull StyleOrigin origin, Key<T> key) {
+    public @Nullable <T> T remove(@NonNull StyleOrigin origin, Key<T> key) {
         T value = null;
         switch (origin) {
-            case INLINE:
-                if (inline != null) {
-                    @SuppressWarnings("unchecked")
-                    T temp = (T) inline.remove(key);
-                    value = temp;
-                }
-                break;
-            case AUTHOR:
+        case INLINE:
+            if (inline != null) {
+                @SuppressWarnings("unchecked")
+                T temp = (T) inline.remove(key);
+                value = temp;
+            }
+            break;
+        case AUTHOR:
                 if (author != null) {
                     @SuppressWarnings("unchecked")
                     T temp = (T) author.remove(key);
@@ -339,8 +335,7 @@ public class StyleablePropertyMap {
     // ---
     public class MapStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-        @NonNull
-        private final Key<T> key;
+        private final @NonNull Key<T> key;
         private final CssMetaData<?, T> metaData;
 
         public MapStyleableProperty(@NonNull Key<T> key, CssMetaData<?, T> metaData) {
@@ -355,9 +350,8 @@ public class StyleablePropertyMap {
             return StyleablePropertyMap.this.getBean();
         }
 
-        @Nullable
         @Override
-        public String getName() {
+        public @Nullable String getName() {
             return key.getName();
         }
 
@@ -412,9 +406,8 @@ public class StyleablePropertyMap {
             }
         }
 
-        @Nullable
         @Override
-        public StyleOrigin getStyleOrigin() {
+        public @Nullable StyleOrigin getStyleOrigin() {
             return StyleablePropertyMap.this.getStyleOrigin(key);
         }
 

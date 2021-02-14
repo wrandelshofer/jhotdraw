@@ -29,8 +29,7 @@ import java.net.URL;
 public class StyleClassCell extends ListCell<StyleClassItem> {
 
     private HBox node;
-    @Nullable
-    private StyleClassItem item;
+    private @Nullable StyleClassItem item;
     private boolean isUpdating;
 
     @FXML
@@ -79,8 +78,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
         }
     }
 
-    @NonNull
-    public static Callback<ListView<StyleClassItem>, ListCell<StyleClassItem>> forListView(StyleClassesInspector inspector) {
+    public static @NonNull Callback<ListView<StyleClassItem>, ListCell<StyleClassItem>> forListView(StyleClassesInspector inspector) {
         return list -> new StyleClassCell(inspector);
     }
 

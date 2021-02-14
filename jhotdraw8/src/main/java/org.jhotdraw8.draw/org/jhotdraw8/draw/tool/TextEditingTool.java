@@ -34,10 +34,8 @@ public class TextEditingTool extends AbstractTool {
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
-    @NonNull
-    private TextArea textArea = new TextArea();
-    @Nullable
-    private TextEditableFigure.TextEditorData editorData;
+    private @NonNull TextArea textArea = new TextArea();
+    private @Nullable TextEditableFigure.TextEditorData editorData;
 
     /**
      * The rubber band.
@@ -178,9 +176,8 @@ public class TextEditingTool extends AbstractTool {
         super.activate(editor);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "CreationTool"
                 + "\n  Click on the drawing view. The tool will create a new figure with default size at the clicked location."
                 + "\nOr:"

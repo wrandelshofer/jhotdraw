@@ -15,15 +15,14 @@ import java.util.EventObject;
  */
 public class Event<E> extends EventObject {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public Event(@NonNull E source) {
         super(source);
     }
 
-    @NonNull
     @Override
-    public E getSource() {
+    public @NonNull E getSource() {
         @SuppressWarnings("unchecked")
         E temp = (E) super.getSource();
         return temp;

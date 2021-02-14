@@ -215,8 +215,7 @@ public interface StrokableFigure extends Figure {
 
     }
 
-    @NonNull
-    default BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
+    default @NonNull BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
         CssSize cssSize = getStyledNonNull(STROKE_WIDTH);
         double width = ctx == null ? cssSize.getConvertedValue()
                 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
@@ -267,8 +266,7 @@ public interface StrokableFigure extends Figure {
     }
 
     @Override
-    @NonNull
-    default Bounds getBoundsInLocal() {
+    default @NonNull Bounds getBoundsInLocal() {
         Bounds layoutBounds = getLayoutBounds();
         Paintable paintable = get(STROKE);
         if (paintable == null) {

@@ -24,8 +24,7 @@ public class FXConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    @NonNull
-    public static List<Point2D> getConvexHull(@NonNull List<Point2D> points) {
+    public static @NonNull List<Point2D> getConvexHull(@NonNull List<Point2D> points) {
         return Arrays.asList(getConvexHull(points.toArray(new Point2D[0])));
     }
 

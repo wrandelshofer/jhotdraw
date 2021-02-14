@@ -39,8 +39,7 @@ public abstract class MessageStringFormatter extends StringBinding {
         return value;
     }
 
-    @NonNull
-    private static Object[] extractValues(@NonNull Object[] objs) {
+    private static @NonNull Object[] extractValues(@NonNull Object[] objs) {
         final int n = objs.length;
         final Object[] values = new Object[n];
         for (int i = 0; i < n; i++) {
@@ -49,8 +48,7 @@ public abstract class MessageStringFormatter extends StringBinding {
         return values;
     }
 
-    @NonNull
-    private static ObservableValue<?>[] extractDependencies(@NonNull Object... args) {
+    private static @NonNull ObservableValue<?>[] extractDependencies(@NonNull Object... args) {
         final List<ObservableValue<?>> dependencies = new ArrayList<>();
         for (final Object obj : args) {
             if (obj instanceof ObservableValue) {
@@ -60,8 +58,7 @@ public abstract class MessageStringFormatter extends StringBinding {
         return dependencies.toArray(new ObservableValue<?>[dependencies.size()]);
     }
 
-    @NonNull
-    public static StringExpression format(@Nullable final String format, @NonNull final Object... args) {
+    public static @NonNull StringExpression format(final @Nullable String format, final @NonNull Object... args) {
         Objects.requireNonNull(format, "format is null");
         if (extractDependencies(args).length == 0) {
             return ConstantStringExpression.of(String.format(format, args));
@@ -76,16 +73,14 @@ public abstract class MessageStringFormatter extends StringBinding {
                 super.unbind(extractDependencies(args));
             }
 
-            @NonNull
             @Override
-            protected String computeValue() {
+            protected @NonNull String computeValue() {
                 final Object[] values = extractValues(args);
                 return MessageFormat.format(format, values);
             }
 
-            @NonNull
             @Override
-            public ObservableList<ObservableValue<?>> getDependencies() {
+            public @NonNull ObservableList<ObservableValue<?>> getDependencies() {
                 return FXCollections.unmodifiableObservableList(FXCollections
                         .observableArrayList(extractDependencies(args)));
             }

@@ -42,11 +42,11 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public final static Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", ImmutableLists.emptyList());
+    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", ImmutableLists.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Polyline";
+    public static final String TYPE_SELECTOR = "Polyline";
 
     public PolylineFigure() {
         this(0, 0, 1, 1);
@@ -81,17 +81,15 @@ public class PolylineFigure extends AbstractLeafFigure
         }
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Polyline n = new Polyline();
         n.setManaged(false);
         return n;
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         // XXX should be cached
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -106,20 +104,17 @@ public class PolylineFigure extends AbstractLeafFigure
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 
-    @NonNull
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return Shapes.pathIteratorFromPoints(getNonNull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -161,8 +156,7 @@ public class PolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    @NonNull
-    public static double[] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<ImmutableList<Point2D>> key) {
+    public static @NonNull double[] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<ImmutableList<Point2D>> key) {
         ImmutableList<Point2D> points = f.getNonNull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {

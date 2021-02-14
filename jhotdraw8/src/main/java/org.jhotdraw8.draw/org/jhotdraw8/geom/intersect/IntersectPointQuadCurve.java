@@ -74,8 +74,7 @@ public class IntersectPointQuadCurve {
      * @param r  the tolerance radius
      * @return the intersection
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurvePoint(
+    public static @NonNull IntersectionResult intersectQuadCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {
 
@@ -136,8 +135,7 @@ public class IntersectPointQuadCurve {
                 result);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectQuadCurvePointEx(
+    public static @NonNull IntersectionResultEx intersectQuadCurvePointEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double cx, double cy, double epsilon) {
         IntersectionResult result = intersectQuadCurvePoint(a0x, a0y, a1x, a1y, a2x, a2y, cx, cy, epsilon);

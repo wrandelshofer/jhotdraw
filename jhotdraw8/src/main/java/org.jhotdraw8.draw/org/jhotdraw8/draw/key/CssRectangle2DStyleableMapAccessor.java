@@ -31,18 +31,13 @@ import java.util.function.Function;
 public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull CssRectangle2D>
         implements NonNullMapAccessor<@NonNull CssRectangle2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<@NonNull Styleable, @NonNull CssRectangle2D> cssMetaData;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> xKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> yKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> widthKey;
-    @NonNull
-    private final NonNullMapAccessor<CssSize> heightKey;
+    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull CssRectangle2D> cssMetaData;
+    private final @NonNull NonNullMapAccessor<CssSize> xKey;
+    private final @NonNull NonNullMapAccessor<CssSize> yKey;
+    private final @NonNull NonNullMapAccessor<CssSize> widthKey;
+    private final @NonNull NonNullMapAccessor<CssSize> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -85,15 +80,13 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
 
     private final Converter<CssRectangle2D> converter = new CssRectangle2DConverter(false);
 
-    @NonNull
     @Override
-    public Converter<CssRectangle2D> getCssConverter() {
+    public @NonNull Converter<CssRectangle2D> getCssConverter() {
         return converter;
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull CssRectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new CssRectangle2D(xKey.get(a),
                 yKey.get(a),
                 widthKey.get(a),
@@ -109,9 +102,8 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
         heightKey.put(a, value.getHeight());
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull CssRectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
         CssRectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

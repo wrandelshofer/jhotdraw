@@ -39,7 +39,7 @@ public class Geom {
     /**
      * Absolute threshold to be used for comparing reals generally.
      */
-    public final static double REAL_THRESHOLD = 1e-8;
+    public static final double REAL_THRESHOLD = 1e-8;
 
     private Geom() {
     } // never instantiated
@@ -354,8 +354,7 @@ public class Geom {
      * @param y the x value of the vector
      * @return the perpendicular vector
      */
-    @NonNull
-    public static java.awt.geom.Point2D.Double perp(double x, double y) {
+    public static @NonNull java.awt.geom.Point2D.Double perp(double x, double y) {
         return new java.awt.geom.Point2D.Double(y, -x);
     }
 
@@ -372,8 +371,7 @@ public class Geom {
     }
 
 
-    @NonNull
-    public static java.awt.geom.Point2D.Double lerp(double x0, double y0, double x1, double y1, double t) {
+    public static @NonNull java.awt.geom.Point2D.Double lerp(double x0, double y0, double x1, double y1, double t) {
         return new java.awt.geom.Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
@@ -453,8 +451,7 @@ public class Geom {
      *              b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    @NonNull
-    public static java.awt.geom.Point2D.Double lerp(@NonNull java.awt.geom.Point2D start, @NonNull java.awt.geom.Point2D end, double t) {
+    public static @NonNull java.awt.geom.Point2D.Double lerp(@NonNull java.awt.geom.Point2D start, @NonNull java.awt.geom.Point2D end, double t) {
         return Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 

@@ -28,8 +28,7 @@ import java.util.function.Function;
 public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     private int arrowCount;
-    @NonNull
-    private final Map<V, VertexData<V, A>> vertices;
+    private final @NonNull Map<V, VertexData<V, A>> vertices;
 
     /**
      * Creates a new instance with default capacity for vertices and arrows.
@@ -142,15 +141,13 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         return arrowCount;
     }
 
-    @NonNull
     @Override
-    public V getNext(@NonNull V vertex, int i) {
+    public @NonNull V getNext(@NonNull V vertex, int i) {
         return getVertexDataNonNull(vertex).next.get(i).end.v;
     }
 
-    @NonNull
     @Override
-    public A getNextArrow(@NonNull V vertex, int index) {
+    public @NonNull A getNextArrow(@NonNull V vertex, int index) {
         return getVertexDataNonNull(vertex).next.get(index).arrow;
     }
 
@@ -159,15 +156,13 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         return getVertexDataNonNull(vertex).next.size();
     }
 
-    @NonNull
     @Override
-    public V getPrev(@NonNull V vertex, int i) {
+    public @NonNull V getPrev(@NonNull V vertex, int i) {
         return getVertexDataNonNull(vertex).prev.get(i).start.v;
     }
 
-    @NonNull
     @Override
-    public A getPrevArrow(@NonNull V vertex, int index) {
+    public @NonNull A getPrevArrow(@NonNull V vertex, int index) {
         return getVertexDataNonNull(vertex).prev.get(index).arrow;
     }
 
@@ -181,18 +176,15 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         return vertices.size();
     }
 
-    @NonNull
     @Override
-    public Collection<V> getVertices() {
+    public @NonNull Collection<V> getVertices() {
         return Collections.unmodifiableCollection(vertices.keySet());
     }
 
-    @NonNull
     @Override
-    public Collection<A> getArrows() {
+    public @NonNull Collection<A> getArrows() {
         class ArrowIterator implements Iterator<A> {
-            @NonNull
-            private final Iterator<V> vertexIterator;
+            private final @NonNull Iterator<V> vertexIterator;
             private Iterator<A> nextArrowIterator;
 
             public ArrowIterator() {
@@ -207,8 +199,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
             }
 
             @Override
-            @Nullable
-            public A next() {
+            public @Nullable A next() {
                 while (!nextArrowIterator.hasNext()) {
                     V v = vertexIterator.next();
                     nextArrowIterator = getNextArrows(v).iterator();
@@ -218,9 +209,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
         }
         return new AbstractCollection<A>() {
-            @NonNull
             @Override
-            public Iterator<A> iterator() {
+            public @NonNull Iterator<A> iterator() {
                 return new ArrowIterator();
             }
 
@@ -314,26 +304,21 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
 
     private static class ArrowData<V, A> {
 
-        @NonNull
-        final VertexData<V, A> start;
-        @NonNull
-        final VertexData<V, A> end;
-        @Nullable
-        final A arrow;
+        final @NonNull VertexData<V, A> start;
+        final @NonNull VertexData<V, A> end;
+        final @Nullable A arrow;
 
-        ArrowData(@NonNull final VertexData<V, A> start, @NonNull final VertexData<V, A> end, @Nullable final A arrow) {
+        ArrowData(final @NonNull VertexData<V, A> start, final @NonNull VertexData<V, A> end, final @Nullable A arrow) {
             this.start = start;
             this.end = end;
             this.arrow = arrow;
         }
 
-        @NonNull
-        public VertexData<V, A> getStart() {
+        public @NonNull VertexData<V, A> getStart() {
             return start;
         }
 
-        @NonNull
-        public VertexData<V, A> getEnd() {
+        public @NonNull VertexData<V, A> getEnd() {
             return end;
         }
     }
@@ -349,13 +334,11 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
             this.v = v;
         }
 
-        @NonNull
-        public List<ArrowData<V, A>> getNext() {
+        public @NonNull List<ArrowData<V, A>> getNext() {
             return next;
         }
 
-        @NonNull
-        public List<ArrowData<V, A>> getPrev() {
+        public @NonNull List<ArrowData<V, A>> getPrev() {
             return prev;
         }
     }

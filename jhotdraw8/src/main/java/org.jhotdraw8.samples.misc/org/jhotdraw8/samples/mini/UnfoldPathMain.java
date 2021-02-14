@@ -45,40 +45,26 @@ import static java.lang.Math.atan2;
  */
 public class UnfoldPathMain extends Application {
 
-    @NonNull
-    private Polyline polyline = new Polyline();
+    private @NonNull Polyline polyline = new Polyline();
     private double width = 40;
-    @NonNull
-    private Path skeleton = new Path();
-    @NonNull
-    private Path unfoldedSkeleton = new Path();
-    @NonNull
-    private Path offsetPath = new Path();
-    @NonNull
-    private Path builtOffsetPath = new Path();
-    @NonNull
-    private Path strokedPath = new Path();
-    @NonNull
-    private Path intersections = new Path();
-    @NonNull
-    private Path intersections2 = new Path();
-    @NonNull
-    private List<Point2D> points = new ArrayList<>();
+    private @NonNull Path skeleton = new Path();
+    private @NonNull Path unfoldedSkeleton = new Path();
+    private @NonNull Path offsetPath = new Path();
+    private @NonNull Path builtOffsetPath = new Path();
+    private @NonNull Path strokedPath = new Path();
+    private @NonNull Path intersections = new Path();
+    private @NonNull Path intersections2 = new Path();
+    private @NonNull List<Point2D> points = new ArrayList<>();
     private Point2D pressedp;
     private double tolerance = 10;
     private int selected = -1;
 
-    @NonNull
-    private QuadCurve curve3 = new QuadCurve(150, 100, 300, 700, 450, 100);
+    private @NonNull QuadCurve curve3 = new QuadCurve(150, 100, 300, 700, 450, 100);
 
-    @NonNull
-    private Polyline curve3V0 = new Polyline();
-    @NonNull
-    private Polyline curve3V1 = new Polyline();
-    @NonNull
-    private Polyline curve3V0Unfold = new Polyline();
-    @NonNull
-    private Polyline curve3V1Unfold = new Polyline();
+    private @NonNull Polyline curve3V0 = new Polyline();
+    private @NonNull Polyline curve3V1 = new Polyline();
+    private @NonNull Polyline curve3V0Unfold = new Polyline();
+    private @NonNull Polyline curve3V1Unfold = new Polyline();
 
     private void applyToQuadCurve(@NonNull List<Point2D> list1, @NonNull QuadCurve curve) {
         curve.setStartX(list1.get(0).getX());
@@ -114,7 +100,7 @@ public class UnfoldPathMain extends Application {
         return index;
     }
 
-    private void renderSkeleton(@NonNull final ObservableList<PathElement> elements, @NonNull List<Point2D> points) {
+    private void renderSkeleton(final @NonNull ObservableList<PathElement> elements, @NonNull List<Point2D> points) {
         for (int i = 0, n = points.size() - 1; i < n; i++) {
             Point2D p1 = points.get(i);
             Point2D p2 = points.get(i + 1);
@@ -127,7 +113,7 @@ public class UnfoldPathMain extends Application {
         }
     }
 
-    private void renderSkeleton(@NonNull final ObservableList<PathElement> elements, @NonNull List<Point2D> p1s, @NonNull List<Point2D> p2s) {
+    private void renderSkeleton(final @NonNull ObservableList<PathElement> elements, @NonNull List<Point2D> p1s, @NonNull List<Point2D> p2s) {
         for (int i = 0, n = p1s.size(); i < n; i++) {
             Point2D p1 = p1s.get(i);
             Point2D p2 = p2s.get(i);
@@ -149,7 +135,7 @@ public class UnfoldPathMain extends Application {
         }
     }
 
-    private void renderOffsetPath(@NonNull final ObservableList<PathElement> elements) {
+    private void renderOffsetPath(final @NonNull ObservableList<PathElement> elements) {
         elements.clear();
         List<Point2D> offsetList = new ArrayList<>();
         for (int i = 0, n = points.size() - 1; i < n; i++) {
@@ -348,13 +334,11 @@ public class UnfoldPathMain extends Application {
         launch(args);
     }
 
-    @NonNull
-    private Point2D perp(@NonNull Point2D p) {
+    private @NonNull Point2D perp(@NonNull Point2D p) {
         return new Point2D(p.getY(), -p.getX());
     }
 
-    @Nullable
-    private Point2D intersection(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D p4) {
+    private @Nullable Point2D intersection(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D p4) {
         double x1, y1, x2, y2, x3, y3, x4, y4;
         x1 = p1.getX();
         y1 = p1.getY();
@@ -378,8 +362,7 @@ public class UnfoldPathMain extends Application {
         return null;
     }
 
-    @Nullable
-    private Point2D intersection2(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D p4) {
+    private @Nullable Point2D intersection2(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D p4) {
         double x1, y1, x2, y2, x3, y3, x4, y4;
         x1 = p1.getX();
         y1 = p1.getY();
@@ -403,8 +386,7 @@ public class UnfoldPathMain extends Application {
         return null;
     }
 
-    @NonNull
-    private List<Point2D> binary(@NonNull List<Point2D> lista, @NonNull List<Point2D> listb, @NonNull BinaryOperator<Point2D> op) {
+    private @NonNull List<Point2D> binary(@NonNull List<Point2D> lista, @NonNull List<Point2D> listb, @NonNull BinaryOperator<Point2D> op) {
         int n = lista.size();
         List<Point2D> listc = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -413,8 +395,7 @@ public class UnfoldPathMain extends Application {
         return listc;
     }
 
-    @NonNull
-    private List<Point2D> unary(@NonNull List<Point2D> lista, @NonNull UnaryOperator<Point2D> op) {
+    private @NonNull List<Point2D> unary(@NonNull List<Point2D> lista, @NonNull UnaryOperator<Point2D> op) {
         int n = lista.size();
         List<Point2D> listc = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -429,13 +410,13 @@ public class UnfoldPathMain extends Application {
         return dx * dx + dy * dy;
     }
 
-    private final static int curve_recursion_limit = 32;
-    private final static double curve_distance_epsilon = 1e-30;
-    private final static double curve_collinearity_epsilon = 1e-30;
-    private final static double m_approximation_scale = 1.0;
-    private final static double curve_angle_tolerance_epsilon = 0.01;
-    private final static double m_angle_tolerance = 5 * Math.PI / 180.0;
-    private final static double m_distance_tolerance_square = (0.5 / m_approximation_scale) * (0.5 / m_approximation_scale);
+    private static final int curve_recursion_limit = 32;
+    private static final double curve_distance_epsilon = 1e-30;
+    private static final double curve_collinearity_epsilon = 1e-30;
+    private static final double m_approximation_scale = 1.0;
+    private static final double curve_angle_tolerance_epsilon = 0.01;
+    private static final double m_angle_tolerance = 5 * Math.PI / 180.0;
+    private static final double m_distance_tolerance_square = (0.5 / m_approximation_scale) * (0.5 / m_approximation_scale);
 
     private void curve3RecursiveBezier(@NonNull List<Point2D> points, double x1, double y1, double x2, double y2, double x3, double y3, int level) {
         if (level > curve_recursion_limit) {
@@ -511,8 +492,7 @@ public class UnfoldPathMain extends Application {
 
     }
 
-    @NonNull
-    private List<Point2D> curve3Bezier(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3) {
+    private @NonNull List<Point2D> curve3Bezier(@NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3) {
         double x1, y1, x2, y2, x3, y3;
         x1 = p1.getX();
         y1 = p1.getY();
@@ -540,8 +520,7 @@ public class UnfoldPathMain extends Application {
      * @param unfold true if unfolding is needed
      * @return two bezier curves
      */
-    @NonNull
-    private Pair<List<Point2D>, List<Point2D>> curveThicken(@NonNull List<Point2D> V_, double width, boolean unfold) {
+    private @NonNull Pair<List<Point2D>, List<Point2D>> curveThicken(@NonNull List<Point2D> V_, double width, boolean unfold) {
         int n = V_.size();
         if (n < 2) {
             return new Pair<>(Collections.emptyList(), Collections.emptyList());
@@ -650,8 +629,7 @@ public class UnfoldPathMain extends Application {
      * @param unfold true if unfolding is needed
      * @return two bezier curves
      */
-    @NonNull
-    private Pair<List<Point2D>, List<Point2D>> curveThickenOriginal(@NonNull List<Point2D> V, double width, boolean unfold) {
+    private @NonNull Pair<List<Point2D>, List<Point2D>> curveThickenOriginal(@NonNull List<Point2D> V, double width, boolean unfold) {
         int n = V.size();
 
         if (n < 2) {

@@ -38,8 +38,7 @@ public interface ConnectableFigure extends Figure {
      * @return Returns the connector. Returns null if there is no connector at
      * the given location.
      */
-    @Nullable
-    default Connector findConnector(double x, double y, @Nullable Figure prototype) {
+    default @Nullable Connector findConnector(double x, double y, @Nullable Figure prototype) {
         return findConnector(new Point2D(x, y), prototype);
     }
 

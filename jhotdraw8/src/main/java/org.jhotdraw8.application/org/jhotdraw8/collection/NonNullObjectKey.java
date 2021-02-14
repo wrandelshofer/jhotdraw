@@ -38,19 +38,16 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
     /**
      * Holds a String representation of the name.
      */
-    @NonNull
-    private final String name;
+    private final @NonNull String name;
     /**
      * Holds the default value.
      */
-    @NonNull
-    private final T defaultValue;
+    private final @NonNull T defaultValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    @NonNull
-    private final Type type;
+    private final @NonNull Type type;
 
     private final boolean isTransient;
 
@@ -96,15 +93,13 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
      *
      * @return name string.
      */
-    @NonNull
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
-    @NonNull
     @Override
-    public Type getValueType() {
+    public @NonNull Type getValueType() {
         return type;
     }
 
@@ -113,9 +108,8 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
      *
      * @return the default value.
      */
-    @NonNull
     @Override
-    public T getDefaultValue() {
+    public @NonNull T getDefaultValue() {
         return defaultValue;
     }
 
@@ -131,9 +125,8 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
     /**
      * Returns the name string.
      */
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
     }

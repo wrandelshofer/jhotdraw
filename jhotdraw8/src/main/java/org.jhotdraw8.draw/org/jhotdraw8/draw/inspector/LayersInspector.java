@@ -72,18 +72,15 @@ public class LayersInspector extends AbstractDrawingInspector {
     @FXML
     private Button removeButton;
 
-    @Nullable
-    private ReversedObservableList<Figure> layers;
+    private @Nullable ReversedObservableList<Figure> layers;
 
     private Supplier<Layer> layerFactory;
 
     private Node node;
 
-    @NonNull
-    private HashMap<Layer, Integer> selectionCount = new HashMap<>();
+    private @NonNull HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
-    @Nullable
-    private ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
+    private @Nullable ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
         int changedRecursion = 0;
 
         @Override
@@ -96,18 +93,17 @@ public class LayersInspector extends AbstractDrawingInspector {
             changedRecursion--;
         }
     };
-    @Nullable
-    private Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
+    private @Nullable Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
         @Override
         public void handle(@NonNull TreeModelEvent<Figure> event) {
             boolean fire = false;
             Figure root = event.getSource().getRoot();
             switch (event.getEventType()) {
 
-                case ROOT_CHANGED:
-                    fire = true;
-                    break;
-                case SUBTREE_NODES_CHANGED:
+            case ROOT_CHANGED:
+                fire = true;
+                break;
+            case SUBTREE_NODES_CHANGED:
                     if (event.getNode() == root) {
                         fire = true;
                     }
@@ -133,8 +129,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     };
 
 
-    @NonNull
-    private InvalidationListener selectionInvalidationListener = new InvalidationListener() {
+    private @NonNull InvalidationListener selectionInvalidationListener = new InvalidationListener() {
         @Override
         public void invalidated(Observable observable) {
             onSelectionChanged();
@@ -250,9 +245,8 @@ public class LayersInspector extends AbstractDrawingInspector {
                     clipboard.setContent(content);
                 }
 
-                @Nullable
                 @Override
-                public List<Figure> read(@NonNull Clipboard clipboard) {
+                public @Nullable List<Figure> read(@NonNull Clipboard clipboard) {
                     List<Figure> list;
                     if (clipboard.hasString()) {
                         list = new ArrayList<>();
@@ -277,8 +271,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         });
     }
 
-    @NonNull
-    public LayerCell createCell(ListView<Figure> listView) {
+    public @NonNull LayerCell createCell(ListView<Figure> listView) {
         return new LayerCell(getModel(), this);
     }
 
@@ -320,8 +313,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
     }
 
-    @NonNull
-    private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(
+    private @NonNull Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(
             @NonNull ListView<Figure> listView, @NonNull Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
     ) {
         SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
@@ -360,8 +352,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             this.io = io;
         }
 
-        @NonNull
-        private EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {

@@ -38,11 +38,11 @@ public class MacOSPreferences {
     /**
      * Path to global preferences.
      */
-    public final static File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
+    public static final File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
     /**
      * Path to finder preferences.
      */
-    public final static File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
+    public static final File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
     /**
      * Each entry in this hash map represents a cached preferences file.
      */
@@ -54,13 +54,11 @@ public class MacOSPreferences {
     public MacOSPreferences() {
     }
 
-    @Nullable
-    public static String getString(@NonNull File file, @NonNull String key) {
+    public static @Nullable String getString(@NonNull File file, @NonNull String key) {
         return (String) get(file, key);
     }
 
-    @NonNull
-    public static String getString(@NonNull File file, String key, String defaultValue) {
+    public static @NonNull String getString(@NonNull File file, String key, String defaultValue) {
         return (String) get(file, key, defaultValue);
     }
 
@@ -75,8 +73,7 @@ public class MacOSPreferences {
      * @param key  the key may contain tabulator separated entries to directly access a value in a sub-dictionary
      * @return the value associated with the key
      */
-    @Nullable
-    public static Object get(@NonNull File file, @NonNull String key) {
+    public static @Nullable Object get(@NonNull File file, @NonNull String key) {
         ensureCached(file);
         final HashMap<String, Object> map = cachedFiles.get(file);
         final String[] split = key.split("\t");
@@ -114,8 +111,7 @@ public class MacOSPreferences {
      *
      * @return
      */
-    @NonNull
-    public static Set<String> getKeySet(@NonNull File file) {
+    public static @NonNull Set<String> getKeySet(@NonNull File file) {
         ensureCached(file);
         return cachedFiles.get(file).keySet();
     }
@@ -200,8 +196,7 @@ public class MacOSPreferences {
         return value;
     }
 
-    @NonNull
-    private static Iterable<Node> getChildren(@NonNull final Element elem) {
+    private static @NonNull Iterable<Node> getChildren(final @NonNull Element elem) {
         return () -> new Iterator<Node>() {
             int index = 0;
             final NodeList children = elem.getChildNodes();
@@ -218,14 +213,12 @@ public class MacOSPreferences {
         };
     }
 
-    @NonNull
-    private static Iterable<Element> getChildElements(@NonNull final Element elem) {
+    private static @NonNull Iterable<Element> getChildElements(final @NonNull Element elem) {
         return () -> StreamSupport.stream(getChildren(elem).spliterator(), false)
                 .filter(e -> e instanceof Element).map(e -> (Element) e).iterator();
     }
 
-    @NonNull
-    private static List<Object> readPList(@NonNull Element plistElem) throws IOException {
+    private static @NonNull List<Object> readPList(@NonNull Element plistElem) throws IOException {
         List<Object> plist = new ArrayList<>();
         for (Node child : getChildElements(plistElem)) {
             plist.add(readNode((Element) child));
@@ -233,8 +226,7 @@ public class MacOSPreferences {
         return plist;
     }
 
-    @NonNull
-    private static String getContent(@NonNull Element elem) {
+    private static @NonNull String getContent(@NonNull Element elem) {
         StringBuilder buf = new StringBuilder();
         for (Node child : getChildren(elem)) {
             if (child instanceof Text) {
@@ -244,8 +236,7 @@ public class MacOSPreferences {
         return buf.toString().trim();
     }
 
-    @NonNull
-    private static Map<String, Object> readDict(@NonNull Element dictElem) throws IOException {
+    private static @NonNull Map<String, Object> readDict(@NonNull Element dictElem) throws IOException {
         LinkedHashMap<String, Object> dict = new LinkedHashMap<>();
         for (Iterator<Element> iterator = getChildElements(dictElem).iterator(); iterator.hasNext(); ) {
             Element keyElem = iterator.next();
@@ -259,8 +250,7 @@ public class MacOSPreferences {
         return dict;
     }
 
-    @NonNull
-    private static List<Object> readArray(@NonNull Element arrayElem) throws IOException {
+    private static @NonNull List<Object> readArray(@NonNull Element arrayElem) throws IOException {
         List<Object> array = new ArrayList<>();
         for (Element child : getChildElements(arrayElem)) {
             array.add(readNode(child));

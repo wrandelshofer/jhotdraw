@@ -148,8 +148,7 @@ public class UriUtil {
      * @param uri an URI
      * @return a map
      */
-    @NonNull
-    public static Map<String, String> parseQuery(@NonNull URI uri) {
+    public static @NonNull Map<String, String> parseQuery(@NonNull URI uri) {
         String query = uri.getQuery();
         Map<String, String> map = new LinkedHashMap<>();
         if (query != null) {

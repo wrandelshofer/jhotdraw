@@ -31,8 +31,7 @@ import java.util.List;
  */
 public class PathIterablePointsHandle extends AbstractHandle {
 
-    @NonNull
-    private final Path node;
+    private final @NonNull Path node;
     private final boolean selectable;
 
     public PathIterablePointsHandle(PathIterableFigure figure, boolean selectable) {
@@ -47,15 +46,13 @@ public class PathIterablePointsHandle extends AbstractHandle {
         return node.contains(x, y);
     }
 
-    @Nullable
     @Override
-    public Cursor getCursor() {
+    public @Nullable Cursor getCursor() {
         return null;
     }
 
-    @NonNull
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public @NonNull Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         node.setStroke(Paintable.getPaint(color));
         return node;
@@ -70,9 +67,8 @@ public class PathIterablePointsHandle extends AbstractHandle {
         return selectable;
     }
 
-    @NonNull
     @Override
-    public PathIterableFigure getOwner() {
+    public @NonNull PathIterableFigure getOwner() {
         return (PathIterableFigure) super.getOwner();
     }
 

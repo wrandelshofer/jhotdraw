@@ -30,9 +30,8 @@ public class CssSvgPathConverter extends AbstractCssConverter<String> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
         return tt.currentStringNonNull();
     }
@@ -42,9 +41,8 @@ public class CssSvgPathConverter extends AbstractCssConverter<String> {
         out.accept(new CssToken(CssTokenType.TT_STRING, value));
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩｛ moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ ｝ \"");
         buf.append("\nFormat of ⟨moveTo ⟩: M ⟨x⟩ ⟨y⟩ ｜m ⟨dx⟩ ⟨dy⟩ ");
         buf.append("\nFormat of ⟨lineTo ⟩: L ⟨x⟩ ⟨y⟩ ｜l ⟨dx⟩ ⟨dy⟩ | H ⟨x⟩ | h ⟨dx⟩ | V ⟨y⟩ | v ⟨dy⟩");
@@ -56,9 +54,8 @@ public class CssSvgPathConverter extends AbstractCssConverter<String> {
     }
 
 
-    @Nullable
     @Override
-    public String getDefaultValue() {
+    public @Nullable String getDefaultValue() {
         return null;
     }
 

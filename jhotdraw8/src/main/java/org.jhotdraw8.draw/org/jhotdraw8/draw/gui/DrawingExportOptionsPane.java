@@ -46,8 +46,7 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
 public class DrawingExportOptionsPane extends GridPane {
 
-    @NonNull
-    public static Dialog<Map<Key<?>, Object>> createDialog(DataFormat format) {
+    public static @NonNull Dialog<Map<Key<?>, Object>> createDialog(DataFormat format) {
         Resources labels = ApplicationLabels.getResources();
         final DrawingExportOptionsPane pane = new DrawingExportOptionsPane();
         pane.setFormat(format);
@@ -113,8 +112,7 @@ public class DrawingExportOptionsPane extends GridPane {
      *
      * @return the export options
      */
-    @NonNull
-    public Map<Key<?>, Object> getExportOptions() {
+    public @NonNull Map<Key<?>, Object> getExportOptions() {
         Map<Key<?>, Object> map = new HashMap<>();
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());
         EXPORT_PAGES_KEY.put(map, exportPagesCheckBox.isSelected());

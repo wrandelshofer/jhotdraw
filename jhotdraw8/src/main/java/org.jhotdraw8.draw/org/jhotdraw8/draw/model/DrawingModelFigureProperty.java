@@ -21,16 +21,11 @@ import org.jhotdraw8.event.WeakListener;
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
-    @NonNull
-    private final DrawingModel model;
-    @Nullable
-    protected final Figure figure;
-    @Nullable
-    private final Key<T> key;
-    @Nullable
-    private final Listener<DrawingModelEvent> modelListener;
-    @Nullable
-    private final WeakListener<DrawingModelEvent> weakListener;
+    private final @NonNull DrawingModel model;
+    protected final @Nullable Figure figure;
+    private final @Nullable Key<T> key;
+    private final @Nullable Listener<DrawingModelEvent> modelListener;
+    private final @Nullable WeakListener<DrawingModelEvent> weakListener;
     private final boolean isDeclaredKey;
 
     public DrawingModelFigureProperty(@NonNull DrawingModel model, Figure figure, Key<T> key) {
@@ -66,9 +61,8 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
         }
     }
 
-    @Nullable
     @Override
-    public T getValue() {
+    public @Nullable T getValue() {
         @SuppressWarnings("unchecked")
         T temp = isDeclaredKey ? figure.get(key) : null;
         return temp;

@@ -41,8 +41,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
         return false;
     }
 
-    @Nullable
-    private Bounds getBounds(@NonNull DrawingView dv) {
+    private @Nullable Bounds getBounds(@NonNull DrawingView dv) {
         Bounds b = null;
         for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
@@ -56,9 +55,8 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
         return b == null ? null : dv.getWorldToView().transform(b);
     }
 
-    @Nullable
     @Override
-    public Cursor getCursor() {
+    public @Nullable Cursor getCursor() {
         return null;
     }
 

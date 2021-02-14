@@ -73,11 +73,8 @@ import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
 public class SimpleDrawingView extends AbstractDrawingView {
-    @NonNull
-    private final ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
-    @NonNull
-    final
-    private SimpleDrawingViewNode node = new SimpleDrawingViewNode();
+    private final @NonNull ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
+    private final @NonNull SimpleDrawingViewNode node = new SimpleDrawingViewNode();
     private boolean constrainerNodeValid;
     private boolean backgroundNodeValid;
 
@@ -129,26 +126,18 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    @NonNull
-    private final NonNullObjectProperty<DrawingModel> model //
+    private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
-    @NonNull
-    private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
-    @NonNull
-    private final ObjectProperty<Figure> activeParent = new SimpleObjectProperty<>(this, ACTIVE_PARENT_PROPERTY);
-    @NonNull
-    private final NonNullObjectProperty<Constrainer> constrainer = new NonNullObjectProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
-    @NonNull
-    private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
-    @NonNull
-    private final Region background = new Region();
-    @NonNull
-    private final StackPane foreground = new StackPane();
+    private final @NonNull ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
+    private final @NonNull ObjectProperty<Figure> activeParent = new SimpleObjectProperty<>(this, ACTIVE_PARENT_PROPERTY);
+    private final @NonNull NonNullObjectProperty<Constrainer> constrainer = new NonNullObjectProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final @NonNull ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
+    private final @NonNull Region background = new Region();
+    private final @NonNull StackPane foreground = new StackPane();
     private final InteractiveDrawingRenderer drawingRenderer = new InteractiveDrawingRenderer();
     private final InteractiveHandleRenderer handleRenderer = new InteractiveHandleRenderer();
     private boolean isLayoutValid = true;
-    @NonNull
-    private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
 
 
     public SimpleDrawingView() {
@@ -173,8 +162,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         return constrainer;
     }
 
-    @NonNull
-    private Image createCheckerboardImage(Color c1, Color c2, int size) {
+    private @NonNull Image createCheckerboardImage(Color c1, Color c2, int size) {
         WritableImage img = new WritableImage(size * 2, size * 2);
         PixelWriter w = img.getPixelWriter();
         for (int x = 0; x < size; x++) {
@@ -444,8 +432,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         handleRenderer.recreateHandles();
     }
 
-    @Nullable
-    private Runnable repainter = null;
+    private @Nullable Runnable repainter = null;
 
     @Override
     protected void repaint() {

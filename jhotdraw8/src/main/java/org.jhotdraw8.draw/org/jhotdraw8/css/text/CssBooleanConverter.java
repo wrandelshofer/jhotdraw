@@ -32,9 +32,8 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public Boolean parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Boolean parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨Boolean⟩ identifier expected.");
         String s = tt.currentStringNonNull();
         switch (s) {
@@ -52,9 +51,8 @@ public class CssBooleanConverter extends AbstractCssConverter<Boolean> {
         out.accept(new CssToken(CssTokenType.TT_IDENT, value.booleanValue() ? trueString : falseString));
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         if (isNullable()) {
             return "Format of ⟨NullableBoolean⟩: none｜true｜false";
         } else {

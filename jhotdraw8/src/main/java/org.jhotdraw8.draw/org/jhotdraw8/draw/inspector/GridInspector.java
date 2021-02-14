@@ -59,8 +59,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField majorYField;
 
-    @NonNull
-    private Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
+    private @NonNull Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
     private Node node;
 
     @FXML

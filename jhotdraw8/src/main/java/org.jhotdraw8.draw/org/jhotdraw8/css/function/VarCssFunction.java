@@ -33,7 +33,7 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public final static String NAME = "var";
+    public static final String NAME = "var";
 
     public VarCssFunction() {
         this(NAME);

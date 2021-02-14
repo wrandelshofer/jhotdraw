@@ -103,9 +103,8 @@ public class BoundsLocator extends AbstractLocator {
         return relativeY;
     }
 
-    @NonNull
     @Override
-    public Point2D locate(@NonNull Figure owner) {
+    public @NonNull Point2D locate(@NonNull Figure owner) {
         Bounds bounds = owner.getLayoutBounds();
 
         Point2D location = new Point2D(

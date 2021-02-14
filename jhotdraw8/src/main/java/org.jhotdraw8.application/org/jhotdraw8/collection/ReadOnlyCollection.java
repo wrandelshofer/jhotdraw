@@ -48,8 +48,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param a   a template array
      * @return an array
      */
-    @NonNull
-    default <T> T[] toArray(@NonNull T[] a) {
+    default @NonNull <T> T[] toArray(@NonNull T[] a) {
         // Estimate size of array; be prepared to see more or fewer elements
         int size = size();
         @SuppressWarnings("unchecked")
@@ -108,8 +107,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      *
      * @return the wrapped collection
      */
-    @NonNull
-    default Collection<E> asCollection() {
+    default @NonNull Collection<E> asCollection() {
         return new CollectionWrapper<>(this);
     }
 }

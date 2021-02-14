@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.NonNullKey;
  */
 public class DoubleKey extends ObjectFigureKey<@NonNull Double> implements NonNullKey<@NonNull Double> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public DoubleKey(@NonNull String key) {
         this(key, 0.0);

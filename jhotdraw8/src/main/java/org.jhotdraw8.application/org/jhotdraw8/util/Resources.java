@@ -99,8 +99,7 @@ public interface Resources {
         ResourcesHelper.propertyNameModifiers.remove(name);
     }
 
-    @NonNull
-    static Resources getResources(String moduleName, @NonNull String resourceBundle) {
+    static @NonNull Resources getResources(String moduleName, @NonNull String resourceBundle) {
         try {
             Class<?> clazz = Class.forName("org.jhotdraw8.util.ModulepathResources");
             Method method = clazz.getMethod("getResources", String.class, String.class);
@@ -193,8 +192,7 @@ public interface Resources {
      * @param arguments the arguments
      * @return formatted String
      */
-    @NonNull
-    default String format(@NonNull String key, Object... arguments) {
+    default @NonNull String format(@NonNull String key, Object... arguments) {
         //return String.format(resource.getLocale(), getString(key), arguments);
         return new Formatter(getLocale()).format(getString(key), arguments).toString();
     }
@@ -209,8 +207,7 @@ public interface Resources {
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    @Nullable
-    default KeyCombination getAcceleratorProperty(String key) {
+    default @Nullable KeyCombination getAcceleratorProperty(String key) {
         return getKeyCombination(key + ".accelerator");
     }
 
@@ -236,8 +233,7 @@ public interface Resources {
      * @param arguments the arguments
      * @return formatted String
      */
-    @NonNull
-    default String getFormatted(@NonNull String key, Object... arguments) {
+    default @NonNull String getFormatted(@NonNull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
 
@@ -248,8 +244,7 @@ public interface Resources {
      * @param key The key of the property.
      * @return The value of the property. Returns -1 if the property is missing.
      */
-    @NonNull
-    default Integer getInteger(@NonNull String key) {
+    default @NonNull Integer getInteger(@NonNull String key) {
         try {
             return Integer.valueOf(getString(key));
         } catch (MissingResourceException e) {
@@ -266,8 +261,7 @@ public interface Resources {
      * @return <code>javax.swing.KeyStroke.getKeyStroke(value)</code>. Returns
      * null if the property is missing.
      */
-    @Nullable
-    default KeyCombination getKeyCombination(@NonNull String key) {
+    default @Nullable KeyCombination getKeyCombination(@NonNull String key) {
         KeyCombination ks = null;
         String s = getString(key);
         try {
@@ -290,8 +284,7 @@ public interface Resources {
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    @Nullable
-    default Node getLargeIconProperty(String key, @NonNull Class<?> baseClass) {
+    default @Nullable Node getLargeIconProperty(String key, @NonNull Class<?> baseClass) {
         return ResourcesHelper.getIconProperty(this, key, ".largeIcon", baseClass);
     }
 
@@ -319,8 +312,7 @@ public interface Resources {
      * @return The first char of the value of the property. Returns '\0' if the
      * property is missing.
      */
-    @Nullable
-    default KeyCombination getMnemonicProperty(String key) {
+    default @Nullable KeyCombination getMnemonicProperty(String key) {
         String s;
         try {
             s = getString(key + ".mnemonic");
@@ -342,8 +334,7 @@ public interface Resources {
      * @return The value of the property. Returns null if the property is
      * missing.
      */
-    @Nullable
-    default Node getSmallIconProperty(String key, @NonNull Class<?> baseClass) {
+    default @Nullable Node getSmallIconProperty(String key, @NonNull Class<?> baseClass) {
         return ResourcesHelper.getIconProperty(this, key, ".smallIcon", baseClass);
     }
 
@@ -357,8 +348,7 @@ public interface Resources {
      *            key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
-    @Nullable
-    default String getTextProperty(String key) {
+    default @Nullable String getTextProperty(String key) {
         try {
             String value = getString(key + ".text");
             return value;
@@ -377,8 +367,7 @@ public interface Resources {
      *            the key.
      * @return The ToolTip. Returns null if no tooltip is defined.
      */
-    @Nullable
-    default String getToolTipTextProperty(String key) {
+    default @Nullable String getToolTipTextProperty(String key) {
         try {
             String value = getString(key + ".toolTipText");
             return value;
@@ -388,8 +377,7 @@ public interface Resources {
         }
     }
 
-    @NonNull
-    default String substitutePlaceholders(String key, @NonNull String value) throws MissingResourceException {
+    default @NonNull String substitutePlaceholders(String key, @NonNull String value) throws MissingResourceException {
 
         // Substitute placeholders in the value
         for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
@@ -451,8 +439,7 @@ public interface Resources {
      * @param s The KeyStroke String
      * @return The KeyCombination String
      */
-    @Nullable
-    default String translateKeyStrokeToKeyCombination(@Nullable String s) {
+    default @Nullable String translateKeyStrokeToKeyCombination(@Nullable String s) {
         if (s != null) {
             s = s.replace("ctrl ", "Ctrl+");
             s = s.replace("meta ", "Meta+");

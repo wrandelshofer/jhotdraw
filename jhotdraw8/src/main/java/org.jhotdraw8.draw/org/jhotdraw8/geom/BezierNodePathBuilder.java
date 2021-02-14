@@ -19,8 +19,7 @@ import java.util.List;
  */
 public class BezierNodePathBuilder extends AbstractPathBuilder implements Builder<ImmutableList<BezierNode>> {
 
-    @NonNull
-    private List<BezierNode> nodes = new ArrayList<>();
+    private @NonNull List<BezierNode> nodes = new ArrayList<>();
 
     private void add(BezierNode newValue) {
         nodes.add(newValue);
@@ -85,8 +84,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder implements Builde
         nodes.set(nodes.size() - 1, newValue);
     }
 
-    @NonNull
-    public ImmutableList<BezierNode> build() {
+    public @NonNull ImmutableList<BezierNode> build() {
         return ImmutableLists.ofCollection(nodes);
     }
 

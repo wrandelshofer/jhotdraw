@@ -31,20 +31,17 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Arc";
+    public static final String TYPE_SELECTOR = "Arc";
 
-    @NonNull
-    public final static CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
-    @NonNull
-    public final static CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
-    public final static CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
-    public final static CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
-    public final static DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
-    public final static DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
-    public final static EnumStyleableKey<ArcType> ARC_TYPE = new EnumStyleableKey<>("arcType", ArcType.class, ArcType.ROUND);
-    @Nullable
-    public final static CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
-    public final static CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
+    public static final @NonNull CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
+    public static final CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
+    public static final CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
+    public static final DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
+    public static final DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
+    public static final EnumStyleableKey<ArcType> ARC_TYPE = new EnumStyleableKey<>("arcType", ArcType.class, ArcType.ROUND);
+    public static final @Nullable CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public static final CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
     public ArcFigure() {
         this(0, 0, 1, 1);
@@ -58,9 +55,8 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         reshapeInLocal(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
-    @NonNull
     @Override
-    public Bounds getLayoutBounds() {
+    public @NonNull Bounds getLayoutBounds() {
         double rx = getNonNull(RADIUS_X).getConvertedValue();
         double ry = getNonNull(RADIUS_Y).getConvertedValue();
         double cx = getNonNull(CENTER_X).getConvertedValue();
@@ -68,9 +64,8 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         return new BoundingBox(cx - rx, cy - ry, rx * 2.0, ry * 2.0);
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D getCssLayoutBounds() {
+    public @NonNull CssRectangle2D getCssLayoutBounds() {
         CssSize rx = getNonNull(RADIUS_X);
         CssSize ry = getNonNull(RADIUS_Y);
         CssSize cx = getNonNull(CENTER_X);
@@ -96,9 +91,8 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         set(RADIUS_Y, ry);
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         Arc n = new Arc();
         n.setManaged(false);
         return n;
@@ -123,9 +117,8 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
         n.applyCss();
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

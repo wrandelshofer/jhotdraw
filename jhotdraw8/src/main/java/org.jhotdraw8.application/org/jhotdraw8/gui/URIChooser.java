@@ -39,8 +39,7 @@ public interface URIChooser {
      *             {@code showDialog} for details
      * @return the selected URIs or an empty list if no selection has been made.
      */
-    @Nullable
-    default URI showDialog(@Nullable Node node) {
+    default @Nullable URI showDialog(@Nullable Node node) {
         Scene scene = node == null ? null : node.getScene();
         return showDialog(scene == null ? null : scene.getWindow());
     }
@@ -51,8 +50,7 @@ public interface URIChooser {
      * @return data format, or null if the user did not explicitly select a
      * format
      */
-    @Nullable
-    default DataFormat getDataFormat() {
+    default @Nullable DataFormat getDataFormat() {
         return null;
     }
 }

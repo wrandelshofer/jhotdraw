@@ -83,8 +83,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @return The name
      */
-    @Nullable
-    default String getLabel() {
+    default @Nullable String getLabel() {
         return get(LABEL);
     }
 
@@ -93,8 +92,7 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      *
      * @return The instance
      */
-    @Nullable
-    default String getId() {
+    default @Nullable String getId() {
         return get(ID_KEY);
     }
 

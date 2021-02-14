@@ -33,9 +33,8 @@ public static final String ID = "file.close";
     }
 
 
-    @NonNull
     @Override
-    protected CompletionStage<Void> doIt(@Nullable FileBasedActivity view) {
+    protected @NonNull CompletionStage<Void> doIt(@Nullable FileBasedActivity view) {
         if (view != null) {
             app.getActivities().remove(view);
         }

@@ -20,16 +20,12 @@ import static java.lang.Double.max;
  */
 public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final MapAccessor<Double> xKey;
-    @NonNull
-    private final MapAccessor<Double> yKey;
-    @NonNull
-    private final MapAccessor<Double> widthKey;
-    @NonNull
-    private final MapAccessor<Double> heightKey;
+    private final @NonNull MapAccessor<Double> xKey;
+    private final @NonNull MapAccessor<Double> yKey;
+    private final @NonNull MapAccessor<Double> widthKey;
+    private final @NonNull MapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -50,15 +46,13 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
     }
 
 
-    @NonNull
     @Override
-    public Rectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Rectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new Rectangle2D(xKey.get(a), yKey.get(a), max(0.0, widthKey.get(a)), max(0.0, heightKey.get(a)));
     }
 
-    @NonNull
     @Override
-    public Rectangle2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Rectangle2D value) {
+    public @NonNull Rectangle2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Rectangle2D value) {
         Rectangle2D oldValue = get(a);
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
@@ -67,9 +61,8 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
         return oldValue;
     }
 
-    @NonNull
     @Override
-    public Rectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Rectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
         Rectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

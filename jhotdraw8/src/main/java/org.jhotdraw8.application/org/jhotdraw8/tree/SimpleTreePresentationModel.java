@@ -69,9 +69,8 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
 
     protected int updating;
 
-    @NonNull
     @Override
-    public TreeItem<N> getRoot() {
+    public @NonNull TreeItem<N> getRoot() {
         return root;
     }
 

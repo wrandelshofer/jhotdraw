@@ -21,10 +21,8 @@ import java.util.function.Function;
  * @version $$Id$$
  */
 public class PostorderSpliterator<T> extends AbstractSpliterator<T> {
-    @NonNull
-    private final Function<T, Iterable<T>> getChildrenFunction;
-    @Nullable
-    private T root;
+    private final @NonNull Function<T, Iterable<T>> getChildrenFunction;
+    private @Nullable T root;
     private Spliterator<T> subtree;
     private Iterator<T> children;
 

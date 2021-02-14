@@ -17,17 +17,15 @@ import org.jhotdraw8.annotation.Nullable;
  * @author Werner Randelshofer
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
-    @NonNull
-    private final MapAccessor<V> accessor;
+    private final @NonNull MapAccessor<V> accessor;
 
     public KeyMapEntryProperty(@NonNull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
         super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getRawValueType());
         this.accessor = key;
     }
 
-    @Nullable
     @Override
-    public V get() {
+    public @Nullable V get() {
         @SuppressWarnings("unchecked")
         V ret = accessor.get(map);
         return ret;
@@ -42,9 +40,8 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> 
         super.set(value);
     }
 
-    @Nullable
     @Override
-    public Object getBean() {
+    public @Nullable Object getBean() {
         return map;
     }
 

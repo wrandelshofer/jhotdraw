@@ -21,10 +21,8 @@ public class ColorDialog extends HBox {
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
-    @NonNull
-    private ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
-    @NonNull
-    private ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
+    private @NonNull ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
+    private @NonNull ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
 
     public ColorDialog() {
     }
@@ -78,8 +76,7 @@ public class ColorDialog extends HBox {
         return currentColor.get();
     }
 
-    @NonNull
-    public ObjectProperty<ColorSpaceColor> currentColorProperty() {
+    public @NonNull ObjectProperty<ColorSpaceColor> currentColorProperty() {
         return currentColor;
     }
 
@@ -91,8 +88,7 @@ public class ColorDialog extends HBox {
         return customColor.get();
     }
 
-    @NonNull
-    public ObjectProperty<ColorSpaceColor> customColorProperty() {
+    public @NonNull ObjectProperty<ColorSpaceColor> customColorProperty() {
         return customColor;
     }
 

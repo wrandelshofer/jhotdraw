@@ -20,9 +20,8 @@ public abstract class AbstractDrawingModel extends AbstractTreeModel<Figure> imp
 
     private final CopyOnWriteArrayList<Listener<DrawingModelEvent>> drawingModelListeners = new CopyOnWriteArrayList<>();
 
-    @NonNull
     @Override
-    final public CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners() {
+    public final @NonNull CopyOnWriteArrayList<Listener<DrawingModelEvent>> getDrawingModelListeners() {
         return drawingModelListeners;
     }
 }

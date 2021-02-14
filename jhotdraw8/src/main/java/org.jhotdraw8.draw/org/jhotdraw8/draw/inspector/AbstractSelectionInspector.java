@@ -54,8 +54,7 @@ public abstract class AbstractSelectionInspector extends AbstractInspector<Drawi
         }
     }
 
-    @NonNull
-    protected Set<Figure> getSelectedFigures() {
+    protected @NonNull Set<Figure> getSelectedFigures() {
         DrawingView drawingView = getSubject();
         return drawingView == null ? Collections.emptySet() : drawingView.getSelectedFigures();
     }

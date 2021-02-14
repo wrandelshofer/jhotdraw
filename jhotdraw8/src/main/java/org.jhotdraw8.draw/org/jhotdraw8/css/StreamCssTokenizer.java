@@ -146,15 +146,11 @@ public class StreamCssTokenizer implements CssTokenizer {
 
     private int currentToken;
 
-    @Nullable
-    private String stringValue;
-    @NonNull
-    private final StringBuilder stringBuilder = new StringBuilder();
-    @NonNull
-    private final StringBuilder unitBuf = new StringBuilder();
+    private @Nullable String stringValue;
+    private final @NonNull StringBuilder stringBuilder = new StringBuilder();
+    private final @NonNull StringBuilder unitBuf = new StringBuilder();
 
-    @Nullable
-    private Number numericValue;
+    private @Nullable Number numericValue;
     private int lineNumber;
     private int startPosition;
     private int endPosition;
@@ -176,16 +172,14 @@ public class StreamCssTokenizer implements CssTokenizer {
         return currentToken;
     }
 
-    @Nullable
     @Override
-    public String currentString() {
+    public @Nullable String currentString() {
         return stringValue;
     }
 
 
-    @Nullable
     @Override
-    public Number currentNumber() {
+    public @Nullable Number currentNumber() {
         return numericValue;
     }
 
@@ -948,9 +942,8 @@ public class StreamCssTokenizer implements CssTokenizer {
         pushBack();
     }
 
-    @Nullable
     @Override
-    public CssToken getToken() {
+    public @Nullable CssToken getToken() {
         return new CssToken(currentToken, stringValue, numericValue, lineNumber, startPosition, endPosition);
     }
 }

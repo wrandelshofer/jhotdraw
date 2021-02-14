@@ -44,14 +44,10 @@ public class MoveHandle extends LocatorHandle {
 
     private Point2D pickLocation;
     private CssPoint2D oldPoint;
-    @NonNull
-    private final Region node;
-    @NonNull
-    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
-    @NonNull
-    private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
-    @NonNull
-    private static final Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
+    private final @NonNull Region node;
+    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final @NonNull Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
+    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
     private boolean pressed;
 
@@ -72,9 +68,8 @@ public class MoveHandle extends LocatorHandle {
         return pressed ? Cursor.CLOSED_HAND : Cursor.HAND;
     }
 
-    @NonNull
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public @NonNull Node getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();

@@ -28,7 +28,7 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */
-    public final static String NAME = "concat";
+    public static final String NAME = "concat";
 
     public ConcatCssFunction() {
         super(NAME);

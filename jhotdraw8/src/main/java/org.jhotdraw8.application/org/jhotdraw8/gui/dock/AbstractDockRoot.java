@@ -17,8 +17,7 @@ public abstract class AbstractDockRoot
         extends AbstractDockParent
         implements DockRoot {
 
-    @NonNull
-    private final ObjectProperty<Predicate<Dockable>> dockablePredicate = new SimpleObjectProperty<>(d -> true);
+    private final @NonNull ObjectProperty<Predicate<Dockable>> dockablePredicate = new SimpleObjectProperty<>(d -> true);
 
     @Override
     public @NonNull ObjectProperty<Predicate<Dockable>> dockablePredicateProperty() {

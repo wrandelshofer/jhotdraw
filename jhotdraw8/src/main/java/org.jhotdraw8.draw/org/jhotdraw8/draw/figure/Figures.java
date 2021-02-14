@@ -24,8 +24,7 @@ public class Figures {
 
     }
 
-    @NonNull
-    public static Bounds getBoundsInWorld(Iterable<? extends Figure> figures) {
+    public static @NonNull Bounds getBoundsInWorld(Iterable<? extends Figure> figures) {
         Bounds b3 = Iterators.toList(figures).stream().parallel().map(Figure::getLayoutBoundsInWorld)
                 .filter(b -> Double.isFinite(b.getMaxX()) && Double.isFinite(b.getMaxY()))
                 .collect(BoundsCalculator::new, BoundsCalculator::accept,
@@ -33,8 +32,7 @@ public class Figures {
         return b3;
     }
 
-    @NonNull
-    public static Bounds getCenterBounds(@NonNull Iterable<? extends Figure> figures) {
+    public static @NonNull Bounds getCenterBounds(@NonNull Iterable<? extends Figure> figures) {
         double minx = Double.MAX_VALUE, miny = Double.MAX_VALUE,
                 maxx = Double.MIN_VALUE, maxy = Double.MIN_VALUE;
         for (Figure f : figures) {

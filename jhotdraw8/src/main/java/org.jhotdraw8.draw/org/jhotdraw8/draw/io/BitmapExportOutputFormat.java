@@ -71,9 +71,9 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  */
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 
-    private final static double INCH_2_MM = 25.4;
-    public final static String JPEG_MIME_TYPE = "image/jpeg";
-    public final static String PNG_MIME_TYPE = "image/png";
+    private static final double INCH_2_MM = 25.4;
+    public static final String JPEG_MIME_TYPE = "image/jpeg";
+    public static final String PNG_MIME_TYPE = "image/png";
 
     private WritableImage doRenderImage(@NonNull Figure slice, @NonNull Node node, @NonNull Bounds bounds, double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();
@@ -96,9 +96,8 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         return image;
     }
 
-    @NonNull
     @Override
-    protected String getExtension() {
+    protected @NonNull String getExtension() {
         return "png";
     }
 

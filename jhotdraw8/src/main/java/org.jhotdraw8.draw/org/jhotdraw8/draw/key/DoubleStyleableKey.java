@@ -28,9 +28,8 @@ public class DoubleStyleableKey
         extends AbstractStyleableKey<@NonNull Double>
         implements WriteableStyleableMapAccessor<@NonNull Double>,
         NonNullMapAccessor<@NonNull Double> {
-    final static long serialVersionUID = 1L;
-    @NonNull
-    private final CssMetaData<@NonNull Styleable, @NonNull Double> cssMetaData;
+    static final long serialVersionUID = 1L;
+    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull Double> cssMetaData;
 
     private final Converter<@NonNull Double> converter;
 
@@ -78,9 +77,8 @@ public class DoubleStyleableKey
 
     }
 
-    @NonNull
     @Override
-    public Converter<@NonNull Double> getCssConverter() {
+    public @NonNull Converter<@NonNull Double> getCssConverter() {
         return converter;
     }
 }

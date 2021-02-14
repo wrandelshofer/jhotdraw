@@ -25,14 +25,14 @@ import java.time.format.FormatStyle;
  */
 public class PageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
-    public final static String TYPE_SELECTOR = "PageLabel";
-    public final static String NUM_PAGES_PLACEHOLDER = "${numPages}";
-    public final static String PAGE_PLACEHOLDER = "${page}";
-    public final static String DATE_PLACEHOLDER = "${date}";
+    public static final String TYPE_SELECTOR = "PageLabel";
+    public static final String NUM_PAGES_PLACEHOLDER = "${numPages}";
+    public static final String PAGE_PLACEHOLDER = "${page}";
+    public static final String DATE_PLACEHOLDER = "${date}";
     /**
      * The text. Default value: {@code ""}.
      */
-    public final static StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
+    public static final StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
     public PageLabelFigure() {
@@ -74,8 +74,7 @@ public class PageLabelFigure extends AbstractLabelFigure
         return text;
     }
 
-    @NonNull
-    private String replaceAll(@NonNull String text, @NonNull String placeholder, String replace) {
+    private @NonNull String replaceAll(@NonNull String text, @NonNull String placeholder, String replace) {
         for (int p = text.indexOf(placeholder); p != -1; p = text.indexOf(placeholder)) {
             text = text.substring(0, p) + replace + text.substring(p + placeholder.length());
         }
@@ -91,9 +90,8 @@ public class PageLabelFigure extends AbstractLabelFigure
         applyHideableFigureProperties(ctx, node);
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

@@ -29,9 +29,8 @@ import java.util.List;
 
 public class DockingFrameworkSampleMain extends Application {
 
-    @NonNull
-    public DockRoot initStage(String title,
-                              @NonNull Stage primaryStage) {
+    public @NonNull DockRoot initStage(String title,
+                                       @NonNull Stage primaryStage) {
         SimpleDockRoot root = new SimpleDockRoot();
         root.setZSupplier(TabbedAccordionTrack::new);
         Scene scene = new Scene(root.getNode(), 300, 250);

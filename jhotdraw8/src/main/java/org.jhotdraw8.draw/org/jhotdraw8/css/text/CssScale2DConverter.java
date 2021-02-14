@@ -36,9 +36,8 @@ public class CssScale2DConverter implements Converter<Point2D> {
         }
     }
 
-    @NonNull
     @Override
-    public Point2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Point2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
         switch ((int) v[0]) {
         case 1:
@@ -50,15 +49,13 @@ public class CssScale2DConverter implements Converter<Point2D> {
         }
     }
 
-    @NonNull
     @Override
-    public Point2D getDefaultValue() {
+    public @NonNull Point2D getDefaultValue() {
         return new Point2D(1, 1);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";
     }
 

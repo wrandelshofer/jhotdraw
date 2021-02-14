@@ -15,9 +15,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements ImmutableMap<K, V> {
-    @NonNull
-    private final Map<K, V> backingMap;
-    final static ImmutableMap<?, ?> EMPTY_MAP = new ImmutableHashMap<>();
+    private final @NonNull Map<K, V> backingMap;
+    static final ImmutableMap<?, ?> EMPTY_MAP = new ImmutableHashMap<>();
 
 
     public ImmutableHashMap(@NonNull Map<? extends K, ? extends V> backingMap) {
@@ -116,15 +115,13 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         return backingMap.get(key);
     }
 
-    @NonNull
     @Override
-    public Iterator<Map.Entry<K, V>> entries() {
+    public @NonNull Iterator<Map.Entry<K, V>> entries() {
         return backingMap.entrySet().iterator();
     }
 
-    @NonNull
     @Override
-    public Iterator<K> keys() {
+    public @NonNull Iterator<K> keys() {
         return backingMap.keySet().iterator();
     }
 

@@ -71,10 +71,8 @@ public class TransformHandleKit {
         WEST_SHAPE.setContent(circle + "M 4.5,0 4.5,9");
     }
 
-    @NonNull
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @NonNull
-    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
+    private static final @NonNull Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
 
@@ -92,7 +90,7 @@ public class TransformHandleKit {
      * @param f       the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addCornerTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
+    public static void addCornerTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         handles.add(southEast(f));
         handles.add(southWest(f));
         handles.add(northEast(f));
@@ -106,7 +104,7 @@ public class TransformHandleKit {
      * @param f       the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addEdgeTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
+    public static void addEdgeTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         handles.add(south(f));
         handles.add(north(f));
         handles.add(east(f));
@@ -120,7 +118,7 @@ public class TransformHandleKit {
      * @param f       the figure which will own the handles
      * @param handles the list to which the handles should be added
      */
-    static public void addTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
+    public static void addTransformHandles(TransformableFigure f, @NonNull Collection<Handle> handles) {
         addCornerTransformHandles(f, handles);
         addEdgeTransformHandles(f, handles);
     }
@@ -131,8 +129,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle south(TransformableFigure owner) {
+    public static @NonNull Handle south(TransformableFigure owner) {
         return new SouthHandle(owner);
     }
 
@@ -142,8 +139,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle southEast(TransformableFigure owner) {
+    public static @NonNull Handle southEast(TransformableFigure owner) {
         return new SouthEastHandle(owner);
     }
 
@@ -153,8 +149,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle southWest(TransformableFigure owner) {
+    public static @NonNull Handle southWest(TransformableFigure owner) {
         return new SouthWestHandle(owner);
     }
 
@@ -164,8 +159,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle north(TransformableFigure owner) {
+    public static @NonNull Handle north(TransformableFigure owner) {
         return new NorthHandle(owner);
     }
 
@@ -175,8 +169,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle northEast(TransformableFigure owner) {
+    public static @NonNull Handle northEast(TransformableFigure owner) {
         return new NorthEastHandle(owner);
     }
 
@@ -186,8 +179,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle northWest(TransformableFigure owner) {
+    public static @NonNull Handle northWest(TransformableFigure owner) {
         return new NorthWestHandle(owner);
     }
 
@@ -197,8 +189,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle east(TransformableFigure owner) {
+    public static @NonNull Handle east(TransformableFigure owner) {
         return new EastHandle(owner);
     }
 
@@ -208,8 +199,7 @@ public class TransformHandleKit {
      * @param owner the figure which will own the handle
      * @return the handle
      */
-    @NonNull
-    static public Handle west(TransformableFigure owner) {
+    public static @NonNull Handle west(TransformableFigure owner) {
         return new WestHandle(owner);
     }
 

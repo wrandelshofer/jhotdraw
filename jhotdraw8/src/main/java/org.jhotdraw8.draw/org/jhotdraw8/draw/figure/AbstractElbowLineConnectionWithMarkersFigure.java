@@ -67,9 +67,8 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         super(startX, startY, endX, endY);
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         final Polyline line = new Polyline();
         final Path startMarker = new Path();
@@ -212,9 +211,8 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         }
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         return path == null ? Shapes.emptyPathIterator() : Shapes.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
@@ -222,13 +220,11 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     public abstract double getStrokeCutEnd(RenderContext ctx);
 
-    @Nullable
-    public abstract String getMarkerStartShape();
+    public abstract @Nullable String getMarkerStartShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    @Nullable
-    public abstract String getMarkerEndShape();
+    public abstract @Nullable String getMarkerEndShape();
 
     public abstract double getMarkerEndScaleFactor();
 
@@ -239,8 +235,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      *
      * @return an offset
      */
-    @Nullable
-    public abstract CssSize getElbowOffset();
+    public abstract @Nullable CssSize getElbowOffset();
 
 
     @Override

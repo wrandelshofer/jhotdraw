@@ -105,10 +105,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
     /**
      * The name of the {@link #showingProperty}.
      */
-    public final static String SHOWING_PROPERTY = "showing";
+    public static final String SHOWING_PROPERTY = "showing";
 
-    @NonNull
-    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
+    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
 
     {
         showing.addListener((o, oldv, newv) -> {
@@ -118,8 +117,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         });
     }
 
-    @NonNull
-    public BooleanProperty showingProperty() {
+    public @NonNull BooleanProperty showingProperty() {
         return showing;
     }
 
@@ -155,8 +153,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
     private final ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
     private final ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
-    @NonNull
-    private SetProperty<E> selection = new SimpleSetProperty<>();
+    private @NonNull SetProperty<E> selection = new SimpleSetProperty<>();
 
     {
         SetChangeListener<E> listener = change -> {
@@ -174,10 +171,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     private Node node;
-    @NonNull
-    private final Map<QualifiedName, String> helpTexts = new HashMap<>();
-    @NonNull
-    private final List<LookupEntry> lookupTable = new ArrayList<>();
+    private final @NonNull Map<QualifiedName, String> helpTexts = new HashMap<>();
+    private final @NonNull List<LookupEntry> lookupTable = new ArrayList<>();
     @FXML
     private Button applyButton;
     @FXML
@@ -210,8 +205,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         init(fxmlUrl);
     }
 
-    @NonNull
-    public ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMapProperty() {
+    public @NonNull ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMapProperty() {
         return accessorPickerMap;
     }
 
@@ -263,16 +257,13 @@ public abstract class AbstractStyleAttributesInspector<E> {
      *
      * @return attribute filter
      */
-    @NonNull
-    public Property<Predicate<QualifiedName>> attributeFilter() {
+    public @NonNull Property<Predicate<QualifiedName>> attributeFilter() {
         return attributeFilter;
     }
 
-    @NonNull
-    protected abstract Iterable<E> getEntities();
+    protected abstract @NonNull Iterable<E> getEntities();
 
-    @Nullable
-    private String buildString(@Nullable List<CssToken> attribute) {
+    private @Nullable String buildString(@Nullable List<CssToken> attribute) {
         if (attribute == null) {
             return null;
         }
@@ -298,8 +289,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    @NonNull
-    private <T> Picker<T> createAndCachePicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
+    private @NonNull <T> Picker<T> createAndCachePicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
         ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> amap = getAccessorPickerMap();
         @SuppressWarnings("unchecked") Picker<T> picker = (Picker<T>) amap.get(acc);
         if (picker == null) {
@@ -309,9 +299,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return picker;
     }
 
-    @NonNull
     @SuppressWarnings("unchecked")
-    protected <T> Picker<T> createPicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
+    protected @NonNull <T> Picker<T> createPicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
         Class<T> type = acc.getRawValueType();
         boolean nullable = true;
         if (acc.getCssConverter() instanceof CssConverter) {
@@ -339,8 +328,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return (Picker<T>) p;
     }
 
-    @NonNull
-    private ObservableMap<String, Set<E>> createPseudoStyles() {
+    private @NonNull ObservableMap<String, Set<E>> createPseudoStyles() {
         ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
         Set<E> fs = new LinkedHashSet<>(selection.get());
         // handling of emptyness must be consistent with code in
@@ -361,11 +349,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
      */
     protected abstract void fireInvalidated(E f);
 
-    @Nullable
-    protected abstract Object get(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor);
+    protected abstract @Nullable Object get(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor);
 
-    @Nullable
-    protected abstract WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<E> fsm, E f, String propertyNamespace, String propertyName);
+    protected abstract @Nullable WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<E> fsm, E f, String propertyNamespace, String propertyName);
 
     public ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> getAccessorPickerMap() {
         return accessorPickerMap.get();
@@ -379,11 +365,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
         this.attributeFilter.set(attributeFilter);
     }
 
-    @Nullable
-    protected abstract Converter<?> getConverter(SelectorModel<E> selectorModel, E f, String namespace, String name);
+    protected abstract @Nullable Converter<?> getConverter(SelectorModel<E> selectorModel, E f, String namespace, String name);
 
-    @Nullable
-    private LookupEntry getLookupEntryAt(@NonNull int caretPosition) {
+    private @Nullable LookupEntry getLookupEntryAt(@NonNull int caretPosition) {
         int insertionPoint = Collections.binarySearch(lookupTable, new LookupEntry(caretPosition, null, null));
         if (insertionPoint < 0) {
             insertionPoint = (-(insertionPoint) - 1) - 1;
@@ -402,16 +386,14 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return node;
     }
 
-    @Nullable
-    protected abstract E getRoot();
+    protected abstract @Nullable E getRoot();
 
     public ObservableSet<E> getSelection() {
         ObservableSet<E> es = selection.get();
         return es == null ? FXCollections.emptyObservableSet() : es;
     }
 
-    @Nullable
-    protected abstract StylesheetsManager<E> getStyleManager();
+    protected abstract @Nullable StylesheetsManager<E> getStyleManager();
 
     protected TextArea getTextArea() {
         return textArea;
@@ -728,8 +710,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
-    @NonNull
-    private Map<QualifiedName, String> collectAttributeValues(boolean decompose, @NonNull List<E> matchedFigures, @NonNull SelectorModel<E> selectorModel) {
+    private @NonNull Map<QualifiedName, String> collectAttributeValues(boolean decompose, @NonNull List<E> matchedFigures, @NonNull SelectorModel<E> selectorModel) {
         final StyleOrigin origin;
         if (showAttributeValues.isSelected()) {
             origin = StyleOrigin.USER;
@@ -803,8 +784,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    @NonNull
-    private SelectorGroup createSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
+    private @NonNull SelectorGroup createSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
         String id = null;
         String type = null;
         Set<String> styleClasses = new TreeSet<>();

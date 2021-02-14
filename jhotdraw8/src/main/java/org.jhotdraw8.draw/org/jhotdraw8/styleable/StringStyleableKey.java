@@ -18,11 +18,9 @@ import org.jhotdraw8.text.StyleConverterAdapter;
 import java.util.function.Function;
 
 public class StringStyleableKey extends StringKey implements WriteableStyleableMapAccessor<String> {
-    private final static long serialVersionUID = 0L;
-    @NonNull
-    private final String cssName;
-    @NonNull
-    private final CssMetaData<? extends Styleable, String> cssMetaData;
+    private static final long serialVersionUID = 0L;
+    private final @NonNull String cssName;
+    private final @NonNull CssMetaData<? extends Styleable, String> cssMetaData;
     private final CssStringConverter converter = new CssStringConverter();
 
     public StringStyleableKey(String key) {
@@ -47,15 +45,13 @@ public class StringStyleableKey extends StringKey implements WriteableStyleableM
         return cssMetaData;
     }
 
-    @NonNull
     @Override
-    public Converter<String> getCssConverter() {
+    public @NonNull Converter<String> getCssConverter() {
         return converter;
     }
 
-    @NonNull
     @Override
-    public String getCssName() {
+    public @NonNull String getCssName() {
         return cssName;
     }
 }

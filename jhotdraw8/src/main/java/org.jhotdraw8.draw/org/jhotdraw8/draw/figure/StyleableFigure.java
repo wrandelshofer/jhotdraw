@@ -94,8 +94,7 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
-    @Nullable
-    default String getStyle() {
+    default @Nullable String getStyle() {
         return get(STYLE);
     }
 
@@ -119,9 +118,8 @@ public interface StyleableFigure extends Figure {
         return pseudoClasses;
     }
 
-    @Nullable
     @Override
-    default String getId() {
+    default @Nullable String getId() {
         return get(ID);
     }
 }

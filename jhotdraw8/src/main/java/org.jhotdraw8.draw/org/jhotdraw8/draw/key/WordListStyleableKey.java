@@ -27,10 +27,9 @@ import java.util.function.Function;
  */
 public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WriteableStyleableMapAccessor<ImmutableList<String>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, ImmutableList<String>> cssMetaData;
+    private final @NonNull CssMetaData<?, ImmutableList<String>> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the

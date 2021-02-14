@@ -25,10 +25,9 @@ import java.util.function.Function;
  */
 public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements WriteableStyleableMapAccessor<CssFont> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, CssFont> cssMetaData;
+    private final @NonNull CssMetaData<?, CssFont> cssMetaData;
     private final Converter<CssFont> converter = new CssFontConverter(false);
 
     /**
@@ -77,9 +76,8 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
 
     }
 
-    @NonNull
     @Override
-    public Converter<CssFont> getCssConverter() {
+    public @NonNull Converter<CssFont> getCssConverter() {
         return converter;
     }
 }

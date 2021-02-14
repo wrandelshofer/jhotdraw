@@ -113,8 +113,7 @@ public interface PathBuilder {
      *
      * @return the last end point.
      */
-    @NonNull
-    default Point2D.Double getLastPoint() {
+    default @NonNull Point2D.Double getLastPoint() {
         return new Point2D.Double(getLastX(), getLastY());
     }
 

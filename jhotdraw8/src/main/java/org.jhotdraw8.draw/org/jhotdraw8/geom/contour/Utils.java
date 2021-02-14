@@ -17,11 +17,11 @@ public class Utils {
      * absolute threshold to be used for reals in common geometric computation (e.g. to check for
      * singularities).
      */
-    public final static double realPrecision = 1e-5;
+    public static final double realPrecision = 1e-5;
     /**
      * absolute threshold to be used for joining slices together at end points
      */
-    public final static double sliceJoinThreshold = 1e-4;
+    public static final double sliceJoinThreshold = 1e-4;
 
     public static final double tau = 2.0 * Math.PI;
     // absolute threshold to be used for pruning invalid slices for offset

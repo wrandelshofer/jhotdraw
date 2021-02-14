@@ -26,10 +26,9 @@ import java.util.function.Function;
 public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         implements WriteableStyleableMapAccessor<CssColor> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, CssColor> cssMetaData;
+    private final @NonNull CssMetaData<?, CssColor> cssMetaData;
     private final Converter<CssColor> converter = new CssColorConverter(true);
 
     /**
@@ -70,9 +69,8 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
 
     }
 
-    @NonNull
     @Override
-    public Converter<CssColor> getCssConverter() {
+    public @NonNull Converter<CssColor> getCssConverter() {
         return converter;
     }
 }

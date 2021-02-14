@@ -38,9 +38,8 @@ public class CssSymmetricPoint2DConverterOLD extends AbstractCssConverter<Point2
         this.withComma = withComma || !withSpace;
     }
 
-    @NonNull
     @Override
-    public Point2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Point2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨SymmetricPoint2D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
@@ -69,15 +68,13 @@ public class CssSymmetricPoint2DConverterOLD extends AbstractCssConverter<Point2
     }
 
 
-    @NonNull
     @Override
-    public Point2D getDefaultValue() {
+    public @NonNull Point2D getDefaultValue() {
         return new Point2D(0, 0);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
     }
 

@@ -26,15 +26,13 @@ public class ClassSelector extends SimpleSelector {
         this.clazz = clazz;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Class:" + clazz;
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasStyleClass(element, clazz)) //
                 ? element : null;
     }

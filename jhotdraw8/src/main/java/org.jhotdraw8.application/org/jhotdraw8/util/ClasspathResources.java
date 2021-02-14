@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 
 
 public class ClasspathResources extends ResourceBundle implements Serializable, Resources {
-    private final static Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
-    private final static long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
+    private static final long serialVersionUID = 1L;
 
     /**
      * The base class
@@ -30,19 +30,16 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     /**
      * The base name of the resource bundle.
      */
-    @NonNull
-    private final String baseName;
+    private final @NonNull String baseName;
     /**
      * The locale.
      */
-    @NonNull
-    private final Locale locale;
+    private final @NonNull Locale locale;
 
     /**
      * The parent resources object.
      */
-    @Nullable
-    private Resources parent;
+    private @Nullable Resources parent;
 
     /**
      * The wrapped resource bundle.
@@ -119,11 +116,8 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
 
-
-
-    @Nullable
     @Override
-    protected Object handleGetObject(@NonNull String key) {
+    protected @Nullable Object handleGetObject(@NonNull String key) {
         Object obj = handleGetObjectRecursively(key);
         if (obj == null) {
             obj = "";
@@ -136,8 +130,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return obj;
     }
 
-    @Nullable
-    public Object handleGetObjectRecursively(@NonNull String key) {
+    public @Nullable Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -149,16 +142,14 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return obj;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "ClasspathResources" + "[" + baseName + "]";
     }
 
 
-    @NonNull
     @Override
-    public String getBaseName() {
+    public @NonNull String getBaseName() {
         return baseName;
     }
 
@@ -169,8 +160,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @return the resource bundle
      * @see java.util.ResourceBundle
      */
-    @NonNull
-    static Resources getResources(@NonNull String baseName)
+    static @NonNull Resources getResources(@NonNull String baseName)
             throws MissingResourceException {
         return getResources(baseName, LocaleUtil.getDefault());
     }
@@ -190,9 +180,8 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return r;
     }
 
-    @NonNull
     @Override
-    public ResourceBundle asResourceBundle() {
+    public @NonNull ResourceBundle asResourceBundle() {
         return this;
     }
 
@@ -212,9 +201,8 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return Collections.enumeration(keys);
     }
 
-    @Nullable
     @Override
-    public Resources getParent() {
+    public @Nullable Resources getParent() {
         return parent;
     }
 

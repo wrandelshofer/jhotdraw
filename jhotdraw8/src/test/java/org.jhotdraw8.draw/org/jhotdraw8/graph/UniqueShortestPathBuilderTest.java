@@ -29,8 +29,7 @@ public class UniqueShortestPathBuilderTest {
     public UniqueShortestPathBuilderTest() {
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
@@ -62,8 +61,7 @@ public class UniqueShortestPathBuilderTest {
         return builder;
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createDiamondGraph() {
+    private @NonNull DirectedGraph<Integer, Double> createDiamondGraph() {
         DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |
@@ -107,9 +105,8 @@ public class UniqueShortestPathBuilderTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestVertexPath() {
+    public @NonNull List<DynamicTest> testFindShortestVertexPath() {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -139,9 +136,8 @@ public class UniqueShortestPathBuilderTest {
         }
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
+    public @NonNull List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -195,9 +191,8 @@ public class UniqueShortestPathBuilderTest {
         assertEquals(expResult, actualShortestPath == null ? null : actualShortestPath.getKey());
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestEdgePath() throws Exception {
+    public @NonNull List<DynamicTest> testFindShortestEdgePath() throws Exception {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> doFindShortestEdgePath(1, 5, null)),
                 dynamicTest("2", () -> doFindShortestEdgePath(1, 4, ArrowPath.of(14.0))),
@@ -217,8 +212,7 @@ public class UniqueShortestPathBuilderTest {
         assertEquals(expResult, result == null ? null : result.getKey());
     }
 
-    @NonNull
-    private DirectedGraph<Integer, Double> createGraph2() {
+    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
         DirectedGraphBuilder<Integer, Double> b = new DirectedGraphBuilder<>();
         b.addVertex(1);
         b.addVertex(2);
@@ -236,9 +230,8 @@ public class UniqueShortestPathBuilderTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindShortestVertexPathOverWaypoints() throws Exception {
+    public @NonNull List<DynamicTest> testFindShortestVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 3, 5), VertexPath.of(1, 3, 6, 5), 20.0)),
                 dynamicTest("2", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VertexPath.of(1, 4), 14.0)),
@@ -264,9 +257,8 @@ public class UniqueShortestPathBuilderTest {
         }
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFindEdgePathOverWaypoints() throws Exception {
+    public @NonNull List<DynamicTest> testFindEdgePathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> doFindEdgePathOverWaypoints(Arrays.asList(1, 5), null, 0.0)),
                 dynamicTest("2", () -> doFindEdgePathOverWaypoints(Arrays.asList(1, 4), ArrowPath.of(14.0), 14.0)),

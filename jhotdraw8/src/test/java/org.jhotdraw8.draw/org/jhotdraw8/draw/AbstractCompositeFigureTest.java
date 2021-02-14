@@ -118,9 +118,8 @@ public class AbstractCompositeFigureTest {
 
         private static final long serialVersionUID = 1L;
 
-        @NonNull
         @Override
-        public Bounds getLayoutBounds() {
+        public @NonNull Bounds getLayoutBounds() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -144,9 +143,8 @@ public class AbstractCompositeFigureTest {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public Node createNode(RenderContext renderer) {
+        public @NonNull Node createNode(RenderContext renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -170,41 +168,36 @@ public class AbstractCompositeFigureTest {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public String getTypeSelector() {
+        public @NonNull String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public String getId() {
+        public @NonNull String getId() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public ObservableList<String> getStyleClass() {
+        public @NonNull ObservableList<String> getStyleClass() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public String getStyle() {
+        public @NonNull String getStyle() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public Styleable getStyleableParent() {
+        public @NonNull Styleable getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        @NonNull
         @Override
-        public ObservableSet<PseudoClass> getPseudoClassStates() {
+        public @NonNull ObservableSet<PseudoClass> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
+
         @Override
         public ObservableSet<String> getPseudoClass() {
             throw new UnsupportedOperationException("Not supported yet.");

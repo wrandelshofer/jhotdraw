@@ -18,7 +18,7 @@ import org.jhotdraw8.event.Event;
  */
 public class DrawingModelEvent extends Event<DrawingModel> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public enum EventType {
 
@@ -62,23 +62,19 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         this.eventType = eventType;
     }
 
-    @NonNull
-    public static <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
+    public static @NonNull <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
     }
 
-    @NonNull
-    public static <T> DrawingModelEvent transformChanged(@NonNull DrawingModel source, Figure figure) {
+    public static @NonNull <T> DrawingModelEvent transformChanged(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    @NonNull
-    public static <T> DrawingModelEvent layoutChanged(@NonNull DrawingModel source, Figure figure) {
+    public static @NonNull <T> DrawingModelEvent layoutChanged(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null);
     }
 
-    @NonNull
-    public static <T> DrawingModelEvent styleInvalidated(@NonNull DrawingModel source, Figure figure) {
+    public static @NonNull <T> DrawingModelEvent styleInvalidated(@NonNull DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null);
     }
 
@@ -97,8 +93,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the key
      */
-    @NonNull
-    public <T> Key<T> getKey() {
+    public @NonNull <T> Key<T> getKey() {
         @SuppressWarnings("unchecked")
         Key<T> tmp = (Key<T>) key;
         return tmp;
@@ -110,8 +105,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the old value
      */
-    @Nullable
-    public <T> T getOldValue() {
+    public @Nullable <T> T getOldValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) oldValue;
         return temp;
@@ -123,8 +117,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the new value
      */
-    @Nullable
-    public <T> T getNewValue() {
+    public @Nullable <T> T getNewValue() {
         @SuppressWarnings("unchecked")
         T temp = (T) newValue;
         return temp;
@@ -175,9 +168,8 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         return eventType;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "DrawingModelEvent{"
                 + (figure == null ? null : figure.getTypeSelector() + "@" + Integer.toHexString(System.identityHashCode(figure)))
                 + ", key=" + key

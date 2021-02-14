@@ -58,10 +58,8 @@ public class CssColorDialog {
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
-    @NonNull
-    private ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
-    @NonNull
-    private ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(CssColor.TRANSPARENT);
+    private @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
+    private @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(CssColor.TRANSPARENT);
 
     public CssColorDialog(Window owner) {
         final Resources labels = ApplicationLabels.getGuiResources();
@@ -97,13 +95,11 @@ public class CssColorDialog {
 
     }
 
-    @Nullable
-    public ObjectProperty<CssColor> currentColorProperty() {
+    public @Nullable ObjectProperty<CssColor> currentColorProperty() {
         return currentColor;
     }
 
-    @Nullable
-    public ObjectProperty<CssColor> customColorProperty() {
+    public @Nullable ObjectProperty<CssColor> customColorProperty() {
         return customColor;
     }
 

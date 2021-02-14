@@ -57,9 +57,8 @@ public class CssStop {
         return Objects.equals(this.color, other.color);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssStop{" + "offset=" + offset + ", " + color + '}';
     }
 

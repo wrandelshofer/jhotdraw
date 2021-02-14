@@ -30,14 +30,11 @@ import java.util.function.Function;
  */
 public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, Point2D> cssMetaData;
-    @NonNull
-    private final NonNullMapAccessor<Double> xKey;
-    @NonNull
-    private final NonNullMapAccessor<Double> yKey;
+    private final @NonNull CssMetaData<?, Point2D> cssMetaData;
+    private final @NonNull NonNullMapAccessor<Double> xKey;
+    private final @NonNull NonNullMapAccessor<Double> yKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -90,9 +87,8 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         return converter;
     }
 
-    @NonNull
     @Override
-    public Point2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Point2D get(@NonNull Map<? super Key<?>, Object> a) {
         return new Point2D(xKey.getNonNull(a), yKey.getNonNull(a));
     }
 
@@ -103,9 +99,8 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         yKey.put(a, value.getY());
     }
 
-    @NonNull
     @Override
-    public Point2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @NonNull Point2D remove(@NonNull Map<? super Key<?>, Object> a) {
         Point2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);

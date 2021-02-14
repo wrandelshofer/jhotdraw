@@ -31,17 +31,15 @@ public class XmlRectangle2DConverter implements Converter<Rectangle2D> {
         formatter.toStr(out, idSupplier, value.getMinX(), value.getMinY(), value.getWidth(), value.getHeight());
     }
 
-    @NonNull
     @Override
-    public Rectangle2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Rectangle2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Object[] v = formatter.fromString(buf);
 
         return new Rectangle2D((double) v[0], (double) v[1], (double) v[2], (double) v[3]);
     }
 
-    @NonNull
     @Override
-    public Rectangle2D getDefaultValue() {
+    public @NonNull Rectangle2D getDefaultValue() {
         return new Rectangle2D(0, 0, 1, 1);
     }
 }

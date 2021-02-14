@@ -56,10 +56,8 @@ import static org.jhotdraw8.geom.BezierNode.C0_MASK;
  */
 public class BezierNodeEditHandle extends AbstractHandle {
 
-    @Nullable
-    private static final Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
-    @Nullable
-    private static final Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
+    private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
     private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
     private static final Path REGION_SHAPE_QUADRATIC = new Path();
@@ -80,8 +78,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         elements.add(new LineTo(3, 6));
     }
 
-    @NonNull
-    private final Region node;
+    private final @NonNull Region node;
     private Point2D pickLocation;
     private final int pointIndex;
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
@@ -118,8 +115,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
-    @NonNull
-    private Point2D getLocation() {
+    private @NonNull Point2D getLocation() {
         return getBezierNode().getC0();
 
     }
@@ -128,9 +124,8 @@ public class BezierNodeEditHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public Region getNode(@NonNull DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);

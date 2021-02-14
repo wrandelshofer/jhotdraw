@@ -73,8 +73,7 @@ public class BoundsCalculator {
      *
      * @return the calculated bounds
      */
-    @NonNull
-    public Bounds getBounds() {
+    public @NonNull Bounds getBounds() {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 }

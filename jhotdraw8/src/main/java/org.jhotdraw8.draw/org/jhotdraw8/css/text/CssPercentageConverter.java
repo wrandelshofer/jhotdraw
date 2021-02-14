@@ -29,9 +29,8 @@ public class CssPercentageConverter extends AbstractCssConverter<Double> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
             return tt.currentNumberNonNull().doubleValue();
@@ -71,9 +70,8 @@ public class CssPercentageConverter extends AbstractCssConverter<Double> {
         }
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         if (isNullable()) {
             return "Format of ⟨NullablePercentage⟩: none｜⟨fraction⟩｜⟨percentage⟩%";
         } else {

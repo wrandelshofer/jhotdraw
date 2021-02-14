@@ -34,10 +34,8 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractConnectorHandle extends AbstractHandle {
     protected static class ConnectorAndConnectedFigure {
-        @NonNull
-        final Connector connector;
-        @NonNull
-        final Figure connectedFigure;
+        final @NonNull Connector connector;
+        final @NonNull Figure connectedFigure;
 
         public ConnectorAndConnectedFigure(@NonNull Connector connector, @NonNull Figure connectedFigure) {
             this.connector = connector;
@@ -53,21 +51,17 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         }
     }
 
-    @NonNull
-    protected final MapAccessor<Connector> connectorKey;
+    protected final @NonNull MapAccessor<Connector> connectorKey;
     protected final NonNullMapAccessor<CssPoint2D> pointKey;
-    @NonNull
-    protected final MapAccessor<Figure> targetKey;
-    @Nullable
-    protected Point2D connectorLocation;
+    protected final @NonNull MapAccessor<Figure> targetKey;
+    protected @Nullable Point2D connectorLocation;
     protected Point2D pickLocation;
     // private final Region connectorNode;
     // private final javafx.scene.Group groupNode;
     private boolean isConnected;
     private boolean isDragging;
     private boolean editable = true;
-    @Nullable
-    private Figure prevTarget;
+    private @Nullable Figure prevTarget;
 
     public AbstractConnectorHandle(@NonNull ConnectingFigure figure,
                                    NonNullMapAccessor<CssPoint2D> pointKey,
@@ -102,9 +96,8 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         return pickLocation;
     }
 
-    @NonNull
     @Override
-    public ConnectingFigure getOwner() {
+    public @NonNull ConnectingFigure getOwner() {
         return (ConnectingFigure) super.getOwner();
     }
 

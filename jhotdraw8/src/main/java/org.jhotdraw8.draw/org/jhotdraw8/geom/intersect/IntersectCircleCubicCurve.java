@@ -28,22 +28,19 @@ public class IntersectCircleCubicCurve {
      * @param r  the radius of the circle
      * @return the computed result
      */
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCircle(
+    public static @NonNull IntersectionResult intersectCubicCurveCircle(
             @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
             @NonNull Point2D c, double r) {
         return IntersectCubicCurveEllipse.intersectCubicCurveEllipse(p0, p1, p2, p3, c, r, r);
     }
 
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCircle(
+    public static @NonNull IntersectionResult intersectCubicCurveCircle(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double r) {
         return IntersectCubicCurveEllipse.intersectCubicCurveEllipse(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, r, r);
     }
 
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCircle(
+    public static @NonNull IntersectionResult intersectCubicCurveCircle(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double r, double epsilon) {
         return IntersectCubicCurveEllipse.intersectCubicCurveEllipse(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, r, r, epsilon);

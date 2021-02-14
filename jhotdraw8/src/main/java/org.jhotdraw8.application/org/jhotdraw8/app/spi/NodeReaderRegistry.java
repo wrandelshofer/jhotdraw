@@ -19,8 +19,7 @@ public class NodeReaderRegistry {
     private NodeReaderRegistry() {
     }
 
-    @NonNull
-    public static List<NodeReader> getNodeReaders(@NonNull URL url) {
+    public static @NonNull List<NodeReader> getNodeReaders(@NonNull URL url) {
         List<NodeReader> list = new ArrayList<>();
         for (Iterator<NodeReaderProvider> i = ServiceLoader.load(NodeReaderProvider.class).iterator(); i.hasNext(); ) {
             NodeReaderProvider spi = i.next();
@@ -31,8 +30,7 @@ public class NodeReaderRegistry {
         return list;
     }
 
-    @NonNull
-    public static List<NodeReader> getNodeReaders(@NonNull String path) {
+    public static @NonNull List<NodeReader> getNodeReaders(@NonNull String path) {
         List<NodeReader> list = new ArrayList<>();
         for (Iterator<NodeReaderProvider> i = ServiceLoader.load(NodeReaderProvider.class).iterator(); i.hasNext(); ) {
             NodeReaderProvider spi = i.next();
@@ -43,14 +41,12 @@ public class NodeReaderRegistry {
         return list;
     }
 
-    @Nullable
-    public static NodeReader getNodeReader(@NonNull URL url) {
+    public static @Nullable NodeReader getNodeReader(@NonNull URL url) {
         List<NodeReader> list = getNodeReaders(url);
         return list.isEmpty() ? null : list.get(0);
     }
 
-    @Nullable
-    public static NodeReader getNodeReader(@NonNull String path) throws MalformedURLException {
+    public static @Nullable NodeReader getNodeReader(@NonNull String path) throws MalformedURLException {
         List<NodeReader> list = getNodeReaders(path);
         return list.isEmpty() ? null : list.get(0);
     }

@@ -42,12 +42,9 @@ import java.util.Set;
  */
 public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
 
-    @NonNull
-    final private ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
-    @NonNull
-    final private ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
-    @NonNull
-    final private ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
+    private final @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
+    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
+    private final @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
     /**
      * The selectedFiguresProperty holds the list of selected figures in the
      * sequence they were selected by the user.
@@ -71,21 +68,18 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
 
-    @NonNull
     @Override
-    public ObjectProperty<DrawingEditor> editorProperty() {
+    public @NonNull ObjectProperty<DrawingEditor> editorProperty() {
         return editor;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
+    public @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
         return clipboardInputFormat;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
+    public @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
         return clipboardOutputFormat;
     }
 
@@ -109,7 +103,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         } else {
             Map<DataFormat, Object> content = new LinkedHashMap<DataFormat, Object>() {
-                private final static long serialVersionUID = 0L;
+                private static final long serialVersionUID = 0L;
 
                 @Override
                 public Object put(@Nullable DataFormat key, Object value) {
@@ -157,15 +151,13 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
         }
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<Tool> toolProperty() {
+    public @NonNull ObjectProperty<Tool> toolProperty() {
         return tool;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<Handle> activeHandleProperty() {
+    public @NonNull ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
 

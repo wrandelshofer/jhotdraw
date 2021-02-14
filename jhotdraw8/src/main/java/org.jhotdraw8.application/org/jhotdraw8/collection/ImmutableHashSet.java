@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements ImmutableSet<E> {
 
-    final static ImmutableHashSet<Object> EMPTY = new ImmutableHashSet<>(Collections.emptySet());
+    static final ImmutableHashSet<Object> EMPTY = new ImmutableHashSet<>(Collections.emptySet());
     private final Set<E> backingSet;
 
     public ImmutableHashSet(@NonNull Collection<? extends E> copyMe) {
@@ -91,9 +91,8 @@ public final class ImmutableHashSet<E> extends AbstractReadOnlySet<E> implements
         return backingSet.contains(o);
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<? extends E> i = backingSet.iterator();
 

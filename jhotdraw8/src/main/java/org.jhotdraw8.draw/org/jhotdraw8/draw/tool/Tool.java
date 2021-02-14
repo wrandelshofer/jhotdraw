@@ -191,8 +191,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return The name
      */
-    @Nullable
-    default String getLabel() {
+    default @Nullable String getLabel() {
         return get(LABEL);
     }
 
@@ -201,8 +200,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return The instance
      */
-    @Nullable
-    default String getName() {
+    default @Nullable String getName() {
         return get(NAME);
     }
 
@@ -211,8 +209,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return a drawing view
      */
-    @Nullable
-    default DrawingView getDrawingView() {
+    default @Nullable DrawingView getDrawingView() {
         return drawingViewProperty().get();
     }
 
@@ -244,8 +241,7 @@ public interface Tool extends PropertyBean, Disableable {
      */
     void activate(DrawingEditor editor);
 
-    @Nullable
-    default DrawingEditor getDrawingEditor() {
+    default @Nullable DrawingEditor getDrawingEditor() {
         return drawingEditorProperty().get();
     }
 

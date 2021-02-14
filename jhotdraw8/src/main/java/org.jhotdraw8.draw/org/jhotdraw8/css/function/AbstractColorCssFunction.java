@@ -27,8 +27,7 @@ public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T>
         super(name);
     }
 
-    @Nullable
-    protected CssColor parseColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssColor parseColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssColor color = null;
         switch (tt.next()) {
         case CssTokenType.TT_FUNCTION:
@@ -49,8 +48,7 @@ public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T>
         return color;
     }
 
-    @Nullable
-    protected CssColor parseResolvedColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssColor parseResolvedColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         return converter.parse(tt, null);
     }
 

@@ -20,9 +20,9 @@ import java.util.Spliterator;
  */
 public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
 
-    final static ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(true, new Object[0]);
+    static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(true, new Object[0]);
 
-    private final static Object[] EMPTY_ARRAY = new Object[0];
+    private static final Object[] EMPTY_ARRAY = new Object[0];
 
     private final Object[] array;
 
@@ -68,8 +68,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         return false;
     }
 
-    @NonNull
-    public E get(int index) {
+    public @NonNull E get(int index) {
         @SuppressWarnings("unchecked")
         E value = (E) array[index];
         return value;
@@ -79,8 +78,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         return array.length;
     }
 
-    @NonNull
-    public <T> T[] toArray(@NonNull T[] a) {
+    public @NonNull <T> T[] toArray(@NonNull T[] a) {
         int size = size();
         if (a.length < size) {
             @SuppressWarnings("unchecked")
@@ -99,19 +97,16 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         return new ArrayIterator<>(array);
     }
 
-    @NonNull
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return new ArrayIterator<>(array);
     }
 
-    @NonNull
-    public Enumerator<E> enumerator() {
+    public @NonNull Enumerator<E> enumerator() {
         return new ArrayIterator<>(array);
     }
 
-    @NonNull
     @Override
-    public ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ImmutableArraySubList<E>(true, this.array, fromIndex, toIndex);
     }
 

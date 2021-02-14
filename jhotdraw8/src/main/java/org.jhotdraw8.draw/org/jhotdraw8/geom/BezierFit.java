@@ -160,8 +160,7 @@ public class BezierFit {
      *                        0, this method only removes sequences of coincident points.
      * @return Digitized points with a minimal distance.
      */
-    @NonNull
-    public static ArrayList<Point2D> removeClosePoints(@NonNull java.util.List<Point2D> digitizedPoints, double minDistance) {
+    public static @NonNull ArrayList<Point2D> removeClosePoints(@NonNull java.util.List<Point2D> digitizedPoints, double minDistance) {
         if (minDistance == 0) {
             return removeCoincidentPoints(digitizedPoints);
         } else {
@@ -198,8 +197,7 @@ public class BezierFit {
      * @param digitizedPoints Digitized points
      * @return Digitized points without subsequent duplicates.
      */
-    @NonNull
-    private static ArrayList<Point2D> removeCoincidentPoints(@NonNull java.util.List<Point2D> digitizedPoints) {
+    private static @NonNull ArrayList<Point2D> removeCoincidentPoints(@NonNull java.util.List<Point2D> digitizedPoints) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
             Point2D prev = digitizedPoints.get(0);
@@ -228,8 +226,7 @@ public class BezierFit {
      * @return Segments of digitized points, each segment having less than
      * maximal angle between points.
      */
-    @NonNull
-    public static ArrayList<ArrayList<Point2D>> splitAtCorners(@NonNull java.util.List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
+    public static @NonNull ArrayList<ArrayList<Point2D>> splitAtCorners(@NonNull java.util.List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<>(cornerIndices.size() + 1);
 
@@ -255,8 +252,7 @@ public class BezierFit {
      *                        for corner detection
      * @return list of corner indices.
      */
-    @NonNull
-    public static IntArrayList findCorners(@NonNull java.util.List<Point2D> digitizedPoints, double minAngle, double minDistance) {
+    public static @NonNull IntArrayList findCorners(@NonNull java.util.List<Point2D> digitizedPoints, double minAngle, double minDistance) {
         IntArrayList cornerIndices = new IntArrayList();
 
         double squaredDistance = minDistance * minDistance;
@@ -322,8 +318,7 @@ public class BezierFit {
      * @param weight          Weight of the current point
      * @return Digitized points with reduced noise.
      */
-    @NonNull
-    public static ArrayList<Point2D> reduceNoise(@NonNull java.util.List<Point2D> digitizedPoints, double weight) {
+    public static @NonNull ArrayList<Point2D> reduceNoise(@NonNull java.util.List<Point2D> digitizedPoints, double weight) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
             Point2D prev = digitizedPoints.get(0);
@@ -740,8 +735,7 @@ public class BezierFit {
     /**
      * Scales the input vector to the new length and returns it.
      */
-    @NonNull
-    private static Point2D v2Scale(@NonNull Point2D v, double newlen) {
+    private static @NonNull Point2D v2Scale(@NonNull Point2D v, double newlen) {
         double len = v2Length(v);
         double x = v.getX(), y = v.getY();
         if (len != 0.0) {
@@ -755,8 +749,7 @@ public class BezierFit {
     /**
      * Scales the input vector by the specified factor and returns it.
      */
-    @NonNull
-    private static Point2D v2ScaleIII(@NonNull Point2D v, double s) {
+    private static @NonNull Point2D v2ScaleIII(@NonNull Point2D v, double s) {
         Point2D result = new Point2D(v.getX() * s, v.getY() * s);
         return result;
     }
@@ -778,8 +771,7 @@ public class BezierFit {
     /**
      * Return vector sum c = a+b.
      */
-    @NonNull
-    private static Point2D v2Add(@NonNull Point2D a, @NonNull Point2D b) {
+    private static @NonNull Point2D v2Add(@NonNull Point2D a, @NonNull Point2D b) {
         return new Point2D(a.getX() + b.getX(),
                 a.getY() + b.getY());
     }
@@ -787,8 +779,7 @@ public class BezierFit {
     /**
      * Return vector sum = a+b.
      */
-    @NonNull
-    private static Point2D v2AddII(@NonNull Point2D a, @NonNull Point2D b) {
+    private static @NonNull Point2D v2AddII(@NonNull Point2D a, @NonNull Point2D b) {
         return new Point2D(
                 a.getX() + b.getX(),
                 a.getY() + b.getY());
@@ -797,8 +788,7 @@ public class BezierFit {
     /**
      * Negates the input vector and returns it.
      */
-    @NonNull
-    private static Point2D v2Negate(@NonNull Point2D v) {
+    private static @NonNull Point2D v2Negate(@NonNull Point2D v) {
         return new Point2D(-v.getX(),
                 -v.getY());
     }
@@ -813,8 +803,7 @@ public class BezierFit {
     /**
      * Normalizes the input vector and returns it.
      */
-    @NonNull
-    private static Point2D v2Normalize(@NonNull Point2D v) {
+    private static @NonNull Point2D v2Normalize(@NonNull Point2D v) {
         double len = v2Length(v);
         if (len != 0.0) {
             return new Point2D(v.getX() / len,
@@ -831,8 +820,7 @@ public class BezierFit {
      * @param b Vector b - the value is not changed by this method
      * @return Vector a subtracted by Vector v.
      */
-    @NonNull
-    private static Point2D v2SubII(@NonNull Point2D a, @NonNull Point2D b) {
+    private static @NonNull Point2D v2SubII(@NonNull Point2D a, @NonNull Point2D b) {
         Point2D c = new Point2D(a.getX() - b.getX(),
                 a.getY() - b.getY());
         return (c);

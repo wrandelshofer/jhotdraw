@@ -41,9 +41,8 @@ public class MapWrapper<K, V> extends AbstractMap<K, V> {
         return backingMap.size();
     }
 
-    @NonNull
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @NonNull Set<Entry<K, V>> entrySet() {
         return backingMap.entrySet().asSet();
     }
 }

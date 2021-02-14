@@ -17,8 +17,7 @@ public class IntersectCircleLine {
     private IntersectCircleLine() {
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectCircleLineEx(double cx, double cy, double r, double a0x, double a0y, double a1x, double a1y) {
+    public static @NonNull IntersectionResultEx intersectCircleLineEx(double cx, double cy, double r, double a0x, double a0y, double a1x, double a1y) {
         return intersectCircleLineEx(new Point2D.Double(cx, cy), r, new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y));
     }
 
@@ -34,8 +33,7 @@ public class IntersectCircleLine {
      * @param a1 point 2 of the line
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectCircleLineEx(@NonNull Point2D c, double r, @NonNull Point2D a0, @NonNull Point2D a1) {
+    public static @NonNull IntersectionResultEx intersectCircleLineEx(@NonNull Point2D c, double r, @NonNull Point2D a0, @NonNull Point2D a1) {
         IntersectionResultEx inter = intersectLineCircleEx(a0, a1, c, r);
         // FIXME compute t of circle!
         return inter;
@@ -53,8 +51,7 @@ public class IntersectCircleLine {
      * @param a1 point 1 of the line
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineCircleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D c, double r) {
+    public static @NonNull IntersectionResultEx intersectLineCircleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D c, double r) {
         return intersectLineCircleEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(), c.getX(), c.getY(), r);
     }
 
@@ -103,8 +100,7 @@ public class IntersectCircleLine {
      * @param r  the radius of the circle
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineCircleEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+    public static @NonNull IntersectionResultEx intersectLineCircleEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
         return intersectLineCircleEx(x0, y0, x1, y1, cx, cy, r, Intersections.EPSILON);
     }
 
@@ -127,8 +123,7 @@ public class IntersectCircleLine {
      * @param epsilon
      * @return
      */
-    @NonNull
-    public static IntersectionResultEx intersectLineCircleEx(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {
+    public static @NonNull IntersectionResultEx intersectLineCircleEx(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {
         List<IntersectionPointEx> result = new ArrayList<>(2);
         final double Δx, Δy;
         Δx = x1 - x0;
@@ -200,13 +195,11 @@ public class IntersectCircleLine {
         return new IntersectionResultEx(status, result);
     }
 
-    @NonNull
-    public static IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+    public static @NonNull IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
         return intersectLineCircle(x0, y0, x1, y1, cx, cy, r, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {
+    public static @NonNull IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>(2);
         final double Δx, Δy;
         Δx = x1 - x0;

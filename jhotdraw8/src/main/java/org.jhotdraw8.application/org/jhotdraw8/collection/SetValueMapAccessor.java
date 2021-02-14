@@ -18,14 +18,11 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
-    private final static long serialVersionUID = 1L;
-    @NonNull
-    private final MapAccessor<ImmutableSet<E>> setAccessor;
-    @Nullable
-    private final E value;
+    private static final long serialVersionUID = 1L;
+    private final @NonNull MapAccessor<ImmutableSet<E>> setAccessor;
+    private final @Nullable E value;
     private boolean defaultValue;
-    @NonNull
-    private final String name;
+    private final @NonNull String name;
     private final boolean isTransient;
 
     public SetValueMapAccessor(@NonNull String name, boolean isTransient, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
@@ -56,15 +53,13 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         return name;
     }
 
-    @NonNull
     @Override
-    public Set<MapAccessor<?>> getSubAccessors() {
+    public @NonNull Set<MapAccessor<?>> getSubAccessors() {
         return Collections.singleton(setAccessor);
     }
 
-    @NonNull
     @Override
-    public Class<Boolean> getValueType() {
+    public @NonNull Class<Boolean> getValueType() {
         return Boolean.class;
     }
 

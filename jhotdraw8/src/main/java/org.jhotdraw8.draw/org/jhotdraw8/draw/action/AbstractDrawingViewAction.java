@@ -26,8 +26,7 @@ import org.jhotdraw8.draw.DrawingView;
  */
 public abstract class AbstractDrawingViewAction extends AbstractAction {
 
-    @NonNull
-    private final DrawingEditor editor;
+    private final @NonNull DrawingEditor editor;
 
     /**
      * Creates an action which acts on the selected figures on the current view
@@ -60,8 +59,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
      * @return the active drawing view. Returns null if the editor is null no
      * drawing view is active.
      */
-    @Nullable
-    protected DrawingView getView() {
+    protected @Nullable DrawingView getView() {
         return editor.getActiveDrawingView();
     }
 

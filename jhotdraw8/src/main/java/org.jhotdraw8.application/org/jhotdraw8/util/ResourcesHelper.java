@@ -28,14 +28,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class ResourcesHelper {
-    final static Logger LOG = Logger.getLogger(Resources.class.getName());
+    static final Logger LOG = Logger.getLogger(Resources.class.getName());
     /**
      * The global map of property name modifiers. The key of this map is the
      * name of the property name modifier, the value of this map is a fallback
      * chain.
      */
-    @NonNull
-    static Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
+    static @NonNull Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
 
 
     static {
@@ -57,8 +56,7 @@ class ResourcesHelper {
      * List of decoders. The first decoder which can decode a resource value is
      * will be used to convert the resource value to an object.
      */
-    @NonNull
-    static List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
+    static @NonNull List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Generates fallback keys by processing all property name modifiers in the
@@ -84,8 +82,7 @@ class ResourcesHelper {
         }
     }
 
-    @Nullable
-    static Node getIconProperty(@NonNull Resources r, String key, String suffix, @NonNull Class<?> baseClass) {
+    static @Nullable Node getIconProperty(@NonNull Resources r, String key, String suffix, @NonNull Class<?> baseClass) {
         try {
             String rsrcName = r.getString(key + suffix);
             if ("".equals(rsrcName)) {

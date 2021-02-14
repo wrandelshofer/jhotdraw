@@ -28,9 +28,8 @@ public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
         this.converter = converter;
     }
 
-    @Nullable
     @Override
-    public T convert(@NonNull ParsedValue<String, T> value, Font font) {
+    public @Nullable T convert(@NonNull ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
         } catch (ParseException | IOException ex) {

@@ -63,8 +63,7 @@ public interface CssFunctionProcessor<T> {
      * @return the processed tokens
      * @throws ParseException in case of a parsing failure
      */
-    @NonNull
-    default ImmutableList<CssToken> process(T element, @NonNull ReadOnlyList<CssToken> in) throws ParseException {
+    default @NonNull ImmutableList<CssToken> process(T element, @NonNull ReadOnlyList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {

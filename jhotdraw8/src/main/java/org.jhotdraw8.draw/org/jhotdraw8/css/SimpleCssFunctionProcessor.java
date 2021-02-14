@@ -70,8 +70,7 @@ private int maxRecursionDepth=256;
         this.customProperties = customProperties;
     }
 
-    @NonNull
-    public final ReadOnlyList<CssToken> process(@NonNull T element, @NonNull ImmutableList<CssToken> in) throws ParseException {
+    public final @NonNull ReadOnlyList<CssToken> process(@NonNull T element, @NonNull ImmutableList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
@@ -115,7 +114,7 @@ private int maxRecursionDepth=256;
         }
         if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
 
-            @NonNull final String name = tt.currentStringNonNull();
+            final @NonNull String name = tt.currentStringNonNull();
             final CssFunction<T> function = functions.get(name);
             if (function != null) {
                 tt.pushBack();

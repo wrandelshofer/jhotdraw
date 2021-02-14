@@ -62,8 +62,7 @@ public interface StyleablePropertyBean extends PropertyBean, Styleable {
      * @param key The property key
      * @return The styled value.
      */
-    @NonNull
-    default <T> T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
+    default @NonNull <T> T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = getStyled(key);
         return Objects.requireNonNull(value);
     }

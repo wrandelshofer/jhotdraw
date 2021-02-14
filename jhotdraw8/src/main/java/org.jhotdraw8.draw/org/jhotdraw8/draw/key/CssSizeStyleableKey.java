@@ -28,11 +28,10 @@ import java.util.function.Function;
 public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> implements WriteableStyleableMapAccessor<@NonNull CssSize>,
         NonNullMapAccessor<@NonNull CssSize> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     private final Converter<@NonNull CssSize> converter = new CssSizeConverter(false);
-    @NonNull
-    private final CssMetaData<@NonNull Styleable, @NonNull CssSize> cssMetaData;
+    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull CssSize> cssMetaData;
 
 
     /**
@@ -58,9 +57,8 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> 
     }
 
 
-    @NonNull
     @Override
-    public Converter<CssSize> getCssConverter() {
+    public @NonNull Converter<CssSize> getCssConverter() {
         return converter;
     }
 

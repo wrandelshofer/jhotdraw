@@ -343,8 +343,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     }
 
     @Override
-    @Nullable
-    public String getPrefix(@NonNull String uri) throws XMLStreamException {
+    public @Nullable String getPrefix(@NonNull String uri) throws XMLStreamException {
         Objects.requireNonNull(uri);
         for (Element element : stack) {
             if (element.namespaceContext != null) {
@@ -357,15 +356,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         return null;
     }
 
-    @NonNull
-    private String getPrefixNonNull(@NonNull String uri) throws XMLStreamException {
+    private @NonNull String getPrefixNonNull(@NonNull String uri) throws XMLStreamException {
         String prefix = getPrefix(uri);
         return prefix == null ? DEFAULT_PREFIX : prefix;
     }
 
     @Override
-    @Nullable
-    public Object getProperty(@NonNull String name) throws IllegalArgumentException {
+    public @Nullable Object getProperty(@NonNull String name) throws IllegalArgumentException {
         Objects.requireNonNull(name);
         throw new IllegalArgumentException("unsupported property: " + name);
     }
@@ -846,13 +843,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             return localName;
         }
 
-        @NonNull
-        public String getNamespace() {
+        public @NonNull String getNamespace() {
             return namespace;
         }
 
-        @Nullable
-        public String getPrefix() {
+        public @Nullable String getPrefix() {
             return prefix;
         }
 

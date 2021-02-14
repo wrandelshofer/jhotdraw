@@ -109,7 +109,7 @@ public class PlineVertex implements Cloneable {
      * Computes a fast approximate AABB of a segment described by v1 to v2, bounding box may be larger
      * than the true bounding box for the segment
      */
-    static @NonNull AABB createFastApproxBoundingBox(@NonNull final PlineVertex v1, @NonNull final PlineVertex v2) {
+    static @NonNull AABB createFastApproxBoundingBox(final @NonNull PlineVertex v1, final @NonNull PlineVertex v2) {
         if (v1.bulgeIsZero()) {
             return new AABB(
                     min(v1.getX(), v2.getX()),

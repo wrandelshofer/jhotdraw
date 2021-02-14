@@ -36,8 +36,7 @@ public class DimensionConverterTest {
     /**
      * Test of toString method, of class CssDoubleConverter.
      */
-    static
-    public void testToString(@Nullable Double value, String expected) throws Exception {
+    public static void testToString(@Nullable Double value, String expected) throws Exception {
         System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
@@ -52,8 +51,7 @@ public class DimensionConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    static
-    public void testFromString(@Nullable Double expected, @NonNull String string) throws Exception {
+    public static void testFromString(@Nullable Double expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
@@ -71,9 +69,8 @@ public class DimensionConverterTest {
     }
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(1.0, "1")),
@@ -103,9 +100,8 @@ public class DimensionConverterTest {
         );
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> testToStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "none")),
                 dynamicTest("2", () -> testToString(1.0, "1")),

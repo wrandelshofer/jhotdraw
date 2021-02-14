@@ -30,13 +30,11 @@ public interface ReadOnlyMap<K, V> {
 
     boolean containsKey(K key);
 
-    @NonNull
-    default ReadOnlySet<Map.Entry<K, V>> entrySet() {
+    default @NonNull ReadOnlySet<Map.Entry<K, V>> entrySet() {
         return new ReadOnlySet<Map.Entry<K, V>>() {
 
-            @NonNull
             @Override
-            public Iterator<Map.Entry<K, V>> iterator() {
+            public @NonNull Iterator<Map.Entry<K, V>> iterator() {
                 return ReadOnlyMap.this.entries();
             }
 
@@ -58,13 +56,11 @@ public interface ReadOnlyMap<K, V> {
         };
     }
 
-    @NonNull
-    default ReadOnlySet<K> keySet() {
+    default @NonNull ReadOnlySet<K> keySet() {
         return new ReadOnlySet<K>() {
 
-            @NonNull
             @Override
-            public Iterator<K> iterator() {
+            public @NonNull Iterator<K> iterator() {
                 return ReadOnlyMap.this.keys();
             }
 
@@ -91,8 +87,7 @@ public interface ReadOnlyMap<K, V> {
      *
      * @return the wrapped map
      */
-    @NonNull
-    default Map<K, V> asMap() {
+    default @NonNull Map<K, V> asMap() {
         return new MapWrapper<>(this);
     }
 }

@@ -14,19 +14,16 @@ import org.jhotdraw8.text.Converter;
 import java.lang.reflect.Type;
 
 /**
- * SimpleStyleableKey.
+ * SimpleReadOnlyStyleableKey.
  *
  * @author Werner Randelshofer
  */
 public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadOnlyStyleableMapAccessor<T> {
-    @NonNull
-    private final String cssName;
-    private final static long serialVersionUID = 1L;
+    private final @NonNull String cssName;
+    private static final long serialVersionUID = 1L;
 
-    @Nullable
-    protected CssMetaData<?, T> cssMetaData;
-    @NonNull
-    protected Converter<T> converter;
+    protected @Nullable CssMetaData<?, T> cssMetaData;
+    protected @NonNull Converter<T> converter;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -86,8 +83,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
     }
 
     @Override
-    @NonNull
-    public Converter<T> getCssConverter() {
+    public @NonNull Converter<T> getCssConverter() {
         return converter;
     }
 
@@ -100,8 +96,7 @@ public class SimpleReadOnlyStyleableKey<T> extends ObjectKey<T> implements ReadO
         this.converter = converter;
     }
 
-    @NonNull
-    public String getCssName() {
+    public @NonNull String getCssName() {
         return cssName;
     }
 

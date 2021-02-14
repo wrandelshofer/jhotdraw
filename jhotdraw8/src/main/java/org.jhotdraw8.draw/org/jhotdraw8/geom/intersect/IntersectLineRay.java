@@ -10,8 +10,7 @@ public class IntersectLineRay {
     private IntersectLineRay() {
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectRayLineEx(
+    public static @NonNull IntersectionResultEx intersectRayLineEx(
             double aox, double aoy, double adx, double ady, double amax,
             double b0x, double b0y, double b1x, double b1y, double epsilon) {
         return IntersectRayRay.intersectRayRayEx(

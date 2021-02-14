@@ -43,23 +43,18 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private ColorPicker backgroundColorPicker;
 
-    @NonNull
-    private Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
-    @Nullable
-    private Property<CssColor> boundBackgroundProperty;
+    private @NonNull Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
+    private @Nullable Property<CssColor> boundBackgroundProperty;
 
-    @NonNull
-    private InvalidationListener commitHandler = o -> commitEdits();
+    private @NonNull InvalidationListener commitHandler = o -> commitEdits();
     @FXML
     private TextField heightField;
-    @Nullable
-    private Property<CssSize> heightProperty;
+    private @Nullable Property<CssSize> heightProperty;
 
     private Node node;
     @FXML
     private TextField widthField;
-    @Nullable
-    private Property<CssSize> widthProperty;
+    private @Nullable Property<CssSize> widthProperty;
 
     public DrawingInspector() {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));

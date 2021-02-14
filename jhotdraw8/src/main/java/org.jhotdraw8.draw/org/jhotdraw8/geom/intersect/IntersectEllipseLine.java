@@ -29,9 +29,8 @@ public class IntersectEllipseLine {
      * @param b1  point 1 of the line
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectEllipseLine(@NonNull Point2D ac, double arx, double ary,
-                                                          @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static @NonNull IntersectionResult intersectEllipseLine(@NonNull Point2D ac, double arx, double ary,
+                                                                   @NonNull Point2D b0, @NonNull Point2D b1) {
         IntersectionResult result = intersectLineEllipse(b0, b1, ac, arx, ary);
         ArrayList<IntersectionPoint> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
@@ -46,27 +45,23 @@ public class IntersectEllipseLine {
         return new IntersectionResult(result.getStatus(), list);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectEllipseLineEx(@NonNull Point2D ac, double arx, double ary,
-                                                              @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static @NonNull IntersectionResultEx intersectEllipseLineEx(@NonNull Point2D ac, double arx, double ary,
+                                                                       @NonNull Point2D b0, @NonNull Point2D b1) {
         return intersectEllipseLineEx(ac.getX(), ac.getY(), arx, ary, b0.getX(), b0.getY(), b1.getX(), b1.getY());
     }
 
-    @NonNull
-    public static IntersectionResult intersectEllipseLine(double acx, double acy, double arx, double ary,
-                                                          double b0x, double b0y, double b1x, double b1y) {
+    public static @NonNull IntersectionResult intersectEllipseLine(double acx, double acy, double arx, double ary,
+                                                                   double b0x, double b0y, double b1x, double b1y) {
         return intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
-                                                              double b0x, double b0y, double b1x, double b1y) {
+    public static @NonNull IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
+                                                                       double b0x, double b0y, double b1x, double b1y) {
         return intersectEllipseLineEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
-                                                              double b0x, double b0y, double b1x, double b1y, double epsilon) {
+    public static @NonNull IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
+                                                                       double b0x, double b0y, double b1x, double b1y, double epsilon) {
         IntersectionResult result = intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
@@ -82,9 +77,8 @@ public class IntersectEllipseLine {
         return new IntersectionResultEx(result.getStatus(), list);
     }
 
-    @NonNull
-    public static IntersectionResult intersectEllipseLine(double cx, double cy, double rx, double ry,
-                                                          double x0, double y0, double x1, double y1, double epsilon) {
+    public static @NonNull IntersectionResult intersectEllipseLine(double cx, double cy, double rx, double ry,
+                                                                   double x0, double y0, double x1, double y1, double epsilon) {
         IntersectionResult result = intersectLineEllipse(x0, y0, x1, y1, cx, cy, rx, ry, epsilon);
         // FIXME compute t for Ellipse instead for Line!
         return result;
@@ -101,8 +95,7 @@ public class IntersectEllipseLine {
      * @param a1 point 1 of the line
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull AABB e) {
+    public static @NonNull IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull AABB e) {
         double rx = e.getWidth() * 0.5;
         double ry = e.getHeight() * 0.5;
         return intersectLineEllipse(a0, a1, new Point2D.Double(e.getMinX() + rx, e.getMinY() + ry), rx, ry);
@@ -121,8 +114,7 @@ public class IntersectEllipseLine {
      * @param a1 point 1 of the line
      * @return computed intersection
      */
-    @NonNull
-    public static IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D ec, double rx, double ry) {
+    public static @NonNull IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D ec, double rx, double ry) {
         return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Geom.REAL_THRESHOLD);
     }
 
@@ -142,10 +134,9 @@ public class IntersectEllipseLine {
      * @param epsilon
      * @return
      */
-    @NonNull
-    public static IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
-                                                          double cx, double cy, double rx, double ry,
-                                                          double epsilon) {
+    public static @NonNull IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
+                                                                   double cx, double cy, double rx, double ry,
+                                                                   double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         final Point2D.Double origin, dir, center, diff, mDir, mDiff;

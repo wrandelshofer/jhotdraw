@@ -48,9 +48,8 @@ public class CssIdentConverter extends AbstractCssConverter<String> {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, " ⟨Ident⟩: ⟨identifier⟩ expected");
         return tt.currentStringNonNull();
     }

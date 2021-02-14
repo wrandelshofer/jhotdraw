@@ -14,10 +14,8 @@ import org.jhotdraw8.annotation.NonNull;
  * @param <E> the element type
  */
 public class MatchResult<E> {
-    @NonNull
-    private final Selector selector;
-    @NonNull
-    private final E element;
+    private final @NonNull Selector selector;
+    private final @NonNull E element;
 
     public MatchResult(@NonNull Selector selector, @NonNull E element) {
         this.selector = selector;

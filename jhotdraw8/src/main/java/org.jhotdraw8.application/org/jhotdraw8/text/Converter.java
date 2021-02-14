@@ -43,8 +43,7 @@ public interface Converter<T> {
      *                             undefined.
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
-    @Nullable
-    default T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    default @Nullable T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         return fromString(CharBuffer.wrap(in), idResolver);
     }
 
@@ -104,8 +103,7 @@ public interface Converter<T> {
      *                             undefined.
      * @throws java.io.IOException Thrown by the CharBuffer.
      */
-    @Nullable
-    default T fromString(@NonNull CharBuffer in) throws ParseException, IOException {
+    default @Nullable T fromString(@NonNull CharBuffer in) throws ParseException, IOException {
         return fromString(in, null);
     }
 
@@ -125,8 +123,7 @@ public interface Converter<T> {
      * @throws ParseException on conversion failure
      * @throws IOException    on IO failure
      */
-    @Nullable
-    default T fromString(@NonNull CharSequence in) throws ParseException, IOException {
+    default @Nullable T fromString(@NonNull CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
@@ -172,8 +169,7 @@ public interface Converter<T> {
      *
      * @return help text. Returns null if no help text is available.
      */
-    @Nullable
-    default String getHelpText() {
+    default @Nullable String getHelpText() {
         return null;
     }
 
@@ -208,8 +204,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @return The String.
      */
-    @NonNull
-    default <TT extends T> String toString(@Nullable TT value) {
+    default @NonNull <TT extends T> String toString(@Nullable TT value) {
         StringBuilder out = new StringBuilder();
         try {
             toString(out, value);

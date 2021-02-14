@@ -23,7 +23,7 @@ import org.jhotdraw8.text.Converter;
 public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
         implements WriteableStyleableMapAccessor<Boolean> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, Boolean> cssMetaData;
 
     /**

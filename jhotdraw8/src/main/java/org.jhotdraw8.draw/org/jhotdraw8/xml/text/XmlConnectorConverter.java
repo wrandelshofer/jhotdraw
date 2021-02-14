@@ -42,11 +42,10 @@ import java.util.function.Function;
  */
 public class XmlConnectorConverter implements Converter<Connector> {
 
-    @NonNull
-    private CssLocatorConverter locatorConverter = new CssLocatorConverter();
+    private @NonNull CssLocatorConverter locatorConverter = new CssLocatorConverter();
 
-    private final static HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
-    private final static HashMap<Class<? extends Connector>, String> connectorToChoiceMap = new HashMap<>();
+    private static final HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
+    private static final HashMap<Class<? extends Connector>, String> connectorToChoiceMap = new HashMap<>();
 
     static {
         connectorToChoiceMap.put(PathConnector.class, "path");
@@ -72,9 +71,8 @@ public class XmlConnectorConverter implements Converter<Connector> {
         }
     }
 
-    @Nullable
     @Override
-    public Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Connector c;
         CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         c = parseConnector(tt, idResolver);
@@ -85,9 +83,8 @@ public class XmlConnectorConverter implements Converter<Connector> {
         return c;
     }
 
-    @Nullable
     @Override
-    public Connector getDefaultValue() {
+    public @Nullable Connector getDefaultValue() {
         return null;
     }
 
@@ -100,8 +97,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
      * @throws ParseException if parsing fails
      * @throws IOException    if IO fails
      */
-    @Nullable
-    public Connector parseConnector(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Connector parseConnector(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         Locator locator = null;
         Function<Locator, Connector> supplier;
 

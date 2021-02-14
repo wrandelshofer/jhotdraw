@@ -16,13 +16,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @param <E>
+ * This converter uses a map to convert a data type from/to String.
+ *
+ * @param <E> the data type
  */
 public class MappedConverter<E> implements Converter<E> {
-    @NonNull
-    private final Map<String, E> fromStringMap;
-    @NonNull
-    private final Map<E, String> toStringMap;
+    private final @NonNull Map<String, E> fromStringMap;
+    private final @NonNull Map<E, String> toStringMap;
     private final String nullValue;
 
 
@@ -44,9 +44,8 @@ public class MappedConverter<E> implements Converter<E> {
         this.nullValue = nullValue;
     }
 
-    @Nullable
     @Override
-    public E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (in == null) {
             throw new ParseException("Illegal value=null", 0);
         }
@@ -62,9 +61,8 @@ public class MappedConverter<E> implements Converter<E> {
         return e;
     }
 
-    @Nullable
     @Override
-    public E getDefaultValue() {
+    public @Nullable E getDefaultValue() {
         return null;
     }
 

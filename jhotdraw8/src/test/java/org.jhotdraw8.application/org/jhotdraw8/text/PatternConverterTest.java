@@ -29,8 +29,7 @@ public class PatternConverterTest {
     /**
      * Test of toString method, of class PatternConverter.
      */
-    static
-    public void testToString(@NonNull String pattern, Object[] value, String expectedOutput) throws IOException {
+    public static void testToString(@NonNull String pattern, Object[] value, String expectedOutput) throws IOException {
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         String actualOutput = c.toString(value);
         assertEquals(actualOutput, expectedOutput);
@@ -39,8 +38,7 @@ public class PatternConverterTest {
     /**
      * Test of fromString method, of class PatternConverter.
      */
-    static
-    public void testFromString(@NonNull String pattern, Object[] expectedValue, @NonNull String input) throws IOException, ParseException {
+    public static void testFromString(@NonNull String pattern, Object[] expectedValue, @NonNull String input) throws IOException, ParseException {
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
         System.out.println("ast:" + ast);
@@ -49,9 +47,8 @@ public class PatternConverterTest {
         assertArrayEquals(expectedValue, actualValue);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> testToStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString("{0,list,{1}}", new Object[]{0}, "")),
                 dynamicTest("2", () -> testToString("{0,list,{1}}", new Object[]{1, "i0"}, "i0")),
@@ -82,9 +79,8 @@ public class PatternConverterTest {
         );
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString("hello world", new Object[]{}, "hello world")),
                 dynamicTest("1", () -> testFromString("'hello world'", new Object[]{}, "hello world")),

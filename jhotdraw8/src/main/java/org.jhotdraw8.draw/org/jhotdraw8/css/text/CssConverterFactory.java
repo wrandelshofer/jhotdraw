@@ -17,19 +17,18 @@ import org.jhotdraw8.text.DefaultConverter;
  */
 public class CssConverterFactory implements ConverterFactory {
 
-    @NonNull
     @Override
-    public Converter<?> apply(@Nullable String type, String style) {
+    public @NonNull Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {
             return new DefaultConverter();
         }
         switch (type) {
-            case "number":
-                return new CssNumberConverter(false);
-            case "size":
-                return new CssSizeConverter(false);
-            case "word":
-                return new CssWordConverter();
+        case "number":
+            return new CssNumberConverter(false);
+        case "size":
+            return new CssSizeConverter(false);
+        case "word":
+            return new CssWordConverter();
             case "paint":
                 return new CssPaintableConverter(false);
             case "font":

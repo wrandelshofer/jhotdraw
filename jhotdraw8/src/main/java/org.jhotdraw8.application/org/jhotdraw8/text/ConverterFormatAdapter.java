@@ -28,9 +28,8 @@ public class ConverterFormatAdapter implements Converter<Object> {
         this.format = format;
     }
 
-    @NonNull
     @Override
-    public String toString(Object value) {
+    public @NonNull String toString(Object value) {
         return format.format(value);
     }
 
@@ -59,9 +58,8 @@ public class ConverterFormatAdapter implements Converter<Object> {
         return value;
     }
 
-    @Nullable
     @Override
-    public Object getDefaultValue() {
+    public @Nullable Object getDefaultValue() {
         return null;
     }
 }

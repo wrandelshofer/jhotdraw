@@ -20,11 +20,10 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
     public AbstractStringCssFunction(String name) {
         super(name);
     }
-    private final static               ParseException parseException = new ParseException("〈---〉: String, Number, CssSize, Percentage or URL expected.", 0);
+    private static final ParseException parseException = new ParseException("〈---〉: String, Number, CssSize, Percentage or URL expected.", 0);
 
 
-    @NonNull
-    protected String evalString(@NonNull T element, @NonNull CssTokenizer tt, String expressionName, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @NonNull String evalString(@NonNull T element, @NonNull CssTokenizer tt, String expressionName, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         StringBuilder buf = new StringBuilder();
         List<CssToken> temp = new ArrayList<>();
 

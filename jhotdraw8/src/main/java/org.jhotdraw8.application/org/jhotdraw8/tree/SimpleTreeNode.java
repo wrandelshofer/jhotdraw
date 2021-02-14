@@ -11,8 +11,7 @@ import java.util.List;
 
 public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
     private ChildList<SimpleTreeNode<V>> children;
-    @Nullable
-    private SimpleTreeNode<V> parent;
+    private @Nullable SimpleTreeNode<V> parent;
     private V value;
 
     public SimpleTreeNode() {
@@ -37,18 +36,16 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         }
     }
 
-    @NonNull
     @Override
-    public List<SimpleTreeNode<V>> getChildren() {
+    public @NonNull List<SimpleTreeNode<V>> getChildren() {
         if (children == null) {
             children = new ChildList<>(this);
         }
         return children;
     }
 
-    @Nullable
     @Override
-    public SimpleTreeNode<V> getParent() {
+    public @Nullable SimpleTreeNode<V> getParent() {
         return null;
     }
 

@@ -23,21 +23,21 @@ import static java.lang.Math.sqrt;
 
 public class Polynomial implements ToDoubleFunction<Double> {
 
-    private final static double ACCURACY = 6;
+    private static final double ACCURACY = 6;
 
     /**
      * ln(10)≈2.302
      */
-    private final static double LN10 = log(10);
+    private static final double LN10 = log(10);
     /**
      * ln(2)≈0.693
      */
-    private final static double LN2 = log(2);
+    private static final double LN2 = log(2);
     /**
      * Values closer to zero than epsilon are treated as zero .
      * Machine precision for double is 2^-53.
      */
-    private final static double EPSILON = 1.0 / (1L << 33);
+    private static final double EPSILON = 1.0 / (1L << 33);
 
     /**
      * Holds the coefficients from lowest to highest degree, that is
@@ -93,8 +93,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param that another polynomial
      * @return a new polynomial containing the sum of the coefficients
      */
-    @NonNull
-    public Polynomial add(@NonNull Polynomial that) {
+    public @NonNull Polynomial add(@NonNull Polynomial that) {
         int d1 = this.getDegree();
         int d2 = that.getDegree();
         int dmax = max(d1, d2);
@@ -118,8 +117,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param that another polynomial
      * @return a new polynomial containing the difference of the coefficients
      */
-    @NonNull
-    public Polynomial subtract(@NonNull Polynomial that) {
+    public @NonNull Polynomial subtract(@NonNull Polynomial that) {
         int d1 = this.getDegree();
         int d2 = that.getDegree();
         int dmax = max(d1, d2);
@@ -148,8 +146,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param max  the upper bound of the interval
      * @return the root, null if no root could be found
      */
-    @Nullable
-    public static Double bisection(@NonNull final ToDoubleFunction<Double> func, double min, double max) {
+    public static @Nullable Double bisection(final @NonNull ToDoubleFunction<Double> func, double min, double max) {
         double minValue = func.applyAsDouble(min);
         double maxValue = func.applyAsDouble(max);
         Double result = null;
@@ -191,8 +188,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param scalar a scalar
      * @return a new polynomial
      */
-    @NonNull
-    public Polynomial divide_scalar(double scalar) {
+    public @NonNull Polynomial divide_scalar(double scalar) {
         double[] result = new double[this.coefs.length];
         for (int i = 0; i < this.coefs.length; i++) {
             result[i] = this.coefs[i] /= scalar;
@@ -220,8 +216,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    @NonNull
-    private double[] getCubicRoots() {
+    private @NonNull double[] getCubicRoots() {
         final double[] results = new double[4];
         int numResults = 0;
 
@@ -306,8 +301,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return returns the derivative of the current polynomial.
      */
-    @NonNull
-    public Polynomial getDerivative() {
+    public @NonNull Polynomial getDerivative() {
         double[] derivative = new double[coefs.length - 1];
 
         for (int i = 1; i < this.coefs.length; i++) {
@@ -322,8 +316,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    @NonNull
-    private double[] getLinearRoot() {
+    private @NonNull double[] getLinearRoot() {
         double[] result = new double[0];
         double a = this.coefs[1];
 
@@ -339,8 +332,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    @NonNull
-    private double[] getQuadraticRoots() {
+    private @NonNull double[] getQuadraticRoots() {
         double a = this.coefs[2];
         double b = this.coefs[1] / a;
         double c = this.coefs[0] / a;
@@ -359,8 +351,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    @NonNull
-    public static double[] getQuadraticRoots(double a, double b, double c) {
+    public static @NonNull double[] getQuadraticRoots(double a, double b, double c) {
         double d = b * b - 4 * c;
         if (d > 0) {
             double e = sqrt(d);
@@ -380,8 +371,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    @NonNull
-    private double[] getQuarticRoots() {
+    private @NonNull double[] getQuarticRoots() {
 
         double[] results = new double[4];
         int numResults = 0;
@@ -507,8 +497,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param max the upper bound of the interval (inclusive)
      * @return a list of roots
      */
-    @NonNull
-    public DoubleArrayList getRootsInInterval(double min, double max) {
+    public @NonNull DoubleArrayList getRootsInInterval(double min, double max) {
         DoubleArrayList roots = new DoubleArrayList(getDegree());
         int numRoots = 0;
 
@@ -553,8 +542,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param max    the upper bound of the interval (inclusive)
      * @return a list of roots. The list if empty, if no roots have been found
      */
-    @NonNull
-    public static DoubleArrayList getRootsInInterval(@NonNull ToDoubleFunction<Double> func, @NonNull DoubleArrayList droots, double min, double max) {
+    public static @NonNull DoubleArrayList getRootsInInterval(@NonNull ToDoubleFunction<Double> func, @NonNull DoubleArrayList droots, double min, double max) {
         final DoubleArrayList roots = new DoubleArrayList(droots.size());
         int numRoots = 0;
 
@@ -597,8 +585,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param that another polynomial
      * @return a new polynomial containing the product of the coefficients
      */
-    @NonNull
-    public Polynomial multiply(@NonNull Polynomial that) {
+    public @NonNull Polynomial multiply(@NonNull Polynomial that) {
         Polynomial result = new Polynomial(new double[this.getDegree() + that.getDegree()]);
         for (int i = 0; i <= this.getDegree(); i++) {
             for (int j = 0; j <= that.getDegree(); j++) {
@@ -622,8 +609,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return a new polynomial
      */
-    @NonNull
-    public Polynomial simplify() {
+    public @NonNull Polynomial simplify() {
         int popAt = simplifiedDegree();
         if (popAt == this.getDegree()) {
             return this;
@@ -639,8 +625,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return string representation
      */
-    @NonNull
-    public String toString() {
+    public @NonNull String toString() {
         StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = coefs.length - 1; i >= 0; i--) {
@@ -670,8 +655,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param a      the array
      * @return array of the specified length
      */
-    @NonNull
-    static double[] trim(int length, @NonNull double[] a) {
+    static @NonNull double[] trim(int length, @NonNull double[] a) {
         if (length == a.length) {
             return a;
         }
@@ -726,8 +710,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param x
      * @return a tuple: y, dy
      */
-    @NonNull
-    private static Point2D interpolate(double[] xs, double[] ys, int n, int offset, double x) {
+    private static @NonNull Point2D interpolate(double[] xs, double[] ys, int n, int offset, double x) {
 
         double y;
         double dy = 0;

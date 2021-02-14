@@ -15,18 +15,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 class ListTransformContentBinding<D, S> {
-    @NonNull
-    private final ObservableList<D> dest;
-    @NonNull
-    private final ObservableList<S> source;
-    @NonNull
-    private final Function<S, D> toDest;
-    @Nullable
-    private final Function<D, S> toSource;
-    @Nullable
-    private final Consumer<D> destOnRemove;
-    @Nullable
-    private final Consumer<S> sourceOnRemove;
+    private final @NonNull ObservableList<D> dest;
+    private final @NonNull ObservableList<S> source;
+    private final @NonNull Function<S, D> toDest;
+    private final @Nullable Function<D, S> toSource;
+    private final @Nullable Consumer<D> destOnRemove;
+    private final @Nullable Consumer<S> sourceOnRemove;
 
     private int isChanging;
 

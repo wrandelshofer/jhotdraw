@@ -21,8 +21,7 @@ public class IntersectCubicCurveCubicCurve {
     private IntersectCubicCurveCubicCurve() {
     }
 
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCubicCurve(
+    public static @NonNull IntersectionResult intersectCubicCurveCubicCurve(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
         return intersectCubicCurveCubicCurve(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(a3x, a3y),
@@ -30,8 +29,7 @@ public class IntersectCubicCurveCubicCurve {
 
     }
 
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCubicCurve(
+    public static @NonNull IntersectionResult intersectCubicCurveCubicCurve(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y, double epsilon) {
         return intersectCubicCurveCubicCurve(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(a3x, a3y),
@@ -57,9 +55,8 @@ public class IntersectCubicCurveCubicCurve {
      * @param b3 control point P3 of 'b'
      * @return the computed result
      */
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3,
-                                                                   @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3) {
+    public static @NonNull IntersectionResult intersectCubicCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3,
+                                                                            @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3) {
         return intersectCubicCurveCubicCurve(a0, a1, a2, a3, b0, b1, b2, b3, Geom.REAL_THRESHOLD);
     }
 
@@ -80,10 +77,9 @@ public class IntersectCubicCurveCubicCurve {
      * @param b3 control point P3 of 'b'
      * @return the computed result
      */
-    @NonNull
-    public static IntersectionResult intersectCubicCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3,
-                                                                   @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3,
-                                                                   double epsilon) {
+    public static @NonNull IntersectionResult intersectCubicCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3,
+                                                                            @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3,
+                                                                            double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         // Calculate the coefficients of cubic polynomial

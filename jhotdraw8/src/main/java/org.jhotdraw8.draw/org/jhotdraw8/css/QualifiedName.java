@@ -18,13 +18,11 @@ public class QualifiedName implements Comparable<QualifiedName> {
         this.name = name;
     }
 
-    @Nullable
-    public String getNamespace() {
+    public @Nullable String getNamespace() {
         return namespace;
     }
 
-    @NonNull
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
@@ -51,9 +49,8 @@ public class QualifiedName implements Comparable<QualifiedName> {
         return this.name.compareTo(o.name);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "QualifiedName{" +
                 "namespace='" + namespace + '\'' +
                 ", name='" + name + '\'' +

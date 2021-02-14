@@ -67,8 +67,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             setId("toolEventPane");
         }
 
-        @Nullable
-        private EditableComponent getEditableParent() {
+        private @Nullable EditableComponent getEditableParent() {
 
             DrawingView dv = getDrawingView();
             if (dv != null) {
@@ -95,9 +94,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
             }
         }
 
-        @Nullable
         @Override
-        public ReadOnlyBooleanProperty selectionEmptyProperty() {
+        public @Nullable ReadOnlyBooleanProperty selectionEmptyProperty() {
             EditableComponent p = getEditableParent();
             if (p != null) {
                 return p.selectionEmptyProperty();
@@ -254,15 +252,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         return properties;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<DrawingView> drawingViewProperty() {
+    public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
-    @NonNull
     @Override
-    public ObjectProperty<DrawingEditor> drawingEditorProperty() {
+    public @NonNull ObjectProperty<DrawingEditor> drawingEditorProperty() {
         return drawingEditor;
     }
 
@@ -276,9 +272,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         set(SHORT_DESCRIPTION, rsrc.getToolTipTextProperty(name));
     }
 
-    @NonNull
     @Override
-    public Node getNode() {
+    public @NonNull Node getNode() {
         return node;
     }
 

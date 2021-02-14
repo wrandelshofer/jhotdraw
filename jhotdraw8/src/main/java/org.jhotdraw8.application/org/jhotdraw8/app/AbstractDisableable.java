@@ -46,9 +46,8 @@ public class AbstractDisableable implements Disableable {
         return disabled.getReadOnlyProperty();
     }
 
-    @NonNull
     @Override
-    public ObservableSet<Object> disablers() {
+    public @NonNull ObservableSet<Object> disablers() {
         return disablers;
     }
 }

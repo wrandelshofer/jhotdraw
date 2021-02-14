@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class CssInsets {
 
-    public final static CssInsets ZERO = new CssInsets();
+    public static final CssInsets ZERO = new CssInsets();
 
     private final CssSize bottom;
     private final CssSize left;
@@ -77,28 +77,24 @@ public class CssInsets {
      *               insets
      * @return the converted value
      */
-    @NonNull
-    public Insets getConvertedValue(double width, double height) {
+    public @NonNull Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
         final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
         return new Insets(heightConverter.convert(top, UnitConverter.DEFAULT), widthConverter.convert(right, UnitConverter.DEFAULT),
                 heightConverter.convert(bottom, UnitConverter.DEFAULT), widthConverter.convert(left, UnitConverter.DEFAULT));
     }
 
-    @NonNull
-    public Insets getConvertedValue() {
+    public @NonNull Insets getConvertedValue() {
         return new Insets(top.getConvertedValue(), right.getConvertedValue(),
                 bottom.getConvertedValue(), left.getConvertedValue());
     }
 
-    @NonNull
-    public Insets getConvertedValue(UnitConverter converter, @NonNull String units) {
+    public @NonNull Insets getConvertedValue(UnitConverter converter, @NonNull String units) {
         return new Insets(top.getConvertedValue(converter, units), right.getConvertedValue(converter, units),
                 bottom.getConvertedValue(converter, units), left.getConvertedValue(converter, units));
     }
 
-    @NonNull
-    public Insets getConvertedValue(@NonNull UnitConverter converter) {
+    public @NonNull Insets getConvertedValue(@NonNull UnitConverter converter) {
         return getConvertedValue(converter, UnitConverter.DEFAULT);
     }
 
@@ -124,9 +120,8 @@ public class CssInsets {
         return hash;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "CssInsets{" +
                 "" + bottom +
                 ", " + left +

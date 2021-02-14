@@ -50,8 +50,7 @@ public interface AttributedIntBidiGraph<V, A> extends IntBidiGraph, AttributedIn
      * @return a collection view on the direct predecessor vertices of vertex
      * with the arrow pointing away from the vertex
      */
-    @NonNull
-    default Collection<Map.Entry<Integer, A>> getPrevIntEntries(int vertexIndex) {
+    default @NonNull Collection<Map.Entry<Integer, A>> getPrevIntEntries(int vertexIndex) {
         class PrevVertexAndArrowIterator implements Iterator<Map.Entry<Integer, A>> {
 
             private int index;
@@ -68,9 +67,8 @@ public interface AttributedIntBidiGraph<V, A> extends IntBidiGraph, AttributedIn
                 return index < prevCount;
             }
 
-            @NonNull
             @Override
-            public Map.Entry<Integer, A> next() {
+            public @NonNull Map.Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
                         getPrev(vertex, i),
@@ -80,9 +78,8 @@ public interface AttributedIntBidiGraph<V, A> extends IntBidiGraph, AttributedIn
 
         }
         return new AbstractCollection<Map.Entry<Integer, A>>() {
-            @NonNull
             @Override
-            public Iterator<Map.Entry<Integer, A>> iterator() {
+            public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {
                 return new PrevVertexAndArrowIterator(vertexIndex);
             }
 

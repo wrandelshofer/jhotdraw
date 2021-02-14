@@ -23,10 +23,8 @@ import java.util.function.Function;
  */
 public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
 
-@Nullable
-    private BooleanProperty property;
-    @Nullable
-    private final Function<Activity, Node> nodeGetter;
+    private @Nullable BooleanProperty property;
+    private final @Nullable Function<Activity, Node> nodeGetter;
 
     public ToggleViewPropertyAction(@NonNull Application app, Activity view, @NonNull BooleanProperty property, String id, @NonNull Resources labels) {
         super(view);

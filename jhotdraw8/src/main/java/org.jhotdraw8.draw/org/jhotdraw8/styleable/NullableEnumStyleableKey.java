@@ -20,7 +20,7 @@ import org.jhotdraw8.text.Converter;
  */
 public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> implements WriteableStyleableMapAccessor<T> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final CssMetaData<?, T> cssMetaData;
 
@@ -62,12 +62,10 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleable
 
     }
 
-    @NonNull
-    private final Converter<T> converter;
+    private final @NonNull Converter<T> converter;
 
-    @NonNull
     @Override
-    public Converter<T> getCssConverter() {
+    public @NonNull Converter<T> getCssConverter() {
         return converter;
     }
 }

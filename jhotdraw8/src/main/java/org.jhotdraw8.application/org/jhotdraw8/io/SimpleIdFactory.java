@@ -38,8 +38,7 @@ public class SimpleIdFactory implements IdFactory {
         return objectToId.get(object);
     }
 
-    @Nullable
-    private URI documentHome;
+    private @Nullable URI documentHome;
 
     public void setDocumentHome(@Nullable URI documentHome) {
         this.documentHome=documentHome;

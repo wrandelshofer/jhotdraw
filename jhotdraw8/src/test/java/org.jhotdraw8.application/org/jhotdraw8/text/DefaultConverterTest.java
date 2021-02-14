@@ -38,26 +38,23 @@ public class DefaultConverterTest {
         assertEquals(actualOutput, expectedOutput);
     }
 
-    @NonNull
-    public static Object[][] textData() {
+    public static @NonNull Object[][] textData() {
         return new Object[][]{
                 {"hello world", "hello world"},
         };
 
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString("hello", "hello"))
         );
 
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> testToStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString("hello", "hello"))
         );

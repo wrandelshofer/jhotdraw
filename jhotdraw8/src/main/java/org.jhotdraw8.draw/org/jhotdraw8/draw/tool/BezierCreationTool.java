@@ -51,13 +51,11 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     /**
      * The bezier nodes being created.
      */
-    @Nullable
-    private ArrayList<BezierNode> points;
+    private @Nullable ArrayList<BezierNode> points;
     /**
      * The rubber band shows where the next point will be added.
      */
-    @NonNull
-    private Line rubberBand = new Line();
+    private @NonNull Line rubberBand = new Line();
 
     public BezierCreationTool(String name, Resources rsrc, BezierNodeListStyleableKey key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
@@ -230,9 +228,8 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         }
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         return "BezierCreationTool"
                 + "\n  Click on the drawing view. The tool will create a new bezier curve with a point at that location."
                 + "\n  Continue clicking on the drawing view. The tool will add each clicked point to the created bezier curve."

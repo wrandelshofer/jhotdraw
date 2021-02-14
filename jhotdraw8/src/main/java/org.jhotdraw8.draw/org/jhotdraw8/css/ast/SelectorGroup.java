@@ -23,8 +23,7 @@ import java.util.function.Consumer;
  */
 public class SelectorGroup extends Selector {
 
-    @NonNull
-    private final ReadOnlyList<Selector> selectors;
+    private final @NonNull ReadOnlyList<Selector> selectors;
 
     public SelectorGroup(Selector selector) {
         this.selectors = ImmutableLists.of(selector);
@@ -34,9 +33,8 @@ public class SelectorGroup extends Selector {
         this.selectors = ImmutableLists.ofCollection(selectors);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         StringBuilder buf = new StringBuilder("( ");
         boolean first = true;
         for (Selector s : selectors) {
@@ -69,9 +67,8 @@ public class SelectorGroup extends Selector {
         return match(model, element) != null;
     }
 
-    @Nullable
     @Override
-    protected <T> T match(SelectorModel<T> model, T element) {
+    protected @Nullable <T> T match(SelectorModel<T> model, T element) {
         for (Selector s : selectors) {
             T result = s.match(model, element);
             if (result != null) {
@@ -98,8 +95,7 @@ public class SelectorGroup extends Selector {
      * @return the last selector with highest specificity that matches the specified element,
      * returns null if no selector matches
      */
-    @Nullable
-    public <T> Selector matchSelector(@NonNull SelectorModel<T> model, @NonNull T element) {
+    public @Nullable <T> Selector matchSelector(@NonNull SelectorModel<T> model, @NonNull T element) {
         int maxSpecificity = 0;
         Selector found = null;// selector with maxSpecificity or last
 

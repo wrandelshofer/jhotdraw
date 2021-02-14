@@ -13,7 +13,7 @@ import org.jhotdraw8.reflect.TypeToken;
  */
 public class SetKey<E> extends ObjectKey<ImmutableSet<E>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public SetKey(String key, TypeToken<ImmutableSet<E>> type) {
         super(key, type, ImmutableSets.emptySet());

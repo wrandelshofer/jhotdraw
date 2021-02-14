@@ -89,14 +89,11 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 new NumberStringConverter());
     }
 
-    @NonNull
-    private NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", CssColor.valueOf("blue"));
+    private @NonNull NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", CssColor.valueOf("blue"));
 
-    @NonNull
-    private IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
+    private @NonNull IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
 
-    @NonNull
-    private IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
+    private @NonNull IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
 
     private Node node;
 

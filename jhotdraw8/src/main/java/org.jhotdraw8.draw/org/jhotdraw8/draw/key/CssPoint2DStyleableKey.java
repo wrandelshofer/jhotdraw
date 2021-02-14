@@ -29,11 +29,10 @@ import java.util.function.Function;
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoint2D>
         implements WriteableStyleableMapAccessor<@NonNull CssPoint2D>, NonNullMapAccessor<@NonNull CssPoint2D> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final Converter<@NonNull CssPoint2D> converter;
 
-    @NonNull
-    private final CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> cssMetaData;
+    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with 0,0 as the

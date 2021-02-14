@@ -42,38 +42,28 @@ import java.util.stream.StreamSupport;
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
-    @NonNull
-    private final CssParser parser = new CssParser();
-    @NonNull
-    private SelectorModel<E> selectorModel;
+    private final @NonNull CssParser parser = new CssParser();
+    private @NonNull SelectorModel<E> selectorModel;
     /**
      * Cache for parsed user agent stylesheets.
      * <p>
      * The key is either an URI or a literal CSS String for which we cache the
      * data. The value contains the parsed stylesheet entry.
      */
-    @NonNull
-    private LinkedHashMap<Object, StylesheetEntry> userAgentList = new LinkedHashMap<>();
+    private @NonNull LinkedHashMap<Object, StylesheetEntry> userAgentList = new LinkedHashMap<>();
     /**
      * @see #userAgentList
      */
-    @NonNull
-    private LinkedHashMap<Object, StylesheetEntry> authorList = new LinkedHashMap<>();
+    private @NonNull LinkedHashMap<Object, StylesheetEntry> authorList = new LinkedHashMap<>();
     /**
      * @see #userAgentList
      */
-    @NonNull
-    private LinkedHashMap<Object, StylesheetEntry> inlineList = new LinkedHashMap<>();
-    @NonNull
-    private final Executor executor = Executors.newCachedThreadPool();
-    @Nullable
-    private Map<String, ImmutableList<CssToken>> cachedAuthorCustomProperties;
-    @Nullable
-    private Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
-    @Nullable
-    private Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
-    @NonNull
-    private final static Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
+    private @NonNull LinkedHashMap<Object, StylesheetEntry> inlineList = new LinkedHashMap<>();
+    private final @NonNull Executor executor = Executors.newCachedThreadPool();
+    private @Nullable Map<String, ImmutableList<CssToken>> cachedAuthorCustomProperties;
+    private @Nullable Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
+    private @Nullable Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
+    private static final @NonNull Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
 
     public SimpleStylesheetsManager(@NonNull SelectorModel<E> selectorModel) {
         this(selectorModel, Collections.emptyList());
@@ -204,18 +194,15 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         setMap(origin, newMap);
     }
 
-    @NonNull
-    protected Collection<StylesheetEntry> getAuthorStylesheets() {
+    protected @NonNull Collection<StylesheetEntry> getAuthorStylesheets() {
         return authorList.values();
     }
 
-    @NonNull
-    protected Collection<StylesheetEntry> getUserAgentStylesheets() {
+    protected @NonNull Collection<StylesheetEntry> getUserAgentStylesheets() {
         return userAgentList.values();
     }
 
-    @NonNull
-    protected Collection<StylesheetEntry> getInlineStylesheets() {
+    protected @NonNull Collection<StylesheetEntry> getInlineStylesheets() {
         return inlineList.values();
     }
 
@@ -303,8 +290,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 });
     }
 
-    @NonNull
-    private Map<String, ImmutableList<CssToken>> computeCustomProperties() {
+    private @NonNull Map<String, ImmutableList<CssToken>> computeCustomProperties() {
         Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         customProperties.putAll(getUserAgentCustomProperties());
         customProperties.putAll(getAuthorCustomProperties());
@@ -312,24 +298,21 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return customProperties;
     }
 
-    @NonNull
-    private Map<String, ImmutableList<CssToken>> getInlineCustomProperties() {
+    private @NonNull Map<String, ImmutableList<CssToken>> getInlineCustomProperties() {
         if (cachedInlineCustomProperties == null) {
             cachedInlineCustomProperties = collectCustomProperties(getInlineStylesheets());
         }
         return cachedInlineCustomProperties;
     }
 
-    @NonNull
-    private Map<String, ImmutableList<CssToken>> getAuthorCustomProperties() {
+    private @NonNull Map<String, ImmutableList<CssToken>> getAuthorCustomProperties() {
         if (cachedAuthorCustomProperties == null) {
             cachedAuthorCustomProperties = collectCustomProperties(getAuthorStylesheets());
         }
         return cachedAuthorCustomProperties;
     }
 
-    @NonNull
-    private Map<String, ImmutableList<CssToken>> getUserAgentCustomProperties() {
+    private @NonNull Map<String, ImmutableList<CssToken>> getUserAgentCustomProperties() {
         if (cachedUserAgentCustomProperties == null) {
             cachedUserAgentCustomProperties = collectCustomProperties(getUserAgentStylesheets());
         }
@@ -358,9 +341,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return applicableDeclarations.stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).collect(Collectors.toList());
     }
 
-    @NonNull
-    private List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> collectApplicableDeclarations(E elem, @NonNull Stylesheet s,
-                                                                                                       @NonNull List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> applicableDeclarations) {
+    private @NonNull List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> collectApplicableDeclarations(E elem, @NonNull Stylesheet s,
+                                                                                                                @NonNull List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> applicableDeclarations) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             Selector selector;
@@ -427,8 +409,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
 
-    @NonNull
-    private List<CssFunction<E>> functions = new ArrayList<>();
+    private @NonNull List<CssFunction<E>> functions = new ArrayList<>();
 
     public @NonNull List<CssFunction<E>> getFunctions() {
         return functions;
@@ -438,9 +419,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         this.functions = functions;
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         StringBuilder buf = new StringBuilder();
         for (CssFunction<E> value : functions) {
             if (buf.length() != 0) {
@@ -451,8 +431,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return buf.toString();
     }
 
-    @NonNull
-    private Map<String, ImmutableList<CssToken>> collectCustomProperties(@NonNull Collection<StylesheetEntry> stylesheets) {
+    private @NonNull Map<String, ImmutableList<CssToken>> collectCustomProperties(@NonNull Collection<StylesheetEntry> stylesheets) {
         Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         for (StylesheetEntry s : stylesheets) {
             Stylesheet stylesheet = s.getStylesheet();
@@ -463,8 +442,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return customProperties;
     }
 
-    @NonNull
-    private Map<String, ImmutableList<CssToken>> collectCustomProperties(@NonNull Stylesheet s) {
+    private @NonNull Map<String, ImmutableList<CssToken>> collectCustomProperties(@NonNull Stylesheet s) {
         Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         collectCustomProperties(s, customProperties);
         return customProperties;
@@ -480,8 +458,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    @NonNull
-    private ImmutableList<CssToken> preprocessTerms(E elem, @NonNull CssFunctionProcessor<E> processor, @NonNull ImmutableList<CssToken> terms) {
+    private @NonNull ImmutableList<CssToken> preprocessTerms(E elem, @NonNull CssFunctionProcessor<E> processor, @NonNull ImmutableList<CssToken> terms) {
         try {
             return processor.process(elem, terms);
         } catch (ParseException e) {
@@ -492,14 +469,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     protected class StylesheetEntry {
 
-        @Nullable
-        private final URI uri;
-        @NonNull
-        private final StyleOrigin origin;
-        @Nullable
-        private FutureTask<Stylesheet> future;
-        @Nullable
-        private Stylesheet stylesheet;
+        private final @Nullable URI uri;
+        private final @NonNull StyleOrigin origin;
+        private @Nullable FutureTask<Stylesheet> future;
+        private @Nullable Stylesheet stylesheet;
 
 
         public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri) {
@@ -540,13 +513,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
-        @NonNull
-        public StyleOrigin getOrigin() {
+        public @NonNull StyleOrigin getOrigin() {
             return origin;
         }
 
-        @Nullable
-        public Stylesheet getStylesheet() {
+        public @Nullable Stylesheet getStylesheet() {
             if (future != null) {
                 try {
                     stylesheet = future.get();

@@ -34,9 +34,8 @@ public interface RectangularFigure extends Figure {
         set(Y, getNonNull(Y).add(t.getY()));
     }
 
-    @NonNull
     @Override
-    default CssRectangle2D getCssLayoutBounds() {
+    default @NonNull CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 }

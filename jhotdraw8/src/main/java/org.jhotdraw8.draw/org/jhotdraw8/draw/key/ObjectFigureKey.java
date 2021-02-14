@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
 public class ObjectFigureKey<@NonNull T> extends ObjectKey<@NonNull T> implements
         NonNullMapAccessor<@NonNull T> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance with the specified name, type token class, default

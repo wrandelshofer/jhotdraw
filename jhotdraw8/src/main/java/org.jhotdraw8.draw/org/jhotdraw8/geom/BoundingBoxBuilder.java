@@ -61,16 +61,14 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         addToBounds(x2, y2);
     }
 
-    @Nullable
-    public Rectangle getRectangle() {
+    public @Nullable Rectangle getRectangle() {
         if (Double.isNaN(minx)) {
             return null;
         }
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
-    @NonNull
-    public BoundingBox build() {
+    public @NonNull BoundingBox build() {
         if (Double.isNaN(minx)) {
             return new BoundingBox(0, 0, 0, 0);
         }

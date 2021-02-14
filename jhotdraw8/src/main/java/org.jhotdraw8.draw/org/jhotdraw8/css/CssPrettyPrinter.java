@@ -16,8 +16,7 @@ public class CssPrettyPrinter implements Appendable {
         STYLESHEET, SELECTOR, DECLARATION_KEY, DECLARATION_VALUE, ROUND_BLOCK, SQUARE_BLOCK, CURLY_BLOCK
     }
 
-    @NonNull
-    private Deque<Syntax> stack = new ArrayDeque<>();
+    private @NonNull Deque<Syntax> stack = new ArrayDeque<>();
     int indentation = 0;
     private String indenter = "\t";
     private Appendable w;
@@ -28,8 +27,7 @@ public class CssPrettyPrinter implements Appendable {
         stack.push(Syntax.STYLESHEET);
     }
 
-    @NonNull
-    public CssPrettyPrinter append(CharSequence str) {
+    public @NonNull CssPrettyPrinter append(CharSequence str) {
         try {
             print(str);
         } catch (IOException e) {
@@ -38,16 +36,14 @@ public class CssPrettyPrinter implements Appendable {
         return this;
     }
 
-    @NonNull
     @Override
-    public CssPrettyPrinter append(@NonNull CharSequence csq, int start, int end) {
+    public @NonNull CssPrettyPrinter append(@NonNull CharSequence csq, int start, int end) {
         append(csq.subSequence(start, end));
         return this;
     }
 
-    @NonNull
     @Override
-    public CssPrettyPrinter append(char c) {
+    public @NonNull CssPrettyPrinter append(char c) {
         return append("" + c);
     }
 

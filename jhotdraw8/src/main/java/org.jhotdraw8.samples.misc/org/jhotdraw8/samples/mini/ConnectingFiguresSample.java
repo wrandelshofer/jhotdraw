@@ -14,8 +14,7 @@ import org.jhotdraw8.draw.render.SimpleRenderContext;
 
 public class ConnectingFiguresSample {
 
-    @NonNull
-    public Drawing createDrawing() {
+    public @NonNull Drawing createDrawing() {
         RectangleFigure a = new RectangleFigure(100, 80, 150, 100);  // 1
         RectangleFigure b = new RectangleFigure(300, 230, 150, 100);
         LineConnectionFigure c = new LineConnectionFigure();

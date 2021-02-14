@@ -121,9 +121,8 @@ public interface Drawing extends Figure {
      */
     String TYPE_SELECTOR = "Drawing";
 
-    @NonNull
     @Override
-    default String getTypeSelector() {
+    default @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -173,8 +172,7 @@ public interface Drawing extends Figure {
      *
      * @return figures in topological order according to layout dependencies
      */
-    @NonNull
-    default Iterable<Figure> layoutDependenciesIterable() {
+    default @NonNull Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
         DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(256, 256, true);

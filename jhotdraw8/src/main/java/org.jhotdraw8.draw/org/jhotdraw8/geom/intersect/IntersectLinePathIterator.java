@@ -15,18 +15,15 @@ public class IntersectLinePathIterator {
     private IntersectLinePathIterator() {
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit) {
+    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit) {
         return intersectLinePathIteratorEx(a0x, a0y, a1x, a1y, pit, 1.0);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit, double maxT) {
+    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit, double maxT) {
         return intersectLinePathIteratorEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(), pit, maxT);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit, double maxT) {
+    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit, double maxT) {
         List<IntersectionPointEx> result = new ArrayList<>();
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
@@ -90,8 +87,7 @@ public class IntersectLinePathIterator {
     }
 
 
-    @NonNull
-    public static IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit) {
+    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit) {
         IntersectionResultEx i = intersectLinePathIteratorEx(a0, a1, pit, 1.0);
         if (i.getStatus() == IntersectionStatus.INTERSECTION && i.getFirst().getArgumentA() > 1) {
             return new IntersectionResultEx(IntersectionStatus.NO_INTERSECTION, new ArrayList<>());

@@ -25,15 +25,13 @@ public class DescendantCombinator extends Combinator {
         super(simpleSelector, selector);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return firstSelector + ".isAncestorOf(" + secondSelector + ")";
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
         T result = secondSelector.match(model, element);
         T siblingElement = result;
         while (siblingElement != null) {

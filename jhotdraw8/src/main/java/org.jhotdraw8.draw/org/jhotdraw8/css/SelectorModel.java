@@ -127,13 +127,11 @@ public interface SelectorModel<T> {
      * @return The attribute value. Returns "initial" if the element does not have an
      * attribute with this name.
      */
-    @Nullable
-    default String getAttributeAsString(@NonNull T element, @Nullable String namespace, @NonNull String name) {
+    default @Nullable String getAttributeAsString(@NonNull T element, @Nullable String namespace, @NonNull String name) {
         return getAttributeAsString(element, StyleOrigin.USER, namespace, name);
     }
 
-    @Nullable
-    default String getAttributeAsString(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
+    default @Nullable String getAttributeAsString(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         List<CssToken> list = getAttribute(element, origin, namespace, name);
         if (list == null) {
             return null;

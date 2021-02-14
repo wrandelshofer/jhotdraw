@@ -26,10 +26,8 @@ import org.jhotdraw8.draw.tool.Tool;
  */
 public class ToolsToolbar extends GridPane {
 
-    @NonNull
-    private final ToggleGroup group = new ToggleGroup();
-    @NonNull
-    private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, "editor");
+    private final @NonNull ToggleGroup group = new ToggleGroup();
+    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, "editor");
 
     {
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -43,8 +41,7 @@ public class ToolsToolbar extends GridPane {
         });
     }
 
-    @NonNull
-    private final ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
+    private final @NonNull ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
             if (button.getUserData() == newValue) {
@@ -76,13 +73,11 @@ public class ToolsToolbar extends GridPane {
         setDrawingEditor(editor);
     }
 
-    @NonNull
-    public ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy) {
+    public @NonNull ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy) {
         return addTool(tool, gridx, gridy, 0);
     }
 
-    @NonNull
-    public ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy, double marginLeft) {
+    public @NonNull ToggleButton addTool(@NonNull Tool tool, int gridx, int gridy, double marginLeft) {
         ToggleButton button = new ToggleButton();
         if (tool.get(Tool.LARGE_ICON_KEY) != null) {
             button.setGraphic(tool.get(Tool.LARGE_ICON_KEY));
@@ -107,8 +102,7 @@ public class ToolsToolbar extends GridPane {
         return button;
     }
 
-    @NonNull
-    public ObjectProperty<DrawingEditor> drawingEditor() {
+    public @NonNull ObjectProperty<DrawingEditor> drawingEditor() {
         return editor;
     }
 

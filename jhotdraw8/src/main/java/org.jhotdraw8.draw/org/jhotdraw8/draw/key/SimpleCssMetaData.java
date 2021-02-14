@@ -54,9 +54,8 @@ public class SimpleCssMetaData<S extends Styleable, V> extends CssMetaData<S, V>
     /**
      * {@inheritDoc}
      */
-    @Nullable
     @Override
-    public final StyleableProperty<V> getStyleableProperty(@Nullable S styleable) {
+    public final @Nullable StyleableProperty<V> getStyleableProperty(@Nullable S styleable) {
         if (styleable != null) {
             StyleableProperty<V> property = function.apply(styleable);
             return property;

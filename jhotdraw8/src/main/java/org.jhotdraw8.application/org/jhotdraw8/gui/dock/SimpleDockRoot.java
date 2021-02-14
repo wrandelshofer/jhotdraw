@@ -35,30 +35,18 @@ import java.util.function.Supplier;
 public class SimpleDockRoot
         extends AbstractDockRoot {
 
-    @NonNull
-    private final static Insets rootDrawnDropZoneInsets = new Insets(10);
-    @NonNull
-    private final static Insets dockSensedDropZoneInsets = new Insets(30);
-    @NonNull
-    private final static Insets rootSensedDropZoneInsets = new Insets(20);
-    @NonNull
-    private final static Insets dockDrawnDropZoneInsets = new Insets(20);
-    @NonNull
-    private final Rectangle dropRect = new Rectangle(0, 0, 0, 0);
-    @NonNull
-    private final BorderPane contentPane = new BorderPane();
-    @Nullable
-    private RectangleTransition transition;
-    @NonNull
-    private Supplier<Track> rootXSupplier = () -> new SplitPaneTrack(Orientation.HORIZONTAL);
-    @NonNull
-    private Supplier<Track> rootYSupplier = () -> new SplitPaneTrack(Orientation.VERTICAL);
-    @NonNull
-    private Supplier<Track> subXSupplier = HBoxTrack::new;
-    @NonNull
-    private Supplier<Track> subYSupplier = VBoxTrack::new;
-    @NonNull
-    private Supplier<Track> zSupplier = TabPaneTrack::new;
+    private static final @NonNull Insets rootDrawnDropZoneInsets = new Insets(10);
+    private static final @NonNull Insets dockSensedDropZoneInsets = new Insets(30);
+    private static final @NonNull Insets rootSensedDropZoneInsets = new Insets(20);
+    private static final @NonNull Insets dockDrawnDropZoneInsets = new Insets(20);
+    private final @NonNull Rectangle dropRect = new Rectangle(0, 0, 0, 0);
+    private final @NonNull BorderPane contentPane = new BorderPane();
+    private @Nullable RectangleTransition transition;
+    private @NonNull Supplier<Track> rootXSupplier = () -> new SplitPaneTrack(Orientation.HORIZONTAL);
+    private @NonNull Supplier<Track> rootYSupplier = () -> new SplitPaneTrack(Orientation.VERTICAL);
+    private @NonNull Supplier<Track> subXSupplier = HBoxTrack::new;
+    private @NonNull Supplier<Track> subYSupplier = VBoxTrack::new;
+    private @NonNull Supplier<Track> zSupplier = TabPaneTrack::new;
 
     public SimpleDockRoot() {
         getChildren().add(contentPane);
@@ -76,8 +64,7 @@ public class SimpleDockRoot
         setOnDragDropped(this::onDragDrop);
     }
 
-    @NonNull
-    private static Bounds subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
+    private static @NonNull Bounds subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
         return new BoundingBox(
                 b.getMinX() + i.getLeft(),
                 b.getMinY() + i.getTop(),
@@ -220,8 +207,7 @@ public class SimpleDockRoot
         return TrackAxis.Z;
     }
 
-    @Nullable
-    private DropZone getZone(double x, double y, @NonNull Bounds b, @NonNull Insets insets) {
+    private @Nullable DropZone getZone(double x, double y, @NonNull Bounds b, @NonNull Insets insets) {
         if (y - b.getMinY() < insets.getTop() && b.getHeight() > insets.getTop() + insets.getBottom()) {
             return DropZone.TOP;
         } else if (b.getMaxY() - y < insets.getBottom() && b.getHeight() > insets.getTop() + insets.getBottom()) {

@@ -20,12 +20,9 @@ import java.util.Objects;
  * @param <A> the arrow data type
  */
 public class Arc<V, A> {
-    @NonNull
-    private final V start;
-    @NonNull
-    private final V end;
-    @Nullable
-    private final A data;
+    private final @NonNull V start;
+    private final @NonNull V end;
+    private final @Nullable A data;
 
     public Arc(@NonNull V start, @NonNull V end, @Nullable A data) {
         Objects.requireNonNull(start, "start is null");
@@ -35,18 +32,15 @@ public class Arc<V, A> {
         this.data = data;
     }
 
-    @Nullable
-    public A getData() {
+    public @Nullable A getData() {
         return data;
     }
 
-    @NonNull
-    public V getEnd() {
+    public @NonNull V getEnd() {
         return end;
     }
 
-    @NonNull
-    public V getStart() {
+    public @NonNull V getStart() {
         return start;
     }
 

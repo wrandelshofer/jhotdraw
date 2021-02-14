@@ -22,11 +22,10 @@ public class RegionFigure extends AbstractRegionFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "Region";
+    public static final String TYPE_SELECTOR = "Region";
 
-    @Nullable
     @Override
-    public Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
+    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
@@ -45,9 +44,8 @@ public class RegionFigure extends AbstractRegionFigure
         applyTransformableFigureProperties(ctx, path);
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

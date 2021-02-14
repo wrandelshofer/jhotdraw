@@ -24,9 +24,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class PolynomialTest {
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testGetRootsFactory() {
+    public @NonNull List<DynamicTest> testGetRootsFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testGetRoots(
                         new Polynomial(1, -1.61900826446281, 0.882231404958678, -0.163453828290417), new double[]{0.635379615995478})),
@@ -39,9 +38,8 @@ public class PolynomialTest {
         );
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testGetRootsInIntervalFactory() {
+    public @NonNull List<DynamicTest> testGetRootsInIntervalFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> testGetRootsInInterval(new Polynomial(1, -1.61900826446281, 0.882231404958678, -0.163453828290417), 0.0, 1.0, new double[]{0.635379615995478})),
                 dynamicTest("1", () -> testGetRootsInInterval(new Polynomial(5), -5.0, 5.0, new double[]{})),

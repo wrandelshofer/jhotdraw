@@ -42,9 +42,8 @@ public class LocatorConnector extends AbstractConnector {
         return locator;
     }
 
-    @Nullable
     @Override
-    public Point2D getPositionInLocal(Figure connection, @NonNull Figure target) {
+    public @Nullable Point2D getPositionInLocal(Figure connection, @NonNull Figure target) {
         return locator.locate(target);
     }
 

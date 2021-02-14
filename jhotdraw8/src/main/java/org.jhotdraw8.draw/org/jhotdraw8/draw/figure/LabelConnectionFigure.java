@@ -12,12 +12,10 @@ public interface LabelConnectionFigure extends Figure {
     /**
      * The label target.
      */
-    @NonNull
-    public final static NullableObjectKey<Figure> LABEL_TARGET = new NullableObjectKey<>("labelTarget", Figure.class, null);
+    public static final @NonNull NullableObjectKey<Figure> LABEL_TARGET = new NullableObjectKey<>("labelTarget", Figure.class, null);
     /**
      * The connector.
      */
-    @NonNull
-    public final static NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
+    public static final @NonNull NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
 
 }

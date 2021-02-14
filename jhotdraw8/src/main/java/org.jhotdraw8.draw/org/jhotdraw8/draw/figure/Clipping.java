@@ -33,9 +33,8 @@ public interface Clipping extends Figure {
         return false;
     }
 
-    @NonNull
     @Override
-    default String getTypeSelector() {
+    default @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

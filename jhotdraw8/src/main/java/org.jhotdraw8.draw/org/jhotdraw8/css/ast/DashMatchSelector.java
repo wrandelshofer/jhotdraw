@@ -22,12 +22,9 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class DashMatchSelector extends AbstractAttributeSelector {
-    @Nullable
-    private final String namespace;
-    @NonNull
-    private final String attributeName;
-    @NonNull
-    private final String substring;
+    private final @Nullable String namespace;
+    private final @NonNull String attributeName;
+    private final @NonNull String substring;
 
     public DashMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
         this.namespace = namespace;
@@ -35,9 +32,8 @@ public class DashMatchSelector extends AbstractAttributeSelector {
         this.substring = substring;
     }
 
-    @Nullable
     @Override
-    protected <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
+    protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
         return (model.attributeValueEquals(element, namespace, attributeName, substring) //
                 || model.attributeValueStartsWith(element, namespace, attributeName, substring + '-'))//
                 ? element : null;

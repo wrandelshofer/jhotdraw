@@ -116,9 +116,8 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         }
     }
 
-    @NonNull
     @Override
-    public CssFont parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull CssFont parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         CssSize fontSize = new CssSize(12.0);

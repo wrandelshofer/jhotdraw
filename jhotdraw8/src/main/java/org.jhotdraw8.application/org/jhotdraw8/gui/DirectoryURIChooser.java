@@ -24,14 +24,12 @@ public class DirectoryURIChooser implements URIChooser {
      */
     private final DirectoryChooser chooser = new DirectoryChooser();
 
-    @NonNull
-    public DirectoryChooser getDirectoryChooser() {
+    public @NonNull DirectoryChooser getDirectoryChooser() {
         return chooser;
     }
 
-    @Nullable
     @Override
-    public URI showDialog(Window parent) {
+    public @Nullable URI showDialog(Window parent) {
         File f = chooser.showDialog(parent);
 
         return f == null ? null : f.toURI();

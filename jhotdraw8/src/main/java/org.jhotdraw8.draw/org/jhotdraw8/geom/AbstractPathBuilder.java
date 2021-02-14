@@ -81,8 +81,7 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         doPathDone();
     }
 
-    @NonNull
-    public Point2D.Double getLastPoint() {
+    public @NonNull Point2D.Double getLastPoint() {
         return new Point2D.Double(lastX, lastY);
     }
 

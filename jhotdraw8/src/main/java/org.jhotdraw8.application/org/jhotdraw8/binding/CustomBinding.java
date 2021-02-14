@@ -260,8 +260,7 @@ public class CustomBinding {
      * @param args   The arguments.
      * @return The string expression
      */
-    @NonNull
-    public static StringExpression formatted(String format, Object... args) {
+    public static @NonNull StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }
 

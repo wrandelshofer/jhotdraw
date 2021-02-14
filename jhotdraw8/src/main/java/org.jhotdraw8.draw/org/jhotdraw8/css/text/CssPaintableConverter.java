@@ -40,20 +40,16 @@ import java.util.function.Consumer;
  */
 public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
 
-    @NonNull
-    private static final CssColorConverter colorConverter = new CssColorConverter(false);
-    @NonNull
-    private static final CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter(false);
-    @NonNull
-    private static final CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
+    private static final @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
+    private static final @NonNull CssLinearGradientConverter linearGradientConverter = new CssLinearGradientConverter(false);
+    private static final @NonNull CssRadialGradientConverter radialGradientConverter = new CssRadialGradientConverter(false);
 
     public CssPaintableConverter(boolean nullable) {
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public String getHelpText() {
+    public @NonNull String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
                 + "\n" + colorConverter.getHelpText()
                 + "\n" + linearGradientConverter.getHelpText()
@@ -71,9 +67,8 @@ public class CssPaintableConverter extends AbstractCssConverter<Paintable> {
         return buf.toString();
     }
 
-    @NonNull
     @Override
-    public Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_FUNCTION) {
             switch (tt.currentStringNonNull()) {
             case CssLinearGradientConverter.LINEAR_GRADIENT_FUNCTION:

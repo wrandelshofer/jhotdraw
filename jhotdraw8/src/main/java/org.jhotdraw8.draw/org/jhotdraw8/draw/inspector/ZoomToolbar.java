@@ -75,15 +75,13 @@ public class ZoomToolbar extends BorderPane {
         zoomSlider.valueProperty().bindBidirectional(zoomPower);
 
         zoomSlider.setLabelFormatter(new StringConverter<Double>() {
-            @NonNull
             @Override
-            public String toString(@NonNull Double object) {
+            public @NonNull String toString(@NonNull Double object) {
                 return Integer.toString(object.intValue());
             }
 
-            @NonNull
             @Override
-            public Double fromString(String string) {
+            public @NonNull Double fromString(String string) {
                 return 0.0;
             }
         });
@@ -95,8 +93,7 @@ public class ZoomToolbar extends BorderPane {
      *
      * @return zoom factor
      */
-    @NonNull
-    public DoubleProperty zoomFactorProperty() {
+    public @NonNull DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
 
@@ -119,13 +116,11 @@ public class ZoomToolbar extends BorderPane {
         zoomPower.set(Math.round((zoomPower.get() + zoomPowerIncrement) / zoomPowerIncrement) * zoomPowerIncrement);
     }
 
-    @NonNull
-    public DoubleProperty minProperty() {
+    public @NonNull DoubleProperty minProperty() {
         return zoomSlider.minProperty();
     }
 
-    @NonNull
-    public DoubleProperty maxProperty() {
+    public @NonNull DoubleProperty maxProperty() {
         return zoomSlider.maxProperty();
     }
 

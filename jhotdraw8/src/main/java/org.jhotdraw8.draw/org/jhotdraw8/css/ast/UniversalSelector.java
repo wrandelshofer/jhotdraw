@@ -19,15 +19,13 @@ import java.util.function.Consumer;
  */
 public class UniversalSelector extends SimpleSelector {
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Universal:*";
     }
 
-    @Nullable
     @Override
-    public <T> T match(SelectorModel<T> model, T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, T element) {
         return element;
     }
 

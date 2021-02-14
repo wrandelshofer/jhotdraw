@@ -22,11 +22,9 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     /**
      * Holds the underlying model.
      */
-    @Nullable
-    private final NonNullObjectProperty<TreeModel<N>> treeModel //
+    private final @Nullable NonNullObjectProperty<TreeModel<N>> treeModel //
             = new NonNullObjectProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<>()) {
-        @Nullable
-        private TreeModel<N> oldValue = null;
+        private @Nullable TreeModel<N> oldValue = null;
 
         @Override
         protected void fireValueChangedEvent() {
@@ -37,8 +35,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
         }
     };
 
-    @Nullable
-    public NonNullObjectProperty<TreeModel<N>> treeModelProperty() {
+    public @Nullable NonNullObjectProperty<TreeModel<N>> treeModelProperty() {
         return treeModel;
     }
 

@@ -30,9 +30,8 @@ public final class ReadOnlySetWrapper<E> extends AbstractReadOnlySet<E> {
         return backingSet.contains(o);
     }
 
-    @NonNull
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
             private final Iterator<? extends E> i = backingSet.iterator();
 

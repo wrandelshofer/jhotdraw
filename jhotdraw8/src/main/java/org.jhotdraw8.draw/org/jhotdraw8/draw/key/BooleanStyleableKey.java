@@ -25,7 +25,7 @@ public class BooleanStyleableKey extends AbstractStyleableKey<@NonNull Boolean>
         implements WriteableStyleableMapAccessor<@NonNull Boolean>,
         NonNullMapAccessor<@NonNull Boolean> {
 
-    final static long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
     private final CssMetaData<? extends Styleable, @NonNull Boolean> cssMetaData;
 
     /**

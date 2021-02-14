@@ -19,8 +19,7 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
      *
      * @return a string representation of this collection
      */
-    @NonNull
-    public String toString() {
+    public @NonNull String toString() {
         Iterator<E> it = iterator();
         if (!it.hasNext()) {
             return "[]";

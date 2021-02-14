@@ -14,7 +14,7 @@ import org.jhotdraw8.event.Event;
  */
 public class ToolEvent extends Event<Tool> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Defines the event type.
@@ -36,9 +36,8 @@ public class ToolEvent extends Event<Tool> {
         return eventType;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "ToolEvent{" + "type=" + eventType + " tool=" + getSource()
                 + '}';
     }

@@ -23,8 +23,7 @@ public class ConstantStringExpression extends StringExpression {
         this.value = value;
     }
 
-    @NonNull
-    public static ConstantStringExpression of(String value) {
+    public static @NonNull ConstantStringExpression of(String value) {
         return new ConstantStringExpression(value);
     }
 

@@ -25,7 +25,7 @@ import static java.lang.Math.toRadians;
  */
 public class SvgPath2D extends Path2D.Double {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Adds an elliptical arc, defined by two radii, an angle from the x-axis, a

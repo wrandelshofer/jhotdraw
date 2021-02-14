@@ -215,32 +215,28 @@ public class BezierNode {
         return Double.doubleToLongBits(this.y2) == Double.doubleToLongBits(other.y2);
     }
 
-    @NonNull
-    public Point2D getC(int mask) {
+    public @NonNull Point2D getC(int mask) {
         switch (mask) {
-            case C0_MASK:
-                return getC0();
-            case C1_MASK:
-                return getC1();
-            case C2_MASK:
-                return getC2();
-            default:
-                throw new IllegalArgumentException("illegal mask:" + mask);
+        case C0_MASK:
+            return getC0();
+        case C1_MASK:
+            return getC1();
+        case C2_MASK:
+            return getC2();
+        default:
+            throw new IllegalArgumentException("illegal mask:" + mask);
         }
     }
 
-    @NonNull
-    public Point2D getC0() {
+    public @NonNull Point2D getC0() {
         return new Point2D(x0, y0);
     }
 
-    @NonNull
-    public Point2D getC1() {
+    public @NonNull Point2D getC1() {
         return new Point2D(x1, y1);
     }
 
-    @NonNull
-    public Point2D getC2() {
+    public @NonNull Point2D getC2() {
         return new Point2D(x2, y2);
     }
 
@@ -425,8 +421,7 @@ public class BezierNode {
      * @param c    the c to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC(int mask, @NonNull Point2D c) {
+    public @NonNull BezierNode setC(int mask, @NonNull Point2D c) {
         double x = c.getX(), y = c.getY();
         double nx0, ny0, nx1, ny1, nx2, ny2;
         if ((mask & C0_MASK) != 0) {
@@ -458,8 +453,7 @@ public class BezierNode {
      * @param c0 the c0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC0(@NonNull Point2D c0) {
+    public @NonNull BezierNode setC0(@NonNull Point2D c0) {
         return new BezierNode(mask, equidistant, collinear, c0.getX(), c0.getY(), x1, y1, x2, y2);
     }
 
@@ -468,8 +462,7 @@ public class BezierNode {
      * @param y0 the y0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC0(double x0, double y0) {
+    public @NonNull BezierNode setC0(double x0, double y0) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -477,8 +470,7 @@ public class BezierNode {
      * @param c0 the c0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC0AndTranslateC1C2(@NonNull Point2D c0) {
+    public @NonNull BezierNode setC0AndTranslateC1C2(@NonNull Point2D c0) {
         double x = c0.getX();
         double y = c0.getY();
         return new BezierNode(mask, equidistant, collinear, x, y, x1 + x - x0, y1 + y - y0, x2 + x - x0, y2 + y - y0);
@@ -488,8 +480,7 @@ public class BezierNode {
      * @param c1 the c0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC1(@NonNull Point2D c1) {
+    public @NonNull BezierNode setC1(@NonNull Point2D c1) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, c1.getX(), c1.getY(), x2, y2);
     }
 
@@ -498,8 +489,7 @@ public class BezierNode {
      * @param y1 the y1to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC1(double x1, double y1) {
+    public @NonNull BezierNode setC1(double x1, double y1) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -507,8 +497,7 @@ public class BezierNode {
      * @param c2 the c0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC2(@NonNull Point2D c2) {
+    public @NonNull BezierNode setC2(@NonNull Point2D c2) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, c2.getX(), c2.getY());
     }
 
@@ -517,8 +506,7 @@ public class BezierNode {
      * @param y2 the y2 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setC2(double x2, double y2) {
+    public @NonNull BezierNode setC2(double x2, double y2) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -526,8 +514,7 @@ public class BezierNode {
      * @param collinear the collinear to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setCollinear(boolean collinear) {
+    public @NonNull BezierNode setCollinear(boolean collinear) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -535,8 +522,7 @@ public class BezierNode {
      * @param equidistant the equidistant to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setEquidistant(boolean equidistant) {
+    public @NonNull BezierNode setEquidistant(boolean equidistant) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -544,8 +530,7 @@ public class BezierNode {
      * @param mask the mask to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setMask(int mask) {
+    public @NonNull BezierNode setMask(int mask) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -553,8 +538,7 @@ public class BezierNode {
      * @param x0 the x0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setX0(double x0) {
+    public @NonNull BezierNode setX0(double x0) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -562,8 +546,7 @@ public class BezierNode {
      * @param x1 the x1 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setX1(double x1) {
+    public @NonNull BezierNode setX1(double x1) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -571,8 +554,7 @@ public class BezierNode {
      * @param x2 the x2 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setX2(double x2) {
+    public @NonNull BezierNode setX2(double x2) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -580,8 +562,7 @@ public class BezierNode {
      * @param y0 the y0 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setY0(double y0) {
+    public @NonNull BezierNode setY0(double y0) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -589,8 +570,7 @@ public class BezierNode {
      * @param y1 the y1 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setY1(double y1) {
+    public @NonNull BezierNode setY1(double y1) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
@@ -598,19 +578,16 @@ public class BezierNode {
      * @param y2 the y2 to set
      * @return a new instance
      */
-    @NonNull
-    public BezierNode setY2(double y2) {
+    public @NonNull BezierNode setY2(double y2) {
         return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "BezierNode{" + "collinear=" + collinear + ", equidistant=" + equidistant + ", mask=" + mask + ", x0=" + x0 + ", x1=" + x1 + ", x2=" + x2 + ", y0=" + y0 + ", y1=" + y1 + ", y2=" + y2 + '}';
     }
 
-    @NonNull
-    public BezierNode transform(@NonNull Transform transform) {
+    public @NonNull BezierNode transform(@NonNull Transform transform) {
         Point2D p0 = transform.transform(x0, y0);
         Point2D p1 = transform.transform(x1, y1);
         Point2D p2 = transform.transform(x2, y2);

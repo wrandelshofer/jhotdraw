@@ -75,7 +75,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
         }
     }
 
-    private boolean dependsOn(@NonNull final Figure f, @NonNull final Set<Figure> others) {
+    private boolean dependsOn(final @NonNull Figure f, final @NonNull Set<Figure> others) {
         return StreamSupport.stream(new BreadthFirstSpliterator<>(Figure::getLayoutSubjects, f), false)
                 .anyMatch(fg -> (fg != f) && others.contains(fg) ||
                         (fg.getParent() != null && containsAny(others, fg.getParent().getPath())));

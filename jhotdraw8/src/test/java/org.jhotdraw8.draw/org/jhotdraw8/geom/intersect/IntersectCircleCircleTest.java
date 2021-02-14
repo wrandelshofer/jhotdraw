@@ -22,9 +22,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class IntersectCircleCircleTest {
 
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testCircleCircleFactory() {
+    public @NonNull List<DynamicTest> testCircleCircleFactory() {
         return Arrays.asList(
                 dynamicTest("2 intersections same radius", () -> testIntersectCircleCircle_5args(
                         100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
@@ -45,9 +44,8 @@ public class IntersectCircleCircleTest {
         );
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testCircleCircleFactoryEx() {
+    public @NonNull List<DynamicTest> testCircleCircleFactoryEx() {
         return Arrays.asList(
                 dynamicTest("2 intersections same radius", () -> testIntersectCircleCircle_5argsEx(
                         100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),

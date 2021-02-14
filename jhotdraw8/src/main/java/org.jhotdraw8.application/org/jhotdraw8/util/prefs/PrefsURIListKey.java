@@ -19,8 +19,7 @@ import java.util.prefs.Preferences;
  */
 public class PrefsURIListKey {
     private final String key;
-    @NonNull
-    private final List<String> defaultValue;
+    private final @NonNull List<String> defaultValue;
 
 
     public PrefsURIListKey(String key, @NonNull List<String> defaultValue) {
@@ -29,8 +28,7 @@ public class PrefsURIListKey {
 
     }
 
-    @NonNull
-    public List<String> get(Preferences prefs) {
+    public @NonNull List<String> get(Preferences prefs) {
         return defaultValue;
     }
 

@@ -17,29 +17,25 @@ public class IntersectEllipseQuadCurve {
     private IntersectEllipseQuadCurve() {
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveEllipse(
+    public static @NonNull IntersectionResult intersectQuadCurveEllipse(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry) {
         return intersectQuadCurveEllipse(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResult intersectQuadCurveEllipse(
+    public static @NonNull IntersectionResult intersectQuadCurveEllipse(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry, double epsilon) {
         return intersectQuadCurveEllipse(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(bcx, bcy), brx, bry, epsilon);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectQuadCurveEllipseEx(
+    public static @NonNull IntersectionResultEx intersectQuadCurveEllipseEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry) {
         return intersectQuadCurveEllipseEx(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectQuadCurveEllipseEx(
+    public static @NonNull IntersectionResultEx intersectQuadCurveEllipseEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry, double epsilon) {
         IntersectionResult result = intersectQuadCurveEllipse(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(bcx, bcy), brx, bry, epsilon);
@@ -75,8 +71,7 @@ public class IntersectEllipseQuadCurve {
      * @return the computed result. Status can be{@link IntersectionStatus#INTERSECTION},
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurveEllipse(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double rx, double ry) {
+    public static @NonNull IntersectionResult intersectQuadCurveEllipse(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double rx, double ry) {
         return intersectQuadCurveEllipse(p0, p1, p2, c, rx, ry, Geom.REAL_THRESHOLD);
     }
 
@@ -94,8 +89,7 @@ public class IntersectEllipseQuadCurve {
      * @param epsilon
      * @return
      */
-    @NonNull
-    public static IntersectionResult intersectQuadCurveEllipse(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double rx, double ry, double epsilon) {
+    public static @NonNull IntersectionResult intersectQuadCurveEllipse(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double rx, double ry, double epsilon) {
         final Point2D.Double c2, c1, c0; // coefficients of quadratic
         c2 = Points2D.sum(p0, Points2D.multiply(p1, -2), p2);
         c1 = Points2D.add(Points2D.multiply(p0, -2), Points2D.multiply(p1, 2));
@@ -143,8 +137,7 @@ public class IntersectEllipseQuadCurve {
         return new IntersectionResult(status, result);
     }
 
-    @NonNull
-    public static IntersectionResult intersectEllipseQuadCurve(
+    public static @NonNull IntersectionResult intersectEllipseQuadCurve(
             double acx, double acy, double arx, double ary,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
         IntersectionResult resultB = intersectQuadCurveEllipse(new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), new Point2D.Double(b2x, b2y), new Point2D.Double(acx, acy), arx, ary);
@@ -161,15 +154,13 @@ public class IntersectEllipseQuadCurve {
         return new IntersectionResult(resultB.getStatus(), list);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectEllipseQuadCurveEx(
+    public static @NonNull IntersectionResultEx intersectEllipseQuadCurveEx(
             double acx, double acy, double arx, double ary,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
         return intersectEllipseQuadCurveEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, b2x, b2y, Geom.REAL_THRESHOLD);
     }
 
-    @NonNull
-    public static IntersectionResultEx intersectEllipseQuadCurveEx(
+    public static @NonNull IntersectionResultEx intersectEllipseQuadCurveEx(
             double acx, double acy, double arx, double ary,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double epsilon) {
         IntersectionResultEx resultB = intersectQuadCurveEllipseEx(

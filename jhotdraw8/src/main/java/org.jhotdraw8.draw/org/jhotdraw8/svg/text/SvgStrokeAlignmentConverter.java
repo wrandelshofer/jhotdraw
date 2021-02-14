@@ -40,9 +40,8 @@ public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType
         super(nullable);
     }
 
-    @NonNull
     @Override
-    public StrokeType parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull StrokeType parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StrokeType type;
         tt.requireNextToken(CssTokenType.TT_IDENT, "One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
         switch (tt.currentStringNonNull()) {

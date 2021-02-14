@@ -20,7 +20,7 @@ import java.net.URI;
  * @author Werner Randelshofer
  */
 public class XmlEncoderOutputFormat extends AbstractPropertyBean implements OutputFormat {
-    public final static String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
+    public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
 
     @Override
     public void write(@NonNull OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {

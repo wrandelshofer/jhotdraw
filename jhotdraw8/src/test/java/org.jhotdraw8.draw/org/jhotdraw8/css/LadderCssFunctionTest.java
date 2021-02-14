@@ -24,9 +24,8 @@ public class LadderCssFunctionTest extends AbstractCssFunctionProcessorTest {
         return new SimpleCssFunctionProcessor<>(functions, model, customProperties);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testLadderCssFunctionTestFactory() {
+    public @NonNull List<DynamicTest> testLadderCssFunctionTestFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestProcess("foo", "foo")),
                 dynamicTest("black on white, default", () -> doTestProcess("ladder(white, white 0.49, black 0.5)", "black")),

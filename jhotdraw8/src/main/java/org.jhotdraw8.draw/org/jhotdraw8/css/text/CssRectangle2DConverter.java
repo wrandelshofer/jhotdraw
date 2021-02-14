@@ -38,9 +38,8 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
         this.withComma = withComma;
     }
 
-    @NonNull
     @Override
-    public CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, width, height;
         x = parseDimension(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -53,18 +52,17 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
         return new CssRectangle2D(x, y, width, height);
     }
 
-    @NonNull
-    private CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
+    private @NonNull CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                return new CssSize(tt.currentNumberNonNull().doubleValue());
-            case CssTokenType.TT_DIMENSION:
-                return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
-            case CssTokenType.TT_IDENT:
-                switch (tt.currentStringNonNull()) {
-                    case "INF":
-                        return new CssSize(Double.POSITIVE_INFINITY);
-                    case "-INF":
+        case CssTokenType.TT_NUMBER:
+            return new CssSize(tt.currentNumberNonNull().doubleValue());
+        case CssTokenType.TT_DIMENSION:
+            return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+        case CssTokenType.TT_IDENT:
+            switch (tt.currentStringNonNull()) {
+            case "INF":
+                return new CssSize(Double.POSITIVE_INFINITY);
+            case "-INF":
                         return new CssSize(Double.NEGATIVE_INFINITY);
                     case "NaN":
                         return new CssSize(Double.NaN);

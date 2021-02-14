@@ -31,10 +31,8 @@ public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
     private final Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialogFactory;
-    @NonNull
-    public final static Key<URIChooser> EXPORT_CHOOSER_KEY = new ObjectKey<>("exportChooser", URIChooser.class);
-    @NonNull
-    public final static Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new ObjectKey<>("exportChooserFactory",
+    public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new ObjectKey<>("exportChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new ObjectKey<>("exportChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
             }, null);
 
@@ -64,8 +62,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         this.optionsDialogFactory = optionsDialog;
     }
 
-    @Nullable
-    protected URIChooser getChooser(FileBasedActivity view) {
+    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(EXPORT_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(EXPORT_CHOOSER_FACTORY_KEY);
@@ -75,9 +72,8 @@ public class ExportFileAction extends AbstractSaveFileAction {
         return chooser;
     }
 
-    @Nullable
     @Override
-    protected Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected @Nullable Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return optionsDialogFactory == null ? null : optionsDialogFactory.apply(format);
     }
 

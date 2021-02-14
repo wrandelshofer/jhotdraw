@@ -173,11 +173,11 @@ public class DumpGraphs {
      *                         use as arrow attributes
      * @throws java.io.IOException if writing fails
      */
-    public static <V, A> void dumpAsDot(@NonNull final Appendable w,
-                                        @NonNull final DirectedGraph<V, A> graph,
-                                        @NonNull final Function<V, String> vertexToString,
-                                        @Nullable final Function<V, String> vertexAttributes,
-                                        @Nullable final Function<A, String> arrowAttributes) throws IOException {
+    public static <V, A> void dumpAsDot(final @NonNull Appendable w,
+                                        final @NonNull DirectedGraph<V, A> graph,
+                                        final @NonNull Function<V, String> vertexToString,
+                                        final @Nullable Function<V, String> vertexAttributes,
+                                        final @Nullable Function<A, String> arrowAttributes) throws IOException {
         w.append("digraph G {\n");
 
         // dump vertices

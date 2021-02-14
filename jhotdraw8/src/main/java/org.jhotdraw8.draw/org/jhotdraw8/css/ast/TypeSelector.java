@@ -19,27 +19,23 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class TypeSelector extends SimpleSelector {
-    @Nullable
-    private final String namespace;
-    @NonNull
-    private final String type;
+    private final @Nullable String namespace;
+    private final @NonNull String type;
 
     public TypeSelector(@Nullable String namespace, @NonNull String type) {
         this.namespace = namespace;
         this.type = type;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Type:"
                 + (namespace == null ? "" : namespace + "|")
                 + type;
     }
 
-    @Nullable
     @Override
-    public <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasType(element, namespace, type)) //
                 ? element : null;
     }

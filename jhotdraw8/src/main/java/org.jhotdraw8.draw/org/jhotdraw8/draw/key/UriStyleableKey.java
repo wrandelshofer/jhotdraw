@@ -26,10 +26,9 @@ import java.util.function.Function;
  */
 public class UriStyleableKey extends AbstractStyleableKey<URI> implements WriteableStyleableMapAccessor<URI> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private final CssMetaData<?, URI> cssMetaData;
+    private final @NonNull CssMetaData<?, URI> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the

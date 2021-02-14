@@ -27,20 +27,17 @@ public interface XmlInputFormatMixin {
 
     boolean isNamespaceAware();
 
-    @NonNull
-    default Figure read(InputStream in, Drawing drawing) throws IOException {
+    default @NonNull Figure read(InputStream in, Drawing drawing) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing);
     }
 
-    @NonNull
-    default Figure read(Reader in, Drawing drawing) throws IOException {
+    default @NonNull Figure read(Reader in, Drawing drawing) throws IOException {
         Document doc = XmlUtil.read(in, isNamespaceAware());
         return read(doc, drawing);
     }
 
-    @NonNull
-    default Figure read(@NonNull String string, Drawing drawing) throws IOException {
+    default @NonNull Figure read(@NonNull String string, Drawing drawing) throws IOException {
         try (StringReader in = new StringReader(string)) {
             return read(in, drawing);
         }

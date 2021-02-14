@@ -20,8 +20,7 @@ public interface MarkerSegmentableFigure extends Figure {
     @Nullable NullableSvgPathStyleableKey MARKER_SEGMENT_SHAPE = new NullableSvgPathStyleableKey("marker-segment-shape", null);
     DoubleStyleableKey MARKER_SEGMENT_SCALE_FACTOR = new DoubleStyleableKey("marker-segment-scale-factor", 1.0);
 
-    @Nullable
-    default String getMarkerSegmentShape() {
+    default @Nullable String getMarkerSegmentShape() {
         return getStyled(MARKER_SEGMENT_SHAPE);
     }
 

@@ -74,12 +74,12 @@ public class MLDiagramFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public final static String TYPE_SELECTOR = "MLDiagram";
+    public static final String TYPE_SELECTOR = "MLDiagram";
 
-    public final static NullableStringStyleableKey DIAGRAM_KIND = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "diagramKind");
-    public final static NullableStringStyleableKey MODEL_ELEMENT_TYPE = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "modelElementType");
-    public final static NullableStringStyleableKey MODEL_ELEMENT_NAME = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "modelElementName");
-    public final static NullableStringStyleableKey DIAGRAM_NAME = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "diagramName");
+    public static final NullableStringStyleableKey DIAGRAM_KIND = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "diagramKind");
+    public static final NullableStringStyleableKey MODEL_ELEMENT_TYPE = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "modelElementType");
+    public static final NullableStringStyleableKey MODEL_ELEMENT_NAME = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "modelElementName");
+    public static final NullableStringStyleableKey DIAGRAM_NAME = new NullableStringStyleableKey(MLConstants.MODEL_NAMESPACE_PREFIX, "diagramName");
     /**
      * This key is used to tag editable nodes.
      */
@@ -96,9 +96,8 @@ public class MLDiagramFigure extends AbstractLeafFigure
 */
     }
 
-    @NonNull
     @Override
-    public Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(RenderContext ctx) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
         Path p = new Path();
@@ -116,9 +115,8 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
 
-    @Nullable
     @Override
-    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
+    public @Nullable TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
         if (node == null) {
             return null;
         }
@@ -199,9 +197,8 @@ public class MLDiagramFigure extends AbstractLeafFigure
         pathElements.add(new ClosePath());
     }
 
-    @NonNull
     @Override
-    public String getTypeSelector() {
+    public @NonNull String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -221,9 +218,8 @@ public class MLDiagramFigure extends AbstractLeafFigure
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
-    @NonNull
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (path == null) {
             layout(new SimpleRenderContext());
         }

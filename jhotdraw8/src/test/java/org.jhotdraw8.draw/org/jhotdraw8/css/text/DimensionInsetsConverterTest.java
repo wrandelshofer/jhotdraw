@@ -18,8 +18,7 @@ class DimensionInsetsConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    static
-    public void doTestFromString(CssInsets expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssInsets expected, @NonNull String string) throws Exception {
         System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
@@ -30,9 +29,8 @@ class DimensionInsetsConverterTest {
         assertEquals(actual, expected);
     }
 
-    @NonNull
     @TestFactory
-    public List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> testFromStringFactory() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new CssInsets(10, 20, 30, 40, "mm"), "10mm 20mm 30mm 40mm")),
                 dynamicTest("2", () -> doTestFromString(new CssInsets(10, 10, 20, 40, "mm"), "10mm 10mm 20mm 40mm")),

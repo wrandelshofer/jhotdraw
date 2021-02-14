@@ -35,9 +35,8 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
     }
 
 
-    @NonNull
     @Override
-    public ImmutableList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull ImmutableList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
         }

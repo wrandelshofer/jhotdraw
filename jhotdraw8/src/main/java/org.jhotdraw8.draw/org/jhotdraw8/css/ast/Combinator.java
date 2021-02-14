@@ -24,9 +24,8 @@ public abstract class Combinator extends Selector {
 
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Combinator{" + "simpleSelector=" + firstSelector + ", selector=" + secondSelector + '}';
     }
 

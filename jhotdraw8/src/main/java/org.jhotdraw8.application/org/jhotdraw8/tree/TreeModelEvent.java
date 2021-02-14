@@ -15,7 +15,7 @@ import org.jhotdraw8.event.Event;
  */
 public class TreeModelEvent<E> extends Event<TreeModel<E>> {
 
-    private final static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public enum EventType {
         /**
@@ -75,38 +75,31 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         this.eventType = eventType;
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> subtreeNodesInvalidated(@NonNull TreeModel<E> source, E subtreeRot) {
+    public static @NonNull <E> TreeModelEvent<E> subtreeNodesInvalidated(@NonNull TreeModel<E> source, E subtreeRot) {
         return new TreeModelEvent<>(source, EventType.SUBTREE_NODES_CHANGED, subtreeRot, null, null, -1);
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> nodeAddedToParent(@NonNull TreeModel<E> source, E child, E parent, int index) {
+    public static @NonNull <E> TreeModelEvent<E> nodeAddedToParent(@NonNull TreeModel<E> source, E child, E parent, int index) {
         return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_PARENT, child, parent, null, index);
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> nodeRemovedFromParent(@NonNull TreeModel<E> source, E child, E parent, int index) {
+    public static @NonNull <E> TreeModelEvent<E> nodeRemovedFromParent(@NonNull TreeModel<E> source, E child, E parent, int index) {
         return new TreeModelEvent<>(source, EventType.NODE_REMOVED_FROM_PARENT, child, parent, null, index);
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> nodeAddedToTree(@NonNull TreeModel<E> source, E root, E node) {
+    public static @NonNull <E> TreeModelEvent<E> nodeAddedToTree(@NonNull TreeModel<E> source, E root, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_ADDED_TO_TREE, node, null, root, -1);
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> nodeRemovedFromTree(@NonNull TreeModel<E> source, E root, E node) {
+    public static @NonNull <E> TreeModelEvent<E> nodeRemovedFromTree(@NonNull TreeModel<E> source, E root, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_REMOVED_FROM_TREE, node, null, root, -1);
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> nodeChanged(@NonNull TreeModel<E> source, E node) {
+    public static @NonNull <E> TreeModelEvent<E> nodeChanged(@NonNull TreeModel<E> source, E node) {
         return new TreeModelEvent<>(source, EventType.NODE_CHANGED, node, null, null, -1);
     }
 
-    @NonNull
-    public static <E> TreeModelEvent<E> rootChanged(@NonNull TreeModel<E> source, E root) {
+    public static @NonNull <E> TreeModelEvent<E> rootChanged(@NonNull TreeModel<E> source, E root) {
         return new TreeModelEvent<>(source, EventType.ROOT_CHANGED, root, null, null, -1);
     }
 
@@ -164,9 +157,8 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         return eventType;
     }
 
-    @NonNull
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "TreeModelEvent{"
                 + "node=" + node
                 + ", parent=" + parent
