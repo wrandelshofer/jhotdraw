@@ -4,29 +4,19 @@
  */
 package org.jhotdraw8.samples.modeler.model;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonNullMapAccessor;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
-import org.jhotdraw8.draw.key.SimpleCssMetaData;
 import org.jhotdraw8.samples.modeler.text.CssUmlCompartmentalizedDataConverter;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<@NonNull MLCompartmentalizedData>
         implements WriteableStyleableMapAccessor<@NonNull MLCompartmentalizedData>, NonNullMapAccessor<@NonNull MLCompartmentalizedData> {
 
     static final long serialVersionUID = 1L;
-    private final @NonNull CssMetaData<? extends Styleable, MLCompartmentalizedData> cssMetaData;
+    private final @NonNull CssUmlCompartmentalizedDataConverter converter;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -39,6 +29,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
         this(namespace, name, new MLCompartmentalizedData());
     }
 
+
     /**
      * Creates a new instance with the specified name, mask and default value.
      *  @param namespace    The namespace
@@ -48,7 +39,6 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
     public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, MLCompartmentalizedData defaultValue) {
         this(namespace, name, defaultValue, null);
     }
-
 
     /**
      * Creates a new instance with the specified name, mask and default value.
@@ -60,26 +50,7 @@ public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<
     public MLCompartmentedDataStyleableFigureKey(@Nullable String namespace, @NonNull String name, MLCompartmentalizedData defaultValue, String helpText) {
         super(namespace, name, MLCompartmentalizedData.class, false, defaultValue);
         converter = new CssUmlCompartmentalizedDataConverter(true);
-        Function<Styleable, StyleableProperty<MLCompartmentalizedData>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, MLCompartmentalizedData> converter = new StyleConverterAdapter<>(this.converter);
-        CssMetaData<Styleable, MLCompartmentalizedData> md
-                = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
-        cssMetaData = md;
     }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull MLCompartmentalizedData> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private final @NonNull CssUmlCompartmentalizedDataConverter converter;
 
     @Override
     public @NonNull Converter<MLCompartmentalizedData> getCssConverter() {

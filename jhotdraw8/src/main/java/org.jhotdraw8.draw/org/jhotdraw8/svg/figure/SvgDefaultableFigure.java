@@ -151,12 +151,12 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <a href="https://www.w3.org/TR/SVGTiny12/text.html#TextAlignmentProperties">
      * SVG Tiny 1.2, Text Alignment Properties</a>
      */
-    @NonNull DefaultableStyleableKey<SvgTextAnchor> TEXT_ANCHOR =
+    @NonNull DefaultableStyleableKey<SvgTextAnchor> TEXT_ANCHOR_KEY =
             new DefaultableStyleableKey<SvgTextAnchor>("text-anchor",
                     new TypeToken<CssDefaultableValue<SvgTextAnchor>>() {
                     },
                     new CssEnumConverter<>(SvgTextAnchor.class),
-                    new CssDefaultableValue<>(SvgTextAnchor.START), SvgTextAnchor.START
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgTextAnchor.START
             );
     /**
      * shape-rendering.
@@ -321,6 +321,9 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     default void applySvgDefaultableFillProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         Paintable fill = getDefaultableStyled(FILL_KEY);
+        if ((fill instanceof CssColor) && ("currentColor".equals(((CssColor) fill).getName()))) {
+            fill = getDefaultableStyled(COLOR_KEY);
+        }
         shape.setFill(Paintable.getPaint(fill, ctx));
 
         double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
@@ -335,6 +338,9 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     default void applySvgDefaultableStrokeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         Paintable stroke = getDefaultableStyled(STROKE_KEY);
+        if ((stroke instanceof CssColor) && ("currentColor".equals(((CssColor) stroke).getName()))) {
+            stroke = getDefaultableStyled(COLOR_KEY);
+        }
         shape.setStroke(Paintable.getPaint(stroke, ctx));
 
         CssSize sw = getDefaultableStyledNonNull(STROKE_WIDTH_KEY);

@@ -226,7 +226,7 @@ public class SvgTextFigure extends AbstractLeafFigure
 
     protected void updateTextNode(@NonNull RenderContext ctx, @NonNull Text tn) {
         applySvgDefaultableFillProperties(ctx,tn);
-        SvgTextAnchor textAnchor = getDefaultableStyledNonNull(TEXT_ANCHOR);
+        SvgTextAnchor textAnchor = getDefaultableStyledNonNull(TEXT_ANCHOR_KEY);
         switch (textAnchor) {
         case START:
             tn.setTextAlignment(TextAlignment.LEFT);

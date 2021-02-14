@@ -4,10 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
@@ -15,14 +11,10 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssSymmetricPoint2DConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  * SymmetricCssPoint2DStyleableMapAccessor.
@@ -34,9 +26,8 @@ public class SymmetricCssPoint2DStyleableMapAccessor
         implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
     private static final long serialVersionUID = 1L;
-    private @NonNull Converter<@NonNull CssPoint2D> converter;
+    private @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricPoint2DConverter();
 
-    private final @NonNull CssMetaData<?, @NonNull CssPoint2D> cssMetaData;
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> xKey;
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> yKey;
 
@@ -52,19 +43,6 @@ public class SymmetricCssPoint2DStyleableMapAccessor
                                                    @NonNull NonNullMapAccessor<@NonNull CssSize> yKey) {
         super(name, CssPoint2D.class, new NonNullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
-        Function<Styleable, StyleableProperty<CssPoint2D>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssPoint2D> cnvrtr
-                = new StyleConverterAdapter<>(getCssConverter());
-        CssMetaData<@NonNull Styleable, @NonNull CssPoint2D> md
-                = new SimpleCssMetaData<>(property, function,
-                cnvrtr, getDefaultValue(), inherits);
-        cssMetaData = md;
-
         this.xKey = xKey;
         this.yKey = yKey;
     }
@@ -77,16 +55,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
     @Override
     public @NonNull Converter<CssPoint2D> getCssConverter() {
-        if (converter == null) {
-            converter = new CssSymmetricPoint2DConverter();
-        }
         return converter;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, CssPoint2D> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     @Override

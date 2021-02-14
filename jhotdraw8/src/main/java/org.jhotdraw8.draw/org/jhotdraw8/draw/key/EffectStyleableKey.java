@@ -4,14 +4,9 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.Effect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssEffectConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
@@ -24,7 +19,6 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
 
     static final long serialVersionUID = 1L;
     private final CssEffectConverter converter = new CssEffectConverter();
-    private final CssMetaData<? extends Styleable, Effect> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,19 +38,6 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
      */
     public EffectStyleableKey(String name, Effect defaultValue) {
         super(name, Effect.class, defaultValue);
-
-        StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
-        cssMetaData = factory.createEffectCssMetaData(
-                Figure.JHOTDRAW_CSS_PREFIX + getName(), s -> {
-                    StyleablePropertyBean spb = (StyleablePropertyBean) s;
-                    return spb.getStyleableProperty(this);
-                });
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, Effect> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     @Override

@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.css.StyleOrigin;
-import javafx.css.StyleableProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -174,11 +173,6 @@ public class FigureTest {
 
         public boolean hasPropertyChangeListeners() {
             return false;
-        }
-
-        @Override
-        public <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override

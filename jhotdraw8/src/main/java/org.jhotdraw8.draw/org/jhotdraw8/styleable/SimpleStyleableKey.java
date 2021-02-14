@@ -31,7 +31,7 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      * @param converter the converter
      */
     public SimpleStyleableKey(@NonNull String key, @NonNull Type type, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter) {
-        this(key, type, metaData, converter, null);
+        this(key, type, converter, null);
     }
 
     /**
@@ -40,16 +40,15 @@ public class SimpleStyleableKey<T> extends SimpleReadOnlyStyleableKey<T> {
      *
      * @param key          The name of the name.
      * @param type         The type of the value.
-     * @param metaData     The CSS meta data.
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public SimpleStyleableKey(@NonNull String key, @NonNull Type type, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter, T defaultValue) {
-        super(key, type, metaData, converter, defaultValue);
+    public SimpleStyleableKey(@NonNull String key, @NonNull Type type, @NonNull Converter<T> converter, T defaultValue) {
+        super(key, type, converter, defaultValue);
     }
 
-    public SimpleStyleableKey(@NonNull String key, @NonNull String cssName, @NonNull Type type, @Nullable CssMetaData<?, T> metaData, @NonNull Converter<T> converter, T defaultValue) {
-        super(key, cssName, type, metaData, converter, defaultValue);
+    public SimpleStyleableKey(@NonNull String key, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, T defaultValue) {
+        super(key, cssName, type, converter, defaultValue);
     }
 
 

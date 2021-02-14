@@ -248,23 +248,6 @@ public class StyleablePropertyMap {
         return bean;
     }
 
-    public @Nullable <T> StyleableProperty<T> getStyleableProperty(Key<T> key) {
-        @SuppressWarnings("unchecked")
-        StyleableProperty<T> sp = (StyleableProperty<T>) styleableProperties.get(key);
-        if (sp == null) {
-            if (key instanceof WriteableStyleableMapAccessor) {
-                @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp = new MapStyleableProperty<>(key, ((WriteableStyleableMapAccessor) key).getCssMetaData());
-                sp = temp;
-            } else {
-                @SuppressWarnings("unchecked")
-                StyleableProperty<T> temp = new MapStyleableProperty<>(key, null);
-                sp = temp;
-            }
-            styleableProperties.put(key, sp);
-        }
-        return sp;
-    }
 
     public @Nullable <T> T remove(@NonNull StyleOrigin origin, Key<T> key) {
         T value = null;

@@ -10,9 +10,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.layout.HBox;
@@ -104,13 +102,13 @@ public class SvgReadWriteAndCompareTest {
                 .filter(f -> f.getFileName().toString().endsWith(".svg"))
                 .sorted(Comparator.comparing(p -> p.getFileName().toString()))
                 .map(p -> dynamicTest(p.getFileName().toString()
-                        , () -> dow3cSvgTiny12TestSuiteTest(p)));
+                        , () -> doTest(p)));
 
     }
 
-    private void dow3cSvgTiny12TestSuiteTest(Path testFile) throws Exception{
+    private void doTest(Path testFile) throws Exception {
         System.out.println("Performing W3C SVG 1.2 Tiny test:");
-        System.out.println("  test file     : " + testFile);
+        System.out.println("  test file     : " + testFile.toAbsolutePath());
 
         FigureSvgTinyReader reader = new FigureSvgTinyReader();
         reader.setBestEffort(true);

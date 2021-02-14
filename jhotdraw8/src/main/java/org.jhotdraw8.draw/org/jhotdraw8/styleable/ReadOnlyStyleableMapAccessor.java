@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.styleable;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapAccessor;
@@ -27,14 +25,6 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @return name string.
      */
     @NonNull String getName();
-
-    /**
-     * Gets the CssMetaData.
-     *
-     * @return the meta data
-     */
-    @NonNull
-    CssMetaData<@NonNull ? extends @NonNull Styleable, T> getCssMetaData();
 
     /**
      * Gets the converter.

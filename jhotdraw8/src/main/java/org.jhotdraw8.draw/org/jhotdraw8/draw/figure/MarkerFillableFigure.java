@@ -38,7 +38,7 @@ public interface MarkerFillableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.NON_ZERO}.
      */
-    NullableEnumStyleableKey<FillRule> MARKER_FILL_RULE = new NullableEnumStyleableKey<>("marker-fill-rule", FillRule.class, false, FillRule.NON_ZERO);
+    NullableEnumStyleableKey<FillRule> MARKER_FILL_RULE = new NullableEnumStyleableKey<>("marker-fill-rule", FillRule.class, FillRule.NON_ZERO);
 
     /**
      * Updates a shape node.

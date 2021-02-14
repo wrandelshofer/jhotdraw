@@ -4,19 +4,10 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * NullableStringStyleableKey.
@@ -27,7 +18,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WriteableStyleableMapAccessor<String> {
 
     static final long serialVersionUID = 1L;
-    private final @NonNull CssMetaData<? extends Styleable, String> cssMetaData;
+    private final @NonNull CssStringConverter converter;
 
     /**
      * Creates a new instance with the specified name and with a null String
@@ -51,26 +42,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
     public NullableStringStyleableKey(String namespace, @NonNull String name, String helpText) {
         super(namespace, name, String.class, true, null);
         converter = new CssStringConverter(true, '\'', helpText);
-        Function<Styleable, StyleableProperty<String>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, String> converter = new StyleConverterAdapter<>(this.converter);
-        CssMetaData<Styleable, String> md
-                = new SimpleCssMetaData<>(property, function,
-                converter, null, inherits);
-        cssMetaData = md;
     }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private final @NonNull CssStringConverter converter;
 
     @Override
     public @NonNull Converter<String> getCssConverter() {

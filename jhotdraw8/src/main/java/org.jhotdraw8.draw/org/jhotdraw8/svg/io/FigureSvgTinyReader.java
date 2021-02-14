@@ -5,17 +5,17 @@
 
 package org.jhotdraw8.svg.io;
 
-import javafx.scene.paint.CycleMethod;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.NonNullKey;
 import org.jhotdraw8.concurrent.CheckedRunnable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
-import org.jhotdraw8.css.CssLinearGradient;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
@@ -37,12 +37,12 @@ import org.jhotdraw8.svg.figure.SvgElementFigure;
 import org.jhotdraw8.svg.figure.SvgEllipseFigure;
 import org.jhotdraw8.svg.figure.SvgGFigure;
 import org.jhotdraw8.svg.figure.SvgLineFigure;
+import org.jhotdraw8.svg.figure.SvgLinearGradientFigure;
 import org.jhotdraw8.svg.figure.SvgPathFigure;
 import org.jhotdraw8.svg.figure.SvgPolygonFigure;
 import org.jhotdraw8.svg.figure.SvgPolylineFigure;
 import org.jhotdraw8.svg.figure.SvgRectFigure;
 import org.jhotdraw8.svg.figure.SvgTextFigure;
-import org.jhotdraw8.svg.text.SvgLinearGradient;
 import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
@@ -77,7 +77,7 @@ import java.util.stream.Collectors;
  * <dl>
  *     <dt>SVG 1.2 Tiny</dt>
  *     <dd><a href="https://www.w3.org/TR/SVGTiny12/index.html">w3.org</a></dd>
-
+ *
  *     <dt>SVG Strokes</dt>
  *     <dd><a href="https://www.w3.org/TR/svg-strokes/">w3.org</a></dd>
  * </dl>
@@ -130,7 +130,8 @@ public class FigureSvgTinyReader {
                 ImmutableMaps.entry("path", SvgPathFigure.class),
                 ImmutableMaps.entry("polygon", SvgPolygonFigure.class),
                 ImmutableMaps.entry("polyline", SvgPolylineFigure.class),
-                ImmutableMaps.entry("text", SvgTextFigure.class)
+                ImmutableMaps.entry("text", SvgTextFigure.class),
+                ImmutableMaps.entry("linearGradient", SvgLinearGradientFigure.class)
         )) {
             String elem = e.getKey();
             Class<? extends Figure> figureClass = e.getValue();
@@ -304,41 +305,41 @@ public class FigureSvgTinyReader {
     private void readAttributes(XMLStreamReader r, Figure node, Map<String, MapAccessor<?>> m, Context ctx) throws XMLStreamException {
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
-            if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
-                String localName = r.getAttributeLocalName(i);
-                String value = r.getAttributeValue(i);
-                Location location = r.getLocation();
+            String localName = r.getAttributeLocalName(i);
+            String value = r.getAttributeValue(i);
 
-                if ("id".equals(localName)) {
-                    ctx.idFactory.putIdAndObject(value, node);
-                    node.set(StyleableFigure.ID, value);
-                } else {
-                    if (m != null) {
-                        ctx.secondPass.add(() -> {
-                            @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
-                            if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?>) {
-                                ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) mapAccessor;
-                                Converter<?> converter = converterMap.get(rosma.getValueType());
-                                if (converter == null) {
-                                    handleError(location, "No converter for attribute \"" + localName + "\".");
-                                } else {
-                                    try {
-                                        node.set(mapAccessor, converter.fromString(value, ctx.idFactory));
-                                    } catch (ParseException e) {
-                                        handleError(location, "Could not convert attribute \"" + localName + "\". " + toLocationString(location)
-                                                + "\n" + e.getMessage());
-                                    } catch (IOException e) {
-                                        handleError(location, "Could not read attribute \"" + localName + "\".", e);
-                                    }
-                                }
+            if ("id".equals(localName)
+                    && (namespace == null
+                    || SVG_NAMESPACE.equals(namespace)
+                    || XML_NAMESPACE.equals(namespace))) {
+                ctx.idFactory.putIdAndObject(value, node);
+                node.set(StyleableFigure.ID, value);
+            } else if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
+                Location location = r.getLocation();
+                if (m != null) {
+                    ctx.secondPass.add(() -> {
+                        @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
+                        if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?>) {
+                            ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) mapAccessor;
+                            Converter<?> converter = converterMap.get(rosma.getValueType());
+                            if (converter == null) {
+                                handleError(location, "No converter for attribute \"" + localName + "\".");
                             } else {
-                                handleError(location, "Unsupported attribute \"" + localName + "\".");
+                                try {
+                                    node.set(mapAccessor, converter.fromString(value, ctx.idFactory));
+                                } catch (ParseException | IOException e) {
+                                    handleError(location, "Could not read attribute \"" + localName + "\".", e);
+                                }
                             }
-                        });
-                    } else {
-                        handleError(r, "Skipping SVG attribute \"" + localName + "\".");
-                    }
+                        } else {
+                            handleError(location, "Unsupported attribute " + localName + "=\"" + value + "\".");
+                        }
+                    });
+                } else {
+                    handleError(r, "Skipping SVG attribute " + localName + "=\"" + value + "\".");
                 }
+            } else {
+                handleError(r, "Skipping foreign attribute {" + namespace + "}" + localName + "=\"" + value + "\".");
             }
         }
     }
@@ -380,7 +381,6 @@ public class FigureSvgTinyReader {
             }
         }
         if (collectTextForTextFigure && ctx.stringBuilder.length() > 0) {
-            System.out.println("setting text: " + ctx.stringBuilder);
             parent.set(textKey, ctx.stringBuilder.toString());
         }
     }
@@ -413,8 +413,8 @@ public class FigureSvgTinyReader {
                 case "style":
                     readStyle(r, parent, ctx);
                     return parent;
-                case "linearGradient":
-                    readLinearGradient(r, parent, ctx);
+                case "stop":
+                    readStop(r, parent, ctx);
                     return parent;
                 default:
                     handleError(r, "Don't understand SVG element: " + localName + ".");
@@ -428,140 +428,7 @@ public class FigureSvgTinyReader {
         return null;
     }
 
-    private void readLinearGradient(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
-        String id = null;
-        boolean proportional = true;
-        CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
-        Number x1 = 0;
-        Number x2 = 1;
-        Number y1 = 0;
-        Number y2 = 0;
-        for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
-            String namespace = r.getAttributeNamespace(i);
-            String localName = r.getAttributeLocalName(i);
-            String value = r.getAttributeValue(i);
-            switch (namespace == null ? SVG_NAMESPACE : namespace) {
-            case SVG_NAMESPACE: {
-                try {
-                    switch (localName) {
-                    case "id":
-                        id = value;
-                        break;
-                    case "gradientUnits":
-                        switch (value) {
-                        case "userSpaceOnUse":
-                            proportional = false;
-                            break;
-                        case "objectBoundingBox":
-                            proportional = true;
-                            break;
-                        default:
-                            handleError(r, "linearGradient: Unsupported gradientUnits=\"" + value + "=\"");
-                            break;
-                        }
-                        break;
-                    case "spreadMethod":
-                        switch (value) {
-                        case "pad":
-                            cycleMethod = CycleMethod.NO_CYCLE;
-                            break;
-                        case "reflect":
-                            cycleMethod = CycleMethod.REFLECT;
-                            break;
-                        case "repeat":
-                            cycleMethod = CycleMethod.REPEAT;
-                            break;
-                        default:
-                            handleError(r, "linearGradient: Unsupported spreadMethod=\"" + value + "=\"");
-                            break;
-                        }
-                        break;
-
-                    case "x1":
-                        x1 = numberConverter.fromString(value);
-                        break;
-                    case "x2":
-                        x2 = numberConverter.fromString(value);
-                        break;
-                    case "y1":
-                        y1 = numberConverter.fromString(value);
-                        break;
-                    case "y2":
-                        y2 = numberConverter.fromString(value);
-                        break;
-                    default:
-                        handleError(r, "linearGradient: Skipping SVG attribute " + localName+ "=\"" + value + "\".");
-                        break;
-                    }
-                } catch (ParseException | IOException e) {
-                    handleError(r, "linearGradient: Could not parse attribute " + localName + "=\"" + value + "\".");
-                }
-            }
-            break;
-            case XML_NAMESPACE:
-                switch (localName) {
-                case "id":
-                    id = value;
-                    break;
-                default:
-                    handleError(r, "linearGradient: Skipping foreign attribute " + r.getAttributeName(i));
-                    break;
-                }
-                break;
-            default: {
-                handleError(r, "linearGradient: Skipping foreign attribute " + r.getAttributeName(i));
-            }
-            break;
-            }
-        }
-
-        final List<CssStop> stops = readStops(r, ctx);
-        if (id != null && x1 != null && y1 != null && x2 != null && y2 != null) {
-            ctx.idFactory.putIdAndObject(id,
-                    new SvgLinearGradient(x1.doubleValue(), y1.doubleValue(), x2.doubleValue(), y2.doubleValue(),
-                            proportional, cycleMethod, stops));
-        }
-    }
-
-    private List<CssStop> readStops(XMLStreamReader r, Context ctx) throws XMLStreamException {
-        List<CssStop> stops = new ArrayList<>();
-        int depth = 1;// we are currently inside START_ELEMENT
-        Loop:
-        while (true) {
-            switch (r.next()) {
-            case XMLStreamReader.START_ELEMENT:
-                if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
-                    final String localName = r.getLocalName();
-                    switch (localName == null ? "" : localName) {
-                    case "stop":
-                        final CssStop cssStop = readStop(r, ctx);
-                        if (cssStop != null) {
-                            stops.add(cssStop);
-                        }
-                        break;
-                    default:
-                        handleError(r, "Skipping SVG element " + r.getName() + ".");
-                        break;
-                    }
-                } else {
-                    handleError(r, "Skipping foreign element " + r.getName() + ".");
-                }
-                depth++;
-                break;
-            case XMLStreamReader.END_ELEMENT:
-                depth--;
-                if (depth == 0) {
-                    break Loop;
-                }
-                break;
-            default:
-                break;
-            }
-        }
-        return stops;
-    }
-
-    private CssStop readStop(XMLStreamReader r, Context ctx) throws XMLStreamException {
+    private void readStop(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         CssColor stopColor = null;
         CssSize offset = null;
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
@@ -589,11 +456,17 @@ public class FigureSvgTinyReader {
             }
         }
         if (stopColor != null && offset != null) {
-            return new CssStop(offset.getConvertedValue(), stopColor);
-        } else {
-            return null;
+            if (!parent.getSupportedKeys().contains(stopsKey)) {
+                handleError(r, "stop: Cannot add stop to parent element " + parent.getTypeSelector());
+            } else {
+                CssStop stop = new CssStop(offset.getConvertedValue(), stopColor);
+                parent.put(stopsKey, ImmutableLists.add(parent.get(stopsKey), stop));
+            }
         }
+        skipElement(r, ctx);
     }
+
+    private NonNullKey<ImmutableList<CssStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;

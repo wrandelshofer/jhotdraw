@@ -4,9 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
@@ -14,14 +11,9 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * Point2DListStyleableKey.
@@ -33,7 +25,6 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<?, ImmutableList<@NonNull Point2D>> cssMetaData;
     private final @NonNull Converter<ImmutableList<@NonNull Point2D>> converter;
 
     /**
@@ -56,24 +47,8 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
         super(name, new TypeToken<ImmutableList<Point2D>>() {
         }, defaultValue);
 
-        Function<Styleable, StyleableProperty<ImmutableList<Point2D>>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         this.converter = new CssListConverter<>(
                 new Point2DConverter(false, false), " ,");
-        CssMetaData<Styleable, ImmutableList<Point2D>> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(this.converter),
-                defaultValue, inherits);
-        cssMetaData = md;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<Point2D>> getCssMetaData() {
-        return cssMetaData;
     }
 
     @Override

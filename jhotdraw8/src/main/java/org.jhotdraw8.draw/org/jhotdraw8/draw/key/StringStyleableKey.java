@@ -4,20 +4,11 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * StringStyleableKey.
@@ -28,7 +19,6 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
         implements WriteableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
 
     static final long serialVersionUID = 1L;
-    private final @NonNull CssMetaData<? extends Styleable, @NonNull String> cssMetaData;
     private final @NonNull CssStringConverter converter;
 
     /**
@@ -66,17 +56,6 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
     public StringStyleableKey(String namespace, String name, String defaultValue, String helpText) {
         super(namespace, name, String.class, false, defaultValue);
         converter = new CssStringConverter(false, '\'', helpText);
-        Function<Styleable, StyleableProperty<String>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, String> converter = new StyleConverterAdapter<>(this.converter);
-        CssMetaData<Styleable, String> md
-                = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
-        cssMetaData = md;
     }
 
     @Override
@@ -84,9 +63,4 @@ public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
         return converter;
     }
 
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
-        return cssMetaData;
-
-    }
 }

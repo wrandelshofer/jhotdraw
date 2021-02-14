@@ -4,10 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
@@ -15,13 +11,9 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssInsetsConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * InsetsStyleableMapAccessor.
@@ -34,7 +26,6 @@ public class CssInsetsStyleableMapAccessor
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull CssInsets> cssMetaData;
     private final @NonNull NonNullMapAccessor<CssSize> topKey;
     private final @NonNull NonNullMapAccessor<CssSize> rightKey;
     private final @NonNull NonNullMapAccessor<CssSize> bottomKey;
@@ -52,29 +43,10 @@ public class CssInsetsStyleableMapAccessor
     public CssInsetsStyleableMapAccessor(@NonNull String name, @NonNull NonNullMapAccessor<CssSize> topKey, @NonNull NonNullMapAccessor<CssSize> rightKey, @NonNull NonNullMapAccessor<CssSize> bottomKey, @NonNull NonNullMapAccessor<CssSize> leftKey) {
         super(name, CssInsets.class, new NonNullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
-        Function<Styleable, StyleableProperty<CssInsets>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, CssInsets> cnvrtr
-                = new StyleConverterAdapter<>(getCssConverter());
-        CssMetaData<@NonNull Styleable, @NonNull CssInsets> md
-                = new SimpleCssMetaData<>(property, function,
-                cnvrtr, getDefaultValue(), inherits);
-        cssMetaData = md;
-
         this.topKey = topKey;
         this.rightKey = rightKey;
         this.bottomKey = bottomKey;
         this.leftKey = leftKey;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, @NonNull CssInsets> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     private final Converter<CssInsets> converter = new CssInsetsConverter(false);

@@ -4,14 +4,9 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleablePropertyFactory;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssBooleanConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
@@ -24,7 +19,6 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
         implements WriteableStyleableMapAccessor<Boolean> {
 
     static final long serialVersionUID = 1L;
-    private final CssMetaData<? extends Styleable, Boolean> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -59,19 +53,6 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      */
     public NullableBooleanStyleableKey(@Nullable String namespace, @NonNull String key, Boolean defaultValue) {
         super(namespace, key, Boolean.class, true, defaultValue);
-
-        StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
-        cssMetaData = factory.createBooleanCssMetaData(
-                Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-                    StyleablePropertyBean spb = (StyleablePropertyBean) s;
-                    return spb.getStyleableProperty(this);
-                });
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, Boolean> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     private Converter<Boolean> converter;

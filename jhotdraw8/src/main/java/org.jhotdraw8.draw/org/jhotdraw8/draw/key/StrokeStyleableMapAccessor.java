@@ -4,9 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
@@ -19,13 +16,9 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.text.CssStrokeStyleConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Stroke Style combines all stroke attributes.
@@ -36,7 +29,6 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<?, CssStrokeStyle> cssMetaData;
 
     private final @NonNull MapAccessor<CssSize> dashOffsetKey;
     private final @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey;
@@ -44,6 +36,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     private final @NonNull MapAccessor<StrokeLineJoin> lineJoinKey;
     private final @NonNull MapAccessor<StrokeLineCap> lineCapKey;
     private final @NonNull MapAccessor<CssSize> miterLimitKey;
+    private final Converter<CssStrokeStyle> converter = new CssStrokeStyleConverter(false);
 
     public StrokeStyleableMapAccessor(String name,
                                       @NonNull MapAccessor<StrokeType> typeKey,
@@ -68,36 +61,12 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
                         dashArrayKey.getDefaultValue()
                 ));
 
-        Function<Styleable, StyleableProperty<CssStrokeStyle>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, CssStrokeStyle> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
-        cssMetaData = md;
-
         this.dashOffsetKey = dashOffsetKey;
         this.dashArrayKey = dashArrayKey;
         this.typeKey = typeKey;
         this.lineJoinKey = lineJoinKey;
         this.lineCapKey = lineCapKey;
         this.miterLimitKey = miterLimitKey;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, CssStrokeStyle> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private final Converter<CssStrokeStyle> converter = new CssStrokeStyleConverter(false);
-
-    @Override
-    public @NonNull Converter<CssStrokeStyle> getCssConverter() {
-        return converter;
     }
 
     @Override
@@ -110,6 +79,34 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
                 dashOffsetKey.get(a),
                 dashArrayKey.get(a)
         );
+    }
+
+    @Override
+    public @NonNull Converter<CssStrokeStyle> getCssConverter() {
+        return converter;
+    }
+
+    /**
+     * This is a non-standard map composite map accessor and thus it is transient.
+     * We only used in the GUI to get a more concise presentation of attributes.
+     *
+     * @return true
+     */
+    @Override
+    public boolean isTransient() {
+        return true;
+    }
+
+    @Override
+    public CssStrokeStyle remove(@NonNull Map<? super Key<?>, Object> a) {
+        CssStrokeStyle oldValue = get(a);
+        typeKey.remove(a);
+        lineJoinKey.remove(a);
+        lineCapKey.remove(a);
+        miterLimitKey.remove(a);
+        dashOffsetKey.remove(a);
+        dashArrayKey.remove(a);
+        return oldValue;
     }
 
     @Override
@@ -129,28 +126,5 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
             lineCapKey.put(a, value.getLineCap());
             miterLimitKey.put(a, value.getMiterLimit());
         }
-    }
-
-    @Override
-    public CssStrokeStyle remove(@NonNull Map<? super Key<?>, Object> a) {
-        CssStrokeStyle oldValue = get(a);
-        typeKey.remove(a);
-        lineJoinKey.remove(a);
-        lineCapKey.remove(a);
-        miterLimitKey.remove(a);
-        dashOffsetKey.remove(a);
-        dashArrayKey.remove(a);
-        return oldValue;
-    }
-
-    /**
-     * This is a non-standard map composite map accessor and thus it is transient.
-     * We only used in the GUI to get a more concise presentation of attributes.
-     *
-     * @return true
-     */
-    @Override
-    public boolean isTransient() {
-        return true;
     }
 }

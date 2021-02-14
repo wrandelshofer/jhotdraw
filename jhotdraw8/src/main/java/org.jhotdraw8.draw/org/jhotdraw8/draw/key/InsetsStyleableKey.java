@@ -4,19 +4,11 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import javafx.geometry.Insets;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.InsetsConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * InsetsStyleableKey.
@@ -26,8 +18,7 @@ import java.util.function.Function;
 public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements WriteableStyleableMapAccessor<Insets> {
 
     private static final long serialVersionUID = 1L;
-
-    private final @NonNull CssMetaData<?, Insets> cssMetaData;
+    private final Converter<Insets> converter = new InsetsConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -49,25 +40,7 @@ public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements 
     public InsetsStyleableKey(String key, Insets defaultValue) {
         super(key, Insets.class, defaultValue);
 
-        Function<Styleable, StyleableProperty<Insets>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, Insets> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(this.converter), defaultValue, inherits);
-        cssMetaData = md;
     }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, Insets> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private final Converter<Insets> converter = new InsetsConverter(false);
 
     @Override
     public @NonNull Converter<Insets> getCssConverter() {

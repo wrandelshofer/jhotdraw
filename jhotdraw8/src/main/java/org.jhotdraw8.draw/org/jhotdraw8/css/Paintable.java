@@ -17,7 +17,7 @@ public interface Paintable {
 
     @Nullable Paint getPaint();
 
-    default @Nullable Paint getPaint(RenderContext ctx) {
+    default @Nullable Paint getPaint(@Nullable RenderContext ctx) {
         return getPaint();
     }
 
@@ -25,7 +25,7 @@ public interface Paintable {
         return p == null ? null : p.getPaint();
     }
 
-    static @Nullable Paint getPaint(@Nullable Paintable p, RenderContext ctx) {
+    static @Nullable Paint getPaint(@Nullable Paintable p, @Nullable RenderContext ctx) {
         return p == null ? null : p.getPaint(ctx);
     }
 }

@@ -4,22 +4,14 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssDefaultableValueConverter;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * TListStyleableFigureKey.
@@ -32,7 +24,6 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<?, @NonNull CssDefaultableValue<T>> cssMetaData;
     private final @NonNull Converter<@NonNull CssDefaultableValue<T>> converter;
     private final T initialValue;
 
@@ -51,22 +42,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
         super(name, type, initialDefaultingValue);
         this.initialValue = initialValue;
 
-        Function<Styleable, StyleableProperty<CssDefaultableValue<T>>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         this.converter = new CssDefaultableValueConverter<>(converter);
-        CssMetaData<Styleable, CssDefaultableValue<T>> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(this.converter), initialDefaultingValue, inherits);
-        cssMetaData = md;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, CssDefaultableValue<T>> getCssMetaData() {
-        return cssMetaData;
     }
 
     @Override

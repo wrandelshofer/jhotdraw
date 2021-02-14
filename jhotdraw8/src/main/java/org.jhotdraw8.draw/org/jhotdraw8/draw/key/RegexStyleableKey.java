@@ -4,20 +4,11 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssRegexConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.RegexReplace;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * RegexStyleableKey.
@@ -28,7 +19,6 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
 
     static final long serialVersionUID = 1L;
     private final @NonNull CssRegexConverter converter;
-    private final @NonNull CssMetaData<? extends Styleable, RegexReplace> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -59,26 +49,7 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
      */
     public RegexStyleableKey(String name, boolean nullable, RegexReplace defaultValue) {
         super(null, name, RegexReplace.class, nullable, defaultValue);
-
-        Function<Styleable, StyleableProperty<RegexReplace>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, RegexReplace> cnvrtr
-                = new StyleConverterAdapter<>(getCssConverter());
-        CssMetaData<Styleable, RegexReplace> md
-                = new SimpleCssMetaData<>(property, function,
-                cnvrtr, defaultValue, inherits);
-        cssMetaData = md;
         converter = new CssRegexConverter(isNullable());
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, RegexReplace> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     @Override

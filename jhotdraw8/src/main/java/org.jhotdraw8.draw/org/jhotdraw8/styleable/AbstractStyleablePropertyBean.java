@@ -7,7 +7,6 @@ package org.jhotdraw8.styleable;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
@@ -79,16 +78,6 @@ public abstract class AbstractStyleablePropertyBean
     @Override
     public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
         return properties;
-    }
-
-    @Override
-    public @Nullable <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key) {
-        if (key instanceof WriteableStyleableMapAccessor) {
-            WriteableStyleableMapAccessor<T> skey = (WriteableStyleableMapAccessor<T>) key;
-            return new KeyMapEntryStyleableProperty<>(this, properties, skey, skey.getCssName(), skey.getCssMetaData());
-        } else {
-            return null;
-        }
     }
 
     protected @NonNull StyleableMap<Key<?>, Object> getStyleableMap() {

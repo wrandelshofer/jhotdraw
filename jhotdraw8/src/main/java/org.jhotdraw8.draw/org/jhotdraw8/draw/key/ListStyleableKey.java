@@ -4,23 +4,15 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * TListStyleableFigureKey.
@@ -33,7 +25,6 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<?, @NonNull ImmutableList<T>> cssMetaData;
     private @NonNull Converter<@NonNull ImmutableList<T>> converter;
 
     /**
@@ -59,22 +50,7 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
     public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
         super(name, type, defaultValue);
 
-        Function<Styleable, StyleableProperty<ImmutableList<T>>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         this.converter = new CssListConverter<>(converter);
-        CssMetaData<Styleable, ImmutableList<T>> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(this.converter), defaultValue, inherits);
-        cssMetaData = md;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, ImmutableList<T>> getCssMetaData() {
-        return cssMetaData;
     }
 
     @Override

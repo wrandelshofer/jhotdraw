@@ -4,20 +4,12 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * DoubleStyleableKey.
@@ -29,7 +21,6 @@ public class DoubleStyleableKey
         implements WriteableStyleableMapAccessor<@NonNull Double>,
         NonNullMapAccessor<@NonNull Double> {
     static final long serialVersionUID = 1L;
-    private final @NonNull CssMetaData<@NonNull Styleable, @NonNull Double> cssMetaData;
 
     private final Converter<@NonNull Double> converter;
 
@@ -58,23 +49,7 @@ public class DoubleStyleableKey
     public DoubleStyleableKey(@NonNull String name, double defaultValue, @NonNull CssConverter<@NonNull Double> converter) {
         super(name, Double.class, defaultValue);
 
-        Function<Styleable, StyleableProperty<Double>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
         this.converter = converter;
-        CssMetaData<@NonNull Styleable, @NonNull Double> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(converter), defaultValue, inherits);
-        cssMetaData = md;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, Double> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     @Override

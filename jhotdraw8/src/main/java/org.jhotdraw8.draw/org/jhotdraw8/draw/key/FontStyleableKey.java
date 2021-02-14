@@ -4,19 +4,11 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.text.CssFontConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * FontStyleableKey.
@@ -27,7 +19,6 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<?, CssFont> cssMetaData;
     private final Converter<CssFont> converter = new CssFontConverter(false);
 
     /**
@@ -47,33 +38,7 @@ public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements W
      * @param defaultValue The default value.
      */
     public FontStyleableKey(String name, CssFont defaultValue) {
-        super(name, CssFont.class, //
-                //
-                defaultValue);
-        /*
-         StyleablePropertyFactory factory = new StyleablePropertyFactory(null);
-         cssMetaData = factory.createFontCssMetaData(
-         Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-         StyleablePropertyBean spb = (StyleablePropertyBean) s;
-         return spb.getStyleableProperty(this);
-         });
-         */
-        Function<Styleable, StyleableProperty<CssFont>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, CssFont> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(this.converter), defaultValue, inherits);
-        cssMetaData = md;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, CssFont> getCssMetaData() {
-        return cssMetaData;
-
+        super(name, CssFont.class, defaultValue);
     }
 
     @Override

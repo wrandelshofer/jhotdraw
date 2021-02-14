@@ -4,14 +4,9 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleablePropertyFactory;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssEnumConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
@@ -24,7 +19,6 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
 
     static final long serialVersionUID = 1L;
 
-    private final CssMetaData<? extends Styleable, BlendMode> cssMetaData;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,28 +38,13 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
      */
     public BlendModeStyleableKey(@NonNull String name, BlendMode defaultValue) {
         super(name, BlendMode.class, defaultValue);
-
-        StyleablePropertyFactory<? extends Styleable> factory = new StyleablePropertyFactory<>(null);
-        cssMetaData = factory.createEnumCssMetaData(BlendMode.class,
-                Figure.JHOTDRAW_CSS_PREFIX + getCssName(), s -> {
-                    StyleablePropertyBean spb = (StyleablePropertyBean) s;
-                    return spb.getStyleableProperty(this);
-                });
     }
 
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, BlendMode> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private Converter<BlendMode> converter;
+    private Converter<BlendMode> converter = new CssEnumConverter<>(BlendMode.class, false);
+    ;
 
     @Override
     public @NonNull Converter<BlendMode> getCssConverter() {
-        if (converter == null) {
-            converter = new CssEnumConverter<>(BlendMode.class, false);
-        }
         return converter;
     }
 

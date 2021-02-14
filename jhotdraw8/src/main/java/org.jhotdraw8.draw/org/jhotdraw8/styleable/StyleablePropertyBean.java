@@ -35,15 +35,6 @@ import java.util.Objects;
 public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
 
     /**
-     * Returns the styleable property.
-     *
-     * @param <T> The value type
-     * @param key The property key
-     * @return The styleable property.
-     */
-    @Nullable <T> StyleableProperty<T> getStyleableProperty(MapAccessor<T> key);
-
-    /**
      * Returns the styled value.
      *
      * @param <T> The value type

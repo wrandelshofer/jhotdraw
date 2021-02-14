@@ -4,19 +4,11 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.Point2DConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * Point2DStyleableKey.
@@ -26,8 +18,7 @@ import java.util.function.Function;
 public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WriteableStyleableMapAccessor<Point2D> {
 
     private static final long serialVersionUID = 1L;
-
-    private final @NonNull CssMetaData<?, Point2D> cssMetaData;
+    private final Converter<Point2D> converter = new Point2DConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -48,26 +39,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
      */
     public Point2DStyleableKey(String key, Point2D defaultValue) {
         super(key, Point2D.class, defaultValue);
-
-        Function<Styleable, StyleableProperty<Point2D>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, Point2D> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(converter), defaultValue, inherits);
-        cssMetaData = md;
     }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, Point2D> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private final Converter<Point2D> converter = new Point2DConverter(false);
 
     @Override
     public @NonNull Converter<Point2D> getCssConverter() {

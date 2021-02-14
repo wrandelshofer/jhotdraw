@@ -44,7 +44,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure, FillRulableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    public static final @NonNull NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, true, null);
+    public static final @NonNull NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */

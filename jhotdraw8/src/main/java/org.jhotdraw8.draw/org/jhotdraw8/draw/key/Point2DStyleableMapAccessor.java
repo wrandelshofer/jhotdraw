@@ -4,9 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -14,14 +11,10 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.Point2DConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 /**
  * Point2DStyleableMapAccessor.
@@ -32,9 +25,9 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull CssMetaData<?, Point2D> cssMetaData;
     private final @NonNull NonNullMapAccessor<Double> xKey;
     private final @NonNull NonNullMapAccessor<Double> yKey;
+    private final Converter<Point2D> converter;
 
     /**
      * Creates a new instance with the specified name.
@@ -58,33 +51,9 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     public Point2DStyleableMapAccessor(String name, @NonNull NonNullMapAccessor<Double> xKey, @NonNull NonNullMapAccessor<Double> yKey, Converter<Point2D> converter) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValueNonNull(), yKey.getDefaultValueNonNull()));
 
-        Function<Styleable, StyleableProperty<Point2D>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-        boolean inherits = false;
         this.converter = converter;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        CssMetaData<Styleable, Point2D> md
-                = new SimpleCssMetaData<>(property, function,
-                new StyleConverterAdapter<>(converter), getDefaultValue(), inherits);
-        cssMetaData = md;
-
         this.xKey = xKey;
         this.yKey = yKey;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, Point2D> getCssMetaData() {
-        return cssMetaData;
-
-    }
-
-    private final Converter<Point2D> converter;
-
-    @Override
-    public final @NonNull Converter<Point2D> getCssConverter() {
-        return converter;
     }
 
     @Override
@@ -93,10 +62,8 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
-        Objects.requireNonNull(value, "value is null");
-        xKey.put(a, value.getX());
-        yKey.put(a, value.getY());
+    public final @NonNull Converter<Point2D> getCssConverter() {
+        return converter;
     }
 
     @Override
@@ -105,5 +72,12 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
         xKey.remove(a);
         yKey.remove(a);
         return oldValue;
+    }
+
+    @Override
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
+        Objects.requireNonNull(value, "value is null");
+        xKey.put(a, value.getX());
+        yKey.put(a, value.getY());
     }
 }

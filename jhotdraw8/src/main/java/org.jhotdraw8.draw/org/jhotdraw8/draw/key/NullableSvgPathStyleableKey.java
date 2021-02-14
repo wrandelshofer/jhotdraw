@@ -4,19 +4,10 @@
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.css.CssMetaData;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssSvgPathConverter;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.StyleablePropertyBean;
 import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.StyleConverterAdapter;
-
-import java.util.function.Function;
 
 /**
  * NullableSvgPathStyleableKey.
@@ -26,8 +17,6 @@ import java.util.function.Function;
 public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> implements WriteableStyleableMapAccessor<String> {
 
     private static final long serialVersionUID = 1L;
-
-    private final @NonNull CssMetaData<?, String> cssMetaData;
 
     private final @NonNull Converter<String> converter;
 
@@ -53,26 +42,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
     public NullableSvgPathStyleableKey(@NonNull String key, String defaultValue) {
         super(null, key, String.class, true, defaultValue);
 
-        Function<Styleable, StyleableProperty<String>> function = s -> {
-            StyleablePropertyBean spb = (StyleablePropertyBean) s;
-            return spb.getStyleableProperty(this);
-        };
-
         converter = new CssSvgPathConverter(isNullable());
-        boolean inherits = false;
-        String property = Figure.JHOTDRAW_CSS_PREFIX + getCssName();
-        final StyleConverter<String, String> converter
-                = new StyleConverterAdapter<>(getCssConverter());
-        CssMetaData<Styleable, String> md
-                = new SimpleCssMetaData<>(property, function,
-                converter, defaultValue, inherits);
-        cssMetaData = md;
-    }
-
-    @Override
-    public @NonNull CssMetaData<? extends @NonNull Styleable, String> getCssMetaData() {
-        return cssMetaData;
-
     }
 
     @Override
