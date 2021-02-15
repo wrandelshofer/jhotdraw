@@ -9,11 +9,11 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
 import org.jhotdraw8.samples.modeler.text.CssUmlCompartmentalizedDataConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 public class MLCompartmentedDataStyleableFigureKey extends AbstractStyleableKey<@NonNull MLCompartmentalizedData>
-        implements WriteableStyleableMapAccessor<@NonNull MLCompartmentalizedData>, NonNullMapAccessor<@NonNull MLCompartmentalizedData> {
+        implements WritableStyleableMapAccessor<@NonNull MLCompartmentalizedData>, NonNullMapAccessor<@NonNull MLCompartmentalizedData> {
 
     static final long serialVersionUID = 1L;
     private final @NonNull CssUmlCompartmentalizedDataConverter converter;

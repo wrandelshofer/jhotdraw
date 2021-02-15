@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.Point2DConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -15,7 +15,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WriteableStyleableMapAccessor<Point2D> {
+public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D> {
 
     private static final long serialVersionUID = 1L;
     private final Converter<Point2D> converter = new Point2DConverter(false);

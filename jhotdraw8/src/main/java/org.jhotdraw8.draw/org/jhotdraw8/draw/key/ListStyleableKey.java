@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -20,7 +20,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  */
 public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull ImmutableList<T>>
-        implements WriteableStyleableMapAccessor<@NonNull ImmutableList<T>>,
+        implements WritableStyleableMapAccessor<@NonNull ImmutableList<T>>,
         NonNullMapAccessor<@NonNull ImmutableList<T>> {
 
     private static final long serialVersionUID = 1L;

@@ -68,7 +68,7 @@ import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
 import org.jhotdraw8.draw.popup.Picker;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -152,7 +152,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private final ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
     private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
     private final ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
-    private final ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
+    private final ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
     private @NonNull SetProperty<E> selection = new SimpleSetProperty<>();
 
     {
@@ -205,7 +205,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         init(fxmlUrl);
     }
 
-    public @NonNull ReadOnlyMapProperty<WriteableStyleableMapAccessor<?>, Picker<?>> accessorPickerMapProperty() {
+    public @NonNull ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMapProperty() {
         return accessorPickerMap;
     }
 
@@ -289,8 +289,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    private @NonNull <T> Picker<T> createAndCachePicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
-        ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> amap = getAccessorPickerMap();
+    private @NonNull <T> Picker<T> createAndCachePicker(@NonNull WritableStyleableMapAccessor<T> acc) {
+        ObservableMap<WritableStyleableMapAccessor<?>, Picker<?>> amap = getAccessorPickerMap();
         @SuppressWarnings("unchecked") Picker<T> picker = (Picker<T>) amap.get(acc);
         if (picker == null) {
             picker = createPicker(acc);
@@ -300,7 +300,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     @SuppressWarnings("unchecked")
-    protected @NonNull <T> Picker<T> createPicker(@NonNull WriteableStyleableMapAccessor<T> acc) {
+    protected @NonNull <T> Picker<T> createPicker(@NonNull WritableStyleableMapAccessor<T> acc) {
         Class<T> type = acc.getRawValueType();
         boolean nullable = true;
         if (acc.getCssConverter() instanceof CssConverter) {
@@ -349,11 +349,11 @@ public abstract class AbstractStyleAttributesInspector<E> {
      */
     protected abstract void fireInvalidated(E f);
 
-    protected abstract @Nullable Object get(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor);
+    protected abstract @Nullable Object get(E f, WritableStyleableMapAccessor<Object> finalSelectedAccessor);
 
-    protected abstract @Nullable WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<E> fsm, E f, String propertyNamespace, String propertyName);
+    protected abstract @Nullable WritableStyleableMapAccessor<?> getAccessor(SelectorModel<E> fsm, E f, String propertyNamespace, String propertyName);
 
-    public ObservableMap<WriteableStyleableMapAccessor<?>, Picker<?>> getAccessorPickerMap() {
+    public ObservableMap<WritableStyleableMapAccessor<?>, Picker<?>> getAccessorPickerMap() {
         return accessorPickerMap.get();
     }
 
@@ -494,7 +494,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
     }
 
-    protected abstract void remove(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor);
+    protected abstract void remove(E f, WritableStyleableMapAccessor<Object> finalSelectedAccessor);
 
     private void select(ActionEvent event) {
         CssParser parser = new CssParser();
@@ -533,7 +533,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return selection;
     }
 
-    protected abstract void set(E f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor, Object o);
+    protected abstract void set(E f, WritableStyleableMapAccessor<Object> finalSelectedAccessor, Object o);
 
     protected abstract void setHelpText(String helpText);
 
@@ -549,11 +549,11 @@ public abstract class AbstractStyleAttributesInspector<E> {
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             Set<E> selectedF = new LinkedHashSet<>();
-            WriteableStyleableMapAccessor<?> selectedAccessor = null;
+            WritableStyleableMapAccessor<?> selectedAccessor = null;
             boolean multipleAccessorTypes = false;
             for (E f : getEntities()) {
                 if (null != styleRule.getSelectorGroup().matchSelector(fsm, f)) {
-                    WriteableStyleableMapAccessor<?> accessor = getAccessor(fsm, f, declaration.getNamespace(), declaration.getPropertyName());
+                    WritableStyleableMapAccessor<?> accessor = getAccessor(fsm, f, declaration.getNamespace(), declaration.getPropertyName());
                     if (selectedAccessor == null || selectedAccessor == accessor) {
                         selectedAccessor = accessor;
                         selectedF.add(f);
@@ -569,8 +569,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 if (picker != null) {
                     Object initialValue = null;
                     @SuppressWarnings("unchecked")
-                    WriteableStyleableMapAccessor<Object> finalSelectedAccessor
-                            = (WriteableStyleableMapAccessor<Object>) selectedAccessor;
+                    WritableStyleableMapAccessor<Object> finalSelectedAccessor
+                            = (WritableStyleableMapAccessor<Object>) selectedAccessor;
                     for (E f : selectedF) {
                         initialValue = get(f, finalSelectedAccessor);
                         break;

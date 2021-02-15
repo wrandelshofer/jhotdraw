@@ -12,7 +12,7 @@ import org.jhotdraw8.css.text.CssBooleanConverter;
  *
  * @author Werner Randelshofer
  */
-public class NulllableBooleanStyleableKey extends SimpleStyleableKey<Boolean> implements WriteableStyleableMapAccessor<Boolean> {
+public class NulllableBooleanStyleableKey extends SimpleStyleableKey<Boolean> implements WritableStyleableMapAccessor<Boolean> {
 
     private static final long serialVersionUID = 1L;
 

@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.text.Converter;
 
-public class StringStyleableKey extends SimpleNullableKey<String> implements WriteableStyleableMapAccessor<String> {
+public class StringStyleableKey extends SimpleNullableKey<String> implements WritableStyleableMapAccessor<String> {
     private static final long serialVersionUID = 0L;
     private final @NonNull String cssName;
     private final CssStringConverter converter = new CssStringConverter();

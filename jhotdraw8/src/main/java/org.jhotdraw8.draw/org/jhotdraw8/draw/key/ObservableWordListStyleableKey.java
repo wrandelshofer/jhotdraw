@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.xml.text.XmlWordListConverter;
 
@@ -16,7 +16,7 @@ import org.jhotdraw8.xml.text.XmlWordListConverter;
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WriteableStyleableMapAccessor<ImmutableList<String>> {
+public class ObservableWordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WritableStyleableMapAccessor<ImmutableList<String>> {
 
     private static final long serialVersionUID = 1L;
     private Converter<ImmutableList<String>> converter = new XmlWordListConverter();

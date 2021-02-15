@@ -51,25 +51,25 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
                 break;
             default:
                 tt.pushBack();
-                    break;
+                break;
             }
         }
         switch (list.size()) {
-            case 1:
-                double trbl = list.get(0).doubleValue();
-                return new Insets(trbl);
-            case 2:
-                double tb = list.get(0).doubleValue();
-                double rl = list.get(1).doubleValue();
-                return new Insets(tb, rl, tb, rl);
-            case 4:
-                double t = list.get(0).doubleValue();
-                double r = list.get(1).doubleValue();
-                double b = list.get(2).doubleValue();
-                double l = list.get(3).doubleValue();
-                return new Insets(t, r, b, l);
-            default:
-                throw new ParseException("⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
+        case 1:
+            double trbl = list.get(0).doubleValue();
+            return new Insets(trbl);
+        case 2:
+            double tb = list.get(0).doubleValue();
+            double rl = list.get(1).doubleValue();
+            return new Insets(tb, rl, tb, rl);
+        case 4:
+            double t = list.get(0).doubleValue();
+            double r = list.get(1).doubleValue();
+            double b = list.get(2).doubleValue();
+            double l = list.get(3).doubleValue();
+            return new Insets(t, r, b, l);
+        default:
+            throw new ParseException("⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩,⟨left-right⟩ ｜ ⟨top⟩,⟨right⟩,⟨bottom⟩,⟨left⟩ expected.", tt.getStartPosition());
 
         }
     }

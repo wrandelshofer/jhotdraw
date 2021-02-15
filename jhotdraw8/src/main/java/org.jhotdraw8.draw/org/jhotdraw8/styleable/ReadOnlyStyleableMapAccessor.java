@@ -10,7 +10,11 @@ import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
- * Interface for keys which support styled values from CSS.
+ * Generic interface for map accessors that are readable by CSS.
+ * <p>
+ * This interface does not guarantee 'read-only', it actually guarantees
+ * 'readable'. We use the prefix 'ReadOnly' because this is the naming
+ * convention in JavaFX for APIs that provide read methods but no write methods.
  *
  * @param <T> The value type.
  * @author Werner Randelshofer

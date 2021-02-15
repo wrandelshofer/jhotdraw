@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -16,7 +16,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> implements WriteableStyleableMapAccessor<@NonNull CssSize>,
+public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> implements WritableStyleableMapAccessor<@NonNull CssSize>,
         NonNullMapAccessor<@NonNull CssSize> {
 
     static final long serialVersionUID = 1L;

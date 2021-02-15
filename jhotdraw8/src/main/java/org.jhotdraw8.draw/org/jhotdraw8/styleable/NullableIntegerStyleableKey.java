@@ -12,7 +12,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class NullableIntegerStyleableKey extends SimpleStyleableKey<Integer> implements WriteableStyleableMapAccessor<Integer> {
+public class NullableIntegerStyleableKey extends SimpleStyleableKey<Integer> implements WritableStyleableMapAccessor<Integer> {
 
     private static final long serialVersionUID = 1L;
 

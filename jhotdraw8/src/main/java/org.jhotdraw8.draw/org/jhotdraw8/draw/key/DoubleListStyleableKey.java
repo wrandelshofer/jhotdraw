@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -17,7 +17,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WriteableStyleableMapAccessor<ImmutableList<Double>> {
+public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
 
     private static final long serialVersionUID = 1L;
 

@@ -22,18 +22,18 @@ import org.jhotdraw8.collection.KeyMapEntryProperty;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    private final @NonNull WriteableStyleableMapAccessor<T> key;
+    private final @NonNull WritableStyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
     private final @NonNull ObservableMap<Key<?>, Object> mapp;
     private final String name;
     private final @NonNull StyleableMap<Key<?>, Object> map;
     private final Object bean;
 
-    public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         this(mapp.getBean(), mapp, key, name, metaData);
     }
 
-    public KeyMapEntryStyleableProperty(Object bean, @NonNull ObservableMap<Key<?>, Object> mapp, @NonNull WriteableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(Object bean, @NonNull ObservableMap<Key<?>, Object> mapp, @NonNull WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp;
         this.map = m;

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssRegexConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.RegexReplace;
 
@@ -15,7 +15,7 @@ import org.jhotdraw8.text.RegexReplace;
  *
  * @author Werner Randelshofer
  */
-public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implements WriteableStyleableMapAccessor<RegexReplace> {
+public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implements WritableStyleableMapAccessor<RegexReplace> {
 
     static final long serialVersionUID = 1L;
     private final @NonNull CssRegexConverter converter;

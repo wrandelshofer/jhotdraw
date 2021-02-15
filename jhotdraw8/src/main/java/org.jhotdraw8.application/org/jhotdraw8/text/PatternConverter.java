@@ -59,7 +59,7 @@ import java.util.List;
  * <i>RegexChoice:</i>
  *       ( <i>RegexChoiceList</i> )
  *
- * <i>RegexChoiceList</i>
+ * <i>RegexChoiceList:</i>
  *       <i>Regex</i>
  *       <i>Regex</i> | <i>RegexChoiceList</i>
  *
@@ -118,12 +118,12 @@ import java.util.List;
  */
 public class PatternConverter implements Converter<Object[]> {
 
-    private AST ast;
-    private ConverterFactory factory;
+    private final AST ast;
+    private final ConverterFactory factory;
     /**
      * Number of argument indices needed.
      */
-    private int numIndices;
+    private final int numIndices;
 
     public PatternConverter(@NonNull String pattern, ConverterFactory factory) {
         try {
@@ -170,20 +170,6 @@ public class PatternConverter implements Converter<Object[]> {
         return value.toArray();
     }
 
-    static class ArgumentOffset {
-
-        int offset;
-
-        public ArgumentOffset() {
-            this(0);
-        }
-
-        public ArgumentOffset(int offset) {
-            this.offset = offset;
-        }
-
-    }
-
     /**
      * Pattern AST. This class is package visible for testing purposes.
      */
@@ -228,15 +214,22 @@ public class PatternConverter implements Converter<Object[]> {
             }
         }
 
-        static @NonNull String escape(@NonNull String charAt) {
-            StringBuilder buf = new StringBuilder();
-            for (int i = 0, n = charAt.length(); i < n; i++) {
+        static @NonNull String escape(@NonNull String str) {
+            StringBuilder buf = new StringBuilder(str.length());
+            for (int i = 0, n = str.length(); i < n; i++) {
+                char ch = str.charAt(i);
+                if (Character.isISOControl(ch)) {
+                    String hex = "000" + Integer.toHexString(ch);
+                    buf.append("\\u").append(hex.substring(hex.length() - 4));
+                } else {
+                    buf.append(ch);
+                }
             }
             return buf.toString();
         }
     }
 
-    static class Argument extends AST {
+    abstract static class Argument extends AST {
 
         protected int index;
 
@@ -298,7 +291,7 @@ public class PatternConverter implements Converter<Object[]> {
 
         @Override
         public @NonNull String toString() {
-            return "ArgChoice{" + index + " limits=" + limits
+            return "ArgChoice{" + index + " limits=" + Arrays.toString(limits)
                     + "' children=" + children
                     + '}';
         }
@@ -437,7 +430,7 @@ public class PatternConverter implements Converter<Object[]> {
 
     }
 
-    static class Regex extends AST {
+    abstract static class Regex extends AST {
 
         protected int maxRepeat;
         protected int minRepeat;
@@ -730,7 +723,6 @@ public class PatternConverter implements Converter<Object[]> {
     }
 
     private static void parseArgument(@NonNull StreamPosTokenizer tt, @NonNull AST parent, int offset) throws IOException {
-        RegexChoice regex = new RegexChoice();
         if (tt.nextToken() != '{') {
             throw new IOException("Argument '{' expected @"
                     + (tt.getStartPosition() + offset));
@@ -759,6 +751,8 @@ public class PatternConverter implements Converter<Object[]> {
             case '9':
                 index = index * 10 + tt.ttype - '0';
                 break;
+            default:
+                throw new IOException("argument index is not numeric @" + (tt.getStartPosition() + offset));
             }
         }
         // parse argument type

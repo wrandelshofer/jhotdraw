@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public abstract class AbstractStyleableMapAccessor<T>
-        implements WriteableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
+        implements WritableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
     private final @NonNull String cssName;
     private static final long serialVersionUID = 1L;

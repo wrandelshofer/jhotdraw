@@ -53,37 +53,37 @@ public class CssSizeConverter implements CssConverter<CssSize> {
         Number value;
         String units;
         switch (tt.next()) {
-            case CssTokenType.TT_DIMENSION:
-                value = tt.currentNumberNonNull();
-                units = tt.currentString();
+        case CssTokenType.TT_DIMENSION:
+            value = tt.currentNumberNonNull();
+            units = tt.currentString();
+            break;
+        case CssTokenType.TT_PERCENTAGE:
+            value = tt.currentNumberNonNull();
+            units = UnitConverter.PERCENTAGE;
+            break;
+        case CssTokenType.TT_NUMBER:
+            value = tt.currentNumberNonNull();
+            units = UnitConverter.DEFAULT;
+            break;
+        case CssTokenType.TT_IDENT: {
+            units = null;
+            switch (tt.currentStringNonNull()) {
+            case "INF":
+                value = Double.POSITIVE_INFINITY;
                 break;
-            case CssTokenType.TT_PERCENTAGE:
-                value = tt.currentNumberNonNull();
-                units = UnitConverter.PERCENTAGE;
+            case "-INF":
+                value = Double.NEGATIVE_INFINITY;
                 break;
-            case CssTokenType.TT_NUMBER:
-                value = tt.currentNumberNonNull();
-                units = UnitConverter.DEFAULT;
+            case "NaN":
+                value = Double.NaN;
                 break;
-            case CssTokenType.TT_IDENT: {
-                units = null;
-                switch (tt.currentStringNonNull()) {
-                    case "INF":
-                        value = Double.POSITIVE_INFINITY;
-                        break;
-                    case "-INF":
-                        value = Double.NEGATIVE_INFINITY;
-                        break;
-                    case "NaN":
-                        value = Double.NaN;
-                        break;
-                    default:
-                        throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
-                }
-                break;
-            }
             default:
-                throw new ParseException("number expected", tt.getStartPosition());
+                throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+            }
+            break;
+        }
+        default:
+            throw new ParseException("number expected", tt.getStartPosition());
         }
         return new CssSize(value.doubleValue(), units);
     }

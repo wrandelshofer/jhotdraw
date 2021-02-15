@@ -19,13 +19,17 @@ import java.util.function.Consumer;
 /**
  * CssNumberConverter.
  * <p>
- * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
- * CSS Reference Guide</a>.
- * </p>
+ * Parses the following EBNF:
  * <pre>
- * Number := Double ;
+ * Number := number-token | "-INF" | "INF" | "NaN";
+ * number-token = (* CSS number-token *)
  * </pre>
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>CSS Syntax Module Level 3, 4. Token Railroad Diagrams, Number Token Diagram</dt>
+ *     <dd><a href="">w3.org</a>https://www.w3.org/TR/css-syntax-3/#number-token-diagram</dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */
@@ -39,7 +43,7 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
     public @NonNull Number parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            return tt.currentNumberNonNull().doubleValue();
+            return tt.currentNumberNonNull();
         case CssTokenType.TT_IDENT: {
             double value;
             switch (tt.currentStringNonNull()) {
@@ -47,18 +51,18 @@ public class CssNumberConverter extends AbstractCssConverter<Number> {
                 value = Double.POSITIVE_INFINITY;
                 break;
             case "-INF":
-                        value = Double.NEGATIVE_INFINITY;
-                        break;
-                    case "NaN":
-                        value = Double.NaN;
-                        break;
-                    default:
-                        throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
-                }
-                return value;
-            }
+                value = Double.NEGATIVE_INFINITY;
+                break;
+            case "NaN":
+                value = Double.NaN;
+                break;
             default:
-                throw new ParseException("⟨Double⟩: number expected.", tt.getStartPosition());
+                throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+            }
+            return value;
+        }
+        default:
+            throw new ParseException("⟨Double⟩: number expected.", tt.getStartPosition());
         }
     }
 

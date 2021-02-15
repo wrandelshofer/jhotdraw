@@ -65,33 +65,33 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
             switch (font.getPosture()) {
             case ITALIC:
                 out.accept(new CssToken(CssTokenType.TT_IDENT, ITALIC_STYLE));
-                    needsSpace = true;
-                    break;
-                case REGULAR:
-                    break;
-                default:
-                    throw new RuntimeException("Unknown fontPosture:" + font.getPosture());
+                needsSpace = true;
+                break;
+            case REGULAR:
+                break;
+            default:
+                throw new RuntimeException("Unknown fontPosture:" + font.getPosture());
             }
         }
         final FontWeight weight = font.getWeight();
         if (weight != null) {
             switch (weight) {
-                case NORMAL:
-                    break;
-                case BOLD:
-                    if (needsSpace) {
-                        out.accept(new CssToken(CssTokenType.TT_S, " "));
-                    }
-                    out.accept(new CssToken(CssTokenType.TT_IDENT, BOLD_WEIGHT));
-                    needsSpace = true;
-                    break;
-                default:
-                    if (needsSpace) {
-                        out.accept(new CssToken(CssTokenType.TT_S, " "));
-                    }
-                    out.accept(new CssToken(CssTokenType.TT_NUMBER, weight.getWeight()));
-                    needsSpace = true;
-                    break;
+            case NORMAL:
+                break;
+            case BOLD:
+                if (needsSpace) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                }
+                out.accept(new CssToken(CssTokenType.TT_IDENT, BOLD_WEIGHT));
+                needsSpace = true;
+                break;
+            default:
+                if (needsSpace) {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                }
+                out.accept(new CssToken(CssTokenType.TT_NUMBER, weight.getWeight()));
+                needsSpace = true;
+                break;
             }
         }
         if (needsSpace) {
@@ -128,14 +128,14 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
             switch (tt.currentStringNonNull().toLowerCase()) {
             case NORMAL_STYLE:
                 fontPosture = FontPosture.REGULAR;
-                    break;
-                case ITALIC_STYLE:
-                case OBLIQUE_STYLE:
-                    fontPosture = FontPosture.ITALIC;
-                    break;
-                default:
-                    tt.pushBack();
-                    break;
+                break;
+            case ITALIC_STYLE:
+            case OBLIQUE_STYLE:
+                fontPosture = FontPosture.ITALIC;
+                break;
+            default:
+                tt.pushBack();
+                break;
             }
         } else {
             tt.pushBack();
@@ -145,27 +145,27 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         boolean fontWeightConsumed = false;
         if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonNull().toLowerCase()) {
-                case NORMAL_WEIGHT:
-                    fontWeight = FontWeight.NORMAL;
-                    fontWeightConsumed = true;
-                    break;
-                case BOLD_WEIGHT:
-                    fontWeight = FontWeight.BOLD;
-                    fontWeightConsumed = true;
-                    break;
-                case BOLDER_WEIGHT:
-                    // FIXME weight should be relative to parent font
-                    fontWeight = FontWeight.BOLD;
-                    fontWeightConsumed = true;
-                    break;
-                case LIGHTER_WEIGHT:
-                    // FIXME weight should be relative to parent font
-                    fontWeight = FontWeight.LIGHT;
-                    fontWeightConsumed = true;
-                    break;
-                default:
-                    tt.pushBack();
-                    break;
+            case NORMAL_WEIGHT:
+                fontWeight = FontWeight.NORMAL;
+                fontWeightConsumed = true;
+                break;
+            case BOLD_WEIGHT:
+                fontWeight = FontWeight.BOLD;
+                fontWeightConsumed = true;
+                break;
+            case BOLDER_WEIGHT:
+                // FIXME weight should be relative to parent font
+                fontWeight = FontWeight.BOLD;
+                fontWeightConsumed = true;
+                break;
+            case LIGHTER_WEIGHT:
+                // FIXME weight should be relative to parent font
+                fontWeight = FontWeight.LIGHT;
+                fontWeightConsumed = true;
+                break;
+            default:
+                tt.pushBack();
+                break;
             }
         } else {
             tt.pushBack();
@@ -191,35 +191,35 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
             }
             if (fontWeightOrFontSizeConsumed) {
                 switch ((int) fontWeightOrFontSize) {
-                    case 100:
-                        fontWeight = FontWeight.THIN;
-                        break;
-                    case 200:
-                        fontWeight = FontWeight.EXTRA_LIGHT;
-                        break;
-                    case 300:
-                        fontWeight = FontWeight.LIGHT;
-                        break;
-                    case 400:
-                        fontWeight = FontWeight.NORMAL;
-                        break;
-                    case 500:
-                        fontWeight = FontWeight.MEDIUM;
-                        break;
-                    case 600:
-                        fontWeight = FontWeight.SEMI_BOLD;
-                        break;
-                    case 700:
-                        fontWeight = FontWeight.BOLD;
-                        break;
-                    case 800:
-                        fontWeight = FontWeight.EXTRA_BOLD;
-                        break;
-                    case 900:
-                        fontWeight = FontWeight.BLACK;
-                        break;
-                    default:
-                        throw new ParseException("⟨Font⟩: illegal font weight " + fontWeightOrFontSize, tt.getStartPosition());
+                case 100:
+                    fontWeight = FontWeight.THIN;
+                    break;
+                case 200:
+                    fontWeight = FontWeight.EXTRA_LIGHT;
+                    break;
+                case 300:
+                    fontWeight = FontWeight.LIGHT;
+                    break;
+                case 400:
+                    fontWeight = FontWeight.NORMAL;
+                    break;
+                case 500:
+                    fontWeight = FontWeight.MEDIUM;
+                    break;
+                case 600:
+                    fontWeight = FontWeight.SEMI_BOLD;
+                    break;
+                case 700:
+                    fontWeight = FontWeight.BOLD;
+                    break;
+                case 800:
+                    fontWeight = FontWeight.EXTRA_BOLD;
+                    break;
+                case 900:
+                    fontWeight = FontWeight.BLACK;
+                    break;
+                default:
+                    throw new ParseException("⟨Font⟩: illegal font weight " + fontWeightOrFontSize, tt.getStartPosition());
                 }
             }
 

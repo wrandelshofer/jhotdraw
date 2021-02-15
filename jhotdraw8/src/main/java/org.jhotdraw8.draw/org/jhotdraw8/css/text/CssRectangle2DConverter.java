@@ -28,6 +28,8 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     private final boolean withSpace;
     private final boolean withComma;
 
+    private CssSizeConverter sizeConverter = new CssSizeConverter(false);
+
     public CssRectangle2DConverter(boolean nullable) {
         this(nullable, true, false);
     }
@@ -41,67 +43,41 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     @Override
     public @NonNull CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, width, height;
-        x = parseDimension(tt, "x");
+        x = sizeConverter.parse(tt, idResolver);
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        y = parseDimension(tt, "y");
+        y = sizeConverter.parse(tt, idResolver);
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        width = parseDimension(tt, "width");
+        width = sizeConverter.parse(tt, idResolver);
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        height = parseDimension(tt, "height");
+        height = sizeConverter.parse(tt, idResolver);
 
         return new CssRectangle2D(x, y, width, height);
     }
 
-    private @NonNull CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return new CssSize(tt.currentNumberNonNull().doubleValue());
-        case CssTokenType.TT_DIMENSION:
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
-        case CssTokenType.TT_IDENT:
-            switch (tt.currentStringNonNull()) {
-            case "INF":
-                return new CssSize(Double.POSITIVE_INFINITY);
-            case "-INF":
-                        return new CssSize(Double.NEGATIVE_INFINITY);
-                    case "NaN":
-                        return new CssSize(Double.NaN);
-                    default:
-                        throw new ParseException(" ⟨CssRectangle2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-                }
-            default:
-                throw new ParseException(" ⟨CssRectangle2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-        }
-    }
-
     @Override
     protected <TT extends CssRectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        CssSize minX = value.getMinX();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, minX.getValue(), minX.getUnits()));
+        sizeConverter.produceTokens(value.getMinX(), idSupplier, out);
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssSize minY = value.getMinY();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, minY.getValue(), minY.getUnits()));
+        sizeConverter.produceTokens(value.getMinY(), idSupplier, out);
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssSize width = value.getWidth();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
+        sizeConverter.produceTokens(value.getWidth(), idSupplier, out);
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssSize height = value.getHeight();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, height.getValue(), height.getUnits()));
+        sizeConverter.produceTokens(value.getHeight(), idSupplier, out);
     }
 
     @Override

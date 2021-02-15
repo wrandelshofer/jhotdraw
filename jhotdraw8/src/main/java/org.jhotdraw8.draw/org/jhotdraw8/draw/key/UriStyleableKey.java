@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssUriConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.net.URI;
@@ -16,7 +16,7 @@ import java.net.URI;
  *
  * @author Werner Randelshofer
  */
-public class UriStyleableKey extends AbstractStyleableKey<URI> implements WriteableStyleableMapAccessor<URI> {
+public class UriStyleableKey extends AbstractStyleableKey<URI> implements WritableStyleableMapAccessor<URI> {
 
     private static final long serialVersionUID = 1L;
     private Converter<URI> converter = new CssUriConverter();

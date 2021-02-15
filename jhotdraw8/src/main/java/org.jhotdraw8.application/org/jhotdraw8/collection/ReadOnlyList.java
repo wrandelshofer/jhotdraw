@@ -23,6 +23,10 @@ import java.util.Spliterator;
  * Note: To compare a ReadOnlyList to a List, you must either
  * wrap the ReadOnlyList into a List using {@link ListWrapper},
  * or wrap the List into a ReadOnlyList using {@link ReadOnlyListWrapper}.
+ * <p>
+ * This interface does not guarantee 'read-only', it actually guarantees
+ * 'readable'. We use the prefix 'ReadOnly' because this is the naming
+ * convention in JavaFX for APIs that provide read methods but no write methods.
  *
  * @param <E> the element type
  */

@@ -15,7 +15,7 @@ import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.Converter;
 
 public class ListStyleableKey<T> extends SimpleNonNullListKey<T>
-        implements WriteableStyleableMapAccessor<@NonNull ImmutableList<T>>, NonNullMapAccessor<@NonNull ImmutableList<T>> {
+        implements WritableStyleableMapAccessor<@NonNull ImmutableList<T>>, NonNullMapAccessor<@NonNull ImmutableList<T>> {
     private static final long serialVersionUID = 0L;
     private final @NonNull Converter<@NonNull ImmutableList<T>> converter;
     private final String cssName;

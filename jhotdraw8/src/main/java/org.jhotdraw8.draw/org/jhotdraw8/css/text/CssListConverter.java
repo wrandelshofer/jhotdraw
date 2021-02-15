@@ -130,22 +130,22 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                 continue Loop;
             }
             switch (ttype) {
-                case CssTokenType.TT_S:
-                    continue Loop;
-                case CssTokenType.TT_EOF:
-                case CssTokenType.TT_SEMICOLON:
-                case CssTokenType.TT_RIGHT_BRACKET:
-                case CssTokenType.TT_RIGHT_CURLY_BRACKET:
-                case CssTokenType.TT_RIGHT_SQUARE_BRACKET:
-                    tt.pushBack();
-                    break Loop;
-                default:
-                    tt.pushBack();
-                    T elem = elementConverter.parse(tt, idResolver);
-                    if (elem != null) {
-                        list.add(elem);
-                    }
-                    break;
+            case CssTokenType.TT_S:
+                continue Loop;
+            case CssTokenType.TT_EOF:
+            case CssTokenType.TT_SEMICOLON:
+            case CssTokenType.TT_RIGHT_BRACKET:
+            case CssTokenType.TT_RIGHT_CURLY_BRACKET:
+            case CssTokenType.TT_RIGHT_SQUARE_BRACKET:
+                tt.pushBack();
+                break Loop;
+            default:
+                tt.pushBack();
+                T elem = elementConverter.parse(tt, idResolver);
+                if (elem != null) {
+                    list.add(elem);
+                }
+                break;
             }
 
         }

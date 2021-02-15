@@ -267,16 +267,25 @@ public class NumberConverter implements Converter<Number> {
             if (factor != 1.0) {
                 v = (float) (v * factor);
             }
-            String str;// = Float.toString(v);
-            BigDecimal big = new BigDecimal(v);
-            int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-            if (!usesScientificNotation || exponent > minNegativeExponent
-                    && exponent < minPositiveExponent) {
-                str = floatDecimalFormat.format(v);
+            if (Float.isInfinite(v)) {
+                if (v < 0.0) {
+                    buf.append('-');
+                }
+                buf.append("INF");
+            } else if (Float.isNaN(v)) {
+                buf.append("NaN");
             } else {
-                str = scientificFormat.format(v);
+                String str;// = Float.toString(v);
+                BigDecimal big = new BigDecimal(v);
+                int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
+                if (!usesScientificNotation || exponent > minNegativeExponent
+                        && exponent < minPositiveExponent) {
+                    str = floatDecimalFormat.format(v);
+                } else {
+                    str = scientificFormat.format(v);
+                }
+                buf.append(str);
             }
-            buf.append(str);
         } else if (value instanceof Long) {
             long v = (Long) value;
             if (factor != 1.0) {

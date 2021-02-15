@@ -14,7 +14,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> implements WriteableStyleableMapAccessor<T> {
+public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> implements WritableStyleableMapAccessor<T> {
 
     private static final long serialVersionUID = 1L;
 

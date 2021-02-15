@@ -22,7 +22,7 @@ import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
@@ -53,13 +53,13 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     /**
      * Maps an attribute name to a key.
      */
-    private @NonNull Map<Class<?>, Map<QualifiedName, WriteableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
+    private @NonNull Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
     private @NonNull Map<Class<?>, Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
     /**
      * Maps a key to an attribute name.
      */
-    private @NonNull HashMap<WriteableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new HashMap<>();
-    private @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
+    private @NonNull HashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new HashMap<>();
+    private @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
 
 
@@ -99,12 +99,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return element.getStyleClasses();
     }
 
-    private WriteableStyleableMapAccessor<?> findKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
-        Map<QualifiedName, WriteableStyleableMapAccessor<?>> mm = nameToKeyMap.computeIfAbsent(element.getClass(), k -> {
-            Map<QualifiedName, WriteableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
+    private WritableStyleableMapAccessor<?> findKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+        Map<QualifiedName, WritableStyleableMapAccessor<?>> mm = nameToKeyMap.computeIfAbsent(element.getClass(), k -> {
+            Map<QualifiedName, WritableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
-                if (kk instanceof WriteableStyleableMapAccessor) {
-                    WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) kk;
+                if (kk instanceof WritableStyleableMapAccessor) {
+                    WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) kk;
                     m.put(new QualifiedName(sk.getCssNamespace(), element.getClass() + "$" + sk.getCssName()), sk);
                     if (sk.getCssNamespace() != null) {
                         m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
@@ -241,10 +241,10 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     @Override
     public @NonNull Set<QualifiedName> getComposedAttributeNames(@NonNull Figure element) {
         Set<QualifiedName> attr = new HashSet<>();
-        Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
+        Set<WritableStyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if (key instanceof WriteableStyleableMapAccessor) {
-                WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) key;
+            if (key instanceof WritableStyleableMapAccessor) {
+                WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) key;
                 attrk.add(sk);
             }
         }
@@ -253,7 +253,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                 attrk.removeAll(((CompositeMapAccessor<?>) key).getSubAccessors());
             }
         }
-        for (WriteableStyleableMapAccessor<?> key : attrk) {
+        for (WritableStyleableMapAccessor<?> key : attrk) {
             attr.add(new QualifiedName(key.getCssNamespace(), key.getCssName()));
         }
         return attr;
@@ -263,14 +263,14 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     public @NonNull Set<QualifiedName> getDecomposedAttributeNames(@NonNull Figure element) {
         // FIXME use keyToName map
         Set<QualifiedName> attr = new HashSet<>();
-        Set<WriteableStyleableMapAccessor<?>> attrk = new HashSet<>();
+        Set<WritableStyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if ((key instanceof WriteableStyleableMapAccessor) && !(key instanceof CompositeMapAccessor)) {
-                WriteableStyleableMapAccessor<?> sk = (WriteableStyleableMapAccessor<?>) key;
+            if ((key instanceof WritableStyleableMapAccessor) && !(key instanceof CompositeMapAccessor)) {
+                WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) key;
                 attrk.add(sk);
             }
         }
-        for (WriteableStyleableMapAccessor<?> key : attrk) {
+        for (WritableStyleableMapAccessor<?> key : attrk) {
             attr.add(new QualifiedName(key.getCssNamespace(), key.getCssName()));
         }
         return attr;
@@ -388,24 +388,24 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     public @Nullable Converter<?> getConverter(@NonNull Figure element, @Nullable String namespace, String attributeName) {
         @SuppressWarnings("unchecked")
-        WriteableStyleableMapAccessor<Object> k = (WriteableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
+        WritableStyleableMapAccessor<Object> k = (WritableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
         return k == null ? null : k.getCssConverter();
     }
 
-    public @Nullable WriteableStyleableMapAccessor<?> getAccessor(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    public @Nullable WritableStyleableMapAccessor<?> getAccessor(@NonNull Figure element, @Nullable String namespace, String attributeName) {
         @SuppressWarnings("unchecked")
-        WriteableStyleableMapAccessor<Object> k = (WriteableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
+        WritableStyleableMapAccessor<Object> k = (WritableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
         return k;
     }
 
-    private Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> getWritableMetaMap(@NonNull Figure elem) {
+    private Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> getWritableMetaMap(@NonNull Figure elem) {
         return figureToMetaMap.computeIfAbsent(elem.getClass(), klass -> {
-            Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
+            Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
             for (MapAccessor<?> k : elem.getSupportedKeys()) {
-                if (k instanceof WriteableStyleableMapAccessor) {
+                if (k instanceof WritableStyleableMapAccessor) {
                     @SuppressWarnings("unchecked")
-                    WriteableStyleableMapAccessor<Object> sk = (WriteableStyleableMapAccessor<Object>) k;
+                    WritableStyleableMapAccessor<Object> sk = (WritableStyleableMapAccessor<Object>) k;
                     metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), key -> new ArrayList<>()).add(sk);
                     if (sk.getCssNamespace() != null) {
                         // all names can be accessed without specificying a namespace
@@ -441,11 +441,11 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     @Override
     public void setAttribute(@NonNull Figure elem, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value)
             throws ParseException {
-        Map<QualifiedName, List<WriteableStyleableMapAccessor<Object>>> metaMap = getWritableMetaMap(elem);
+        Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = getWritableMetaMap(elem);
 
-        List<WriteableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
+        List<WritableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
         if (ks != null) {
-            for (WriteableStyleableMapAccessor<Object> k : ks) {
+            for (WritableStyleableMapAccessor<Object> k : ks) {
                 if (value == null || isInitial(value)) {
                     elem.remove(origin, k);
                 } else {

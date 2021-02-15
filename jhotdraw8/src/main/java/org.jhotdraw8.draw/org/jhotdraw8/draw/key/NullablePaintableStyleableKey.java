@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssPaintableConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -15,7 +15,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WriteableStyleableMapAccessor<Paintable> {
+public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WritableStyleableMapAccessor<Paintable> {
 
     private static final long serialVersionUID = 1L;
 

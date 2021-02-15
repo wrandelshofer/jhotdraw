@@ -15,6 +15,10 @@ import java.util.Set;
  * <p>
  * Note: a ReadOnlySet is not equal to a non-readable {@link Set}.
  * To compare a ReadOnlySet to a Set, you have to wrap the Set into a {@link ReadOnlySetWrapper}.
+ * <p>
+ * This interface does not guarantee 'read-only', it actually guarantees
+ * 'readable'. We use the prefix 'ReadOnly' because this is the naming
+ * convention in JavaFX for APIs that provide read methods but no write methods.
  *
  * @param <E> the element type
  */

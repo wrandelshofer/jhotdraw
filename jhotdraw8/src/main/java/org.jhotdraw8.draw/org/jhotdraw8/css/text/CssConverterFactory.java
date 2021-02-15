@@ -29,12 +29,12 @@ public class CssConverterFactory implements ConverterFactory {
             return new CssSizeConverter(false);
         case "word":
             return new CssWordConverter();
-            case "paint":
-                return new CssPaintableConverter(false);
-            case "font":
-                return new CssFontConverter(false);
-            default:
-                throw new IllegalArgumentException("illegal type:" + type);
+        case "paint":
+            return new CssPaintableConverter(false);
+        case "font":
+            return new CssFontConverter(false);
+        default:
+            throw new IllegalArgumentException("illegal type:" + type);
         }
     }
 

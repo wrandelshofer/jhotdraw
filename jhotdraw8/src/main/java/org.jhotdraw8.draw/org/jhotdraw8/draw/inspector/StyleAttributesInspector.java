@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.tree.TreeModelEvent;
 
@@ -78,12 +78,12 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected @Nullable Object get(@NonNull Figure f, @NonNull WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected @Nullable Object get(@NonNull Figure f, @NonNull WritableStyleableMapAccessor<Object> finalSelectedAccessor) {
         return getDrawingModel().get(f, finalSelectedAccessor);
     }
 
     @Override
-    protected @Nullable WriteableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
+    protected @Nullable WritableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
         if (selectorModel instanceof FigureSelectorModel) {
             FigureSelectorModel m = (FigureSelectorModel) selectorModel;
             return m.getAccessor(f, propertyNamespace, propertyName);
@@ -149,12 +149,12 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected void remove(@NonNull Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected void remove(@NonNull Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor) {
         getDrawingModel().remove(f, finalSelectedAccessor);
     }
 
     @Override
-    protected void set(@NonNull Figure f, WriteableStyleableMapAccessor<Object> finalSelectedAccessor, Object o) {
+    protected void set(@NonNull Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor, Object o) {
         getDrawingModel().set(f, finalSelectedAccessor, o);
     }
 

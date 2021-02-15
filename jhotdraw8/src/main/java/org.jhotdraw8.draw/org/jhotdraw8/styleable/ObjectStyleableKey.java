@@ -11,7 +11,7 @@ import org.jhotdraw8.text.Converter;
 
 import java.lang.reflect.Type;
 
-public class ObjectStyleableKey<T> extends AbstractKey<T> implements WriteableStyleableMapAccessor<T> {
+public class ObjectStyleableKey<T> extends AbstractKey<T> implements WritableStyleableMapAccessor<T> {
     private static final long serialVersionUID = 0L;
 
     private final @NonNull Converter<T> converter;

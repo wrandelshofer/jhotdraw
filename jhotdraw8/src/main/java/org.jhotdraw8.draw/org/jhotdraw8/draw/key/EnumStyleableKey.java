@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssEnumConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.util.Objects;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * @author Werner Randelshofer
  */
 public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStyleableKey<@NonNull T>
-        implements WriteableStyleableMapAccessor<@NonNull T>, NonNullMapAccessor<@NonNull T> {
+        implements WritableStyleableMapAccessor<@NonNull T>, NonNullMapAccessor<@NonNull T> {
 
     private static final long serialVersionUID = 1L;
 

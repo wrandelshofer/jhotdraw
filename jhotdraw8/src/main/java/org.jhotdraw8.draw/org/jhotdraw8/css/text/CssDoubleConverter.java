@@ -41,18 +41,18 @@ public class CssDoubleConverter extends AbstractCssConverter<Double> {
                 value = Double.POSITIVE_INFINITY;
                 break;
             case "-INF":
-                        value = Double.NEGATIVE_INFINITY;
-                        break;
-                    case "NaN":
-                        value = Double.NaN;
-                        break;
-                    default:
-                        throw tt.createParseException("⟨Double⟩: number expected.");
-                }
-                return value;
-            }
+                value = Double.NEGATIVE_INFINITY;
+                break;
+            case "NaN":
+                value = Double.NaN;
+                break;
             default:
                 throw tt.createParseException("⟨Double⟩: number expected.");
+            }
+            return value;
+        }
+        default:
+            throw tt.createParseException("⟨Double⟩: number expected.");
         }
     }
 

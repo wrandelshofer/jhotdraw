@@ -39,6 +39,7 @@ import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.styleable.StyleableBean;
 import org.jhotdraw8.styleable.StyleablePropertyBean;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.tree.TreeNode;
 
 import java.lang.reflect.Field;
@@ -106,7 +107,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <p>
  * <b>Styling.</b> Some property values of a figure can be styled using CSS. The
  * corresponding property key must implement the interface
- * {@link org.jhotdraw8.styleable.WriteableStyleableMapAccessor}.</p>
+ * {@link WritableStyleableMapAccessor}.</p>
  * <p>
  * <b>Update Strategy.</b> A figure does not automatically update its computed
  * property values. The update strategy is factored out into

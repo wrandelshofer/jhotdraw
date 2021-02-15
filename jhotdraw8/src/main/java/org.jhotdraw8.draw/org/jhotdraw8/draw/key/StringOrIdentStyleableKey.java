@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssStringOrIdentConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -17,7 +17,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  */
 public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull String>
-        implements WriteableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
+        implements WritableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
 
     static final long serialVersionUID = 1L;
     private final Converter<String> converter = new CssStringOrIdentConverter();

@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssPoint2DConverter;
-import org.jhotdraw8.styleable.WriteableStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 /**
@@ -18,7 +18,7 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  */
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoint2D>
-        implements WriteableStyleableMapAccessor<@NonNull CssPoint2D>, NonNullMapAccessor<@NonNull CssPoint2D> {
+        implements WritableStyleableMapAccessor<@NonNull CssPoint2D>, NonNullMapAccessor<@NonNull CssPoint2D> {
 
     private static final long serialVersionUID = 1L;
     private final Converter<@NonNull CssPoint2D> converter;
