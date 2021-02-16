@@ -141,7 +141,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<Double>>() {
                     },
                     new CssPercentageConverter(false),
-                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
+                    new CssDefaultableValue<>(CssDefaulting.INHERIT), 0.0);
     /**
      * fill-opacity.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillOpacityProperty">link</a>

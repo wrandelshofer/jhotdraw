@@ -8,9 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.text.CssConverterFactory;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.text.PatternConverter;
 
 import java.util.Objects;
 
@@ -23,7 +21,6 @@ import java.util.Objects;
  */
 public class CssColor implements Paintable {
 
-    private static final PatternConverter formatter = new PatternConverter("rgba'('{0,number},{1,number},{2,number},{3,number}')'", new CssConverterFactory());
 
     private final @NonNull String name;
     private final @NonNull Color color;
@@ -81,19 +78,37 @@ public class CssColor implements Paintable {
 
     public static @NonNull String toName(@NonNull Color c) {
         if (c.getOpacity() == 1.0) {
+            // The fields in class Color store values as floats, we must
+            // not promote it to double because this changes the values!
+            return "rgb("
+                    + ((float) c.getRed()) * 100 + "%,"
+                    + ((float) c.getGreen()) * 100 + "%,"
+                    + ((float) c.getBlue()) * 100 + "%"
+                    + ")";
+            /*
+            // This is not precise and will faill in SVG tests.
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
             return String.format("#%02x%02x%02x", r, g, b);
+             */
         } else if (c.equals(Color.TRANSPARENT)) {
             return "transparent";
         } else {
+            // The fields in class Color store values as floats, we must
+            // not promote it to double because this changes the values!
+            return "rgba("
+                    + ((float) c.getRed()) * 100 + "%,"
+                    + ((float) c.getGreen()) * 100 + "%,"
+                    + ((float) c.getBlue()) * 100 + "%"
+                    + ((float) c.getOpacity()) * 100 + "%"
+                    + ")";
+            /*
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
             float o = (float) c.getOpacity();// Color represents opacity by a float. We must not promote it.
-            return formatter.format(r, g, b, o);
-            //return String.format("rgba(%d,%d,%d,%f)", r, g, b, o);
+             */
         }
     }
 

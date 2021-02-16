@@ -13,7 +13,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -126,7 +125,6 @@ public class SvgPathFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group g=(Group)node;
-        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         javafx.scene.shape.Path n0 = (javafx.scene.shape.Path) g.getChildren().get(0);
         javafx.scene.shape.Path n1 = (javafx.scene.shape.Path) g.getChildren().get(1);
 

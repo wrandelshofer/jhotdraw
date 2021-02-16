@@ -10,10 +10,18 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
@@ -30,6 +38,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -126,6 +135,7 @@ public class SvgReadWriteAndCompareTest {
         writer.write(bufOutputStream,drawing1Node, drawing1Size);
 
         ByteArrayInputStream bufInputStream = new ByteArrayInputStream(bufOutputStream.toByteArray());
+        System.out.println(new String(bufOutputStream.toByteArray(), StandardCharsets.UTF_8));
         reader.setBestEffort(false);
         Figure drawing2 = reader.read(new StreamSource(bufInputStream));
         Node drawing2Node = r.render(drawing2);
@@ -133,8 +143,8 @@ public class SvgReadWriteAndCompareTest {
         CompletableFuture<OrderedPair<WritableImage, WritableImage>> future = new CompletableFuture<>();
         Platform.runLater(() -> {
             try {
-                WritableImage drawing1Image = drawing1Node.snapshot(new SnapshotParameters(), null);
                 WritableImage drawing2Image = drawing2Node.snapshot(new SnapshotParameters(), null);
+                WritableImage drawing1Image = drawing1Node.snapshot(new SnapshotParameters(), null);
                 future.complete(new OrderedPair<>(drawing1Image, drawing2Image));
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -156,15 +166,33 @@ public class SvgReadWriteAndCompareTest {
 
         if (INTERACTIVE && !actualBuffer.equals(expectedBuffer)) {
             CompletableFuture<Boolean> waitUntilClosed = new CompletableFuture<>();
-            AtomicReference<Stage> stageRef=new AtomicReference<>(null);
+            AtomicReference<Stage> stageRef = new AtomicReference<>(null);
+            WritableImage markedDifferences = new WritableImage((int) actualImage.getWidth(), (int) actualImage.getHeight());
+            int[] aa = actualBuffer.array();
+            int[] ea = expectedBuffer.array();
+            PixelWriter pw = markedDifferences.getPixelWriter();
+            int w = (int) actualImage.getWidth();
+            for (int i = 0; i < aa.length; i++) {
+                if (aa[i] != ea[i]) {
+                    pw.setArgb(i % w, i / w, 0xff000000);
+                }
+            }
             Platform.runLater(() -> {
                 try {
                     Stage stage = new Stage();
                     stageRef.set(stage);
-                    HBox hbox = new HBox();
-                    hbox.getChildren().addAll(new ImageView(actualImage),
-                            new ImageView(expectedImage));
-                    stage.setScene(new Scene(hbox));
+                    GridPane grid = new GridPane();
+                    grid.setBorder(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderStroke.THICK)));
+                    grid.add(new ImageView(actualImage), 0, 0);
+                    grid.add(new ImageView(expectedImage), 1, 0);
+                    grid.add(new ImageView(markedDifferences), 1, 1);
+                    StackPane stackPane = new StackPane();
+                    ImageView imageView = new ImageView(actualImage);
+                    ImageView imageView1 = new ImageView(expectedImage);
+                    imageView1.setBlendMode(BlendMode.DIFFERENCE);
+                    stackPane.getChildren().setAll(imageView, imageView1);
+                    grid.add(stackPane, 0, 1);
+                    stage.setScene(new Scene(grid));
                     stage.sizeToScene();
                     stage.setWidth(Math.max(100, stage.getWidth()));
                     stage.setHeight(Math.max(100, stage.getHeight()));
