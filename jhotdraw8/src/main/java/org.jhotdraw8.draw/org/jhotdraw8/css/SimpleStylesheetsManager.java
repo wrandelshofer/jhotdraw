@@ -226,9 +226,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     selectorModel.reset(elem);
 
                     // The stylesheet is a user-agent stylesheet
-                    for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
+                    for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
                         try {
-                            Declaration d = entry.getValue();
+                            Declaration d = entry.getValue().getValue();
                             doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
@@ -239,9 +239,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // ... nothing to do!
 
                     // The stylesheet is an external file
-                    for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
+                    for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
                         try {
-                            Declaration d = entry.getValue();
+                            Declaration d = entry.getValue().getValue();
                             doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
@@ -249,9 +249,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     }
 
                     // The stylesheet is an internal file
-                    for (Map.Entry<Stylesheet, Declaration> entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
+                    for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
                         try {
-                            Declaration d = entry.getValue();
+                            Declaration d = entry.getValue().getValue();
                             doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
@@ -327,8 +327,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * @param stylesheets the stylesheets
      * @return list of applicable declarations
      */
-    private List<Map.Entry<Stylesheet, Declaration>> collectApplicableDeclarations(E elem,
-                                                                                   @NonNull Collection<StylesheetEntry> stylesheets) {
+    private List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> collectApplicableDeclarations(E elem,
+                                                                                                       @NonNull Collection<StylesheetEntry> stylesheets) {
         List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> applicableDeclarations = new ArrayList<>();
         for (StylesheetEntry e : stylesheets) {
             Stylesheet s = e.getStylesheet();
@@ -338,7 +338,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             collectApplicableDeclarations(elem, s, applicableDeclarations);
         }
 
-        return applicableDeclarations.stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).collect(Collectors.toList());
+        applicableDeclarations.sort(Map.Entry.comparingByKey());
+        return applicableDeclarations;
     }
 
     private @NonNull List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> collectApplicableDeclarations(E elem, @NonNull Stylesheet s,

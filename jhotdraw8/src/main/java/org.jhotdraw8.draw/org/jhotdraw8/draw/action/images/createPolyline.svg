@@ -5,14 +5,9 @@
     <g id="content">
       <polyline fill="none" id="polyline1" points="10,3 4,6 9,16 16,17 18,7 13,9" stroke="#000000"
                 stroke-linecap="square" stroke-width="2"/>
-      <g id="label2">
-        <text fill="#008b8b" font-family="'Futura Medium', 'Futura'" font-size="19">
-          <tspan x="5" y="39.63623047">#</tspan>
-        </text>
-      </g>
       <polygon fill="#808080" id="polygon8"
                points="22,32 27,36 27,34 30,34 30,37 28,37 32,42 36,37 34,37 34,34 37,34 37,36 42,32 37,28 37,30 34,30 34,27 36,27 32,22 28,27 30,27 30,30 27,30 27,28"
-               stroke="#808080" stroke-alignment="inner"/>
+               stroke="#808080"/>
     </g>
   </g>
 </svg>

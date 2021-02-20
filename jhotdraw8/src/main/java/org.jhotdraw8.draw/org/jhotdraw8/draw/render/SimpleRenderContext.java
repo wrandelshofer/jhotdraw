@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class SimpleRenderContext implements RenderContext {
+public class SimpleRenderContext implements WritableRenderContext {
     private @NonNull Map<Figure, Node> nodeMap = new HashMap<>();
     private @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
@@ -29,6 +29,10 @@ public class SimpleRenderContext implements RenderContext {
 
     public @NonNull ObservableMap<Key<?>, Object> getProperties() {
         return properties;
+    }
+
+    public <T> void set(@NonNull MapAccessor<T> key, @Nullable T value) {
+        key.set(properties, value);
     }
 
     /**

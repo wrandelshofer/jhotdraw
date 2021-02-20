@@ -29,6 +29,7 @@ import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -191,12 +192,17 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         updatePathNode(ctx, p);
         updateTextNode(ctx, t);
 
-        g.getChildren().clear();
+        // Note: we must not add individual elements to g.children because
+        // its ObservableList fires too many events.
+        ArrayList<Node> newChildren = new ArrayList<>(2);
         if (p.getStroke() != null || p.getFill() != null) {
-            g.getChildren().add(p);
+            newChildren.add(p);
         }
         if (t.getStroke() != null || t.getFill() != null) {
-            g.getChildren().add(t);
+            newChildren.add(t);
+        }
+        if (!newChildren.equals(g.getChildren())) {
+            g.getChildren().setAll(newChildren);
         }
     }
 

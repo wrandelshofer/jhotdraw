@@ -93,8 +93,6 @@ public class LayerFigure extends AbstractCompositeFigure
         }
 
         ObservableList<Node> groupChildren = n.getChildren();
-        // Performance: setAll is extremely expensive, maybe we should add/remove
-        // each node individually instead.
         if (!groupChildren.equals(childNodes)) {
             groupChildren.setAll(childNodes);
         }

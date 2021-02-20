@@ -5,9 +5,7 @@
     <g id="content">
       <line fill="none" id="line7" stroke="#008b8b" x1="18.5" x2="18.5" y1="4" y2="19"/>
       <g id="label2">
-        <text fill="#008b8b" font-family="'Futura Medium', 'Futura'" font-size="19">
-          <tspan x="5" y="17.63623047">#</tspan>
-        </text>
+        <text fill="#008b8b" font-family="'Futura Medium', 'Futura'" font-size="19" x="5" y="17.63623047">#</text>
       </g>
       <polygon fill="#000000" id="polygon3" points="55,47 60,58 56.5,57 56.5,62 53.5,62 53.5,57 50,58" stroke="#ffffff"
                transform="translate(-44,-44), matrix(0.9238795325112868,-0.38268343236508956,0.38268343236508956,0.9238795325112868,-12.669621352018158,47.19615425821479)"/>

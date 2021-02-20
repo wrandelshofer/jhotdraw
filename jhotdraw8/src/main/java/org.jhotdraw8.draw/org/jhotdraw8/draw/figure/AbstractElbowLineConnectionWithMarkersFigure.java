@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
@@ -35,6 +36,7 @@ import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -193,10 +195,13 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
                                     @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             try {
-                markerNode.getElements().clear();
-                FXPathBuilder builder = new FXPathBuilder(markerNode.getElements());
+                // Note: we must not add individual elements to the ObservableList
+                // of the markerNode, because this fires too many change events.
+                List<PathElement> nodes = new ArrayList<>();
+                FXPathBuilder builder = new FXPathBuilder(nodes);
                 Shapes.buildFromSvgString(builder, svgString);
                 builder.build();
+                markerNode.getElements().setAll(nodes);
             } catch (ParseException e) {
                 Logger.getLogger(AbstractElbowLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
             }

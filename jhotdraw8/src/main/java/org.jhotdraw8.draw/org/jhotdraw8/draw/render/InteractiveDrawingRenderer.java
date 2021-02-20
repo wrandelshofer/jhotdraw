@@ -52,7 +52,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     public static final String RENDER_CONTEXT_PROPERTY = "renderContext";
     public static final String MODEL_PROPERTY = "model";
     public static final String DRAWING_VIEW_PROPERTY = "drawingView";
-    private final @NonNull NonNullObjectProperty<RenderContext> renderContext //
+    private final @NonNull NonNullObjectProperty<WritableRenderContext> renderContext //
             = new NonNullObjectProperty<>(this, RENDER_CONTEXT_PROPERTY, new SimpleRenderContext());
     private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
@@ -396,15 +396,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return n;
     }
 
-    public @NonNull NonNullObjectProperty<RenderContext> renderContextProperty() {
+    public @NonNull NonNullObjectProperty<WritableRenderContext> renderContextProperty() {
         return renderContext;
     }
 
-    public @NonNull RenderContext getRenderContext() {
+    public @NonNull WritableRenderContext getRenderContext() {
         return renderContext.get();
     }
 
-    public void setRenderContext(@NonNull RenderContext newValue) {
+    public void setRenderContext(@NonNull WritableRenderContext newValue) {
         renderContext.set(newValue);
     }
 
@@ -548,9 +548,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private void updateRenderContext() {
-        set(RenderContext.CLIP_BOUNDS, getClipBounds());
+        getRenderContext().set(RenderContext.CLIP_BOUNDS, getClipBounds());
         DefaultUnitConverter units = new DefaultUnitConverter(90, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
-        set(RenderContext.UNIT_CONVERTER_KEY, units);
+        getRenderContext().set(RenderContext.UNIT_CONVERTER_KEY, units);
     }
 
     private void removeNode(Figure f) {

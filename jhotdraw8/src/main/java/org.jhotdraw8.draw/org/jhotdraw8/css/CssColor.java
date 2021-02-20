@@ -72,6 +72,7 @@ public class CssColor implements Paintable {
 
     @Override
     public @Nullable Paint getPaint(RenderContext ctx) {
+        // XXX This should only be done for a named color
         return ctx.getNonNull(RenderContext.SYSTEM_COLOR_CONVERTER_KEY)
                 .convert(this);
     }

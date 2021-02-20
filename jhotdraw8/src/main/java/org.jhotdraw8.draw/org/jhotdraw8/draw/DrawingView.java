@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.WritableRenderContext;
 import org.jhotdraw8.draw.tool.Tool;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ import java.util.function.Predicate;
  * @author Werner Randelshofer
  * Responsibility, Handler.
  */
-public interface DrawingView extends RenderContext {
+public interface DrawingView extends WritableRenderContext {
 
     // ---
     // property names
