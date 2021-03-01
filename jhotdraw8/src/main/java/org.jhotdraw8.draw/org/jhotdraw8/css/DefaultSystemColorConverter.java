@@ -27,7 +27,7 @@ public class DefaultSystemColorConverter extends MappedSystemColorConverter {
         map.put(BUTTON_TEXT, Color.BLACK);
         map.put(FIELD, Color.WHITE);
         map.put(FIELD_TEXT, Color.BLACK);
-        map.put(HIGHLIGHT, Color.CORNFLOWERBLUE);
+        map.put(HIGHLIGHT, Color.YELLOW);
         map.put(HIGHLIGHT_TEXT, Color.BLACK);
         map.put(GRAY_TEXT, Color.GRAY);
         LIGHT_SYSTEM_COLORS = Collections.unmodifiableMap(map);

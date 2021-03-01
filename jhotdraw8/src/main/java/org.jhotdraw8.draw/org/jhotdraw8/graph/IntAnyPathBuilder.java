@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.LongArrayDeque;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.ArrayDeque;
@@ -77,7 +78,7 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
 
 
     /**
-     * Breadth-first-search.
+     * Searches breadth-first for a path from root to goal.
      *
      * @param root      the starting point of the search
      * @param goal      the goal of the search
@@ -92,7 +93,7 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
                                      @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
                                      @NonNull AddToIntSet visited,
                                      int maxLength) {
-        Queue<MyBackLink> queue = new ArrayDeque<>(16);
+        Queue<MyBackLink> queue = new ArrayDeque<>(32);
         MyBackLink rootBackLink = new MyBackLink(root, null, maxLength);
         int[] v = new int[1];
         IntConsumer consumer = i -> v[0] = i;
@@ -102,15 +103,17 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
 
         while (!queue.isEmpty()) {
             MyBackLink node = queue.remove();
-            if (goal.test(node.vertex)) {
+            int vertex = node.vertex;
+            if (goal.test(vertex)) {
                 return node;
             }
 
-            if (node.maxRemaining > 0) {
-                Spliterator.OfInt spliterator = nextNodesFunction.apply(node.vertex);
+            int maxRemaining = node.maxRemaining;
+            if (maxRemaining > 0) {
+                Spliterator.OfInt spliterator = nextNodesFunction.apply(vertex);
                 while (spliterator.tryAdvance(consumer)) {
                     if (visited.add(v[0])) {
-                        MyBackLink backLink = new MyBackLink(v[0], node, node.maxRemaining - 1);
+                        MyBackLink backLink = new MyBackLink(v[0], node, maxRemaining - 1);
                         queue.add(backLink);
                     }
                 }
@@ -118,6 +121,72 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
         }
 
         return null;
+    }
+
+    /**
+     * Searches breadth-first whether a path from root to goal exists.
+     *
+     * @param root      the starting point of the search
+     * @param goal      the goal of the search
+     * @param visited   a predicate with side effect. The predicate returns true
+     *                  if the specified vertex has been visited, and marks the specified vertex
+     *                  as visited.
+     * @param maxLength the maximal path length
+     * @return true on success, false on failure
+     */
+    public @Nullable boolean exists(@NonNull int root,
+                                    @NonNull IntPredicate goal,
+                                    @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                    @NonNull AddToIntSet visited,
+                                    int maxLength) {
+        LongArrayDeque queue = new LongArrayDeque(32);
+        long rootBackLink = newSearchNode(root, maxLength);
+        int[] v = new int[1];
+        IntConsumer consumer = i -> v[0] = i;
+        if (visited.add(root)) {
+            queue.addLast(rootBackLink);
+        }
+
+        while (!queue.isEmpty()) {
+            long node = queue.removeFirst();
+            int vertex = searchNodeGetVertex(node);
+            if (goal.test(vertex)) {
+                return true;
+            }
+
+            int maxRemaining = searchNodeGetMaxRemaining(node);
+            if (maxRemaining > 0) {
+                Spliterator.OfInt spliterator = nextNodesFunction.apply(vertex);
+                while (spliterator.tryAdvance(consumer)) {
+                    if (visited.add(v[0])) {
+                        long backLink = newSearchNode(v[0], maxRemaining - 1);
+                        queue.addLast(backLink);
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * A SearchNode stores for a given vertex, how long the remaining
+     * path to gaol may be until we abort the search.
+     *
+     * @param vertex       a vertex
+     * @param maxRemaining number of remaining path elements until abort
+     * @return a SearchNode
+     */
+    private long newSearchNode(int vertex, int maxRemaining) {
+        return (long) vertex << 32 | (long) maxRemaining;
+    }
+
+    private int searchNodeGetVertex(long primitiveBackLink) {
+        return (int) (primitiveBackLink >> 32);
+    }
+
+    private int searchNodeGetMaxRemaining(long primitiveBackLink) {
+        return (int) primitiveBackLink;
     }
 
     private void searchAll(@NonNull MyBackLink start, @NonNull IntPredicate goal,

@@ -18,10 +18,10 @@ import org.jhotdraw8.css.function.CssFunction;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -226,9 +226,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     selectorModel.reset(elem);
 
                     // The stylesheet is a user-agent stylesheet
-                    for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
+                    for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
                         try {
-                            Declaration d = entry.getValue().getValue();
+                            Declaration d = entry.getDeclaration();
                             doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
@@ -239,9 +239,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // ... nothing to do!
 
                     // The stylesheet is an external file
-                    for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
+                    for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
                         try {
-                            Declaration d = entry.getValue().getValue();
+                            Declaration d = entry.getDeclaration();
                             doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
@@ -249,9 +249,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     }
 
                     // The stylesheet is an internal file
-                    for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
+                    for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
                         try {
-                            Declaration d = entry.getValue().getValue();
+                            Declaration d = entry.getDeclaration();
                             doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
@@ -327,9 +327,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * @param stylesheets the stylesheets
      * @return list of applicable declarations
      */
-    private List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> collectApplicableDeclarations(E elem,
-                                                                                                       @NonNull Collection<StylesheetEntry> stylesheets) {
-        List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> applicableDeclarations = new ArrayList<>();
+    private List<ApplicableDeclaration> collectApplicableDeclarations(
+            E elem,
+            @NonNull Collection<StylesheetEntry> stylesheets) {
+        List<ApplicableDeclaration> applicableDeclarations = new ArrayList<>();
         for (StylesheetEntry e : stylesheets) {
             Stylesheet s = e.getStylesheet();
             if (s == null) {
@@ -338,12 +339,33 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             collectApplicableDeclarations(elem, s, applicableDeclarations);
         }
 
-        applicableDeclarations.sort(Map.Entry.comparingByKey());
+        applicableDeclarations.sort(Comparator.comparingInt(ApplicableDeclaration::getSpecificity));
         return applicableDeclarations;
     }
 
-    private @NonNull List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> collectApplicableDeclarations(E elem, @NonNull Stylesheet s,
-                                                                                                                @NonNull List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> applicableDeclarations) {
+    private static class ApplicableDeclaration {
+        private final int specificity;
+        private final Stylesheet stylesheet;
+        private final Declaration declaration;
+
+        public ApplicableDeclaration(int specificity, Stylesheet stylesheet, Declaration declaration) {
+            this.specificity = specificity;
+            this.stylesheet = stylesheet;
+            this.declaration = declaration;
+        }
+
+        public Declaration getDeclaration() {
+            return declaration;
+        }
+
+        public int getSpecificity() {
+            return specificity;
+        }
+    }
+
+    private @NonNull List<ApplicableDeclaration> collectApplicableDeclarations(
+            E elem, @NonNull Stylesheet s,
+            @NonNull List<ApplicableDeclaration> applicableDeclarations) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             Selector selector;
@@ -354,8 +376,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         continue;
                     }
 
-                    applicableDeclarations.add(new AbstractMap.SimpleImmutableEntry<>(selector.getSpecificity(),
-                            new AbstractMap.SimpleImmutableEntry<>(s, d)));
+                    applicableDeclarations.add(new ApplicableDeclaration(selector.getSpecificity(),
+                            s, d));
                 }
             }
         }
@@ -368,13 +390,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         final Map<String, ImmutableList<CssToken>> customProperties = collectCustomProperties(s);
 
         CssFunctionProcessor<E> processor = createCssFunctionProcessor(selectorModel, customProperties);
-        final List<Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>>> applicableDeclarations = collectApplicableDeclarations(elem, s,
+        final List<ApplicableDeclaration> applicableDeclarations = collectApplicableDeclarations(elem, s,
                 new ArrayList<>());
         if (applicableDeclarations.isEmpty()) {
             return false;
         }
-        for (Map.Entry<Integer, Map.Entry<Stylesheet, Declaration>> entry : applicableDeclarations) {
-            Declaration d = entry.getValue().getValue();
+        for (ApplicableDeclaration entry : applicableDeclarations) {
+            Declaration d = entry.getDeclaration();
             ImmutableList<CssToken> value = preprocessTerms(elem, processor, d.getTerms());
             try {
 

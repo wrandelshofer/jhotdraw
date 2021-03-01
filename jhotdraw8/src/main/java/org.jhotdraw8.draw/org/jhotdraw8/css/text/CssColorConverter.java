@@ -11,6 +11,8 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
+import org.jhotdraw8.css.HexColor;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
@@ -78,23 +80,26 @@ public class CssColorConverter implements CssConverter<CssColor> {
         }
 
         switch (tt.next()) {
-            case CssTokenType.TT_DIMENSION:
-                if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
-                        && tt.currentStringNonNull().startsWith("x")) {
-                    color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
-                } else {
-                    throw tt.createParseException("CssColor: hex color expected.");
-                }
-                break;
-            case CssTokenType.TT_HASH:
-                color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
-                break;
+        case CssTokenType.TT_DIMENSION:
+            // If the color is written with a leading "0xabcdef", then the
+            // color value is is tokenized into a TT_DIMENSION. The unit
+            // contains the leading 'x' and the color value 'abcdef'.
+            if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
+                    && tt.currentStringNonNull().startsWith("x")) {
+                color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
+            } else {
+                throw tt.createParseException("CssColor: hex color expected.");
+            }
+            break;
+        case CssTokenType.TT_HASH:
+            color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
+            break;
             case CssTokenType.TT_IDENT:
                 String ident = tt.currentStringNonNull();
                 try {
                     color = ident.startsWith("0x")
                             ? parseColorHexDigits(ident.substring(2), tt.getStartPosition())
-                            : new CssColor(ident);
+                            : NamedCssColor.of(ident);
                 } catch (IllegalArgumentException e) {
                     throw tt.createParseException(e.getMessage() + " value:" + ident);
                 }
@@ -224,7 +229,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return color;
     }
 
-    private @NonNull CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
+    private @NonNull HexColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
         try {
             int v = (int) Long.parseLong(hexdigits, 16);
             int r, g, b, a;
@@ -234,27 +239,25 @@ public class CssColorConverter implements CssConverter<CssColor> {
                 g = (((v & 0x0f0)) | (v & 0x0f0) >>> 4);
                 b = ((v & 0x00f) << 4) | (v & 0x00f);
                 a = 255;
-                return new CssColor('#' + hexdigits.toLowerCase(), new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
+                return new HexColor(r, g, b, a);
                 case 4:
                     r = (((v & 0xf000) >>> 8) | (v & 0xf000) >>> 12);
                     g = (((v & 0x0f00) >>> 4) | (v & 0x0f00) >>> 8);
                     b = (((v & 0x00f0)) | (v & 0x00f0) >>> 4);
                     a = ((v & 0x000f) << 4) | (v & 0x000f);
-                    return new CssColor(a == 255 ? '#' + hexdigits.substring(0, 3).toLowerCase()
-                            : "rgba(" + r + "," + g + "," + b + "," + a / 255.0 + ")", new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
+                    return new HexColor(r, g, b, a);
                 case 6:
                     r = (v & 0xff0000) >>> 16;
                     g = (v & 0x00ff00) >>> 8;
                     b = (v & 0x0000ff);
                     a = 255;
-                    return new CssColor('#' + hexdigits.toLowerCase(), new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
+                    return new HexColor(r, g, b, a);
                 case 8:
                     r = (v & 0xff000000) >>> 24;
                     g = (v & 0x00ff0000) >>> 16;
                     b = (v & 0x0000ff00) >>> 8;
                     a = (v & 0xff);
-                    return new CssColor(a == 255 ? '#' + hexdigits.substring(0, 6).toLowerCase()
-                            : "rgba(" + r + "," + g + "," + b + "," + a / 255.0 + ")", new Color(r / 255.0, g / 255.0, b / 255.0, a / 255.0));
+                    return new HexColor(r, g, b, a);
             default:
                 throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
             }

@@ -42,6 +42,20 @@ public abstract class AbstractIntPathBuilder {
         return findVertexPath(start, i -> i == goal);
     }
 
+    /**
+     * Checks whether a VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex exists.
+     * <p>
+     * This method uses a breadth first search.
+     *
+     * @param start the start vertex
+     * @param goal  the goal vertex
+     * @return true if a traversal is possible, false otherwise
+     */
+    public boolean existsVertexPath(int start, int goal) {
+        return existsVertexPath(start, i -> i == goal);
+    }
+
     public boolean isReachable(int start, int goal) {
         return isReachable(start, i -> i == goal);
     }
@@ -74,6 +88,27 @@ public abstract class AbstractIntPathBuilder {
             vertices.addFirst(i.getVertex());
         }
         return new VertexPath<>(vertices);
+    }
+
+    /**
+     * Checks whether VertexPath through the graph which goes from the specified start
+     * vertex to the specified goal vertex exists.
+     * <p>
+     * This method uses a breadth first search.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Wikipedia, Dijkstra's algorithm, Practical optimizations and infinite graphs</dt>
+     *     <dd><a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
+     *      wikipedia.org</a></dd>
+     * </dl>
+     *
+     * @param start         the start vertex
+     * @param goalPredicate the goal predicate
+     * @return a VertexPath if traversal is possible, null otherwise
+     */
+    public @Nullable boolean existsVertexPath(int start, @NonNull IntPredicate goalPredicate) {
+        return exists(start, goalPredicate, addToBitSet(new BitSet()));
     }
 
     private static AddToIntSet addToBitSet(BitSet bitSet) {
@@ -155,10 +190,21 @@ public abstract class AbstractIntPathBuilder {
         return search(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
+    private boolean exists(int start,
+                           @NonNull IntPredicate goalPredicate,
+                           @NonNull AddToIntSet visited) {
+        return exists(start, goalPredicate, nextNodesFunction, visited, maxLength);
+    }
+
     protected abstract @Nullable BackLink search(int start,
                                                  IntPredicate goal,
                                                  Function<Integer, Spliterator.OfInt> nextNodesFunction,
                                                  @NonNull AddToIntSet visited, int maxLength);
+
+    protected abstract boolean exists(int start,
+                                      IntPredicate goal,
+                                      Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                      @NonNull AddToIntSet visited, int maxLength);
 
     protected abstract static class BackLink {
         abstract BackLink getParent();

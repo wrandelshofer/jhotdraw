@@ -72,7 +72,7 @@ public class LayerFigure extends AbstractCompositeFigure
 
         List<Node> childNodes;
         int maxNodesPerLayer = ctx.getNonNull(RenderContext.MAX_NODES_PER_LAYER);
-        Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
+        final Bounds clipBounds = ctx.get(RenderContext.CLIP_BOUNDS);
         if (renderingIntent == RenderingIntent.EDITOR
                 && clipBounds != null && getChildren().size() > MIN_NODES_FOR_CLIPPING) {
             childNodes = getChildren().stream()

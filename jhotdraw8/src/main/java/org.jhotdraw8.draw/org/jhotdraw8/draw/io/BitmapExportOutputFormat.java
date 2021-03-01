@@ -21,6 +21,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -80,7 +81,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         double scale = dpi / RenderContext.DPI.getDefaultValueNonNull();
         parameters.setTransform(FXTransforms.concat(Transform.scale(scale, scale), slice.getWorldToLocal()));
         Drawing drawing = (slice instanceof Drawing) ? (Drawing) slice : slice.getDrawing();
-        final CssColor color = drawing != null ? drawing.get(Drawing.BACKGROUND) : CssColor.WHITE;
+        final CssColor color = drawing != null ? drawing.get(Drawing.BACKGROUND) : NamedCssColor.WHITE;
         if (color != null) {
             parameters.setFill(color.getColor());
         }

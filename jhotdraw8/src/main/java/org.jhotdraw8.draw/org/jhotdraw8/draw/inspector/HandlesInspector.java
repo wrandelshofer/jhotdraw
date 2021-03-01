@@ -20,6 +20,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.gui.PlatformUtil;
@@ -89,7 +90,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 new NumberStringConverter());
     }
 
-    private @NonNull NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", CssColor.valueOf("blue"));
+    private @NonNull NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", NamedCssColor.BLUE);
 
     private @NonNull IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
 

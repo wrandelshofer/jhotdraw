@@ -5,7 +5,6 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.collections.ObservableList;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -1397,7 +1396,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             break;
         }
 
-        if (node.getWrappingWidth() <= 0) {
+        if (hasNoWrapping(node)) {
             // If the text has no wrapping width, we can write the
             // text directly into the body of the "text" element.
             switch (node.getTextAlignment()) {
@@ -1406,7 +1405,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                 w.writeAttribute("x", nb.toString(node.getX()));
                 break;
             case CENTER:
-                w.writeAttribute("x", nb.toString(node.getX()+node.getBoundsInLocal().getWidth()*0.5));
+                w.writeAttribute("x", nb.toString(node.getX() + node.getBoundsInLocal().getWidth() * 0.5));
                 break;
             case RIGHT:
                 w.writeAttribute("x", nb.toString(node.getX()+node.getBoundsInLocal().getWidth()));
@@ -1419,7 +1418,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private void writeTextChildElements(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
         double lineSpacing = node.getLineSpacing();//+node.getFont().getSize()*0.15625;
         Bounds textRect = node.getLayoutBounds();
-        if (node.getWrappingWidth() <= 0) {
+        if (hasNoWrapping(node)) {
             // If the text has no wrapping width, we can write the
             // text directly into the body of the "text" element
             w.writeCharacters(node.getText());
@@ -1428,6 +1427,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                     node.isUnderline(), node.isStrikethrough(),
                     node.getTextAlignment(), lineSpacing);
         }
+    }
+
+    private boolean hasNoWrapping(@NonNull Text node) {
+        String text = node.getText();
+        return node.getWrappingWidth() <= 0 && text == null || text.indexOf('\n') == -1;
     }
 
     private void writeTextStartElement(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class MacOSSystemColorConverter extends MappedSystemColorConverter {
     public static final Map<String, Color> DARK_SYSTEM_COLORS;
 

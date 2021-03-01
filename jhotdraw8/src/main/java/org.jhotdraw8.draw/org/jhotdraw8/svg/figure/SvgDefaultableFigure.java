@@ -20,6 +20,7 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
@@ -56,7 +57,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<CssColor> COLOR_KEY = new DefaultableStyleableKey<>("color",
             new TypeToken<CssDefaultableValue<CssColor>>() {
             }, new CssColorConverter(true),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssColor.BLACK);
+            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
     /**
      * fill.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillProperty">link</a>
@@ -64,7 +65,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<Paintable> FILL_KEY = new DefaultableStyleableKey<>("fill",
             new TypeToken<CssDefaultableValue<Paintable>>() {
             }, new SvgCssPaintableConverter(true),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssColor.BLACK);
+            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
     /**
      * fill-rule.
      * <p>

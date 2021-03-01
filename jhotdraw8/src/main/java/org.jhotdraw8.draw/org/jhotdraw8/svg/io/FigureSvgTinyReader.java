@@ -19,6 +19,7 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.FloatRgbaCssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.text.CssColorConverter;
@@ -466,7 +467,7 @@ public class FigureSvgTinyReader {
             } else {
                 if (stopOpacity.getConvertedValue() != 1.0) {
                     Color color = stopColor.getColor();
-                    stopColor = CssColor.ofColor(
+                    stopColor = new FloatRgbaCssColor(
                             new Color(color.getRed(), color.getGreen(), color.getBlue(), stopOpacity.getConvertedValue())
                     );
                 }

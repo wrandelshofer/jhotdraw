@@ -8,8 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.draw.render.RenderContext;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Objects;
 
 /**
@@ -25,9 +28,6 @@ public class CssColor implements Paintable {
     private final @NonNull String name;
     private final @NonNull Color color;
 
-    public static final @NonNull CssColor BLACK = CssColor.valueOf("black");
-    public static final @NonNull CssColor WHITE = CssColor.valueOf("white");
-    public static final @NonNull CssColor TRANSPARENT = CssColor.valueOf("transparent");
 
     public CssColor(@NonNull Color color) {
         this(null, color);
@@ -53,7 +53,7 @@ public class CssColor implements Paintable {
         this.color = color;
     }
 
-    public @Nullable String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
@@ -72,9 +72,7 @@ public class CssColor implements Paintable {
 
     @Override
     public @Nullable Paint getPaint(RenderContext ctx) {
-        // XXX This should only be done for a named color
-        return ctx.getNonNull(RenderContext.SYSTEM_COLOR_CONVERTER_KEY)
-                .convert(this);
+        return color;
     }
 
     public static @NonNull String toName(@NonNull Color c) {
@@ -87,7 +85,7 @@ public class CssColor implements Paintable {
                     + ((float) c.getBlue()) * 100 + "%"
                     + ")";
             /*
-            // This is not precise and will faill in SVG tests.
+            // This is not precise and will fail in SVG tests.
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
@@ -139,8 +137,14 @@ public class CssColor implements Paintable {
         return "CssColor{" + getName() + '}';
     }
 
+    private static final @NonNull CssColorConverter converter = new CssColorConverter();
+
     public static @NonNull CssColor valueOf(@NonNull String value) {
-        return new CssColor(value);
+        try {
+            return converter.fromString(value);
+        } catch (ParseException | IOException e) {
+            return new NamedCssColor(value, Color.BLACK);
+        }
     }
 
     public static @Nullable CssColor ofColor(@Nullable Color c) {

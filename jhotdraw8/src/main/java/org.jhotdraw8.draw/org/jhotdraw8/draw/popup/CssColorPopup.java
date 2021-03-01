@@ -16,6 +16,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.util.Resources;
 
@@ -28,7 +29,7 @@ public class CssColorPopup {
     private final ColorPicker colorPicker;
     private BiConsumer<Boolean, CssColor> callback;
 
-    private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
+    private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
 
     public CssColorPopup() {
         Resources labels = DrawLabels.getResources();

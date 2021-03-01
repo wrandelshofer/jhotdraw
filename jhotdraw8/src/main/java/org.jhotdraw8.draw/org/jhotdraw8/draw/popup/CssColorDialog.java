@@ -22,6 +22,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
@@ -58,8 +59,8 @@ public class CssColorDialog {
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
-    private @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(CssColor.WHITE);
-    private @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(CssColor.TRANSPARENT);
+    private @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
+    private @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(NamedCssColor.TRANSPARENT);
 
     public CssColorDialog(Window owner) {
         final Resources labels = ApplicationLabels.getGuiResources();
