@@ -8,6 +8,7 @@ package org.jhotdraw8.draw.io;
 import javafx.css.Styleable;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.SimpleIdFactory;
+import org.jhotdraw8.styleable.StyleableBean;
 
 /**
  * SimpleFigureIdFactory.
@@ -22,6 +23,14 @@ public class SimpleFigureIdFactory extends SimpleIdFactory {
         if (id == null) {
             if (object instanceof Styleable) {
                 Styleable f = (Styleable) object;
+                id = f.getId();
+                if (id != null && getObject(id) == null) {
+                    putIdAndObject(id, object);
+                } else {
+                    id = super.createId(object, f.getTypeSelector().toLowerCase());
+                }
+            } else if (object instanceof StyleableBean) {
+                StyleableBean f = (StyleableBean) object;
                 id = f.getId();
                 if (id != null && getObject(id) == null) {
                     putIdAndObject(id, object);
