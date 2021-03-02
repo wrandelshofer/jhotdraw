@@ -30,6 +30,7 @@ public interface UnitConverter {
 
     String DEFAULT = "";
     String CENTIMETERS = "cm";
+    String DEGREES = "deg";
     String EM = "em";
     String EX = "ex";
     String INCH = "in";

@@ -155,6 +155,23 @@ public class Geom {
      * @param max   the upper bound of the range
      * @return the constrained value
      */
+    public static float clamp(float value, float min, float max) {
+        if (Float.isNaN(value) || value < min) {
+            return min;
+        } else if (value > max) {
+            return max;
+        }
+        return value;
+    }
+
+    /**
+     * Clamps a value to the given range.
+     *
+     * @param value the value
+     * @param min   the lower bound of the range
+     * @param max   the upper bound of the range
+     * @return the constrained value
+     */
     public static int clamp(int value, int min, int max) {
         if (value < min) {
             return min;

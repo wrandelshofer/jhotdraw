@@ -41,7 +41,7 @@ public class CssColorConverterTest {
         CssColor actual = instance.fromString(buf, idFactory);
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
         if (actual != null) {
             assertEquals(actual.getName(), expected.getName());
         }
@@ -63,7 +63,7 @@ public class CssColorConverterTest {
                 dynamicTest("11", () -> testFromString(new CssColor("hsb(10,20%,30%)", Color.hsb(10, 0.20, 0.30)), "hsb(10,20%,30%)")),
                 dynamicTest("12", () -> testFromString(new CssColor("hsba(10,0.2,0.3,80%)", Color.hsb(10, 0.20, 0.30, 0.8)), "hsba(10,.2,.3,80%)")),
                 dynamicTest("13", () -> testFromString(new CssColor("hsba(10,20%,30%,0.8)", Color.hsb(10, 0.20, 0.30, 0.8)), "hsba(10,20%,30%,0.8)")),
-                dynamicTest("opacity 0.2 cannot be represented with a float", () -> testFromString(new CssColor(null, Color.rgb(0, 0, 0, 0.2)), "rgba(0,0,0,0.2)"))
+                dynamicTest("opacity 0.2 cannot be represented with a float", () -> testFromString(new CssColor(null, Color.rgb(0, 0, 0, 0.2)), "rgba(0%,0%,0%,0.2)"))
         );
 
     }

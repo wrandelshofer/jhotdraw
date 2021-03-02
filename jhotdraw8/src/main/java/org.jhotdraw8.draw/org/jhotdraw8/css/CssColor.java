@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,6 +25,7 @@ import java.util.Objects;
  */
 public class CssColor implements Paintable {
 
+    private static final XmlNumberConverter num = new XmlNumberConverter();
 
     private final @NonNull String name;
     private final @NonNull Color color;
@@ -78,11 +80,11 @@ public class CssColor implements Paintable {
     public static @NonNull String toName(@NonNull Color c) {
         if (c.getOpacity() == 1.0) {
             // The fields in class Color store values as floats, we must
-            // not promote it to double because this changes the values!
+            // not promote them to double because this changes the values!
             return "rgb("
-                    + ((float) c.getRed()) * 100 + "%,"
-                    + ((float) c.getGreen()) * 100 + "%,"
-                    + ((float) c.getBlue()) * 100 + "%"
+                    + num.toString((float) c.getRed() * 100) + "%,"
+                    + num.toString((float) c.getGreen() * 100) + "%,"
+                    + num.toString((float) c.getBlue() * 100) + "%"
                     + ")";
             /*
             // This is not precise and will fail in SVG tests.
@@ -95,12 +97,12 @@ public class CssColor implements Paintable {
             return "transparent";
         } else {
             // The fields in class Color store values as floats, we must
-            // not promote it to double because this changes the values!
+            // not promote them to double because this changes the values!
             return "rgba("
-                    + ((float) c.getRed()) * 100 + "%,"
-                    + ((float) c.getGreen()) * 100 + "%,"
-                    + ((float) c.getBlue()) * 100 + "%"
-                    + ((float) c.getOpacity()) * 100 + "%"
+                    + num.toString((float) c.getRed() * 100) + "%,"
+                    + num.toString((float) c.getGreen() * 100) + "%,"
+                    + num.toString((float) c.getBlue() * 100) + "%,"
+                    + num.toString((float) c.getOpacity())
                     + ")";
             /*
             int r = (int) Math.round(c.getRed() * 255.0);
@@ -134,7 +136,7 @@ public class CssColor implements Paintable {
 
     @Override
     public @NonNull String toString() {
-        return "CssColor{" + getName() + '}';
+        return "CssColor{" + getName() + "," + getColor() + '}';
     }
 
     private static final @NonNull CssColorConverter converter = new CssColorConverter();

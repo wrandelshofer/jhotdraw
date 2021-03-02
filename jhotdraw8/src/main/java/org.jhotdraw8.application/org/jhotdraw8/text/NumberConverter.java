@@ -20,7 +20,7 @@ import java.util.Locale;
 /**
  * Formats real numbers.
  * <p>
- * FIXME should be a converter factory and not a converter.
+ * FIXME all fields should be final.
  * </p>
  * <p>
  * Supports clamping into a {@code [min,max]} range (inclusive), a scale factor
@@ -171,31 +171,12 @@ public class NumberConverter implements Converter<Number> {
     }
 
     /**
-     * Sets the factor for use in percent, per mille, and similar formats.
-     *
-     * @param newValue the factor
-     */
-    public void setFactor(double newValue) {
-        factor = newValue;
-    }
-
-    /**
      * Gets the factor for use in percent, per mille, and similar formats.
      *
      * @return the factor
      */
     public double getFactor() {
         return factor;
-    }
-
-    /**
-     * Allows/Disallows null values.
-     *
-     * @param newValue true if null values are allowed
-     */
-    @SuppressWarnings("unused")
-    public void setAllowsNullValue(boolean newValue) {
-        allowsNullValue = newValue;
     }
 
     /**
@@ -320,7 +301,7 @@ public class NumberConverter implements Converter<Number> {
 
     @Override
     public @Nullable Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
-        if ((str == null || str.length() == 0) && getAllowsNullValue()) {
+        if ((str.length() == 0) && getAllowsNullValue()) {
             return null;
         }
         if (str == null) {
