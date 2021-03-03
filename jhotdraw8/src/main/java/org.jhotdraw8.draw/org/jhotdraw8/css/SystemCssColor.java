@@ -13,6 +13,7 @@ import org.jhotdraw8.collection.ImmutableMap;
 import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.draw.render.RenderContext;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -53,24 +54,30 @@ public class SystemCssColor extends CssColor {
                 .convert(this);
     }
 
-    private static final @NonNull ImmutableMap<String, SystemCssColor> SYSTEM_COLORS = ImmutableMaps.ofEntries(
-            Map.entry(CANVAS.getName(), CANVAS),
-            Map.entry(CANVAS_TEXT.getName(), CANVAS_TEXT),
-            Map.entry(LINK_TEXT.getName(), LINK_TEXT),
-            Map.entry(VISITED_TEXT.getName(), VISITED_TEXT),
-            Map.entry(ACTIVE_TEXT.getName(), ACTIVE_TEXT),
-            Map.entry(BUTTON_FACE.getName(), BUTTON_FACE),
-            Map.entry(BUTTON_TEXT.getName(), BUTTON_TEXT),
-            Map.entry(BUTTON_BORDER.getName(), BUTTON_BORDER),
-            Map.entry(FIELD.getName(), FIELD),
-            Map.entry(FIELD_TEXT.getName(), FIELD_TEXT),
-            Map.entry(HIGHLIGHT.getName(), HIGHLIGHT),
-            Map.entry(HIGHLIGHT_TEXT.getName(), HIGHLIGHT_TEXT),
-            Map.entry(MARK.getName(), MARK),
-            Map.entry(MARK_TEXT.getName(), MARK_TEXT),
-            Map.entry(GRAY_TEXT.getName(), GRAY_TEXT)
-    );
+    private static final @NonNull ImmutableMap<String, SystemCssColor> SYSTEM_COLORS;
 
+    static {
+        // Workaround for Java SE 8: javac hangs if ImmutableMap.ofEntries() has many entries.
+        Map<String, SystemCssColor> m = new LinkedHashMap<>();
+
+
+        m.put(CANVAS.getName(), CANVAS);
+        m.put(CANVAS_TEXT.getName(), CANVAS_TEXT);
+        m.put(LINK_TEXT.getName(), LINK_TEXT);
+        m.put(VISITED_TEXT.getName(), VISITED_TEXT);
+        m.put(ACTIVE_TEXT.getName(), ACTIVE_TEXT);
+        m.put(BUTTON_FACE.getName(), BUTTON_FACE);
+        m.put(BUTTON_TEXT.getName(), BUTTON_TEXT);
+        m.put(BUTTON_BORDER.getName(), BUTTON_BORDER);
+        m.put(FIELD.getName(), FIELD);
+        m.put(FIELD_TEXT.getName(), FIELD_TEXT);
+        m.put(HIGHLIGHT.getName(), HIGHLIGHT);
+        m.put(HIGHLIGHT_TEXT.getName(), HIGHLIGHT_TEXT);
+        m.put(MARK.getName(), MARK);
+        m.put(MARK_TEXT.getName(), MARK_TEXT);
+        m.put(GRAY_TEXT.getName(), GRAY_TEXT);
+        SYSTEM_COLORS = ImmutableMaps.ofMap(m);
+    }
     /**
      * Creates a system color for the given name.
      * <p>

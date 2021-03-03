@@ -84,7 +84,7 @@ public class SvgLinearGradientFigure extends AbstractCompositeFigure
 
 
     public static final @NonNull NonNullKey<ImmutableList<CssStop>> STOPS = new SimpleNonNullKey<ImmutableList<CssStop>>("stops",
-            new TypeToken<>() {
+            new TypeToken<ImmutableList<CssStop>>() {
             }, ImmutableLists.emptyList());
 
     public SvgLinearGradientFigure() {

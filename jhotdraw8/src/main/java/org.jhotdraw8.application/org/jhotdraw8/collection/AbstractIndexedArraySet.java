@@ -273,6 +273,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
 
     @Override
     public boolean contains(Object o) {
+        @SuppressWarnings("unchecked")
         Boolean isContained = onContains((E) o);
         return (isContained!=null)? isContained: indexOf(o) >= 0; // linear time!
     }
@@ -558,7 +559,10 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
     }
 
     public int indexOf(Object o) {
-        if (Boolean.FALSE.equals(onContains((E)o))) return -1;
+        @SuppressWarnings("unchecked") final E element = (E) o;
+        if (Boolean.FALSE.equals(onContains(element))) {
+            return -1;
+        }
 
         int start = 0, end = size;
         if (o == null) {
