@@ -10,6 +10,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ObservableListProxy;
 import org.jhotdraw8.draw.figure.Figure;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -27,6 +29,54 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
         super(parent.getChildren());
         this.model = model;
         this.parent = parent;
+        model.addDrawingModelListener(event -> {
+            final Figure node = event.getNode();
+            if (node != null && node.getParent() == parent) {
+                final int index = node.getParent().getChildren().indexOf(node);
+                fireChange(new ListChangeListener.Change<Figure>(this) {
+                    private boolean invalid = true;
+
+                    @Override
+                    public boolean next() {
+                        if (invalid) {
+                            invalid = false;
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public void reset() {
+                        invalid = true;
+                    }
+
+                    @Override
+                    public int getFrom() {
+                        return index;
+                    }
+
+                    @Override
+                    public int getTo() {
+                        return index + 1;
+                    }
+
+                    @Override
+                    public boolean wasUpdated() {
+                        return !invalid;
+                    }
+
+                    @Override
+                    public List<Figure> getRemoved() {
+                        return Collections.emptyList();
+                    }
+
+                    @Override
+                    protected int[] getPermutation() {
+                        return new int[0];
+                    }
+                });
+            }
+        });
     }
 
     @Override

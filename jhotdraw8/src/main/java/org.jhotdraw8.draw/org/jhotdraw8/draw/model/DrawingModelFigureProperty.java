@@ -64,13 +64,13 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
     @Override
     public @Nullable T getValue() {
         @SuppressWarnings("unchecked")
-        T temp = isDeclaredKey ? figure.get(key) : null;
+        T temp = isDeclaredKey && figure != null && key != null ? figure.get(key) : null;
         return temp;
     }
 
     @Override
     public void setValue(@Nullable T value) {
-        if (isDeclaredKey) {
+        if (isDeclaredKey && figure != null && key != null) {
             if (value != null && !key.isAssignable(value)) {
                 throw new IllegalArgumentException("value is not assignable " + value);
             }
@@ -84,9 +84,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
     @Override
     public void unbind() {
         super.unbind();
-        if (model != null) {
-            model.removeDrawingModelListener(weakListener);
-        }
+        model.removeDrawingModelListener(weakListener);
     }
 
     /**
