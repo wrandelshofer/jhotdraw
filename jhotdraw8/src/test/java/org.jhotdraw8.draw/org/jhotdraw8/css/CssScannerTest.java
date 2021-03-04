@@ -30,7 +30,7 @@ public class CssScannerTest {
     /**
      * Test of nextChar method, of class CssScanner.
      */
-    public void doTestScanner(@NonNull String inputData, String expectedValue) throws Exception {
+    public void testScanner(@NonNull String inputData, String expectedValue) throws Exception {
         CssScanner s = new CssScanner(new StringReader(inputData));
         //
         StringBuilder buf = new StringBuilder();
@@ -53,19 +53,19 @@ public class CssScannerTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testScanner() {
+    public @NonNull List<DynamicTest> dynamicTestsScanner() {
         return Arrays.asList(
-                dynamicTest("abcd abcd", () -> doTestScanner("abcd", "abcd")),
+                dynamicTest("abcd abcd", () -> testScanner("abcd", "abcd")),
                 //
-                dynamicTest("ab\ncd ab\ncd", () -> doTestScanner("ab\ncd", "ab\ncd")),
-                dynamicTest("ab\r\ncd ab\ncd", () -> doTestScanner("ab\r\ncd", "ab\ncd")),
-                dynamicTest("ab\fcd ab\ncd", () -> doTestScanner("ab\fcd", "ab\ncd")),
-                dynamicTest("ab\rcd ab\ncd", () -> doTestScanner("ab\rcd", "ab\ncd")),
+                dynamicTest("ab\ncd ab\ncd", () -> testScanner("ab\ncd", "ab\ncd")),
+                dynamicTest("ab\r\ncd ab\ncd", () -> testScanner("ab\r\ncd", "ab\ncd")),
+                dynamicTest("ab\fcd ab\ncd", () -> testScanner("ab\fcd", "ab\ncd")),
+                dynamicTest("ab\rcd ab\ncd", () -> testScanner("ab\rcd", "ab\ncd")),
                 //
-                dynamicTest("abcd\n abcd\n", () -> doTestScanner("abcd\n", "abcd\n")),
-                dynamicTest("abcd\r\n abcd\n", () -> doTestScanner("abcd\r\n", "abcd\n")),
-                dynamicTest("abcd\f abcd\n", () -> doTestScanner("abcd\f", "abcd\n")),
-                dynamicTest("abcd\r abcd\n", () -> doTestScanner("abcd\r", "abcd\n"))
+                dynamicTest("abcd\n abcd\n", () -> testScanner("abcd\n", "abcd\n")),
+                dynamicTest("abcd\r\n abcd\n", () -> testScanner("abcd\r\n", "abcd\n")),
+                dynamicTest("abcd\f abcd\n", () -> testScanner("abcd\f", "abcd\n")),
+                dynamicTest("abcd\r abcd\n", () -> testScanner("abcd\r", "abcd\n"))
         );
     }
 

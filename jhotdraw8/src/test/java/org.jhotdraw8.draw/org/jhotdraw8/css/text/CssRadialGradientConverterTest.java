@@ -29,7 +29,7 @@ class CssRadialGradientConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new CssRadialGradient(), "radial-gradient()"))
         );

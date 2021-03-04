@@ -23,29 +23,29 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class ContourBuilderTest {
     @TestFactory
-    public @NonNull List<DynamicTest> offsetPathTestFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsOffsetPath() {
         return Arrays.asList(
-                dynamicTest("shape with coincident line - angle from seg 0 to 1 > 180°, angle from seg 1 to 2 = 360°", () -> doTest(
+                dynamicTest("shape with coincident line - angle from seg 0 to 1 > 180°, angle from seg 1 to 2 = 360°", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{220.0, 40.0, 0.0}, {190.0, 110.0, 0.0}, {210.0, 90.0, 0.0}, {200.0, 100.0, 0.0}, {280.0, 180.0, 0.0}}),
                         -7,
                         Arrays.asList(polylineOf(false, new double[][]{
-                                {226.4340152101264, 42.75743509005417, 0.0}
-                                , {209.16582399091348, 83.04988126821766, 0.7122671462660679}
-                                , {214.94974746830584, 94.94974746830583, 0.0}
-                                , {209.89949493661166, 100.00000000000001, 0.0}
-                                , {284.9497474683058, 175.05025253169416, 0.0}
+                                        {226.4340152101264, 42.75743509005417, 0.0}
+                                        , {209.16582399091348, 83.04988126821766, 0.7122671462660679}
+                                        , {214.94974746830584, 94.94974746830583, 0.0}
+                                        , {209.89949493661166, 100.00000000000001, 0.0}
+                                        , {284.9497474683058, 175.05025253169416, 0.0}
                                 })
                         )
                 )),
 
 
-                dynamicTest("b shape - last point coincides with another point", () -> doTest(
+                dynamicTest("b shape - last point coincides with another point", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{190.0, 170.0, 0.0}, {210.0, 120.0, 0.0}, {230.0, 150.0, 0.0}, {190.0, 170.0, 0.0}}),
                         20.0,
                         Arrays.asList()
                 )),
 
-                dynamicTest("u", () -> doTest(
+                dynamicTest("u", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{130.0, 80.0, 0.0}, {130.0, 190.0, 0.0}, {200.0, 190.0, 0.0}, {200.0, 80.0, 0.0}}),
                         5.0,
                         Arrays.asList(polylineOf(false, new double[][]{
@@ -58,7 +58,7 @@ public class ContourBuilderTest {
                         }))
                 )),
 
-                dynamicTest("h", () -> doTest(
+                dynamicTest("h", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{130.0, 80.0, 0.0}, {130.0, 180.0, 0.0}, {210.0, 120.0, 0.0}, {260.0, 180.0, 0.0}}),
                         -15.0,
                         Arrays.asList(polylineOf(false, new double[][]{
@@ -71,7 +71,7 @@ public class ContourBuilderTest {
                 )),
 
 
-                dynamicTest("inside open p - medium gap", () -> doTest(
+                dynamicTest("inside open p - medium gap", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{110.0, 180.0, 0.0}, {110.0, 70.0, 0.0}, {220.0, 70.0, 0.0}, {220.0, 140.0, 0.0}, {130.0, 140.0, 0.0}}),
                         17.5,
                         Arrays.asList(
@@ -80,30 +80,30 @@ public class ContourBuilderTest {
                         )
                 )),
 
-                dynamicTest("inside open p - small gap", () -> doTest(
+                dynamicTest("inside open p - small gap", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{110.0, 180.0, 0.0}, {110.0, 70.0, 0.0}, {220.0, 70.0, 0.0}, {220.0, 140.0, 0.0}, {130.0, 140.0, 0.0}}),
                         20.0,
                         Arrays.asList(
                                 polylineOf(false, new double[][]{{130.0, 180.0, 0.0}, {130.0, 160.0, 0.0}}),
                                 polylineOf(false, new double[][]{{130.0, 120.0, 0.0}, {130.0, 90.0, 0.0}, {200.0, 90.0, 0.0}, {200.0, 120.0, 0.0}, {130.0, 120.0, 0.0}}))
                 )),
-                dynamicTest("knot", () -> doTest(
+                dynamicTest("knot", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{260.0, 180.0, 0.0}, {110.0, 120.0, 0.0}, {220.0, 60.0, 0.0}, {200.0, 220.0, 0.0}}),
                         -15.0,
                         Arrays.asList(polylineOf(false, new double[][]{{254.42913985468846, 193.92715036327888, 0.0}, {220.09266330988987, 180.19255974535946, 0.0}, {214.88416815070502, 221.8605210188381, 0.0}}),
                                 polylineOf(false, new double[][]{{191.29888563739502, 168.67504867636148, 0.0}, {104.42913985468844, 133.92715036327888, 0.6345466534187385}, {102.8172180397914, 106.83156640628424, 0.0}, {212.8172180397914, 46.83156640628424, 0.6112142738578111}, {234.88416815070502, 61.86052101883813, 0.0}, {223.93920960070022, 149.4201894188766, 0.0}}))
                 )),
-                dynamicTest("rectangle outset", () -> doTest(
+                dynamicTest("rectangle outset", () -> testOffsetPath(
                         polylineOf(true, new double[][]{{110.0, 200.0, 0.0}, {110.0, 120.0, 0.0}, {210.0, 120.0, 0.0}, {210.0, 200.0, 0.0}}),
                         -12.5,
                         Arrays.asList(polylineOf(true, new double[][]{{97.5, 200.0, 0.0}, {97.5, 120.0, 0.41421356237309503}, {110.0, 107.5, 0.0}, {210.0, 107.5, 0.41421356237309503}, {222.5, 120.0, 0.0}, {222.5, 200.0, 0.41421356237309503}, {210.0, 212.5, 0.0}, {110.0, 212.5, 0.41421356237309503}}))
                 )),
-                dynamicTest("rectangle inset", () -> doTest(
+                dynamicTest("rectangle inset", () -> testOffsetPath(
                         polylineOf(true, new double[][]{{110.0, 200.0, 0.0}, {110.0, 120.0, 0.0}, {210.0, 120.0, 0.0}, {210.0, 200.0, 0.0}}),
                         25.0,
                         Arrays.asList(polylineOf(true, new double[][]{{135.0, 175.0, 0.0}, {135.0, 145.0, 0.0}, {185.0, 145.0, 0.0}, {185.0, 175.0, 0.0}}))
                 )),
-                dynamicTest("peaky", () -> doTest(
+                dynamicTest("peaky", () -> testOffsetPath(
                         polylineOf(false, new double[][]{{110.0, 200.0, 0.0}, {160.0, 180.0, 0.0}, {90.0, 120.0, 0.0}, {260.0, 180.0, 0.0}, {310.0, 200.0, 0.0}}),
                         -15,
                         Arrays.asList(polylineOf(false, new double[][]{
@@ -133,7 +133,7 @@ public class ContourBuilderTest {
         return p;
     }
 
-    private void doTest(PolyArcPath input, double offset, List<PolyArcPath> expected) throws Exception, InterruptedException {
+    private void testOffsetPath(PolyArcPath input, double offset, List<PolyArcPath> expected) throws Exception, InterruptedException {
         final ContourBuilder pap = new ContourBuilder();
         //final Polyline raw = pap.createRawOffsetPline(input, offset);
         //final StringBuilder b = new StringBuilder();

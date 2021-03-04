@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class FigureSvgTinyReaderTest {
 
     @TestFactory
-    public @NonNull List<DynamicTest> svgWithDefaultableAttributesFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsSvgWithDefaultableAttributes() {
         return Arrays.asList(
                 dynamicTest("rect with fill value", () -> testDefaultable(
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +

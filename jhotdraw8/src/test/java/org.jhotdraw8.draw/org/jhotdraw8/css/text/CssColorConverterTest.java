@@ -48,7 +48,7 @@ public class CssColorConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, CssTokenType.IDENT_NONE)),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),

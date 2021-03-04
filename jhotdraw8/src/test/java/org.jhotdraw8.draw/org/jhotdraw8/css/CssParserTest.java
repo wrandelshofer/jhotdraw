@@ -112,7 +112,7 @@ public class CssParserTest {
      * @return examples
      */
     @TestFactory
-    public @NonNull List<DynamicTest> testCssSyntaxFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsCssSyntax() {
         return Arrays.asList(
                 dynamicTest("1", () -> testCssSyntax(true, ":nth-child(3n + 1) {}", //
                         "<xml/>",//
@@ -229,7 +229,7 @@ public class CssParserTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testAtRuleFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsAtRule() {
         return Arrays.asList(
                 // at rules
                 dynamicTest("1", () -> testAtRule(true, "@charset \"UTF-8\"; AB {x:y}", //
@@ -348,7 +348,7 @@ public class CssParserTest {
      * Tests selectors.
      */
     @TestFactory
-    public @NonNull List<DynamicTest> testSelectorSyntaxFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsSelectorSyntax() {
         return Arrays.asList(
                 dynamicTest("type selector", () -> testSelectorSyntax(true, "a {x:1;}", //
                         "<xml><a/><b/></xml>",//
@@ -382,7 +382,7 @@ public class CssParserTest {
      * Test selectors with name space.
      */
     @TestFactory
-    public @NonNull List<DynamicTest> testSelectorSyntaxNSFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsSelectorSyntaxNS() {
         return Arrays.asList(
                 dynamicTest("type selector not ns aware", () -> testSelectorSyntaxNS(true, "a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//

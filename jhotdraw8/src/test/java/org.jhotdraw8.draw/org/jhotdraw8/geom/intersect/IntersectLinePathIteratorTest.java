@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class IntersectLinePathIteratorTest {
     @TestFactory
-    public @NonNull List<DynamicTest> intersectLineLineFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsIntersectLinePathIterator() {
         return Arrays.asList(
                 dynamicTest("intersection", () -> testIntersectLinePathIterator(
                         new Line(5925, 425, 6085, 34),

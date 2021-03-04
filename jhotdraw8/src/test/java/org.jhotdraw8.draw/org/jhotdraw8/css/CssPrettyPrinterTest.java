@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class CssPrettyPrinterTest {
     @TestFactory
-    public @NonNull List<DynamicTest> testPrettyPrinterFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsPrettyPrinter() {
         return Arrays.asList(
                 dynamicTest("1", () -> testPrettyPrint("", "")),
                 dynamicTest("2", () -> testPrettyPrint("* {}", "* {}")),

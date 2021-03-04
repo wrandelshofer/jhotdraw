@@ -50,7 +50,7 @@ class CssPoint2DConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(new CssPoint2D(40, 40, "cm"), "40cm 40cm"))
         );

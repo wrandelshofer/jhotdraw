@@ -46,21 +46,21 @@ class CssFontConverterTest {
     /**
      * Test of fromString and toString methods, of class CssFontConverter.
      */
-    public static void doTest(CssFont value, @NonNull String str) throws Exception {
+    public static void testFont(CssFont value, @NonNull String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFont() {
         return Arrays.asList(
-                dynamicTest("1", () -> doTest(
+                dynamicTest("1", () -> testFont(
                         new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(12)),
                         "12 Arial")),
-                dynamicTest("2", () -> doTest(
+                dynamicTest("2", () -> testFont(
                         new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, new CssSize(12, "pt")),
                         "12pt Arial")),
-                dynamicTest("3", () -> doTest(
+                dynamicTest("3", () -> testFont(
                         new CssFont("Arial", FontWeight.SEMI_BOLD, FontPosture.REGULAR, new CssSize(12, "pt")),
                         "600 12pt Arial"))
         );

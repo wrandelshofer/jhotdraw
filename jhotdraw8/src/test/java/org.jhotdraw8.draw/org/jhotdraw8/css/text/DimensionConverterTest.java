@@ -70,7 +70,7 @@ public class DimensionConverterTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(1.0, "1")),
@@ -101,7 +101,7 @@ public class DimensionConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "none")),
                 dynamicTest("2", () -> testToString(1.0, "1")),

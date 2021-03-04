@@ -50,7 +50,7 @@ public abstract class AbstractIndexedArraySetTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> addDataFactory() {
+    public @NonNull List<DynamicTest> dyanmicTestsAdd() {
         return Arrays.asList(
                 dynamicTest("0", () -> testAdd("", 0, 'a', "a", "add(0,[a])")),
                 dynamicTest("1", () -> testAdd("a", 0, 'a', "a", "")),
@@ -99,7 +99,7 @@ public abstract class AbstractIndexedArraySetTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> setDataFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsSet() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSet("a", 0, 'a', "a", "")),
                 dynamicTest("1", () -> testSet("a", 0, 'b', "b", "rep([a]->[b])")),

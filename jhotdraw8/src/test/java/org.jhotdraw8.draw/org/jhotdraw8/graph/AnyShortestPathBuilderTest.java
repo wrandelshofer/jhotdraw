@@ -80,7 +80,7 @@ public class AnyShortestPathBuilderTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFindShortestVertexPath() {
+    public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPath() {
         return Arrays.asList(
                 dynamicTest("0", () -> doFindShortestVertexPath(1, 1, VertexPath.of(1), 0.0)),
                 dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexPath.of(1, 3, 6, 5), 20.0)),

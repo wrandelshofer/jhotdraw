@@ -47,7 +47,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -99,8 +98,9 @@ public class SvgReadWriteAndCompareTest {
         Platform.setImplicitExit(false);
         new Launcher().launch();
     }
+
     @TestFactory
-    public @NonNull Stream<DynamicTest> w3cSvgTiny12TestSuiteTestFactory() throws IOException {
+    public @NonNull Stream<DynamicTest> dynamicTestsW3cSvgTiny12TestSuite() throws IOException {
         if (!Files.isDirectory(Path.of(W3C_SVG_12_TINY_TEST_SUITE))) {
             System.err.println("Please fix the path to W3C SVG 1.2 Tiny Test Suite: " +
                     Path.of(W3C_SVG_12_TINY_TEST_SUITE).toAbsolutePath());
@@ -122,7 +122,7 @@ public class SvgReadWriteAndCompareTest {
         FigureSvgTinyReader reader = new FigureSvgTinyReader();
         reader.setBestEffort(true);
         Figure drawing1 = reader.read(new StreamSource(testFile.toFile()));
-        System.out.println(reader.getCopyOfErrors().stream().collect(Collectors.joining("\n")));
+        System.out.println(String.join("\n", reader.getCopyOfErrors()));
 
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node drawing1Node = r.render(drawing1);
@@ -135,7 +135,7 @@ public class SvgReadWriteAndCompareTest {
         writer.write(bufOutputStream,drawing1Node, drawing1Size);
 
         ByteArrayInputStream bufInputStream = new ByteArrayInputStream(bufOutputStream.toByteArray());
-        System.out.println(new String(bufOutputStream.toByteArray(), StandardCharsets.UTF_8));
+        System.out.println(bufOutputStream.toString(StandardCharsets.UTF_8));
         reader.setBestEffort(false);
         Figure drawing2 = reader.read(new StreamSource(bufInputStream));
         Node drawing2Node = r.render(drawing2);

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class BezierCurvesTest {
     @TestFactory
-    public @NonNull List<DynamicTest> inflectionsTestFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsInflections() {
         return Arrays.asList(
                 dynamicTest("1", () -> testInflections(new double[]{135, 25, 25, 135, 215, 75, 215, 240}, new double[]{0.5059963709191709})),
                 dynamicTest("2", () -> testInflections(new double[]{80, 40, 210, 40, 190, 110, 190, 20}, new double[]{0.8484087766415317, 0.4746000729159903}))
@@ -26,7 +26,7 @@ class BezierCurvesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> alignTestFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsAlign() {
         return Arrays.asList(
                 dynamicTest("1", () -> testAlign(new double[]{135, 25, 25, 135, 215, 75, 215, 240},
                         new double[]{0, 0,

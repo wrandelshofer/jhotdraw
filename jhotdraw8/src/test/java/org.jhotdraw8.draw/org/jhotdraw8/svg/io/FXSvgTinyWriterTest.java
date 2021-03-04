@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class FXSvgTinyWriterTest {
     @TestFactory
-    public @NonNull List<DynamicTest> exportTestToWriterFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsExportToWriter() {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToWriter(new Rectangle(10, 20, 100, 200),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
@@ -45,7 +45,7 @@ class FXSvgTinyWriterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> exportTestToDOMFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsExportToDOM() {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToDOM(new Rectangle(10, 20, 100, 200),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +

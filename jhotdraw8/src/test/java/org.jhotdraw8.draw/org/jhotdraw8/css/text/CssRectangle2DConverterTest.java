@@ -50,7 +50,7 @@ public class CssRectangle2DConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44")),
                 dynamicTest("1", () -> testFromString(new CssRectangle2D(new CssSize(11, "cm"),

@@ -23,7 +23,7 @@ public class IntersectCircleCircleTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testCircleCircleFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsCircleCircle() {
         return Arrays.asList(
                 dynamicTest("2 intersections same radius", () -> testIntersectCircleCircle_5args(
                         100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
@@ -45,7 +45,7 @@ public class IntersectCircleCircleTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testCircleCircleFactoryEx() {
+    public @NonNull List<DynamicTest> dynamicTestsCircleCircleEx() {
         return Arrays.asList(
                 dynamicTest("2 intersections same radius", () -> testIntersectCircleCircle_5argsEx(
                         100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),

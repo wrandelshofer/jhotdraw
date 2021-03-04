@@ -46,7 +46,7 @@ public class DefaultConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString("hello", "hello"))
         );
@@ -54,7 +54,7 @@ public class DefaultConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString("hello", "hello"))
         );

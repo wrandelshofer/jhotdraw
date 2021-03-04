@@ -99,14 +99,14 @@ class GraphSearchTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFindDisjointSets() {
+    public @NonNull List<DynamicTest> dynamicTestsFindDisjointSets() {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindDisjointSets(createDisjointGraph(), 2)),
-                dynamicTest("2", () -> doFindDisjointSets(createLoopGraph(), 1))
+                dynamicTest("1", () -> testFindDisjointSets(createDisjointGraph(), 2)),
+                dynamicTest("2", () -> testFindDisjointSets(createLoopGraph(), 1))
         );
     }
 
-    void doFindDisjointSets(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void testFindDisjointSets(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
         System.out.println("find disjoint sets");
         System.out.println("graph:");
         System.out.println(DumpGraphs.dumpAsAdjacencyList(graph));
@@ -144,14 +144,14 @@ class GraphSearchTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testSearchStronglyConnectedComponents() {
+    public @NonNull List<DynamicTest> dynamicTestsSearchStronglyConnectedComponents() {
         return Arrays.asList(
-                dynamicTest("1", () -> doSearchStronglyConnectedComponents(createDisjointGraph(), 4)),
-                dynamicTest("2", () -> doSearchStronglyConnectedComponents(createLoopGraph(), 1))
+                dynamicTest("1", () -> testSearchStronglyConnectedComponents(createDisjointGraph(), 4)),
+                dynamicTest("2", () -> testSearchStronglyConnectedComponents(createLoopGraph(), 1))
         );
     }
 
-    void doSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void testSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
         System.out.println("find strongly connected components");
         System.out.println("graph:");
         System.out.println(DumpGraphs.dumpAsAdjacencyList(graph));

@@ -48,7 +48,7 @@ public class PatternConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString("{0,list,{1}}", new Object[]{0}, "")),
                 dynamicTest("2", () -> testToString("{0,list,{1}}", new Object[]{1, "i0"}, "i0")),
@@ -80,7 +80,7 @@ public class PatternConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString("hello world", new Object[]{}, "hello world")),
                 dynamicTest("1", () -> testFromString("'hello world'", new Object[]{}, "hello world")),

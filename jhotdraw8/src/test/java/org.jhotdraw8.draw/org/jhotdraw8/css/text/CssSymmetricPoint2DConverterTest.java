@@ -35,7 +35,7 @@ class CssSymmetricPoint2DConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new Point2D(10, 20), "10 20")),
                 dynamicTest("2", () -> doTestFromString(new Point2D(10, 10), "10")),

@@ -51,7 +51,7 @@ public class XMLNumberConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToFromString(-0.0, "-0")),
                 dynamicTest("1", () -> testToFromString(0.0, "0")),

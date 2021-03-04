@@ -90,7 +90,7 @@ public class CssListConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testDoubleFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsDoubleFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleFromString(Collections.emptyList(), "none")),
                 dynamicTest("2", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
@@ -110,7 +110,7 @@ public class CssListConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testDoubleArrowFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsDoubleArrowFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleArrowFromString(Collections.emptyList(), "none")),
                 dynamicTest("2", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
@@ -130,7 +130,7 @@ public class CssListConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testStringFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsStringFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testStringFromString(Collections.emptyList(), "none")),
                 dynamicTest("2", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a' 'b' 'c'")),
@@ -142,7 +142,7 @@ public class CssListConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testToStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "none")),
                 dynamicTest("2", () -> testToString(Collections.emptyList(), "none")),

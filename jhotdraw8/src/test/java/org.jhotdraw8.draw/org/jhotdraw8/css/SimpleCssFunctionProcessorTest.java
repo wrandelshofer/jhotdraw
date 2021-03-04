@@ -29,7 +29,7 @@ class SimpleCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testProcessingOfStandardFunctionsFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsProcessingOfStandardFunctions() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestProcess("foo", "foo")),
                 dynamicTest("2", () -> doTestProcess("attr(id)", "\"o1\"")),

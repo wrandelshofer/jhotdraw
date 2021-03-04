@@ -44,14 +44,14 @@ public class DepthFirstArcSpliteratorTest {
     }
 
     @TestFactory
-    public List<DynamicTest> testIterator() {
+    public List<DynamicTest> dynamicTestsIterator() {
         return Arrays.asList(
-                dynamicTest("1", () -> doTestIterator(createDoubleVertexGraph(), Arrays.asList(5, 9),
+                dynamicTest("1", () -> testIterator(createDoubleVertexGraph(), Arrays.asList(5, 9),
                         "5->6:100,6->8:100,8->9:100,6->7:100,7->4:100,4->9:100,5->2:100,2->3:100,3->4:100"))
         );
     }
 
-    private void doTestIterator(DirectedGraph<Integer, Integer> graph, List<Integer> waypoints, String expected) {
+    private void testIterator(DirectedGraph<Integer, Integer> graph, List<Integer> waypoints, String expected) {
         Set<Integer> goals = new HashSet<>(waypoints);
         StringBuilder buf = new StringBuilder();
         for (Integer root : waypoints) {
@@ -69,17 +69,17 @@ public class DepthFirstArcSpliteratorTest {
     }
 
     @TestFactory
-    public List<DynamicTest> testPathBuilding() {
+    public List<DynamicTest> dynamicTestsPathBuilding() {
         return Arrays.asList(
-                dynamicTest("5->", () -> doTestPathBuilding(createDoubleVertexGraph(), Arrays.asList(5),
+                dynamicTest("5->", () -> testPathBuilding(createDoubleVertexGraph(), Arrays.asList(5),
                         "[VertexPath{[5, 6, 8, 9]}, VertexPath{[6, 7, 4, 9]}, VertexPath{[5, 2, 3, 4]}]")),
-                dynamicTest("1->", () -> doTestPathBuilding(createDoubleVertexGraph(), Arrays.asList(1),
+                dynamicTest("1->", () -> testPathBuilding(createDoubleVertexGraph(), Arrays.asList(1),
                         "[VertexPath{[1, 2, 3, 4, 9]}]"))
         );
     }
 
-    private void doTestPathBuilding(DirectedGraph<Integer, Integer> graph, List<Integer> waypoints,
-                                    String expected) {
+    private void testPathBuilding(DirectedGraph<Integer, Integer> graph, List<Integer> waypoints,
+                                  String expected) {
         List<VertexPath<Integer>> paths = new ArrayList<>();
         List<Integer> path = null;
         for (Integer root : waypoints) {

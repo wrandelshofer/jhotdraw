@@ -26,7 +26,7 @@ class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> doubleSvgStringFromAWTFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsDoubleSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
                 dynamicTest("2", () -> testDoubleSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "M0,0 1,0 1,1 0,1 Z")),
@@ -74,7 +74,7 @@ class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> floatSvgStringFromAWTFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFloatSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFloatSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
                 dynamicTest("2", () -> testFloatSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "M0,0 1,0 1,1 0,1 Z")),
@@ -105,7 +105,7 @@ class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> doubleRelativeSvgStringFromAWTFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsDoubleRelativeSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleRelativeSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "m0,0 1,0 0,1 -1,0 z")),
                 dynamicTest("2", () -> testDoubleRelativeSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 z")),
@@ -138,7 +138,7 @@ class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> doubleSvgStringFromElementsFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsDoubleSvgStringFromElements() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSvgStringFromElements("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
                 dynamicTest("2", () -> testSvgStringFromElements("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 Z")),
@@ -157,7 +157,7 @@ class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> floatRelativeSvgStringFromAWTFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFloatRelativeSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFloatRelativeSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "m0,0 1,0 0,1 -1,0 z")),
                 dynamicTest("2", () -> testFloatRelativeSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 z")),

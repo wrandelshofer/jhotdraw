@@ -26,7 +26,7 @@ public class IntersectEllipseLineTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testLineEllipseFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsLineEllipse() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectLineEllipse_5args(
                         new Line(10, 40, 200, 40), new Ellipse(100, 100, 60, 60), new double[]{0.47368421052631576})),

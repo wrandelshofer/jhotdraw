@@ -65,7 +65,7 @@ public class CssRegexConverterTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testRegexFromStringReplaceFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsRegexFromStringReplace() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplace("replace('' '')", "", "")),
                 dynamicTest("2", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
@@ -87,7 +87,7 @@ public class CssRegexConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testRegexFromStringApplyFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsRegexFromStringApply() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromStringApply("replace('' '')", "", "")),
                 dynamicTest("2", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
@@ -100,7 +100,7 @@ public class CssRegexConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testRegexFromStringReplaceNullableFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsRegexFromStringReplaceNullable() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplaceNullable("replace('' '')", false)),
                 dynamicTest("2", () -> testRegexFromStringReplaceNullable("none", true))

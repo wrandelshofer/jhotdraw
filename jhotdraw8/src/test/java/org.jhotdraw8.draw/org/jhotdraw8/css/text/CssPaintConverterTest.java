@@ -48,7 +48,7 @@ public class CssPaintConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testFromStringFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),

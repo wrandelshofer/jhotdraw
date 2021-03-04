@@ -104,7 +104,7 @@ public class CssSelectorTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testVariousSelectors() {
+    public @NonNull List<DynamicTest> dynamicTestsVariousSelectors() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSelector("#vertex4 {\n"
                         + "    -jhotdraw-fill: yellow;\n"
@@ -169,7 +169,7 @@ public class CssSelectorTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testSelectorSpecificity() {
+    public @NonNull List<DynamicTest> dynamicTestsSelectorSpecificity() {
         return Arrays.asList(
                 dynamicTest("46", () -> testSelectorSpecificity("TubeShape,\n" +
                         "TubeShape.One,\n" +

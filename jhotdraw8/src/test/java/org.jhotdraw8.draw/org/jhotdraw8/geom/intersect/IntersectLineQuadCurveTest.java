@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class IntersectLineQuadCurveTest {
 
     @TestFactory
-    public @NonNull List<DynamicTest> testIntersectLineQuadraticCurve_5argsFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsIntersectLineQuadraticCurve_5args() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectLineQuadCurve(new Line(10, 40, 210, 175), new QuadCurve(125, 200, 250, 225, 275, 100), new double[]{}))
         );

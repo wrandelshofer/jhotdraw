@@ -114,7 +114,7 @@ public class AnalysisOfSvgTestSuitesTest {
      */
     @TestFactory
     @Disabled
-    public @NonNull Stream<DynamicTest> w3cSvgTiny12TestSuiteTestFactory() throws IOException {
+    public @NonNull Stream<DynamicTest> dynamicTestsW3cSvgTiny12TestSuite() throws IOException {
         if (!Files.isDirectory(Path.of(W3C_SVG_12_TINY_TEST_SUITE))) {
             System.err.println("Please fix the path to W3C SVG 1.2 Tiny Test Suite: " +
                     Path.of(W3C_SVG_12_TINY_TEST_SUITE).toAbsolutePath());
@@ -123,8 +123,8 @@ public class AnalysisOfSvgTestSuitesTest {
 
         return Files.walk(Path.of(W3C_SVG_12_TINY_TEST_SUITE, "svggen"))
                 .filter(f -> f.getFileName().toString().endsWith(".svg"))
-                .filter(f->!f.getFileName().toString().startsWith("animate-")
-                &&!f.getFileName().toString().startsWith("conf-")
+                .filter(f -> !f.getFileName().toString().startsWith("animate-")
+                                && !f.getFileName().toString().startsWith("conf-")
                 &&!f.getFileName().toString().startsWith("coords-")
                 &&!f.getFileName().toString().startsWith("extend-")
                 &&!f.getFileName().toString().startsWith("fonts-")
@@ -136,7 +136,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 &&!f.getFileName().toString().startsWith("script-")
                 &&!f.getFileName().toString().startsWith("udom-")
                 )
-                .filter(f->f.getFileName().toString().startsWith("paint-"))
+                .filter(f -> f.getFileName().toString().startsWith("paint-"))
                 .map(f -> new OrderedPair<Path, Path>(f,
                         f.getParent().getParent().resolve(
                                 Path.of("png",
@@ -146,7 +146,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 ))
                 .sorted(Comparator.comparing(p -> getLastTwoPathElements(p.first())))
                 .map(p -> dynamicTest(getLastTwoPathElements(p.first())
-                        , () -> doW3CSvg12TinyTest(p.first(), p.second())));
+                        , () -> testW3CSvg12Tiny(p.first(), p.second())));
 
     }
 
@@ -166,7 +166,7 @@ public class AnalysisOfSvgTestSuitesTest {
      */
     @Disabled
     @TestFactory
-    public @NonNull Stream<DynamicTest> webPlatformTestFactory() throws IOException {
+    public @NonNull Stream<DynamicTest> dynamicTestsWebPlatformTests() throws IOException {
         if (!Files.isDirectory(Path.of(WPT_PATH))) {
             System.err.println("Please fix the path to web-platform-tests: " +
                     Path.of(WPT_PATH).toAbsolutePath());
@@ -186,7 +186,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 .filter(p -> !unwantedTests.contains(getLastTwoPathElements(p.first())))
                 .sorted(Comparator.comparing(p -> getLastTwoPathElements(p.first())))
                 .map(p -> dynamicTest(getLastTwoPathElements(p.first())
-                        , () -> doWebPlatformTest(p.first(), p.second())));
+                        , () -> testWebPlatformTest(p.first(), p.second())));
 
     }
 
@@ -195,7 +195,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 + "/" + p.getName(p.getNameCount() - 1).toString();
     }
 
-     private void doW3CSvg12TinyTest(Path testFile, Path referenceFile) throws Exception {
+    private void testW3CSvg12Tiny(Path testFile, Path referenceFile) throws Exception {
         System.out.println("Performing W3C SVG 1.2 Tiny test:");
         System.out.println("  test file     : " + testFile);
         System.out.println("  reference file: " + referenceFile);
@@ -230,7 +230,7 @@ public class AnalysisOfSvgTestSuitesTest {
         checkImages(testFile, actualImage,expectedImage);
     }
 
-    private void doWebPlatformTest(Path testFile, Path referenceFile) throws Exception {
+    private void testWebPlatformTest(Path testFile, Path referenceFile) throws Exception {
         System.out.println("Performing web-platform test:");
         System.out.println("  test file     : " + testFile);
         System.out.println("  reference file: " + referenceFile);

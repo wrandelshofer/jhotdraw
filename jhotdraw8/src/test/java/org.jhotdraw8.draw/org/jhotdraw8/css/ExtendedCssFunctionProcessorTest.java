@@ -35,7 +35,7 @@ class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest 
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> testProcessingOfExtendedFunctionsFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsProcessingOfExtendedFunctions() {
         return Arrays.asList(
                 dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),
                 dynamicTest("302", () -> doTestProcess("concat(\"a\",\"b\")", "\"ab\"")),

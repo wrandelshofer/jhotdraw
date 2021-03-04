@@ -61,7 +61,7 @@ public class StreamCssTokenizerTest {
 
     @NonNull
     @TestFactory
-    List<DynamicTest> tokenizerData() {
+    List<DynamicTest> dynamicTestsTokenizer() {
         return Arrays.asList(
                 dynamicTest("1", () -> testTokenizer("<!-", "<:< !:! -:-")),
                 dynamicTest("2", () -> testTokenizer("func(", "-18:func")),

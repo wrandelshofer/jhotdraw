@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 class GeomTest {
     @TestFactory
-    public @NonNull List<DynamicTest> testSinDegreesFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsSinDegrees() {
         List<DynamicTest> list = new ArrayList<>();
         for (double i = -360; i <= 360; i += 0.5) {
             double aDeg = i;
@@ -33,7 +33,7 @@ class GeomTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> testCosDegreesFactory() {
+    public @NonNull List<DynamicTest> dynamicTestsCosDegrees() {
         List<DynamicTest> list = new ArrayList<>();
         for (double i = -360; i <= 360; i += 0.5) {
             double aDeg = i;

@@ -19,31 +19,31 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 class MacOSPreferencesTest {
     @NonNull
     @TestFactory
-    List<DynamicTest> test() {
+    List<DynamicTest> dynamicTestsPreferences() {
         List<DynamicTest> list = new ArrayList<>();
         for (String file : Arrays.asList("XML Property List.plist",
                 "Binary Property List.plist")) {
             list.addAll(Arrays.asList(
-                    dynamicTest("nonexistent key", () -> doTest(file, "key", null)),
-                    dynamicTest("array", () -> doTest(file, "a array", Arrays.asList("the item 0 value", "the item 1 value"))),
-                    dynamicTest("dict", () -> doTest(file, "a dict", ImmutableMaps.of("a child 1", "the child 1 value", "a child 2", "the child 2 value").asMap())),
-                    dynamicTest("sub-dict access", () -> doTest(file, "a dict\ta child 2", "the child 2 value")),
+                    dynamicTest("nonexistent key", () -> testPreferences(file, "key", null)),
+                    dynamicTest("array", () -> testPreferences(file, "a array", Arrays.asList("the item 0 value", "the item 1 value"))),
+                    dynamicTest("dict", () -> testPreferences(file, "a dict", ImmutableMaps.of("a child 1", "the child 1 value", "a child 2", "the child 2 value").asMap())),
+                    dynamicTest("sub-dict access", () -> testPreferences(file, "a dict\ta child 2", "the child 2 value")),
 
-                    dynamicTest("boolean false", () -> doTest(file, "a boolean false", false)),
-                    dynamicTest("boolean true", () -> doTest(file, "a boolean true", true)),
-                    dynamicTest("data", () -> doTest(file, "a data", new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe})),
-                    dynamicTest("date", () -> doTest(file, "a date", DatatypeFactory.newInstance().newXMLGregorianCalendar("2019-11-09T11:39:03Z"))),
-                    dynamicTest("float", () -> doTest(file, "a float", 0.42)),
-                    dynamicTest("integer", () -> doTest(file, "a integer", 42L)),
-                    dynamicTest("long", () -> doTest(file, "a long", 4294967296L)),
-                    dynamicTest("string", () -> doTest(file, "a string", "The String Value"))
+                    dynamicTest("boolean false", () -> testPreferences(file, "a boolean false", false)),
+                    dynamicTest("boolean true", () -> testPreferences(file, "a boolean true", true)),
+                    dynamicTest("data", () -> testPreferences(file, "a data", new byte[]{(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe})),
+                    dynamicTest("date", () -> testPreferences(file, "a date", DatatypeFactory.newInstance().newXMLGregorianCalendar("2019-11-09T11:39:03Z"))),
+                    dynamicTest("float", () -> testPreferences(file, "a float", 0.42)),
+                    dynamicTest("integer", () -> testPreferences(file, "a integer", 42L)),
+                    dynamicTest("long", () -> testPreferences(file, "a long", 4294967296L)),
+                    dynamicTest("string", () -> testPreferences(file, "a string", "The String Value"))
             ));
         }
         return list;
 
     }
 
-    private void doTest(String filename, @NonNull String key, Object expectedValue) throws URISyntaxException {
+    private void testPreferences(String filename, @NonNull String key, Object expectedValue) throws URISyntaxException {
         File file = new File(getClass().getResource(filename).toURI());
         System.out.println(filename + ", " + key.replaceAll("\t", "→") + " = " + expectedValue);
         final Object actualValue = MacOSPreferences.get(file, key);
