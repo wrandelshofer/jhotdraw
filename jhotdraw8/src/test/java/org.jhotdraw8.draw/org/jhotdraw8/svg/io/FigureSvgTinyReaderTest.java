@@ -7,10 +7,11 @@ package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.draw.figure.DefaultableFigure;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.key.DefaultableStyleableMapAccessor;
+import org.jhotdraw8.svg.figure.SvgDefaultableFigure;
 import org.jhotdraw8.svg.figure.SvgRectFigure;
+import org.jhotdraw8.svg.key.SvgDefaultablePaintStyleableMapAccessor;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -55,12 +56,12 @@ public class FigureSvgTinyReaderTest {
         );
     }
 
-    private <T> void testDefaultable(String svg, String id, DefaultableStyleableMapAccessor<T> key, T expected) throws IOException {
+    private <T extends Paintable> void testDefaultable(String svg, String id, SvgDefaultablePaintStyleableMapAccessor<T> key, T expected) throws IOException {
         FigureSvgTinyReader instance = new FigureSvgTinyReader();
         Figure drawing = instance.read(new StreamSource(new StringReader(svg)));
         for (Figure f : drawing.depthFirstIterable()) {
-            if (f instanceof DefaultableFigure) {
-                DefaultableFigure df = (DefaultableFigure) f;
+            if (f instanceof SvgDefaultableFigure) {
+                SvgDefaultableFigure df = (SvgDefaultableFigure) f;
                 if (id.equals(f.getId())) {
                     T actual = df.getDefaultableStyled(key);
                     assertEquals(expected, actual);

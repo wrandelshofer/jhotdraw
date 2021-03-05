@@ -37,6 +37,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 import org.jhotdraw8.io.StreamPosTokenizer;
 import org.jhotdraw8.svg.SvgPath2D;
+import org.jhotdraw8.text.NumberConverter;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import java.awt.BasicStroke;
@@ -1070,13 +1071,12 @@ public class Shapes {
     }
 
     public static @NonNull String floatSvgStringFromElements(@NonNull List<PathElement> elements) {
-        XmlNumberConverter nb = new XmlNumberConverter();
-        nb.setMaximumFractionDigits(7);
+        NumberConverter nb = new NumberConverter(Float.class);
         return svgStringFromElements(elements, nb);
     }
 
 
-    public static @NonNull String svgStringFromElements(@NonNull List<PathElement> elements, XmlNumberConverter nb) {
+    public static @NonNull String svgStringFromElements(@NonNull List<PathElement> elements, NumberConverter nb) {
         StringBuilder buf = new StringBuilder();
         char next = 'Z'; // next instruction
         double x = 0, y = 0;// current point
@@ -1275,8 +1275,7 @@ public class Shapes {
      * @return SVG Path
      */
     public static @NonNull String floatSvgStringFromAWT(@NonNull PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
-        nb.setMaximumFractionDigits(8);
+        NumberConverter nb = new NumberConverter(Float.class);
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
         char next = 'Z'; // next instruction

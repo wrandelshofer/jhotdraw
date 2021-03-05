@@ -7,6 +7,7 @@ package org.jhotdraw8.css;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableMap;
 import org.jhotdraw8.collection.ImmutableMaps;
 
@@ -41,7 +42,8 @@ public class NamedCssColor extends CssColor {
      * @param rgb  the color
      */
     public NamedCssColor(@NonNull String name, int rgb) {
-        super(name, Color.rgb((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff));
+        super(name,
+                Color.rgb((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff));
     }
 
     public static final @NonNull NamedCssColor TRANSPARENT = new NamedCssColor(NamedColorName.TRANSPARENT, Color.TRANSPARENT);
@@ -355,21 +357,42 @@ public class NamedCssColor extends CssColor {
     }
 
     /**
-     * Creates a named color for the given name.
+     * Returns a named color for the given name.
      * <p>
-     * If the name is unknown, then a black named color with the given
-     * name is created.
+     * The name is not case sensitive.
+     * <p>
+     * If the name is unknown, then an illegal argument exception is thrown.
      *
-     * @param name the name of the system color
-     * @return a new instance
+     * @param name the name of the color
+     * @return a named color
+     * @throws IllegalArgumentException if the name is unknown
      */
-    public static @NonNull NamedCssColor of(@NonNull String name) {
+    public static @NonNull NamedCssColor ofNonNull(@NonNull String name) {
         NamedCssColor color = NAMED_COLORS.get(name.toLowerCase());
-        return color == null ? new NamedCssColor(name, Color.BLACK) : color;
+        if (color == null) {
+            throw new IllegalArgumentException("unsupported color name: " + name);
+        }
+        return color;
+    }
+
+    /**
+     * Returns a named color for the given name.
+     * <p>
+     * The name is not case sensitive.
+     * <p>
+     * If the name is unknown, then null is returned.
+     *
+     * @param name the name of the color
+     * @return a named color or null
+     */
+    public static @Nullable NamedCssColor of(@NonNull String name) {
+        return NAMED_COLORS.get(name.toLowerCase());
     }
 
     /**
      * Returns true if the given name is a known system color.
+     * <p>
+     * The name is not case sensitive.
      *
      * @param name a name
      * @return true if known

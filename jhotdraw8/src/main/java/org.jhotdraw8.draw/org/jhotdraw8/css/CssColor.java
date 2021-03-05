@@ -79,38 +79,33 @@ public class CssColor implements Paintable {
 
     public static @NonNull String toName(@NonNull Color c) {
         if (c.getOpacity() == 1.0) {
-            // The fields in class Color store values as floats, we must
-            // not promote them to double because this changes the values!
-            return "rgb("
-                    + num.toString((float) c.getRed() * 100) + "%,"
-                    + num.toString((float) c.getGreen() * 100) + "%,"
-                    + num.toString((float) c.getBlue() * 100) + "%"
-                    + ")";
-            /*
-            // This is not precise and will fail in SVG tests.
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
             return String.format("#%02x%02x%02x", r, g, b);
-             */
+
         } else if (c.equals(Color.TRANSPARENT)) {
             return "transparent";
         } else {
-            // The fields in class Color store values as floats, we must
-            // not promote them to double because this changes the values!
-            return "rgba("
-                    + num.toString((float) c.getRed() * 100) + "%,"
-                    + num.toString((float) c.getGreen() * 100) + "%,"
-                    + num.toString((float) c.getBlue() * 100) + "%,"
-                    + num.toString((float) c.getOpacity())
-                    + ")";
-            /*
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
             int b = (int) Math.round(c.getBlue() * 255.0);
-            float o = (float) c.getOpacity();// Color represents opacity by a float. We must not promote it.
-             */
+            int o = (int) Math.round(c.getOpacity() * 255.0);
+            return String.format("#%02x%02x%02x%02x", r, g, b, o);
         }
+    }
+
+    @NonNull
+    protected static String toPercentageString(double v) {
+        // JavaFX color stores the number internally as a float.
+        // Check if we get the same number back, if we do not promote the color
+        // to double
+        float originalFloat = (float) v;
+        float asFloat = (float) v * 100f;
+        double asDouble = v * 100.0;
+        float backFromFloat = asFloat / 100f;
+        float backFromDouble = (float) (asDouble / 100f);
+        return (backFromFloat == originalFloat) ? num.toString(asFloat) : num.toString(asDouble);
     }
 
     @Override
@@ -136,7 +131,9 @@ public class CssColor implements Paintable {
 
     @Override
     public @NonNull String toString() {
-        return "CssColor{" + getName() + "," + getColor() + '}';
+        return "CssColor{" + getName() + ","
+                + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "," + color.getOpacity()
+                + "}";
     }
 
     private static final @NonNull CssColorConverter converter = new CssColorConverter();

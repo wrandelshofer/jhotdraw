@@ -15,6 +15,7 @@ import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.css.ShsbaCssColor;
 import org.jhotdraw8.css.SrgbaCssColor;
 import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.SystemCssColor;
 import org.jhotdraw8.css.Uint4HexSrgbaCssColor;
 import org.jhotdraw8.css.Uint8HexSrgbaCssColor;
 import org.jhotdraw8.css.UnitConverter;
@@ -93,92 +94,103 @@ public class CssColorConverter implements CssConverter<CssColor> {
                     throw tt.createParseException("CssColor: hex color expected.");
                 }
                 break;
-            case CssTokenType.TT_HASH:
-                color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
+        case CssTokenType.TT_HASH:
+            color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
+            break;
+        case CssTokenType.TT_IDENT:
+            color = NamedCssColor.of(tt.currentStringNonNull());
+            if (color == null) {
+                color = SystemCssColor.of(tt.currentStringNonNull());
+            }
+            break;
+        case CssTokenType.TT_FUNCTION:
+            double[] values = new double[4];
+            switch (tt.currentStringNonNull()) {
+            case "rgba":
+            case "rgb": {
+                color = parseSrgbaColor(tt);
                 break;
-            case CssTokenType.TT_IDENT:
-                String ident = tt.currentStringNonNull();
-                try {
-                    color = ident.startsWith("0x")
-                            ? parseColorHexDigits(ident.substring(2), tt.getStartPosition())
-                            : NamedCssColor.of(ident);
-                } catch (IllegalArgumentException e) {
-                    throw tt.createParseException(e.getMessage() + " value:" + ident);
-                }
+            }
+            case "hsba":
+            case "hsb": {
+                color = parseShsbaColor(tt);
                 break;
-            case CssTokenType.TT_FUNCTION:
-                double[] values = new double[4];
-                int i = 0;
-                switch (tt.currentStringNonNull()) {
-                    case "rgba":
-                    case "rgb": {
-                        CssSize[] sizes = new CssSize[4];
-                        while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
-                            if (tt.current() == CssTokenType.TT_PERCENTAGE) {
-                                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
-                            } else {
-                                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
-                            }
-                            if (tt.next() != ',') {
-                                tt.pushBack();
-                            }
-                        }
-
-                        if (i == 0) {
-                            color = SrgbaCssColor.BLACK;
-                            tt.pushBack();
-                        } else if (i == 3) {
-                            color = new SrgbaCssColor(sizes[0], sizes[1], sizes[2], CssSize.ONE);
-                            tt.pushBack();
-                        } else if (i == 4) {
-                            color = new SrgbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
-                        } else {
-                            throw tt.createParseException("CssColor: rgb values expected.");
-                        }
-                        break;
-                    }
-                    case "hsba":
-                    case "hsb": {
-                        CssSize[] sizes = new CssSize[4];
-                        while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER
-                                || tt.current() == CssTokenType.TT_PERCENTAGE
-                                || tt.current() == CssTokenType.TT_DIMENSION)) {
-                            if (tt.current() == CssTokenType.TT_DIMENSION &&
-                                    (i != 0 || !UnitConverter.DEGREES.equals(tt.currentStringNonNull()))) {
-                                throw tt.createParseException("CssColor: hsb found unsupported dimension.");
-                            }
-                            if (tt.current() == CssTokenType.TT_PERCENTAGE) {
-                                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
-                            } else {
-                                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
-                            }
-                            if (tt.next() != ',') {
-                                tt.pushBack();
-                            }
-                        }
-
-                        if (i == 0) {
-                            color = ShsbaCssColor.BLACK;
-                            tt.pushBack();
-                        } else if (i == 3) {
-                            color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], CssSize.ONE);
-                            tt.pushBack();
-                        } else if (i == 4) {
-                            color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
-                        } else {
-                            throw tt.createParseException("CssColor: rgb values expected.");
-                        }
-                        break;
-                    }
-                    default:
-                        throw tt.createParseException("CssColor: color expected.");
-                }
-                if (tt.next() != ')') {
-                    throw tt.createParseException("CssColor: ')' expected.");
-                }
-                break;
+            }
             default:
                 throw tt.createParseException("CssColor: color expected.");
+            }
+            if (tt.next() != ')') {
+                throw tt.createParseException("CssColor: ')' expected.");
+            }
+            break;
+        default:
+            throw tt.createParseException("CssColor: color expected.");
+        }
+        return color;
+    }
+
+    @NonNull
+    private CssColor parseShsbaColor(@NonNull CssTokenizer tt) throws IOException, ParseException {
+        CssColor color;
+        int i = 0;
+        CssSize[] sizes = new CssSize[4];
+        while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER
+                || tt.current() == CssTokenType.TT_PERCENTAGE
+                || tt.current() == CssTokenType.TT_DIMENSION)) {
+            if (tt.current() == CssTokenType.TT_DIMENSION &&
+                    (i != 0 || !UnitConverter.DEGREES.equals(tt.currentStringNonNull()))) {
+                throw tt.createParseException("CssColor: hsb found unsupported dimension.");
+            }
+            if (tt.current() == CssTokenType.TT_PERCENTAGE) {
+                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+            } else {
+                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
+            }
+            if (tt.next() != ',') {
+                tt.pushBack();
+            }
+        }
+
+        if (i == 0) {
+            color = ShsbaCssColor.BLACK;
+            tt.pushBack();
+        } else if (i == 3) {
+            color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], CssSize.ONE);
+            tt.pushBack();
+        } else if (i == 4) {
+            color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
+        } else {
+            throw tt.createParseException("CssColor: hsb values expected.");
+        }
+        return color;
+    }
+
+    @NonNull
+    private CssColor parseSrgbaColor(@NonNull CssTokenizer tt) throws IOException, ParseException {
+        int i = 0;
+        CssColor color;
+        CssSize[] sizes = new CssSize[4];
+        while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
+            if (tt.current() == CssTokenType.TT_PERCENTAGE) {
+                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+            } else {
+                sizes[i++] = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
+            }
+            if (tt.next() != ',') {
+                tt.pushBack();
+            }
+        }
+
+        if (i == 0) {
+            color = SrgbaCssColor.BLACK;
+            tt.pushBack();
+        } else if (i == 3) {
+            color = new SrgbaCssColor(sizes[0], sizes[1], sizes[2], CssSize.ONE);
+            tt.pushBack();
+        } else if (i == 4) {
+            color = new SrgbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
+        } else {
+            throw tt.createParseException("CssColor: rgb values expected.");
         }
         return color;
     }

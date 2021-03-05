@@ -25,7 +25,7 @@ public class Uint8HexSrgbaCssColor extends CssColor {
 
     public Uint8HexSrgbaCssColor(int r, int g, int b, int a) {
         super(Uint8HexSrgbaCssColor.toName((a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | b & 0xff),
-                Color.rgb(r, g, b, a / 255.0));
+                Color.rgb(r & 0xff, g & 0xff, b & 0xff, (a & 0xff) / 255.0));
     }
 
     private static String toName(int argb) {

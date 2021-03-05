@@ -10,12 +10,20 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
@@ -160,9 +168,6 @@ public class AnalysisOfSvgTestSuitesTest {
      * <p>
      * If a file name ends with "-ref.svg" then it is a reference file.
      * The corresponding test file has the same file name without "-ref".
-     *
-     * @return
-     * @throws IOException
      */
     @Disabled
     @TestFactory
@@ -212,11 +217,13 @@ public class AnalysisOfSvgTestSuitesTest {
         CompletableFuture<OrderedPair<WritableImage, WritableImage>> future = new CompletableFuture<>();
         Platform.runLater(() -> {
             try {
-                WritableImage testImage = testNode.snapshot(new SnapshotParameters(), null);
-                Image referenceImageX=new Image(referenceFile.toUri().toURL().toString());
+                SnapshotParameters params = new SnapshotParameters();
+                params.setFill(Color.TRANSPARENT);
+                WritableImage testImage = testNode.snapshot(params, null);
+                Image referenceImageX = new Image(referenceFile.toUri().toURL().toString());
                 PixelReader pixelReader = referenceImageX.getPixelReader();
-                WritableImage referenceImage=new WritableImage(pixelReader,
-                        (int)referenceImageX.getWidth(),(int)referenceImageX.getHeight());
+                WritableImage referenceImage = new WritableImage(pixelReader,
+                        (int) referenceImageX.getWidth(), (int) referenceImageX.getHeight());
                 future.complete(new OrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -262,7 +269,6 @@ public class AnalysisOfSvgTestSuitesTest {
         WritableImage expectedImage = pair.second();
         checkImages(testFile, actualImage,expectedImage);
     }
-
     private void checkImages(Path testFile,
                              WritableImage actualImage , WritableImage expectedImage) throws InterruptedException, ExecutionException, TimeoutException {
 
@@ -271,15 +277,24 @@ public class AnalysisOfSvgTestSuitesTest {
 
         if (INTERACTIVE && !actualBuffer.equals(expectedBuffer)) {
             CompletableFuture<Boolean> waitUntilClosed = new CompletableFuture<>();
-            AtomicReference<Stage> stageRef=new AtomicReference<>(null);
+            AtomicReference<Stage> stageRef = new AtomicReference<>(null);
+            WritableImage markedDifferences = markDifferences(actualImage, actualBuffer, expectedBuffer);
             Platform.runLater(() -> {
                 try {
                     Stage stage = new Stage();
                     stageRef.set(stage);
-                    HBox hbox = new HBox();
-                    hbox.getChildren().addAll(new ImageView(actualImage),
-                            new ImageView(expectedImage));
-                    stage.setScene(new Scene(hbox));
+                    GridPane grid = new GridPane();
+                    grid.setBorder(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderStroke.THICK)));
+                    grid.add(new ImageView(actualImage), 0, 0);
+                    grid.add(new ImageView(expectedImage), 1, 0);
+                    grid.add(new ImageView(markedDifferences), 1, 1);
+                    StackPane stackPane = new StackPane();
+                    ImageView imageView = new ImageView(actualImage);
+                    ImageView imageView1 = new ImageView(expectedImage);
+                    imageView1.setBlendMode(BlendMode.DIFFERENCE);
+                    stackPane.getChildren().setAll(imageView, imageView1);
+                    grid.add(stackPane, 0, 1);
+                    stage.setScene(new Scene(grid));
                     stage.sizeToScene();
                     stage.setWidth(Math.max(100, stage.getWidth()));
                     stage.setHeight(Math.max(100, stage.getHeight()));
@@ -301,7 +316,9 @@ public class AnalysisOfSvgTestSuitesTest {
                 // close stage, move to next test
                 Platform.runLater(() -> {
                     Stage stage = stageRef.get();
-                    if (stage!=null)stage.close();
+                    if (stage != null) {
+                        stage.close();
+                    }
                 });
             }
         }
@@ -309,11 +326,21 @@ public class AnalysisOfSvgTestSuitesTest {
         assertArrayEquals(expectedBuffer.array(), actualBuffer.array());
     }
 
-    private void dump(Figure f, int depth) {
-        System.out.println(".".repeat(depth) + f.getTypeSelector() + " " + f.getId());
-        for (Figure child : f.getChildren()) {
-            dump(child, depth + 1);
+    @NonNull
+    private WritableImage markDifferences(WritableImage actualImage, IntBuffer actualBuffer, IntBuffer expectedBuffer) {
+        WritableImage markedDifferences = new WritableImage((int) actualImage.getWidth(), (int) actualImage.getHeight());
+        int[] aa = actualBuffer.array();
+        int[] ea = expectedBuffer.array();
+
+        PixelWriter pw = markedDifferences.getPixelWriter();
+        int w = (int) actualImage.getWidth();
+        for (int i = 0; i < aa.length; i++) {
+            int eai = ea[i];
+            if (aa[i] != eai) {
+                pw.setArgb(i % w, i / w, 0xffff0000);
+            }
         }
+        return markedDifferences;
     }
 
     private @NonNull IntBuffer createIntBuffer(WritableImage actualImage) {
@@ -324,4 +351,14 @@ public class AnalysisOfSvgTestSuitesTest {
                 WritablePixelFormat.getIntArgbInstance(), intBuffer, w);
         return intBuffer;
     }
+
+
+    private void dump(Figure f, int depth) {
+        System.out.println(".".repeat(depth) + f.getTypeSelector() + " " + f.getId());
+        for (Figure child : f.getChildren()) {
+            dump(child, depth + 1);
+        }
+    }
+
+
 }

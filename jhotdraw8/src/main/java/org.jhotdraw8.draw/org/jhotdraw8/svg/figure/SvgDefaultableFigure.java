@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.svg.figure;
 
+import javafx.css.StyleOrigin;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.shape.FillRule;
@@ -13,6 +14,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableMaps;
@@ -33,7 +35,11 @@ import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.svg.css.SvgDefaultablePaint;
+import org.jhotdraw8.svg.css.SvgPaintDefaulting;
 import org.jhotdraw8.svg.io.SvgFontFamilyConverter;
+import org.jhotdraw8.svg.key.SvgDefaultablePaintStyleableKey;
+import org.jhotdraw8.svg.key.SvgDefaultablePaintStyleableMapAccessor;
 import org.jhotdraw8.svg.text.SvgCssPaintableConverter;
 import org.jhotdraw8.svg.text.SvgDisplay;
 import org.jhotdraw8.svg.text.SvgFontSize;
@@ -42,6 +48,8 @@ import org.jhotdraw8.svg.text.SvgShapeRendering;
 import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
 import org.jhotdraw8.svg.text.SvgTextAnchor;
 import org.jhotdraw8.svg.text.SvgVisibility;
+
+import java.util.Objects;
 
 import static org.jhotdraw8.svg.io.SvgFontFamilyConverter.GENERIC_FONT_FAMILY_SANS_SERIF;
 
@@ -59,13 +67,27 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             }, new CssColorConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
     /**
+     * stop-color.
+     */
+    DefaultableStyleableKey<CssColor> STOP_COLOR_KEY = new DefaultableStyleableKey<>("stop-color",
+            new TypeToken<CssDefaultableValue<CssColor>>() {
+            }, new CssColorConverter(true),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
+    /**
+     * stop-opacity.
+     */
+    DefaultableStyleableKey<CssSize> STOP_OPACITY_KEY = new DefaultableStyleableKey<>("stop-opacity",
+            new TypeToken<CssDefaultableValue<CssSize>>() {
+            }, new CssSizeConverter(true),
+            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssSize.ONE);
+    /**
      * fill.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#FillProperty">link</a>
      */
-    DefaultableStyleableKey<Paintable> FILL_KEY = new DefaultableStyleableKey<>("fill",
-            new TypeToken<CssDefaultableValue<Paintable>>() {
+    SvgDefaultablePaintStyleableKey<Paintable> FILL_KEY = new SvgDefaultablePaintStyleableKey<>("fill",
+            new TypeToken<SvgDefaultablePaint<Paintable>>() {
             }, new SvgCssPaintableConverter(true),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
+            new SvgDefaultablePaint<>(SvgPaintDefaulting.INHERIT, null), NamedCssColor.BLACK);
     /**
      * fill-rule.
      * <p>
@@ -110,10 +132,10 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * stroke.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/painting.html#StrokeProperty">link</a>
      */
-    DefaultableStyleableKey<Paintable> STROKE_KEY = new DefaultableStyleableKey<>("stroke",
-            new TypeToken<CssDefaultableValue<Paintable>>() {
+    SvgDefaultablePaintStyleableKey<Paintable> STROKE_KEY = new SvgDefaultablePaintStyleableKey<>("stroke",
+            new TypeToken<SvgDefaultablePaint<Paintable>>() {
             }, new SvgCssPaintableConverter(true),
-            new CssDefaultableValue<>(CssDefaulting.INHERIT, null), null);
+            new SvgDefaultablePaint<>(SvgPaintDefaulting.INHERIT, null), null);
 
     /**
      * stroke-alignment.
@@ -413,4 +435,37 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             strokeShape.setVisible(true);
         }
     }
+
+    /**
+     * Returns the styled value.
+     *
+     * @param <T> The value type
+     * @param key The property key
+     * @return The styled value.
+     */
+    default @Nullable <T extends Paintable> T getDefaultableStyled(@NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
+        return getDefaultableStyled(StyleOrigin.INLINE, key);
+    }
+
+    default @Nullable <T extends Paintable> T getDefaultableStyled(@NonNull StyleOrigin origin, @NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
+        // FIXME REVERT does not work this way, must use getStyled(origin,key) for _starting a search at the specified origin_ value
+        SvgDefaultablePaint<T> dv = Objects.requireNonNull(getStyled(origin == StyleOrigin.INLINE ? null : origin, key));
+        if (dv.getDefaulting() == null) {
+            return dv.getValue();
+        }
+        switch (dv.getDefaulting()) {
+        case INHERIT:
+            if (getParent() instanceof SvgDefaultableFigure) {
+                return ((SvgDefaultableFigure) getParent()).getDefaultableStyled(key);
+            } else {
+                return key.getInitialValue();
+            }
+        case CURRENT_COLOR:
+            T currentColor = (T) getDefaultableStyled(COLOR_KEY);
+            return currentColor;
+        default:
+            throw new UnsupportedOperationException("unsupported defaulting: " + dv.getDefaulting());
+        }
+    }
+
 }

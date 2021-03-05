@@ -7,7 +7,7 @@ package org.jhotdraw8.css;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
+import org.jhotdraw8.text.NumberConverter;
 
 import static org.jhotdraw8.geom.Geom.clamp;
 
@@ -39,7 +39,7 @@ import static org.jhotdraw8.geom.Geom.clamp;
  * </dl>
  */
 public class SrgbaCssColor extends CssColor {
-    private static final XmlNumberConverter num = new XmlNumberConverter();
+    private static final NumberConverter num = new NumberConverter();
     public static final SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
 
     private final @NonNull CssSize red, green, blue, opacity;
@@ -58,12 +58,34 @@ public class SrgbaCssColor extends CssColor {
 
     public SrgbaCssColor(@NonNull CssSize red, @NonNull CssSize green, @NonNull CssSize blue, @NonNull CssSize opacity) {
         super(toName(red, green, blue, opacity),
-                Color.color(
+/*
+                Color.rgb(
+                        (int) Math.round(clamp(UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() * 2.55 : red.getValue(), 0, 255)),
+                        (int)Math.round(clamp(UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue()  * 2.55 : green.getValue() , 0, 255)),
+                        (int) Math.round(clamp(UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue()  * 2.55 : blue.getValue() , 0, 255)),
+                        clamp(UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue(), 0, 1)
+                )
+*/
+
+                // The following code would be nicer, but JavaFX color internally
+                // does not convert double numbers to rgb numbers as we expect it.
+
+                (UnitConverter.PERCENTAGE.equals(red.getUnits())
+                        || UnitConverter.PERCENTAGE.equals(green.getUnits())
+                        | UnitConverter.PERCENTAGE.equals(blue.getUnits()))
+                        ? Color.color(
                         clamp(UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() / 100 : red.getValue() / 255, 0, 1),
                         clamp(UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue() / 100 : green.getValue() / 255, 0, 1),
                         clamp(UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue() / 100 : blue.getValue() / 255, 0, 1),
                         clamp(UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue(), 0, 1)
                 )
+                        : Color.rgb(
+                        (int) Math.round(clamp(UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() * 2.55 : red.getValue(), 0, 255)),
+                        (int) Math.round(clamp(UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue() * 2.55 : green.getValue(), 0, 255)),
+                        (int) Math.round(clamp(UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue() * 2.55 : blue.getValue(), 0, 255)),
+                        clamp(UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue(), 0, 1)
+                )
+
         );
         this.red = red;
         this.green = green;

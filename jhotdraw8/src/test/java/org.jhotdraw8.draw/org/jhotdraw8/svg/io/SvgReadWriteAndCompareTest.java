@@ -167,16 +167,7 @@ public class SvgReadWriteAndCompareTest {
         if (INTERACTIVE && !actualBuffer.equals(expectedBuffer)) {
             CompletableFuture<Boolean> waitUntilClosed = new CompletableFuture<>();
             AtomicReference<Stage> stageRef = new AtomicReference<>(null);
-            WritableImage markedDifferences = new WritableImage((int) actualImage.getWidth(), (int) actualImage.getHeight());
-            int[] aa = actualBuffer.array();
-            int[] ea = expectedBuffer.array();
-            PixelWriter pw = markedDifferences.getPixelWriter();
-            int w = (int) actualImage.getWidth();
-            for (int i = 0; i < aa.length; i++) {
-                if (aa[i] != ea[i]) {
-                    pw.setArgb(i % w, i / w, 0xff000000);
-                }
-            }
+            WritableImage markedDifferences = markDifferences(actualImage, actualBuffer, expectedBuffer);
             Platform.runLater(() -> {
                 try {
                     Stage stage = new Stage();
@@ -214,13 +205,31 @@ public class SvgReadWriteAndCompareTest {
                 // close stage, move to next test
                 Platform.runLater(() -> {
                     Stage stage = stageRef.get();
-                    if (stage!=null)stage.close();
+                    if (stage != null) {
+                        stage.close();
+                    }
                 });
             }
         }
 
         assertArrayEquals(expectedBuffer.array(), actualBuffer.array());
     }
+
+    @NonNull
+    private WritableImage markDifferences(WritableImage actualImage, IntBuffer actualBuffer, IntBuffer expectedBuffer) {
+        WritableImage markedDifferences = new WritableImage((int) actualImage.getWidth(), (int) actualImage.getHeight());
+        int[] aa = actualBuffer.array();
+        int[] ea = expectedBuffer.array();
+        PixelWriter pw = markedDifferences.getPixelWriter();
+        int w = (int) actualImage.getWidth();
+        for (int i = 0; i < aa.length; i++) {
+            if (aa[i] != ea[i]) {
+                pw.setArgb(i % w, i / w, 0xff000000);
+            }
+        }
+        return markedDifferences;
+    }
+
     private @NonNull IntBuffer createIntBuffer(WritableImage actualImage) {
         int w = (int) actualImage.getWidth();
         int h = (int) actualImage.getHeight();

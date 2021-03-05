@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.svg.io;
 
-import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
@@ -19,19 +18,20 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.SrgbaCssColor;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDefaultableValueConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
-import org.jhotdraw8.css.text.CssStop;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.svg.css.SvgDefaultablePaint;
+import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
 import org.jhotdraw8.svg.figure.SvgCircleFigure;
 import org.jhotdraw8.svg.figure.SvgDefsFigure;
 import org.jhotdraw8.svg.figure.SvgDrawing;
@@ -43,11 +43,12 @@ import org.jhotdraw8.svg.figure.SvgLinearGradientFigure;
 import org.jhotdraw8.svg.figure.SvgPathFigure;
 import org.jhotdraw8.svg.figure.SvgPolygonFigure;
 import org.jhotdraw8.svg.figure.SvgPolylineFigure;
+import org.jhotdraw8.svg.figure.SvgRadialGradientFigure;
 import org.jhotdraw8.svg.figure.SvgRectFigure;
+import org.jhotdraw8.svg.figure.SvgStop;
 import org.jhotdraw8.svg.figure.SvgTextFigure;
 import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.jhotdraw8.xml.text.XmlStringConverter;
 
 import javax.xml.namespace.QName;
@@ -69,7 +70,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -87,7 +87,6 @@ import java.util.stream.Collectors;
 public class FigureSvgTinyReader {
     public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
     public static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
-    private static final Logger LOGGER = Logger.getLogger(FigureSvgTinyReader.class.getName());
     /**
      * Maps from an attribute name to an accessor.
      */
@@ -103,18 +102,14 @@ public class FigureSvgTinyReader {
      * FIXME we must use XmlSizeConverter and not CssSizeConverter!
      */
     private final CssSizeConverter sizeConverter = new CssSizeConverter(true);
-
-    /**
-     * Converts an XML number into a double value.
-     */
-    private final XmlNumberConverter numberConverter = new XmlNumberConverter();
+    private final CssDefaultableValueConverter<CssSize> defaultableSizeConverter = new CssDefaultableValueConverter<>(new CssSizeConverter(false));
 
     /**
      * Converts a CSS color string into a CssColor value.
      * <p>
      * FIXME we must use XmlColorConverter and not CssColorConverter!
      */
-    private final CssColorConverter colorConverter = new CssColorConverter(true);
+    private final SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new CssColorConverter(true));
     /**
      * Maps from a type to a converter.
      */
@@ -133,7 +128,8 @@ public class FigureSvgTinyReader {
                 ImmutableMaps.entry("polygon", SvgPolygonFigure.class),
                 ImmutableMaps.entry("polyline", SvgPolylineFigure.class),
                 ImmutableMaps.entry("text", SvgTextFigure.class),
-                ImmutableMaps.entry("linearGradient", SvgLinearGradientFigure.class)
+                ImmutableMaps.entry("linearGradient", SvgLinearGradientFigure.class),
+                ImmutableMaps.entry("radialGradient", SvgRadialGradientFigure.class)
         )) {
             String elem = e.getKey();
             Class<? extends Figure> figureClass = e.getValue();
@@ -237,7 +233,11 @@ public class FigureSvgTinyReader {
         if (bestEffort) {
             errors.add(message + " " + toLocationString(r));
         } else {
-            throw new XMLStreamException(message, r, cause);
+            if (r == null) {
+                throw new XMLStreamException(message, cause);
+            } else {
+                throw new XMLStreamException(message, r, cause);
+            }
         }
     }
 
@@ -292,6 +292,7 @@ public class FigureSvgTinyReader {
                 svgDrawing.addChild(root);
                 root = svgDrawing;
             }
+            ((SvgDrawing) root).set(SvgDrawing.BACKGROUND, NamedCssColor.TRANSPARENT);
             ((SvgDrawing) root).updateAllCss(new SimpleRenderContext());
 
             setSizeOfDrawing(root);
@@ -431,9 +432,9 @@ public class FigureSvgTinyReader {
     }
 
     private void readStop(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
-        CssColor stopColor = null;
+        SvgDefaultablePaint<CssColor> stopColor = null;
         CssSize offset = null;
-        CssSize stopOpacity = CssSize.ONE;
+        CssDefaultableValue<CssSize> stopOpacity = new CssDefaultableValue<>(CssSize.ONE);
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String namespace = r.getAttributeNamespace(i);
             if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
@@ -448,7 +449,7 @@ public class FigureSvgTinyReader {
                         offset = sizeConverter.fromString(value);
                         break;
                     case "stop-opacity":
-                        stopOpacity = sizeConverter.fromString(value);
+                        stopOpacity = defaultableSizeConverter.fromString(value);
                         break;
                     default:
                         handleError(r, "stop: Skipping SVG attribute " + localName + "=\"" + value + "\"W");
@@ -461,25 +462,18 @@ public class FigureSvgTinyReader {
                 handleError(r, "stop: Skipping foreign attribute " + r.getAttributeName(i));
             }
         }
-        if (stopColor != null && offset != null) {
+        if (offset != null) {
             if (!parent.getSupportedKeys().contains(stopsKey)) {
                 handleError(r, "stop: Cannot add stop to parent element " + parent.getTypeSelector());
             } else {
-                if (stopOpacity.getConvertedValue() != 1.0) {
-                    Color color = stopColor.getColor();
-                    stopColor = new SrgbaCssColor(
-                            new Color(color.getRed(), color.getGreen(), color.getBlue(), stopOpacity.getConvertedValue())
-                    );
-                }
-
-                CssStop stop = new CssStop(offset.getConvertedValue(), stopColor);
+                SvgStop stop = new SvgStop(offset.getConvertedValue(), stopColor, stopOpacity);
                 parent.put(stopsKey, ImmutableLists.add(parent.get(stopsKey), stop));
             }
         }
         skipElement(r, ctx);
     }
 
-    private NonNullKey<ImmutableList<CssStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;

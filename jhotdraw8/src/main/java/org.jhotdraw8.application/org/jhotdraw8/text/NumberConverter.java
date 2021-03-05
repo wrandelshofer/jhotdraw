@@ -35,8 +35,6 @@ import java.util.Locale;
  */
 public class NumberConverter implements Converter<Number> {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * Specifies whether the formatter allows null values.
      */
@@ -67,6 +65,12 @@ public class NumberConverter implements Converter<Number> {
     @SuppressWarnings("WeakerAccess")
     public NumberConverter() {
         super();
+        initFormats();
+    }
+
+    public NumberConverter(Class<? extends Number> valueClass) {
+        super();
+        this.valueClass = valueClass;
         initFormats();
     }
 
@@ -189,17 +193,6 @@ public class NumberConverter implements Converter<Number> {
         return allowsNullValue;
     }
 
-    /**
-     * Specifies how many "0" are appended to double and float values. By
-     * default this is 0.
-     *
-     * @param newValue the value
-     */
-    @SuppressWarnings("unused")
-    public void setMinimumFractionDigits(int newValue) {
-        minFractionDigits = newValue;
-        doubleDecimalFormat.setMinimumFractionDigits(newValue);
-    }
 
     /**
      * Returns the minimum fraction digits.
@@ -237,6 +230,15 @@ public class NumberConverter implements Converter<Number> {
                         && exponent < minPositiveExponent) {
                     //str = big.toPlainString();
                     str = doubleDecimalFormat.format(v);
+                    if (false) {
+                        str = Double.toString(v);
+                        if (str.endsWith(".0")) {
+                            str = str.substring(0, str.length() - 2);
+                        }
+                        if (str.indexOf('e') != -1) {
+                            str = doubleDecimalFormat.format(v);
+                        }
+                    }
                 } else {
                     str = scientificFormat.format(v);
                     //str = big.toEngineeringString();
@@ -261,7 +263,15 @@ public class NumberConverter implements Converter<Number> {
                 int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
                 if (!usesScientificNotation || exponent > minNegativeExponent
                         && exponent < minPositiveExponent) {
-                    str = floatDecimalFormat.format(v);
+                    // floatDecimalFormat creates too many digits, because it
+                    // promotes the float to a double before it converts it.
+                    str = Float.toString(v);
+                    if (str.endsWith(".0")) {
+                        str = str.substring(0, str.length() - 2);
+                    }
+                    if (str.indexOf('e') != -1) {
+                        str = floatDecimalFormat.format(v);
+                    }
                 } else {
                     str = scientificFormat.format(v);
                 }
@@ -513,65 +523,7 @@ public class NumberConverter implements Converter<Number> {
         return minIntDigits;
     }
 
-    /**
-     * Sets the minimum number of digits allowed in the integer portion of a
-     * number.
-     *
-     * @param newValue the new value
-     */
-    public void setMinimumIntegerDigits(int newValue) {
-        doubleDecimalFormat.setMinimumIntegerDigits(newValue);
-        scientificFormat.setMinimumIntegerDigits(newValue);
-        this.minIntDigits = newValue;
-    }
 
-    /**
-     * Gets the maximum number of digits allowed in the integer portion of a
-     * number.
-     *
-     * @return the maximum integer digits
-     */
-    @SuppressWarnings("unused")
-    public int getMaximumIntegerDigits() {
-        return maxIntDigits;
-    }
-
-    /**
-     * Sets the maximum number of digits allowed in the integer portion of a
-     * number.
-     *
-     * @param newValue the new value
-     */
-    @SuppressWarnings("unused")
-    public void setMaximumIntegerDigits(int newValue) {
-        doubleDecimalFormat.setMaximumIntegerDigits(newValue);
-        scientificFormat.setMaximumIntegerDigits(newValue);
-        this.maxIntDigits = newValue;
-    }
-
-    /**
-     * Gets the maximum number of digits allowed in the fraction portion of a
-     * number.
-     *
-     * @return the maximum fraction digits
-     */
-    @SuppressWarnings("unused")
-    public int getMaximumFractionDigits() {
-        return maxFractionDigits;
-    }
-
-    /**
-     * Sets the maximum number of digits allowed in the fraction portion of a
-     * number.
-     *
-     * @param newValue the maximum fraction digits
-     */
-    @SuppressWarnings("unused")
-    public void setMaximumFractionDigits(int newValue) {
-        doubleDecimalFormat.setMaximumFractionDigits(newValue);
-        scientificFormat.setMaximumFractionDigits(newValue);
-        this.maxFractionDigits = newValue;
-    }
 
     /**
      * Gets the minimum negative exponent value for scientific notation.

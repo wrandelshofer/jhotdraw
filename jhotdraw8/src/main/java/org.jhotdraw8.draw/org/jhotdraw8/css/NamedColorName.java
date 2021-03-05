@@ -8,9 +8,9 @@ package org.jhotdraw8.css;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Specifies the name of a system color in a cascading stylesheet.
+ * Specifies the name of a named color in a cascading stylesheet.
  * <p>
- * All names are given in lower case. System color names are not case sensitive.
+ * All names are given in lower case. Although the color names are not case sensitive.
  * <p>
  * References:
  * <dl>

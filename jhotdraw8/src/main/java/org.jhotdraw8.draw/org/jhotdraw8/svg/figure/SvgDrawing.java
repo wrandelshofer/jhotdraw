@@ -6,7 +6,6 @@
 package org.jhotdraw8.svg.figure;
 
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -41,11 +40,6 @@ public class SvgDrawing extends AbstractDrawing
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         super.updateNode(ctx, n);
         applyStyleableFigureProperties(ctx, n);
-    }
-
-    @Override
-    public void updateBackground(RenderContext ctx, Pane g) {
-        // background is always transparent!
     }
 
     @Override

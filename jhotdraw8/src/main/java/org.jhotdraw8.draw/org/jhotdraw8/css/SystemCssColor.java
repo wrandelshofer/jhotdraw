@@ -27,21 +27,47 @@ import java.util.Map;
  */
 public class SystemCssColor extends CssColor {
 
-    public static final @NonNull SystemCssColor CANVAS = new SystemCssColor(SystemColorName.CANVAS, new Color(1.0, 1.0, 1.0, 1.0));
-    public static final @NonNull SystemCssColor CANVAS_TEXT = new SystemCssColor(SystemColorName.CANVAS_TEXT, new Color(0.0, 0.0, 0.0, 1.0));
-    public static final @NonNull SystemCssColor LINK_TEXT = new SystemCssColor(SystemColorName.LINK_TEXT, new Color(0.0, 0.0, 0.933, 1.0));
-    public static final @NonNull SystemCssColor VISITED_TEXT = new SystemCssColor(SystemColorName.VISITED_TEXT, new Color(0.333, 0.102, 0.545, 1.0));
-    public static final @NonNull SystemCssColor ACTIVE_TEXT = new SystemCssColor(SystemColorName.ACTIVE_TEXT, new Color(1.0, 0.0, 0.0, 1.0));
-    public static final @NonNull SystemCssColor BUTTON_FACE = new SystemCssColor(SystemColorName.BUTTON_FACE, new Color(0.867, 0.867, 0.867, 1.0));
-    public static final @NonNull SystemCssColor BUTTON_TEXT = new SystemCssColor(SystemColorName.BUTTON_TEXT, new Color(0.0, 0.0, 0.0, 1.0));
-    public static final @NonNull SystemCssColor BUTTON_BORDER = new SystemCssColor(SystemColorName.BUTTON_BORDER, new Color(1.0, 1.0, 1.0, 1.0));
-    public static final @NonNull SystemCssColor FIELD = new SystemCssColor(SystemColorName.FIELD, new Color(1.0, 1.0, 1.0, 1.0));
-    public static final @NonNull SystemCssColor FIELD_TEXT = new SystemCssColor(SystemColorName.FIELD_TEXT, new Color(0.0, 0.0, 0.0, 1.0));
-    public static final @NonNull SystemCssColor HIGHLIGHT = new SystemCssColor(SystemColorName.HIGHLIGHT, new Color(0.71, 0.835, 1.0, 1.0));
-    public static final @NonNull SystemCssColor HIGHLIGHT_TEXT = new SystemCssColor(SystemColorName.HIGHLIGHT_TEXT, new Color(0.0, 0.0, 0.0, 1.0));
-    public static final @NonNull SystemCssColor MARK = new SystemCssColor(SystemColorName.MARK, new Color(1.0, 1.0, 0.0, 1.0));
-    public static final @NonNull SystemCssColor MARK_TEXT = new SystemCssColor(SystemColorName.MARK_TEXT, new Color(1.0, 1.0, 1.0, 1.0));
-    public static final @NonNull SystemCssColor GRAY_TEXT = new SystemCssColor(SystemColorName.GRAY_TEXT, new Color(0.502, 0.502, 0.502, 1.0));
+    public static final @NonNull SystemCssColor CANVAS = new SystemCssColor(SystemColorName.CANVAS, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor CANVAS_TEXT = new SystemCssColor(SystemColorName.CANVAS_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor LINK_TEXT = new SystemCssColor(SystemColorName.LINK_TEXT, Color.rgb(7, 0, 248));
+    public static final @NonNull SystemCssColor VISITED_TEXT = new SystemCssColor(SystemColorName.VISITED_TEXT, Color.rgb(93, 19, 144));
+    public static final @NonNull SystemCssColor ACTIVE_TEXT = new SystemCssColor(SystemColorName.ACTIVE_TEXT, Color.rgb(255, 0, 0));
+    public static final @NonNull SystemCssColor BUTTON_FACE = new SystemCssColor(SystemColorName.BUTTON_FACE, Color.rgb(240, 240, 240));
+    public static final @NonNull SystemCssColor BUTTON_TEXT = new SystemCssColor(SystemColorName.BUTTON_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor BUTTON_BORDER = new SystemCssColor(SystemColorName.BUTTON_BORDER, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor FIELD = new SystemCssColor(SystemColorName.FIELD, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor FIELD_TEXT = new SystemCssColor(SystemColorName.FIELD_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor HIGHLIGHT = new SystemCssColor(SystemColorName.HIGHLIGHT, Color.rgb(0, 101, 233));
+    public static final @NonNull SystemCssColor HIGHLIGHT_TEXT = new SystemCssColor(SystemColorName.HIGHLIGHT_TEXT, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor MARK = new SystemCssColor(SystemColorName.MARK, Color.rgb(255, 255, 0));
+    public static final @NonNull SystemCssColor MARK_TEXT = new SystemCssColor(SystemColorName.MARK_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor GRAY_TEXT = new SystemCssColor(SystemColorName.GRAY_TEXT, Color.rgb(192, 192, 192));
+
+    // deprecated system colors
+    public static final @NonNull SystemCssColor ACTIVE_BORDER = new SystemCssColor(SystemColorName.ACTIVE_BORDER, Color.rgb(0, 105, 253));
+    public static final @NonNull SystemCssColor ACTIVE_CAPTION = new SystemCssColor(SystemColorName.ACTIVE_CAPTION, Color.rgb(204, 204, 204));
+    public static final @NonNull SystemCssColor APP_WORKSPACE = new SystemCssColor(SystemColorName.APP_WORKSPACE, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor BACKGROUND = new SystemCssColor(SystemColorName.BACKGROUND, Color.rgb(99, 99, 213));
+    public static final @NonNull SystemCssColor BUTTON_HIGHLIGHT = new SystemCssColor(SystemColorName.BUTTON_HIGHLIGHT, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor BUTTON_SHADOW = new SystemCssColor(SystemColorName.BUTTON_SHADOW, Color.rgb(220, 220, 220));
+    public static final @NonNull SystemCssColor CAPTION_TEXT = new SystemCssColor(SystemColorName.CAPTION_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor INACTIVE_BORDER = new SystemCssColor(SystemColorName.INACTIVE_BORDER, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor INACTIVE_CAPTION = new SystemCssColor(SystemColorName.INACTIVE_CAPTION, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor INACTIVE_CAPTION_TEXT = new SystemCssColor(SystemColorName.INACTIVE_CAPTION_TEXT, Color.rgb(69, 69, 69));
+    public static final @NonNull SystemCssColor INFO_BACKGROUND = new SystemCssColor(SystemColorName.INFO_BACKGROUND, Color.rgb(255, 255, 192));
+    public static final @NonNull SystemCssColor INFO_TEXT = new SystemCssColor(SystemColorName.INFO_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor MENU = new SystemCssColor(SystemColorName.MENU, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor MENU_TEXT = new SystemCssColor(SystemColorName.MENU_TEXT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor SCROLLBAR = new SystemCssColor(SystemColorName.SCROLLBAR, Color.rgb(170, 170, 170));
+    public static final @NonNull SystemCssColor THREE_D_DARK_SHADOW = new SystemCssColor(SystemColorName.THREE_D_DARK_SHADOW, Color.rgb(220, 220, 220));
+    public static final @NonNull SystemCssColor THREE_D_FACE = new SystemCssColor(SystemColorName.THREE_D_FACE, Color.rgb(240, 240, 240));
+    public static final @NonNull SystemCssColor THREE_D_HIGHLIGHT = new SystemCssColor(SystemColorName.THREE_D_HIGHLIGHT, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor THREE_D_LIGHT_SHADOW = new SystemCssColor(SystemColorName.THREE_D_LIGHT_SHADOW, Color.rgb(218, 218, 218));
+    public static final @NonNull SystemCssColor THREE_D_SHADOW = new SystemCssColor(SystemColorName.THREE_D_SHADOW, Color.rgb(0, 0, 0));
+    public static final @NonNull SystemCssColor WINDOW = new SystemCssColor(SystemColorName.WINDOW, Color.rgb(255, 255, 255));
+    public static final @NonNull SystemCssColor WINDOW_FRAME = new SystemCssColor(SystemColorName.WINDOW_FRAME, Color.rgb(204, 204, 204));
+    public static final @NonNull SystemCssColor WINDOW_TEXT = new SystemCssColor(SystemColorName.WINDOW_TEXT, Color.rgb(0, 0, 0));
+
 
     public SystemCssColor(@NonNull String name, @NonNull Color color) {
         super(name, color);
@@ -76,24 +102,52 @@ public class SystemCssColor extends CssColor {
         m.put(MARK.getName(), MARK);
         m.put(MARK_TEXT.getName(), MARK_TEXT);
         m.put(GRAY_TEXT.getName(), GRAY_TEXT);
+
+        m.put(ACTIVE_BORDER.getName(), ACTIVE_BORDER);
+        m.put(ACTIVE_CAPTION.getName(), ACTIVE_CAPTION);
+        m.put(APP_WORKSPACE.getName(), APP_WORKSPACE);
+        m.put(BACKGROUND.getName(), BACKGROUND);
+        m.put(BUTTON_HIGHLIGHT.getName(), BUTTON_HIGHLIGHT);
+        m.put(BUTTON_SHADOW.getName(), BUTTON_SHADOW);
+        m.put(CAPTION_TEXT.getName(), CAPTION_TEXT);
+        m.put(INACTIVE_BORDER.getName(), INACTIVE_BORDER);
+        m.put(INACTIVE_CAPTION.getName(), INACTIVE_CAPTION);
+        m.put(INACTIVE_CAPTION_TEXT.getName(), INACTIVE_CAPTION_TEXT);
+        m.put(INFO_BACKGROUND.getName(), INFO_BACKGROUND);
+        m.put(INFO_TEXT.getName(), INFO_TEXT);
+        m.put(MENU.getName(), MENU);
+        m.put(MENU_TEXT.getName(), MENU_TEXT);
+        m.put(SCROLLBAR.getName(), SCROLLBAR);
+        m.put(THREE_D_DARK_SHADOW.getName(), THREE_D_DARK_SHADOW);
+        m.put(THREE_D_FACE.getName(), THREE_D_FACE);
+        m.put(THREE_D_HIGHLIGHT.getName(), THREE_D_HIGHLIGHT);
+        m.put(THREE_D_LIGHT_SHADOW.getName(), THREE_D_LIGHT_SHADOW);
+        m.put(THREE_D_SHADOW.getName(), THREE_D_SHADOW);
+        m.put(WINDOW.getName(), WINDOW);
+        m.put(WINDOW_FRAME.getName(), WINDOW_FRAME);
+        m.put(WINDOW_TEXT.getName(), WINDOW_TEXT);
+
         SYSTEM_COLORS = ImmutableMaps.ofMap(m);
     }
+
     /**
      * Creates a system color for the given name.
      * <p>
-     * If the name is unknown, then a black system color with the given
-     * name is created.
+     * The name is not case sensitive.
+     * <p>
+     * If the name is unknown, then null is returned.
      *
      * @param name the name of the system color
-     * @return a new instance
+     * @return the system color or null
      */
     public static @NonNull SystemCssColor of(@NonNull String name) {
-        SystemCssColor color = SYSTEM_COLORS.get(name.toLowerCase());
-        return color == null ? new SystemCssColor(name, Color.BLACK) : color;
+        return SYSTEM_COLORS.get(name.toLowerCase());
     }
 
     /**
      * Returns true if the given name is a known system color.
+     * <p>
+     * The name is not case sensitive.
      *
      * @param name a name
      * @return true if known
