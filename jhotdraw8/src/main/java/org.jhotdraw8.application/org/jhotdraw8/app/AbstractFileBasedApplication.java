@@ -59,7 +59,6 @@ import org.jhotdraw8.tree.PreorderSpliterator;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
-import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -166,7 +165,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      * @param actions the action map
      * @return the menu bar
      */
-    protected @Nullable MenuBar createMenuBar(@Nullable Activity activity, @Nullable Stage stage, @NonNull Map<String, Action> actions) {
+    protected @Nullable MenuBar createMenuBar(@Nullable FileBasedActivity activity, @Nullable Stage stage, @NonNull Map<String, Action> actions) {
         Supplier<MenuBar> factory = getMenuBarFactory();
         MenuBar mb = factory == null ? null : factory.get();
         if (mb == null) {
@@ -217,34 +216,44 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         return mb;
     }
 
-    private void createWindowMenu(@Nullable Activity activity, Menu menu) {
+    private void createWindowMenu(@Nullable FileBasedActivity activity, Menu menu) {
         Map<Activity, CheckMenuItem> menuItemMap = new WeakHashMap<>();
-        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
         CustomBinding.bindListContentToSet(menu.getItems(), getActivities(),
                 v -> menuItemMap.computeIfAbsent(v, k -> {
                     final CheckMenuItem menuItem = new CheckMenuItem();
-                    menuItem.setText(v.getTitle());
-                    /*
-                    menuItem.textProperty().bind(
-                            CustomBinding.formatted(getResources().getString("frame.title"),
-                                    v.titleProperty(), get(NAME_KEY), v.disambiguationProperty(), new SimpleBooleanProperty())
-                    );*/
+
+                    menuItem.textProperty().bind(CustomBinding.formatted(getResources().getString("frame.title"),
+                            v.titleProperty(), get(NAME_KEY), v.disambiguationProperty(),
+                            ((FileBasedActivity) v).modifiedProperty()));
+
                     menuItem.setOnAction(evt -> {
-                        Activity a = activityWeakReference.get();
-                        if (a != null) {
-                            final Stage s = a.get(STAGE_KEY);
-                            if (s != null) {
-                                s.requestFocus();
-                            }
-                            menuItem.setSelected(true);
+                        final Stage s = v.get(STAGE_KEY);
+                        if (s != null) {
+                            s.requestFocus();
                         }
                     });
-                    Activity a = activityWeakReference.get();
-                    if (a != null) {
-                        menuItem.setSelected(true);
-                    }
+
+                    ChangeListener<Activity> activityChangeListener = (observable, oldValue, newValue) -> menuItem.setSelected(newValue == v);
+                    menuItem.getProperties().put("activityChangeListener", activityChangeListener);
+                    activeActivityProperty().addListener(new WeakChangeListener<>(
+                            activityChangeListener
+                    ));
+
                     return menuItem;
-                })
+                }),
+                menuItem -> {
+                    // Workaround for memory leak: JavaFX keeps a reference to menu items
+                    // in the system menu bar. We must remove all references to the
+                    // activity.
+                    menuItem.setOnAction(null);
+                    menuItem.textProperty().unbind();
+                    ChangeListener<Activity> activityChangeListener = (ChangeListener<Activity>) menuItem.getProperties().remove("activityChangeListener");
+                    if (activityChangeListener != null) {
+                        activeActivityProperty().removeListener(
+                                activityChangeListener);
+                    }
+                }
+
         );
     }
 
@@ -304,26 +313,9 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         map.put(CloseFileAction.ID, new CloseFileAction(activity));
 
         Stage stage = createStage(activity);
+        activity.titleProperty().addListener(this::onTitleChanged);
         activity.set(STAGE_KEY, stage);
 
-        PreferencesUtil.installStagePrefsHandler(getPreferences(), "stage", stage);
-
-        stage.setOnCloseRequest(event -> {
-            event.consume();
-            activity.getActions().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
-        });
-        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
-        stage.focusedProperty().addListener(new WeakChangeListener<>((observer, oldValue, newValue) -> {
-            if (newValue) {
-                Activity activity1 = activityWeakReference.get();
-                if (activity1 != null) {
-                    activeActivity.set(activity1);
-                }
-            }
-        }));
-        stage.titleProperty().bind(CustomBinding.formatted(getResources().getString("frame.title"),
-                activity.titleProperty(), get(NAME_KEY), activity.disambiguationProperty(), activity.modifiedProperty()));
-        activity.titleProperty().addListener(this::onTitleChanged);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
                 activeActivity.set(activity);
@@ -392,6 +384,21 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         }
 
         stage.setScene(scene);
+
+        PreferencesUtil.installStagePrefsHandler(getPreferences(), "stage", stage);
+
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            activity.getActions().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
+        });
+        stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
+            if (newValue) {
+                activeActivity.set(activity);
+            }
+        });
+        stage.titleProperty().bind(CustomBinding.formatted(getResources().getString("frame.title"),
+                activity.titleProperty(), get(NAME_KEY), activity.disambiguationProperty(), activity.modifiedProperty()));
+
         return stage;
     }
 
@@ -420,44 +427,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         stage.close();
         activity.destroy();
         activity.titleProperty().removeListener(this::onTitleChanged);
-        BorderPane borderPane = (BorderPane) stage.getScene().getRoot();
-        MenuBar menuBar = (MenuBar) borderPane.getTop();
-        if (menuBar != null) {
-            menuBar.setUseSystemMenuBar(false);
-            List<MenuItem> items = new ArrayList<>();
-            new PreorderSpliterator<Object>(
-                    o -> {
-                        if (o instanceof MenuBar) {
-                            return (Iterable<Object>) (Iterable<?>) ((MenuBar) o).getMenus();
-                        } else if (o instanceof Menu) {
-                            return (Iterable<Object>) (Iterable<?>) ((Menu) o).getItems();
-                        } else {
-                            return Collections.emptyList();
-                        }
-                    }
-                    , menuBar
-            ).forEachRemaining(node -> {
-                if (node instanceof Menu) {
-                    CustomBinding.unbindListContentToSet(
-                            ((Menu) node).getItems(), getActivities());
-                }
-                if (node instanceof MenuItem) {
-                    ((MenuItem) node).setOnAction(null);
-                    ((MenuItem) node).textProperty().unbind();
-                    items.add((MenuItem) node);
-                }
-            });
-            items.forEach(item -> {
-                Menu parentMenu = ((MenuItem) item).getParentMenu();
-                if (parentMenu != null) {
-                    parentMenu.getItems().remove(item);
-                }
 
-            });
-        }
-
-        stage.setScene(null);
-        stage.setOnCloseRequest(null);
+        destroyStage(stage);
 
         if (activeActivity.get() == activity) {
             activeActivity.set(null);
@@ -467,6 +438,64 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         if (getActivities().isEmpty() && !isSystemMenuSupported) {
             exit();
         }
+    }
+
+    private void destroyStage(Stage stage) {
+        BorderPane borderPane = (BorderPane) stage.getScene().getRoot();
+        MenuBar menuBar = (MenuBar) borderPane.getTop();
+
+        // Workaround for JavaFX 15 unlink all bindings to menu
+        // items in the system menu bar, so that the activity
+        // can be garbage collected.
+        if (menuBar != null) {
+            destroyMenuBar(menuBar);
+        }
+
+        stage.setScene(null);
+        stage.setOnCloseRequest(null);
+    }
+
+
+    private void destroyMenuBar(MenuBar menuBar) {
+        // Workaround for memory leak: JavaFX keeps a reference to menu items
+        // in the system menu bar. We must remove all references to the
+        // activity.
+
+        menuBar.setUseSystemMenuBar(false);
+        List<MenuItem> items = new ArrayList<>();
+        new PreorderSpliterator<Object>(
+                o -> {
+                    if (o instanceof MenuBar) {
+                        return (Iterable<Object>) (Iterable<?>) ((MenuBar) o).getMenus();
+                    } else if (o instanceof Menu) {
+                        return (Iterable<Object>) (Iterable<?>) ((Menu) o).getItems();
+                    } else {
+                        return Collections.emptyList();
+                    }
+                }
+                , menuBar
+        ).forEachRemaining(node -> {
+            if (node instanceof Menu) {
+                CustomBinding.unbindListContentToSet(
+                        ((Menu) node).getItems(), getActivities());
+            } else if (node instanceof MenuItem) {
+                MenuItem menuItem = (MenuItem) node;
+                menuItem.setOnAction(null);
+                menuItem.textProperty().unbind();
+                ChangeListener<Activity> activityChangeListener = (ChangeListener<Activity>) menuItem.getProperties().remove("activityChangeListener");
+                if (activityChangeListener != null) {
+                    menuItem.getProperties().remove(activityChangeListener);
+                }
+                items.add(menuItem);
+            }
+        });
+        items.forEach(item -> {
+            Menu parentMenu = ((MenuItem) item).getParentMenu();
+            if (parentMenu != null) {
+                parentMenu.getItems().remove(item);
+            }
+
+        });
     }
 
     protected void onTitleChanged(Observable obs) {

@@ -10,6 +10,7 @@ import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -19,6 +20,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
     private final ObservableList<D> dest;
     private final ObservableSet<S> source;
     private final Function<S, D> toDest;
+    private final Consumer<D> disposeDest;
 
 
     /**
@@ -27,9 +29,21 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
      * @param toDest may only be null, if this instance is used for unbinding!
      */
     ListToSetTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableSet<S> source, @Nullable Function<S, D> toDest) {
+        this(dest, source, toDest, null);
+    }
+
+    /**
+     * @param dest
+     * @param source
+     * @param toDest may only be null, if this instance is used for unbinding!
+     */
+    ListToSetTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableSet<S> source,
+                                     @Nullable Function<S, D> toDest,
+                                     @Nullable Consumer<D> disposeDest) {
         this.dest = dest;
         this.source = source;
         this.toDest = toDest == null ? s -> null : toDest;
+        this.disposeDest = disposeDest;
         if (toDest != null) {
             dest.clear();
             for (S s : source) {
@@ -42,7 +56,14 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
     @Override
     public void onChanged(Change<? extends S> change) {
         if (change.wasRemoved()) {
-            dest.remove(toDest.apply(change.getElementRemoved()));
+            int i = dest.indexOf(toDest.apply(change.getElementRemoved()));
+            if (i != -1) {
+                D removed = dest.get(i);
+                dest.remove(i);
+                if (disposeDest != null) {
+                    disposeDest.accept(removed);
+                }
+            }
         }
         if (change.wasAdded()) {
             dest.add(toDest.apply(change.getElementAdded()));

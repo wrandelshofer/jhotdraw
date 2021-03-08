@@ -325,6 +325,11 @@ public class CustomBinding {
         src.addListener(binding);
     }
 
+    public static <D, S> void bindListContentToSet(ObservableList<D> dest, ObservableSet<S> src, Function<S, D> toDest, Consumer<D> disposeDest) {
+        ListToSetTransformContentBinding<D, S> binding = new ListToSetTransformContentBinding<>(dest, src, toDest, disposeDest);
+        src.addListener(binding);
+    }
+
     /**
      * Unbinds list dest from set source.
      *
