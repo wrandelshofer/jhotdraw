@@ -208,7 +208,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     @Override
     public int getNextCount(int vi) {
         final int offset = nextOffset[vi];
-        final int nextOffset = (vi == this.nextOffset.length - 1) ? next.length : this.nextOffset[vi + 1];
+        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.nextOffset.length : this.nextOffset[vi + 1];
         return nextOffset - offset;
     }
 

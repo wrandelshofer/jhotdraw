@@ -63,7 +63,11 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     public @Nullable VertexPath<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
-        BackLink<V, A> current = search(start, goalPredicate, new HashSet<>()::add);
+        return findVertexPath(start, goalPredicate, new HashSet<>()::add);
+    }
+
+    public @Nullable VertexPath<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate, @NonNull AddToSet<V> visited) {
+        BackLink<V, A> current = search(start, goalPredicate, visited);
         if (current == null) {
             return null;
         }

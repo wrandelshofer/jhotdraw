@@ -23,6 +23,8 @@ import org.jhotdraw8.reflect.TypeToken;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -157,7 +159,11 @@ public interface Drawing extends Figure {
     default void updateAllCss(@NonNull RenderContext ctx) {
         StylesheetsManager<Figure> styleManager = getStyleManager();
         if (styleManager != null) {
-            styleManager.applyStylesheetsTo(preorderIterable());
+            // Performance: We copy preorderIterable into a list, so that it
+            //              splits better for parallel execution.
+            List<Figure> list = new ArrayList<>();
+            preorderIterable().forEach(list::add);
+            styleManager.applyStylesheetsTo(list);
             for (Figure f : preorderIterable()) {
                 // XXX WR why do we updateCss again, after having done applyStylesheetsTo??
                 //f.updateCss(ctx);

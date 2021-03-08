@@ -326,6 +326,20 @@ public class CustomBinding {
     }
 
     /**
+     * Unbinds list dest from set source.
+     *
+     * @param dest   list dest
+     * @param src    list source
+     * @param toDest mapping function to dest
+     * @param <D>    the type of list dest
+     * @param <S>    the type of list source
+     */
+    public static <D, S> void unbindListContentToSet(ObservableList<D> dest, ObservableSet<S> src) {
+        ListToSetTransformContentBinding<D, S> binding = new ListToSetTransformContentBinding<>(dest, src, null);
+        src.removeListener(binding);
+    }
+
+    /**
      * Binds the specified property of all list elements to the given property.
      * <p>
      * If an element is added, its property is bound.

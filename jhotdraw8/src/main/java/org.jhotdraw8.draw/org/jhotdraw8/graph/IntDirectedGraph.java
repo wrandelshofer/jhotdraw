@@ -133,7 +133,7 @@ public interface IntDirectedGraph {
             int limit;
 
             public MySpliterator(int vidx, int lo, int hi) {
-                super(hi, ORDERED | NONNULL | SIZED | SUBSIZED);
+                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 limit = hi;
                 index = lo;
             }

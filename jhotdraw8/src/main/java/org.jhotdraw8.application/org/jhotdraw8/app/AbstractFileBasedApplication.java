@@ -8,9 +8,9 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.value.WeakChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.SetChangeListener;
 import javafx.event.ActionEvent;
@@ -55,9 +55,11 @@ import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.OSXCollator;
+import org.jhotdraw8.tree.PreorderSpliterator;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -217,21 +219,30 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
     private void createWindowMenu(@Nullable Activity activity, Menu menu) {
         Map<Activity, CheckMenuItem> menuItemMap = new WeakHashMap<>();
+        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
         CustomBinding.bindListContentToSet(menu.getItems(), getActivities(),
                 v -> menuItemMap.computeIfAbsent(v, k -> {
                     final CheckMenuItem menuItem = new CheckMenuItem();
+                    menuItem.setText(v.getTitle());
+                    /*
                     menuItem.textProperty().bind(
                             CustomBinding.formatted(getResources().getString("frame.title"),
                                     v.titleProperty(), get(NAME_KEY), v.disambiguationProperty(), new SimpleBooleanProperty())
-                    );
+                    );*/
                     menuItem.setOnAction(evt -> {
-                        final Stage s = v.get(STAGE_KEY);
-                        if (s != null) {
-                            s.requestFocus();
+                        Activity a = activityWeakReference.get();
+                        if (a != null) {
+                            final Stage s = a.get(STAGE_KEY);
+                            if (s != null) {
+                                s.requestFocus();
+                            }
+                            menuItem.setSelected(true);
                         }
-                        menuItem.setSelected(v == activity);
                     });
-                    menuItem.setSelected(v == activity);
+                    Activity a = activityWeakReference.get();
+                    if (a != null) {
+                        menuItem.setSelected(true);
+                    }
                     return menuItem;
                 })
         );
@@ -301,12 +312,15 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             event.consume();
             activity.getActions().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
         });
-
-        stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
+        WeakReference<Activity> activityWeakReference = new WeakReference<>(activity);
+        stage.focusedProperty().addListener(new WeakChangeListener<>((observer, oldValue, newValue) -> {
             if (newValue) {
-                activeActivity.set(activity);
+                Activity activity1 = activityWeakReference.get();
+                if (activity1 != null) {
+                    activeActivity.set(activity1);
+                }
             }
-        });
+        }));
         stage.titleProperty().bind(CustomBinding.formatted(getResources().getString("frame.title"),
                 activity.titleProperty(), get(NAME_KEY), activity.disambiguationProperty(), activity.modifiedProperty()));
         activity.titleProperty().addListener(this::onTitleChanged);
@@ -325,15 +339,11 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             Random r = new Random();
             if (activeActivity.get() != null) {
                 Window w = activeActivity.get().getNode().getScene().getWindow();
-                //stage.setWidth(w.getWidth());
-                //stage.setHeight(w.getHeight());
                 stage.setX(min(w.getX() + 22, bounds.getMaxX()
                         - stage.getWidth()));
                 stage.setY(min(w.getY() + 22, bounds.getMaxY()
                         - stage.getHeight()));
             } else {
-                //stage.setWidth(bounds.getWidth() / 4);
-                //stage.setHeight(bounds.getHeight() / 3);
                 stage.setX(bounds.getMinX());
                 stage.setY(bounds.getMinY());
             }
@@ -398,19 +408,58 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      * Called immediately after a view has been removed from the views
      * property.
      *
-     * @param view the view
+     * @param activity the view
      */
-    protected void onActivityRemoved(@NonNull FileBasedActivity view) {
-        Stage stage = (Stage) view.getNode().getScene().getWindow();
-        view.stop();
-        ChangeListener<Boolean> focusListener = view.get(FOCUS_LISTENER_KEY);
+    protected void onActivityRemoved(@NonNull FileBasedActivity activity) {
+        Stage stage = (Stage) activity.getNode().getScene().getWindow();
+        activity.stop();
+        ChangeListener<Boolean> focusListener = activity.get(FOCUS_LISTENER_KEY);
         if (focusListener != null) {
             stage.focusedProperty().removeListener(focusListener);
         }
         stage.close();
-        view.destroy();
+        activity.destroy();
+        activity.titleProperty().removeListener(this::onTitleChanged);
+        BorderPane borderPane = (BorderPane) stage.getScene().getRoot();
+        MenuBar menuBar = (MenuBar) borderPane.getTop();
+        if (menuBar != null) {
+            menuBar.setUseSystemMenuBar(false);
+            List<MenuItem> items = new ArrayList<>();
+            new PreorderSpliterator<Object>(
+                    o -> {
+                        if (o instanceof MenuBar) {
+                            return (Iterable<Object>) (Iterable<?>) ((MenuBar) o).getMenus();
+                        } else if (o instanceof Menu) {
+                            return (Iterable<Object>) (Iterable<?>) ((Menu) o).getItems();
+                        } else {
+                            return Collections.emptyList();
+                        }
+                    }
+                    , menuBar
+            ).forEachRemaining(node -> {
+                if (node instanceof Menu) {
+                    CustomBinding.unbindListContentToSet(
+                            ((Menu) node).getItems(), getActivities());
+                }
+                if (node instanceof MenuItem) {
+                    ((MenuItem) node).setOnAction(null);
+                    ((MenuItem) node).textProperty().unbind();
+                    items.add((MenuItem) node);
+                }
+            });
+            items.forEach(item -> {
+                Menu parentMenu = ((MenuItem) item).getParentMenu();
+                if (parentMenu != null) {
+                    parentMenu.getItems().remove(item);
+                }
 
-        if (activeActivity.get() == view) {
+            });
+        }
+
+        stage.setScene(null);
+        stage.setOnCloseRequest(null);
+
+        if (activeActivity.get() == activity) {
             activeActivity.set(null);
         }
 

@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
@@ -76,7 +77,11 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 
             @Override
             public @NonNull V next() {
-                return getNext(vertex, index++);
+                if (hasNext()) {
+                    return getNext(vertex, index++);
+                } else {
+                    throw new NoSuchElementException();
+                }
             }
 
         }

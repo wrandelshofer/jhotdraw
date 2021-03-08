@@ -79,7 +79,11 @@ public abstract class AbstractIntPathBuilder {
      * @return a VertexPath if traversal is possible, null otherwise
      */
     public @Nullable VertexPath<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate) {
-        BackLink current = search(start, goalPredicate, addToBitSet(new BitSet()));
+        return findVertexPath(start, goalPredicate, addToBitSet(new BitSet()));
+    }
+
+    public @Nullable VertexPath<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+        BackLink current = search(start, goalPredicate, visited);
         if (current == null) {
             return null;
         }
@@ -111,7 +115,7 @@ public abstract class AbstractIntPathBuilder {
         return exists(start, goalPredicate, addToBitSet(new BitSet()));
     }
 
-    private static AddToIntSet addToBitSet(BitSet bitSet) {
+    public static AddToIntSet addToBitSet(BitSet bitSet) {
         return i -> {
             boolean b = bitSet.get(i);
             if (!b) {

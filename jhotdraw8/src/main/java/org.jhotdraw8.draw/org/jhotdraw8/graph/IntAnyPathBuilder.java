@@ -76,7 +76,14 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
         return vertexPaths;
     }
 
+private static class MyIntConsumer implements IntConsumer {
+    int value;
 
+    @Override
+    public void accept(int value) {
+        this.value = value;
+    }
+}
     /**
      * Searches breadth-first for a path from root to goal.
      *
@@ -95,8 +102,7 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
                                      int maxLength) {
         Queue<MyBackLink> queue = new ArrayDeque<>(32);
         MyBackLink rootBackLink = new MyBackLink(root, null, maxLength);
-        int[] v = new int[1];
-        IntConsumer consumer = i -> v[0] = i;
+        MyIntConsumer consumer = new MyIntConsumer();
         if (visited.add(root)) {
             queue.add(rootBackLink);
         }
@@ -112,8 +118,8 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
             if (maxRemaining > 0) {
                 Spliterator.OfInt spliterator = nextNodesFunction.apply(vertex);
                 while (spliterator.tryAdvance(consumer)) {
-                    if (visited.add(v[0])) {
-                        MyBackLink backLink = new MyBackLink(v[0], node, maxRemaining - 1);
+                    if (visited.add(consumer.value)) {
+                        MyBackLink backLink = new MyBackLink(consumer.value, node, maxRemaining - 1);
                         queue.add(backLink);
                     }
                 }
@@ -141,8 +147,8 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
                                     int maxLength) {
         LongArrayDeque queue = new LongArrayDeque(32);
         long rootBackLink = newSearchNode(root, maxLength);
-        int[] v = new int[1];
-        IntConsumer consumer = i -> v[0] = i;
+
+        MyIntConsumer consumer = new MyIntConsumer();
         if (visited.add(root)) {
             queue.addLast(rootBackLink);
         }
@@ -158,8 +164,8 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
             if (maxRemaining > 0) {
                 Spliterator.OfInt spliterator = nextNodesFunction.apply(vertex);
                 while (spliterator.tryAdvance(consumer)) {
-                    if (visited.add(v[0])) {
-                        long backLink = newSearchNode(v[0], maxRemaining - 1);
+                    if (visited.add(consumer.value)) {
+                        long backLink = newSearchNode(consumer.value, maxRemaining - 1);
                         queue.addLast(backLink);
                     }
                 }
@@ -194,9 +200,7 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
                            @NonNull List<MyBackLink> backlinks, int maxDepth) {
         Deque<MyBackLink> stack = new ArrayDeque<>();
         stack.push(start);
-        int[] v = new int[1];
-        IntConsumer consumer = i -> v[0] = i;
-
+        MyIntConsumer consumer = new MyIntConsumer();
         while (!stack.isEmpty()) {
             MyBackLink current = stack.pop();
             if (goal.test(current.vertex)) {
@@ -205,7 +209,7 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
             if (current.maxRemaining < maxDepth) {
                 Spliterator.OfInt spliterator = nextNodesFunction.apply(current.vertex);
                 while (spliterator.tryAdvance(consumer)) {
-                    MyBackLink newPath = new MyBackLink(v[0], current, current.maxRemaining + 1);
+                    MyBackLink newPath = new MyBackLink(consumer.value, current, current.maxRemaining + 1);
                     stack.push(newPath);
                 }
             }

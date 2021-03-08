@@ -7,6 +7,8 @@ package org.jhotdraw8.binding;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.function.Function;
 
@@ -19,14 +21,21 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
     private final Function<S, D> toDest;
 
 
-    ListToSetTransformContentBinding(ObservableList<D> dest, ObservableSet<S> source, Function<S, D> toDest) {
+    /**
+     * @param dest
+     * @param source
+     * @param toDest may only be null, if this instance is used for unbinding!
+     */
+    ListToSetTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableSet<S> source, @Nullable Function<S, D> toDest) {
         this.dest = dest;
         this.source = source;
-        this.toDest = toDest;
-        dest.clear();
-        for (S s : source) {
-            D d = toDest.apply(s);
-            dest.add(d);
+        this.toDest = toDest == null ? s -> null : toDest;
+        if (toDest != null) {
+            dest.clear();
+            for (S s : source) {
+                D d = toDest.apply(s);
+                dest.add(d);
+            }
         }
     }
 
@@ -42,6 +51,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
 
     @Override
     public int hashCode() {
+        // Identity Hash Code is not based on content of list.
         return System.identityHashCode(dest);
     }
 
@@ -53,6 +63,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
 
         if (obj instanceof ListToSetTransformContentBinding) {
             final ListToSetTransformContentBinding<?, ?> that = (ListToSetTransformContentBinding<?, ?>) obj;
+            // Compare identity of collections and not their content.
             return this.dest == that.dest && this.source == that.source;
         }
         return false;
