@@ -129,13 +129,15 @@ public interface IntDirectedGraph {
      */
     default @NonNull Spliterator.OfInt getNextVertices(int vidx) {
         class MySpliterator extends AbstractIntSpliterator {
-            int index;
-            int limit;
+            private int index;
+            private int limit;
+            private final int vidx;
 
             public MySpliterator(int vidx, int lo, int hi) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 limit = hi;
                 index = lo;
+                this.vidx = vidx;
             }
 
             @Override

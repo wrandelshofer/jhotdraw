@@ -5,11 +5,15 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.IntConsumer;
 
 /**
  * ImmutableIntDirectedGraph.
@@ -208,7 +212,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     @Override
     public int getNextCount(int vi) {
         final int offset = nextOffset[vi];
-        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.nextOffset.length : this.nextOffset[vi + 1];
+        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
         return nextOffset - offset;
     }
 
@@ -248,6 +252,41 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
 
     public @NonNull A getArrow(int vertex, int index) {
         return nextArrows[getArrowIndex(vertex, index)];
+    }
+
+    @Override
+    public @NonNull Spliterator.OfInt getNextVertices(int vi) {
+        class MySpliterator extends Spliterators.AbstractIntSpliterator {
+            private int index;
+            private int limit;
+            private final int[] array;
+
+            public MySpliterator(int lo, int hi, int[] nextVertices) {
+                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
+                limit = hi;
+                index = lo;
+                this.array = nextVertices;
+            }
+
+            @Override
+            public boolean tryAdvance(@NonNull IntConsumer action) {
+                if (index < limit) {
+                    action.accept(array[index++]);
+                    return true;
+                }
+                return false;
+            }
+
+            public @Nullable MySpliterator trySplit() {
+                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
+                return (lo >= mid) ? null : // divide range in half unless too small
+                        new MySpliterator(lo, index = mid, array);
+            }
+
+        }
+        final int offset = nextOffset[vi];
+        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
+        return new MySpliterator(offset, nextOffset, this.next);
     }
 
 }
