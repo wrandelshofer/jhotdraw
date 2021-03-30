@@ -443,26 +443,25 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param key The property key
      * @return The styled value.
      */
-    default @Nullable <T extends Paintable> T getDefaultableStyled(@NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
+    default @Nullable <T extends Paintable> Paintable getDefaultableStyled(@NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
         return getDefaultableStyled(StyleOrigin.INLINE, key);
     }
 
-    default @Nullable <T extends Paintable> T getDefaultableStyled(@NonNull StyleOrigin origin, @NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
+    default @Nullable <T extends Paintable> Paintable getDefaultableStyled(@NonNull StyleOrigin origin, @NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
         // FIXME REVERT does not work this way, must use getStyled(origin,key) for _starting a search at the specified origin_ value
         SvgDefaultablePaint<T> dv = Objects.requireNonNull(getStyled(origin == StyleOrigin.INLINE ? null : origin, key));
         if (dv.getDefaulting() == null) {
             return dv.getValue();
         }
         switch (dv.getDefaulting()) {
-        case INHERIT:
-            if (getParent() instanceof SvgDefaultableFigure) {
-                return ((SvgDefaultableFigure) getParent()).getDefaultableStyled(key);
-            } else {
+            case INHERIT:
+                if (getParent() instanceof SvgDefaultableFigure) {
+                    return ((SvgDefaultableFigure) getParent()).getDefaultableStyled(key);
+                } else {
                 return key.getInitialValue();
             }
         case CURRENT_COLOR:
-            T currentColor = (T) getDefaultableStyled(COLOR_KEY);
-            return currentColor;
+            return getDefaultableStyled(COLOR_KEY);
         default:
             throw new UnsupportedOperationException("unsupported defaulting: " + dv.getDefaulting());
         }

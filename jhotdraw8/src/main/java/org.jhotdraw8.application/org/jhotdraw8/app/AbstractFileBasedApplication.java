@@ -247,6 +247,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     // activity.
                     menuItem.setOnAction(null);
                     menuItem.textProperty().unbind();
+                    @SuppressWarnings("unchecked")
                     ChangeListener<Activity> activityChangeListener = (ChangeListener<Activity>) menuItem.getProperties().remove("activityChangeListener");
                     if (activityChangeListener != null) {
                         activeActivityProperty().removeListener(
@@ -466,9 +467,11 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         new PreorderSpliterator<Object>(
                 o -> {
                     if (o instanceof MenuBar) {
-                        return (Iterable<Object>) (Iterable<?>) ((MenuBar) o).getMenus();
+                        @SuppressWarnings("unchecked") final Iterable<Object> menus = (Iterable<Object>) (Iterable<?>) ((MenuBar) o).getMenus();
+                        return menus;
                     } else if (o instanceof Menu) {
-                        return (Iterable<Object>) (Iterable<?>) ((Menu) o).getItems();
+                        @SuppressWarnings("unchecked") final Iterable<Object> childItems = (Iterable<Object>) (Iterable<?>) ((Menu) o).getItems();
+                        return childItems;
                     } else {
                         return Collections.emptyList();
                     }
@@ -482,6 +485,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 MenuItem menuItem = (MenuItem) node;
                 menuItem.setOnAction(null);
                 menuItem.textProperty().unbind();
+                @SuppressWarnings("unchecked")
                 ChangeListener<Activity> activityChangeListener = (ChangeListener<Activity>) menuItem.getProperties().remove("activityChangeListener");
                 if (activityChangeListener != null) {
                     menuItem.getProperties().remove(activityChangeListener);
@@ -490,7 +494,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             }
         });
         items.forEach(item -> {
-            Menu parentMenu = ((MenuItem) item).getParentMenu();
+            Menu parentMenu = item.getParentMenu();
             if (parentMenu != null) {
                 parentMenu.getItems().remove(item);
             }

@@ -63,7 +63,7 @@ public class FigureSvgTinyReaderTest {
             if (f instanceof SvgDefaultableFigure) {
                 SvgDefaultableFigure df = (SvgDefaultableFigure) f;
                 if (id.equals(f.getId())) {
-                    T actual = df.getDefaultableStyled(key);
+                    Paintable actual = df.getDefaultableStyled(key);
                     assertEquals(expected, actual);
                 }
             }
