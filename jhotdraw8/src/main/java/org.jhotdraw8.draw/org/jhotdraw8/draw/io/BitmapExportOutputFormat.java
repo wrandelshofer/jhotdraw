@@ -269,24 +269,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         int iw = (int) img.getWidth();
         int ih = (int) img.getHeight();
         PixelFormat<?> fxFormat = pr.getPixelFormat();
-        boolean srcPixelsAreOpaque = false;
-        switch (fxFormat.getType()) {
-            case INT_ARGB_PRE:
-            case INT_ARGB:
-            case BYTE_BGRA_PRE:
-            case BYTE_BGRA:
-                // Check fx image opacity only if
-                // supplied BufferedImage is without alpha channel
-                if (bimg != null &&
-                        (bimg.getType() == BufferedImage.TYPE_INT_BGR ||
-                                bimg.getType() == BufferedImage.TYPE_INT_RGB)) {
-                    srcPixelsAreOpaque = checkFXImageOpaque(pr, iw, ih);
-                }
-                break;
-            case BYTE_RGB:
-                srcPixelsAreOpaque = true;
-                break;
-        }
+        boolean srcPixelsAreOpaque = isSrcPixelsAreOpaque(bimg, pr, iw, ih, fxFormat);
         int prefBimgType = getBestBufferedImageType(pr.getPixelFormat(), bimg, srcPixelsAreOpaque);
         if (bimg != null) {
             int bw = bimg.getWidth();
@@ -315,6 +298,28 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         WritablePixelFormat<IntBuffer> pf = getAssociatedPixelFormat(bimg);
         pr.getPixels(0, 0, iw, ih, pf, data, offset, scan);
         return bimg;
+    }
+
+    private static boolean isSrcPixelsAreOpaque(BufferedImage bimg, PixelReader pr, int iw, int ih, PixelFormat<?> fxFormat) {
+        boolean srcPixelsAreOpaque = false;
+        switch (fxFormat.getType()) {
+        case INT_ARGB_PRE:
+        case INT_ARGB:
+        case BYTE_BGRA_PRE:
+        case BYTE_BGRA:
+            // Check fx image opacity only if
+            // supplied BufferedImage is without alpha channel
+            if (bimg != null &&
+                    (bimg.getType() == BufferedImage.TYPE_INT_BGR ||
+                            bimg.getType() == BufferedImage.TYPE_INT_RGB)) {
+                srcPixelsAreOpaque = checkFXImageOpaque(pr, iw, ih);
+            }
+            break;
+        case BYTE_RGB:
+            srcPixelsAreOpaque = true;
+            break;
+        }
+        return srcPixelsAreOpaque;
     }
 
     //
