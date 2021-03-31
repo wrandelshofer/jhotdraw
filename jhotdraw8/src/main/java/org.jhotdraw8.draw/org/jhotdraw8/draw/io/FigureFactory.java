@@ -43,7 +43,7 @@ public interface FigureFactory {
      * @return the figure
      * @throws java.io.IOException if the factory does not support this name
      */
-    @Nullable Figure createFigureByElementName(String elementName) throws IOException;
+    @NonNull Figure createFigureByElementName(String elementName) throws IOException;
 
     /**
      * Maps a key to a XML attribute name. The name used for persistent storage

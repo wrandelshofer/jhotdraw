@@ -53,9 +53,11 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
     }
 
     private @NonNull Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
-        Figure figure = figureFactory.createFigureByElementName(r.getLocalName());
-        if (figure == null) {
-            throw new IOException("Cannot create figure for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber());
+        Figure figure;
+        try {
+            figure = figureFactory.createFigureByElementName(r.getLocalName());
+        } catch (IOException e) {
+            throw new IOException("Cannot create figure for element <" + r.getLocalName() + "> at line " + r.getLocation().getLineNumber() + ", col " + r.getLocation().getColumnNumber(), e);
         }
         if (!stack.isEmpty()) {
             Figure parent = stack.peek();

@@ -409,12 +409,9 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public @Nullable Figure createFigureByElementName(String elementName) throws IOException {
+    public @NonNull Figure createFigureByElementName(String elementName) throws IOException {
         Supplier<Figure> supplier = nameToFigure.get(elementName);
         if (supplier == null) {
-            if (skipElements.contains(elementName)) {
-                return null;
-            }
             throw new IOException("no mapping for element " + elementName);
         }
         return supplier.get();
