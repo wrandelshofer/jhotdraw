@@ -27,7 +27,9 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  */
 public interface UnitConverter {
-
+    /**
+     * Default unit.
+     */
     String DEFAULT = "";
     String CENTIMETERS = "cm";
     String DEGREES = "deg";
@@ -87,9 +89,6 @@ public interface UnitConverter {
             case PERCENTAGE:
                 factor = getPercentageFactor();
                 break;
-            case PIXELS:
-                factor = 1.0;
-                break;
             case CENTIMETERS:
                 factor = 2.54 / getDpi();
                 break;
@@ -126,8 +125,9 @@ public interface UnitConverter {
             case VIEWPORT_MAX_PERCENTAGE:
                 factor = 100.0 / max(getViewportHeight(), getViewportWidth());
                 break;
-            case DEFAULT:
-            default:
+        case DEFAULT:
+        case PIXELS:
+        default:
                 factor = 1.0;
                 break;
         }

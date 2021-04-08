@@ -31,11 +31,12 @@
     <arg value="--pretty=format:%cd_%h"/>
   </exec>
 
+  <tstamp>
+    <format property="pub-year" pattern="yyyy" locale="en,GB"/>
+  </tstamp>
   <property name="name" value="${ant.project.name}"/>
-  <property name="copyright" value="Copyright (c) 2020 The authors and contributors of JHotDraw."/>
-  <property name="license.name" value="MIT License"/>
-  <property name="license" value="${license.name}. https://opensource.org/licenses/mit-license.php"/>
-  <property name="version" value="${git.version}"/>
+  <property name="copyright" value="Copyright © ${pub-year} ${author}."/>
+  <property name="version" value="${git.describe}"/>
   <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
 
   <property name="manifest.application-name" value="${ant.project.name}"/>
@@ -947,9 +948,6 @@ new-inline-tags: section
       <map from="${basedir}/${build}/epub-docs/OEBPS/" to="woff:"/>
     </pathconvert>
 
-    <tstamp>
-      <format property="pub-year" pattern="yyyy" locale="en,GB"/>
-    </tstamp>
     <tstamp>
       <format property="pub-modified" pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ" locale="en,GB"/>
     </tstamp>
