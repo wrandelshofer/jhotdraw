@@ -21,8 +21,9 @@ import java.io.Reader;
  *                 | '\n' | '\t' | '\f
  *                 );
  * inline        = legalInline | illegalInline ;
- * legalInline   = -( '\r' | '\n' | '\t' | '\f' | '\000' ) ;
- * illegaInline  = '\000' ;
+ * legalInline   = char - ( '\r' | '\n' | '\t' | '\f' | '\000' ) ;
+ * illegalInline = '\000' ;
+ * char          = (* the set of unicode UTF-16 characters *) ;
  * </pre>
  * <p>
  * Any {@code illegalInline} production is replaced with U+FFFD REPLACEMENT
