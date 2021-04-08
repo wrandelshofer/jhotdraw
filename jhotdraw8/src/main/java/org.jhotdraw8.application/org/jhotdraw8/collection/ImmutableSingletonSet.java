@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * ImmutableHashSet preserves insertion order of items.
+ * ImmutableSingletonSet preserves insertion order of items.
  *
  * @author Werner Randelshofer
  */

@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,7 +15,7 @@ public class ImmutableSets {
     public static @NonNull <T> ImmutableSet<T> add(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
-            return new ImmutableHashSet<>(Collections.singleton(item));
+            return new ImmutableSingletonSet<>(item);
         default:
             Set<T> a = new LinkedHashSet<>(collection);
             a.add(item);
@@ -27,9 +26,12 @@ public class ImmutableSets {
     public static @NonNull <T> ImmutableSet<T> add(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
-            return new ImmutableHashSet<>(Collections.singleton(item));
+            return new ImmutableSingletonSet<>(item);
         default:
-            Set<T> a = new LinkedHashSet<T>(new CollectionWrapper<T>(collection));
+            if (collection.contains(item) && (collection instanceof ImmutableSet)) {
+                return (ImmutableSet<T>) collection;
+            }
+            Set<T> a = new LinkedHashSet<T>(collection.asCollection());
             a.add(item);
             return new ImmutableHashSet<>(true, a);
         }
