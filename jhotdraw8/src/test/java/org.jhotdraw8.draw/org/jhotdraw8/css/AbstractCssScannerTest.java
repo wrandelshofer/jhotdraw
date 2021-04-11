@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,17 +20,18 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class CssScannerTest {
+public abstract class AbstractCssScannerTest {
 
-    public CssScannerTest() {
+    public AbstractCssScannerTest() {
     }
 
+    protected abstract CssScanner createScanner(String inputData);
 
     /**
      * Test of nextChar method, of class CssScanner.
      */
     public void testScanner(@NonNull String inputData, String expectedValue) throws Exception {
-        CssScanner s = new CssScanner(new StringReader(inputData));
+        CssScanner s = createScanner(inputData);
         //
         StringBuilder buf = new StringBuilder();
         while (s.nextChar() != -1) {

@@ -7,7 +7,6 @@ package org.jhotdraw8.css;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.CharSequenceReader;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -160,11 +159,15 @@ public class StreamCssTokenizer implements CssTokenizer {
     }
 
     public StreamCssTokenizer(CharSequence charSequence) {
-        this(new CharSequenceReader(charSequence));
+        this(new CharSequenceCssScanner(charSequence));
     }
 
     public StreamCssTokenizer(Reader reader) {
-        in = new CssScanner(reader);
+        this(new ReaderCssScanner(reader));
+    }
+
+    public StreamCssTokenizer(CssScanner reader) {
+        in = reader;
     }
 
     @Override

@@ -2,12 +2,10 @@
  * @(#)CssScanner.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
+
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.collection.IntArrayList;
-
 import java.io.IOException;
-import java.io.Reader;
 
 /**
  * The {@code CssScanner} preprocesses an input stream of UTF-16 code points for
@@ -42,41 +40,7 @@ import java.io.Reader;
  *
  * @author Werner Randelshofer
  */
-public class CssScanner {
-
-    /**
-     * The underlying reader.
-     */
-    private Reader in;
-
-    /**
-     * The current position in the input stream.
-     */
-    private long position;
-    /**
-     * The current line number in the input stream.
-     */
-    private long lineNumber;
-
-    /**
-     * The current character.
-     */
-    private int currentChar;
-
-    /**
-     * Whether we need to skip a linefeed on the next read.
-     */
-    private boolean skipLF;
-
-    /**
-     * Stack of pushed back characters.
-     */
-    private final IntArrayList pushedChars = new IntArrayList();
-
-    public CssScanner(Reader reader) {
-        this.in = reader;
-    }
-
+public interface CssScanner {
     /**
      * Phase 2: Processes unicode escape sequences first, and then processes
      * newlines.
@@ -84,84 +48,33 @@ public class CssScanner {
      * @return the next character. Returns -1 if EOF.
      * @throws IOException from the underlying input stream
      */
-    public int nextChar() throws IOException {
-        if (!pushedChars.isEmpty()) {
-            currentChar = pushedChars.removeAt(pushedChars.size() - 1);
-            return currentChar;
-        }
-
-        currentChar = in.read();
-        if (skipLF && currentChar == '\n') {
-            skipLF = false;
-            position++;
-            currentChar = in.read();
-        }
-
-        switch (currentChar) {
-            case -1: // EOF
-                break;
-            case '\r': // translate "\r", "\r\n" into "\n"
-                skipLF = true;
-                currentChar = '\n';
-                lineNumber++;
-                position++;
-                break;
-            case '\f': // translate "\f" into "\n"
-                currentChar = '\n';
-                lineNumber++;
-                position++;
-                break;
-            case '\n':
-                lineNumber++;
-                position++;
-                break;
-            case '\000':
-                currentChar = '\ufffd';
-                break;
-            default:
-                position++;
-                break;
-        }
-
-        return currentChar;
-    }
+    int nextChar() throws IOException;
 
     /**
      * Returns the current character.
      *
      * @return the current character
      */
-    public int currentChar() {
-        return currentChar;
-    }
+    int currentChar();
 
     /**
      * Pushes the specified character back into the scanner.
      *
      * @param ch The character to be pushed back
      */
-    public void pushBack(int ch) {
-        if (ch != -1) {
-            pushedChars.add(ch);
-        }
-    }
+    void pushBack(int ch);
 
     /**
      * Returns the position in the input stream.
      *
      * @return the position
      */
-    public long getPosition() {
-        return position - pushedChars.size();
-    }
+    long getPosition();
 
     /**
      * Returns the line number in the input stream.
      *
      * @return the line number
      */
-    public long getLineNumber() {
-        return lineNumber;
-    }
-
+    long getLineNumber();
 }

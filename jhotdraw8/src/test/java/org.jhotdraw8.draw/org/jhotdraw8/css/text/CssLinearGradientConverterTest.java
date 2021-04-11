@@ -40,7 +40,7 @@ public class CssLinearGradientConverterTest {
         String actual = out.toString();
         System.out.println("  expected: " + expected);
         System.out.println("    actual: " + actual);
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     /**
