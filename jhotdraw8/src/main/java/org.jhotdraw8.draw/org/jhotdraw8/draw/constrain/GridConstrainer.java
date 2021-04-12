@@ -340,8 +340,8 @@ public class GridConstrainer extends AbstractConstrainer {
         }
 
 
-        double x = tx * cwidth + cx;
-        double y = ty * cheight + cy;
+        double x = Math.fma(tx, cwidth, cx);
+        double y = Math.fma(ty, cheight, cy);
         return new CssPoint2D(new CssSize(x, wunits), new CssSize(y, hunits));
     }
 
@@ -381,7 +381,9 @@ public class GridConstrainer extends AbstractConstrainer {
             ty = round(ty);
         }
 
-        return new CssRectangle2D(tx * cwidth + cx, ty * cheight + cy, r.getWidth(), r.getHeight());
+        return new CssRectangle2D(
+                Math.fma(tx, cwidth, cx),
+                Math.fma(ty, cheight, cy), r.getWidth(), r.getHeight());
     }
 
     @Override
