@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.AbstractCollection;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -357,7 +359,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     @Override
-    public @NonNull Collection<V> getVertices() {
+    public @NonNull Set<V> getVertices() {
         class VertexIterator implements Iterator<V> {
 
             private int index;
@@ -378,10 +380,15 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
             }
 
         }
-        return new AbstractCollection<V>() {
+        return new AbstractSet<V>() {
             @Override
             public @NonNull Iterator<V> iterator() {
                 return new VertexIterator();
+            }
+
+            @Override
+            public boolean contains(Object o) {
+                return vertices.contains(o);
             }
 
             @Override

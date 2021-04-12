@@ -7,6 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Provides a minimal read-only API for a directed graph.
@@ -67,7 +68,7 @@ public interface BareDirectedGraph<V, A> {
      * @return a collection view on all vertices
      */
     @NonNull
-    Collection<V> getVertices();
+    Set<V> getVertices();
 
     /**
      * Returns all arrow data objects.

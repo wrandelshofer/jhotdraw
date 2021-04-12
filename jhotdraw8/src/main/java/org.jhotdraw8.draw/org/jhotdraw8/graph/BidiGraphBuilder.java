@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -177,8 +178,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     }
 
     @Override
-    public @NonNull Collection<V> getVertices() {
-        return Collections.unmodifiableCollection(vertices.keySet());
+    public @NonNull Set<V> getVertices() {
+        return Collections.unmodifiableSet(vertices.keySet());
     }
 
     @Override
