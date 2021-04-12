@@ -26,6 +26,7 @@ import java.util.function.Consumer;
 public class Point2DConverter extends AbstractCssConverter<Point2D> {
 
     private final boolean withSpace;
+    private final boolean withComma = false;
 
     public Point2DConverter(boolean nullable) {
         this(nullable, true);
@@ -38,7 +39,7 @@ public class Point2DConverter extends AbstractCssConverter<Point2D> {
 
     @Override
     public @NonNull String getHelpText() {
-        return "Format of ⟨Point2D⟩: ⟨x⟩,⟨y⟩";
+        return "Format of ⟨Point2D⟩: ⟨x⟩, ⟨y⟩";
     }
 
     @Override
@@ -56,10 +57,17 @@ public class Point2DConverter extends AbstractCssConverter<Point2D> {
     @Override
     protected <TT extends Point2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
+        produceDelimiter(out);
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
+    }
+
+
+    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
     }
 }

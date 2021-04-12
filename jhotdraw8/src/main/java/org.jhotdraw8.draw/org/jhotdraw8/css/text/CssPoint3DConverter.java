@@ -11,13 +11,14 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
+
+import static org.jhotdraw8.css.text.CssSizeConverter.parseSize;
 
 /**
  * Converts a {@code javafx.geometry.CssPoint3D} into a {@code String} and vice
@@ -42,51 +43,46 @@ public class CssPoint3DConverter extends AbstractCssConverter<CssPoint3D> {
     @Override
     public @NonNull CssPoint3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, z;
-        x = parseDimension(tt, "x");
+        x = parseSize(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        y = parseDimension(tt, "y");
+        y = parseSize(tt, "y");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        z = parseDimension(tt, "z");
+        if (tt.next() == CssTokenType.TT_EOF) {
+            z = CssSize.ZERO;
+        } else {
+            tt.pushBack();
+            z = parseSize(tt, "z");
+        }
 
         return new CssPoint3D(x, y, z);
     }
 
-    private @NonNull CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return new CssSize(tt.currentNumberNonNull().doubleValue());
-        case CssTokenType.TT_DIMENSION:
-            String s = tt.currentStringNonNull();
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), s == null ? UnitConverter.DEFAULT : s);
-        default:
-            throw new ParseException(" ⟨CssPoint3D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-        }
-    }
 
     @Override
     protected <TT extends CssPoint3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         CssSize x = value.getX();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
-        if (withComma) {
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-        }
-        if (withSpace) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-        }
+        produceDelimiter(out);
         CssSize y = value.getY();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getValue(), y.getUnits()));
+        CssSize z = value.getZ();
+        if (z.getValue() != 0) {
+            produceDelimiter(out);
+            out.accept(new CssToken(CssTokenType.TT_DIMENSION, z.getValue(), z.getUnits()));
+        }
+    }
+
+    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        CssSize z = value.getZ();
-        out.accept(new CssToken(CssTokenType.TT_DIMENSION, z.getValue(), z.getUnits()));
     }
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨CssPoint3D⟩: ⟨x⟩ ⟨y⟩";
+        return "Format of ⟨CssPoint3D⟩: ⟨x⟩ ⟨y⟩ ｜ ⟨x⟩ ⟨y⟩ ⟨z⟩";
     }
 }

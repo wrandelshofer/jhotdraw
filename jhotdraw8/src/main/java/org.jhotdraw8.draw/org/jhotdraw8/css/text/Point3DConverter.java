@@ -25,13 +25,21 @@ import java.util.function.Consumer;
  */
 public class Point3DConverter extends AbstractCssConverter<Point3D> {
 
+    private final boolean withComma = true;
+    private final boolean withSpace;
+
     public Point3DConverter(boolean nullable) {
+        this(nullable, true);
+    }
+
+    public Point3DConverter(boolean nullable, boolean withSpace) {
         super(nullable);
+        this.withSpace = withSpace;
     }
 
     @Override
     public @NonNull String getHelpText() {
-        return "Format of ⟨Point3D⟩: ⟨x⟩, ⟨y⟩, ⟨z⟩";
+        return "Format of ⟨Point3D⟩: ⟨x⟩ ⟨y⟩ ｜ ⟨x⟩ ⟨y⟩ ⟨z⟩";
     }
 
     @Override
@@ -44,25 +52,32 @@ public class Point3DConverter extends AbstractCssConverter<Point3D> {
         y = tt.currentNumberNonNull().doubleValue();
         tt.skipIfPresent(CssTokenType.TT_COMMA);
         if (tt.next() == CssTokenType.TT_NUMBER) {
+            tt.pushBack();
             z = tt.currentNumberNonNull().doubleValue();
         } else {
-            tt.pushBack();
             z = 0;
         }
 
         return new Point3D(x, y, z);
     }
 
+    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
+        if (withSpace) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+        }
+    }
+
     @Override
     protected <TT extends Point3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-        out.accept(new CssToken(CssTokenType.TT_COMMA));
-        out.accept(new CssToken(CssTokenType.TT_S, " "));
+        produceDelimiter(out);
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
         double z = value.getZ();
         if (z != 0.0) {
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            produceDelimiter(out);
             out.accept(new CssToken(CssTokenType.TT_NUMBER, z));
         }
     }

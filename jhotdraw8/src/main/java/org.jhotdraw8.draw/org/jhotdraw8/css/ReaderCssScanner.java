@@ -52,8 +52,6 @@ public class ReaderCssScanner extends AbstractCssScanner {
     }
 
     public long getPosition() {
-        return position - pushedChars.size();
+        return position;
     }
-
-
 }

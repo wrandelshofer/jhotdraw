@@ -23,16 +23,20 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssSymmetricPoint2DConverterOLD extends AbstractCssConverter<Point2D> {
+public class SymmetricPoint2DConverter extends AbstractCssConverter<Point2D> {
 
     private final boolean withSpace;
     private boolean withComma;
 
-    public CssSymmetricPoint2DConverterOLD(boolean nullable) {
+    public SymmetricPoint2DConverter() {
+        this(false, true, false);
+    }
+
+    public SymmetricPoint2DConverter(boolean nullable) {
         this(nullable, true, false);
     }
 
-    public CssSymmetricPoint2DConverterOLD(boolean nullable, boolean withSpace, boolean withComma) {
+    public SymmetricPoint2DConverter(boolean nullable, boolean withSpace, boolean withComma) {
         super(nullable);
         this.withSpace = withSpace;
         this.withComma = withComma || !withSpace;
@@ -41,29 +45,33 @@ public class CssSymmetricPoint2DConverterOLD extends AbstractCssConverter<Point2
     @Override
     public @NonNull Point2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨SymmetricPoint2D⟩: ⟨x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, "x");
         x = tt.currentNumberNonNull().doubleValue();
-        tt.skipIfPresent(CssTokenType.TT_COMMA);
-        if (tt.next() == CssTokenType.TT_NUMBER) {
-            y = tt.currentNumberNonNull().doubleValue();
+        if (tt.next() == CssTokenType.TT_EOF) {
+            y = x;
         } else {
             tt.pushBack();
-            y = x;
+            tt.skipIfPresent(CssTokenType.TT_COMMA);
+            tt.requireNextToken(CssTokenType.TT_NUMBER, "y");
+            y = tt.currentNumberNonNull().doubleValue();
         }
+
         return new Point2D(x, y);
     }
 
     @Override
     protected <TT extends Point2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-        if (value.getX() != value.getY()) {
+        double x = value.getX();
+        double y = value.getY();
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, x));
+        if (x != y) {
             if (withComma) {
                 out.accept(new CssToken(CssTokenType.TT_COMMA));
             }
             if (withSpace) {
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
             }
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, y));
         }
     }
 

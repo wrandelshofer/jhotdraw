@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssSymmetricPoint2DConverter;
+import org.jhotdraw8.css.text.CssSymmetricCssPoint2DConverter;
 import org.jhotdraw8.text.Converter;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
         implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
     private static final long serialVersionUID = 1L;
-    private @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricPoint2DConverter();
+    private @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricCssPoint2DConverter();
 
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> xKey;
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> yKey;

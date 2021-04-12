@@ -4,17 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.PatternConverter;
-
-import java.io.IOException;
-import java.nio.CharBuffer;
-import java.text.ParseException;
+import org.jhotdraw8.css.text.Point2DConverter;
 
 /**
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
@@ -22,24 +12,18 @@ import java.text.ParseException;
  *
  * @author Werner Randelshofer
  */
-public class XmlPoint2DConverter implements Converter<Point2D> {
+public class XmlPoint2DConverter extends Point2DConverter {
 
-    private final PatternConverter formatter = new PatternConverter("{0,number} {1,number}", new XmlConverterFactory());
 
-    @Override
-    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @NonNull Point2D value) throws IOException {
-        formatter.toStr(out, idSupplier, value.getX(), value.getY());
+    public XmlPoint2DConverter() {
+        this(false, true);
     }
 
-    @Override
-    public @NonNull Point2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        Object[] v = formatter.fromString(buf);
-
-        return new Point2D((double) v[0], (double) v[1]);
+    public XmlPoint2DConverter(boolean nullable) {
+        this(nullable, true);
     }
 
-    @Override
-    public @NonNull Point2D getDefaultValue() {
-        return new Point2D(0, 0);
+    public XmlPoint2DConverter(boolean nullable, boolean withSpace) {
+        super(nullable, withSpace);
     }
 }

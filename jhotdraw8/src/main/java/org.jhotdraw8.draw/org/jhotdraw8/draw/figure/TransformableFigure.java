@@ -20,7 +20,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleNonNullKey;
 import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.text.CssTranslate3DConverterOLD;
+import org.jhotdraw8.css.text.CssTranslate3DConverter;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
@@ -121,7 +121,7 @@ public interface TransformableFigure extends TransformCachingFigure {
      */
     @SuppressWarnings("unused")
     @NonNull
-    Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverterOLD(false));
+    Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverter(false));
 
     static @NonNull Set<Key<?>> getDeclaredKeys() {
         Set<Key<?>> keys = new LinkedHashSet<>();

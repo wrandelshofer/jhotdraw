@@ -18,59 +18,80 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /**
- * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
+ * Converts a {@code javafx.geometry.Point3D} into a {@code String} and vice
  * versa.
  *
  * @author Werner Randelshofer
  */
 public class CssScale3DConverter extends AbstractCssConverter<Point3D> {
 
-    public CssScale3DConverter(boolean nullable) {
-        super(nullable);
+    private final boolean withSpace;
+    private final boolean withComma = false;
+
+    public CssScale3DConverter() {
+        this(false, true);
     }
 
+    public CssScale3DConverter(boolean nullable) {
+        this(nullable, true);
+    }
+
+    public CssScale3DConverter(boolean nullable, boolean withSpace) {
+        super(nullable);
+        this.withSpace = withSpace;
+    }
 
     @Override
     public @NonNull Point3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, z;
-        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Translate3D⟩: ⟨x⟩ expected.");
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
-        tt.skipIfPresent(CssTokenType.TT_COMMA);
-        if (tt.next() == CssTokenType.TT_NUMBER) {
-            y = tt.currentNumberNonNull().doubleValue();
-            tt.skipIfPresent(CssTokenType.TT_COMMA);
-            if (tt.next() == CssTokenType.TT_NUMBER) {
-                z = tt.currentNumberNonNull().doubleValue();
-            } else {
-                tt.pushBack();
-                z = 1;
-            }
-        } else {
-            tt.pushBack();
+        if (tt.next() == CssTokenType.TT_EOF) {
             y = x;
-            z = x;
+            z = 1;
+        } else {
+            tt.skipIfPresent(CssTokenType.TT_COMMA);
+            tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨y⟩ expected.");
+            y = tt.currentNumberNonNull().doubleValue();
+
+            if (tt.next() == CssTokenType.TT_EOF) {
+                z = 1;
+            } else {
+                tt.skipIfPresent(CssTokenType.TT_COMMA);
+                tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨z⟩ expected.");
+                z = tt.currentNumberNonNull().doubleValue();
+            }
+
         }
+
         return new Point3D(x, y, z);
     }
 
     @Override
     protected <TT extends Point3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        if (value.getZ() == 1.0) {
-            if (value.getX() == value.getY()) {
-                out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-            } else {
-                out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-                out.accept(new CssToken(CssTokenType.TT_S, " "));
-                out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
-            }
-        } else {
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getX()));
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getY()));
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getZ()));
+        double x = value.getX();
+        double y = value.getY();
+        double z = value.getZ();
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, x));
+        if (x != y || z != 1) {
+            produceDelimiter(out);
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, y));
+        }
+        if (z != 1) {
+            produceDelimiter(out);
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, z));
         }
     }
+
+    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
+        if (withComma) {
+            out.accept(new CssToken(CssTokenType.TT_COMMA));
+        }
+        if (withSpace) {
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+        }
+    }
+
 
     @Override
     public @NonNull Point3D getDefaultValue() {

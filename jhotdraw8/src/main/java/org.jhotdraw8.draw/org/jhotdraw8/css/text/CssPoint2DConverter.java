@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
+import static org.jhotdraw8.css.text.CssSizeConverter.parseSize;
+
 /**
  * Converts a {@code javafx.geometry.CssPoint2D} into a {@code String} and vice
  * versa.
@@ -41,33 +43,11 @@ public class CssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
     @Override
     public @NonNull CssPoint2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y;
-        x = parseDimension(tt, "x");
+        x = parseSize(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        y = parseDimension(tt, "y");
+        y = parseSize(tt, "y");
 
         return new CssPoint2D(x, y);
-    }
-
-    private @Nullable CssSize parseDimension(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return new CssSize(tt.currentNumber().doubleValue());
-        case CssTokenType.TT_DIMENSION:
-            return new CssSize(tt.currentNumber().doubleValue(), tt.currentString());
-        case CssTokenType.TT_IDENT:
-            switch (tt.currentStringNonNull()) {
-            case "NaN":
-                return new CssSize(Double.NaN);
-            case "INF":
-                        return new CssSize(Double.POSITIVE_INFINITY);
-                    case "-INF":
-                        return new CssSize(Double.NEGATIVE_INFINITY);
-                    default:
-                        throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-                }
-            default:
-                throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-        }
     }
 
     @Override

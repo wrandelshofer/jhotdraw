@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
+import static org.jhotdraw8.css.text.CssSizeConverter.parseSize;
+
 /**
  * Converts a {@code javafx.geometry.CssRectangle2D} into a {@code String} and vice
  * versa.
@@ -27,8 +29,6 @@ import java.util.function.Consumer;
 public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D> {
     private final boolean withSpace;
     private final boolean withComma;
-
-    private CssSizeConverter sizeConverter = new CssSizeConverter(false);
 
     public CssRectangle2DConverter(boolean nullable) {
         this(nullable, true, false);
@@ -43,41 +43,39 @@ public class CssRectangle2DConverter extends AbstractCssConverter<CssRectangle2D
     @Override
     public @NonNull CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, width, height;
-        x = sizeConverter.parse(tt, idResolver);
+        x = parseSize(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        y = sizeConverter.parse(tt, idResolver);
+        y = parseSize(tt, "y");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        width = sizeConverter.parse(tt, idResolver);
+        width = parseSize(tt, "width");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
-        height = sizeConverter.parse(tt, idResolver);
+        height = parseSize(tt, "height");
 
         return new CssRectangle2D(x, y, width, height);
     }
 
     @Override
     protected <TT extends CssRectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        sizeConverter.produceTokens(value.getMinX(), idSupplier, out);
+        CssSize x = value.getMinX();
+        CssSize y = value.getMinY();
+        CssSize width = value.getWidth();
+        CssSize height = value.getHeight();
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));
+        produceDelimiter(out);
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, y.getValue(), y.getUnits()));
+        produceDelimiter(out);
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, width.getValue(), width.getUnits()));
+        produceDelimiter(out);
+        out.accept(new CssToken(CssTokenType.TT_DIMENSION, height.getValue(), height.getUnits()));
+    }
+
+    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        sizeConverter.produceTokens(value.getMinY(), idSupplier, out);
-        if (withComma) {
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-        }
-        if (withSpace) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-        }
-        sizeConverter.produceTokens(value.getWidth(), idSupplier, out);
-        if (withComma) {
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-        }
-        if (withSpace) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-        }
-        sizeConverter.produceTokens(value.getHeight(), idSupplier, out);
     }
 
     @Override

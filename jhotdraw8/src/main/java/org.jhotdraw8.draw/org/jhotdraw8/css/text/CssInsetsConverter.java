@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static org.jhotdraw8.css.text.CssSizeConverter.parseSize;
+
 /**
  * Converts a {@link CssInsets} object into a {@code String} and vice
  * versa.
@@ -46,16 +48,15 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
-                list.add(new CssSize(tt.currentNumberNonNull().doubleValue()));
-                break;
             case CssTokenType.TT_DIMENSION:
-                list.add(new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentString()));
+                tt.pushBack();
+                list.add(parseSize(tt, i + ""));
                 break;
             case CssTokenType.TT_COMMA:
-                    break;
-                default:
-                    tt.pushBack();
-                    break;
+                break;
+            default:
+                tt.pushBack();
+                break;
             }
         }
         switch (list.size()) {

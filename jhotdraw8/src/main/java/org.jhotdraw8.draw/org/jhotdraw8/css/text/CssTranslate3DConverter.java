@@ -23,9 +23,9 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssTranslate3DConverterOLD extends AbstractCssConverter<Point3D> {
+public class CssTranslate3DConverter extends AbstractCssConverter<Point3D> {
 
-    public CssTranslate3DConverterOLD(boolean nullable) {
+    public CssTranslate3DConverter(boolean nullable) {
         super(nullable);
     }
 

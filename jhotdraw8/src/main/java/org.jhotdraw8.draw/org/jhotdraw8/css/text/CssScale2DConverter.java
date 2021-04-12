@@ -7,14 +7,15 @@ package org.jhotdraw8.css.text;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
-import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.text.PatternConverter;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.text.ParseException;
+import java.util.function.Consumer;
 
 /**
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
@@ -22,41 +23,58 @@ import java.text.ParseException;
  *
  * @author Werner Randelshofer
  */
-public class CssScale2DConverter implements Converter<Point2D> {
+public class CssScale2DConverter extends AbstractCssConverter<Point2D> {
 
-    // FIXME must use CssParser instead of PatternConverter!!
-    private final PatternConverter formatter = new PatternConverter("{0,list,{1,number}|[ ]+}", new CssConverterFactory());
+    private final boolean withSpace;
+    private final boolean withComma = false;
+
+    public CssScale2DConverter() {
+        this(false, true);
+    }
+
+    public CssScale2DConverter(boolean nullable) {
+        this(nullable, true);
+    }
+
+    public CssScale2DConverter(boolean nullable, boolean withSpace) {
+        super(nullable);
+        this.withSpace = withSpace;
+    }
 
     @Override
-    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @NonNull Point2D value) throws IOException {
-        if (value.getX() == value.getY()) {
-            formatter.toStr(out, idSupplier, 1, value.getX());
+    public @NonNull Point2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        final double x, y;
+        tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale2D⟩: ⟨x⟩ expected.");
+        x = tt.currentNumberNonNull().doubleValue();
+        if (tt.next() == CssTokenType.TT_EOF) {
+            y = x;
         } else {
-            formatter.toStr(out, idSupplier, 2, value.getX(), value.getY());
+            tt.skipIfPresent(CssTokenType.TT_COMMA);
+            tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale2D⟩: ⟨y⟩ expected.");
+            y = tt.currentNumberNonNull().doubleValue();
         }
+
+        return new Point2D(x, y);
     }
 
     @Override
-    public @NonNull Point2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        Object[] v = formatter.fromString(buf);
-        switch ((int) v[0]) {
-        case 1:
-            return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[1]).doubleValue());
-        case 2:
-            return new Point2D(((Number) v[1]).doubleValue(), ((Number) v[2]).doubleValue());
-        default:
-            throw new ParseException("Scale with 1 to 2 values expected.", buf.position());
+    protected <TT extends Point2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+        double x = value.getX();
+        double y = value.getY();
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, x));
+        if (x != y) {
+            if (withComma) {
+                out.accept(new CssToken(CssTokenType.TT_COMMA));
+            }
+            if (withSpace) {
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
+            }
+            out.accept(new CssToken(CssTokenType.TT_NUMBER, y));
         }
-    }
-
-    @Override
-    public @NonNull Point2D getDefaultValue() {
-        return new Point2D(1, 1);
     }
 
     @Override
     public @NonNull String getHelpText() {
         return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";
     }
-
 }
