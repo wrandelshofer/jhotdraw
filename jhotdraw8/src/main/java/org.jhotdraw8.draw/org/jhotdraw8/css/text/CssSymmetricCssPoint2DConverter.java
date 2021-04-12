@@ -52,6 +52,7 @@ public class CssSymmetricCssPoint2DConverter extends AbstractCssConverter<CssPoi
         if (tt.next() == CssTokenType.TT_EOF) {
             y = x;
         } else {
+            tt.pushBack();
             tt.skipIfPresent(CssTokenType.TT_COMMA);
             y = parseSize(tt, "y");
         }
