@@ -449,19 +449,6 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                 if (value == null || isInitial(value)) {
                     elem.remove(origin, k);
                 } else {
-                    // Ignore if tokens are bad or just whitespace and comments
-                    boolean ignore = true;
-                    for (CssToken t : value) {
-                        if (t.getType() != CssTokenType.TT_S && t.getType() != CssTokenType.TT_COMMENT) {
-                            ignore = false;
-                            break;
-                        }
-                    }
-                    if (ignore || value.isEmpty()) {
-                        return;
-                    }
-
-
                     @SuppressWarnings("unchecked")
                     Converter<Object> converter = k.getCssConverter();
                     Object convertedValue;
