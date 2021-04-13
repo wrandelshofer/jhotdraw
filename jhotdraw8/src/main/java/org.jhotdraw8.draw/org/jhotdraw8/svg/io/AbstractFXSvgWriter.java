@@ -1399,19 +1399,25 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (hasNoWrapping(node)) {
             // If the text has no wrapping width, we can write the
             // text directly into the body of the "text" element.
+            Bounds bounds = node.getLayoutBounds();
             switch (node.getTextAlignment()) {
             case LEFT:
             case JUSTIFY:
                 w.writeAttribute("x", nb.toString(node.getX()));
                 break;
             case CENTER:
-                w.writeAttribute("x", nb.toString(node.getX() + node.getBoundsInLocal().getWidth() * 0.5));
+                w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth() * 0.5));
                 break;
             case RIGHT:
-                w.writeAttribute("x", nb.toString(node.getX()+node.getBoundsInLocal().getWidth()));
+                w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth()));
                 break;
             }
-            w.writeAttribute("y", nb.toString(node.getY()));
+
+            // By adding baselineOffset to layoutBounds.minY we get the correct
+            // y coordinate for all possible VPos values.
+            double y = bounds.getMinY() + node.getBaselineOffset();
+            w.writeAttribute("ya", nb.toString(y));
+            w.writeAttribute("y", nb.toString(y));
         }
     }
 
