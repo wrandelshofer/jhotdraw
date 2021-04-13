@@ -51,8 +51,8 @@ class Point3DConverterTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
-                dynamicTest("1", () -> doTest(new Point3D(1, 2, 3), "1, 2, 3")),
-                dynamicTest("1", () -> doTest(new Point3D(1, 2, 0), "1, 2"))
+                dynamicTest("1", () -> doTest(new Point3D(1, 2, 3), "1 2 3")),
+                dynamicTest("2", () -> doTest(new Point3D(1, 2, 0), "1 2"))
         );
     }
 

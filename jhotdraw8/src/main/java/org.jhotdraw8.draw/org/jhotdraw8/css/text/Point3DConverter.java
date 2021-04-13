@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  */
 public class Point3DConverter extends AbstractCssConverter<Point3D> {
 
-    private final boolean withComma = true;
+    private final boolean withComma = false;
     private final boolean withSpace;
 
     public Point3DConverter(boolean nullable) {
