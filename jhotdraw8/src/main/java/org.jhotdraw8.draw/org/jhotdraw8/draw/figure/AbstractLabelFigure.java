@@ -189,8 +189,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         Text t = (Text) g.getProperties().get("textNode");
 
         updateGroupNode(ctx, g);
-        updatePathNode(ctx, p);
         updateTextNode(ctx, t);
+        updatePathNode(ctx, p, t);
 
         // Note: we must not add individual elements to g.children because
         // its ObservableList fires too many events.
@@ -206,10 +206,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
-    protected void updatePathNode(RenderContext ctx, @NonNull Path node) {
+    protected void updatePathNode(RenderContext ctx, @NonNull Path node, @NonNull Text tn) {
         applyFillableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, node);
-        applyShapeableProperties(ctx, node);
+        applyShapeableProperties(ctx, node, tn.getBoundsInLocal());
     }
 
     protected void updateTextNode(@NonNull RenderContext ctx, @NonNull Text tn) {
