@@ -8,15 +8,19 @@ package org.jhotdraw8.draw.io;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -28,11 +32,14 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -125,9 +132,90 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         return figure;
     }
 
+    public @Nullable Figure read(@NonNull Reader in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
+        idFactory.setDocumentHome(documentHome);
+        XMLInputFactory dbf = XMLInputFactory.newInstance();
+
+        // We do not want that the reader creates a socket connection,
+        // even if it would benefit the result!
+        dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
+        dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        dbf.setXMLResolver((publicID,
+                            systemID,
+                            baseURI,
+                            namespace) -> null
+        );
+        Deque<Figure> stack = new ArrayDeque<>();
+        List<Runnable> secondPass = new ArrayList<>();
+        try {
+            for (XMLStreamReader r = dbf.createXMLStreamReader(in); r.hasNext(); ) {
+                readNode(r, r.next(), stack, secondPass);
+            }
+
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+        if (stack.size() > 1) {
+            throw new IOException("Illegal stack size! " + stack);
+        }
+
+        try {
+            secondPass.parallelStream().forEach(Runnable::run);
+        } catch (UncheckedIOException e) {
+            throw e.getCause();
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
+
+        Figure figure = stack.isEmpty() ? null : stack.getFirst();
+        if ((figure instanceof Drawing)) {
+            figure.set(Drawing.DOCUMENT_HOME, documentHome);
+        }
+        return figure;
+    }
+
     @Override
     public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, @Nullable Figure parent) throws IOException {
-        return null;
+        Object content = clipboard.getContent(getDataFormat());
+        if (content instanceof String) {
+            Set<Figure> figures = new LinkedHashSet<>();
+            Figure newDrawing = read(new StringReader((String) content), null, null, new SimpleWorkState());
+            idFactory.reset();
+            idFactory.setDocumentHome(null);
+            for (Figure f : drawing.preorderIterable()) {
+                idFactory.createId(f);
+            }
+            // FIXME use current layer in drawingView!
+            Layer layer = new LayerFigure();
+            for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
+                figures.add(f);
+                newDrawing.removeChild(f);
+                String id = idFactory.createId(f);
+                f.set(StyleableFigure.ID, id);
+                if (f instanceof Layer) {
+                    model.addChildTo(f, drawing);
+                } else {
+                    if (layer.getParent() == null) {
+                        model.addChildTo(layer, drawing);
+                    }
+                    model.addChildTo(f, layer);
+                }
+            }
+            return figures;
+        } else {
+            throw new IOException("no data found");
+        }
+
+    }
+
+    private DataFormat getDataFormat() {
+        String mimeType = "application/xml";
+        DataFormat df = DataFormat.lookupMimeType(mimeType);
+        if (df == null) {
+            df = new DataFormat(mimeType);
+        }
+        return df;
     }
 
     private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass) throws IOException {
@@ -141,9 +229,10 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
             Location location = r.getLocation();
             if (idAttribute.equals(attributeLocalName)) {
                 Object anotherObjWithSameId = idFactory.putIdToObject(attributeValue, figure);
-                if (anotherObjWithSameId != null) {
+                /*if (anotherObjWithSameId != null) {
+                    // Note: it is okay if we have found a duplicate id when pasting!
                     throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
-                }
+                }*/
                 setId(figure, attributeValue);
             } else {
                 @SuppressWarnings("unchecked")
