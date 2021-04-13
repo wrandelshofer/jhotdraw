@@ -64,7 +64,7 @@ public class EllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
         return new EllipseConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 

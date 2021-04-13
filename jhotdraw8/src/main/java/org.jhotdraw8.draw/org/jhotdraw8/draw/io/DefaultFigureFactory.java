@@ -135,30 +135,10 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
             addFigureKeysAndNames("Drawing", SimpleLayeredDrawing.class, keys);
         }
 
-        {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(TextFigure.class));
-            keys.remove(TextFigure.TEXT);
-            addNodeListKey(TextFigure.class, "", TextFigure.TEXT);
-            addFigureKeysAndNames("Text", TextFigure.class, keys);
-        }
-        {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(TextAreaFigure.class));
-            keys.remove(TextAreaFigure.TEXT);
-            addNodeListKey(TextAreaFigure.class, "", TextAreaFigure.TEXT);
-            addFigureKeysAndNames("TextArea", TextAreaFigure.class, keys);
-        }
-        {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(LabelFigure.class));
-            keys.remove(LabelFigure.TEXT);
-            addNodeListKey(LabelFigure.class, "", LabelFigure.TEXT);
-            addFigureKeysAndNames("Label", LabelFigure.class, keys);
-        }
-        {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(PageLabelFigure.class));
-            keys.remove(PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
-            addNodeListKey(PageLabelFigure.class, "", PageLabelFigure.TEXT_WITH_PLACEHOLDERS);
-            addFigureKeysAndNames("PageLabel", PageLabelFigure.class, keys);
-        }
+        addFigureKeysAndNames("Text", TextFigure.class);
+        addFigureKeysAndNames("TextArea", TextAreaFigure.class);
+        addFigureKeysAndNames("Label", LabelFigure.class);
+        addFigureKeysAndNames("PageLabel", PageLabelFigure.class);
 
         addFigureKeysAndNames("Line", LineFigure.class);
         addFigureKeysAndNames("Ellipse", EllipseFigure.class);

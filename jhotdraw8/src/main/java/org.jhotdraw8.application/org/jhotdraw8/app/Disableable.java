@@ -60,8 +60,6 @@ public interface Disableable {
 
     /**
      * Adds a disabler.
-     * <p>
-     * FIXME disabler type should be restricted to {@link Worker}.
      *
      * @param disabler a new disabler
      */

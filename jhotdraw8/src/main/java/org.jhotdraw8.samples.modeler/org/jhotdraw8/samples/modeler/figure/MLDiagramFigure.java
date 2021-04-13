@@ -214,7 +214,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure) {
+    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 

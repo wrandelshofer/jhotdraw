@@ -80,7 +80,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
@@ -209,7 +209,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     protected void updatePathNode(RenderContext ctx, @NonNull Path node, @NonNull Text tn) {
         applyFillableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, node);
-        applyShapeableProperties(ctx, node, tn.getBoundsInLocal());
+        applyShapeableProperties(ctx, node, getVisualBounds());
     }
 
     protected void updateTextNode(@NonNull RenderContext ctx, @NonNull Text tn) {

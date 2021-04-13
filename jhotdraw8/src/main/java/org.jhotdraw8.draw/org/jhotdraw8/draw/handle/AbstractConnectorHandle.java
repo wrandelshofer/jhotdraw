@@ -18,6 +18,7 @@ import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Geom;
 
 import java.util.List;
@@ -122,6 +123,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         isDragging = true;
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
+        double tolerance = view.getEditor().getTolerance();
 
         CssPoint2D constrainedPoint;
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -145,7 +147,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 newConnectedFigure = prevTarget;
                 ConnectableFigure cff = (ConnectableFigure) prevTarget;
                 Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
-                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPoint, o, cff, event);
+                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPoint, o, cff, event, tolerance);
                 newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
                 if (newConnector != null && o.canConnect(cff, newConnector)) {
                     newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
@@ -153,10 +155,10 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                     isConnected = true;
                 }
             } else {
-                List<Figure> list;
-                list = view.findFigures(pointInViewCoordinates, true)
-                .stream().map(Map.Entry::getKey).collect(Collectors.toList());
+                List<Figure> list = view.findFigures(pointInViewCoordinates, true)
+                        .stream().map(Map.Entry::getKey).collect(Collectors.toList());
 
+                double closestDistanceSq = Double.POSITIVE_INFINITY;
                 SearchLoop:
                 for (Figure f1 : list) {
                     for (Figure ff : f1.breadthFirstIterable()) {
@@ -164,13 +166,19 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPoint, o, cff, event);
-                                newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
-                                if (newConnector != null && o.canConnect(ff, newConnector)) {
-                                    newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
-                                    constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, ff));
-                                    isConnected = true;
-                                    break SearchLoop;
+                                final ConnectorAndConnectedFigure candidate = find(constrainedPoint, o, cff, event, tolerance);
+                                final Connector candidateConnector = candidate == null ? null : candidate.getConnector();
+                                if (candidateConnector != null && o.canConnect(ff, newConnector)) {
+                                    Point2D p = candidate.getConnector().getPositionInWorld(owner, candidate.getConnectedFigure());
+                                    double distanceSq = FXGeom.distanceSq(p, unconstrainedPoint);
+                                    if (distanceSq <= closestDistanceSq) {
+                                        // we compare <= because we go back to front, and the
+                                        // front-most figure wins
+                                        closestDistanceSq = distanceSq;
+                                        newConnectedFigure = candidate.getConnectedFigure();
+                                        newConnector = candidateConnector;
+                                        isConnected = true;
+                                    }
                                 }
                             }
                         }
@@ -184,8 +192,9 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         model.set(o, targetKey, newConnectedFigure);
     }
 
-    protected ConnectorAndConnectedFigure find(CssPoint2D constrainedPoint, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent) {
-        final Connector connector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o);
+    protected ConnectorAndConnectedFigure find(CssPoint2D constrainedPoint, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent,
+                                               double tolerance) {
+        final Connector connector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o, tolerance);
         return connector == null ? null : new ConnectorAndConnectedFigure(connector, cff);
     }
 

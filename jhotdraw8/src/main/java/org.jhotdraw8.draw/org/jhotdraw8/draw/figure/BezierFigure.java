@@ -94,7 +94,7 @@ public class BezierFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype) {
+    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 

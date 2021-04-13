@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
@@ -122,6 +121,7 @@ public class ConnectionTool extends AbstractTool {
             } else {
                 constrainedPoint = unconstrainedPoint;
             }
+            double tolerance = view.getEditor().getTolerance();
             Connector newConnector = null;
             Figure newConnectionTarget = null;
             DrawingModel model = view.getModel();
@@ -137,7 +137,7 @@ public class ConnectionTool extends AbstractTool {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                             if (ff.getLayoutBounds().contains(pointInLocal)) {
-                                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
+                                newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure, tolerance);
                                 if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                     newConnectionTarget = ff;
                                     break SearchLoop;
@@ -167,7 +167,7 @@ public class ConnectionTool extends AbstractTool {
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, new CssPoint2D(unconstrainedPoint)).getConvertedValue();
         figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getDrawing();
+        double tolerance = view.getEditor().getTolerance();
 
         Figure parent = getOrCreateParent(view, figure);
         view.setActiveParent(parent);
@@ -185,7 +185,7 @@ public class ConnectionTool extends AbstractTool {
                         ConnectableFigure cff = (ConnectableFigure) ff;
                         Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                         if (ff.getLayoutBounds().contains(pointInLocal)) {
-                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure);
+                            newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure, tolerance);
                             if (newConnector != null && figure.canConnect(ff, newConnector)) {
                                 newConnectedFigure = ff;
                                 break SearchLoop;

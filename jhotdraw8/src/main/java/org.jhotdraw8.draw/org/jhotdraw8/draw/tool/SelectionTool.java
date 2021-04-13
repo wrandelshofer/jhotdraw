@@ -58,11 +58,6 @@ public class SelectionTool extends AbstractTool {
     // ---
     private static final long serialVersionUID = 1L;
     /**
-     * Look inside a radius of 2 pixels if the mouse click did not hit
-     * something.
-     */
-    private final double tolerance = 2;
-    /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
     private @Nullable Tracker tracker;

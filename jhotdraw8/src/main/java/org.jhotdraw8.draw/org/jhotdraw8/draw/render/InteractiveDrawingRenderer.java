@@ -330,15 +330,14 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                 Double distance=contains(n, pl, tolerance);
                 if (distance!=null) { // only drill down if the parent contains the point
                     boolean test = figurePredicate.test(f1);
-                    boolean addedDecomposedFigure=false;
-                    if (!test||decompose&&f1.isDecomposable()) {
+                    if (!test || decompose && f1.isDecomposable()) {
                         if (n instanceof Parent) {
-                            addedDecomposedFigure= foundAFigure|=findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate,tolerance);
+                            foundAFigure |= findFiguresRecursive((Parent) n, pl, found, decompose, figurePredicate, tolerance);
                         }
                     }
-                    if (test&&!addedDecomposedFigure) {
-                        found.add(new AbstractMap.SimpleImmutableEntry<>(f1,distance));
-                        foundAFigure=true;
+                    if (test/*&&!addedDecomposedFigure*/) {
+                        found.add(new AbstractMap.SimpleImmutableEntry<>(f1, distance));
+                        foundAFigure = true;
                     }
                 }
             } else {

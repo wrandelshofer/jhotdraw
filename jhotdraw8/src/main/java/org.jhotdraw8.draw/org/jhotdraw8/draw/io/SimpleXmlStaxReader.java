@@ -45,6 +45,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
+ */
 public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
     private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     private final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
