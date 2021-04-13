@@ -145,7 +145,9 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
             try {
                 Set<Figure> pastedFigures = in.read(cb, getModel(), getDrawing(), parent);
                 getSelectedFigures().clear();
-                getSelectedFigures().addAll(pastedFigures);
+                if (pastedFigures != null) {
+                    getSelectedFigures().addAll(pastedFigures);
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
