@@ -1416,7 +1416,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             // By adding baselineOffset to layoutBounds.minY we get the correct
             // y coordinate for all possible VPos values.
             double y = bounds.getMinY() + node.getBaselineOffset();
-            w.writeAttribute("ya", nb.toString(y));
             w.writeAttribute("y", nb.toString(y));
         }
     }
