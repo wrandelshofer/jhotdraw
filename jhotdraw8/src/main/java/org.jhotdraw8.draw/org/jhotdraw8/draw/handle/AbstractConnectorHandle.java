@@ -121,16 +121,16 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             return;
         }
         isDragging = true;
-        Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
-        double tolerance = view.getEditor().getTolerance();
+        Point2D pointInView = new Point2D(event.getX(), event.getY());
+        Point2D unconstrainedPointInWorld = view.viewToWorld(pointInView);
+        double tolerance = view.getViewToWorld().deltaTransform(view.getEditor().getTolerance(), 0).getX();
 
-        CssPoint2D constrainedPoint;
+        CssPoint2D constrainedPointInWorld;
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            constrainedPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(unconstrainedPoint));
+            constrainedPointInWorld = view.getConstrainer().constrainPoint(owner, new CssPoint2D(unconstrainedPointInWorld));
         } else {
-            constrainedPoint = new CssPoint2D(unconstrainedPoint);
+            constrainedPointInWorld = new CssPoint2D(unconstrainedPointInWorld);
         }
 
         ConnectingFigure o = getOwner();
@@ -146,31 +146,31 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             if (event.isShiftDown()) {
                 newConnectedFigure = prevTarget;
                 ConnectableFigure cff = (ConnectableFigure) prevTarget;
-                Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
-                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPoint, o, cff, event, tolerance);
+                final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPointInWorld, o, cff, event, tolerance);
                 newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
                 if (newConnector != null && o.canConnect(cff, newConnector)) {
                     newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
-                    constrainedPoint = new CssPoint2D(newConnector.getPositionInLocal(o, cff));
+                    constrainedPointInWorld = new CssPoint2D(newConnector.getPositionInLocal(o, cff));
                     isConnected = true;
                 }
             } else {
-                List<Figure> list = view.findFigures(pointInViewCoordinates, true)
+                List<Figure> list = view.findFigures(pointInView, true)
                         .stream().map(Map.Entry::getKey).collect(Collectors.toList());
 
                 double closestDistanceSq = Double.POSITIVE_INFINITY;
                 SearchLoop:
-                for (Figure f1 : list) {
+                for (int i = list.size() - 1; i >= 0; i--) {
+                    Figure f1 = list.get(i);
                     for (Figure ff : f1.breadthFirstIterable()) {
                         if (this.owner != ff && (ff instanceof ConnectableFigure)) {
                             ConnectableFigure cff = (ConnectableFigure) ff;
-                            Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
+                            Point2D pointInLocal = cff.worldToLocal(unconstrainedPointInWorld);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
-                                final ConnectorAndConnectedFigure candidate = find(constrainedPoint, o, cff, event, tolerance);
+                                final ConnectorAndConnectedFigure candidate = find(constrainedPointInWorld, o, cff, event, tolerance);
                                 final Connector candidateConnector = candidate == null ? null : candidate.getConnector();
                                 if (candidateConnector != null && o.canConnect(ff, newConnector)) {
                                     Point2D p = candidate.getConnector().getPositionInWorld(owner, candidate.getConnectedFigure());
-                                    double distanceSq = FXGeom.distanceSq(p, unconstrainedPoint);
+                                    double distanceSq = FXGeom.distanceSq(p, unconstrainedPointInWorld);
                                     if (distanceSq <= closestDistanceSq) {
                                         // we compare <= because we go back to front, and the
                                         // front-most figure wins
@@ -187,14 +187,14 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             }
         }
 
-        model.set(o, pointKey, owner.worldToLocal(constrainedPoint));
+        model.set(o, pointKey, owner.worldToLocal(constrainedPointInWorld));
         model.set(o, connectorKey, newConnector);
         model.set(o, targetKey, newConnectedFigure);
     }
 
-    protected ConnectorAndConnectedFigure find(CssPoint2D constrainedPoint, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent,
+    protected ConnectorAndConnectedFigure find(CssPoint2D pointInWorld, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent,
                                                double tolerance) {
-        final Connector connector = cff.findConnector(cff.worldToLocal(constrainedPoint.getConvertedValue()), o, tolerance);
+        final Connector connector = cff.findConnector(cff.worldToLocal(pointInWorld.getConvertedValue()), o, tolerance);
         return connector == null ? null : new ConnectorAndConnectedFigure(connector, cff);
     }
 

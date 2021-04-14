@@ -127,13 +127,12 @@ public class PolygonOutlineHandle extends AbstractHandle {
         }
     }
 
-    private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
         ImmutableList<Point2D> points = owner.get(key);
-        Point2D pInDrawing = dv.viewToWorld(new Point2D(event.getX(), event.getY()));
+        Point2D pInDrawing = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         Point2D pInLocal = owner.worldToLocal(pInDrawing);
 
-        double tolerance = FXTransforms.deltaTransform(owner.getWorldToLocal(), FXTransforms.deltaTransform(dv.getViewToWorld(),
-                dv.getEditor().getTolerance(), dv.getEditor().getTolerance())).getX();
+        double tolerance = view.getViewToWorld().deltaTransform(view.getEditor().getTolerance(), 0).getX();
         double px = pInLocal.getX();
         double py = pInLocal.getY();
 
@@ -151,8 +150,8 @@ public class PolygonOutlineHandle extends AbstractHandle {
             }
         }
         if (insertAt != -1) {
-            dv.getModel().set(owner, key, ImmutableLists.add(owner.get(key), insertAt, insertLocation));
-            dv.recreateHandles();
+            view.getModel().set(owner, key, ImmutableLists.add(owner.get(key), insertAt, insertLocation));
+            view.recreateHandles();
         }
     }
 

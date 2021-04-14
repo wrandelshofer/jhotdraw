@@ -129,23 +129,23 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param vx        point in view coordinates
      * @param vy        point in view coordinates
      * @param figures   figures of interest
-     * @param radius the number of pixels around the figure in view
+     * @param tolerance the number of pixels around the figure in view
      *                  coordinates, in which the the point is considered to be inside the figure
      * @return a figure in the specified set which contains the point, or null.
      */
-    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double radius) {
+    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
         Node worldNode = getNode(getDrawing());
         if (worldNode != null) {
             Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
                     getDrawingView().viewToWorld(vx, vy));
-            Figure closestFigure=null;
-            double closestDistance=Double.POSITIVE_INFINITY;
+            Figure closestFigure = null;
+            double closestDistance = Double.POSITIVE_INFINITY;
             for (Figure f : figures) {
                 if (f.isShowing()) {
                     Node n = getNode(f);
                     if (n != null) {
                         Point2D pointInLocal = n.sceneToLocal(pointInScene);
-                        Double distance = contains(n, pointInLocal, radius);
+                        Double distance = contains(n, pointInLocal, tolerance);
                         if (distance !=null&&distance<closestDistance) {
                             closestFigure=f;
                             closestDistance=distance;

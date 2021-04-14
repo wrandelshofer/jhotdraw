@@ -121,7 +121,7 @@ public class ConnectionTool extends AbstractTool {
             } else {
                 constrainedPoint = unconstrainedPoint;
             }
-            double tolerance = view.getEditor().getTolerance();
+            double tolerance = view.getViewToWorld().transform(view.getEditor().getTolerance(), 0).getX();
             Connector newConnector = null;
             Figure newConnectionTarget = null;
             DrawingModel model = view.getModel();
@@ -167,7 +167,7 @@ public class ConnectionTool extends AbstractTool {
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, new CssPoint2D(unconstrainedPoint)).getConvertedValue();
         figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
-        double tolerance = view.getEditor().getTolerance();
+        double tolerance = view.getViewToWorld().transform(view.getEditor().getTolerance(), 0).getX();
 
         Figure parent = getOrCreateParent(view, figure);
         view.setActiveParent(parent);

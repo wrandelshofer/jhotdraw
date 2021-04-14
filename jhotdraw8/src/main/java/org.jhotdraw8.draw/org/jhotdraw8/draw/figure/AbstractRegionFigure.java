@@ -43,7 +43,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
     private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
 
-    private transient Path2D.Float pathElements;
+    private transient Path2D.Double pathElements;
 
     public AbstractRegionFigure() {
         this(0, 0, 1, 1);
@@ -75,7 +75,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     @Override
     public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         if (pathElements == null) {
-            pathElements = new Path2D.Float();
+            pathElements = new Path2D.Double();
         }
         return pathElements.getPathIterator(tx);
     }
@@ -106,7 +106,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     protected void layoutPath() {
         if (pathElements == null) {
-            pathElements = new Path2D.Float();
+            pathElements = new Path2D.Double();
         }
         pathElements.reset();
 
