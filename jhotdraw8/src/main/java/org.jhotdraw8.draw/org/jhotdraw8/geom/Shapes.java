@@ -390,7 +390,7 @@ public class Shapes {
     public static @NonNull Path2D.Double awtShapeFromSvgString(@NonNull String str) throws ParseException {
         AWTPathBuilder b = new AWTPathBuilder();
         buildFromSvgString(b, str);
-        return (Path2D.Double) b.build();
+        return b.build();
     }
 
     /**
