@@ -39,6 +39,13 @@ import java.util.function.Supplier;
  * @author BlackLabrador (as stated in the reference)
  */
 public class CustomBinding {
+
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private CustomBinding() {
+    }
+
     /**
      * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
      * <p>
