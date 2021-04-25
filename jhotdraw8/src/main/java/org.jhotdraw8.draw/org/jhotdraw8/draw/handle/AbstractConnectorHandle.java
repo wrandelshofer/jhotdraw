@@ -200,11 +200,27 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
 
     @Override
     public void onMousePressed(MouseEvent event, DrawingView view) {
+        if (event.isPopupTrigger()) {
+            onPopupTriggered(event, view);
+        }
         prevTarget = owner.get(targetKey);
     }
 
+    /**
+     * This method is called when the popup menu is triggered.
+     * This implementation does nothing.
+     *
+     * @param event the mouse event
+     * @param view  the drawing view
+     */
+    protected void onPopupTriggered(MouseEvent event, DrawingView view) {
+    }
+
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
+        if (event.isPopupTrigger()) {
+            onPopupTriggered(event, view);
+        }
         isDragging = false;
     }
 
