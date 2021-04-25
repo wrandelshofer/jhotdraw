@@ -8,11 +8,11 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.PointAndTangent;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 /**
@@ -43,8 +43,8 @@ public class LocatorConnector extends AbstractConnector {
     }
 
     @Override
-    public @Nullable Point2D getPositionInLocal(Figure connection, @NonNull Figure target) {
-        return locator.locate(target);
+    public @NonNull PointAndTangent getPointAndTangentInLocal(@NonNull Figure connection, @NonNull Figure target) {
+        return new PointAndTangent(locator.locate(target).getX(), locator.locate(target).getY(), new Point2D(1, 0).getX(), new Point2D(1, 0).getY());
     }
 
     @Override

@@ -206,7 +206,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
     public double eval(double x) {
         double result = 0;
         for (int i = this.coefs.length - 1; i >= 0; i--) {
-            result = Math.fma(result, x, this.coefs[i]);
+            result = Geom.fma(result, x, this.coefs[i]);
         }
         return result;
     }

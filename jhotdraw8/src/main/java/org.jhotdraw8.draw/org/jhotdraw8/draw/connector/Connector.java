@@ -6,12 +6,14 @@ package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.PointAndTangent;
 import org.jhotdraw8.geom.intersect.IntersectLineRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
@@ -27,77 +29,32 @@ import java.awt.geom.Rectangle2D;
 public interface Connector {
 
     /**
-     * Returns a point on the target figure for the specified connection figure
-     * in local coordinates.
-     *
-     * @param connection a connection figure
-     * @param target     the target
-     * @return A point on the target figure in local coordinates of the target
-     * figure.
-     */
-    @NonNull Point2D getPositionInLocal(Figure connection, Figure target);
-
-    /**
-     * Returns the tangent vector on the target figure for the specified
+     * Returns a point and tangent on the target figure for the specified
      * connection figure in local coordinates.
      *
      * @param connection a connection figure
      * @param target     the target
-     * @return A tangent vector on the target figure in local coordinates of the
-     * target figure.
+     * @return A point and tangent on the target figure in local coordinates of the target
+     * figure.
      */
-    default Point2D getTangentInLocal(Figure connection, Figure target) {
-        return new Point2D(1.0, 0.0);
-    }
+    @NonNull PointAndTangent getPointAndTangentInLocal(@NonNull Figure connection,
+                                                       @NonNull Figure target);
 
     /**
-     * Returns a point on the target figure for the specified connection figure
-     * in world coordinates.
-     *
-     * @param connection a connection figure
-     * @param target     the target
-     * @return A point on the target figure in world coordinates.
-     */
-    default @NonNull Point2D getPositionInWorld(Figure connection, @NonNull Figure target) {
-        return target.localToWorld(getPositionInLocal(connection, target));
-    }
-
-    /**
-     * Returns a point on the target figure for the specified connection figure
-     * in parent coordinates.
-     *
-     * @param connection a connection figure
-     * @param target     the target
-     * @return A point on the target figure in parent coordinates.
-     */
-    default @NonNull Point2D getPositionInParent(Figure connection, @NonNull Figure target) {
-        return FXTransforms.transform(target.getLocalToParent(), getPositionInLocal(connection, target));
-    }
-
-    /**
-     * Returns a tangent vector on the target figure for the specified
+     * Returns a point and tangent on the target figure for the specified
      * connection figure in world coordinates.
      *
      * @param connection a connection figure
      * @param target     the target
-     * @return A point on the target figure in world coordinates.
+     * @return A point and tangent on the target figure in world coordinates
      */
-    default Point2D getTangentInWorld(Figure connection, @NonNull Figure target) {
-        return FXTransforms.deltaTransform(target.getLocalToWorld(),
-                getTangentInLocal(connection, target));
-    }
-
-    /**
-     * Returns a tangent vector on the target figure for the specified
-     * connection figure in parent coordinates.
-     *
-     * @param connection a connection figure
-     * @param target     the target
-     * @return A point on the target figure in parent coordinates.
-     */
-    default Point2D getTangentInParent(Figure connection, @NonNull Figure target) {
-        return FXTransforms.deltaTransform(target.getLocalToParent(),
-                getTangentInLocal(connection, target));
+    default @NonNull PointAndTangent getPointAndTangentInWorld(Figure connection, Figure target) {
+        PointAndTangent inLocal = getPointAndTangentInLocal(connection, target);
+        Transform localToWorld = target.getLocalToWorld();
+        Point2D pointInWorld = FXTransforms.transform(localToWorld, inLocal.getPoint(Point2D::new));
+        Point2D tangentInWorld = FXTransforms.deltaTransform(localToWorld, inLocal.getTangent(Point2D::new));
+        return new PointAndTangent(pointInWorld.getX(), pointInWorld.getY(),
+                tangentInWorld.getX(), tangentInWorld.getY());
     }
 
     /**

@@ -104,7 +104,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         targetNode.setRotationAxis(f.getStyledNonNull(ROTATION_AXIS));
 
         if (connector != null && target != null) {
-            connectorLocation = view.worldToView(connector.getPositionInWorld(owner, target));
+            connectorLocation = view.worldToView(connector.getPointAndTangentInWorld(owner, target).getPoint(Point2D::new));
             targetNode.relocate(connectorLocation.getX() - size * 0.5, connectorLocation.getY() - size * 0.5);
         } else {
             connectorLocation = null;

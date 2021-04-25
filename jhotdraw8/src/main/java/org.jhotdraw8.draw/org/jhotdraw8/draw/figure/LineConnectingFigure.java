@@ -80,7 +80,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
         Connector connector = get(START_CONNECTOR);
         Figure target = get(START_TARGET);
         if (connector != null && target != null) {
-            return worldToLocal(connector.getPositionInWorld(this, target));
+            return worldToLocal(connector.getPointAndTangentInWorld(this, target).getPoint(Point2D::new));
         } else {
             return getNonNull(START).getConvertedValue();
         }
@@ -90,7 +90,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
         Connector connector = get(END_CONNECTOR);
         Figure target = get(END_TARGET);
         if (connector != null && target != null) {
-            return worldToLocal(connector.getPositionInWorld(this, target));
+            return worldToLocal(connector.getPointAndTangentInWorld(this, target).getPoint(Point2D::new));
         } else {
             return getNonNull(END).getConvertedValue();
         }

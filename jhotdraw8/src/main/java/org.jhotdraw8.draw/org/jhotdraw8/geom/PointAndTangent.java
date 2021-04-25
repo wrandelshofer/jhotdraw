@@ -4,15 +4,12 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
+
+import java.util.function.BiFunction;
 
 public class PointAndTangent {
     private final double x, y, tangentX, tangentY;
-
-    public PointAndTangent(@NonNull Point2D point, @NonNull Point2D tangent) {
-        this(point.getX(), point.getY(), tangent.getX(), tangent.getY());
-    }
 
     public PointAndTangent(double x, double y, double tangentX, double tangentY) {
         this.x = x;
@@ -37,11 +34,21 @@ public class PointAndTangent {
         return tangentY;
     }
 
-    public @NonNull Point2D getPoint() {
-        return new Point2D(x, y);
+    public <T> @NonNull T getPoint(BiFunction<Double, Double, T> factory) {
+        return factory.apply(x, y);
     }
 
-    public @NonNull Point2D getTangent() {
-        return new Point2D(tangentX, tangentY);
+    public <T> @NonNull T getTangent(BiFunction<Double, Double, T> factory) {
+        return factory.apply(tangentX, tangentY);
+    }
+
+    @Override
+    public String toString() {
+        return "PointAndTangent{" +
+                "x=" + x +
+                ", y=" + y +
+                ", tangentX=" + tangentX +
+                ", tangentY=" + tangentY +
+                '}';
     }
 }

@@ -260,10 +260,10 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
 
         if (startConnector != null && startTarget != null) {
-            start = startConnector.getPositionInWorld(this, startTarget);
+            start = startConnector.getPointAndTangentInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            end = endConnector.getPositionInWorld(this, endTarget);
+            end = endConnector.getPointAndTangentInWorld(this, endTarget).getPoint(Point2D::new);
         }
 
         Point2D endTangent = null;

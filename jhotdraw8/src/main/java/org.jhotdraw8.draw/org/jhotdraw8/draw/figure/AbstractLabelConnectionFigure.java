@@ -38,6 +38,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.PointAndTangent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,18 +185,19 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         Bounds textNodeLayoutBounds = textNode.getLayoutBounds();
 
         if (labelConnector != null && labelTarget != null) {
-            labeledLoc = labelConnector.getPositionInWorld(this, labelTarget);
-            tangent = labelConnector.getTangentInWorld(this, labelTarget).normalize();
+            PointAndTangent pointAndTangent = labelConnector.getPointAndTangentInWorld(this, labelTarget);
+            labeledLoc = pointAndTangent.getPoint(Point2D::new);
+            tangent = pointAndTangent.getTangent(Point2D::new).normalize();
             perp = FXGeom.perp(tangent);
 
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
             double hposTranslate = 0;
             switch (getStyledNonNull(TEXT_HPOS)) {
-            case CENTER: {
-                hposTranslate = textNodeLayoutBounds.getWidth() * -0.5;
-                break;
-            }
-            case LEFT:
+                case CENTER: {
+                    hposTranslate = textNodeLayoutBounds.getWidth() * -0.5;
+                    break;
+                }
+                case LEFT:
                 break;
             case RIGHT: {
                 hposTranslate = -textNodeLayoutBounds.getWidth();

@@ -128,10 +128,10 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
         if (startConnector != null && startTarget != null) {
-            start = startConnector.getPositionInWorld(this, startTarget);
+            start = startConnector.getPointAndTangentInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            end = endConnector.getPositionInWorld(this, endTarget);
+            end = endConnector.getPointAndTangentInWorld(this, endTarget).getPoint(Point2D::new);
         }
 
         if (startConnector != null && startTarget != null) {

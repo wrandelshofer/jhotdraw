@@ -150,18 +150,18 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
                 if (newConnector != null && o.canConnect(cff, newConnector)) {
                     newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
-                    constrainedPointInWorld = new CssPoint2D(newConnector.getPositionInLocal(o, cff));
+                    constrainedPointInWorld = new CssPoint2D(newConnector.getPointAndTangentInLocal(o, cff).getPoint(Point2D::new));
                     isConnected = true;
                 }
             } else {
                 List<Figure> list = view.findFigures(pointInView, true)
-                        .stream().map(Map.Entry::getKey).collect(Collectors.toList());
+                        .stream().map(Map.Entry::getKey).collect(Collectors.toList());//front to back
 
                 double closestDistanceSq = Double.POSITIVE_INFINITY;
                 SearchLoop:
                 for (int i = list.size() - 1; i >= 0; i--) {
                     Figure f1 = list.get(i);
-                    for (Figure ff : f1.breadthFirstIterable()) {
+                    for (Figure ff : f1.breadthFirstIterable()) {//back to front NOOO
                         if (this.owner != ff && (ff instanceof ConnectableFigure)) {
                             ConnectableFigure cff = (ConnectableFigure) ff;
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPointInWorld);
@@ -169,7 +169,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                                 final ConnectorAndConnectedFigure candidate = find(constrainedPointInWorld, o, cff, event, tolerance);
                                 final Connector candidateConnector = candidate == null ? null : candidate.getConnector();
                                 if (candidateConnector != null && o.canConnect(ff, newConnector)) {
-                                    Point2D p = candidate.getConnector().getPositionInWorld(owner, candidate.getConnectedFigure());
+                                    Point2D p = candidate.getConnector().getPointAndTangentInWorld(owner, candidate.getConnectedFigure()).getPoint(Point2D::new);
                                     double distanceSq = FXGeom.distanceSq(p, unconstrainedPointInWorld);
                                     if (distanceSq <= closestDistanceSq) {
                                         // we compare <= because we go back to front, and the

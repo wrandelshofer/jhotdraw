@@ -34,6 +34,7 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.geom.Geom;
 
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
@@ -340,8 +341,8 @@ public class GridConstrainer extends AbstractConstrainer {
         }
 
 
-        double x = Math.fma(tx, cwidth, cx);
-        double y = Math.fma(ty, cheight, cy);
+        double x = Geom.fma(tx, cwidth, cx);
+        double y = Geom.fma(ty, cheight, cy);
         return new CssPoint2D(new CssSize(x, wunits), new CssSize(y, hunits));
     }
 
@@ -382,8 +383,8 @@ public class GridConstrainer extends AbstractConstrainer {
         }
 
         return new CssRectangle2D(
-                Math.fma(tx, cwidth, cx),
-                Math.fma(ty, cheight, cy), r.getWidth(), r.getHeight());
+                Geom.fma(tx, cwidth, cx),
+                Geom.fma(ty, cheight, cy), r.getWidth(), r.getHeight());
     }
 
     @Override

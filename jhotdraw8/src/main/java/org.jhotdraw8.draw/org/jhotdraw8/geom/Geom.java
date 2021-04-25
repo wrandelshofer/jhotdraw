@@ -41,8 +41,11 @@ public class Geom {
      */
     public static final double REAL_THRESHOLD = 1e-8;
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
     private Geom() {
-    } // never instantiated
+    }
 
     /**
      * Gets the angle of the specified line.
@@ -476,6 +479,8 @@ public class Geom {
         return atan2(y, x);//FIXME implement me
     }
 
+
+
     /**
      * Returns the trigonometric sine of an angle in degrees.
      * <p>
@@ -550,5 +555,21 @@ public class Geom {
      */
     public static double cosDegrees(double aDeg) {
         return sinDegrees(aDeg + 90);
+    }
+
+    /**
+     * Returns {@code a * b + c}.
+     * <p>
+     * This method is here for backwards-compatibility with Java SE 8 only.
+     * Once we are on Java SE 11 or above, this method should be replaced
+     * with {@link Math#fma}.
+     *
+     * @param a a value
+     * @param b a value
+     * @param c a value
+     * @return a * b + c
+     */
+    public static double fma(double a, double b, double c) {
+        return a *b+c;
     }
 }

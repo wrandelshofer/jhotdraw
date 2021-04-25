@@ -254,8 +254,8 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             double cosa = Math.cos(a);
 
             p2 = new Point2D(
-                    Math.fma(r, cosa, c0.getX()),
-                    Math.fma(r, sina, c0.getY()));
+                    Geom.fma(r, cosa, c0.getX()),
+                    Geom.fma(r, sina, c0.getY()));
             BezierNode newBezierNode;
             if (controlPointMask == BezierNode.C1_MASK) {
                 newBezierNode = bn.setC1(p).setC2(p2);

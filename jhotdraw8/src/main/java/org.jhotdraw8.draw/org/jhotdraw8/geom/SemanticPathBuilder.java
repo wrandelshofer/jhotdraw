@@ -8,6 +8,11 @@ package org.jhotdraw8.geom;
 import java.awt.geom.Path2D;
 import java.util.Arrays;
 
+/**
+ * A PathBuilder that allows to store data on each path segment.
+ *
+ * @param <T>
+ */
 public class SemanticPathBuilder<T> extends AbstractPathBuilder {
     private final Path2D.Double path;
     public final static int CLOSE_PATH = 1;
