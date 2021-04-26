@@ -36,7 +36,7 @@
   </tstamp>
   <property name="name" value="${ant.project.name}"/>
   <property name="copyright" value="Copyright © ${pub-year} ${author}."/>
-  <property name="version" value="${git.describe}"/>
+  <property name="version" value="${git.version}"/>
   <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
 
   <property name="manifest.application-name" value="${ant.project.name}"/>
