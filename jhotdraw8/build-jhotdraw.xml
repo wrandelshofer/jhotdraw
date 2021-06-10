@@ -1074,23 +1074,13 @@ new-inline-tags: section
              additionalparam="-html5"
     >
 
+      <module name="org.jhotdraw8.application"/>
+      <module name="org.jhotdraw8.draw"/>
+
       <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
       <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
 
-      <packageset dir="${src.main.java}/org.jhotdraw8.application">
-        <include name="org/jhotdraw/**"/>
-      </packageset>
-      <sourcepath>
-        <pathelement path="${src.main.java}/org.jhotdraw8.application"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.draw"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.grapher"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.misc"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.modeler"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.net"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.pert"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.svg"/>
-        <pathelement path="${src.main.java}/org.jhotdraw8.samples.teddy"/>
-      </sourcepath>
+      <modulesourcepath path="${src.main.java}"/>
       <modulepath>
         <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
       </modulepath>
