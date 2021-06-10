@@ -60,11 +60,16 @@ public class ContourIntersections {
 
 
     /**
-     * Gets the intersect between a segment and a circle, returning the parametric solution t to the
-     * segment equation P(t) = v1 + t * (v2 - v1) for t = 0 to t = 1, if t < 0 or t > 1 then intersect
-     * occurs only when extending the segment out past the points given (if t < 0 intersect nearest v1,
-     * if t > 0 then intersect nearest v2), intersects are "sticky" and "snap" to tangent points, e.g. a
-     * segment very close to being a tangent will be returned as a single intersect point.
+     * Gets the intersect between a segment and a circle, returning the
+     * parametric solution t to the segment equation
+     * P(t) = v1 + t * (v2 - v1) for t = 0 to t = 1,
+     * if {@literal t < 0} or {@literal t > 1} then intersect
+     * occurs only when extending the segment out past the points given (if
+     * {@literal t < 0} intersect nearest v1,
+     * if {@literal t > 0} then intersect nearest v2),
+     * intersects are "sticky" and "snap" to tangent points, e.g. a
+     * segment very close to being a tangent will be returned as a single
+     * intersect point.
      */
     public static IntersectionResult intrLineSeg2Circle2(final Point2D.Double p0,
                                                          final Point2D.Double p1, double radius,

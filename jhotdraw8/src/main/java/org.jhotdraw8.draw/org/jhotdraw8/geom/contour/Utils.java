@@ -129,7 +129,8 @@ public class Utils {
     }
 
     /**
-     * Returns the smaller difference between two angles, result is negative if angle2 < angle1.
+     * Returns the smaller difference between two angles, result is negative if
+     * {@literal angle2 < angle1}.
      */
     public static double deltaAngle(double angle1, double angle2) {
         double diff = normalizeRadians(angle2 - angle1);

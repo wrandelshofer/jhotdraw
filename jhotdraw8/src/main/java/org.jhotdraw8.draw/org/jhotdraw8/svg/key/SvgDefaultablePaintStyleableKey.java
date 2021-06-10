@@ -66,17 +66,17 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
      * We intentionally do <b>not</b> use the definition from SVG
      * initial value:
      * <p>
-     * <strike>"The initial value of an attribute or property is
+     * <del>"The initial value of an attribute or property is
      * the value used when that attribute or property is not
-     * specified, or when it has an invalid value."</strike>
+     * specified, or when it has an invalid value."</del>
      * <p>
      * References:
      * <dl>
-     *     <dt>CSS Cascading and Inheritance Level 4, Chapter 7.1 Initial Values></dt>
+     *     <dt>CSS Cascading and Inheritance Level 4, Chapter 7.1 Initial Values</dt>
      *     <dd><a href="https://www.w3.org/TR/css-cascade-4/#initial-values">w3.org</a></dd>
      *
      *     <dt>SVG, Chapter 4: Basic Data Types and Interfaces, 4.1 Definitions, Initial Value</dt>
-     *     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dt>
+     *     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dd>
      * </dl>
      *
      * @return the initial value.

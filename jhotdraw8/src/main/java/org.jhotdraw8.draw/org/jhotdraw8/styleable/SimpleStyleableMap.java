@@ -91,7 +91,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      * <p>
      * A shared mutable implementation of {@code keyMap} could be implemented
      * as follows:
-     * <pre>
+     * <pre>{@literal
      * Map<K>, V> keyMap = new ConcurrentHashMap<K>, V>() {
      *
      *     final AtomicInteger nextIndex = new AtomicInteger();
@@ -100,8 +100,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      *         return super.computeIfAbsent((K) key, k -> nextIndex.getAndIncrement());
      *     }
      * };
-     * </pre>
-     * </p>
+     * }</pre>
      *
      * @param keyMap a map which maps from keys to indices. The indices must be
      *               in the range {@code [0,keyMap.size()-1]}.

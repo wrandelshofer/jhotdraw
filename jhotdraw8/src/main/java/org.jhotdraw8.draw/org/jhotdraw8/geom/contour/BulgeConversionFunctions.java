@@ -135,7 +135,7 @@ public class BulgeConversionFunctions {
      * θ=asin(d/r)*2;
      * bulge=b=tan(θ/4)=tan(asin(d/r)*0.5)
      * <p>
-     * See {@link #computeCircle)} for the formulas used.
+     * See {@link #computeCircle} for the formulas used.
      *
      * @param x1 point 1 x-coordinate
      * @param y1 point 1 y coordinate

@@ -1069,6 +1069,7 @@ new-inline-tags: section
              windowtitle="${ant.project.name} ${version}"
              maxmemory="256M"
              charset="UTF-8"
+             encoding="UTF-8"
              executable="${jdk.documentation}/bin/javadoc"
              additionalparam="-html5"
     >
@@ -1090,6 +1091,9 @@ new-inline-tags: section
         <pathelement path="${src.main.java}/org.jhotdraw8.samples.svg"/>
         <pathelement path="${src.main.java}/org.jhotdraw8.samples.teddy"/>
       </sourcepath>
+      <modulepath>
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+      </modulepath>
       <classpath>
         <pathelement path="${lib.runtime}"/>
         <fileset file="${jdk}/lib/tools.jar"/>

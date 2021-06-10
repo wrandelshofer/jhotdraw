@@ -385,7 +385,7 @@ public class Shapes {
      *
      * @param str the SVG path
      * @return the SvgPath2D
-     * @throws java.io.IOException if the String is not a valid path
+     * @throws ParseException if the String is not a valid path
      */
     public static @NonNull Path2D.Double awtShapeFromSvgString(@NonNull String str) throws ParseException {
         AWTPathBuilder b = new AWTPathBuilder();
@@ -546,7 +546,7 @@ public class Shapes {
      * @param builder the builder
      * @param str     the SVG path
      * @return the path builder
-     * @throws java.io.IOException if the String is not a valid path
+     * @throws ParseException if the String is not a valid path
      */
     public static @NonNull PathBuilder buildFromSvgString(@NonNull PathBuilder builder, @NonNull String str) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));

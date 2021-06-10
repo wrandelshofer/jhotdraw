@@ -91,7 +91,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     /**
      * fill-rule.
      * <p>
-     * <a href="https://www.w3.org/TR/SVG11/painting.html#FillRuleProperty">">
+     * <a href="https://www.w3.org/TR/SVG11/painting.html#FillRuleProperty">
      * SVG Tiny 1.2, The 'fill-rule' property</a>
      */
     @NonNull DefaultableStyleableKey<FillRule> FILL_RULE_KEY =
@@ -201,7 +201,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     /**
      * shape-rendering.
      * <p>
-     * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#ShapeRenderingProperty">">
+     * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#ShapeRenderingProperty">
      * SVG Tiny 1.2, The 'shape-rendering' property</a>
      */
     @NonNull DefaultableStyleableKey<SvgShapeRendering> SHAPE_RENDERING_KEY =
