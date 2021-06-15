@@ -12,7 +12,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
- * LabelFigure.
+ * LabelFigure presents a text on a drawing.
  *
  * @author Werner Randelshofer
  */

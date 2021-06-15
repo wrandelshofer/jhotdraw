@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import java.net.URI;
 
 /**
- * ImageFigure.
+ * ImageFigure presents a bitmap image on a drawing.
  *
  * @author Werner Randelshofer
  */

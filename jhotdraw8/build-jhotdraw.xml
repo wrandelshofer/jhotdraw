@@ -1087,7 +1087,11 @@ new-inline-tags: section
       <classpath>
         <pathelement path="${lib.runtime}"/>
         <fileset file="${jdk}/lib/tools.jar"/>
+        <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
       </classpath>
+      <modulepath>
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+      </modulepath>
     </javadoc>
   </target>
   <target name="do-jar-classes" depends="init">

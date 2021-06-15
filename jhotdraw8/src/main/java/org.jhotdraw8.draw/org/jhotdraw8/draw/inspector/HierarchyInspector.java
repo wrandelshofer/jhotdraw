@@ -12,6 +12,8 @@ import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
@@ -148,10 +150,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // Type arguments needed for Java 8!
         pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<String>>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
-            @Override
-            public @Nullable ImmutableSet<String> getValue() {
-                return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
-            }
+                    @Override
+                    public @Nullable ImmutableSet<String> getValue() {
+                        return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
+                    }
                 }
         );
 
@@ -283,8 +285,35 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         lockedColumn.setCellFactory(BooleanPropertyCheckBoxTreeTableCell.forTreeTableColumn(InspectorStyleClasses.LOCKED_CHECK_BOX));
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         treeView.getSelectionModel().getSelectedCells().addListener(treeSelectionHandler);
-        treeView.setRowFactory(tv -> {
-            TreeTableRow<Figure> row = new TreeTableRow<>();
+        treeView.setRowFactory(createRow());
+
+        //treeView.setFixedCellSize(22);
+
+        treeView.setRoot(model.getRoot());
+        model.getRoot().setExpanded(true);
+    }
+
+    @NonNull
+    private Callback<TreeTableView<Figure>, TreeTableRow<Figure>> createRow() {
+        return tv -> {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteMenuItem = new MenuItem(InspectorLabels.getResources().getString("edit.delete.text"));
+            contextMenu.getItems().add(deleteMenuItem);
+
+            TreeTableRow<Figure> row = new TreeTableRow<>() {
+                @Override
+                public void updateItem(Figure item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(null);
+                    } else {
+                        // configure context menu with appropriate menu items,
+                        // depending on value of item
+                        setContextMenu(contextMenu);
+                        deleteMenuItem.setDisable(!item.isDeletable());
+                    }
+                }
+            };
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Figure rowData = row.getItem();
@@ -294,13 +323,16 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
                 }
             });
+            deleteMenuItem.setOnAction(evt -> {
+                final Figure item = row.getItem();
+                if (item != null && item.isDeletable() && drawingView != null) {
+                    final DrawingModel model = drawingView.getModel();
+                    model.disconnect(item);
+                    model.removeFromParent(item);
+                }
+            });
             return row;
-        });
-
-        //treeView.setFixedCellSize(22);
-
-        treeView.setRoot(model.getRoot());
-        model.getRoot().setExpanded(true);
+        };
     }
 
     @Override
@@ -387,5 +419,6 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             Platform.runLater(this::updateSelectionInTree);
         }
     }
+
 
 }

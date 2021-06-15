@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public interface SelectorModel<T> {
     /**
-     * FIXME SelectorModel most not have any state so that becomes thread safe.
+     * Pseudo classes set on the selector model.
      *
      * @return a map
      */
