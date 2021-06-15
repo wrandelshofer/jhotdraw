@@ -156,8 +156,13 @@ public class PolyPointEditHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<Point2D> list = f.get(pointKey);
+        if (list == null || pointIndex > list.size()) {
+            node.setVisible(false);
+            return;
+        }
+        node.setVisible(true);
         Point2D p = list.get(pointIndex);
-        pickLocation = p = t == null ? p : t.transform(p);
+        pickLocation = p = t.transform(p);
         double size = node.getWidth();
         node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:

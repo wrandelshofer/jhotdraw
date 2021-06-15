@@ -103,7 +103,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     public static final String SVG_MIME_TYPE = "image/svg+xml";
     public static final String SVG_NS = "http://www.w3.org/2000/svg";
     protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
-    protected static final String XLINK_Q = "xlink";
+    protected static final String XLINK_PREFIX = "xlink";
     protected final XmlNumberConverter nb = new XmlNumberConverter();
     private final @Nullable Object imageUriKey;
     private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
@@ -653,7 +653,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.setDefaultNamespace(SVG_NS);
         w.writeStartElement("svg");
         w.writeDefaultNamespace(SVG_NS);
-        w.writeNamespace(XLINK_Q, XLINK_NS);
+        w.writeNamespace(XLINK_PREFIX, XLINK_NS);
         writeDocumentElementAttributes(w, drawingNode, size);
 
         if (shouldWriteDefs(drawingNode)) {
@@ -761,7 +761,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             }
         }
         if (href != null) {
-            w.writeAttribute(XLINK_NS, XLINK_Q + ":href", href);
+            w.writeAttribute(XLINK_PREFIX, XLINK_NS, "href", href);
         }
     }
 

@@ -350,8 +350,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             modified.set(true);
         });
 
-        FigureFactory factory = new DefaultFigureFactory();
         IdFactory idFactory = new SimpleFigureIdFactory();
+        FigureFactory factory = new DefaultFigureFactory(idFactory);
         SimpleXmlWriter iow = new SimpleXmlWriter(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
         SimpleXmlStaxReader ior = new SimpleXmlStaxReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
@@ -455,8 +455,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     @Override
     public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
         return FXWorker.supply(() -> {
-            FigureFactory factory = new DefaultFigureFactory();
             IdFactory idFactory = new SimpleFigureIdFactory();
+            FigureFactory factory = new DefaultFigureFactory(idFactory);
             SimpleXmlStaxReader io = new SimpleXmlStaxReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);

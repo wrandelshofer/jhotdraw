@@ -48,7 +48,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
         }, defaultValue);
 
         this.converter = new CssListConverter<>(
-                new Point2DConverter(false, false), " ,");
+                new Point2DConverter(false, false), ", ");
     }
 
     @Override

@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 public class Point2DConverter extends AbstractCssConverter<Point2D> {
 
     private final boolean withSpace;
-    private final boolean withComma = false;
+    private final boolean withComma;
 
     public Point2DConverter(boolean nullable) {
         this(nullable, true);
@@ -35,6 +35,7 @@ public class Point2DConverter extends AbstractCssConverter<Point2D> {
     public Point2DConverter(boolean nullable, boolean withSpace) {
         super(nullable);
         this.withSpace = withSpace;
+        this.withComma = !withSpace;
     }
 
     @Override
