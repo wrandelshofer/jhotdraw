@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
@@ -39,7 +40,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat extends AbstractPropertyBean implements ExportOutputFormat {
-
+    private static final Logger LOGGER = Logger.getLogger(AbstractExportOutputFormat.class.getName());
     protected abstract @NonNull String getExtension();
 
 

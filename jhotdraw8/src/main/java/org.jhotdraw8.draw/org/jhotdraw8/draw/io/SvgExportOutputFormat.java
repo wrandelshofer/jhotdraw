@@ -61,6 +61,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.logging.Logger;
 
 import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
@@ -71,6 +72,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
+    private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
 
     public static final DataFormat SVG_FORMAT;
     public static final String SVG_MIME_TYPE = "image/svg+xml";
@@ -232,6 +234,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     @Override
     protected boolean writeSlice(@NonNull Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
+        LOGGER.info("Writing slice " + file);
         markNodesOutsideBoundsWithSkip(node, slice.getLayoutBounds());
         Transform worldToLocal = slice.getWorldToLocal();
         Point2D sliceOrigin = slice.getSliceOrigin();

@@ -6,8 +6,8 @@ package org.jhotdraw8.svg;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurveTo;
@@ -72,28 +72,28 @@ public class TransformFlattener {
      * @param node a node
      */
     public void flattenTranslates(Node node) {
-        if (node instanceof Group) {
-            flattenTranslatesInGroup((Group) node);
+        if (node instanceof Parent) {
+            flattenTranslatesInParent((Parent) node);
         } else if (node instanceof Shape) {
             flattenTranslatesInShape((Shape) node);
         }
     }
 
-    private void flattenTranslatesInGroup(@NonNull Group group) {
-        if (!canFlattenTranslate(group)) {
+    private void flattenTranslatesInParent(@NonNull Parent parent) {
+        if (!canFlattenTranslate(parent)) {
             return;
         }
 
-        Translate translate = flattenTranslate(group);
+        Translate translate = flattenTranslate(parent);
 
         // apply  translation to children
         if (!translate.isIdentity()) {
-            for (Node child : group.getChildren()) {
+            for (Node child : parent.getChildrenUnmodifiable()) {
                 child.getTransforms().add(0, translate);
             }
         }
         // try to flatten the children
-        for (Node child : group.getChildren()) {
+        for (Node child : parent.getChildrenUnmodifiable()) {
             flattenTranslates(child);
         }
 
