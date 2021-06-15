@@ -146,4 +146,14 @@ public interface StylesheetsManager<E> {
      * @return the help text
      */
     String getHelpText();
+
+    List<StylesheetInfo> getStylesheets();
+
+    interface StylesheetInfo {
+        URI getUri();
+
+        StyleOrigin getOrigin();
+
+        Stylesheet getStylesheet();
+    }
 }

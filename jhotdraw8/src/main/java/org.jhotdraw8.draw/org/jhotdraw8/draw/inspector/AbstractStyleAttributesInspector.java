@@ -481,10 +481,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
             case "userAgent":
                 showUserAgentValues.setSelected(true);
                 break;
-        case "styled":
-        default:
-            showAppliedValues.setSelected(true);
-            break;
+            case "styled":
+            default:
+                showAppliedValues.setSelected(true);
+                break;
         }
 
         shownValues.selectedToggleProperty().addListener(this::updateShownValues);
@@ -700,6 +700,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
         pp.append("\n}");
 
+        updateStylesheetInfo(pp, matchedFigures, styleManager);
+
         textArea.setText(buf.toString());
         int rows = 1;
         for (int i = 0; i < buf.length(); i++) {
@@ -708,6 +710,54 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
         }
         textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
+    }
+
+    private void updateStylesheetInfo(CssPrettyPrinter pp, List<E> matchedFigures, StylesheetsManager<E> styleManager) {
+        final List<StylesheetsManager.StylesheetInfo> stylesheets = styleManager.getStylesheets();
+        Set<StylesheetsManager.StylesheetInfo> matchedInfos = new LinkedHashSet<>();
+
+        final ArrayList<StylesheetsManager.StylesheetInfo> stylesheetInfos = new ArrayList<>();
+        for (StylesheetsManager.StylesheetInfo stylesheet : stylesheets) {
+            final StyleOrigin origin = stylesheet.getOrigin();
+            switch (origin) {
+
+                case USER_AGENT:
+                    if (showUserAgentValues.isSelected())
+                        stylesheetInfos.add(stylesheet);
+                    break;
+                case USER:
+                    break;
+                case AUTHOR:
+                    if (showStylesheetValues.isSelected())
+                        stylesheetInfos.add(stylesheet);
+                    break;
+                case INLINE:
+                    break;
+            }
+        }
+
+        if (!stylesheetInfos.isEmpty())
+            for (E f : matchedFigures) {
+                for (StylesheetsManager.StylesheetInfo info : stylesheetInfos) {
+                    if (styleManager.matchesElement(info.getStylesheet(), f)) {
+                        matchedInfos.add(info);
+                        break;
+                    }
+                }
+            }
+        if (!matchedInfos.isEmpty()) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("\n/*");
+            buf.append("\nThe following stylesheets match:");
+            for (StylesheetsManager.StylesheetInfo matchedInfo : matchedInfos) {
+                buf.append("\n  ");
+                buf.append(matchedInfo.getOrigin());
+                buf.append(": ");
+                buf.append(matchedInfo.getUri().toString());
+            }
+            buf.append("\n*/");
+            pp.append(buf.toString());
+        }
     }
 
     private @NonNull Map<QualifiedName, String> collectAttributeValues(boolean decompose, @NonNull List<E> matchedFigures, @NonNull SelectorModel<E> selectorModel) {

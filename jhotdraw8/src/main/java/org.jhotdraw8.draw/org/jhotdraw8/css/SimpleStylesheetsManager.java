@@ -490,7 +490,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    protected class StylesheetEntry {
+    protected class StylesheetEntry implements StylesheetInfo {
 
         private final @Nullable URI uri;
         private final @NonNull StyleOrigin origin;
@@ -536,6 +536,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
+        @Override
+        public URI getUri() {
+            return uri;
+        }
+
         public @NonNull StyleOrigin getOrigin() {
             return origin;
         }
@@ -556,6 +561,14 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             }
             return stylesheet;
         }
+    }
 
+    @Override
+    public List<StylesheetInfo> getStylesheets() {
+        final ArrayList<StylesheetInfo> list = new ArrayList<>();
+        list.addAll(userAgentList.values());
+        list.addAll(authorList.values());
+        list.addAll(inlineList.values());
+        return list;
     }
 }
