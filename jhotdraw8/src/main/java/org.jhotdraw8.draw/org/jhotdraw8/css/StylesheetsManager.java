@@ -11,6 +11,7 @@ import org.jhotdraw8.css.ast.Stylesheet;
 
 import java.net.URI;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -138,6 +139,18 @@ public interface StylesheetsManager<E> {
         }
 
         return false;
+    }
+
+    default List<StyleRule> getMatchingRulesForElement(@NonNull Stylesheet s, E elem) {
+        List<StyleRule> matchingRules = new ArrayList<>();
+        SelectorModel<E> selectorModel = getSelectorModel();
+        for (StyleRule r : s.getStyleRules()) {
+            if (r.getSelectorGroup().matches(selectorModel, elem)) {
+                matchingRules.add(r);
+            }
+        }
+
+        return matchingRules;
     }
 
     /**

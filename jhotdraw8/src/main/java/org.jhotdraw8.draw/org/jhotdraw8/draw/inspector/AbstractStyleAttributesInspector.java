@@ -714,7 +714,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     private void updateStylesheetInfo(CssPrettyPrinter pp, List<E> matchedFigures, StylesheetsManager<E> styleManager) {
         final List<StylesheetsManager.StylesheetInfo> stylesheets = styleManager.getStylesheets();
-        Set<StylesheetsManager.StylesheetInfo> matchedInfos = new LinkedHashSet<>();
+        Map<StylesheetsManager.StylesheetInfo, Set<StyleRule>> matchedInfos = new LinkedHashMap<>();
 
         final ArrayList<StylesheetsManager.StylesheetInfo> stylesheetInfos = new ArrayList<>();
         for (StylesheetsManager.StylesheetInfo stylesheet : stylesheets) {
@@ -736,24 +736,31 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
         }
 
-        if (!stylesheetInfos.isEmpty())
+        if (!stylesheetInfos.isEmpty()) {
             for (E f : matchedFigures) {
                 for (StylesheetsManager.StylesheetInfo info : stylesheetInfos) {
-                    if (styleManager.matchesElement(info.getStylesheet(), f)) {
-                        matchedInfos.add(info);
+                    final List<StyleRule> matchingRules = styleManager.getMatchingRulesForElement(info.getStylesheet(), f);
+                    if (!matchingRules.isEmpty()) {
+                        matchedInfos.computeIfAbsent(info, k -> new LinkedHashSet<>()).addAll(matchingRules);
                         break;
                     }
                 }
             }
+        }
         if (!matchedInfos.isEmpty()) {
             StringBuilder buf = new StringBuilder();
             buf.append("\n/*");
             buf.append("\nThe following stylesheets match:");
-            for (StylesheetsManager.StylesheetInfo matchedInfo : matchedInfos) {
+            for (Map.Entry<StylesheetsManager.StylesheetInfo, Set<StyleRule>> matchedInfo : matchedInfos.entrySet()) {
                 buf.append("\n  ");
-                buf.append(matchedInfo.getOrigin());
+                buf.append(matchedInfo.getKey().getOrigin());
                 buf.append(": ");
-                buf.append(matchedInfo.getUri().toString());
+                buf.append(matchedInfo.getKey().getUri().toString());
+                buf.append("\n  Rules:");
+                for (StyleRule rule : matchedInfo.getValue()) {
+                    buf.append("\n    ");
+                    rule.getSelectorGroup().produceTokens(token -> buf.append(token.fromToken()));
+                }
             }
             buf.append("\n*/");
             pp.append(buf.toString());

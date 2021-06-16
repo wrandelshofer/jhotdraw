@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,6 +91,7 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
     private boolean doAddNotifyAndUpdateCss = true;
+    private Supplier<Layer> layerFactory = LayerFigure::new;
 
     public SimpleXmlDomReader(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -223,7 +225,7 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
             if (layer == null) {
                 layer = (Layer) drawing.getLastChild();
                 if (layer == null) {
-                    layer = new LayerFigure();
+                    layer = layerFactory.get();
                     layer.set(StyleableFigure.ID, idFactory.createId(layer));
                     model.addChildTo(layer, drawing);
                 }
@@ -582,5 +584,11 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
         this.namespaceURI = namespaceURI;
     }
 
+    public Supplier<Layer> getLayerFactory() {
+        return layerFactory;
+    }
 
+    public void setLayerFactory(Supplier<Layer> layerFactory) {
+        this.layerFactory = layerFactory;
+    }
 }

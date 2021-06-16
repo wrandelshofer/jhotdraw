@@ -208,7 +208,7 @@ public class CssParser {
     /**
      * Some special at-rules contain information for the parser.
      */
-    private void interpretAtRule(AtRule atRule) {
+    private void interpretAtRule(AtRule atRule, int position) throws ParseException {
         if (NAMESPACE_AT_RULE.equals(atRule.getAtKeyword())) {
             ListCssTokenizer tt = new ListCssTokenizer(atRule.getHeader());
             final String prefix;
@@ -222,6 +222,9 @@ public class CssParser {
                 String namespace = tt.currentStringNonNull();
                 prefixToNamespaceMap.put(prefix, namespace);
             }
+        } else {
+            throw new ParseException("Unsupported At-Rule: @" + atRule.getAtKeyword(),
+                    position);
         }
     }
 
@@ -360,15 +363,15 @@ public class CssParser {
 
     private void parseComponentValue(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
         switch (tt.nextNoSkip()) {
-        case '{':
-            tt.pushBack();
-            parseCurlyBlock(tt, preservedTokens);
-            break;
-        case '(':
-            tt.pushBack();
-            parseRoundBlock(tt, preservedTokens);
-            break;
-        case '[':
+            case '{':
+                tt.pushBack();
+                parseCurlyBlock(tt, preservedTokens);
+                break;
+            case '(':
+                tt.pushBack();
+                parseRoundBlock(tt, preservedTokens);
+                break;
+            case '[':
                 tt.pushBack();
                 parseSquareBlock(tt, preservedTokens);
                 break;
@@ -714,16 +717,17 @@ public class CssParser {
                         break;
                     case CssTokenType.TT_AT_KEYWORD: {
                         tt.pushBack();
+                        final int startPosition = tt.getStartPosition();
                         AtRule r = parseAtRule(tt);
-                            interpretAtRule(r);
-                            rules.add(r);
+                        interpretAtRule(r, startPosition);
+                        rules.add(r);
                         break;
                     }
                     default: {
                         tt.pushBack();
                         // FIXME parse qualified rules instead of style rule
                         StyleRule r = parseStyleRule(tt);
-                            rules.add(r);
+                        rules.add(r);
                         break;
                     }
                 }

@@ -20,7 +20,6 @@ import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -42,6 +41,7 @@ import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +55,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
     private String idAttribute = "id";
+    private Supplier<Layer> layerFactory;
 
     public SimpleXmlStaxReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
@@ -190,7 +191,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
                 idFactory.createId(f);
             }
             // FIXME use current layer in drawingView!
-            Layer layer = new LayerFigure();
+            Layer layer = layerFactory.get();
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
                 figures.add(f);
                 newDrawing.removeChild(f);
@@ -339,5 +340,13 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     public void setNamespaceURI(@Nullable String namespaceURI) {
         this.namespaceURI = namespaceURI;
+    }
+
+    public Supplier<Layer> getLayerFactory() {
+        return layerFactory;
+    }
+
+    public void setLayerFactory(Supplier<Layer> layerFactory) {
+        this.layerFactory = layerFactory;
     }
 }
