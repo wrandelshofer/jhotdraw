@@ -10,11 +10,11 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Set;
 
 /**
- * Provides query methods to a set. The state of the set may
- * change.
+ * Provides query methods to a set. The state of the set may change.
  * <p>
- * Note: a ReadOnlySet is not equal to a non-readable {@link Set}.
- * To compare a ReadOnlySet to a Set, you have to wrap the Set into a {@link ReadOnlySetWrapper}.
+ * Note: To compare a ReadOnlySet to a {@link Set}, you must either
+ * wrap the ReadOnlySet into a Set using {@link SetWrapper},
+ * or wrap the Set into a ReadOnlySet using {@link ReadOnlySetWrapper}.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming

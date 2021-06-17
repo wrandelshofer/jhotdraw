@@ -20,7 +20,7 @@ import java.util.Spliterator;
  * Provides query methods to a list. The state of the
  * list may change.
  * <p>
- * Note: To compare a ReadOnlyList to a List, you must either
+ * Note: To compare a ReadOnlyList to a {@link List}, you must either
  * wrap the ReadOnlyList into a List using {@link ListWrapper},
  * or wrap the List into a ReadOnlyList using {@link ReadOnlyListWrapper}.
  * <p>
