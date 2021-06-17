@@ -218,7 +218,7 @@ public class OffsetPathSampleMain extends Application {
         elements.clear();
         for (var offPap : offsetPlines) {
             elements.addAll(
-                    Shapes.fxPathElementsFromAWT(offPap.getPathIterator(null)));
+                    Shapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
         }
     }
 
@@ -240,11 +240,11 @@ public class OffsetPathSampleMain extends Application {
         elements.clear();
         PolyArcPath offPap = papb.createRawOffsetPline(pap, offset);
         elements.addAll(
-                Shapes.fxPathElementsFromAWT(offPap.getPathIterator(null)));
+                Shapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
 
         offPap = papb.createRawOffsetPline(pap, -offset);
         elements.addAll(
-                Shapes.fxPathElementsFromAWT(offPap.getPathIterator(null)));
+                Shapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
     }
 
 

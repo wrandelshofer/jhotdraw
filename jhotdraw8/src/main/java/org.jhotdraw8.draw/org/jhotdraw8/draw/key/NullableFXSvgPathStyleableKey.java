@@ -1,26 +1,28 @@
 /*
- * @(#)Point2DStyleableKey.java
+ * @(#)NullableSvgPathStyleableKey.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 
-import javafx.geometry.Point2D;
+import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.NonNullKey;
-import org.jhotdraw8.css.text.Point2DConverter;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.text.CssFXSvgPathConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
+import java.util.List;
+
 /**
- * Point2DStyleableKey.
+ * NullableAwtSvgPathStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D>,
-        NonNullKey<Point2D> {
+public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<List<PathElement>> implements WritableStyleableMapAccessor<List<PathElement>> {
 
     private static final long serialVersionUID = 1L;
-    private final Converter<Point2D> converter = new Point2DConverter(false);
+
+    private final @NonNull Converter<List<PathElement>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -28,9 +30,10 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
      *
      * @param name The name of the key.
      */
-    public Point2DStyleableKey(@NonNull String name) {
-        this(name, Point2D.ZERO);
+    public NullableFXSvgPathStyleableKey(@NonNull String name) {
+        this(name, null);
     }
+
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -40,12 +43,14 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public Point2DStyleableKey(@NonNull String key, @NonNull Point2D defaultValue) {
-        super(key, Point2D.class, defaultValue);
+    public NullableFXSvgPathStyleableKey(@NonNull String key, @Nullable List<PathElement> defaultValue) {
+        super(null, key, String.class, true, defaultValue);
+
+        converter = new CssFXSvgPathConverter(isNullable());
     }
 
     @Override
-    public @NonNull Converter<Point2D> getCssConverter() {
+    public @NonNull Converter<List<PathElement>> getCssConverter() {
         return converter;
     }
 }

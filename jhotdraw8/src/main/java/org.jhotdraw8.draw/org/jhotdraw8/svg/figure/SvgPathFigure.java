@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
@@ -60,7 +60,7 @@ public class SvgPathFigure extends AbstractLeafFigure
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        AWTPathBuilder b = new AWTPathBuilder();
+        AwtPathBuilder b = new AwtPathBuilder();
         String d = get(D);
         if (d != null) {
             try {
@@ -75,7 +75,7 @@ public class SvgPathFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull Bounds getBoundsInLocal() {
-        AWTPathBuilder b = new AWTPathBuilder();
+        AwtPathBuilder b = new AwtPathBuilder();
         String d = get(D);
         if (d != null) {
             try {

@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
@@ -71,7 +71,7 @@ public interface ShapeableFigure extends Figure {
         }
 
         try {
-            AWTPathBuilder builder = new AWTPathBuilder(new Path2D.Double());
+            AwtPathBuilder builder = new AwtPathBuilder(new Path2D.Double());
             Shapes.buildFromSvgString(builder, content);
             Path2D path = builder.build();
 

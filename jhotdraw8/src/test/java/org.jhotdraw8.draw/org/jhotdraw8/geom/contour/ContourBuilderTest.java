@@ -1,7 +1,7 @@
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.junit.jupiter.api.DynamicTest;
@@ -186,21 +186,21 @@ public class ContourBuilderTest {
                     public void paint(Graphics gr) {
                         Graphics2D g = (Graphics2D) gr;
                         g.setColor(Color.BLACK);// original line
-                        AWTPathBuilder b = new AWTPathBuilder();
+                        AwtPathBuilder b = new AwtPathBuilder();
                         Shapes.buildFromPathIterator(b, input.getPathIterator(null));
                         g.draw(b.build());
 
                         g.setColor(Color.CYAN);// expected offset line
                         g.setStroke(new BasicStroke(3.0f));
                         for (PolyArcPath p : expected) {
-                            b = new AWTPathBuilder();
+                            b = new AwtPathBuilder();
                             Shapes.buildFromPathIterator(b, p.getPathIterator(null));
                             g.draw(b.build());
                         }
                         g.setStroke(new BasicStroke());
 
 
-                        b = new AWTPathBuilder();
+                        b = new AwtPathBuilder();
                         final PolyArcPath rawOffsetPline = pap.createRawOffsetPline(input, offset);
                         Shapes.buildFromPathIterator(b, rawOffsetPline.getPathIterator(null));
                         g.setColor(Color.PINK);// raw offset line
@@ -210,7 +210,7 @@ public class ContourBuilderTest {
                         final List<OpenPolylineSlice> slices = pap.dualSliceAtIntersectsForOffset(input, pap.createRawOffsetPline(input, offset),
                                 pap.createRawOffsetPline(input, -offset), offset);
                         for (OpenPolylineSlice s : slices) {
-                            b = new AWTPathBuilder();
+                            b = new AwtPathBuilder();
                             Shapes.buildFromPathIterator(b, s.pline.getPathIterator(null));
                             g.draw(b.build());
                         }
@@ -238,7 +238,7 @@ public class ContourBuilderTest {
                 @Override
                 public void paint(Graphics gr) {
                     Graphics2D g = (Graphics2D) gr;
-                    AWTPathBuilder b = new AWTPathBuilder();
+                    AwtPathBuilder b = new AwtPathBuilder();
                     Shapes.buildFromPathIterator(b, input.getPathIterator(null));
                     g.draw(b.build());
                 }

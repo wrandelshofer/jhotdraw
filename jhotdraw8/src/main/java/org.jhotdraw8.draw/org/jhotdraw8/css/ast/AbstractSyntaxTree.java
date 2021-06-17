@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public abstract class AST {
+public abstract class AbstractSyntaxTree {
     public void produceTokens(Consumer<CssToken> consumer) {
     }
 }

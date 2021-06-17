@@ -192,18 +192,27 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
             double hposTranslate = 0;
+            final double iconTranslate;
+            if (getStyled(ICON_SHAPE) != null) {
+                iconTranslate = getStyledNonNull(ICON_SIZE).getConvertedValue().getWidth()
+                        + getStyledNonNull(ICON_TEXT_GAP).getConvertedValue();
+            } else {
+                iconTranslate = 0;
+            }
             switch (getStyledNonNull(TEXT_HPOS)) {
                 case CENTER: {
                     hposTranslate = textNodeLayoutBounds.getWidth() * -0.5;
                     break;
                 }
                 case LEFT:
-                break;
-            case RIGHT: {
-                hposTranslate = -textNodeLayoutBounds.getWidth();
-                break;
+                    hposTranslate = iconTranslate;
+                    break;
+                case RIGHT: {
+                    hposTranslate = -textNodeLayoutBounds.getWidth();
+                    break;
+                }
             }
-            }
+
 
             // FIXME must convert with current font size of label!!
             final double labelOffsetX = getStyledNonNull(LABEL_OFFSET_X).getConvertedValue();
@@ -215,25 +224,25 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             Rotate rotate = null;
             final boolean layoutTransforms;
             switch (getStyledNonNull(LABEL_AUTOROTATE)) {
-            case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
-                final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
-                rotate = new FXPreciseRotate(theta, origin.getX(), origin.getY());
-                layoutTransforms = true;
-                // set(ROTATE, theta);
-            }
-            break;
-            case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
-                final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
-                final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
-                rotate = new FXPreciseRotate(halfTheta, origin.getX(), origin.getY());
-                layoutTransforms = true;
-                // set(ROTATE, halfTheta);
-            }
-            break;
-            case OFF:
-            default:
-                layoutTransforms = false;
+                case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
+                    final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
+                    rotate = new FXPreciseRotate(theta, origin.getX(), origin.getY());
+                    layoutTransforms = true;
+                    // set(ROTATE, theta);
+                }
                 break;
+                case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
+                    final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
+                    final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
+                    rotate = new FXPreciseRotate(halfTheta, origin.getX(), origin.getY());
+                    layoutTransforms = true;
+                    // set(ROTATE, halfTheta);
+                }
+                break;
+                case OFF:
+                default:
+                    layoutTransforms = false;
+                    break;
             }
             // FIXME add tx in angle of rotated label!
 //        origin=origin.add(tangent.multiply(hposTranslate));
@@ -254,7 +263,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         textNode.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
         textNode.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());
         Bounds b = textNode.getLayoutBounds();
-        Insets i = getStyledNonNull(PADDING).getConvertedValue();
+        Insets i = getTotalPaddingAroundText();
         Bounds bconnected = new BoundingBox(
                 b.getMinX() - i.getLeft(),
                 b.getMinY() - i.getTop(),

@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
@@ -95,7 +95,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
     protected void updatePathNode(RenderContext ctx, @NonNull Path path) {
-        path.getElements().setAll(Shapes.fxPathElementsFromAWT(pathElements.getPathIterator(null)));
+        path.getElements().setAll(Shapes.fxPathElementsFromAwt(pathElements.getPathIterator(null)));
     }
 
     @Override
@@ -121,7 +121,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         double y = getStyledNonNull(Y).getConvertedValue();
         final Bounds b;
         if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
-            AWTPathBuilder awtPathBuilder = new AWTPathBuilder(pathElements);
+            AwtPathBuilder awtPathBuilder = new AwtPathBuilder(pathElements);
             try {
                 Shapes.buildFromSvgString(awtPathBuilder, pathstr);
                 java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
@@ -152,6 +152,6 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                     width,
                     height);
         }
-        Shapes.reshape(pathstr, b, new AWTPathBuilder(pathElements));
+        Shapes.reshape(pathstr, b, new AwtPathBuilder(pathElements));
     }
 }

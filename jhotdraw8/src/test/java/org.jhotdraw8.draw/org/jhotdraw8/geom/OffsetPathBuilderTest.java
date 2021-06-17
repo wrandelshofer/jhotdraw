@@ -52,7 +52,7 @@ public class OffsetPathBuilderTest {
     }
 
     private void testOffsetPath(Polyline input, double offset, Polyline expected) throws Exception, InterruptedException {
-        AWTPathBuilder ab = new AWTPathBuilder();
+        AwtPathBuilder ab = new AwtPathBuilder();
         OffsetPathBuilder instance = new OffsetPathBuilder(ab, offset);
         Shapes.buildFromPathIterator(instance, Shapes.awtShapeFromFX(input).getPathIterator(null));
         Path2D built = ab.build();

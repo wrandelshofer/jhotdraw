@@ -6,22 +6,28 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.NullableFXSvgPathStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -30,6 +36,7 @@ import org.jhotdraw8.geom.Shapes;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -45,6 +52,11 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
     public static final @NonNull CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
+    public static final @NonNull NullableFXSvgPathStyleableKey ICON_SHAPE = new NullableFXSvgPathStyleableKey("iconShape", null);
+    public static final @NonNull CssDimension2DStyleableKey ICON_SIZE = new CssDimension2DStyleableKey("iconSize", new CssDimension2D(16, 16));
+    public static final @NonNull CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", new CssSize(4));
+
+
     private @Nullable Bounds cachedLayoutBounds;
 
     public AbstractLabelFigure() {
@@ -118,7 +130,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     protected @NonNull Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
-        Insets i = getStyledNonNull(PADDING).getConvertedValue();
+        Insets i = getTotalPaddingAroundText();
 
         return new BoundingBox(
                 b.getMinX() - i.getLeft(),
@@ -126,6 +138,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
                 b.getWidth() + i.getLeft() + i.getRight(),
                 textNode.getBaselineOffset() + i.getTop() + i.getBottom());
     }
+
 
     /**
      * Returns the bounds of the text node for layout calculations. These bounds
@@ -169,7 +182,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         Bounds lb = computeLayoutBounds();
-        Insets i = getStyledNonNull(PADDING).getConvertedValue();
+        Insets i = getTotalPaddingAroundText();
         set(ORIGIN, new CssPoint2D(x.getConvertedValue() + i.getLeft(), y.getConvertedValue() + lb.getHeight() - i.getBottom()));
     }
 
@@ -191,6 +204,13 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         updateGroupNode(ctx, g);
         updateTextNode(ctx, t);
         updatePathNode(ctx, p, t);
+        final Path icon;
+        if (getStyled(ICON_SHAPE) != null) {
+            icon = (Path) g.getProperties().computeIfAbsent("iconNode", k -> new Path());
+            updateIconNode(ctx, icon);
+        } else {
+            icon = null;
+        }
 
         // Note: we must not add individual elements to g.children because
         // its ObservableList fires too many events.
@@ -201,9 +221,27 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         if (t.getStroke() != null || t.getFill() != null) {
             newChildren.add(t);
         }
+        if (icon != null) {
+            newChildren.add(icon);
+        }
         if (!newChildren.equals(g.getChildren())) {
             g.getChildren().setAll(newChildren);
         }
+    }
+
+    public void updateIconNode(final @NonNull RenderContext ctx, final @NonNull Path path) {
+        final List<PathElement> elements = getStyled(ICON_SHAPE);
+        if (elements == null) {
+            return;
+        }
+        final Insets padding = getStyledNonNull(PADDING).getConvertedValue();
+
+        path.setFill(Paintable.getPaint(getStyled(TEXT_FILL)));
+        path.setStroke(null);
+        path.getElements().setAll(elements);
+        final Bounds b = getLayoutBounds();
+        path.setTranslateX(padding.getLeft() + b.getMinX());
+        path.setTranslateY(padding.getTop() + b.getMinY());
     }
 
     protected void updatePathNode(RenderContext ctx, @NonNull Path node, @NonNull Text tn) {
@@ -228,4 +266,23 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         }
     }
 
+    /**
+     * Gets the total padding around the text including the space required
+     * for the icon and the icon text gap.
+     *
+     * @return Insets with total padding around text
+     */
+    protected @NonNull Insets getTotalPaddingAroundText() {
+        final Insets padding = getStyledNonNull(PADDING).getConvertedValue();
+        final List<PathElement> shape = getStyled(ICON_SHAPE);
+        if (shape == null) return padding;
+        final Dimension2D size = getStyledNonNull(ICON_SIZE).getConvertedValue();
+        final double gap = getStyledNonNull(ICON_TEXT_GAP).getConvertedValue();
+        return new Insets(
+                padding.getTop(),
+                padding.getRight(),
+                padding.getBottom(),
+                padding.getLeft() + gap + size.getWidth()
+        );
+    }
 }

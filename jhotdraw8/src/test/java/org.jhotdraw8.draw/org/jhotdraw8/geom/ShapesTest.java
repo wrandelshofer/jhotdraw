@@ -21,7 +21,7 @@ class ShapesTest {
 
     void testDoubleSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
         Path2D.Double path = Shapes.awtShapeFromSvgString(input);
-        String actual = Shapes.doubleSvgStringFromAWT(path);
+        String actual = Shapes.doubleSvgStringFromAwt(path);
         assertEquals(expected, actual);
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class Declaration extends AST {
+public class Declaration extends AbstractSyntaxTree {
     private final @Nullable String namespace;
     private final @NonNull String propertyName;
     private final @NonNull ImmutableList<CssToken> terms;

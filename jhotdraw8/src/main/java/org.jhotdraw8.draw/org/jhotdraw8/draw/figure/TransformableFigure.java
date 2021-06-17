@@ -21,6 +21,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleNonNullKey;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssTranslate3DConverter;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
@@ -57,12 +58,19 @@ import java.util.Set;
 public interface TransformableFigure extends TransformCachingFigure {
     boolean CACHE = true;
     /**
-     * Defines the angle of rotation around the center of the figure in degrees.
+     * Defines the angle of rotation around the rotation pivot of the figure in degrees.
      * <p>
      * Default value: {@code 0}.
      */
     @NonNull
     DoubleStyleableKey ROTATE = new DoubleStyleableKey("rotate", 0.0);
+    /**
+     * Defines the pivot of the rotation.
+     * <p>
+     * Default value: {@code 0.5, 0.5}.
+     */
+    @NonNull
+    CssPoint2DStyleableKey ROTATION_PIVOT = new CssPoint2DStyleableKey("rotation-pivot", new CssPoint2D(0.5, 0.5));
     /**
      * Defines the rotation axis used.
      * <p>
@@ -210,7 +218,8 @@ public interface TransformableFigure extends TransformCachingFigure {
     default @NonNull Transform getLocalToParent(boolean styled) {
         Transform l2p = CACHE && styled ? getCachedLocalToParent() : null;
         if (l2p == null) {
-            Point2D center = getCenterInLocal();
+            final Bounds layoutBounds = getLayoutBounds();
+            Point2D center = new Point2D(layoutBounds.getCenterX(), layoutBounds.getCenterY());
 
             ImmutableList<Transform> transforms = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
@@ -224,7 +233,9 @@ public interface TransformableFigure extends TransformCachingFigure {
                 l2p = FXTransforms.concat(l2p, tt);
             }
             if (r != 0) {
-                Rotate tr = new FXPreciseRotate(r, center.getX(), center.getY());
+                CssPoint2D cssPivot = getStyledNonNull(ROTATION_PIVOT);
+                Point2D pivot = CssPoint2D.getPointInBounds(cssPivot, layoutBounds);
+                Rotate tr = new FXPreciseRotate(r, pivot.getX(), pivot.getY());
                 l2p = FXTransforms.concat(l2p, tr);
             }
             if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
@@ -469,4 +480,6 @@ public interface TransformableFigure extends TransformCachingFigure {
             }
         }
     }
+
+
 }

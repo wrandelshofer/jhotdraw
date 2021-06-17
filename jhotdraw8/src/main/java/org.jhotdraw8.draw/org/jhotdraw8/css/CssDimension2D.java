@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css;
 
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -85,8 +86,8 @@ public class CssDimension2D {
                 '}';
     }
 
-    public @NonNull Point2D getConvertedValue() {
-        return new Point2D(width.getConvertedValue(), height.getConvertedValue());
+    public @NonNull Dimension2D getConvertedValue() {
+        return new Dimension2D(width.getConvertedValue(), height.getConvertedValue());
 
     }
 

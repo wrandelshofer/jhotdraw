@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Werner Randelshofer
  */
-public class Stylesheet extends AST {
+public class Stylesheet extends AbstractSyntaxTree {
 
     private final @NonNull ImmutableList<Rule> rules;
     private final @NonNull ImmutableList<StyleRule> styleRules;

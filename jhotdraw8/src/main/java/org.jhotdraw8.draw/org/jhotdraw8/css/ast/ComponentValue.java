@@ -10,6 +10,6 @@ package org.jhotdraw8.css.ast;
  *
  * @author Werner Randelshofer
  */
-public abstract class ComponentValue extends AST {
+public abstract class ComponentValue extends AbstractSyntaxTree {
 
 }

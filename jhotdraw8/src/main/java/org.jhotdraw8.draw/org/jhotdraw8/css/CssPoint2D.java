@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -96,5 +97,52 @@ public class CssPoint2D {
 
     public @NonNull CssPoint2D add(@NonNull CssPoint2D that) {
         return new CssPoint2D(x.add(that.x), y.add(that.y));
+    }
+
+    /**
+     * Gets a point that was given in relative coordinates to a bounds.
+     * <p>
+     * If the x- or y-coordinate of the point is given as a percentage,
+     * then the returned point is {@code bounds.minX + p.x/100 * bounds.width},
+     * {@code bounds.minY + p.y/100 * bounds.height}.
+     * <p>
+     * If the x- or y-coordinate of the point is given with default units,
+     * then the returned point is {@code bounds.minX + p.x * bounds.width},
+     * {@code bounds.minY + p.y * bounds.height}.
+     * <p>
+     * Otherwise the returned point is {@code bounds.minX + p.x},
+     * {@code bounds.minY + p.y}.
+     *
+     * @param p      point in relative coordinates
+     * @param bounds the bounds
+     * @return point in absolute coordinates
+     */
+    public static Point2D getPointInBounds(CssPoint2D p, Bounds bounds) {
+        final double x, y;
+        final CssSize px = p.getX();
+        final CssSize py = p.getY();
+        switch (px.getUnits()) {
+            case UnitConverter.PERCENTAGE:
+                x = Math.fma(bounds.getWidth(), px.getValue() / 100.0, bounds.getMinX());
+                break;
+            case UnitConverter.DEFAULT:
+                x = Math.fma(bounds.getWidth(), px.getValue(), bounds.getMinX());
+                break;
+            default:
+                x = bounds.getMinX() + px.getConvertedValue();
+                break;
+        }
+        switch (py.getUnits()) {
+            case UnitConverter.PERCENTAGE:
+                y = Math.fma(bounds.getHeight(), py.getValue() / 100.0, bounds.getMinY());
+                break;
+            case UnitConverter.DEFAULT:
+                y = Math.fma(bounds.getHeight(), py.getValue(), bounds.getMinY());
+                break;
+            default:
+                y = bounds.getMinY() + py.getConvertedValue();
+                break;
+        }
+        return new Point2D(x, y);
     }
 }

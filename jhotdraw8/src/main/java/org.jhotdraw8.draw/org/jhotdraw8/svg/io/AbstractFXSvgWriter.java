@@ -959,7 +959,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (isRelativizePaths()) {
             d = Shapes.doubleRelativeSvgStringFromAWT(area.getPathIterator(null));
         } else {
-            d = Shapes.doubleSvgStringFromAWT(area.getPathIterator(null));
+            d = Shapes.doubleSvgStringFromAwt(area.getPathIterator(null));
         }
         w.writeAttribute("d", d);
 
@@ -1126,7 +1126,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                             tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                             tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                            bgs = Shapes.fxShapeFromAWT(awtShape, tx);
+                            bgs = Shapes.fxShapeFromAwt(awtShape, tx);
                         } else {
                             bgs = s;
                         }
@@ -1159,7 +1159,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                                 tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                                 tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                                bgs = Shapes.fxShapeFromAWT(awtShape, tx);
+                                bgs = Shapes.fxShapeFromAwt(awtShape, tx);
                             } else {
                                 bgs = s;
                             }

@@ -11,11 +11,11 @@ import java.awt.geom.Path2D;
  *
  * @author Werner Randelshofer
  */
-public class AWTPathBuilder extends AbstractPathBuilder {
+public class AwtPathBuilder extends AbstractPathBuilder {
 
     private final Path2D.Double path;
 
-    public AWTPathBuilder() {
+    public AwtPathBuilder() {
         this(new Path2D.Double());
     }
 
@@ -23,7 +23,7 @@ public class AWTPathBuilder extends AbstractPathBuilder {
         return path.getCurrentPoint() == null;
     }
 
-    public AWTPathBuilder(Path2D.Double path) {
+    public AwtPathBuilder(Path2D.Double path) {
         this.path = path;
     }
 

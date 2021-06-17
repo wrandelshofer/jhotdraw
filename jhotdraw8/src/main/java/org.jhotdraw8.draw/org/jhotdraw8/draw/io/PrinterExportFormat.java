@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
+import javafx.geometry.Dimension2D;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
@@ -68,8 +68,8 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     private void printSlice(@NonNull CssDimension2D pageSize, @NonNull Figure slice, @NonNull Bounds viewportBounds, @NonNull Node node, double dpi) throws IOException {
         Paper paper = findPaper(pageSize);
-        Point2D psize = pageSize.getConvertedValue();
-        PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getX() <= psize.getY() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
+        Dimension2D psize = pageSize.getConvertedValue();
+        PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getWidth() <= psize.getHeight() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
         job.getJobSettings().setPageLayout(pl);
         paper = pl.getPaper();
         if (paper == null) {

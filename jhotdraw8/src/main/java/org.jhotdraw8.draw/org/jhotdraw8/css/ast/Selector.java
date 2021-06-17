@@ -13,7 +13,7 @@ import org.jhotdraw8.css.SelectorModel;
  *
  * @author Werner Randelshofer
  */
-public abstract class Selector extends AST {
+public abstract class Selector extends AbstractSyntaxTree {
 
 
     /**

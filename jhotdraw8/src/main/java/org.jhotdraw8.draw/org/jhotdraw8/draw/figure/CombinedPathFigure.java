@@ -17,7 +17,7 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AWTPathBuilder;
+import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
@@ -100,7 +100,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }
-                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AWTPathBuilder(), iter).build()).getPathIterator(null);
+                    iter = basicStroke.createStrokedShape(Shapes.buildFromPathIterator(new AwtPathBuilder(), iter).build()).getPathIterator(null);
                 }
             }
         }
@@ -132,9 +132,9 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 final PathIterator childPathIterator = getStyledPathIteratorInParent(ctx, (PathIterableFigure) child, tx);
                 if (first) {
                     first = false;
-                    area = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).build());
+                    area = new Area(Shapes.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
                 } else {
-                    Area area1 = new Area(Shapes.buildFromPathIterator(new AWTPathBuilder(), childPathIterator).build());
+                    Area area1 = new Area(Shapes.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
                     switch (op) {
                         case ADD:
                         default:
@@ -204,7 +204,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
 
-        n.getElements().setAll(Shapes.fxPathElementsFromAWT(getPathIterator(ctx, null)));
+        n.getElements().setAll(Shapes.fxPathElementsFromAwt(getPathIterator(ctx, null)));
     }
 
     /**
