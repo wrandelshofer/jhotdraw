@@ -5,6 +5,7 @@
   -->
 <project name="jhotdraw8" basedir="." default="all"
          xmlns:unless="ant:unless"
+         xmlns:if="ant:if"
 >
   <!-- gobal build properties -->
   <property file="build.properties"/>
@@ -1195,11 +1196,19 @@ new-inline-tags: section
           <attribute name="Specification-Vendor" value="${author}"/>
         </manifest>
       </jar>
+      <echo message="Updating version number in jar @{module}.jar to version: ${version}"/>
       <exec executable="jar" unless:blank="@{mainclass}">
-        <arg line="-f &quot;${build}/modules/@{module}.jar&quot;"/>
-        <arg line="-u"/>
-        <arg line="-e @{mainclass}"/>
+        <arg line="--update"/>
+        <arg line="--main-class @{mainclass}"/>
         <arg line="--module-version=${version}"/>
+        <arg line="-f"/>
+        <arg file="${build}/modules/@{module}.jar"/>
+      </exec>
+      <exec executable="jar" if:blank="@{mainclass}">
+        <arg line="--update"/>
+        <arg line="--module-version=${version}"/>
+        <arg line="-f"/>
+        <arg file="${build}/modules/@{module}.jar"/>
       </exec>
 
       <jar destfile="${build}/sources/@{module}-src.jar"
