@@ -27,6 +27,7 @@ import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXTransforms;
 
@@ -219,7 +220,7 @@ public interface TransformableFigure extends TransformCachingFigure {
         Transform l2p = CACHE && styled ? getCachedLocalToParent() : null;
         if (l2p == null) {
             final Bounds layoutBounds = getLayoutBounds();
-            Point2D center = new Point2D(layoutBounds.getCenterX(), layoutBounds.getCenterY());
+            Point2D center = FXGeom.center(layoutBounds);
 
             ImmutableList<Transform> transforms = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);

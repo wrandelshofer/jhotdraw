@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -65,17 +63,17 @@ public class GrapherAboutAction extends AbstractApplicationAction {
         VBox graphic = new VBox();
         TextArea textArea = new TextArea(
                 (name == null ? "unnamed" : name) + (version == null ? "" : " " + version)
-                +  (vendor == null ? "" :"\n" + vendor)
-                + (license == null ? "" : "\n" + license)
-                + "\n\nRunning on"
-                + "\n  Java: " + System.getProperty("java.version")
-                + ", " + System.getProperty("java.vendor")
-                + "\n  JVM: " + System.getProperty("java.vm.version")
-                + ", " + System.getProperty("java.vm.vendor")
-                + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
-                + ", " + System.getProperty("os.arch")
-                + "\n\nModules:\n"
-                + getDependencies());
+                        + (vendor == null ? "" : "\n" + vendor)
+                        + (license == null ? "" : "\n" + license)
+                        + "\n\nRunning on"
+                        + "\n  Java: " + System.getProperty("java.version")
+                        + ", " + System.getProperty("java.vendor")
+                        + "\n  JVM: " + System.getProperty("java.vm.version")
+                        + ", " + System.getProperty("java.vm.vendor")
+                        + "\n  OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
+                        + ", " + System.getProperty("os.arch")
+                        + "\n\nModules:\n"
+                        + getDependencies());
         textArea.setEditable(false);
         graphic.getChildren().add(textArea);
         alert.setGraphic(graphic);
@@ -83,7 +81,7 @@ public class GrapherAboutAction extends AbstractApplicationAction {
         alert.setHeaderText("");
         if (event.getSource() instanceof Node) {
             Scene scene = ((Node) event.getSource()).getScene();
-            Window window = scene==null?null:scene.getWindow();
+            Window window = scene == null ? null : scene.getWindow();
             alert.initOwner(window);
             alert.initModality(Modality.WINDOW_MODAL);
         }
@@ -94,6 +92,8 @@ public class GrapherAboutAction extends AbstractApplicationAction {
     }
 
     private String getDependencies() {
+        Pattern pattern = Pattern.compile("-(\\w+(?:[.\\-+]\\w+)*).jar$");
+
         return
                 ModuleLayer.boot().modules().stream()
                         .map(m -> {
@@ -102,7 +102,6 @@ public class GrapherAboutAction extends AbstractApplicationAction {
                                 return m.getDescriptor().toNameAndVersion();
                             }
                             // Construct version string from jar file name
-                            Pattern pattern = Pattern.compile("-(\\w+(?:[.\\-+]\\w+)*).jar$");
                             String version = m.getLayer().configuration()
                                     .findModule(m.getName())
                                     .map(ResolvedModule::reference)

@@ -8,6 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.Geom;
 
 import java.util.Objects;
 
@@ -123,10 +124,10 @@ public class CssPoint2D {
         final CssSize py = p.getY();
         switch (px.getUnits()) {
             case UnitConverter.PERCENTAGE:
-                x = Math.fma(bounds.getWidth(), px.getValue() / 100.0, bounds.getMinX());
+                x = Geom.fma(bounds.getWidth(), px.getValue() / 100.0, bounds.getMinX());
                 break;
             case UnitConverter.DEFAULT:
-                x = Math.fma(bounds.getWidth(), px.getValue(), bounds.getMinX());
+                x = Geom.fma(bounds.getWidth(), px.getValue(), bounds.getMinX());
                 break;
             default:
                 x = bounds.getMinX() + px.getConvertedValue();
@@ -134,10 +135,10 @@ public class CssPoint2D {
         }
         switch (py.getUnits()) {
             case UnitConverter.PERCENTAGE:
-                y = Math.fma(bounds.getHeight(), py.getValue() / 100.0, bounds.getMinY());
+                y = Geom.fma(bounds.getHeight(), py.getValue() / 100.0, bounds.getMinY());
                 break;
             case UnitConverter.DEFAULT:
-                y = Math.fma(bounds.getHeight(), py.getValue(), bounds.getMinY());
+                y = Geom.fma(bounds.getHeight(), py.getValue(), bounds.getMinY());
                 break;
             default:
                 y = bounds.getMinY() + py.getConvertedValue();

@@ -300,7 +300,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             MenuItem deleteMenuItem = new MenuItem(InspectorLabels.getResources().getString("edit.delete.text"));
             contextMenu.getItems().add(deleteMenuItem);
 
-            TreeTableRow<Figure> row = new TreeTableRow<>() {
+            TreeTableRow<Figure> row = new TreeTableRow<Figure>() {
                 @Override
                 public void updateItem(Figure item, boolean empty) {
                     super.updateItem(item, empty);
