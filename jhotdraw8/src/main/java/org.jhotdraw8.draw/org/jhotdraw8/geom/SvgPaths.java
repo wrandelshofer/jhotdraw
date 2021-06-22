@@ -807,10 +807,8 @@ public class SvgPaths {
         return new PathIterator() {
             private final int size = coordsList.size();
             int index = 0;
-            @NonNull
-            float[] srcf = new float[2];
-            @NonNull
-            double[] srcd = new double[2];
+            final float[] srcf = tx == null ? null : new float[2];
+            final double[] srcd = tx == null ? null : new double[2];
 
             @Override
             public int currentSegment(float[] coords) {

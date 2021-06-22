@@ -122,13 +122,13 @@ public class CssParserTest {
                         "<xml><p/><a/><p><a/></p><a><p/></a></xml>", //
                         "<xml><p/><a/><p><a color=\"blue\" text-decoration=\"underline\"/></p><a><p/></a></xml>")),//
                 // example 2
-                dynamicTest("3", () -> testCssSyntax(true, "@import \"my-styles.css\";", //
+                dynamicTest("3", () -> testCssSyntax(false, "@import \"my-styles.css\";", //
                         "<xml/>",//
                         "<xml/>")),
-                dynamicTest("4", () -> testCssSyntax(true, "@page :left {\n  margin-left: 4cm;\n  margin-right: 3cm;\n}", //
+                dynamicTest("4", () -> testCssSyntax(false, "@page :left {\n  margin-left: 4cm;\n  margin-right: 3cm;\n}", //
                         "<xml/>",//
                         "<xml/>")),
-                dynamicTest("5", () -> testCssSyntax(true, "@media print {\n  body { font-size: 10pt }\n}", //
+                dynamicTest("5", () -> testCssSyntax(false, "@media print {\n  body { font-size: 10pt }\n}", //
                         "<xml/>",//
                         "<xml/>")),
                 // example 3 (Changed \26 to \41 so that we can match an element)
@@ -232,10 +232,10 @@ public class CssParserTest {
     public @NonNull List<DynamicTest> dynamicTestsAtRule() {
         return Arrays.asList(
                 // at rules
-                dynamicTest("1", () -> testAtRule(true, "@charset \"UTF-8\"; AB {x:y}", //
+                dynamicTest("1", () -> testAtRule(false, "@charset \"UTF-8\"; AB {x:y}", //
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
-                dynamicTest("2", () -> testAtRule(true, "@import url('landscape.css') screen and (orientation:landscape); AB {x:y}", //
+                dynamicTest("2", () -> testAtRule(false, "@import url('landscape.css') screen and (orientation:landscape); AB {x:y}", //
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
                 dynamicTest("3", () -> testAtRule(true, "@namespace url(http://www.w3.org/1999/xhtml); AB {x:y}", //
@@ -247,12 +247,12 @@ public class CssParserTest {
                 dynamicTest("4", () -> testAtRule(true, "@namespace svg url(http://www.w3.org/2000/svg); AB {x:y}", //
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
-                dynamicTest("5", () -> testAtRule(true, "@media print {\n" +
+                dynamicTest("5", () -> testAtRule(false, "@media print {\n" +
                                 "  body { font-size: 10pt }\n" +
                                 "} AB {x:y}", //
                         "<xml><AB/></xml>",//
                         "<xml><AB x=\"y\"/></xml>")),
-                dynamicTest("6", () -> testAtRule(true, "@document url(http://www.w3.org/),\n" +
+                dynamicTest("6", () -> testAtRule(false, "@document url(http://www.w3.org/),\n" +
                                 "               url-prefix(http://www.w3.org/Style/),\n" +
                                 "               domain(mozilla.org),\n" +
                                 "               regexp(\"https:.*\")\n" +

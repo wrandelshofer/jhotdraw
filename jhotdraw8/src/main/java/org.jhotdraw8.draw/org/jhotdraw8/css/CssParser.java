@@ -223,8 +223,8 @@ public class CssParser {
                 prefixToNamespaceMap.put(prefix, namespace);
             }
         } else {
-            throw new ParseException("Unsupported At-Rule: @" + atRule.getAtKeyword(),
-                    position);
+            exceptions.add(new ParseException("Unsupported At-Rule: @" + atRule.getAtKeyword(),
+                    position));
         }
     }
 
