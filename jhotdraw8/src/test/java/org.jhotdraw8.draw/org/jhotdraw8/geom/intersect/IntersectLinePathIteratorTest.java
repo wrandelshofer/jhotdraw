@@ -7,7 +7,7 @@ package org.jhotdraw8.geom.intersect;
 
 import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -43,7 +43,7 @@ public class IntersectLinePathIteratorTest {
         IntersectionResultEx actual = IntersectLinePathIterator.intersectLinePathIteratorEx(
                 line.getStartX(), line.getStartY(),
                 line.getEndX(), line.getEndY(),
-                Shapes.awtShapeFromSvgString(path).getPathIterator(null));
+                SvgPaths.awtShapeFromSvgString(path).getPathIterator(null));
         assertEquals(expectedStatus,actual.getStatus());
     }
 }

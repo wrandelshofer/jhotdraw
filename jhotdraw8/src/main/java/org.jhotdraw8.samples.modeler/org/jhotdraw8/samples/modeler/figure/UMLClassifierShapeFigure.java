@@ -51,6 +51,7 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentalizedData;
 import org.jhotdraw8.samples.modeler.model.MLCompartmentedDataStyleableFigureKey;
 import org.jhotdraw8.samples.modeler.model.MLModifier;
@@ -429,7 +430,7 @@ public class UMLClassifierShapeFigure extends AbstractLeafFigure
         if (path == null) {
             layout(new SimpleRenderContext());
         }
-        return path == null ? Shapes.emptyPathIterator() : Shapes.awtShapeFromFX(path).getPathIterator(tx);
+        return path == null ? SvgPaths.emptyPathIterator() : Shapes.awtShapeFromFX(path).getPathIterator(tx);
     }
 }
 

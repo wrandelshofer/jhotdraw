@@ -46,6 +46,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -223,6 +224,6 @@ public class MLDiagramFigure extends AbstractLeafFigure
         if (path == null) {
             layout(new SimpleRenderContext());
         }
-        return path == null ? Shapes.emptyPathIterator() : Shapes.awtShapeFromFX(path).getPathIterator(tx);
+        return path == null ? SvgPaths.emptyPathIterator() : Shapes.awtShapeFromFX(path).getPathIterator(tx);
     }
 }

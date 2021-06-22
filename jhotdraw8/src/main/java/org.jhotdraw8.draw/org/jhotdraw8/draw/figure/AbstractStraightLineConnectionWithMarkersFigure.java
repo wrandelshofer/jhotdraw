@@ -27,6 +27,7 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -191,7 +192,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                 // of the markerNode, because this fires too many change events.
                 List<PathElement> nodes = new ArrayList<>();
                 FXPathBuilder builder = new FXPathBuilder(nodes);
-                Shapes.buildFromSvgString(builder, svgString);
+                SvgPaths.buildFromSvgString(builder, svgString);
                 builder.build();
                 if (!nodes.equals(markerNode.getElements())) {
                     markerNode.getElements().setAll(nodes);

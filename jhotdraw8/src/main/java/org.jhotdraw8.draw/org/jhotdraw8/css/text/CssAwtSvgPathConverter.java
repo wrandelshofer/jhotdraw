@@ -10,7 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 
@@ -40,7 +40,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
 
         try {
             final AwtPathBuilder builder = new AwtPathBuilder();
-            Shapes.buildFromSvgString(builder, svgPathString);
+            SvgPaths.buildFromSvgString(builder, svgPathString);
             return builder.build();
         } catch (final ParseException ex) {
             final Path2D.Double p = new Path2D.Double();
@@ -55,7 +55,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
 
     @Override
     protected <TT extends Path2D.Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, Shapes.doubleSvgStringFromAwt(value)));
+        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(value)));
     }
 
     @Override

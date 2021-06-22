@@ -22,9 +22,10 @@ import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import java.awt.Rectangle;
@@ -64,7 +65,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                Shapes.buildFromSvgString(b, d);
+                SvgPaths.buildFromSvgString(b, d);
             } catch (ParseException e) {
                 // bail
             }
@@ -79,7 +80,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                Shapes.buildFromSvgString(b, d);
+                SvgPaths.buildFromSvgString(b, d);
             } catch (ParseException e) {
                 // bail
             }
@@ -103,13 +104,13 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                Shapes.buildFromSvgString(b, d);
+                SvgPaths.buildFromSvgString(b, d);
             } catch (ParseException e) {
                 // bail
             }
         }
 
-        set(D, Shapes.svgStringFromElements(bb.getElements(), new XmlNumberConverter()));
+        set(D, FXSvgPaths.svgStringFromElements(bb.getElements(), new XmlNumberConverter()));
     }
 
     @Override
@@ -138,7 +139,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                Shapes.buildFromSvgString(bb, d);
+                SvgPaths.buildFromSvgString(bb, d);
             } catch (ParseException e) {
                 // bail
             }

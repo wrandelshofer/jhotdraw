@@ -14,7 +14,8 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.FXPathBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXSvgPaths;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 
@@ -45,7 +46,7 @@ public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement
 
         try {
             final FXPathBuilder builder = new FXPathBuilder();
-            Shapes.buildFromSvgString(builder, svgPathString);
+            SvgPaths.buildFromSvgString(builder, svgPathString);
             return builder.build().getElements();
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
@@ -60,7 +61,7 @@ public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement
 
     @Override
     protected <TT extends List<PathElement>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, Shapes.doubleSvgStringFromElements(value)));
+        out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.doubleSvgStringFromElements(value)));
     }
 
     @Override

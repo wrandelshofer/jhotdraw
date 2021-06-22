@@ -20,7 +20,7 @@ import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.Path2D;
 import java.text.ParseException;
@@ -72,7 +72,7 @@ public interface ShapeableFigure extends Figure {
 
         try {
             AwtPathBuilder builder = new AwtPathBuilder(new Path2D.Double());
-            Shapes.buildFromSvgString(builder, content);
+            SvgPaths.buildFromSvgString(builder, content);
             Path2D path = builder.build();
 
 
@@ -84,7 +84,7 @@ public interface ShapeableFigure extends Figure {
             FXPathBuilder builder2 = new FXPathBuilder();
             final NineRegionsScalingBuilder nineRegionsScalingBuilder = new NineRegionsScalingBuilder(builder2, srcBounds, shapeSlice, b);
 
-            Shapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
+            SvgPaths.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
             List<PathElement> elements = builder2.getElements();
             node.getElements().setAll(elements);
             node.setVisible(true);

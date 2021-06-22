@@ -31,6 +31,7 @@ import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PlineVertex;
 import org.jhotdraw8.geom.contour.PolyArcPath;
@@ -197,12 +198,12 @@ public class OffsetPathSampleMain extends Application {
         if (closed.get()) {
             Polygon poly = new Polygon();
             poly.getPoints().addAll(polyline.getPoints());
-            Shapes.buildFromPathIterator(
+            SvgPaths.buildFromPathIterator(
                     new OffsetPathBuilder(new FXPathBuilder(elements), offset),
                     Shapes.awtShapeFromFX(poly).getPathIterator(null)
             );
         } else {
-            Shapes.buildFromPathIterator(
+            SvgPaths.buildFromPathIterator(
                     new OffsetPathBuilder(new FXPathBuilder(elements), offset),
                     Shapes.awtShapeFromFX(polyline).getPathIterator(null)
             );

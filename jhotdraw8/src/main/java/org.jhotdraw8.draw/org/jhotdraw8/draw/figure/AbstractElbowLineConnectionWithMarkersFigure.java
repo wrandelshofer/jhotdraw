@@ -30,7 +30,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 import java.awt.geom.AffineTransform;
@@ -199,7 +199,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
                 // of the markerNode, because this fires too many change events.
                 List<PathElement> nodes = new ArrayList<>();
                 FXPathBuilder builder = new FXPathBuilder(nodes);
-                Shapes.buildFromSvgString(builder, svgString);
+                SvgPaths.buildFromSvgString(builder, svgString);
                 builder.build();
                 markerNode.getElements().setAll(nodes);
             } catch (ParseException e) {
@@ -218,7 +218,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        return path == null ? Shapes.emptyPathIterator() : Shapes.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
+        return path == null ? SvgPaths.emptyPathIterator() : SvgPaths.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     public abstract double getStrokeCutStart(RenderContext ctx);

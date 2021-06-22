@@ -9,7 +9,9 @@ import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssDimension2D;
+import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -92,9 +94,9 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
         parent.appendChild(elem);
         String d;
         if (isRelativizePaths()) {
-            d = Shapes.floatRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
+            d = SvgPaths.floatRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
-            d = Shapes.floatSvgStringFromElements(node.getElements());
+            d = FXSvgPaths.floatSvgStringFromElements(node.getElements());
         }
         elem.setAttribute("d", d);
         return elem;

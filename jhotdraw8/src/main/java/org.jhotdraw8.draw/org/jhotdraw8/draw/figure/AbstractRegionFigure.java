@@ -19,6 +19,7 @@ import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -123,7 +124,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
             AwtPathBuilder awtPathBuilder = new AwtPathBuilder(pathElements);
             try {
-                Shapes.buildFromSvgString(awtPathBuilder, pathstr);
+                SvgPaths.buildFromSvgString(awtPathBuilder, pathstr);
                 java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
                 double pathRatio = bounds2D.getHeight() / bounds2D.getWidth();
                 double regionRatio = height / width;
@@ -152,6 +153,6 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                     width,
                     height);
         }
-        Shapes.reshape(pathstr, b, new AwtPathBuilder(pathElements));
+        SvgPaths.reshape(pathstr, b, new AwtPathBuilder(pathElements));
     }
 }

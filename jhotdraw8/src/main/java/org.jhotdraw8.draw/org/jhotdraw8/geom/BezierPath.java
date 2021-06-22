@@ -480,7 +480,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
      * @return whether this path contains the point
      */
     public boolean outlineContains(@NonNull Point2D.Double p, double tolerance) {
-        return Shapes.outlineContains(this, p, tolerance);
+        return SvgPaths.outlineContains(this, p, tolerance);
     }
 
     @Override

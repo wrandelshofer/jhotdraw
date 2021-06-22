@@ -73,7 +73,7 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
         final double x0 = getLastX();
         final double y0 = getLastY();
         final Transform tx = FXTransforms.rotate(x0 - x, y0 - y, 0, 0).createConcatenation(new Translate(x, y));
-        Shapes.buildFromPathIterator(out, marker.getPathIterator(FXTransforms.toAWT(tx)));
+        SvgPaths.buildFromPathIterator(out, marker.getPathIterator(FXTransforms.toAWT(tx)));
     }
 
     private void doEndMarker() {
@@ -87,7 +87,7 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
             double x0 = tangentX;
             double y0 = tangentY;
             Transform tx = FXTransforms.rotate(x0 - x, y0 - y, x, y).createConcatenation(new Translate(x, y));
-            Shapes.buildFromPathIterator(out, startMarker.getPathIterator(FXTransforms.toAWT(tx)));
+            SvgPaths.buildFromPathIterator(out, startMarker.getPathIterator(FXTransforms.toAWT(tx)));
         }
     }
 

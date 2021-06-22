@@ -110,7 +110,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        return Shapes.pathIteratorFromPoints(getNonNull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
+        return Shapes.awtPathIteratorFromFxPoint2Ds(getNonNull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     @Override

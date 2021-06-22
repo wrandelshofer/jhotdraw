@@ -14,7 +14,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 
 /**
- * Some geometric utilities.
+ * Provides geometry utility functions.
  */
 public class Geom {
 

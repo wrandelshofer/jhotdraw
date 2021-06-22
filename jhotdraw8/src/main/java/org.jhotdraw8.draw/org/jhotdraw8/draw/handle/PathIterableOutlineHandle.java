@@ -20,6 +20,7 @@ import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.geom.FXPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();
         FXPathBuilder builder = new FXPathBuilder(elements);
-        Shapes.buildFromPathIterator(builder, f.getPathIterator(view, Shapes.awtTransformFromFX(t)));
+        SvgPaths.buildFromPathIterator(builder, f.getPathIterator(view, Shapes.awtTransformFromFX(t)));
         path1.getElements().setAll(elements);
         path2.getElements().setAll(elements);
     }

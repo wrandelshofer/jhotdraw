@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 class ShapesTest {
 
     void testDoubleSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = Shapes.awtShapeFromSvgString(input);
-        String actual = Shapes.doubleSvgStringFromAwt(path);
+        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
+        String actual = SvgPaths.doubleSvgStringFromAwt(path);
         assertEquals(expected, actual);
     }
 
@@ -56,20 +56,20 @@ class ShapesTest {
     }
 
     void testDoubleRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = Shapes.awtShapeFromSvgString(input);
-        String actual = Shapes.doubleRelativeSvgStringFromAWT(path.getPathIterator(null));
+        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
+        String actual = SvgPaths.doubleRelativeSvgStringFromAWT(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     void testFloatRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = Shapes.awtShapeFromSvgString(input);
-        String actual = Shapes.floatRelativeSvgStringFromAWT(path.getPathIterator(null));
+        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
+        String actual = SvgPaths.floatRelativeSvgStringFromAWT(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     void testFloatSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = Shapes.awtShapeFromSvgString(input);
-        String actual = Shapes.floatSvgStringFromAWT(path.getPathIterator(null));
+        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
+        String actual = SvgPaths.floatSvgStringFromAWT(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
@@ -126,8 +126,8 @@ class ShapesTest {
     }
 
     void testSvgStringFromElements(@NonNull String input, String expected) throws ParseException {
-        List<PathElement> elements = Shapes.fxPathElementsFromSvgString(input);
-        String actual = Shapes.doubleSvgStringFromElements(elements);
+        List<PathElement> elements = FXSvgPaths.fxPathElementsFromSvgString(input);
+        String actual = FXSvgPaths.doubleSvgStringFromElements(elements);
         assertEquals(expected, actual);
     }
 

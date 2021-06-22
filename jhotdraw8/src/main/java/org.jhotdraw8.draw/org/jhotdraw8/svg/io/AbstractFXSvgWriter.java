@@ -55,8 +55,10 @@ import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
@@ -894,9 +896,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
-            d = Shapes.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
+            d = SvgPaths.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
-            d = Shapes.doubleSvgStringFromElements(node.getElements());
+            d = FXSvgPaths.doubleSvgStringFromElements(node.getElements());
         }
         w.writeAttribute("d", d);
     }
@@ -957,9 +959,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         String d;
         if (isRelativizePaths()) {
-            d = Shapes.doubleRelativeSvgStringFromAWT(area.getPathIterator(null));
+            d = SvgPaths.doubleRelativeSvgStringFromAWT(area.getPathIterator(null));
         } else {
-            d = Shapes.doubleSvgStringFromAwt(area.getPathIterator(null));
+            d = SvgPaths.doubleSvgStringFromAwt(area.getPathIterator(null));
         }
         w.writeAttribute("d", d);
 
@@ -1443,7 +1445,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (isConvertTextToPath()) {
             w.writeStartElement("path");
             w.writeAttribute("d",
-                    Shapes.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFX(node).getPathIterator(null)));
+                    SvgPaths.doubleRelativeSvgStringFromAWT(Shapes.awtShapeFromFX(node).getPathIterator(null)));
         } else {
             w.writeStartElement("text");
             writeTextAttributes(w, node);

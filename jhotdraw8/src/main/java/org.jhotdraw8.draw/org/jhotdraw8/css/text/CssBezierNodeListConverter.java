@@ -13,7 +13,7 @@ import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 
@@ -41,7 +41,7 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
             throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
         }
         BezierNodePathBuilder builder = new BezierNodePathBuilder();
-        Shapes.buildFromSvgString(builder, tt.currentStringNonNull());
+        SvgPaths.buildFromSvgString(builder, tt.currentStringNonNull());
         return builder.build();
     }
 
@@ -50,7 +50,7 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
-            out.accept(new CssToken(CssTokenType.TT_STRING, Shapes.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null))));
+            out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null))));
         }
     }
 

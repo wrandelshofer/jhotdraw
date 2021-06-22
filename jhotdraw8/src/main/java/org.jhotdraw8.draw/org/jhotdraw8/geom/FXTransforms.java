@@ -45,11 +45,13 @@ public class FXTransforms {
      */
     public static final Transform IDENTITY = new Translate();
 
-    public static @NonNull Transform concat(@Nullable Transform a, @Nullable Transform b) {
-        Transform t = (a == null || a.isIdentity()) ? b : (b == null || b.isIdentity() ? a : a.createConcatenation(b));
-        return t == null ? IDENTITY : t;
+    public static @NonNull Transform concat(@Nullable Transform... transforms) {
+        Transform a=null;
+        for (Transform b : transforms) {
+            a = (a == null || a.isIdentity()) ? b : (b == null || b.isIdentity() ? a : a.createConcatenation(b));
+        }
+        return a == null ? IDENTITY : a;
     }
-
 
     public static @NonNull Transform createReshapeTransform(@NonNull Bounds src, @NonNull Bounds dest) {
         return createReshapeTransform(

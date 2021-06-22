@@ -13,7 +13,7 @@ import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.CharBufferReader;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
@@ -55,7 +55,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
             }
         }
         BezierNodePathBuilder builder = new BezierNodePathBuilder();
-        Shapes.buildFromSvgString(builder, input);
+        SvgPaths.buildFromSvgString(builder, input);
         p = builder.build();
 
         buf.position(buf.limit());
@@ -74,7 +74,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
             return;
         }
 
-        out.append(Shapes.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
+        out.append(SvgPaths.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null)));// we lose smooth!
 
     }
 
