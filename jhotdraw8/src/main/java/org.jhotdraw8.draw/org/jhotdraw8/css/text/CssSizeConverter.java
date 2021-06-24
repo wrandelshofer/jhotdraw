@@ -120,7 +120,7 @@ public class CssSizeConverter implements CssConverter<CssSize> {
 
     @Override
     public @Nullable CssSize getDefaultValue() {
-        return null;
+        return nullable ? null : CssSize.ZERO;
     }
 
     @Override

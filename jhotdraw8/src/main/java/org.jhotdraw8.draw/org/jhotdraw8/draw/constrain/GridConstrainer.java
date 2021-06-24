@@ -399,16 +399,18 @@ public class GridConstrainer extends AbstractConstrainer {
         minorNode.setStrokeWidth(0.5);
         majorNode.setStrokeWidth(1.0);
 
+        Drawing drawing = drawingView.getDrawing();
+        double dx = drawing.getNonNull(Drawing.X).getConvertedValue();
+        double dy = drawing.getNonNull(Drawing.Y).getConvertedValue();
+        double dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
+        double dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
         Bounds visibleRect = drawingView.viewToWorld(drawingView.getVisibleRect());
+        //Bounds visibleRect = FXGeom.intersection(drawingView.viewToWorld(drawingView.getVisibleRect()), new BoundingBox(-dx,-dy,dw,dh));
 
         if (drawGrid.get()) {
-            Drawing drawing = drawingView.getDrawing();
             Transform t = drawingView.getWorldToView();
 
-            double dx = 0;
-            double dy = 0;
-            double dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
-            double dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
+            t = t.createConcatenation(drawing.getLocalToParent());
 
             double gx0 = x.get().getConvertedValue();
             double gy0 = y.get().getConvertedValue();
@@ -427,17 +429,17 @@ public class GridConstrainer extends AbstractConstrainer {
             // render minor
             Point2D scaled = t.deltaTransform(gxdelta, gydelta);
             if (scaled.getX() > 2 && gmx != 1) {
-                final int start = (int) ceil((max(0, visibleRect.getMinX()) - gx0) / gxdelta);
-                final int end = (int) ceil((min(dw, visibleRect.getMaxX()) - gx0) / gxdelta);
+                final int start = (int) ceil((max(dx, visibleRect.getMinX()) - gx0) / gxdelta);
+                final int end = (int) ceil((min(dw + dx, visibleRect.getMaxX()) - gx0) / gxdelta);
                 for (int i = start; i < end; i++) {
                     if (gmx > 0 && i % gmx == 0) {
                         continue;
                     }
                     double x = gx0 + i * gxdelta;
                     double x1 = x;
-                    double y1 = 0;
+                    double y1 = dy;
                     double x2 = x;
-                    double y2 = dh;
+                    double y2 = dh + dy;
 
                     Point2D p1 = t.transform(x1, y1);
                     Point2D p2 = t.transform(x2, y2);
@@ -446,16 +448,16 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2 && gmy != 1) {
-                final int start = (int) ceil((max(0, visibleRect.getMinY()) - gy0) / gydelta);
-                final int end = (int) Math.ceil((min(dh, visibleRect.getMaxY()) - gy0) / gydelta);
+                final int start = (int) ceil((max(dy, visibleRect.getMinY()) - gy0) / gydelta);
+                final int end = (int) Math.ceil((min(dh + dy, visibleRect.getMaxY()) - gy0) / gydelta);
                 for (int i = start; i < end; i++) {
                     if (gmy > 0 && i % gmy == 0) {
                         continue;
                     }
                     double y = gy0 + i * gydelta;
-                    double x1 = 0;
+                    double x1 = dx;
                     double y1 = y;
-                    double x2 = dw;
+                    double x2 = dw + dx;
                     double y2 = y;
 
                     Point2D p1 = t.transform(x1, y1);
@@ -470,14 +472,14 @@ public class GridConstrainer extends AbstractConstrainer {
             double gmxdelta = gxdelta * gmx;
             scaled = t.deltaTransform(gmxdelta, gmydelta);
             if (scaled.getX() > 2) {
-                final int start = (int) ceil((max(0, visibleRect.getMinX()) - gx0) / gmxdelta);
-                final int end = (int) ceil((min(dw, visibleRect.getMaxX()) - gx0) / gmxdelta);
+                final int start = (int) ceil((max(dx, visibleRect.getMinX()) - gx0) / gmxdelta);
+                final int end = (int) ceil((min(dw + dx, visibleRect.getMaxX()) - gx0) / gmxdelta);
                 for (int i = start; i < end; i++) {
                     double x = gx0 + i * gmxdelta;
                     double x1 = x;
-                    double y1 = 0;
+                    double y1 = dy;
                     double x2 = x;
-                    double y2 = dh;
+                    double y2 = dh + dy;
 
                     Point2D p1 = t.transform(x1, y1);
                     Point2D p2 = t.transform(x2, y2);
@@ -486,13 +488,13 @@ public class GridConstrainer extends AbstractConstrainer {
                 }
             }
             if (scaled.getY() > 2) {
-                final int start = (int) ceil((max(0, visibleRect.getMinY()) - gy0) / gmydelta);
-                final int end = (int) Math.ceil((min(dh, visibleRect.getMaxY()) - gy0) / gmydelta);
+                final int start = (int) ceil((max(dy, visibleRect.getMinY()) - gy0) / gmydelta);
+                final int end = (int) Math.ceil((min(dh + dy, visibleRect.getMaxY()) - gy0) / gmydelta);
                 for (int i = start; i < end; i++) {
                     double y = gy0 + i * gmydelta;
-                    double x1 = 0;
+                    double x1 = dx;
                     double y1 = y;
-                    double x2 = dw;
+                    double x2 = dw + dx;
                     double y2 = y;
 
                     Point2D p1 = t.transform(x1, y1);

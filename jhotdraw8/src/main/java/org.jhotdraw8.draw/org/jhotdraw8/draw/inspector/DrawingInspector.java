@@ -48,7 +48,13 @@ public class DrawingInspector extends AbstractDrawingInspector {
 
     private @NonNull InvalidationListener commitHandler = o -> commitEdits();
     @FXML
+    private TextField xField;
+    @FXML
+    private TextField yField;
+    @FXML
     private TextField heightField;
+    private @Nullable Property<CssSize> xProperty;
+    private @Nullable Property<CssSize> yProperty;
     private @Nullable Property<CssSize> heightProperty;
 
     private Node node;
@@ -113,6 +119,16 @@ public class DrawingInspector extends AbstractDrawingInspector {
             heightField.textProperty().unbindBidirectional(heightProperty);
             heightProperty.removeListener(commitHandler);
         }
+        if (xProperty != null) {
+            xField.textProperty().unbindBidirectional(xProperty);
+            xProperty.removeListener(commitHandler);
+        }
+        if (yProperty != null) {
+            yField.textProperty().unbindBidirectional(yProperty);
+            yProperty.removeListener(commitHandler);
+        }
+        xProperty = null;
+        yProperty = null;
         widthProperty = null;
         heightProperty = null;
         if (oldValue != null) {
@@ -120,17 +136,22 @@ public class DrawingInspector extends AbstractDrawingInspector {
             boundBackgroundProperty = null;
         }
         if (newValue != null) {
+            xProperty = Drawing.X.propertyAt(newValue.getProperties());
+            yProperty = Drawing.Y.propertyAt(newValue.getProperties());
             widthProperty = Drawing.WIDTH.propertyAt(newValue.getProperties());
             heightProperty = Drawing.HEIGHT.propertyAt(newValue.getProperties());
             boundBackgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
+            xProperty.addListener(commitHandler);
+            yProperty.addListener(commitHandler);
             widthProperty.addListener(commitHandler);
             heightProperty.addListener(commitHandler);
             myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
+            xField.textProperty().bindBidirectional(xProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
+            yField.textProperty().bindBidirectional(yProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
             heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
-
         }
     }
 

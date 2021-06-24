@@ -358,10 +358,6 @@ public interface TransformableFigure extends TransformCachingFigure {
         return sx != 1 || sy != 1 || r != 0 || tx != 0 || ty != 0;
     }
 
-    default boolean hasTransforms() {
-        return !getNonNull(TRANSFORMS).isEmpty();
-    }
-
     @Override
     default void reshapeInLocal(Transform transform) {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
@@ -385,39 +381,6 @@ public interface TransformableFigure extends TransformCachingFigure {
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
-
-    default void reshapeInParentOld(@NonNull Transform transform) {
-        final boolean hasCenters = hasCenterTransforms();
-        final boolean hasTransforms = hasTransforms();
-        if (!hasTransforms && (transform instanceof Translate)) {
-            reshapeInLocal(transform);
-            return;
-        }
-        Transform parentToLocal = getParentToLocal();
-        if (hasCenters || hasTransforms()) {
-            if (transform instanceof Translate) {
-                Translate translate = (Translate) transform;
-                if (!hasCenters) {
-                    Point2D p = parentToLocal.isIdentity() ? new Point2D(translate.getTx(), translate.getTy())
-                            : parentToLocal.deltaTransform(translate.getTx(), translate.getTy());
-                    reshapeInLocal(new Translate(p.getX(), p.getY()));
-                } else {
-                    set(TRANSLATE_X, getNonNull(TRANSLATE_X) + translate.getTx());
-                    set(TRANSLATE_Y, getNonNull(TRANSLATE_Y) + translate.getTy());
-                }
-            } else {
-                flattenTransforms();
-                ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
-                if (transforms.isEmpty()) {
-                    set(TRANSFORMS, ImmutableLists.of(transform));
-                } else {
-                    set(TRANSFORMS, ImmutableLists.add(transforms, 0, transform));
-                }
-            }
-        } else {
-            reshapeInLocal(FXTransforms.concat(parentToLocal, transform));
-        }
-    }
 
     @Override
     default void reshapeInParent(@NonNull Transform transform) {

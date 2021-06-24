@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -62,6 +63,11 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     public @NonNull Node createNode(RenderContext drawingView) {
         Pane g = new Pane();
         g.setManaged(false);
+
+        Group gg = new Group();
+        gg.setManaged(false);
+        g.getChildren().add(gg);
+
         return g;
     }
 
@@ -80,7 +86,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
      */
     @Override
     public @NonNull CssRectangle2D getCssLayoutBounds() {
-        return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getNonNull(WIDTH), getNonNull(HEIGHT));
+        return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getStyledNonNull(WIDTH), getStyledNonNull(HEIGHT));
     }
 
     @Override
@@ -144,21 +150,28 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         Pane g = (Pane) n;
         Bounds bounds = getLayoutBounds();
+        final double x = getStyledNonNull(X).getConvertedValue();
+        final double y = getStyledNonNull(Y).getConvertedValue();
         g.setPrefWidth(bounds.getWidth());
         g.setPrefHeight(bounds.getHeight());
         g.resizeRelocate(
-        bounds.getMinX(),
-        bounds.getMinY(),
-        bounds.getWidth(),
-        bounds.getHeight());
+                bounds.getMinX(),
+                bounds.getMinY(),
+                bounds.getWidth(),
+                bounds.getHeight());
         updateBackground(ctx, g);
         g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
+
+        Group gg = (Group) g.getChildren().get(0);
+
+        gg.setTranslateX(-x);
+        gg.setTranslateY(-y);
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
-        ObservableList<Node> group = g.getChildren();
+        ObservableList<Node> group = gg.getChildren();
         if (!group.equals(nodes)) {
             group.setAll(nodes);
         }
@@ -172,6 +185,16 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     @Override
     public boolean isSuitableParent(@NonNull Figure newParent) {
         return true;
+    }
+
+    @Override
+    public @NonNull Transform getLocalToParent() {
+        return Transform.translate(-getStyledNonNull(X).getConvertedValue(), -getStyledNonNull(Y).getConvertedValue());
+    }
+
+    @Override
+    public @NonNull Transform getParentToLocal() {
+        return Transform.translate(getStyledNonNull(X).getConvertedValue(), getStyledNonNull(Y).getConvertedValue());
     }
 
 

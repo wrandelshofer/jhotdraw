@@ -14,6 +14,7 @@ import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -85,26 +86,28 @@ public interface Drawing extends Figure {
     @NonNull Key<ImmutableList<String>> INLINE_STYLESHEETS = new SimpleNonNullListKey<String>("inlineStylesheets", new TypeToken<ImmutableList<String>>() {
     });
     /**
-     * Defines the canvas width.
-     * <p>
-     * Canvas width and height are used to determine the bounds of the drawing
-     * when it is printed or exported. {@code DrawingView} typically ignores
-     * this value so that the user can still edit figures which are outside of
-     * the bounds of the drawing.
-     * </p>
-     * <p>
-     * This property is not styleable.</p>
+     * Defines the x-coordinate of the canvas bounds.
+     */
+    @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    /**
+     * Defines the y-coordinate of the canvas bounds.
+     */
+    @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
+    /**
+     * Defines the width of the canvas bounds.
      */
     @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", new CssSize(640.0));
     /**
-     * Defines the canvas height.
-     * <p>
-     * See {@link #WIDTH} for a description.
-     * </p>
-     * <p>
-     * This property is not styleable.</p>
+     * Defines the height of the canvas bounds.
      */
     @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", new CssSize(480.0));
+
+    /**
+     * Defines the canvas bounds.
+     */
+    @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds",
+            X, Y, WIDTH, HEIGHT);
+
     /**
      * Defines the canvas color.
      * <p>

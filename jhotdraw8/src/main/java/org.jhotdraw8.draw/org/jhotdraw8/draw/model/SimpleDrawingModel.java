@@ -157,21 +157,21 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void onPropertyChanged(Figure figure, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    private <T> void onPropertyChanged(@NonNull Figure figure, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                 key, oldValue, newValue));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, figure));
     }
 
-    private void markDirty(Figure figure, DirtyBits... bits) {
+    private void markDirty(@NonNull Figure figure, @NonNull DirtyBits... bits) {
         dirties.merge(figure, DirtyMask.of(bits), mergeDirtyMask);
     }
 
-    private void markDirty(Figure figure, @NonNull DirtyMask mask) {
+    private void markDirty(@NonNull Figure figure, @NonNull DirtyMask mask) {
         dirties.merge(figure, mask, mergeDirtyMask);
     }
 
-    private void removeDirty(Figure figure) {
+    private void removeDirty(@NonNull Figure figure) {
         dirties.remove(figure);
     }
 
@@ -638,21 +638,23 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
             removeDirty(figure);
             break;
-        case NODE_REMOVED_FROM_PARENT:
-            markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
-            invalidate();
-            break;
-        case NODE_CHANGED:
-            break;
-        case ROOT_CHANGED:
-            dirties.clear();
-            valid = true;
-            break;
-        case SUBTREE_NODES_CHANGED:
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + "not supported");
+            case NODE_REMOVED_FROM_PARENT:
+                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
+                invalidate();
+                break;
+            case NODE_CHANGED:
+                markDirty(event.getNode(), DirtyBits.TRANSFORM, DirtyBits.NODE);
+                invalidate();
+                break;
+            case ROOT_CHANGED:
+                dirties.clear();
+                valid = true;
+                break;
+            case SUBTREE_NODES_CHANGED:
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
         }
     }
 }
