@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +46,8 @@ public class DrawingInspector extends AbstractDrawingInspector {
     private @NonNull Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
     private @Nullable Property<CssColor> boundBackgroundProperty;
 
-    private @NonNull InvalidationListener commitHandler = o -> commitEdits();
+    private @NonNull ChangeListener<CssSize> sizeCommitHandler = (o, oldv, newv) -> commitEdits();
+    private @NonNull ChangeListener<CssColor> colorCommitHandler = (o, oldv, newv) -> commitEdits();
     @FXML
     private TextField xField;
     @FXML
@@ -102,7 +103,6 @@ public class DrawingInspector extends AbstractDrawingInspector {
             );
             backgroundColorField.textProperty().bindBidirectional(myBackgroundProperty,
                     new StringConverterAdapter<>(new CssColorConverter(false)));
-            myBackgroundProperty.addListener(commitHandler);
 
         });
 
@@ -113,19 +113,19 @@ public class DrawingInspector extends AbstractDrawingInspector {
     protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (widthProperty != null) {
             widthField.textProperty().unbindBidirectional(widthProperty);
-            widthProperty.removeListener(commitHandler);
+            widthProperty.removeListener(sizeCommitHandler);
         }
         if (heightProperty != null) {
             heightField.textProperty().unbindBidirectional(heightProperty);
-            heightProperty.removeListener(commitHandler);
+            heightProperty.removeListener(sizeCommitHandler);
         }
         if (xProperty != null) {
             xField.textProperty().unbindBidirectional(xProperty);
-            xProperty.removeListener(commitHandler);
+            xProperty.removeListener(sizeCommitHandler);
         }
         if (yProperty != null) {
             yField.textProperty().unbindBidirectional(yProperty);
-            yProperty.removeListener(commitHandler);
+            yProperty.removeListener(sizeCommitHandler);
         }
         xProperty = null;
         yProperty = null;
@@ -133,6 +133,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         heightProperty = null;
         if (oldValue != null) {
             myBackgroundProperty.unbindBidirectional(boundBackgroundProperty);
+            myBackgroundProperty.removeListener(colorCommitHandler);
             boundBackgroundProperty = null;
         }
         if (newValue != null) {
@@ -141,11 +142,12 @@ public class DrawingInspector extends AbstractDrawingInspector {
             widthProperty = Drawing.WIDTH.propertyAt(newValue.getProperties());
             heightProperty = Drawing.HEIGHT.propertyAt(newValue.getProperties());
             boundBackgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
-            xProperty.addListener(commitHandler);
-            yProperty.addListener(commitHandler);
-            widthProperty.addListener(commitHandler);
-            heightProperty.addListener(commitHandler);
+            xProperty.addListener(sizeCommitHandler);
+            yProperty.addListener(sizeCommitHandler);
+            widthProperty.addListener(sizeCommitHandler);
+            heightProperty.addListener(sizeCommitHandler);
             myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
+            myBackgroundProperty.addListener((ChangeListener<? super CssColor>) colorCommitHandler);
 
             // FIXME binding to figure properties bypasses the DrawingModel!
             xField.textProperty().bindBidirectional(xProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
