@@ -130,10 +130,4 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
         path.quadTo(x1, y1, x2, y2);
     }
-
-    @Override
-    public void setSkipEmptySegments(boolean skipEmptySegments) {
-        super.setSkipEmptySegments(skipEmptySegments);
-        path.setSkipEmptySegments(skipEmptySegments);
-    }
 }
