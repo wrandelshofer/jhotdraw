@@ -164,7 +164,7 @@ public class CardinalSplineSampleMain extends Application {
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double px = points.get(i);
             double py = points.get(i + 1);
-            double sq = Geom.distanceSq(x, y, px, py);
+            double sq = Geom.squaredDistance(x, y, px, py);
             if (sq < 25 && sq < bestDistance) {
                 bestDistance = sq;
                 index = i;

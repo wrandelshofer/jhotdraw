@@ -80,10 +80,10 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         boolean b = false;
         if (connectorLocation != null) {
-            b = Geom.lengthSquared(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance * tolerance;
+            b = Geom.squaredDistance(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance * tolerance;
         }
         if (!b && pickLocation != null) {
-            b = Geom.lengthSquared(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance * tolerance;
+            b = Geom.squaredDistance(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance * tolerance;
         }
         return b;
     }

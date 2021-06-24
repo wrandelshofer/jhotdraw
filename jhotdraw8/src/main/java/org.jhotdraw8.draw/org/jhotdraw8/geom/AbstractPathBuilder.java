@@ -20,10 +20,23 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     private int numCommands = 0;
 
+    private boolean skipEmptySegments = false;
+
+    /**
+     * Epsilon for determining whether an element is empty.
+     */
+    private double epsilon;
+    private double squaredEpsilon;
+
     @Override
     public void arcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         if (numCommands++ == 0) {
             throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
+        if (shouldSkip(x, y)) {
+            lastCX = x;
+            lastCY = y;
+            return;
         }
         doArcTo(radiusX, radiusY, xAxisRotation, x, y, largeArcFlag, sweepFlag);
         lastX = x;
@@ -44,6 +57,11 @@ public abstract class AbstractPathBuilder implements PathBuilder {
     public final void curveTo(double x1, double y1, double x2, double y2, double x, double y) {
         if (numCommands++ == 0) {
             throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
+        if (shouldSkip(x, y)) {
+            lastCX = x2;
+            lastCY = y2;
+            return;
         }
         doCurveTo(x1, y1, x2, y2, x, y);
         lastX = x;
@@ -110,11 +128,20 @@ public abstract class AbstractPathBuilder implements PathBuilder {
         if (numCommands++ == 0) {
             throw new IllegalStateException("Missing initial moveto in path definition.");
         }
+        if (shouldSkip(x, y)) {
+            lastCX = x;
+            lastCY = y;
+            return;
+        }
         doLineTo(x, y);
         lastX = x;
         lastY = y;
         lastCX = x;
         lastCY = y;
+    }
+
+    private boolean shouldSkip(double x, double y) {
+        return skipEmptySegments && Geom.squaredDistance(lastX, lastY, x, y) < squaredEpsilon;
     }
 
     @Override
@@ -131,6 +158,11 @@ public abstract class AbstractPathBuilder implements PathBuilder {
     public final void quadTo(double x1, double y1, double x, double y) {
         if (numCommands++ == 0) {
             throw new IllegalStateException("Missing initial moveto in path definition.");
+        }
+        if (shouldSkip(x, y)) {
+            lastCX = x1;
+            lastCY = y1;
+            return;
         }
         doQuadTo(x1, y1, x, y);
         lastX = x;
@@ -183,5 +215,45 @@ public abstract class AbstractPathBuilder implements PathBuilder {
 
     public boolean needsMoveTo() {
         return numCommands == 0;
+    }
+
+    /**
+     * @return whether empty segments are skipped
+     * @see #setSkipEmptySegments(boolean)
+     */
+    public boolean isSkipEmptySegments() {
+        return skipEmptySegments;
+    }
+
+    /**
+     * If set to true, skips lineTo, quadTo and curveTo segments
+     * if the distance to the previous segment is less than epsilon.
+     * <p>
+     * The default value is false.
+     *
+     * @param skipEmptySegments whether to skip empty segments
+     */
+    public void setSkipEmptySegments(boolean skipEmptySegments) {
+        this.skipEmptySegments = skipEmptySegments;
+    }
+
+    /**
+     * @return
+     * @see #setEpsilon(double)
+     */
+    public double getEpsilon() {
+        return epsilon;
+    }
+
+    /**
+     * Sets the epsilon for determining whether a segment is empty.
+     * <p>
+     * The default value is 0.
+     *
+     * @param epsilon
+     */
+    public void setEpsilon(double epsilon) {
+        this.epsilon = epsilon;
+        this.squaredEpsilon = epsilon * epsilon;
     }
 }

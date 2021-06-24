@@ -364,7 +364,7 @@ public class FXGeom {
             if (chop.getStatus() == IntersectionStatus.INTERSECTION) {
                 double x = chop.getFirst().getX();
                 double y = chop.getFirst().getY();
-                double cl = Geom.lengthSquared(x, y, p.getX(), p.getY());
+                double cl = Geom.squaredDistance(x, y, p.getX(), p.getY());
                 if (cl < len) {
                     len = cl;
                     cx = x;
@@ -401,7 +401,7 @@ public class FXGeom {
             for (; !i.isDone(); i.next()) {
                 i.currentSegment(coords);
 
-                double l = Geom.lengthSquared(ctr.x, ctr.y, coords[0], coords[1]);
+                double l = Geom.squaredDistance(ctr.x, ctr.y, coords[0], coords[1]);
                 if (l < len) {
                     len = l;
                     cx = coords[0];
@@ -425,7 +425,7 @@ public class FXGeom {
      * @return the distance between the two points
      */
     public static double length(@NonNull Point2D p1, @NonNull Point2D p2) {
-        return sqrt(Geom.lengthSquared(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
+        return sqrt(Geom.squaredDistance(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
     public static @NonNull Point2D north(@NonNull Rectangle2D r) {
@@ -564,6 +564,12 @@ public class FXGeom {
         return b.getWidth() <= 0 || b.getHeight() <= 0;
     }
 
+    /**
+     * Gets the squared magnitude of the given point.
+     *
+     * @param p a point
+     * @return the squared distance of the point to (0,0)
+     */
     public static double squaredMagnitude(@NonNull Point2D p) {
         double x = p.getX();
         double y = p.getY();
@@ -836,10 +842,10 @@ public class FXGeom {
             double px = xa + (xb - xa) * r;
             double py = ya + (yb - ya) * r;
 
-            if (Geom.lengthSquared(xa, ya, px, py) <= limit2
-                    || Geom.lengthSquared(xb, yb, px, py) <= limit2
-                    || Geom.lengthSquared(xc, yc, px, py) <= limit2
-                    || Geom.lengthSquared(xd, yd, px, py) <= limit2) {
+            if (Geom.squaredDistance(xa, ya, px, py) <= limit2
+                    || Geom.squaredDistance(xb, yb, px, py) <= limit2
+                    || Geom.squaredDistance(xc, yc, px, py) <= limit2
+                    || Geom.squaredDistance(xd, yd, px, py) <= limit2) {
                 return new Point2D(px, py);
             }
 

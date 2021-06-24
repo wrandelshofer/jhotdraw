@@ -795,9 +795,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
             for (int i = 0, n = size(); i < n; i++) {
                 Node cp = get(i);
-                double d = Geom.lengthSquared(ctr.x, ctr.y,
-                        cp.x[0],
-                        cp.y[0]);
+                double d = Geom.squaredDistance(ctr.x, ctr.y, cp.x[0], cp.y[0]);
                 if (d > dist) {
                     dist = d;
                     outer = i;

@@ -351,20 +351,7 @@ public class Geom {
      * @return the distance between the two points
      */
     public static double length(double x1, double y1, double x2, double y2) {
-        return sqrt(lengthSquared(x1, y1, x2, y2));
-    }
-
-    /**
-     * Gets the square distance between two points.
-     *
-     * @param x1 the x coordinate of point 1
-     * @param y1 the y coordinate of point 1
-     * @param x2 the x coordinate of point 2
-     * @param y2 the y coordinate of point 2
-     * @return the square distance between the two points
-     */
-    public static double lengthSquared(double x1, double y1, double x2, double y2) {
-        return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+        return sqrt(squaredDistance(x1, y1, x2, y2));
     }
 
     /**
@@ -378,16 +365,34 @@ public class Geom {
         return new java.awt.geom.Point2D.Double(y, -x);
     }
 
-    public static double distanceSq(double x1, double y1, double x2, double y2) {
-        double Δx = x1 - x2;
-        double Δy = y1 - y2;
-        return Δx * Δx + Δy * Δy;
+    /**
+     * Gets the squared distance between the points (x1,y1) and (x2,y2).
+     *
+     * @param x1 x-coordinate of point 1
+     * @param y1 y-coordinate of point 1
+     * @param x2 x-coordinate of point 2
+     * @param y2 y-coordinate of point 2
+     * @return
+     */
+    public static double squaredDistance(double x1, double y1, double x2, double y2) {
+        double dx = x1 - x2;
+        double dy = y1 - y2;
+        return dx * dx + dy * dy;
     }
 
+    /**
+     * Gets the distance between the points (x1,y1) and (x2,y2).
+     *
+     * @param x1 x-coordinate of point 1
+     * @param y1 y-coordinate of point 1
+     * @param x2 x-coordinate of point 2
+     * @param y2 y-coordinate of point 2
+     * @return
+     */
     public static double distance(double x1, double y1, double x2, double y2) {
-        double Δx = x1 - x2;
-        double Δy = y1 - y2;
-        return sqrt(Δx * Δx + Δy * Δy);
+        double dx = x1 - x2;
+        double dy = y1 - y2;
+        return sqrt(dx * dx + dy * dy);
     }
 
 
@@ -433,7 +438,7 @@ public class Geom {
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1, double epsilon) {
-        return distanceSq(x0, y0, x1, y1) < epsilon * epsilon;
+        return squaredDistance(x0, y0, x1, y1) < epsilon * epsilon;
     }
 
     public static boolean almostZero(java.awt.geom.Point2D.Double v) {

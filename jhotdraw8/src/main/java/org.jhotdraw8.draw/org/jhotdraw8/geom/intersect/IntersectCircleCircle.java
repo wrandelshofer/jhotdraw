@@ -136,7 +136,7 @@ public class IntersectCircleCircle {
         double r_min = Math.abs(r1 - r2);
 
         // Determine actual distance between the two circles
-        double c_distSq = Geom.distanceSq(c1x, c1y, c2x, c2y);
+        double c_distSq = Geom.squaredDistance(c1x, c1y, c2x, c2y);
         double c_dist = Math.sqrt(c_distSq);
 
         IntersectionStatus status;

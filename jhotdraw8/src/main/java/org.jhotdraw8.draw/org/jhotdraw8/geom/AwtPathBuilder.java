@@ -39,7 +39,7 @@ public class AwtPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doLineTo(double x, double y) {
-        path.lineTo(x, y);
+            path.lineTo(x, y);
     }
 
     @Override
