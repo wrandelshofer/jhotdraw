@@ -137,13 +137,13 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void stylesheetNotify(@NonNull RenderContext ctx) {
+    public void stylesheetChanged(@NonNull RenderContext ctx) {
         if (styleManager != null) {
             styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), getList(USER_AGENT_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), getList(AUTHOR_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.INLINE, getStringList(INLINE_STYLESHEETS));
         }
-        super.stylesheetNotify(ctx);
+        super.stylesheetChanged(ctx);
     }
 
     @Override

@@ -67,13 +67,13 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      * This method calls {@link #doAddNotify}.
      */
     @Override
-    public final void addNotify(Drawing drawing) {
+    public final void addedToDrawing(Drawing drawing) {
         this.drawing = drawing;
         doAddNotify(drawing);
     }
 
     /**
-     * This method is called by {@link #addNotify}. The implementation of this
+     * This method is called by {@link #addedToDrawing}. The implementation of this
      * class is empty.
      *
      * @param drawing the drawing
@@ -83,7 +83,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     /**
-     * This method is called by {@link #removeNotify}. The implementation of
+     * This method is called by {@link #removedFromDrawing}. The implementation of
      * this class is empty.
      *
      * @param drawing the drawing
@@ -149,7 +149,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      * This method calls {@link #doAddNotify}.
      */
     @Override
-    public final void removeNotify(Drawing drawing) {
+    public final void removedFromDrawing(Drawing drawing) {
         this.drawing = null;
         doRemoveNotify(drawing);
     }

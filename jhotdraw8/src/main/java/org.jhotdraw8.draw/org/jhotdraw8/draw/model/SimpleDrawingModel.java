@@ -354,7 +354,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void layout(@NonNull Figure f, @NonNull RenderContext ctx) {
-        f.layoutNotify(ctx);
+        f.layoutChanged(ctx);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
@@ -366,7 +366,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void updateCss(@NonNull Figure figure) {
-        figure.stylesheetNotify(new SimpleRenderContext());
+        figure.stylesheetChanged(new SimpleRenderContext());
     }
 
     private void transitivelyCollectDependentFigures(@NonNull Collection<Figure> todo, @NonNull Set<Figure> done) {
@@ -414,11 +414,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmLayoutSubject)) {
                     Figure f = entry.getKey();
-                    f.layoutSubjectChangedNotify();
+                    f.layoutSubjectChanged();
                 }
                 if (dm.intersects(dmLayoutObserversAddRemove)) {
                     Figure f = entry.getKey();
-                    f.layoutObserverChangedNotify();
+                    f.layoutObserverChanged();
                 }
             }
 
@@ -431,7 +431,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 DirtyMask dm = entry.getValue();
                 Figure f = entry.getKey();
                 if (dm.intersects(dmStyle) && visited.add(f)) {
-                    f.stylesheetNotify(ctx);
+                    f.stylesheetChanged(ctx);
                     markDirty(f, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
                 }
             }
@@ -462,7 +462,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform)) {
-                    f.transformNotify();
+                    f.transformChanged();
                 }
             }
 
@@ -526,7 +526,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             if (graphBuilder.getVertexCount() > 0) {
                 for (Figure f : GraphSearch.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
-                        f.layoutNotify(ctx);
+                        f.layoutChanged(ctx);
                         markDirty(f, DirtyBits.NODE);
                     }
                 }
@@ -547,7 +547,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform)) {
-                    f.transformNotify();
+                    f.transformChanged();
                 }
             }
             dirties.clear();
@@ -585,7 +585,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             Key<Object> key = event.getKey();
             Object oldValue = event.getOldValue();
             Object newValue = event.getNewValue();
-            figure.propertyChangedNotify(key, oldValue, newValue);
+            figure.propertyChanged(key, oldValue, newValue);
 
             //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
             final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
@@ -629,12 +629,12 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             break;
         case NODE_ADDED_TO_TREE:
             if (event.getRoot() instanceof Drawing) {
-                figure.addNotify((Drawing) event.getRoot());
+                figure.addedToDrawing((Drawing) event.getRoot());
             }
             break;
         case NODE_REMOVED_FROM_TREE:
             if (event.getRoot() instanceof Drawing) {
-                figure.removeNotify((Drawing) event.getRoot());
+                figure.removedFromDrawing((Drawing) event.getRoot());
             }
             removeDirty(figure);
             break;

@@ -324,11 +324,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     }
 
     /**
-     * Invoked by {@code DrawingModel} when the figure is added to a drawing.
+     * Invoked by {@code DrawingModel} when the figure was added to a drawing.
      *
      * @param drawing the drawing to which this figure has been added
      */
-    default void addNotify(Drawing drawing) {
+    default void addedToDrawing(Drawing drawing) {
     }
 
     /**
@@ -411,7 +411,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method is empty.
      */
-    default void layoutSubjectChangedNotify() {
+    default void layoutSubjectChanged() {
     }
 
     /**
@@ -421,7 +421,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method is empty.
      */
-    default <T> void propertyChangedNotify(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    default <T> void propertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
     }
 
     /**
@@ -431,7 +431,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * The default implementation of this method is empty.
      */
-    default void layoutObserverChangedNotify() {
+    default void layoutObserverChanged() {
     }
 
     /**
@@ -1001,7 +1001,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param ctx the render context (optional)
      */
-    default void layoutNotify(@NonNull RenderContext ctx) {
+    default void layoutChanged(@NonNull RenderContext ctx) {
         layout(ctx);
     }
 
@@ -1096,7 +1096,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param drawing the drawing from which this figure has been removed
      */
-    default void removeNotify(Drawing drawing) {
+    default void removedFromDrawing(Drawing drawing) {
     }
 
     /**
@@ -1207,9 +1207,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param ctx the render context (optional)
      */
-    default void stylesheetNotify(@NonNull RenderContext ctx) {
+    default void stylesheetChanged(@NonNull RenderContext ctx) {
         updateCss(ctx);
-        layout(ctx);
     }
 
     /**
@@ -1238,7 +1237,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation of this method calls
      * {@link #invalidateTransforms}.
      */
-    default void transformNotify() {
+    default void transformChanged() {
         invalidateTransforms();
     }
 

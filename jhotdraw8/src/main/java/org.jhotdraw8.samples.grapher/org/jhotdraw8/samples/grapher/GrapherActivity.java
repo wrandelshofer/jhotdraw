@@ -194,7 +194,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         layer.set(StyleableFigure.ID, "layer1");
         d.addChild(layer);
         for (final Figure f : d.preorderIterable()) {
-            f.addNotify(d);
+            f.addedToDrawing(d);
         }
         applyUserAgentStylesheet(d);
         drawingView.setDrawing(d);

@@ -120,10 +120,10 @@ public class FigureTest {
         public void updateCss(RenderContext ctx) {
         }
 
-        public void addNotify(Drawing drawing) {
+        public void addedToDrawing(Drawing drawing) {
         }
 
-        public void removeNotify(Drawing drawing) {
+        public void removedFromDrawing(Drawing drawing) {
         }
 
         public @NonNull ObservableList<Figure> getChildren() {

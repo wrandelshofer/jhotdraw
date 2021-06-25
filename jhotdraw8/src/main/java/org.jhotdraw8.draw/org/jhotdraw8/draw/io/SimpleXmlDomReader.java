@@ -301,7 +301,7 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
         comments = null;
         if (external != null) {
             Drawing internal = figureFactory.fromExternalDrawing(external);
-            internal.preorderIterable().forEach(figure -> figure.addNotify(internal));
+            internal.preorderIterable().forEach(figure -> figure.addedToDrawing(internal));
             final RenderContext ctx = new SimpleRenderContext();
             internal.preorderIterable().forEach(figure -> figure.updateCss(ctx));
             return internal;
@@ -381,7 +381,7 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
         if (external != null) {
             Drawing internal = figureFactory.fromExternalDrawing(external);
             if (doAddNotifyAndUpdateCss) {
-                internal.preorderIterable().forEach(figure -> figure.addNotify(internal));
+                internal.preorderIterable().forEach(figure -> figure.addedToDrawing(internal));
                 final RenderContext ctx = new SimpleRenderContext();
                 internal.preorderIterable().forEach(figure -> figure.updateCss(ctx));
             }
