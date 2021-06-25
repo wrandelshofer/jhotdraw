@@ -1202,8 +1202,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
      * figure needs to apply its stylesheet again.
      * <p>
-     * The default implementation of this method calls {@link #updateCss} and
-     * then {@code #layout}.
+     * The default implementation of this method calls {@link #updateCss}.
      *
      * @param ctx the render context (optional)
      */
