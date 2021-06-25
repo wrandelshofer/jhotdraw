@@ -12,6 +12,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.event.WeakListener;
 
+import java.lang.ref.WeakReference;
+
 /**
  * This property is weakly bound to a property of a figure in the DrawingModel.
  * <p>
@@ -22,7 +24,7 @@ import org.jhotdraw8.event.WeakListener;
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
     private final @NonNull DrawingModel model;
-    protected final @Nullable Figure figure;
+    protected final @Nullable WeakReference<Figure> figure;
     private final @Nullable Key<T> key;
     private final @Nullable Listener<DrawingModelEvent> modelListener;
     private final @Nullable WeakListener<DrawingModelEvent> weakListener;
@@ -35,7 +37,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
     public DrawingModelFigureProperty(@NonNull DrawingModel model, @Nullable Figure figure, @Nullable Key<T> key, boolean allKeys) {
         this.model = model;
         this.key = key;
-        this.figure = figure;
+        this.figure = new WeakReference<>(figure);
         this.isDeclaredKey = figure != null && Figure.getDeclaredAndInheritedMapAccessors(figure.getClass()).contains(key);
 
         if (key != null) {
@@ -63,8 +65,9 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
     @Override
     public @Nullable T getValue() {
+        Figure f = figure.get();
         @SuppressWarnings("unchecked")
-        T temp = isDeclaredKey && figure != null && key != null ? figure.get(key) : null;
+        T temp = isDeclaredKey && f != null && key != null ? f.get(key) : null;
         return temp;
     }
 
@@ -74,7 +77,10 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
             if (value != null && !key.isAssignable(value)) {
                 throw new IllegalArgumentException("value is not assignable " + value);
             }
-            model.set(figure, key, value);
+            Figure f = this.figure.get();
+            if (f != null) {
+                model.set(f, key, value);
+            }
         }
         // Note: super must be called after "put", so that listeners
         //       can be properly informed.

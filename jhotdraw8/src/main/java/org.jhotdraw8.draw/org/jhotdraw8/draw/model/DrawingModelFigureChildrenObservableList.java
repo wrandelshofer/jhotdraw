@@ -9,6 +9,8 @@ import javafx.collections.transformation.TransformationList;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ObservableListProxy;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.event.WeakListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,8 +21,9 @@ import java.util.function.Function;
  * the proxy performs all changes on the children list via the DrawingModel.
  */
 public class DrawingModelFigureChildrenObservableList extends TransformationList<Figure, Figure> {
-    final @NonNull DrawingModel model;
-    final @NonNull Figure parent;
+    private final @NonNull DrawingModel model;
+    private final @NonNull Figure parent;
+    private final @NonNull Listener<DrawingModelEvent> drawingModelEventListener;
 
     /**
      * Creates a new Transformation list wrapped around the source list.
@@ -29,7 +32,8 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
         super(parent.getChildren());
         this.model = model;
         this.parent = parent;
-        model.addDrawingModelListener(event -> {
+
+        drawingModelEventListener = event -> {
             final Figure node = event.getNode();
             if (node != null && node.getParent() == parent) {
                 final int index = node.getParent().getChildren().indexOf(node);
@@ -76,7 +80,12 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
                     }
                 });
             }
-        });
+        };
+        model.addDrawingModelListener(
+                new WeakListener<>(
+                        drawingModelEventListener
+                        , model::removeDrawingModelListener)
+        );
     }
 
     @Override

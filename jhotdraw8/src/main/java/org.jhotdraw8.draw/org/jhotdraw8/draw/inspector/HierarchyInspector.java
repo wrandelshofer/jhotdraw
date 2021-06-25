@@ -143,7 +143,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
-                        return figure == null ? null : ImmutableSets.ofCollection(figure.getStyleClasses());
+                        Figure f = figure.get();
+                        return f == null ? null : ImmutableSets.ofCollection(f.getStyleClasses());
                     }
                 }
         );
@@ -152,7 +153,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
-                        return figure == null ? null : ImmutableSets.ofCollection(figure.getPseudoClassStates());
+                        Figure f = figure.get();
+                        return f == null ? null : ImmutableSets.ofCollection(f.getPseudoClassStates());
                     }
                 }
         );

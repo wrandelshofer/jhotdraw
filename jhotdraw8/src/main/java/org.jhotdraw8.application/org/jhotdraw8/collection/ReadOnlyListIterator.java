@@ -13,6 +13,14 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
+/**
+ * {@link Enumerator}, {@link Spliterator}, {@link ListIterator},
+ * {@link Iterator} for a {@link ReadOnlyList}.
+ * <p>
+ * Does not perform modification checks of the list.
+ *
+ * @param <E> the element type of the list
+ */
 public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
         Spliterator<E>, Enumerator<E>, Consumer<E> {
     private final ReadOnlyList<E> list;

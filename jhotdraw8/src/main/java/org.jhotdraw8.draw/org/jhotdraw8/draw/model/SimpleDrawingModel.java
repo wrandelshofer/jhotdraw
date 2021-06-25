@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Spliterator;
 import java.util.function.BiFunction;
 
 /**
@@ -444,11 +443,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform) && visited.add(f)) {
-                    for (Enumerator<Figure> i = f.preorderSpliterator(); i.moveNext(); ) {
+                    for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
                         final Figure a = i.current();
                         if (visited.add(a)) {
                             if (a instanceof TransformableFigure
-                            ||a instanceof TransformCachingFigure) {
+                                    || a instanceof TransformCachingFigure) {
                                 markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
                             }
                         }
@@ -498,8 +497,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 if (visited.add(f)) {
                     if (dm.intersects(dmLayout)) {
                         //noinspection StatementWithEmptyBody
-                        for (Spliterator<Figure> i = f.preorderSpliterator(); i.tryAdvance(todo::add); ) {
-                            // empty
+                        for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
+                            todo.add(i.current());
                         }
                     } else if (dm.intersects(dmLayoutObservers)) {
                         todo.addAll(f.getLayoutObservers());

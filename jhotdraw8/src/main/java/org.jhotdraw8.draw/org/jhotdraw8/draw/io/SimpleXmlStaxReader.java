@@ -83,8 +83,25 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         return figure;
     }
 
+    private DataFormat getDataFormat() {
+        String mimeType = "application/xml";
+        DataFormat df = DataFormat.lookupMimeType(mimeType);
+        if (df == null) {
+            df = new DataFormat(mimeType);
+        }
+        return df;
+    }
+
     public @NonNull IdFactory getIdFactory() {
         return idFactory;
+    }
+
+    public Supplier<Layer> getLayerFactory() {
+        return layerFactory;
+    }
+
+    public void setLayerFactory(Supplier<Layer> layerFactory) {
+        this.layerFactory = layerFactory;
     }
 
     @Override
@@ -213,15 +230,6 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     }
 
-    private DataFormat getDataFormat() {
-        String mimeType = "application/xml";
-        DataFormat df = DataFormat.lookupMimeType(mimeType);
-        if (df == null) {
-            df = new DataFormat(mimeType);
-        }
-        return df;
-    }
-
     private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass) throws IOException {
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String ns = r.getAttributeNamespace(i);
@@ -232,8 +240,10 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
             String attributeValue = r.getAttributeValue(i);
             Location location = r.getLocation();
             if (idAttribute.equals(attributeLocalName)) {
+                idFactory.putIdToObject(attributeValue, figure);
+                /*
                 Object anotherObjWithSameId = idFactory.putIdToObject(attributeValue, figure);
-                /*if (anotherObjWithSameId != null) {
+                if (anotherObjWithSameId != null) {
                     // Note: it is okay if we have found a duplicate id when pasting!
                     throw new IOException("Duplicate id " + attributeValue + " at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
                 }*/
@@ -253,7 +263,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
                             throw new UncheckedIOException(e);
                         }
                     });
-                }else{
+                } else {
                     figure.set(key, figureFactory.stringToValue(key, attributeValue));
                 }
             }
@@ -340,13 +350,5 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     public void setNamespaceURI(@Nullable String namespaceURI) {
         this.namespaceURI = namespaceURI;
-    }
-
-    public Supplier<Layer> getLayerFactory() {
-        return layerFactory;
-    }
-
-    public void setLayerFactory(Supplier<Layer> layerFactory) {
-        this.layerFactory = layerFactory;
     }
 }

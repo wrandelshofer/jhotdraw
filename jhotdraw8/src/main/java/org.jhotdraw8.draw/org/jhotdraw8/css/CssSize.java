@@ -42,6 +42,22 @@ public class CssSize {
         this.units = units == null ? UnitConverter.DEFAULT : units;
     }
 
+    public static CssSize from(double value, @Nullable String units) {
+        if (units == null || units.equals(UnitConverter.DEFAULT)) {
+            if (value == 0) {
+                return CssSize.ZERO;
+            }
+            if (value == 1) {
+                return CssSize.ONE;
+            }
+        }
+        return new CssSize(value, units);
+    }
+
+    public static CssSize from(double value) {
+        return from(value, null);
+    }
+
     public static @NonNull CssSize max(@NonNull CssSize a, @NonNull CssSize b) {
         return (a.getConvertedValue() >= b.getConvertedValue()) ? a : b;
     }

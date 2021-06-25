@@ -417,8 +417,8 @@ public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFor
                 } else {
                     try {
                         value = figureFactory.stringToValue(key, attr.getValue());
-                    } catch (IOException e) {
-                        throw createIOException(elem, e);
+                    } catch (UncheckedIOException e) {
+                        throw createIOException(elem, e.getCause());
                     }
                 }
 

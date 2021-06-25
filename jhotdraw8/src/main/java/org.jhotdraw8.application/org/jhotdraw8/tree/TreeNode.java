@@ -6,6 +6,8 @@ package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Enumerator;
+import org.jhotdraw8.collection.ListEnumeratorSpliterator;
 import org.jhotdraw8.collection.SpliteratorIterable;
 
 import java.io.IOException;
@@ -144,6 +146,10 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @NonNull List<T> getChildren();
 
+    default @NonNull Enumerator<T> getChildEnumerator() {
+        return new ListEnumeratorSpliterator<>(getChildren());
+    }
+
     /**
      * Gets the first child.
      *
@@ -243,6 +249,17 @@ public interface TreeNode<T extends TreeNode<T>> {
                     return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
                 }
         );
+    }
+
+    /**
+     * Returns an enumerator which can iterate through this figure and all its
+     * descendants in preorder sequence.
+     *
+     * @return the iterable
+     */
+    default @NonNull Enumerator<T> preorderEnumerator() {
+        @SuppressWarnings("unchecked") T t = (T) this;
+        return new PreorderEnumerator<T>(TreeNode<T>::getChildEnumerator, t);
     }
 
     /**

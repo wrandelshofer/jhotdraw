@@ -64,12 +64,12 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     /**
-     * This method calls {@link #doAddNotify}.
+     * This method calls {@link #doAddedToDrawing}.
      */
     @Override
     public final void addedToDrawing(Drawing drawing) {
         this.drawing = drawing;
-        doAddNotify(drawing);
+        doAddedToDrawing(drawing);
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      *
      * @param drawing the drawing
      */
-    protected void doAddNotify(Drawing drawing) {
+    protected void doAddedToDrawing(Drawing drawing) {
 
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      *
      * @param drawing the drawing
      */
-    protected void doRemoveNotify(Drawing drawing) {
+    protected void doRemovedFromDrawing(Drawing drawing) {
 
     }
 
@@ -146,12 +146,12 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     /**
-     * This method calls {@link #doAddNotify}.
+     * This method calls {@link #doAddedToDrawing}.
      */
     @Override
     public final void removedFromDrawing(Drawing drawing) {
         this.drawing = null;
-        doRemoveNotify(drawing);
+        doRemovedFromDrawing(drawing);
     }
 
     @Override

@@ -69,11 +69,11 @@ public class CssFont {
     }
 
     public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, double size) {
-        return font(family, weight, posture, new CssSize(size));
+        return font(family, weight, posture, CssSize.from(size));
     }
 
     public static @NonNull CssFont font(String family, double size) {
-        return font(family, null, null, new CssSize(size));
+        return font(family, null, null, CssSize.from(size));
     }
 
     @Override

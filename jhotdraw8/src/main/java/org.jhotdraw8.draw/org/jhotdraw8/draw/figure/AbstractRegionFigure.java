@@ -44,7 +44,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
     private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
 
-    private transient Path2D.Double pathElements;
+    private transient Path2D.Double path;
 
     public AbstractRegionFigure() {
         this(0, 0, 1, 1);
@@ -75,10 +75,10 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        if (pathElements == null) {
-            pathElements = new Path2D.Double();
+        if (path == null) {
+            path = new Path2D.Double();
         }
-        return pathElements.getPathIterator(tx);
+        return path.getPathIterator(tx);
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
     protected void updatePathNode(RenderContext ctx, @NonNull Path path) {
-        path.getElements().setAll(Shapes.fxPathElementsFromAwt(pathElements.getPathIterator(null)));
+        path.getElements().setAll(Shapes.fxPathElementsFromAwt(this.path.getPathIterator(null)));
     }
 
     @Override
@@ -106,10 +106,10 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     protected void layoutPath() {
-        if (pathElements == null) {
-            pathElements = new Path2D.Double();
+        if (path == null) {
+            path = new Path2D.Double();
         }
-        pathElements.reset();
+        path.reset();
 
         String pathstr = getStyled(SHAPE);
         if (pathstr == null || pathstr.isEmpty()) {
@@ -122,7 +122,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         double y = getStyledNonNull(Y).getConvertedValue();
         final Bounds b;
         if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
-            AwtPathBuilder awtPathBuilder = new AwtPathBuilder(pathElements);
+            AwtPathBuilder awtPathBuilder = new AwtPathBuilder(path);
             try {
                 SvgPaths.buildFromSvgString(awtPathBuilder, pathstr);
                 java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
@@ -141,7 +141,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                             height / pathRatio,
                             height);
                 }
-                pathElements.reset();
+                path.reset();
             } catch (ParseException e) {
                 LOGGER.warning("Illegal SVG path: " + pathstr);
                 return;
@@ -153,6 +153,6 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                     width,
                     height);
         }
-        SvgPaths.reshape(pathstr, b, new AwtPathBuilder(pathElements));
+        SvgPaths.reshape(pathstr, b, new AwtPathBuilder(path));
     }
 }

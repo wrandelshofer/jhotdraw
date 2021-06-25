@@ -56,17 +56,17 @@ public class CssSizeConverter implements CssConverter<CssSize> {
     public static CssSize parseSize(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            return new CssSize(tt.currentNumberNonNull().doubleValue());
+            return CssSize.from(tt.currentNumberNonNull().doubleValue());
         case CssTokenType.TT_DIMENSION:
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentString());
+            return CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentString());
         case CssTokenType.TT_IDENT:
             switch (tt.currentStringNonNull()) {
             case "NaN":
-                return new CssSize(Double.NaN);
+                return CssSize.from(Double.NaN);
             case "INF":
-                return new CssSize(Double.POSITIVE_INFINITY);
+                return CssSize.from(Double.POSITIVE_INFINITY);
             case "-INF":
-                return new CssSize(Double.NEGATIVE_INFINITY);
+                return CssSize.from(Double.NEGATIVE_INFINITY);
             default:
                 throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
             }
@@ -78,19 +78,19 @@ public class CssSizeConverter implements CssConverter<CssSize> {
     public static CssSize parseSizeOrPercentage(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            return new CssSize(tt.currentNumberNonNull().doubleValue());
+            return CssSize.from(tt.currentNumberNonNull().doubleValue());
         case CssTokenType.TT_DIMENSION:
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentString());
+            return CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentString());
         case CssTokenType.TT_PERCENTAGE:
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), "%");
+            return CssSize.from(tt.currentNumberNonNull().doubleValue(), "%");
         case CssTokenType.TT_IDENT:
             switch (tt.currentStringNonNull()) {
             case "NaN":
-                return new CssSize(Double.NaN);
+                return CssSize.from(Double.NaN);
             case "INF":
-                return new CssSize(Double.POSITIVE_INFINITY);
+                return CssSize.from(Double.POSITIVE_INFINITY);
             case "-INF":
-                return new CssSize(Double.NEGATIVE_INFINITY);
+                return CssSize.from(Double.NEGATIVE_INFINITY);
             default:
                 throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
             }

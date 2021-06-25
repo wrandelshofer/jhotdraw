@@ -100,10 +100,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return cachedLayoutBounds;
     }
 
-    protected @Nullable Bounds setCachedLayoutBounds(Bounds newValue) {
-        Bounds oldValue = cachedLayoutBounds;
-        cachedLayoutBounds = newValue;
-        return oldValue;
+    protected @Nullable void setCachedLayoutBounds(Bounds newValue) {
+        if (!Objects.equals(cachedLayoutBounds, newValue)) {
+            cachedLayoutBounds = newValue;
+        }
     }
 
     @Override
@@ -275,7 +275,9 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     protected @NonNull Insets getTotalPaddingAroundText() {
         final Insets padding = getStyledNonNull(PADDING).getConvertedValue();
         final List<PathElement> shape = getStyled(ICON_SHAPE);
-        if (shape == null) return padding;
+        if (shape == null) {
+            return padding;
+        }
         final Dimension2D size = getStyledNonNull(ICON_SIZE).getConvertedValue();
         final double gap = getStyledNonNull(ICON_TEXT_GAP).getConvertedValue();
         return new Insets(
