@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -58,7 +59,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     /**
      * Maps a key to an attribute name.
      */
-    private @NonNull HashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new HashMap<>();
+    private @NonNull ConcurrentHashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new ConcurrentHashMap<>();
     private @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
 
@@ -402,14 +403,15 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return figureToMetaMap.computeIfAbsent(elem.getClass(), klass -> {
             Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
+            Function<QualifiedName, List<WritableStyleableMapAccessor<Object>>> arrayListSupplier = key -> new ArrayList<>();
             for (MapAccessor<?> k : elem.getSupportedKeys()) {
                 if (k instanceof WritableStyleableMapAccessor) {
                     @SuppressWarnings("unchecked")
                     WritableStyleableMapAccessor<Object> sk = (WritableStyleableMapAccessor<Object>) k;
-                    metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), key -> new ArrayList<>()).add(sk);
+                    metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), arrayListSupplier).add(sk);
                     if (sk.getCssNamespace() != null) {
                         // all names can be accessed without specificying a namespace
-                        metaMap.computeIfAbsent(new QualifiedName(null, sk.getCssName()), key -> new ArrayList<>()).add(sk);
+                        metaMap.computeIfAbsent(new QualifiedName(null, sk.getCssName()), arrayListSupplier).add(sk);
                     }
                 }
             }
@@ -422,14 +424,15 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return figureToReadOnlyMetaMap.computeIfAbsent(elem.getClass(), klass -> {
             Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
+            Function<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> arrayListSupplier = key -> new ArrayList<>();
             for (MapAccessor<?> k : elem.getSupportedKeys()) {
                 if (k instanceof ReadOnlyStyleableMapAccessor) {
                     @SuppressWarnings("unchecked")
                     ReadOnlyStyleableMapAccessor<Object> sk = (ReadOnlyStyleableMapAccessor<Object>) k;
-                    metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), key -> new ArrayList<>()).add(sk);
+                    metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), arrayListSupplier).add(sk);
                     if (sk.getCssNamespace() != null) {
                         // all names can be accessed without specificying a namespace
-                        metaMap.computeIfAbsent(new QualifiedName(null, sk.getCssName()), key -> new ArrayList<>()).add(sk);
+                        metaMap.computeIfAbsent(new QualifiedName(null, sk.getCssName()), arrayListSupplier).add(sk);
                     }
                 }
             }
