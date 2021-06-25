@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
  * Skips lineTo, quadTo and curveTo segments
  * if the distance to the previous segment is less than epsilon.
  */
-public class EmptySkippingPathBuilder extends AbstractPathBuilder {
+public class ShortSegmentsSkipperPathBuilder extends AbstractPathBuilder {
 
     private final @NonNull PathBuilder consumer;
 
@@ -21,7 +21,7 @@ public class EmptySkippingPathBuilder extends AbstractPathBuilder {
      */
     private final double squaredEpsilon;
 
-    public EmptySkippingPathBuilder(@NonNull PathBuilder consumer, double epsilon) {
+    public ShortSegmentsSkipperPathBuilder(@NonNull PathBuilder consumer, double epsilon) {
         this.consumer = consumer;
         this.squaredEpsilon = epsilon * epsilon;
     }
