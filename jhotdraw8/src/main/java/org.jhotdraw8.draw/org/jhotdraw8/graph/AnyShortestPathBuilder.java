@@ -183,14 +183,14 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
             long costToU = node.cost;
 
             for (V v : nextf.apply(u)) {
-                long bestKnownCost = costMap.getOrDefault(v, Long.MAX_VALUE);
-                long costThroughU = costToU + costf.applyAsLong(u, v);
+                long bestKnownCostToV = costMap.getOrDefault(v, Long.MAX_VALUE);
+                long costThroughUToV = costToU + costf.applyAsLong(u, v);
 
                 // If there is a shorter path to v through u.
-                if (costThroughU < bestKnownCost && costThroughU <= maxCost) {
+                if (costThroughUToV < bestKnownCostToV && costThroughUToV <= maxCost) {
                     // Update cost to v.
-                    costMap.put(v, costThroughU);
-                    queue.add(new MyBackLinkLong<>(v, costThroughU, node, costThroughU));
+                    costMap.put(v, costThroughUToV);
+                    queue.add(new MyBackLinkLong<>(v, costThroughUToV, node, costThroughUToV));
                 }
             }
         }

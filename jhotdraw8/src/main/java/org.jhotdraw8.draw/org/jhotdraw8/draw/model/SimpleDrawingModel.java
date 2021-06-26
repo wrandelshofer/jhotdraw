@@ -28,11 +28,12 @@ import org.jhotdraw8.graph.GraphSearch;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.util.AbstractMap;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +107,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     private boolean isValidating = false;
     private boolean valid = true;
-    private final @NonNull Map<Figure, DirtyMask> dirties = new LinkedHashMap<>();
+    /**
+     * Performance: Every figure has a unique reference. IdentityHashMap is faster than HashMap in this case.
+     */
+    private final @NonNull Map<Figure, DirtyMask> dirties = new IdentityHashMap<>();
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
     private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
@@ -134,7 +138,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private void onRootChanged(@Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (listenOnDrawing) {
             if (oldValue != null) {
-                     oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
+                oldValue.getPropertyChangeListeners().remove(propertyChangeHandler);
             }
             if (newValue != null) {
                 newValue.getPropertyChangeListeners().add(propertyChangeHandler);
@@ -424,7 +428,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // all figures with dirty bit "STYLE"
             // invoke stylesheetNotify
             // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
-            final Set<Figure> visited = new HashSet<>((int) (dirties.size() * 1.4));
+            // Performance: Every figure has a unique reference. IdentityHashMap is faster than HashMap in this case.
+            final Set<Figure> visited = Collections.newSetFromMap(new IdentityHashMap<>((int) (dirties.size() * 2)));
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 DirtyMask dm = entry.getValue();
@@ -489,7 +494,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // all layoutable parents must be laid out.
             visited.clear();
             DirtyMask dmLayoutObservers = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS);
-            Set<Figure> todo = new LinkedHashSet<>(dirties.size()); // FIXME will probably be more than dirties.size!
+            Set<Figure> todo = new LinkedHashSet<>(dirties.size() * 2);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
@@ -509,15 +514,18 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // transitively
             visited.clear();
             DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>();
-            while (!todo.isEmpty()) {
-                Figure f = todo.iterator().next();
-                todo.remove(f);
+            ArrayDeque<Figure> queue = new ArrayDeque<>(todo);
+            while (!queue.isEmpty()) {
+                Figure f = queue.removeFirst();
                 if (visited.add(f)) {
                     graphBuilder.addVertex(f);
                     for (Figure obs : f.getLayoutObservers()) {
                         graphBuilder.addVertex(obs);
                         graphBuilder.addArrow(f, obs, f);
-                        todo.add(obs);
+                        if (!visited.contains(obs)) {
+                            queue.add(obs);
+                        }
+                        ;
                     }
                 }
             }
@@ -637,23 +645,23 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
             removeDirty(figure);
             break;
-            case NODE_REMOVED_FROM_PARENT:
-                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
-                invalidate();
-                break;
-            case NODE_CHANGED:
-                markDirty(event.getNode(), DirtyBits.TRANSFORM, DirtyBits.NODE);
-                invalidate();
-                break;
-            case ROOT_CHANGED:
-                dirties.clear();
-                valid = true;
-                break;
-            case SUBTREE_NODES_CHANGED:
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + "not supported");
+        case NODE_REMOVED_FROM_PARENT:
+            markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
+            invalidate();
+            break;
+        case NODE_CHANGED:
+            markDirty(event.getNode(), DirtyBits.TRANSFORM, DirtyBits.NODE);
+            invalidate();
+            break;
+        case ROOT_CHANGED:
+            dirties.clear();
+            valid = true;
+            break;
+        case SUBTREE_NODES_CHANGED:
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + "not supported");
         }
     }
 }

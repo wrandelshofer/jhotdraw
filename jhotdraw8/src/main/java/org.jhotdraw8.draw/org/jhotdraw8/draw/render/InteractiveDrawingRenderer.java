@@ -8,8 +8,10 @@ package org.jhotdraw8.draw.render;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
@@ -38,8 +40,8 @@ import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,13 +62,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final @NonNull Group drawingPane = new Group();
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
-    /**
-     * This is the set of figures which are out of sync with their JavaFX node.
-     */
-    private final Set<Figure> dirtyFigureNodes = new HashSet<>();
+
+    private final Set<Figure> dirtyFigureNodes = Collections.newSetFromMap(new IdentityHashMap<>());
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
-    private final Map<Figure, Node> figureToNodeMap = new HashMap<>();
-    private final Map<Node, Figure> nodeToFigureMap = new HashMap<>();
+    private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 5_000);
+    private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
+    private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
     private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
     private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     private @Nullable Runnable repainter = null;
@@ -251,6 +252,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private boolean findFiguresInsideRecursive(@NonNull Parent p, @NonNull Bounds pp, @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
+        if (!p.isVisible()) {
+            return false;
+        }
         boolean foundAFigure = false;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
@@ -322,6 +326,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
     private boolean findFiguresRecursive(@NonNull Parent p, @NonNull Point2D pp, @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose,
                                          Predicate<Figure> figurePredicate, double tolerance) {
+        if (!p.isVisible()) {
+            return false;
+        }
         boolean foundAFigure = false;
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
@@ -422,7 +429,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private void invalidateFigureNode(Figure f) {
-        dirtyFigureNodes.add(f);
+        if (hasNode(f)) {
+            dirtyFigureNodes.add(f);
+        }
     }
 
     private void invalidateLayerNodes() {
@@ -583,22 +592,76 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
         // create copies of the lists to allow for concurrent modification
         Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
-        dirtyFigureNodes.clear();
-        for (Figure f : copyOfDirtyFigureNodes) {
-            if (!f.getBoundsInWorld().intersects(visibleRectInWorld)
-                    || !f.isShowing()) {
-                // wont otherwise be updated and thus remains dirty!
-                dirtyFigureNodes.add(f);
-                continue;
+
+        // Determine how many nodes we will update in this batch
+        int limit = Math.max(getUpdateLimit(), 0);
+
+        // If there are too many dirty figures, we update the node of
+        // figures that intersect with the visible rect first.
+        int count = 0;
+        if (copyOfDirtyFigureNodes.length > limit) {
+            for (int i = 0, n = copyOfDirtyFigureNodes.length; i < n && count < limit; i++) {
+                Figure f = copyOfDirtyFigureNodes[i];
+                if (f.getVisualBoundsInWorld().intersects(visibleRectInWorld)) {
+                    copyOfDirtyFigureNodes[i] = null;
+                    count++;
+                    Node node = getNode(f);// this may add the node again to the list of dirties!
+                    if (node != null) {
+                        f.updateNode(getRenderContext(), node);
+                        dirtyFigureNodes.remove(f);
+                    }
+                }
             }
-            Node node = getNode(f);
-            if (node != null) {
-                f.updateNode(getRenderContext(), node);
+
+            // If there are more figures intersecting visibleRectInWorld that need
+            // to be updated. Lets update them in the next batch.
+            if (count == limit) {
+                repaint();
+                return;
+            }
+        }
+
+
+        // Update figure nodes until we reach the limit.
+        for (int i = 0, n = copyOfDirtyFigureNodes.length; i < n && count < limit; i++) {
+            Figure f = copyOfDirtyFigureNodes[i];
+            if (f != null) {
+                count++;
+                Node node = getNode(f);// this may add the node again to the list of dirties!
+                if (node != null) {
+                    f.updateNode(getRenderContext(), node);
+                    dirtyFigureNodes.remove(f);
+                }
             }
         }
     }
 
     public @NonNull DoubleProperty zoomFactorProperty() {
         return zoomFactor;
+    }
+
+    public int getUpdateLimit() {
+        return updateLimit.get();
+    }
+
+    /**
+     * The maximal number of figures which are updated in one repaint.
+     * <p>
+     * The value should be sufficiently large, because a repaint is only
+     * done once per frame. If the value is low, it will take many frames
+     * until the drawing is completed.
+     * <p>
+     * If this is set to a value smaller or equal zero, then no figures
+     * are updated.
+     * <p>
+     *
+     * @return the update limit
+     */
+    public IntegerProperty updateLimitProperty() {
+        return updateLimit;
+    }
+
+    public void setUpdateLimit(int updateLimit) {
+        this.updateLimit.set(updateLimit);
     }
 }

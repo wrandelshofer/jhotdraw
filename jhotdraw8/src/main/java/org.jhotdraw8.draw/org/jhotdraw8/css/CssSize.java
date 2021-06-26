@@ -44,10 +44,10 @@ public class CssSize {
 
     public static CssSize from(double value, @Nullable String units) {
         if (units == null || units.equals(UnitConverter.DEFAULT)) {
-            if (value == 0) {
+            if (value == 0.0) {
                 return CssSize.ZERO;
             }
-            if (value == 1) {
+            if (value == 1.0) {
                 return CssSize.ONE;
             }
         }

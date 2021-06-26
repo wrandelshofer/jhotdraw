@@ -20,6 +20,10 @@ public class OrderedPair<U, V> implements Pair<U, V> {
 
     private final U a;
     private final V b;
+    /**
+     * Cached hash-value for faster hashing.
+     */
+    private int hash;
 
     public OrderedPair(U a, V b) {
         this.a = a;
@@ -58,9 +62,11 @@ public class OrderedPair<U, V> implements Pair<U, V> {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.a);
-        hash = 59 * hash + Objects.hashCode(this.b);
+        if (hash == 0) {
+            hash = 3;
+            hash = 59 * hash + Objects.hashCode(this.a);
+            hash = 59 * hash + Objects.hashCode(this.b);
+        }
         return hash;
     }
 

@@ -21,6 +21,10 @@ public class UnorderedPair<V> implements Pair<V, V> {
 
     private final V a;
     private final V b;
+    /**
+     * Cached hash-value for faster hashing.
+     */
+    private int hash;
 
     public UnorderedPair(V a, V b) {
         this.a = a;
@@ -59,7 +63,10 @@ public class UnorderedPair<V> implements Pair<V, V> {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(a) + Objects.hashCode(b);
+        if (hash == 0) {
+            hash = 7 + Objects.hashCode(a) + Objects.hashCode(b);
+        }
+        return hash;
     }
 
     @Override
