@@ -40,8 +40,8 @@ import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,9 +63,19 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
-    private final Set<Figure> dirtyFigureNodes = Collections.newSetFromMap(new IdentityHashMap<>());
+    /**
+     * This must be a linked set, so that figures are updated in first-come
+     * first-serve fashion.
+     * <p>
+     * If many figures change constantly, and {@link #updateLimit} is a small
+     * value, then the linked set ensures that all figures are updated eventually.
+     */
+    private final Set<Figure> dirtyFigureNodes = new LinkedHashSet<>();
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
-    private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 5_000);
+    /**
+     * @see #updateLimitProperty()
+     */
+    private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
     private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
     private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
     private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
@@ -651,9 +661,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * done once per frame. If the value is low, it will take many frames
      * until the drawing is completed.
      * <p>
-     * If this is set to a value smaller or equal zero, then no figures
-     * are updated.
+     * If the value is set too high, then the editor may be become unresponsive
+     * if lots of figures change. (For example, when new stylesheets are applied
+     * to all figures).
      * <p>
+     * If this is set to a value smaller or equal to zero, then no figures
+     * are updated.
      *
      * @return the update limit
      */
