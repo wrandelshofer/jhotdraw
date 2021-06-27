@@ -429,7 +429,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // invoke stylesheetNotify
             // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
             // Performance: Every figure has a unique reference. IdentityHashMap is faster than HashMap in this case.
-            final Set<Figure> visited = Collections.newSetFromMap(new IdentityHashMap<>((int) (dirties.size() * 2)));
+            final Set<Figure> visited = Collections.newSetFromMap(new IdentityHashMap<>(dirties.size() * 2));
             DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 DirtyMask dm = entry.getValue();

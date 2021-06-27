@@ -24,9 +24,8 @@ public class ReversedList<T> extends AbstractList<T> {
      *
      * @param target the target list
      */
-    @SuppressWarnings("unchecked")
     public ReversedList(Collection<T> target) {
-        this.target = (target instanceof List) ? (List) target : new ArrayList<>(target);
+        this.target = (target instanceof List) ? (List<T>) target : new ArrayList<>(target);
     }
 
     @Override

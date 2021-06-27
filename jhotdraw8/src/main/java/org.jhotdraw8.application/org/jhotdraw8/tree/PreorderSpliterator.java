@@ -19,10 +19,10 @@ import java.util.function.Function;
  * @version $$Id$$
  */
 public class PreorderSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
-    private final Function<T, Iterable<T>> getChildrenFunction;
-    private final Deque<Iterator<T>> stack = new ArrayDeque<>();
+    private final Function<T, Iterable<? extends T>> getChildrenFunction;
+    private final Deque<Iterator<? extends T>> stack = new ArrayDeque<>();
 
-    public PreorderSpliterator(Function<T, Iterable<T>> getChildrenFunction, T root) {
+    public PreorderSpliterator(Function<T, Iterable<? extends T>> getChildrenFunction, T root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         stack.push(Collections.singleton(root).iterator());
         this.getChildrenFunction = getChildrenFunction;
@@ -30,7 +30,7 @@ public class PreorderSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
 
     @Override
     public boolean moveNext() {
-        Iterator<T> iter = stack.peek();
+        Iterator<? extends T> iter = stack.peek();
         if (iter == null) {
             return false;
         }
@@ -39,7 +39,7 @@ public class PreorderSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
         if (!iter.hasNext()) {
             stack.pop();
         }
-        Iterator<T> children = getChildrenFunction.apply(current).iterator();
+        Iterator<? extends T> children = getChildrenFunction.apply(current).iterator();
         if (children.hasNext()) {
             stack.push(children);
         }

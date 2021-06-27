@@ -36,7 +36,6 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
         this.activity = activity;
     }
 
-    @SuppressWarnings("unchecked")
     public @Nullable A getActivity() {
         return activity;
     }

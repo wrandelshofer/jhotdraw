@@ -128,9 +128,7 @@ public interface PropertyBean {
      * @return the removed value
      */
     default @Nullable <T> T remove(Key<T> key) {
-        @SuppressWarnings("unchecked")
-        T removedValue = (T) getProperties().remove(key);
-        return removedValue;
+        return key.getRawValueType().cast(getProperties().remove(key));
     }
 
     @SuppressWarnings("unchecked")

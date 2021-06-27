@@ -49,7 +49,7 @@ public class OrderedPairNonNull<U, V> implements Pair<U, V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked") final OrderedPairNonNull<U, V> other = (OrderedPairNonNull) obj;
+         final OrderedPairNonNull<?, ?> other = (OrderedPairNonNull<?, ?>) obj;
         if (!Objects.equals(this.a, other.a)) {
             return false;
         }

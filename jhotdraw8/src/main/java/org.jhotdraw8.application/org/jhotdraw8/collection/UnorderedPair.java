@@ -54,7 +54,7 @@ public class UnorderedPair<V> implements Pair<V, V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked") final UnorderedPair<V> other = (UnorderedPair) obj;
+        final UnorderedPair<?> other = (UnorderedPair<?>) obj;
         if (Objects.equals(this.a, other.a) && Objects.equals(this.b, other.b)) {
             return true;
         }

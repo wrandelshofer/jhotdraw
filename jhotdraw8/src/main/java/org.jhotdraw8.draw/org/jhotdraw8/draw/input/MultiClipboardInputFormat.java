@@ -26,7 +26,6 @@ public class MultiClipboardInputFormat implements ClipboardInputFormat {
 
     private ClipboardInputFormat[] formats;
 
-    @SuppressWarnings("unchecked")
     public MultiClipboardInputFormat(@NonNull List<Supplier<ClipboardInputFormat>> formatSuppliers) {
         this.formatSuppliers = formatSuppliers;
     }

@@ -522,7 +522,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @see java.io.StreamTokenizer#sval
      * @see java.io.StreamTokenizer#ttype
      */
-    @SuppressWarnings("empty-statement")
     public int nextToken() throws IOException {
         if (pushedBack) {
             pushedBack = false;
@@ -590,10 +589,8 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
             ctype = c < 256 ? ct[c] : CT_ALPHA;
         }
 
-        // rlw
         startpos = readpos - 1;
 
-        // rlw hexadecimal
         hex:
         if (((ctype & CT_DIGIT) != 0)
                 && c == '0' && isParseHexNumbers) {

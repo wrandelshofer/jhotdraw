@@ -23,7 +23,6 @@ public class ChildList<E extends TreeNode<E>> extends AbstractIndexedArraySet<E>
 
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected Boolean onContains(E e) {
         return e.getParent() == parent;

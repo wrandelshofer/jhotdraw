@@ -57,10 +57,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     default @Nullable T get(@NonNull Map<? super Key<?>, Object> a) {
-        @SuppressWarnings("unchecked")
-        T value = (T) a.getOrDefault(this, getDefaultValue());
-        //assert isAssignable(value) : value + " is not assignable to " + getValueType();
-        return value;
+        return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
     }
 
     /**
@@ -103,12 +100,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     default @Nullable T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
-        T oldValue;
-        // Note: we must always put a value even if it is the same as our default value
-        @SuppressWarnings("unchecked")
-        T suppress = oldValue = (T) a.put(this, value);
-
-        return oldValue;
+        return getRawValueType().cast(a.put(this, value));
     }
 
     /**
@@ -120,9 +112,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     default @Nullable T remove(@NonNull Map<? super Key<?>, Object> a) {
-        @SuppressWarnings("unchecked")
-        T oldValue = (T) a.remove(this);
-        return oldValue;
+        return getRawValueType().cast(a.remove(this));
     }
 
     /**
@@ -224,7 +214,6 @@ public interface Key<T> extends MapAccessor<T> {
     }
 
     default @NonNull T cast(Object value) {
-        @SuppressWarnings("unchecked") T value1 = (T) value;
-        return value1;
+        return getRawValueType().cast(value);
     }
 }

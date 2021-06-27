@@ -26,9 +26,7 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> 
 
     @Override
     public @Nullable V get() {
-        @SuppressWarnings("unchecked")
-        V ret = accessor.get(map);
-        return ret;
+        return accessor.get(map);
     }
 
     @Override

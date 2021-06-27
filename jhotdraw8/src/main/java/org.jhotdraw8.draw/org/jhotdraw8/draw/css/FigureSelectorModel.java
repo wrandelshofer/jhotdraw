@@ -165,7 +165,6 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         Object value = element.get(k);
 
         // FIXME get rid of special treatment for CssStringConverter
-        @SuppressWarnings("unchecked")
         Converter<Object> c = k.getCssConverter();
         String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getCssConverter().toString(value);
         return stringValue;
@@ -191,8 +190,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         }
         Object value = element.get(k);
         if (value instanceof Collection) {
-            @SuppressWarnings("unchecked")
-            Collection<Object> c = (Collection<Object>) value;
+            Collection<?> c = (Collection<?>) value;
             for (Object o : c) {
                 if (o != null && word.equals(o.toString())) {
                     return true;
@@ -278,21 +276,19 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
         return getAttributeAsString(element, StyleOrigin.USER, namespace, attributeName);
     }
 
-    @SuppressWarnings("unchecked")
     public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String attributeName) {
-        ReadOnlyStyleableMapAccessor<Object> key = (ReadOnlyStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
+        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespace, attributeName);
         if (key == null) {
             return null;
         }
         boolean isInitialValue = origin != null && !element.containsMapAccessor(origin, key);
         if (isInitialValue) {
             if ((key instanceof CompositeMapAccessor)) {
-                for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
+                for (MapAccessor<?> subkey : ((CompositeMapAccessor<?>) key).getSubAccessors()) {
                     if (element.containsMapAccessor(origin, subkey)) {
                         isInitialValue = false;
                         break;
@@ -304,8 +300,9 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             return null;
         }
         StringBuilder buf = new StringBuilder();
-        Converter<Object> converter = key.getCssConverter();
-        if (converter instanceof CssConverter) {// FIXME this is questionable
+        @SuppressWarnings("unchecked")
+        Converter<Object> converter = (Converter<Object>) key.getCssConverter();
+        if (converter instanceof CssConverter) {
             CssConverter<Object> c = (CssConverter<Object>) converter;
             try {
                 List<CssToken> cssTokens = c.toTokens(element.getStyled(origin, key), null);
@@ -313,9 +310,9 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     // If the value is scalar, then append it without CSS syntax adornments.
                     for (CssToken t : cssTokens) {
                         switch (t.getType()) {
-                            case CssTokenType.TT_NUMBER:
-                                buf.append(t.getNumericValueNonNull().toString());
-                                break;
+                        case CssTokenType.TT_NUMBER:
+                            buf.append(t.getNumericValueNonNull().toString());
+                            break;
                             case CssTokenType.TT_PERCENTAGE:
                                 buf.append(t.getNumericValueNonNull().toString());
                                 buf.append('%');
@@ -349,16 +346,15 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return buf.toString();
     }
 
-    @SuppressWarnings("unchecked")
     public @Nullable List<CssToken> getAttribute(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String attributeName) {
-        ReadOnlyStyleableMapAccessor<Object> key = (ReadOnlyStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
+        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespace, attributeName);
         if (key == null) {
             return null;
         }
         boolean isInitialValue = origin != null && !element.containsMapAccessor(origin, key);
         if (isInitialValue) {
             if ((key instanceof CompositeMapAccessor)) {
-                for (MapAccessor<Object> subkey : (Set<MapAccessor<Object>>) ((CompositeMapAccessor) key).getSubAccessors()) {
+                for (MapAccessor<?> subkey : ((CompositeMapAccessor<?>) key).getSubAccessors()) {
                     if (element.containsMapAccessor(origin, subkey)) {
                         isInitialValue = false;
                         break;
@@ -369,7 +365,8 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         if (isInitialValue) {
             return null;
         }
-        Converter<Object> converter = key.getCssConverter();
+        @SuppressWarnings("unchecked")
+        Converter<Object> converter = (Converter<Object>) key.getCssConverter();
         if (converter instanceof CssConverter) {
             try {
                 return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin, key), null);
@@ -388,15 +385,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     public @Nullable Converter<?> getConverter(@NonNull Figure element, @Nullable String namespace, String attributeName) {
-        @SuppressWarnings("unchecked")
-        WritableStyleableMapAccessor<Object> k = (WritableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
+        WritableStyleableMapAccessor<?> k = findKey(element, namespace, attributeName);
         return k == null ? null : k.getCssConverter();
     }
 
     public @Nullable WritableStyleableMapAccessor<?> getAccessor(@NonNull Figure element, @Nullable String namespace, String attributeName) {
-        @SuppressWarnings("unchecked")
-        WritableStyleableMapAccessor<Object> k = (WritableStyleableMapAccessor<Object>) findKey(element, namespace, attributeName);
-        return k;
+        return findKey(element, namespace, attributeName);
     }
 
     private Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> getWritableMetaMap(@NonNull Figure elem) {

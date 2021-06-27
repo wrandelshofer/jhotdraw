@@ -53,7 +53,7 @@ public class OrderedPair<U, V> implements Pair<U, V> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        @SuppressWarnings("unchecked") final OrderedPair<U, V> other = (OrderedPair) obj;
+        final OrderedPair<?, ?> other = (OrderedPair<?, ?>) obj;
         if (!Objects.equals(this.a, other.a)) {
             return false;
         }

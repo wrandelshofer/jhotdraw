@@ -467,11 +467,9 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         new PreorderSpliterator<Object>(
                 o -> {
                     if (o instanceof MenuBar) {
-                        @SuppressWarnings("unchecked") final Iterable<Object> menus = (Iterable<Object>) (Iterable<?>) ((MenuBar) o).getMenus();
-                        return menus;
+                        return ((MenuBar) o).getMenus();
                     } else if (o instanceof Menu) {
-                        @SuppressWarnings("unchecked") final Iterable<Object> childItems = (Iterable<Object>) (Iterable<?>) ((Menu) o).getItems();
-                        return childItems;
+                        return ((Menu) o).getItems();
                     } else {
                         return Collections.emptyList();
                     }

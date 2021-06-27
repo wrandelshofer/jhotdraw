@@ -44,6 +44,6 @@ public class ListEnumeratorSpliterator<T> extends AbstractEnumeratorSpliterator<
     public Spliterator<T> trySplit() {
         int hi = endIndex, lo = index, mid = (lo + hi) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new ListEnumeratorSpliterator(list, lo, index = mid);
+                new ListEnumeratorSpliterator<>(list, lo, index = mid);
     }
 }
