@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.text.ResolvingConverter;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * @param <T> the type
  * @author Werner Randelshofer
  */
-public class XmlObjectReferenceConverter<T> implements Converter<T> {
+public class XmlObjectReferenceConverter<T> implements ResolvingConverter<T> {
 
     private static final Logger LOGGER = Logger.getLogger(XmlObjectReferenceConverter.class.getName());
     private final @NonNull Class<T> clazz;
@@ -41,7 +41,7 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
     @Override
     public <TT extends T> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (idSupplier == null) {
-            throw new UnsupportedOperationException("idFactory is required for this converter");
+            throw new IllegalArgumentException("IdSupplier is required for this converter");
         }
         out.append(value == null ? "none" : idSupplier.getId(value));
     }
@@ -54,7 +54,7 @@ public class XmlObjectReferenceConverter<T> implements Converter<T> {
     @Override
     public @Nullable T fromString(@Nullable CharSequence buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (idResolver == null) {
-            throw new UnsupportedOperationException("idFactory is required for this converter");
+            throw new IllegalArgumentException("IdResolver is required for this converter");
         }
         String str = buf == null ? "none" : buf.toString();
         if ("none".equals(str)) {
