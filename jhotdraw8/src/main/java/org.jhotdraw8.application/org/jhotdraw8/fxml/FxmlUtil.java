@@ -19,8 +19,10 @@ import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
 public class FxmlUtil {
+    /**
+     * Don't let anyone instantiate this class.
+     */
     private FxmlUtil() {
-        // prevent instantiation
     }
 
     public static @NonNull <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,

@@ -48,6 +48,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
@@ -412,7 +413,7 @@ public @NonNull class ZoomableScrollPane extends GridPane {
                 scrollBar.visibleAmountProperty());
     }
 
-    public static @NonNull URL getFxmlResource() {
+    public static @Nullable URL getFxmlResource() {
         return ZoomableScrollPane.class.getResource("/org/jhotdraw8/draw/gui/ZoomableScrollPane.fxml");
     }
 
