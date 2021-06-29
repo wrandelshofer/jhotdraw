@@ -17,26 +17,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -64,7 +48,6 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
@@ -199,19 +182,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         return constrainer;
     }
 
-    private @NonNull Image createCheckerboardImage(Color c1, Color c2, int size) {
-        WritableImage img = new WritableImage(size * 2, size * 2);
-        PixelWriter w = img.getPixelWriter();
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                w.setColor(x, y, c1);
-                w.setColor(x + size, y + size, c1);
-                w.setColor(x + size, y, c2);
-                w.setColor(x, y + size, c2);
-            }
-        }
-        return img;
-    }
 
     @Override
     public @NonNull ReadOnlyObjectProperty<Drawing> drawingProperty() {
@@ -351,18 +321,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
                 emptyCssUrl.toString()
         );
         node.setCenter(zoomableScrollPane.getNode());
-
-        background.setBackground(new Background(new BackgroundFill(
-                new ImagePattern(
-                        createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8),
-                        0, 0, 16, 16, false)
-                , CornerRadii.EMPTY, Insets.EMPTY)));
         background.setManaged(false);
-        BorderStrokeStyle outsideStroke = new BorderStrokeStyle(StrokeType.OUTSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 24.0, 0, Collections.emptyList());
-        Border backgroundBorder = new Border(
-                new BorderStroke(Color.TRANSPARENT, outsideStroke, CornerRadii.EMPTY, new BorderWidths(24))
-        );
-        background.setBorder(backgroundBorder);
         zoomableScrollPane.getContentChildren().add(drawingRenderer.getNode());
         zoomableScrollPane.getBackgroundChildren().add(background);
         zoomableScrollPane.getForegroundChildren().addAll(

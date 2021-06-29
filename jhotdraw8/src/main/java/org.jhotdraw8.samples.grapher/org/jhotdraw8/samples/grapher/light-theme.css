@@ -6,3 +6,9 @@
 #drawingView {
     -fx-background-color: rgb(200, 200, 200);
 }
+
+.jhotdraw8-drawing-view-canvas-region {
+    -fx-border-color: black;
+    -fx-border-style: solid outside;
+    -fx-border-width: 1;
+}

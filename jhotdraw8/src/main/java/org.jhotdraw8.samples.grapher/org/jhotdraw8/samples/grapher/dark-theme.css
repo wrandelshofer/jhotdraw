@@ -38,7 +38,8 @@
 
 }
 
-/** Sets the icon color in dock items. */
-.dock-item-icon {
-    -fx-fill: -fx-text-fill;
+.jhotdraw8-drawing-view-canvas-region {
+    -fx-border-color: black;
+    -fx-border-style: solid outside;
+    -fx-border-width: 1;
 }
