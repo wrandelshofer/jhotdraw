@@ -92,23 +92,23 @@ public @NonNull class ZoomableScrollPane extends GridPane {
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_STYLE_CLASS = "zoomable-scroll-pane";
+    public static final String ZOOMABLE_SCROLL_PANE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "zoomable-scroll-pane-viewpprt";
+    public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-viewpprt";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS = "zoomable-scroll-pane-background";
+    public static final String ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-background";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "zoomable-scroll-subscene-background";
+    public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-subscene-background";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS = "zoomable-scroll-pane-foreground";
+    public static final String ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-foreground";
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "scaleFactor", 1.0);
     private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
 

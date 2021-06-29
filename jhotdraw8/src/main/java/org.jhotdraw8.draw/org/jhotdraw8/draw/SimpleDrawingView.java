@@ -98,12 +98,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
     /**
      * The style class of the canvas pane is {@value #CANVAS_PANE_STYLE_CLASS}.
      */
-    public static final String CANVAS_PANE_STYLE_CLASS = "drawing-view-canvas-pane";
+    public static final String CANVAS_PANE_STYLE_CLASS = "jhotdraw8-drawing-view-canvas-pane";
 
     /**
      * The style class of the drawing view is {@value #DRAWING_VIEW_STYLE_CLASS}.
      */
-    public static final String DRAWING_VIEW_STYLE_CLASS = "drawing-view";
+    public static final String DRAWING_VIEW_STYLE_CLASS = "jhotdraw8-drawing-view";
     private final @NonNull ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
     private final @NonNull SimpleDrawingViewNode node = new SimpleDrawingViewNode();
     private boolean constrainerNodeValid;
