@@ -21,12 +21,11 @@ import javafx.beans.value.WritableValue;
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
+import javafx.css.StyleConverter;
 import javafx.css.Styleable;
 import javafx.css.StyleableBooleanProperty;
 import javafx.css.StyleableObjectProperty;
 import javafx.css.StyleableProperty;
-import javafx.css.converter.BooleanConverter;
-import javafx.css.converter.EnumConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
@@ -290,9 +289,10 @@ public @NonNull class ZoomableScrollPane extends GridPane {
     }
 
     private static class StyleableProperties {
+        @SuppressWarnings("uncheckded")
         private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> HBAR_POLICY =
                 new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-hbar-policy",
-                        new EnumConverter<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.class),
+                        (StyleConverter<?, ScrollPane.ScrollBarPolicy>) StyleConverter.<ScrollPane.ScrollBarPolicy>getEnumConverter(ScrollPane.ScrollBarPolicy.class),
                         ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
                     @Override
@@ -306,9 +306,10 @@ public @NonNull class ZoomableScrollPane extends GridPane {
                     }
                 };
 
+        @SuppressWarnings("uncheckded")
         private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> VBAR_POLICY =
                 new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-vbar-policy",
-                        new EnumConverter<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.class),
+                        (StyleConverter<?, ScrollPane.ScrollBarPolicy>) StyleConverter.<ScrollPane.ScrollBarPolicy>getEnumConverter(ScrollPane.ScrollBarPolicy.class),
                         ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
                     @Override
@@ -324,7 +325,7 @@ public @NonNull class ZoomableScrollPane extends GridPane {
 
         private static final CssMetaData<ZoomableScrollPane, Boolean> PANNABLE =
                 new CssMetaData<ZoomableScrollPane, Boolean>("-fx-pannable",
-                        BooleanConverter.getInstance(), Boolean.FALSE) {
+                        StyleConverter.getBooleanConverter(), Boolean.FALSE) {
 
                     @Override
                     public boolean isSettable(ZoomableScrollPane n) {
