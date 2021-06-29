@@ -72,7 +72,38 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
+/**
+ * A simple implementation of {@link DrawingView}.
+ * <p>
+ * The SimpleDrawingView has the following scene structure:
+ * <ul>
+ *   <li>{@value #DRAWING_VIEW_STYLE_CLASS} – {@link BorderPane}<ul>
+ *     <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – see {@link ZoomableScrollPane}<ul>
+ *       <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}<ul>
+ *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}<ul>
+ *               <li>{@value #CANVAS_PANE_STYLE_CLASS} – {@link Region}</li>
+ *           </ul></li>
+ *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}<ul>
+ *              <li>content</li>
+ *           </ul></li>
+ *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}</li>
+ *       </ul></li>
+ *     </ul></li>
+ *     </ul></li>
+ * </ul>
+ * The scene node of the SimpleDrawingView has the following structure and
+ * CSS style classes:
+ */
 public class SimpleDrawingView extends AbstractDrawingView {
+    /**
+     * The style class of the canvas pane is {@value #CANVAS_PANE_STYLE_CLASS}.
+     */
+    public static final String CANVAS_PANE_STYLE_CLASS = "canvasPane";
+
+    /**
+     * The style class of the drawing view is {@value #DRAWING_VIEW_STYLE_CLASS}.
+     */
+    public static final String DRAWING_VIEW_STYLE_CLASS = "drawingView";
     private final @NonNull ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
     private final @NonNull SimpleDrawingViewNode node = new SimpleDrawingViewNode();
     private boolean constrainerNodeValid;
@@ -82,7 +113,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
         public SimpleDrawingViewNode() {
             setFocusTraversable(true);
-            setId("drawingView");
         }
 
         @Override
@@ -141,12 +171,19 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
 
     public SimpleDrawingView() {
-        initView();
+        initStyle();
+        initLayout();
         initBindings();
-        init();
+        initBehavior();
     }
 
-    protected void init() {
+    protected void initStyle() {
+        background.getStyleClass().add(CANVAS_PANE_STYLE_CLASS);
+        node.getStyleClass().add(DRAWING_VIEW_STYLE_CLASS);
+
+    }
+
+    protected void initBehavior() {
         drawingRenderer.setRenderContext(this);
         set(SYSTEM_COLOR_CONVERTER_KEY, new MacOSSystemColorConverter());
 
@@ -304,7 +341,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         revalidateLayout();
     }
 
-    private void initView() {
+    private void initLayout() {
         String emptyCss = "/org/jhotdraw8/draw/empty.css";
         URL emptyCssUrl = SimpleDrawingView.class.getResource(emptyCss);
         if (emptyCssUrl == null) {
@@ -315,7 +352,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         );
         node.setCenter(zoomableScrollPane.getNode());
 
-        background.getStyleClass().add("canvasPane");
         background.setBackground(new Background(new BackgroundFill(
                 new ImagePattern(
                         createCheckerboardImage(Color.WHITE, Color.LIGHTGRAY, 8),
@@ -397,25 +433,25 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-        case NODE_REMOVED_FROM_PARENT:
-        case NODE_ADDED_TO_TREE:
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            onNodeRemoved(f);
-            break;
-        case NODE_CHANGED:
-            onNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            onRootChanged();
-            break;
-        case SUBTREE_NODES_CHANGED:
-            onSubtreeNodesChanged(f);
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+            case NODE_REMOVED_FROM_PARENT:
+            case NODE_ADDED_TO_TREE:
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                onNodeRemoved(f);
+                break;
+            case NODE_CHANGED:
+                onNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                onRootChanged();
+                break;
+            case SUBTREE_NODES_CHANGED:
+                onSubtreeNodesChanged(f);
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     }
 

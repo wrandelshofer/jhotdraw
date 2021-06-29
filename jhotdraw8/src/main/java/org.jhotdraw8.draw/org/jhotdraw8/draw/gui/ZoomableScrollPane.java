@@ -8,6 +8,7 @@ package org.jhotdraw8.draw.gui;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -16,15 +17,25 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.WritableValue;
 import javafx.collections.ObservableList;
+import javafx.css.CssMetaData;
+import javafx.css.PseudoClass;
+import javafx.css.Styleable;
+import javafx.css.StyleableBooleanProperty;
+import javafx.css.StyleableObjectProperty;
+import javafx.css.StyleableProperty;
+import javafx.css.converter.BooleanConverter;
+import javafx.css.converter.EnumConverter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
+import javafx.scene.control.Control;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -45,6 +56,9 @@ import org.jhotdraw8.geom.Geom;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -59,22 +73,44 @@ import java.util.ResourceBundle;
  * You can not set the background, foreground and content objects,
  * you can only access their children list.
  * <p>
- * The ZoomScrollPane has the following internal structure:
- * <pre>
- *     ScrollableSubScenePanel
- *     .verticalScrollBar
- *     .horizontalScrollBar
- *     .viewport
- *     ..background
- *     ..subScene
- *     ...content
- *     ..foreground
- * </pre>
+ * The ZoomScrollPane has the following scene structure:
+ * <ul>
+ *   <li>{@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – {@link GridPane}<ul>
+ *     <li>"scroll-bar:vertical" – {@link ScrollBar}</li>
+ *     <li>"scroll-bar:horizontal" – {@link ScrollBar}</li>
+ *     <li>{@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS} – {@link StackPane}<ul>
+ *         <li>{@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS} – {@link StackPane}</li>
+ *         <li>{@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS} – {@link SubScene}<ul>
+ *            <li>content</li>
+ *         </ul></li>
+ *         <li>{@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS} – {@link StackPane}</li>
+ *     </ul></li>
+ *   </ul></li>
+ * </ul>
  */
-public @NonNull class ZoomableScrollPane {
+public @NonNull class ZoomableScrollPane extends GridPane {
+    /**
+     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS}.
+     */
+    public static final String ZOOMABLE_SCROLL_PANE_STYLE_CLASS = "zoomable-scroll-pane";
+    /**
+     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}.
+     */
+    public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "zoomable-scroll-pane-viewpprt";
+    /**
+     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}.
+     */
+    public static final String ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS = "zoomable-scroll-pane-background";
+    /**
+     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}.
+     */
+    public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "zoomable-scroll-subscene-background";
+    /**
+     * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}.
+     */
+    public static final String ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS = "zoomable-scroll-pane-foreground";
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "scaleFactor", 1.0);
     private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
-    private final ObjectProperty<Insets> insets = new SimpleObjectProperty<>(this, "insets", new Insets(24, 24, 24, 24));
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -93,8 +129,7 @@ public @NonNull class ZoomableScrollPane {
 
     @FXML // fx:id="subScene"
     private SubScene subScene; // Value injected by FXMLLoader
-    @FXML // fx:id="gridPane"
-    private GridPane gridPane; // Value injected by FXMLLoader
+
 
     private StackPane content;
     @FXML // fx:id="foregroundPane"
@@ -109,19 +144,21 @@ public @NonNull class ZoomableScrollPane {
         assert subScene != null : "fx:id=\"subScene\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
         assert foreground != null : "fx:id=\"foregroundPane\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
         assert viewportPane != null : "fx:id=\"viewportPane\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
-        assert gridPane != null : "fx:id=\"gridPane\" was not injected: check your FXML file 'ZoomableScrollPane.fxml'.";
 
-        // Initialize the layout
-        // ---------------------
-        initLayout();
-
-        // Initialize the bindings
-        // -----------------------
-        initBindings();
-
-        // Initialize the behavior
+        // Initialize style classes
         // ------------------------
+        initStyle();
+        initLayout();
+        initBindings();
         initBehavior();
+    }
+
+    private void initStyle() {
+        this.getStyleClass().add(ZOOMABLE_SCROLL_PANE_STYLE_CLASS);
+        viewportPane.getStyleClass().add(ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS);
+        background.getStyleClass().add(ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS);
+        foreground.getStyleClass().add(ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS);
+        subScene.getStyleClass().add(ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS);
     }
 
     private void initBehavior() {
@@ -217,13 +254,13 @@ public @NonNull class ZoomableScrollPane {
 
         // - Adjust the scrollbar max, when the subScene is resized.
         horizontalScrollBar.maxProperty().bind(
-                CustomBinding.compute(() -> getContentWidth() * getZoomFactor() + getInsets().getRight(), contentWidthProperty(), zoomFactor, insets));
+                CustomBinding.compute(() -> getContentWidth() * getZoomFactor() + getInsets().getRight(), contentWidthProperty(), zoomFactor, insetsProperty()));
         horizontalScrollBar.minProperty().bind(
-                CustomBinding.compute(() -> -getInsets().getLeft(), insets));
+                CustomBinding.compute(() -> -getInsets().getLeft(), insetsProperty()));
         verticalScrollBar.maxProperty().bind(
-                CustomBinding.compute(() -> getContentHeight() * getZoomFactor() + getInsets().getBottom(), contentHeightProperty(), zoomFactor, insets));
+                CustomBinding.compute(() -> getContentHeight() * getZoomFactor() + getInsets().getBottom(), contentHeightProperty(), zoomFactor, insetsProperty()));
         verticalScrollBar.minProperty().bind(
-                CustomBinding.compute(() -> -getInsets().getTop(), insets));
+                CustomBinding.compute(() -> -getInsets().getTop(), insetsProperty()));
 
         // - Adjust the scrollbar visibleAmount whe the viewport is resized.
         horizontalScrollBar.visibleAmountProperty().bind(viewportWidthProperty());
@@ -233,8 +270,8 @@ public @NonNull class ZoomableScrollPane {
 
         // - Only show the scrollbars if their visible amount is less than their
         //   extent (we can use the max value here, because we let min=0).
-        onlyShowScrollBarIfNeeded(horizontalScrollBar, gridPane.getRowConstraints().get(1));
-        onlyShowScrollBarIfNeeded(verticalScrollBar, gridPane.getColumnConstraints().get(1));
+        onlyShowScrollBarIfNeeded(horizontalScrollBar, this.getRowConstraints().get(1), hbarPolicyProperty());
+        onlyShowScrollBarIfNeeded(verticalScrollBar, this.getColumnConstraints().get(1), vbarPolicyProperty());
 
 
         contentToView.bind(CustomBinding.compute(() -> {
@@ -252,17 +289,83 @@ public @NonNull class ZoomableScrollPane {
 
     }
 
-    private void onlyShowScrollBarIfNeeded(ScrollBar scrollBar, RowConstraints rowConstraints) {
+    private static class StyleableProperties {
+        private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> HBAR_POLICY =
+                new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-hbar-policy",
+                        new EnumConverter<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.class),
+                        ScrollPane.ScrollBarPolicy.AS_NEEDED) {
+
+                    @Override
+                    public boolean isSettable(ZoomableScrollPane n) {
+                        return n.hbarPolicy == null || !n.hbarPolicy.isBound();
+                    }
+
+                    @Override
+                    public StyleableProperty<ScrollPane.ScrollBarPolicy> getStyleableProperty(ZoomableScrollPane n) {
+                        return (StyleableProperty<ScrollPane.ScrollBarPolicy>) (WritableValue<ScrollPane.ScrollBarPolicy>) n.hbarPolicyProperty();
+                    }
+                };
+
+        private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> VBAR_POLICY =
+                new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-vbar-policy",
+                        new EnumConverter<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.class),
+                        ScrollPane.ScrollBarPolicy.AS_NEEDED) {
+
+                    @Override
+                    public boolean isSettable(ZoomableScrollPane n) {
+                        return n.vbarPolicy == null || !n.vbarPolicy.isBound();
+                    }
+
+                    @Override
+                    public StyleableProperty<ScrollPane.ScrollBarPolicy> getStyleableProperty(ZoomableScrollPane n) {
+                        return (StyleableProperty<ScrollPane.ScrollBarPolicy>) (WritableValue<ScrollPane.ScrollBarPolicy>) n.vbarPolicyProperty();
+                    }
+                };
+
+        private static final CssMetaData<ZoomableScrollPane, Boolean> PANNABLE =
+                new CssMetaData<ZoomableScrollPane, Boolean>("-fx-pannable",
+                        BooleanConverter.getInstance(), Boolean.FALSE) {
+
+                    @Override
+                    public boolean isSettable(ZoomableScrollPane n) {
+                        return n.pannable == null || !n.pannable.isBound();
+                    }
+
+                    @Override
+                    public StyleableProperty<Boolean> getStyleableProperty(ZoomableScrollPane n) {
+                        return (StyleableProperty<Boolean>) (WritableValue<Boolean>) n.pannableProperty();
+                    }
+                };
+
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+
+        static {
+            final List<CssMetaData<? extends Styleable, ?>> styleables =
+                    new ArrayList<CssMetaData<? extends Styleable, ?>>(Control.getClassCssMetaData());
+            styleables.add(HBAR_POLICY);
+            styleables.add(VBAR_POLICY);
+            styleables.add(PANNABLE);
+            STYLEABLES = Collections.unmodifiableList(styleables);
+        }
+    }
+
+    private void onlyShowScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull RowConstraints rowConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
         BooleanBinding visibilityBinding;
-        visibilityBinding = scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty());
+        visibilityBinding =
+                scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.NEVER).not()
+                        .and(scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.ALWAYS)
+                                .or(scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty())));
         scrollBar.visibleProperty().bind(visibilityBinding);
         rowConstraints.prefHeightProperty().bind(
                 CustomBinding.convert(visibilityBinding, b -> b ? ScrollBar.USE_COMPUTED_SIZE : 0));
     }
 
-    private void onlyShowScrollBarIfNeeded(ScrollBar scrollBar, ColumnConstraints colConstraints) {
+    private void onlyShowScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull ColumnConstraints colConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
         BooleanBinding visibilityBinding;
-        visibilityBinding = scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty());
+        visibilityBinding =
+                scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.NEVER).not()
+                        .and(scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.ALWAYS)
+                                .or(scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty())));
         scrollBar.visibleProperty().bind(visibilityBinding);
         colConstraints.prefWidthProperty().bind(
                 CustomBinding.convert(visibilityBinding, b -> b ? ScrollBar.USE_COMPUTED_SIZE : 0));
@@ -520,13 +623,16 @@ public @NonNull class ZoomableScrollPane {
     }
 
     public Node getNode() {
-        return gridPane;
+        return this;
     }
 
     public static ZoomableScrollPane create() {
         FXMLLoader loader = new FXMLLoader();
+        final ZoomableScrollPane controller = new ZoomableScrollPane();
         loader.setLocation(ZoomableScrollPane.getFxmlResource());
         loader.setResources(null);
+        loader.setController(controller);
+        loader.setRoot(controller);
         try {
             loader.load();
         } catch (IOException e) {
@@ -544,16 +650,120 @@ public @NonNull class ZoomableScrollPane {
         return verticalScrollBar.visibleAmountProperty();
     }
 
-    public Insets getInsets() {
-        return insets.get();
+    private ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicy;
+
+    public final void setHbarPolicy(ScrollPane.ScrollBarPolicy value) {
+        hbarPolicyProperty().set(value);
     }
 
-    public ObjectProperty<Insets> insetsProperty() {
-        return insets;
+    public final ScrollPane.ScrollBarPolicy getHbarPolicy() {
+        return hbarPolicy == null ? ScrollPane.ScrollBarPolicy.AS_NEEDED : hbarPolicy.get();
     }
 
-    public void setInsets(Insets insets) {
-        this.insets.set(insets);
+    public final ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicyProperty() {
+        if (hbarPolicy == null) {
+            hbarPolicy = new StyleableObjectProperty<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
+
+                @Override
+                public CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> getCssMetaData() {
+                    return ZoomableScrollPane.StyleableProperties.HBAR_POLICY;
+                }
+
+                @Override
+                public Object getBean() {
+                    return ZoomableScrollPane.this;
+                }
+
+                @Override
+                public String getName() {
+                    return "hbarPolicy";
+                }
+            };
+        }
+        return hbarPolicy;
     }
+
+    /**
+     * Specifies the policy for showing the vertical scroll bar.
+     */
+    private ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicy;
+
+    public final void setVbarPolicy(ScrollPane.ScrollBarPolicy value) {
+        vbarPolicyProperty().set(value);
+    }
+
+    public final ScrollPane.ScrollBarPolicy getVbarPolicy() {
+        return vbarPolicy == null ? ScrollPane.ScrollBarPolicy.AS_NEEDED : vbarPolicy.get();
+    }
+
+    public final ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicyProperty() {
+        if (vbarPolicy == null) {
+            vbarPolicy = new StyleableObjectProperty<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
+
+                @Override
+                public CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> getCssMetaData() {
+                    return ZoomableScrollPane.StyleableProperties.VBAR_POLICY;
+                }
+
+                @Override
+                public Object getBean() {
+                    return ZoomableScrollPane.this;
+                }
+
+                @Override
+                public String getName() {
+                    return "vbarPolicy";
+                }
+            };
+        }
+        return vbarPolicy;
+    }
+
+    /**
+     * Specifies whether the user should be able to pan the viewport by using
+     * the mouse. If mouse events reach the ZoomableScrollPane (that is, if mouse
+     * events are not blocked by the contained node or one of its children)
+     * then {@link #pannableProperty pannable} is consulted to determine if the events should be
+     * used for panning.
+     */
+    private BooleanProperty pannable;
+
+    public final void setPannable(boolean value) {
+        pannableProperty().set(value);
+    }
+
+    public final boolean isPannable() {
+        return pannable == null ? false : pannable.get();
+    }
+
+    public final BooleanProperty pannableProperty() {
+        if (pannable == null) {
+            pannable = new StyleableBooleanProperty(false) {
+                @Override
+                public void invalidated() {
+                    pseudoClassStateChanged(PANNABLE_PSEUDOCLASS_STATE, get());
+                }
+
+                @Override
+                public CssMetaData<ZoomableScrollPane, Boolean> getCssMetaData() {
+                    return ZoomableScrollPane.StyleableProperties.PANNABLE;
+                }
+
+                @Override
+                public Object getBean() {
+                    return ZoomableScrollPane.this;
+                }
+
+                @Override
+                public String getName() {
+                    return "pannable";
+                }
+            };
+        }
+        return pannable;
+    }
+
+    private static final PseudoClass PANNABLE_PSEUDOCLASS_STATE =
+            PseudoClass.getPseudoClass("pannable");
 }
 
