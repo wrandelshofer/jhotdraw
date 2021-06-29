@@ -227,7 +227,7 @@ public class ModelerFigureFactory extends AbstractFigureFactory {
 
         addConverterForType(MLCompartmentalizedData.class, new XmlUmlCompartmentalizedDataConverter(false));
 
-        checkConverters();
+        checkConverters(false);
     }
 
 }

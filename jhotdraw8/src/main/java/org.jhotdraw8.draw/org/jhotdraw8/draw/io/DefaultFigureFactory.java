@@ -196,7 +196,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
 
         removeKey(StyleableFigure.PSEUDO_CLASS);
 
-        checkConverters();
+        checkConverters(false);
     }
 
 }

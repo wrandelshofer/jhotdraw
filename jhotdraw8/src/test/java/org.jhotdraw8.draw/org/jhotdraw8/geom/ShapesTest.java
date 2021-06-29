@@ -57,19 +57,19 @@ class ShapesTest {
 
     void testDoubleRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.doubleRelativeSvgStringFromAWT(path.getPathIterator(null));
+        String actual = SvgPaths.doubleRelativeSvgStringFromAwt(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     void testFloatRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.floatRelativeSvgStringFromAWT(path.getPathIterator(null));
+        String actual = SvgPaths.floatRelativeSvgStringFromAwt(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     void testFloatSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.floatSvgStringFromAWT(path.getPathIterator(null));
+        String actual = SvgPaths.floatSvgStringFromAwt(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 

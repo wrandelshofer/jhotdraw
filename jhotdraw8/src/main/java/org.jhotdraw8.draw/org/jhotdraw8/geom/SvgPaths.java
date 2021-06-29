@@ -418,7 +418,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String doubleRelativeSvgStringFromAWT(@NonNull PathIterator iter) {
+    public static @NonNull String doubleRelativeSvgStringFromAwt(@NonNull PathIterator iter) {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
@@ -492,7 +492,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String floatRelativeSvgStringFromAWT(@NonNull PathIterator iter) {
+    public static @NonNull String floatRelativeSvgStringFromAwt(@NonNull PathIterator iter) {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
@@ -566,7 +566,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String floatSvgStringFromAWT(@NonNull PathIterator iter) {
+    public static @NonNull String floatSvgStringFromAwt(@NonNull PathIterator iter) {
         NumberConverter nb = new NumberConverter(Float.class);
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];

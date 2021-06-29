@@ -264,12 +264,17 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         skipFigures.add(figure);
     }
 
-    public void checkConverters() {
+    public void checkConverters(boolean throwException) throws IllegalStateException {
         for (HashMap<MapAccessor<?>, String> map : keyToAttr.values()) {
             for (MapAccessor<?> k : map.keySet()) {
                 Type fullValueType = k.getValueType();
                 if (!k.isTransient() && !keyValueToXML.containsKey(k) && !valueToXML.containsKey(fullValueType)) {
-                    LOGGER.warning(getClass() + " can not convert " + fullValueType + " to XML for key " + k + ".");
+                    final String msg = getClass() + " can not convert " + fullValueType + " to XML for key " + k + ".";
+                    if (throwException) {
+                        throw new IllegalStateException(msg);
+                    } else {
+                        LOGGER.warning(msg);
+                    }
                 }
             }
         }
