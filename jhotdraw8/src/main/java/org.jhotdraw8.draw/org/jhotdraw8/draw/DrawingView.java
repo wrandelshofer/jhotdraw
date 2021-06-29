@@ -383,7 +383,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param vwidth    width in view coordinates
      * @param vheight   height in view coordinates
      * @param decompose whether to decompose the figures
-     * @param predicate
+     * @param predicate predicate for filtering figures
      * @return A list of figures from front to back
      */
     @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate);

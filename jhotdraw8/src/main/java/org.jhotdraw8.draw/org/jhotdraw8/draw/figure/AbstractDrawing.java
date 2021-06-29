@@ -23,6 +23,7 @@ import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.SimpleStylesheetsManager;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
@@ -179,7 +180,8 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
 
     public void updateBackground(RenderContext ctx, Pane g) {
         CssColor cclr = getStyled(BACKGROUND);
-        g.setBackground(new Background(new BackgroundFill(cclr.getPaint(), CornerRadii.EMPTY, Insets.EMPTY)));
+        g.setBackground(new Background(new BackgroundFill(
+                Paintable.getPaint(cclr), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     @Override
