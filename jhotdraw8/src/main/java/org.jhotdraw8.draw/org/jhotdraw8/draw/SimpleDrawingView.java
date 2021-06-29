@@ -81,7 +81,7 @@ import java.util.stream.StreamSupport;
  *     <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_STYLE_CLASS} – see {@link ZoomableScrollPane}<ul>
  *       <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}<ul>
  *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}<ul>
- *               <li>{@value #CANVAS_PANE_STYLE_CLASS} – {@link Region}</li>
+ *               <li>{@value #CANVAS_REGION_STYLE_CLASS} – {@link Region}</li>
  *           </ul></li>
  *           <li>{@value ZoomableScrollPane#ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}<ul>
  *              <li>content</li>
@@ -96,9 +96,9 @@ import java.util.stream.StreamSupport;
  */
 public class SimpleDrawingView extends AbstractDrawingView {
     /**
-     * The style class of the canvas pane is {@value #CANVAS_PANE_STYLE_CLASS}.
+     * The style class of the canvas pane is {@value #CANVAS_REGION_STYLE_CLASS}.
      */
-    public static final String CANVAS_PANE_STYLE_CLASS = "jhotdraw8-drawing-view-canvas-pane";
+    public static final String CANVAS_REGION_STYLE_CLASS = "jhotdraw8-drawing-view-canvas-region";
 
     /**
      * The style class of the drawing view is {@value #DRAWING_VIEW_STYLE_CLASS}.
@@ -178,7 +178,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     protected void initStyle() {
-        background.getStyleClass().add(CANVAS_PANE_STYLE_CLASS);
+        background.getStyleClass().add(CANVAS_REGION_STYLE_CLASS);
         node.getStyleClass().add(DRAWING_VIEW_STYLE_CLASS);
 
     }
