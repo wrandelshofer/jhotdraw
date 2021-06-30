@@ -186,8 +186,8 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
 
         if (labelConnector != null && labelTarget != null) {
             PointAndTangent pointAndTangent = labelConnector.getPointAndTangentInWorld(this, labelTarget);
-            labeledLoc = pointAndTangent.getPoint(Point2D::new);
-            tangent = pointAndTangent.getTangent(Point2D::new).normalize();
+            labeledLoc = worldToParent(pointAndTangent.getPoint(Point2D::new));
+            tangent = getWorldToParent().deltaTransform(pointAndTangent.getTangent(Point2D::new)).normalize();
             perp = FXGeom.perp(tangent);
 
             set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
