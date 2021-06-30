@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * TransformPathBuilder.
@@ -14,11 +15,16 @@ import javafx.scene.transform.Transform;
  */
 public class FXTransformPathBuilder extends AbstractPathBuilder {
 
-    private final PathBuilder target;
-    private Transform transform;
+    private final @NonNull PathBuilder target;
+    private @NonNull Transform transform;
 
-    public FXTransformPathBuilder(PathBuilder target) {
+    public FXTransformPathBuilder(@NonNull PathBuilder target) {
+        this(target, FXTransforms.IDENTITY);
+    }
+
+    public FXTransformPathBuilder(@NonNull PathBuilder target, @NonNull Transform transform) {
         this.target = target;
+        this.transform = transform;
     }
 
     @Override
@@ -28,14 +34,10 @@ public class FXTransformPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
-        if (transform == null) {
-            target.curveTo(x1, y1, x2, y2, x3, y3);
-        } else {
-            Point2D p1 = transform.transform(x1, y1);
-            Point2D p2 = transform.transform(x2, y2);
-            Point2D p3 = transform.transform(x3, y3);
-            target.curveTo(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
-        }
+        Point2D p1 = transform.transform(x1, y1);
+        Point2D p2 = transform.transform(x2, y2);
+        Point2D p3 = transform.transform(x3, y3);
+        target.curveTo(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
     }
 
     @Override
@@ -45,40 +47,28 @@ public class FXTransformPathBuilder extends AbstractPathBuilder {
 
     @Override
     protected void doLineTo(double x, double y) {
-        if (transform == null) {
-            target.lineTo(x, y);
-        } else {
-            Point2D p = transform.transform(x, y);
-            target.lineTo(p.getX(), p.getY());
-        }
+        Point2D p = transform.transform(x, y);
+        target.lineTo(p.getX(), p.getY());
     }
 
     @Override
     protected void doMoveTo(double x, double y) {
-        if (transform == null) {
-            target.moveTo(x, y);
-        } else {
-            Point2D p = transform.transform(x, y);
-            target.moveTo(p.getX(), p.getY());
-        }
+        Point2D p = transform.transform(x, y);
+        target.moveTo(p.getX(), p.getY());
     }
 
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
-        if (transform == null) {
-            target.quadTo(x1, y1, x2, y2);
-        } else {
-            Point2D p1 = transform.transform(x1, y1);
-            Point2D p2 = transform.transform(x2, y2);
-            target.quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
-        }
+        Point2D p1 = transform.transform(x1, y1);
+        Point2D p2 = transform.transform(x2, y2);
+        target.quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
-    public Transform getTransform() {
+    public @NonNull Transform getTransform() {
         return transform;
     }
 
-    public void setTransform(Transform transform) {
+    public void setTransform(@NonNull Transform transform) {
         this.transform = transform;
     }
 

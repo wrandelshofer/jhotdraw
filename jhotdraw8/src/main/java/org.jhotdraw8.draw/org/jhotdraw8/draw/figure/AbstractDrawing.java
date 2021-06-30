@@ -14,13 +14,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
@@ -179,9 +179,9 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     public void updateBackground(RenderContext ctx, Pane g) {
-        CssColor cclr = getStyled(BACKGROUND);
-        g.setBackground(new Background(new BackgroundFill(
-                Paintable.getPaint(cclr), CornerRadii.EMPTY, Insets.EMPTY)));
+        final Paint paint = Paintable.getPaint(getStyled(BACKGROUND));
+        g.setBackground(paint == null ? null : new Background(new BackgroundFill(
+                paint, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     @Override
