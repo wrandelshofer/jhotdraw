@@ -316,6 +316,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
+            if (!n.isVisible()) {
+                continue;
+            }
             Bounds pl = n.parentToLocal(pp);
             if (n.intersects(pl)) { // only drill down if the parent intersects the point
                 Figure f = nodeToFigureMap.get(n);
@@ -343,6 +346,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         ObservableList<Node> list = p.getChildrenUnmodifiable();
         for (int i = list.size() - 1; i >= 0; i--) {// front to back
             Node n = list.get(i);
+            if (!n.isVisible()) {
+                continue;
+            }
             Figure f1 = nodeToFigureMap.get(n);
             if (f1 != null) {
                 Point2D pl = n.parentToLocal(pp);
@@ -538,30 +544,30 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            onFigureAdded(f);
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            onFigureRemoved(f);
-            break;
-        case NODE_ADDED_TO_TREE:
-            onFigureRemovedFromDrawing(f);
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            onNodeRemovedFromTree(f);
-            break;
-        case NODE_CHANGED:
-            onNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            onRootChanged(f);
-            break;
-        case SUBTREE_NODES_CHANGED:
-            onSubtreeNodesChanged(f);
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+                onFigureAdded(f);
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                onFigureRemoved(f);
+                break;
+            case NODE_ADDED_TO_TREE:
+                onFigureRemovedFromDrawing(f);
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                onNodeRemovedFromTree(f);
+                break;
+            case NODE_CHANGED:
+                onNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                onRootChanged(f);
+                break;
+            case SUBTREE_NODES_CHANGED:
+                onSubtreeNodesChanged(f);
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     }
 
