@@ -6,6 +6,7 @@ package org.jhotdraw8.css;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 
@@ -30,8 +31,8 @@ public interface StylesheetsManager<E> {
      * @param origin the style origin
      * @param url    the stylesheet url
      */
-    default void addStylesheet(StyleOrigin origin, URI url) {
-        addStylesheet(origin, null, url);
+    default void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI url) {
+        addStylesheet(origin, url, url);
     }
 
     /**
@@ -41,7 +42,7 @@ public interface StylesheetsManager<E> {
      * @param documentHome the document Home url
      * @param url          the stylesheet url
      */
-    void addStylesheet(StyleOrigin origin, URI documentHome, URI url);
+    void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI documentHome, @NonNull URI url);
 
     /**
      * Adds a stylesheet with the specified origin.
@@ -49,7 +50,7 @@ public interface StylesheetsManager<E> {
      * @param origin     the style origin
      * @param stylesheet the stylesheet
      */
-    void addStylesheet(StyleOrigin origin, Stylesheet stylesheet);
+    void addStylesheet(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet);
 
     /**
      * Adds a stylesheet with the specified origin.
@@ -57,7 +58,7 @@ public interface StylesheetsManager<E> {
      * @param origin     the style origin
      * @param stylesheet the stylesheet given as a literal string
      */
-    void addStylesheet(StyleOrigin origin, String stylesheet);
+    void addStylesheet(@NonNull StyleOrigin origin, @NonNull String stylesheet, @Nullable URI documentHome);
 
     default void applyStylesheetsTo(@NonNull Iterable<E> iterable) {
         StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())

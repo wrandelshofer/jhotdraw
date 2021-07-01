@@ -49,7 +49,7 @@ public class CssSelectorTest {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null);
         //
         System.out.println("AST: " + ast);
         if (!p.getParseExceptions().isEmpty()) {
@@ -192,7 +192,7 @@ public class CssSelectorTest {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null);
 
 
         //---

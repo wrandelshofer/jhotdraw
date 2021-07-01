@@ -58,7 +58,6 @@ import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.css.text.CssIdentConverter;
 import org.jhotdraw8.draw.figure.TextFontableFigure;
 import org.jhotdraw8.draw.popup.BooleanPicker;
 import org.jhotdraw8.draw.popup.CssColorPicker;
@@ -150,8 +149,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
      */
     public static final String MULTIPLE_VALUES_PLACEHOLDER = "/* multiple values */";
     private final ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
-    private final CssIdentConverter cssIdentConverter = new CssIdentConverter(false);
-    private final ReadOnlyMapProperty<Class<?>, Picker<?>> valueTypePickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
+
     private final ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
     private @NonNull SetProperty<E> selection = new SimpleSetProperty<>();
 
@@ -214,7 +212,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         CssParser parser = new CssParser();
         TextArea textArea = getTextArea();
         try {
-            Stylesheet stylesheet = parser.parseStylesheet(textArea.getText());
+            Stylesheet stylesheet = parser.parseStylesheet(textArea.getText(), null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.out.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
                 ParseException e = parser.getParseExceptions().get(0);
@@ -499,7 +497,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private void select(ActionEvent event) {
         CssParser parser = new CssParser();
         try {
-            Stylesheet s = parser.parseStylesheet(textArea.getText());
+            Stylesheet s = parser.parseStylesheet(textArea.getText(), null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
             }
@@ -627,7 +625,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         lookupTable.clear();
         CssParser parser = new CssParser();
         try {
-            Stylesheet s = parser.parseStylesheet(getTextArea().getText());
+            Stylesheet s = parser.parseStylesheet(getTextArea().getText(), null);
             for (StyleRule r : s.getStyleRules()) {
                 for (Declaration d : r.getDeclarations()) {
                     lookupTable.add(new LookupEntry(d.getStartPos(), r, d));
@@ -826,7 +824,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private SelectorGroup parseSelector() {
         CssParser parser = new CssParser();
         try {
-            Stylesheet s = parser.parseStylesheet(textArea.getText());
+            Stylesheet s = parser.parseStylesheet(textArea.getText(), null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
                 return new SelectorGroup(Collections.emptyList());

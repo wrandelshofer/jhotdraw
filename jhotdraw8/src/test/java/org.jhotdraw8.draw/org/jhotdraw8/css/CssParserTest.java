@@ -49,7 +49,7 @@ public class CssParserTest {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null);
         //
         System.out.println("AST: " + ast);
         if (!p.getParseExceptions().isEmpty()) {
@@ -274,7 +274,7 @@ public class CssParserTest {
         testCssSyntax(valid, stylesheetStr, before, expectedValue);
 
         CssParser p = new CssParser();
-        Stylesheet stylesheet = p.parseStylesheet(stylesheetStr);
+        Stylesheet stylesheet = p.parseStylesheet(stylesheetStr, null);
         ReadOnlyList<Rule> rules = stylesheet.getRules();
         System.out.println(rules);
     }
@@ -288,7 +288,7 @@ public class CssParserTest {
         System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null);
         //
         System.out.println("AST: " + ast);
         if (!p.getParseExceptions().isEmpty()) {

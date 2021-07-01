@@ -36,6 +36,7 @@ import org.jhotdraw8.css.ast.SubstringMatchSelector;
 import org.jhotdraw8.css.ast.SuffixMatchSelector;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.ast.UniversalSelector;
+import org.jhotdraw8.io.UriResolver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +44,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
@@ -171,7 +173,7 @@ public class CssParser {
     public static final String NAMESPACE_AT_RULE = "namespace";
     private final Map<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
-
+    private @Nullable URI documentHome;
     private @NonNull FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
         final @NonNull String ident = tt.currentStringNonNull();
@@ -687,25 +689,65 @@ public class CssParser {
 
     public @NonNull Stylesheet parseStylesheet(@NonNull URL css) throws IOException {
         try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
-            return parseStylesheet(in);
+            URI documentHome;
+            try {
+                documentHome = css.toURI();
+            } catch (URISyntaxException e) {
+                documentHome = null;
+            }
+            return parseStylesheet(in, documentHome);
         }
     }
 
+    /**
+     * Parses a given stylesheet from the specified URI and uses this URI as
+     * document base.
+     *
+     * @param css the uri of the stylesheet file
+     * @return the parsed stylesheet
+     * @throws IOException on failure
+     */
     public @NonNull Stylesheet parseStylesheet(@NonNull URI css) throws IOException {
+        setDocumentHome(css);
         return parseStylesheet(css.toURL());
     }
 
-    public @NonNull Stylesheet parseStylesheet(@NonNull String css) throws IOException {
-        return parseStylesheet(new StringReader(css));
+    /**
+     * Parses a given stylesheet from the specified String and document home.
+     *
+     * @param css          the uri of the stylesheet file
+     * @param documentHome base URI
+     * @return the parsed stylesheet
+     * @throws IOException on failure
+     */
+    public @NonNull Stylesheet parseStylesheet(@NonNull String css, @Nullable URI documentHome) throws IOException {
+        return parseStylesheet(new StringReader(css), documentHome);
     }
 
-    public @NonNull Stylesheet parseStylesheet(Reader css) throws IOException {
+    /**
+     * Parses a given stylesheet from the specified String and document home.
+     *
+     * @param css          the uri of the stylesheet file
+     * @param documentHome base URI
+     * @return the parsed stylesheet
+     * @throws IOException on failure
+     */
+    public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI documentHome) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css);
-        return parseStylesheet(tt);
+        return parseStylesheet(tt, documentHome);
     }
 
-    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt) throws IOException {
+    /**
+     * Parses a given stylesheet from the specified String and document home.
+     *
+     * @param tt           the tokenier
+     * @param documentHome base URI
+     * @return the parsed stylesheet
+     * @throws IOException on failure
+     */
+    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt, @Nullable URI documentHome) throws IOException {
+        setDocumentHome(documentHome);
         List<Rule> rules = new ArrayList<>();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             try {
@@ -760,6 +802,10 @@ public class CssParser {
                 case CssTokenType.TT_LEFT_SQUARE_BRACKET:
                     parseBracketedTerms(tt, terms, CssTokenType.TT_RIGHT_SQUARE_BRACKET);
                     break;
+                case CssTokenType.TT_URL:
+                    terms.add(new CssToken(tt.current(), absolutizeUri(tt.currentString()), tt.currentNumber(),
+                            tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
+                    break;
                 default:
                     terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
                             tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
@@ -768,6 +814,22 @@ public class CssParser {
         }
         tt.pushBack();
         return terms;
+    }
+
+    /**
+     * Resolves an URL with the DocumentHome URL of this parser.
+     *
+     * @param relativeUri an URL string
+     * @return the resolved URL
+     */
+    @NonNull
+    private String absolutizeUri(@NonNull String relativeUri) {
+        if (documentHome == null) return relativeUri;
+        try {
+            return UriResolver.absolutize(documentHome, new URI(relativeUri)).toString();
+        } catch (URISyntaxException e) {
+            return relativeUri;
+        }
     }
 
     /**
@@ -794,5 +856,13 @@ public class CssParser {
                 || tt.current() == CssTokenType.TT_BAD_COMMENT) {
             tt.nextNoSkip();
         }
+    }
+
+    public URI getDocumentHome() {
+        return documentHome;
+    }
+
+    public void setDocumentHome(URI documentHome) {
+        this.documentHome = documentHome;
     }
 }

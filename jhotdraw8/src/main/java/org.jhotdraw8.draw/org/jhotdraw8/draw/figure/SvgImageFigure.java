@@ -8,29 +8,38 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.svg.io.FXSvgTinyReader;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
 import java.net.URI;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * ImageFigure presents a bitmap image on a drawing.
+ * SvgImageFigure presents an SVG image or a bitmap image on a drawing.
  *
  * @author Werner Randelshofer
  */
-public class ImageFigure extends AbstractLeafFigure
+public class SvgImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure,
         HideableFigure, ImageableFigure {
 
@@ -39,24 +48,21 @@ public class ImageFigure extends AbstractLeafFigure
      */
     public static final String TYPE_SELECTOR = "Image";
 
-
     public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
     public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
     public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    private @Nullable Image cachedImage;
-    private @Nullable URI cachedImageUri;
 
-    public ImageFigure() {
+    public SvgImageFigure() {
         this(0, 0, 1, 1);
     }
 
-    public ImageFigure(double x, double y, double width, double height) {
+    public SvgImageFigure(double x, double y, double width, double height) {
         set(BOUNDS, new CssRectangle2D(x, y, width, height));
     }
 
-    public ImageFigure(CssRectangle2D rect) {
+    public SvgImageFigure(CssRectangle2D rect) {
         set(BOUNDS, rect);
     }
 
@@ -83,28 +89,30 @@ public class ImageFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull Node createNode(RenderContext drawingView) {
-        ImageView n = new ImageView();
-        n.setPreserveRatio(false);
-        n.setManaged(false);
-        return n;
+        Group g = new Group();
+        return g;
     }
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        ImageView imageView = (ImageView) node;
-        validateImage();
-        imageView.setImage(cachedImage);
-        applyTransformableFigureProperties(ctx, imageView);
-        applyCompositableFigureProperties(ctx, node);
-        applyStyleableFigureProperties(ctx, node);
-        applyHideableFigureProperties(ctx, node);
-        Rectangle2D r = getNonNull(BOUNDS).getConvertedValue();
-        imageView.setX(r.getMinX());
-        imageView.setY(r.getMinY());
-        imageView.setFitWidth(r.getWidth());
-        imageView.setFitHeight(r.getHeight());
-        imageView.applyCss();
-        imageView.getProperties().put(IMAGE_URI, get(IMAGE_URI));
+        Group g = (Group) node;
+        final Object renderedUri = g.getProperties().get("renderedUri");
+        final URI imageUri = getStyled(IMAGE_URI);
+        Node imageNode = g.getChildren().isEmpty() ? null : g.getChildren().get(0);
+        if (imageNode == null || !Objects.equals(renderedUri, imageUri)) {
+            imageNode = loadImage();
+            g.getChildren().setAll(imageNode);
+            g.getProperties().put("renderedUri", imageUri);
+        }
+        final UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
+        final Transform reshapeTransform = FXTransforms.createReshapeTransform(imageNode.getBoundsInLocal(),
+                getLayoutBounds());
+        imageNode.getTransforms().setAll(reshapeTransform);
+
+        applyTransformableFigureProperties(ctx, g);
+        applyCompositableFigureProperties(ctx, g);
+        applyStyleableFigureProperties(ctx, g);
+        applyHideableFigureProperties(ctx, g);
     }
 
     @Override
@@ -117,31 +125,32 @@ public class ImageFigure extends AbstractLeafFigure
         return TYPE_SELECTOR;
     }
 
-    @Override
-    public double getPreferredAspectRatio() {
-        return (cachedImage == null || cachedImage.getWidth() == 0 || cachedImage.getHeight() == 0)//
-                ? super.getPreferredAspectRatio()//
-                : cachedImage.getHeight() / cachedImage.getWidth();
-    }
-
-    private void validateImage() {
+    private Node loadImage() {
         URI uri = getStyled(IMAGE_URI);
         if (uri == null) {
-            cachedImageUri = null;
-            cachedImage = null;
-            return;
+            return new Group();// maybe we should show a broken-link icon here
         }
         Drawing drawing = getDrawing();
         URI documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
         URI absoluteUri = (documentHome == null) ? uri : documentHome.resolve(uri);
-        if (cachedImageUri == null || !cachedImageUri.equals(absoluteUri)) {
-            cachedImageUri = absoluteUri;
-            try {
-                cachedImage = new Image(cachedImageUri.toString(), true);
-            } catch (IllegalArgumentException e) {
-                System.err.println("could not load image from uri: " + absoluteUri);
-                e.printStackTrace();
+
+        Source source = new StreamSource(absoluteUri.toString());
+        try {
+            final String path = absoluteUri.getPath();
+            if (path != null && path.toLowerCase().endsWith(".svg")) {
+                // must be wrapped in a group, because the node returned
+                // by the reader might have transformations associated to it
+                Group g = new Group();
+                g.getChildren().addAll(new FXSvgTinyReader().read(source));
+                return g;
+            } else {
+                final Image image = new Image(absoluteUri.toString(), true);
+                return new ImageView(image);
             }
+        } catch (IOException e) {
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.log(Level.INFO, "Could not load SVG image from " + absoluteUri, e);
+            return new Group();// maybe we should show a broken-link icon here
         }
     }
 

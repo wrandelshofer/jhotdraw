@@ -113,9 +113,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public void addStylesheet(@NonNull StyleOrigin origin, @NonNull String str) {
+    public void addStylesheet(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome) {
         invalidate();
-        getMap(origin).put(str, new StylesheetEntry(origin, str));
+        getMap(origin).put(str, new StylesheetEntry(origin, str, documentHome));
     }
 
     private void invalidate() {
@@ -185,7 +185,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 if (old != null) {
                     newMap.put(t, old);
                 } else {
-                    newMap.put(t, new StylesheetEntry(origin, (String) t));
+                    newMap.put(t, new StylesheetEntry(origin, (String) t, documentHome));
                 }
             } else {
                 throw new IllegalArgumentException("illegal item " + t);
@@ -514,18 +514,18 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
-        public StylesheetEntry(StyleOrigin origin, @NonNull Stylesheet stylesheet) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet) {
             this.uri = null;
             this.origin = origin;
             this.stylesheet = stylesheet;
         }
 
-        public StylesheetEntry(StyleOrigin origin, @NonNull String str) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome) {
             this.uri = null;
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
-                Stylesheet s = p.parseStylesheet(str);
+                Stylesheet s = p.parseStylesheet(str, documentHome);
                 LOGGER.info("Parsed " + str + ".\nRules: " + s.getStyleRules());
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
