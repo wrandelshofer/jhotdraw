@@ -34,6 +34,7 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ViewBoxableDrawing;
 import org.jhotdraw8.geom.Geom;
 
 import static java.lang.Math.ceil;
@@ -400,10 +401,18 @@ public class GridConstrainer extends AbstractConstrainer {
         majorNode.setStrokeWidth(1.0);
 
         Drawing drawing = drawingView.getDrawing();
-        double dx = drawing.getNonNull(Drawing.X).getConvertedValue();
-        double dy = drawing.getNonNull(Drawing.Y).getConvertedValue();
-        double dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
-        double dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
+        final double dx, dy, dw, dh;
+        if (drawing instanceof ViewBoxableDrawing) {
+            dx = drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_X).getConvertedValue();
+            dy = drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_Y).getConvertedValue();
+            dw = drawing.getNonNull(ViewBoxableDrawing.WIDTH).getConvertedValue();
+            dh = drawing.getNonNull(ViewBoxableDrawing.HEIGHT).getConvertedValue();
+        } else {
+            dx = 0;
+            dy = 0;
+            dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
+            dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
+        }
         Bounds visibleRect = drawingView.viewToWorld(drawingView.getVisibleRect());
         //Bounds visibleRect = FXGeom.intersection(drawingView.viewToWorld(drawingView.getVisibleRect()), new BoundingBox(-dx,-dy,dw,dh));
 

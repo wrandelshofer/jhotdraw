@@ -545,7 +545,7 @@ public class FigureSvgTinyReader {
     private void setSizeOfDrawing(Figure root) {
         CssSize w = root.getNonNull(SvgDrawing.WIDTH);
         CssSize h = root.getNonNull(SvgDrawing.HEIGHT);
-        CssRectangle2D viewBox = root.get(SvgDrawing.VIEW_BOX);
+        CssRectangle2D viewBox = root.get(SvgDrawing.SVG_VIEW_BOX);
         if (UnitConverter.PERCENTAGE.equals(w.getUnits())) {
             root.set(SvgDrawing.WIDTH,
                     viewBox == null || UnitConverter.PERCENTAGE.equals(viewBox.getWidth().getUnits()) ?

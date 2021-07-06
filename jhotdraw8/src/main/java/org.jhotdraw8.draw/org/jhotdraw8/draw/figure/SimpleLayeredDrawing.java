@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
 
-public class SimpleLayeredDrawing extends AbstractDrawing
+public class SimpleLayeredDrawing extends AbstractViewBoxDrawing
         implements LayeredDrawing, StyleableFigure, LockableFigure, NonTransformableFigure {
     public SimpleLayeredDrawing() {
     }

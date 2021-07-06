@@ -59,7 +59,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Connector findConnector(Point2D pointInLocal, Figure connectingFigure, double tolerance) {
+    public @NonNull Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 

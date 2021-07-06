@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 /**
  * A simple implementation of {@link Drawing}.
  */
-public class SimpleDrawing extends AbstractDrawing
+public class SimpleDrawing extends AbstractViewBoxDrawing
         implements StyleableFigure, LockableFigure {
     public SimpleDrawing(double width, double height) {
         super(width, height);

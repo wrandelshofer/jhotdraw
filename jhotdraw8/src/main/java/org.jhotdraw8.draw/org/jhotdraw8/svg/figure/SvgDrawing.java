@@ -26,7 +26,7 @@ public class SvgDrawing extends AbstractDrawing
         implements StyleableFigure, LockableFigure, NonTransformableFigure, SvgDefaultableFigure,
         SvgElementFigure {
 
-    public static final @NonNull Key<CssRectangle2D> VIEW_BOX = new SimpleStyleableKey<>("viewBox", "viewBox", CssRectangle2D.class, new CssRectangle2DConverter(true), null);
+    public static final @NonNull Key<CssRectangle2D> SVG_VIEW_BOX = new SimpleStyleableKey<>("viewBox", "viewBox", CssRectangle2D.class, new CssRectangle2DConverter(true), null);
     public static final @NonNull Key<String> BASE_PROFILE = new SimpleStyleableKey<>("baseProfile", "baseProfile", String.class, new CssStringConverter(true), null);
     public static final @NonNull Key<String> VERSION = new SimpleStyleableKey<>("version", "version", String.class, new CssStringConverter(true), null);
 

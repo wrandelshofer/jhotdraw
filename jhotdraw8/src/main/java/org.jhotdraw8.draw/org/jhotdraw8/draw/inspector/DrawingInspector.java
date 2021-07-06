@@ -22,6 +22,7 @@ import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.ViewBoxableDrawing;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.tree.TreeModelEvent;
@@ -137,10 +138,10 @@ public class DrawingInspector extends AbstractDrawingInspector {
             boundBackgroundProperty = null;
         }
         if (newValue != null) {
-            xProperty = Drawing.X.propertyAt(newValue.getProperties());
-            yProperty = Drawing.Y.propertyAt(newValue.getProperties());
-            widthProperty = Drawing.WIDTH.propertyAt(newValue.getProperties());
-            heightProperty = Drawing.HEIGHT.propertyAt(newValue.getProperties());
+            xProperty = ViewBoxableDrawing.VIEW_BOX_X.propertyAt(newValue.getProperties());
+            yProperty = ViewBoxableDrawing.VIEW_BOX_Y.propertyAt(newValue.getProperties());
+            widthProperty = ViewBoxableDrawing.WIDTH.propertyAt(newValue.getProperties());
+            heightProperty = ViewBoxableDrawing.HEIGHT.propertyAt(newValue.getProperties());
             boundBackgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
             xProperty.addListener(sizeCommitHandler);
             yProperty.addListener(sizeCommitHandler);

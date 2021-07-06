@@ -77,10 +77,10 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     /**
-     * The bounds of this drawing is determined by its {@code WIDTH} and and
+     * The bounds of this drawing is determined by its {@code WIDTH} and its
      * {@code HEIGHT}.
      * <p>
-     * The bounds of its child figures does not affect the bounds of this
+     * The bounds of the child figures does not affect the bounds of the
      * drawing.
      *
      * @return bounding box (0, 0, WIDTH, HEIGHT).
@@ -151,8 +151,6 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
         Pane g = (Pane) n;
         Bounds bounds = getLayoutBounds();
-        final double x = getStyledNonNull(X).getConvertedValue();
-        final double y = getStyledNonNull(Y).getConvertedValue();
         g.setPrefWidth(bounds.getWidth());
         g.setPrefHeight(bounds.getHeight());
         g.resizeRelocate(
@@ -165,8 +163,6 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
 
         Group gg = (Group) g.getChildren().get(0);
 
-        gg.setTranslateX(-x);
-        gg.setTranslateY(-y);
 
         List<Node> nodes = new ArrayList<>(getChildren().size());
         for (Figure child : getChildren()) {
@@ -189,15 +185,6 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         return true;
     }
 
-    @Override
-    public @NonNull Transform getLocalToParent() {
-        return Transform.translate(-getStyledNonNull(X).getConvertedValue(), -getStyledNonNull(Y).getConvertedValue());
-    }
-
-    @Override
-    public @NonNull Transform getParentToLocal() {
-        return Transform.translate(getStyledNonNull(X).getConvertedValue(), getStyledNonNull(Y).getConvertedValue());
-    }
 
 
 }
