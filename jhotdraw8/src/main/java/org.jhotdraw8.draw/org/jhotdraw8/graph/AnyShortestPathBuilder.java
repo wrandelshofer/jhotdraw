@@ -156,11 +156,11 @@ public class AnyShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V,
         return null;
     }
 
-    public static <V> BackLink<V, Long> searchShortestPathVerticesLong(@NonNull Iterable<V> starts,
-                                                                       @NonNull Predicate<V> goalPredicate,
-                                                                       double maxCost,
-                                                                       @NonNull Function<V, Iterable<V>> nextf,
-                                                                       @NonNull ToLongBiFunction<V, V> costf) {
+    public static @Nullable <V> BackLink<V, Long> searchShortestPathVerticesLong(@NonNull Iterable<V> starts,
+                                                                                 @NonNull Predicate<V> goalPredicate,
+                                                                                 long maxCost,
+                                                                                 @NonNull Function<V, Iterable<V>> nextf,
+                                                                                 @NonNull ToLongBiFunction<V, V> costf) {
         // Priority queue: back-links with shortest distance from start come first.
         PriorityQueue<MyBackLinkLong<V, Long>> queue = new PriorityQueue<>();
 
