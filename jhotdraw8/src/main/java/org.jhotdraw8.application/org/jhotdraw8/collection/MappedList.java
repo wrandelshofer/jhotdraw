@@ -6,25 +6,25 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
- * Wraps a {@link List} in the {@link ReadOnlyList} API.
+ * Wraps a {@link List} in a {@link List} of a different type.
  * <p>
- * The underlying List is referenced - not copied. This allows to pass a
- * list to a client while preventing that the client can modify the list directly.
+ * The underlying List is referenced - not copied.
  *
  * @author Werner Randelshofer
  */
-public final class ReadOnlyTransformationList<E, F> extends AbstractReadOnlyList<E> {
+public final class MappedList<E, F> extends AbstractList<E> {
 
-    private final ReadOnlyList<F> backingList;
+    private final List<F> backingList;
     private final Function<F, E> mapf;
 
-    public ReadOnlyTransformationList(ReadOnlyList<F> backingList, Function<F, E> mapf) {
+    public MappedList(List<F> backingList, Function<F, E> mapf) {
         this.backingList = backingList;
         this.mapf = mapf;
     }
@@ -79,7 +79,8 @@ public final class ReadOnlyTransformationList<E, F> extends AbstractReadOnlyList
         }
     }
 
-    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new ReadOnlyTransformationList<>(backingList.readOnlySubList(fromIndex, toIndex), mapf);
+    @Override
+    public @NonNull List<E> subList(int fromIndex, int toIndex) {
+        return new MappedList<>(backingList.subList(fromIndex, toIndex), mapf);
     }
 }
