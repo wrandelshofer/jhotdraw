@@ -106,7 +106,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
     @Override

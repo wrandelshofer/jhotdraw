@@ -182,7 +182,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure == null) {
             return;
         }

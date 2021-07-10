@@ -87,7 +87,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
 
     }
 

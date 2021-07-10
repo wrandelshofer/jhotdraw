@@ -219,7 +219,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
 

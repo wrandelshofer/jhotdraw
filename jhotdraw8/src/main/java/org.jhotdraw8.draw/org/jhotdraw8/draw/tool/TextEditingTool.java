@@ -163,7 +163,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
 

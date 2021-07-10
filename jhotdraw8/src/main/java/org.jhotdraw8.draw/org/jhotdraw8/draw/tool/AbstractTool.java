@@ -327,28 +327,28 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Event handlers
     // ----
-    protected void onMouseMoved(MouseEvent event, DrawingView view) {
+    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onMouseDragged(MouseEvent event, DrawingView view) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onMouseExited(MouseEvent event, DrawingView view) {
+    protected void onMouseExited(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onMouseEntered(MouseEvent event, DrawingView view) {
+    protected void onMouseEntered(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onMouseReleased(MouseEvent event, DrawingView view) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onMousePressed(MouseEvent event, DrawingView view) {
+    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onMouseClicked(MouseEvent event, DrawingView view) {
+    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onKeyPressed(@NonNull KeyEvent event, DrawingView view) {
+    protected void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (event.getCode() == KeyCode.ESCAPE) {
             fireToolDone();
         } else if (event.getCode() == KeyCode.ENTER) {
@@ -356,10 +356,10 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         }
     }
 
-    protected void onKeyReleased(KeyEvent event, DrawingView view) {
+    protected void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView view) {
     }
 
-    protected void onKeyTyped(KeyEvent event, DrawingView view) {
+    protected void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView view) {
     }
 
     /**
@@ -374,35 +374,35 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * This implementation is empty.
      */
     @Override
-    public void deactivate(DrawingEditor editor) {
+    public void deactivate(@NonNull DrawingEditor editor) {
     }
 
     // ---
     // Listeners
     // ---
     @Override
-    public void addToolListener(Listener<ToolEvent> listener) {
+    public void addToolListener(@NonNull Listener<ToolEvent> listener) {
         toolListeners.add(listener);
     }
 
     @Override
-    public void removeToolListener(Listener<ToolEvent> listener) {
+    public void removeToolListener(@NonNull Listener<ToolEvent> listener) {
         toolListeners.remove(listener);
     }
 
-    protected void fire(ToolEvent event) {
+    protected void fire(@NonNull ToolEvent event) {
         for (Listener<ToolEvent> l : toolListeners) {
             l.handle(event);
         }
     }
 
-    protected void onZoom(ZoomEvent event, DrawingView dv) {
+    protected void onZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
     }
 
-    protected void onZoomStarted(ZoomEvent event, DrawingView dv) {
+    protected void onZoomStarted(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
     }
 
-    protected void onZoomFinished(ZoomEvent event, DrawingView dv) {
+    protected void onZoomFinished(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
     }
 
     protected void fireToolStarted() {
@@ -418,7 +418,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     @Override
-    public ReadOnlyBooleanProperty focusedProperty() {
+    public @NonNull ReadOnlyBooleanProperty focusedProperty() {
         return eventPane.focusedProperty();
     }
 }

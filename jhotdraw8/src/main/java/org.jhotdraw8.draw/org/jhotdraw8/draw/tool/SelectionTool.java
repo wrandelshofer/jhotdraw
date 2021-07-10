@@ -234,7 +234,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
+    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         mouseDragged = true;
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
@@ -242,7 +242,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
+    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseReleased(event, dv);
         }
@@ -250,7 +250,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
+    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseClicked(event, dv);
         }
@@ -273,19 +273,19 @@ public class SelectionTool extends AbstractTool {
         }
     }
 
-    protected void onKeyPressed(KeyEvent event, DrawingView view) {
+    protected void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyPressed(event, view);
         }
     }
 
-    protected void onKeyReleased(KeyEvent event, DrawingView view) {
+    protected void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyReleased(event, view);
         }
     }
 
-    protected void onKeyTyped(KeyEvent event, DrawingView view) {
+    protected void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyTyped(event, view);
         }
@@ -404,11 +404,11 @@ public class SelectionTool extends AbstractTool {
         dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
     }
 
-    protected void onZoomStarted(ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoomStarted(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
     }
 
-    protected void onZoomFinished(ZoomEvent event, DrawingView dv) {
+    protected void onZoomFinished(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
     }
 
     @Override
