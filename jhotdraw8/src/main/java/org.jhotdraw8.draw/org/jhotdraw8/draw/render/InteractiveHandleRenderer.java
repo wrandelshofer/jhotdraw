@@ -40,6 +40,7 @@ import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.tree.TreeModelEvent;
 
@@ -180,11 +181,12 @@ public class InteractiveHandleRenderer {
                 default:
                     throw new IllegalArgumentException();
                 }
+                final java.awt.Shape awtShape = Shapes.awtShapeFromFX(shape);
                 return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
                         cap, join, (float) shape.getStrokeMiterLimit()
-                ).createStrokedShape(Shapes.awtShapeFromFX(shape))
+                ).createStrokedShape(awtShape)
                         .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()))
-                        ? tolerance:null;
+                        ? Geom.distanceFromShape(awtShape, pointInLocal.getX(), pointInLocal.getY()) : null;
             } else {
                 return null;
             }

@@ -8,6 +8,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.Double2Consumer;
 
+import java.awt.Shape;
+import java.awt.geom.PathIterator;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
@@ -263,6 +266,12 @@ public class Geom {
     public static double distanceFromLine(double xa, double ya,
                                           double xb, double yb,
                                           double xc, double yc) {
+        return Math.sqrt(squaredDistanceFromLine(xa, ya, xb, yb, xc, yc));
+    }
+
+    public static double squaredDistanceFromLine(double xa, double ya,
+                                                 double xb, double yb,
+                                                 double xc, double yc) {
 
         // from Doug Lea's PolygonFigure
         // source:http://vision.dai.ed.ac.uk/andrewfg/c-g-a-faq.html#q7
@@ -303,21 +312,24 @@ public class Geom {
         double l2 = xdiff * xdiff + ydiff * ydiff;
 
         if (l2 == 0) {
-            return Geom.length(xa, ya, xc, yc);
+            return Geom.squaredDistance(xa, ya, xc, yc);
         }
 
         double rnum = (ya - yc) * (ya - yb) - (xa - xc) * (xb - xa);
         double r = rnum / l2;
 
-        if (r < 0.0 || r > 1.0) {
-            return Double.MAX_VALUE;
+        if (r < 0.0) {
+            return Geom.squaredDistance(xa, ya, xc, yc);
+        }
+        if (r > 1.0) {
+            return Geom.squaredDistance(xb, yb, xc, yc);
         }
 
         double xi = xa + r * xdiff;
         double yi = ya + r * ydiff;
         double xd = xc - xi;
         double yd = yc - yi;
-        return sqrt(xd * xd + yd * yd);
+        return (xd * xd + yd * yd);
 
         /*
          * for directional version, instead use
@@ -485,7 +497,6 @@ public class Geom {
     }
 
 
-
     /**
      * Returns the trigonometric sine of an angle in degrees.
      * <p>
@@ -575,6 +586,58 @@ public class Geom {
      * @return a * b + c
      */
     public static double fma(double a, double b, double c) {
-        return a *b+c;
+        return a * b + c;
+    }
+
+    /**
+     * Computes the distance from the given shape to the given point.
+     *
+     * @param awtShape a shape
+     * @param x        x-coordinate of the point
+     * @param y        y-coordinate of the point
+     * @return the distance
+     */
+    public static double distanceFromShape(@NonNull Shape awtShape, double x, double y) {
+        return Math.sqrt(squaredDistanceFromShape(awtShape, x, y));
+    }
+
+    public static double squaredDistanceFromShape(@NonNull Shape awtShape, double x, double y) {
+        if (awtShape.contains(x, y)) {
+            return 0;
+        }
+        double[] coords = new double[6];
+        double firstX = Double.NaN, firstY = Double.NaN;
+        double lastX = Double.NaN, lastY = Double.NaN;
+        double minSquaredDistance = Double.POSITIVE_INFINITY;
+        for (final PathIterator it = awtShape.getPathIterator(null, 1); !it.isDone(); it.next()) {
+            double squaredDistance;
+            switch (it.currentSegment(coords)) {
+                case PathIterator.SEG_MOVETO:
+                    firstX = coords[0];
+                    firstY = coords[1];
+                    lastX = coords[0];
+                    lastY = coords[1];
+                    squaredDistance = Double.POSITIVE_INFINITY;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    squaredDistance = squaredDistanceFromLine(lastX, lastY, coords[0], coords[1], x, y);
+                    lastX = coords[0];
+                    lastY = coords[1];
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    squaredDistance = squaredDistanceFromLine(lastX, lastY, firstX, firstY, x, y);
+                    firstX = lastX;
+                    firstY = lastY;
+                    break;
+                default:
+                    squaredDistance = Double.POSITIVE_INFINITY;
+                    break;
+            }
+            if (squaredDistance < minSquaredDistance) {
+                minSquaredDistance = squaredDistance;
+            }
+        }
+        return minSquaredDistance;
+
     }
 }
