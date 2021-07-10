@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
-import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
@@ -43,6 +43,7 @@ public interface DrawingEditor {
     String MULTI_HANDLE_TYPE_PROPERTY = "multiHandleType";
 
     String HANDLE_SIZE_PROPERTY = "handleSize";
+    String TOLERANCE_PROPERTY = "tolerance";
 
     String HANDLE_STROKE_WDITH_PROPERTY = "handleStrokeWidth";
 
@@ -203,21 +204,30 @@ public interface DrawingEditor {
      *
      * @return size of handle
      */
-    IntegerProperty handleSizeProperty();
+    DoubleProperty handleSizeProperty();
+
+    /**
+     * Holds the tolerance for finding figures.
+     */
+    DoubleProperty toleranceProperty();
 
     /**
      * Holds the stroke width of a handle.
      *
      * @return size of handle
      */
-    IntegerProperty handleStrokeWidthProperty();
+    DoubleProperty handleStrokeWidthProperty();
 
-    default int getHandleSize() {
+    default double getHandleSize() {
         return handleSizeProperty().get();
     }
 
-    default void setHandleSize(int newValue) {
+    default void setHandleSize(double newValue) {
         handleSizeProperty().set(newValue);
+    }
+
+    default void setTolerance(double newValue) {
+        toleranceProperty().set(newValue);
     }
 
     /**
@@ -236,11 +246,11 @@ public interface DrawingEditor {
     }
 
 
-    default int getHandleStrokeWidth() {
+    default double getHandleStrokeWidth() {
         return handleStrokeWidthProperty().get();
     }
 
-    default void setHandleStrokeWidth(int newValue) {
+    default void setHandleStrokeWidth(double newValue) {
         handleStrokeWidthProperty().set(newValue);
     }
 
@@ -305,8 +315,7 @@ public interface DrawingEditor {
      * @return the tolerance radius
      */
     default double getTolerance() {
-        // handle size * 0.5 * sqrt(2).
-        return getHandleSize();
+        return toleranceProperty().get();
     }
 
     /**

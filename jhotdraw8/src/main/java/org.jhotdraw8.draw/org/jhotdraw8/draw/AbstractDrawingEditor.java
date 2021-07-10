@@ -4,11 +4,11 @@
  */
 package org.jhotdraw8.draw;
 
-import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.beans.value.ChangeListener;
@@ -29,32 +29,42 @@ import java.util.prefs.Preferences;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
-    private final @NonNull IntegerProperty handleSize = new SimpleIntegerProperty(
+    private final @NonNull DoubleProperty handleSize = new SimpleDoubleProperty(
             this, HANDLE_SIZE_PROPERTY,
-            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_SIZE_PROPERTY, 5)) {
+            Preferences.userNodeForPackage(DrawingEditor.class).getDouble(HANDLE_SIZE_PROPERTY, 5.0)) {
         @Override
-        public void set(int newValue) {
+        public void set(double newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(AbstractDrawingView.class).putInt(HANDLE_SIZE_PROPERTY, newValue);
+            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(HANDLE_SIZE_PROPERTY, newValue);
             recreateHandles();
         }
     };
-    private final @NonNull IntegerProperty handleStrokeWidth = new SimpleIntegerProperty(
-            this, HANDLE_STROKE_WDITH_PROPERTY,
-            Preferences.userNodeForPackage(AbstractDrawingView.class).getInt(HANDLE_STROKE_WDITH_PROPERTY, 1)) {
+    private final @NonNull DoubleProperty tolerance = new SimpleDoubleProperty(
+            this, TOLERANCE_PROPERTY,
+            Preferences.userNodeForPackage(DrawingEditor.class).getDouble(TOLERANCE_PROPERTY, 5.0)) {
         @Override
-        public void set(int newValue) {
+        public void set(double newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(AbstractDrawingView.class).putInt(HANDLE_STROKE_WDITH_PROPERTY, newValue);
+            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(HANDLE_SIZE_PROPERTY, newValue);
+            recreateHandles();
+        }
+    };
+    private final @NonNull DoubleProperty handleStrokeWidth = new SimpleDoubleProperty(
+            this, HANDLE_STROKE_WDITH_PROPERTY,
+            Preferences.userNodeForPackage(DrawingEditor.class).getDouble(HANDLE_STROKE_WDITH_PROPERTY, 1.0)) {
+        @Override
+        public void set(double newValue) {
+            super.set(newValue);
+            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(HANDLE_STROKE_WDITH_PROPERTY, newValue);
             recreateHandles();
         }
     };
     private final @NonNull NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
-            CssColor.valueOf(Preferences.userNodeForPackage(AbstractDrawingView.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
+            CssColor.valueOf(Preferences.userNodeForPackage(DrawingEditor.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
         @Override
         public void set(CssColor newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(AbstractDrawingView.class).put(HANDLE_COLOR_PROPERTY, newValue.getName());
+            Preferences.userNodeForPackage(DrawingEditor.class).put(HANDLE_COLOR_PROPERTY, newValue.getName());
             recreateHandles();
         }
     };
@@ -113,12 +123,17 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     }
 
     @Override
-    public @NonNull IntegerProperty handleSizeProperty() {
+    public @NonNull DoubleProperty handleSizeProperty() {
         return handleSize;
     }
 
     @Override
-    public @NonNull IntegerProperty handleStrokeWidthProperty() {
+    public @NonNull DoubleProperty toleranceProperty() {
+        return tolerance;
+    }
+
+    @Override
+    public @NonNull DoubleProperty handleStrokeWidthProperty() {
         return handleStrokeWidth;
     }
 

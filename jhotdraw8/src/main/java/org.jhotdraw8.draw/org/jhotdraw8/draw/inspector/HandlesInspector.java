@@ -133,12 +133,14 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
         if (oldValue != null) {
             handleColorProperty.unbindBidirectional(oldValue.getEditor().handleColorProperty());
             handleSizeProperty.unbindBidirectional(oldValue.getEditor().handleSizeProperty());
+            oldValue.getEditor().toleranceProperty().unbind();
             handleStrokeWidthProperty.unbindBidirectional(oldValue.getEditor().handleStrokeWidthProperty());
         }
         try {
             if (newValue != null) {
                 handleColorProperty.bindBidirectional(newValue.getEditor().handleColorProperty());
                 handleSizeProperty.bindBidirectional(newValue.getEditor().handleSizeProperty());
+                newValue.getEditor().toleranceProperty().bind(handleSizeProperty);
                 handleStrokeWidthProperty.bindBidirectional(newValue.getEditor().handleStrokeWidthProperty());
             }
         } catch (Throwable t) {

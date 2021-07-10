@@ -192,14 +192,14 @@ public class InteractiveHandleRenderer {
             if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 for (Node child : ((Group) node).getChildren()) {
                     Double distance = contains(child, child.parentToLocal(pointInLocal), tolerance);
-                    if (distance!=null) {
+                    if (distance != null) {
                         return distance;
                     }
                 }
             }
             return null;
-        } else { // foolishly assumes that all other nodes are rectangular and opaque
-            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance)?0.0:null;
+        } else { // foolishly assumes that all other nodes are rectangular
+            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance) ? 0.0 : null;
         }
     }
 

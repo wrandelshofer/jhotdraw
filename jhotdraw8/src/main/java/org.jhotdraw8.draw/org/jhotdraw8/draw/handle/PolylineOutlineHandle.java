@@ -89,7 +89,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
         CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
-        int strokeWidth = view.getEditor().getHandleStrokeWidth();
+        double strokeWidth = view.getEditor().getHandleStrokeWidth();
         poly1.setStrokeWidth(strokeWidth + 2);
         poly2.setStrokeWidth(strokeWidth);
         return node;
