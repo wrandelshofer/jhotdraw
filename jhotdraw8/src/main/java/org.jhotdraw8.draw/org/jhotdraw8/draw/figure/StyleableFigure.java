@@ -35,7 +35,7 @@ public interface StyleableFigure extends Figure {
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
      * <p>
-     * Default value: {@code null}.
+     * Default value: empty set.
      */
     @NonNull
     ObservableWordSetKey STYLE_CLASS = new ObservableWordSetKey("class", ImmutableSets.emptySet());
@@ -44,7 +44,7 @@ public interface StyleableFigure extends Figure {
      * are used for styling a figure with CSS.
      * This property should not be made persistent because it is a computed value.
      * <p>
-     * Default value: {@code null}.
+     * Default value: empty set.
      */
     @NonNull
     ObservableWordSetKey PSEUDO_CLASS = new ObservableWordSetKey("pseudoClass", ImmutableSets.emptySet());
