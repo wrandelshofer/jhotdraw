@@ -74,6 +74,26 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
     private final NonNullObjectProperty<HandleType> multiHandleType = new NonNullObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    private final SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
+    private final ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+        if (newValue) {
+            setActiveDrawingView((DrawingView) ((ReadOnlyProperty<?>) observable).getBean());
+        }
+    };
+    private final @Nullable Listener<ToolEvent> defaultToolActivator = (event) -> {
+        switch (event.getEventType()) {
+            case TOOL_DONE:
+                if (getDefaultTool() != event.getSource() && getDefaultTool() != null) {
+                    setActiveTool(getDefaultTool());
+                }
+                break;
+            default:
+                break;
+        }
+    };
+    private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
+    private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<>(this, ACTIVE_TOOL_PROPERTY);
+    private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
 
     {
         ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> {
@@ -82,14 +102,6 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         multiHandleType.addListener(recreateHandles);
         handleType.addListener(recreateHandles);
     }
-
-    private final SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
-
-    private final ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-        if (newValue) {
-            setActiveDrawingView((DrawingView) ((ReadOnlyProperty<?>) observable).getBean());
-        }
-    };
 
     {
         drawingViews.addListener((SetChangeListener.Change<? extends DrawingView> change) -> {
@@ -102,6 +114,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
                         setActiveDrawingView(drawingViews.isEmpty() ? null : drawingViews.get().iterator().next());
                     }
                 }
+                removed.setTool(null);
             } else if (change.wasAdded()) {
                 DrawingView added = change.getElementAdded();
                 added.focusedProperty().addListener(focusListener);
@@ -109,6 +122,8 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
                     added.getEditor().removeDrawingView(added);
                 }
                 added.setEditor(this);
+                final Tool theActiveTool = getActiveTool();
+                added.setTool(theActiveTool);
                 if (drawingViews.size() == 1) {
                     setActiveDrawingView(added);
                 }
@@ -116,73 +131,6 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
 
         });
     }
-
-    @Override
-    public @NonNull ObjectProperty<String> helpTextProperty() {
-        return helpText;
-    }
-
-    @Override
-    public @NonNull DoubleProperty handleSizeProperty() {
-        return handleSize;
-    }
-
-    @Override
-    public @NonNull DoubleProperty toleranceProperty() {
-        return tolerance;
-    }
-
-    @Override
-    public @NonNull DoubleProperty handleStrokeWidthProperty() {
-        return handleStrokeWidth;
-    }
-
-    @Override
-    public @NonNull NonNullObjectProperty<CssColor> handleColorProperty() {
-        return handleColor;
-    }
-
-    @Override
-    public @NonNull NonNullObjectProperty<HandleType> handleTypeProperty() {
-        return handleType;
-    }
-
-    @Override
-    public @NonNull ObjectProperty<HandleType> leadHandleTypeProperty() {
-        return leadHandleType;
-    }
-
-    @Override
-    public @NonNull ObjectProperty<HandleType> anchorHandleTypeProperty() {
-        return anchorHandleType;
-    }
-
-    @Override
-    public @NonNull NonNullObjectProperty<HandleType> multiHandleTypeProperty() {
-        return multiHandleType;
-    }
-
-
-    @Override
-    public @NonNull SetProperty<DrawingView> drawingViewsProperty() {
-        return drawingViews;
-    }
-
-
-    private final @Nullable Listener<ToolEvent> defaultToolActivator = (event) -> {
-        switch (event.getEventType()) {
-        case TOOL_DONE:
-            if (getDefaultTool() != event.getSource() && getDefaultTool() != null) {
-                setActiveTool(getDefaultTool());
-            }
-            break;
-        default:
-            break;
-        }
-    };
-
-    private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
-    private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<>(this, ACTIVE_TOOL_PROPERTY);
 
     {
         activeTool.addListener((o, oldValue, newValue) -> {
@@ -192,27 +140,15 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             }
             if (oldValue != null) {
                 oldValue.deactivate(this);
+                oldValue.removeToolListener(defaultToolActivator);
             }
             if (newValue != null) {
+                newValue.addToolListener(defaultToolActivator);
                 newValue.setDrawingEditor(this);
                 newValue.activate(this);
             }
         });
     }
-
-    {
-        activeTool.addListener((o, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.removeToolListener(defaultToolActivator);
-            }
-            if (newValue != null) {
-                newValue.addToolListener(defaultToolActivator);
-            }
-        });
-    }
-
-    private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
-
 
     @Override
     public @NonNull ObjectProperty<DrawingView> activeDrawingViewProperty() {
@@ -225,7 +161,57 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     }
 
     @Override
+    public @NonNull ObjectProperty<HandleType> anchorHandleTypeProperty() {
+        return anchorHandleType;
+    }
+
+    @Override
     public @NonNull ObjectProperty<Tool> defaultToolProperty() {
         return defaultTool;
+    }
+
+    @Override
+    public @NonNull SetProperty<DrawingView> drawingViewsProperty() {
+        return drawingViews;
+    }
+
+    @Override
+    public @NonNull NonNullObjectProperty<CssColor> handleColorProperty() {
+        return handleColor;
+    }
+
+    @Override
+    public @NonNull DoubleProperty handleSizeProperty() {
+        return handleSize;
+    }
+
+    @Override
+    public @NonNull DoubleProperty handleStrokeWidthProperty() {
+        return handleStrokeWidth;
+    }
+
+    @Override
+    public @NonNull NonNullObjectProperty<HandleType> handleTypeProperty() {
+        return handleType;
+    }
+
+    @Override
+    public @NonNull ObjectProperty<String> helpTextProperty() {
+        return helpText;
+    }
+
+    @Override
+    public @NonNull ObjectProperty<HandleType> leadHandleTypeProperty() {
+        return leadHandleType;
+    }
+
+    @Override
+    public @NonNull NonNullObjectProperty<HandleType> multiHandleTypeProperty() {
+        return multiHandleType;
+    }
+
+    @Override
+    public @NonNull DoubleProperty toleranceProperty() {
+        return tolerance;
     }
 }
