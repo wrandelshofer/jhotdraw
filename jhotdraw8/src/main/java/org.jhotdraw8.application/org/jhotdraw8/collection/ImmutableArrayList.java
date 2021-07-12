@@ -20,7 +20,7 @@ import java.util.Spliterator;
  */
 public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
 
-    static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(true, new Object[0]);
+    static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(new Object[0]);
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
 
@@ -34,10 +34,6 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
     }
 
-    ImmutableArrayList(@NonNull Object[] array) {
-        this(array, 0, array.length);
-    }
-
     ImmutableArrayList(@NonNull Object[] a, int offset, int length) {
         if (offset < 0) {
             throw new IndexOutOfBoundsException("offset = " + offset);
@@ -49,7 +45,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         System.arraycopy(a, offset, array, 0, length);
     }
 
-    ImmutableArrayList(boolean privateMethod, Object[] array) {
+    ImmutableArrayList(Object[] array) {
         this.array = array;
     }
 

@@ -19,7 +19,7 @@ public class ImmutableLists {
         Object[] a = new Object[collection.size() + 1];
         a = collection.toArray(a);
         a[a.length - 1] = item;
-        return new ImmutableArrayList<>(true, a);
+        return new ImmutableArrayList<>(a);
     }
 
     public static @NonNull <T> ImmutableList<T> add(@Nullable Collection<T> collection, T item) {
@@ -29,11 +29,11 @@ public class ImmutableLists {
         Object[] a = new Object[collection.size() + 1];
         a = collection.toArray(a);
         a[a.length - 1] = item;
-        return new ImmutableArrayList<>(true, a);
+        return new ImmutableArrayList<>(a);
     }
 
     public static @NonNull <T> ImmutableList<T> add(@NonNull Collection<T> collection, int index, T item) {
-        if (collection == null || collection.isEmpty() && index == 0) {
+        if (collection.isEmpty() && index == 0) {
             return of(item);
         }
         Object[] a = new Object[collection.size()];
@@ -42,7 +42,7 @@ public class ImmutableLists {
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
-        return new ImmutableArrayList<>(true, b);
+        return new ImmutableArrayList<>(b);
     }
 
     public static @NonNull <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, int index, T item) {
@@ -55,7 +55,7 @@ public class ImmutableLists {
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index, b, index + 1, a.length - index);
         b[index] = item;
-        return new ImmutableArrayList<>(true, b);
+        return new ImmutableArrayList<>(b);
     }
 
     public static @NonNull <T> ImmutableList<T> addAll(@Nullable ReadOnlyCollection<T> first, @NonNull ReadOnlyCollection<T> second) {
@@ -70,7 +70,7 @@ public class ImmutableLists {
         for (T t : second) {
             a[i++] = t;
         }
-        return new ImmutableArrayList<>(true, a);
+        return new ImmutableArrayList<>(a);
     }
 
     @SuppressWarnings("unchecked")
@@ -131,7 +131,7 @@ public class ImmutableLists {
         Object[] b = new Object[a.length - 1];
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index + 1, b, index, b.length - index);
-        return new ImmutableArrayList<>(true, b);
+        return new ImmutableArrayList<>(b);
     }
 
     public static @NonNull <T> ImmutableList<T> remove(@Nullable Collection<T> collection, int index) {
@@ -143,7 +143,7 @@ public class ImmutableLists {
         Object[] b = new Object[a.length - 1];
         System.arraycopy(a, 0, b, 0, index);
         System.arraycopy(a, index + 1, b, index, b.length - index);
-        return new ImmutableArrayList<>(true, b);
+        return new ImmutableArrayList<>(b);
     }
 
     public static @NonNull <T> ImmutableList<T> remove(@Nullable Collection<T> collection, T item) {
@@ -165,14 +165,14 @@ public class ImmutableLists {
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         a[index] = item;
-        return new ImmutableArrayList<>(true, a);
+        return new ImmutableArrayList<>(a);
     }
 
     public static @NonNull <T> ImmutableList<T> set(@NonNull Collection<T> collection, int index, T item) {
         Object[] a = new Object[collection.size()];
         a = collection.toArray(a);
         a[index] = item;
-        return new ImmutableArrayList<>(true, a);
+        return new ImmutableArrayList<>(a);
     }
 
     public static @NonNull <E> ImmutableList<E> removeAll(@NonNull ReadOnlyCollection<E> list, @NonNull Collection<? extends E> collection) {
@@ -209,10 +209,10 @@ public class ImmutableLists {
     }
 
     public static @NonNull <E> ImmutableList<E> subList(@NonNull List<E> list, int fromIndex, int toIndex) {
-        return new ImmutableArrayList<>(true, list.subList(fromIndex, toIndex).toArray());
+        return new ImmutableArrayList<>(list.subList(fromIndex, toIndex).toArray());
     }
 
     public static @NonNull <E> ImmutableList<E> subList(@NonNull ReadOnlyList<E> list, int fromIndex, int toIndex) {
-        return new ImmutableArrayList<>(true, list.readOnlySubList(fromIndex, toIndex).toArray());
+        return new ImmutableArrayList<>(list.readOnlySubList(fromIndex, toIndex).toArray());
     }
 }
