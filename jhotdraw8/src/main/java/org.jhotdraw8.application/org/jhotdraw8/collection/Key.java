@@ -100,7 +100,12 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     default @Nullable T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
-        return getRawValueType().cast(a.put(this, value));
+        if (a.containsKey(this)) {
+            return getRawValueType().cast(a.put(this, value));
+        } else {
+            a.put(this, value);
+            return getDefaultValue();
+        }
     }
 
     /**
@@ -112,7 +117,11 @@ public interface Key<T> extends MapAccessor<T> {
      */
     @Override
     default @Nullable T remove(@NonNull Map<? super Key<?>, Object> a) {
-        return getRawValueType().cast(a.remove(this));
+        if (a.containsKey(this)) {
+            return getRawValueType().cast(a.remove(this));
+        } else {
+            return getDefaultValue();
+        }
     }
 
     /**
