@@ -6,7 +6,7 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.draw.key.UriStyleableKey;
+import org.jhotdraw8.draw.key.NullableUriStyleableKey;
 
 /**
  * Mixin interface for figures that have an image source.
@@ -18,5 +18,5 @@ public interface ImageableFigure extends Figure {
      * This property is also set on the ImageView node, so that
      * {@link org.jhotdraw8.draw.io.SvgExportOutputFormat} can pick it up.
      */
-    @NonNull UriStyleableKey IMAGE_URI = new UriStyleableKey("src", null);
+    @NonNull NullableUriStyleableKey IMAGE_URI = new NullableUriStyleableKey("src", null);
 }
