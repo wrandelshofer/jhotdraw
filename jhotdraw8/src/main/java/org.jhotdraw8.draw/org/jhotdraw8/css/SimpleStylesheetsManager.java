@@ -504,10 +504,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
                 Stylesheet s = p.parseStylesheet(uri);
-                LOGGER.info("Parsed " + uri + ".\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size());
+                LOGGER.info("Parsed " + uri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size());
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    LOGGER.info("Parsed " + uri + ".\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
+                    LOGGER.info("Parsed " + uri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
                 }
                 return s;
             });
@@ -526,10 +526,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
                 Stylesheet s = p.parseStylesheet(str, documentHome);
-                LOGGER.info("Parsed " + str + ".\nRules: " + s.getStyleRules());
+                LOGGER.info("Parsed " + str + "\nRules: " + s.getStyleRules());
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    LOGGER.info("Parsed " + str + ".\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
+                    LOGGER.info("Parsed " + str + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
                 }
                 return s;
             });

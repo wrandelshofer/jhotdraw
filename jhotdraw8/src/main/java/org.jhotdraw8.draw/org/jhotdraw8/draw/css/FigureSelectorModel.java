@@ -393,7 +393,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return findKey(element, namespace, attributeName);
     }
 
-    private Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> getWritableMetaMap(@NonNull Figure elem) {
+    protected Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> getWritableMetaMap(@NonNull Figure elem) {
         return figureToMetaMap.computeIfAbsent(elem.getClass(), klass -> {
             Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
@@ -456,17 +456,18 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                             convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                         }
                         elem.setStyled(origin, k, intern(convertedValue));
-                    } catch (Throwable ex) {
-                        LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value.toString(), ex);
+                    } catch (ParseException | IOException ex) {
+                        LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value, ex);
                     }
                 }
             }
         }
     }
 
+    @NonNull
     private final Map<Object, Object> inlinedValues = new ConcurrentHashMap<>();
 
-    private Object intern(Object convertedValue) {
+    protected @Nullable Object intern(@Nullable Object convertedValue) {
         return convertedValue == null ? null : inlinedValues.computeIfAbsent(convertedValue, k -> convertedValue);
     }
 
@@ -476,7 +477,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
      * @param value the token
      * @return true if the value is "initial".
      */
-    private boolean isInitial(@Nullable ReadOnlyList<CssToken> value) {
+    protected boolean isInitial(@Nullable ReadOnlyList<CssToken> value) {
         if (value != null) {
             boolean isInitial = false;
             Loop:
