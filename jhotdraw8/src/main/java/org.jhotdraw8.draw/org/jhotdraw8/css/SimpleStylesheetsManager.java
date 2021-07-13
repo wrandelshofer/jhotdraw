@@ -90,7 +90,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    public void setSelectorModel(SelectorModel<E> newValue) {
+    public void setSelectorModel(@NonNull SelectorModel<E> newValue) {
         selectorModel = newValue;
     }
 
@@ -537,7 +537,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
 
         @Override
-        public URI getUri() {
+        public @Nullable URI getUri() {
             return uri;
         }
 

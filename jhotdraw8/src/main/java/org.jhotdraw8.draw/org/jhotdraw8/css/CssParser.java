@@ -691,7 +691,7 @@ public class CssParser {
         try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             URI documentHome;
             try {
-                documentHome = css.toURI();
+                documentHome = css.toURI().resolve(".");
             } catch (URISyntaxException e) {
                 documentHome = null;
             }
@@ -803,7 +803,7 @@ public class CssParser {
                     parseBracketedTerms(tt, terms, CssTokenType.TT_RIGHT_SQUARE_BRACKET);
                     break;
                 case CssTokenType.TT_URL:
-                    terms.add(new CssToken(tt.current(), absolutizeUri(tt.currentString()), tt.currentNumber(),
+                    terms.add(new CssToken(tt.current(), absolutizeUri(tt.currentStringNonNull()), tt.currentNumber(),
                             tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
                     break;
                 default:
