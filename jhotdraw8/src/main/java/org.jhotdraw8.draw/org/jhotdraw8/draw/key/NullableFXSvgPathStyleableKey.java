@@ -8,6 +8,7 @@ import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.text.CssFXSvgPathConverter;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
@@ -44,7 +45,8 @@ public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<List<Pat
      * @param defaultValue The default value.
      */
     public NullableFXSvgPathStyleableKey(@NonNull String key, @Nullable List<PathElement> defaultValue) {
-        super(null, key, String.class, true, defaultValue);
+        super(null, key, new TypeToken<List<PathElement>>() {
+        }.getType(), true, defaultValue);
 
         converter = new CssFXSvgPathConverter(isNullable());
     }

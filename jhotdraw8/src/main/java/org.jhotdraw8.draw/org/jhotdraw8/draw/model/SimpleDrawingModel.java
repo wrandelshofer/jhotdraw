@@ -520,6 +520,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             if (graphBuilder.getVertexCount() > 0) {
                 for (Figure f : GraphSearch.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
+                        if (!f.getLayoutSubjects().isEmpty()) {
+                            // The :leftToRight pseudo class may have changed,
+                            // if the layout subject of the label has changed its layout.
+                            f.stylesheetChanged(ctx);
+                        }
                         f.layoutChanged(ctx);
                         markDirty(f, DirtyBits.NODE);
                     }
