@@ -18,7 +18,6 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
-import org.jhotdraw8.draw.figure.TransformCachingFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -27,18 +26,7 @@ import org.jhotdraw8.graph.DirectedGraphBuilder;
 import org.jhotdraw8.graph.GraphSearch;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.AbstractMap;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /**
@@ -451,8 +439,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
                         final Figure a = i.current();
                         if (visited.add(a)) {
-                            if (a instanceof TransformableFigure
-                                    || a instanceof TransformCachingFigure) {
+                            if (a instanceof TransformableFigure) {
                                 markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
                             }
                         }

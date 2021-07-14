@@ -7,12 +7,7 @@ package org.jhotdraw8.draw.render;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -38,13 +33,7 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static org.jhotdraw8.draw.render.InteractiveHandleRenderer.contains;
@@ -518,7 +507,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         ObservableList<Node> children = drawingPane.getChildren();
         nodeToFigureMap.clear();
         figureToNodeMap.clear();
-        children.setAll(getNode(f));
+        Node node = getNode(f);
+        if (node == null) {
+            children.clear();
+        } else {
+            children.setAll(node);
+        }
         dirtyFigureNodes.clear();
         dirtyFigureNodes.add(f);
         repaint();
