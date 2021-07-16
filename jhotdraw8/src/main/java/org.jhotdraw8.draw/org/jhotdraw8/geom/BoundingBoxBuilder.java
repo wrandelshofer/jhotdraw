@@ -79,4 +79,9 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
     protected void doPathDone() {
         // empty
     }
+
+    public boolean isFinite() {
+        return Double.isFinite(minx) && Double.isFinite(miny)
+                && Double.isFinite(maxx) && Double.isFinite(maxy);
+    }
 }
