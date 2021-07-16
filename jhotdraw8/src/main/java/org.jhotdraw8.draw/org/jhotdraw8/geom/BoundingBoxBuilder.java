@@ -31,7 +31,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder
         // nothing to do
     }
 
-    private void addToBounds(double x, double y) {
+    public void addToBounds(double x, double y) {
         minx = min(minx, x);
         miny = min(miny, y);
         maxx = max(maxx, x);
