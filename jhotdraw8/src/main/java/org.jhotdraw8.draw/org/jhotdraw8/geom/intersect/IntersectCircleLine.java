@@ -128,6 +128,14 @@ public class IntersectCircleLine {
         final double Δx, Δy;
         Δx = x1 - x0;
         Δy = y1 - y0;
+        if (Math.abs(Δx) < 1e-6 && Math.abs(Δy) < 1e-6) {
+            // Line is a point. Check if it is inside or outside the circle.
+            final double distanceSquared = (x0 - cx) * (x0 - cx) + (y0 - cy) * (y0 - cy);
+            return new IntersectionResultEx(
+                    (distanceSquared <= r * r) ? IntersectionStatus.NO_INTERSECTION_INSIDE : IntersectionStatus.NO_INTERSECTION_OUTSIDE,
+                    result);
+        }
+
         final double a, b, c, deter;
         a = Δx * Δx + Δy * Δy;
         b = 2 * (Δx * (x0 - cx) + Δy * (y0 - cy));
