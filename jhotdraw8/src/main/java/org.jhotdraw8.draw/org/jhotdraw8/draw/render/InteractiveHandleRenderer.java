@@ -23,6 +23,10 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
@@ -192,17 +196,35 @@ public class InteractiveHandleRenderer {
             }
         } else if (node instanceof Group) {
             if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                for (Node child : ((Group) node).getChildren()) {
-                    Double distance = contains(child, child.parentToLocal(pointInLocal), tolerance);
-                    if (distance != null) {
-                        return distance;
-                    }
+                return childContains((Parent) node, pointInLocal, tolerance);
+            }
+            return null;
+        } else if (node instanceof Region) {
+            if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+                Region region = (Region) node;
+                final Background bg = region.getBackground();
+                final Border border = region.getBorder();
+                if ((bg == null || bg.isEmpty()) && (border == null || border.isEmpty())) {
+                    return childContains((Parent) node, pointInLocal, tolerance);
+                } else {
+                    return 0.0;
                 }
             }
             return null;
         } else { // foolishly assumes that all other nodes are rectangular
             return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance) ? 0.0 : null;
         }
+    }
+
+    private static @Nullable Double childContains(final @NonNull Parent node, final @NonNull Point2D pointInLocal, final double tolerance) {
+        double minDistance = Double.POSITIVE_INFINITY;
+        for (Node child : node.getChildrenUnmodifiable()) {
+            Double distance = contains(child, child.parentToLocal(pointInLocal), tolerance);
+            if (distance != null) {
+                minDistance = Math.min(minDistance, distance);
+            }
+        }
+        return Double.isFinite(minDistance) ? minDistance : null;
     }
 
     /**

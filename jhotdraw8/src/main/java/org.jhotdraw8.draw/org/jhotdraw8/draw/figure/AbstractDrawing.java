@@ -14,6 +14,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
@@ -175,7 +176,10 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     public void updateBackground(RenderContext ctx, Pane g) {
-        final Paint paint = Paintable.getPaint(getStyled(BACKGROUND));
+        Paint paint = Paintable.getPaint(getStyled(BACKGROUND));
+        if ((paint instanceof Color) && ((Color) paint).getOpacity() == 0) {
+            paint = null;
+        }
         g.setBackground(paint == null ? null : new Background(new BackgroundFill(
                 paint, CornerRadii.EMPTY, Insets.EMPTY)));
     }
@@ -184,7 +188,6 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     public boolean isSuitableParent(@NonNull Figure newParent) {
         return true;
     }
-
 
 
 }
