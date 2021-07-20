@@ -8,6 +8,15 @@ import java.awt.geom.Point2D;
 
 /**
  * Represents a coincident polyline intersection (stretch).
+ * <p>
+ * This code has been derived from Cavalier Contours [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] Cavalier Contours</dt>
+ *     <dd>Cavalier Contours, Copyright (c) 2019 Jedidiah Buck McCready, MIT License.
+ *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+ * </dl>
  */
 public class PlineCoincidentIntersect {
     /// Index of the start vertex of the first segment

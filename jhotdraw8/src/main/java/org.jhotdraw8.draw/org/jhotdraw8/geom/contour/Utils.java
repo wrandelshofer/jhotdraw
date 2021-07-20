@@ -12,6 +12,18 @@ import org.jhotdraw8.geom.Points2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 
+/**
+ * Provides utility functions for geometry calculations.
+ * <p>
+ * This code has been derived from Cavalier Contours [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] Cavalier Contours</dt>
+ *     <dd>Cavalier Contours, Copyright (c) 2019 Jedidiah Buck McCready, MIT License.
+ *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+ * </dl>
+ */
 public class Utils {
     /**
      * absolute threshold to be used for reals in common geometric computation (e.g. to check for

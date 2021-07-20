@@ -89,9 +89,14 @@ public class IntersectRayRay {
      *         The lines segments do not intersect because they are parallel.
      *     </dd>
      * </dl>
-     * The code of this method has been derived from intersection.js by
-     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
-     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     * The code of this method has been derived from intersection.js [1].
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>[1] intersection.js</dt>
+     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+     * </dl>
      *
      * @param aox  x origin of ray 'a'
      * @param aoy  y origin of ray 'a'

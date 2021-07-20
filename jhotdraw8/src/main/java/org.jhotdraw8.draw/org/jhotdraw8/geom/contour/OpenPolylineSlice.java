@@ -6,8 +6,16 @@ package org.jhotdraw8.geom.contour;
 
 /**
  * Represents an open polyline slice of the raw offset polyline.
+ * <p>
+ * This code has been derived from Cavalier Contours [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] Cavalier Contours</dt>
+ *     <dd>Cavalier Contours, Copyright (c) 2019 Jedidiah Buck McCready, MIT License.
+ *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+ * </dl>
  */
-
 public class OpenPolylineSlice {
     final int intrStartIndex;
     final PolyArcPath pline;

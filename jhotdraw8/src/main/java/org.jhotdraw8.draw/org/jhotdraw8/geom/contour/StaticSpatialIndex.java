@@ -24,14 +24,18 @@ import static java.lang.Math.min;
  * <p>
  * The spatial index is implemented using a Hilbert R-tree [1].
  * <p>
+ * This code has been derived from Cavalier Contours [3].
+ * <p>
  * References:
  * <dl>
  *     <dt>[1] Wikipedia, Hilbert R-Tree</dt>
  *     <dd><a href="https://en.wikipedia.org/wiki/Hilbert_R-tree">wikipedia.org</a></dd>
  *     <dt>[2] Hilbert curves in O(log(n)) time</dt>
  *     <dd><a href="http://threadlocalmutex.com/?p=126">threadlocalmutex.com</a></dd>
+ *     <dt>[1] Cavalier Contours</dt>
+ *     <dd>[3] Cavalier Contours, Copyright (c) 2019 Jedidiah Buck McCready, MIT License.
+ *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
- * </p>
  */
 public class StaticSpatialIndex {
     /**

@@ -109,19 +109,24 @@ public class IntersectCircleLine {
      * and thus may be unnecessarily slow if you only need the argument
      * of the line function.
      * <p>
-     * The code of this method has been derived from intersection.js by
-     * Kevin Lindsey, copyright 2002 Kevin Lindsey, BSD 3-clause license.
-     * http://www.kevlindev.com/gui/math/intersection/Intersection.js.
+     * The code of this method has been derived from intersection.js [1].
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>[1] intersection.js</dt>
+     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+     * </dl>
      *
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
-     * @param cx
-     * @param cy
-     * @param r
-     * @param epsilon
-     * @return
+     * @param x0      point 0 of the line
+     * @param y0      point 0 of the line
+     * @param x1      point 1 of the line
+     * @param y1      point 1 of the line
+     * @param cx      the center of the circle
+     * @param cy      the center of the circle
+     * @param r       the radius of the circle
+     * @param epsilon epsilon value
+     * @return intersection result
      */
     public static @NonNull IntersectionResultEx intersectLineCircleEx(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {
         List<IntersectionPointEx> result = new ArrayList<>(2);

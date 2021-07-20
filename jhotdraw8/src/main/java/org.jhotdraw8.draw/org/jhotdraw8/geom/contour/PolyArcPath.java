@@ -33,6 +33,15 @@ import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
  * <p>
  * See {@link BulgeConversionFunctions} for more details regarding bulge
  * calculations.
+ * <p>
+ * This code has been derived from Cavalier Contours [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] Cavalier Contours</dt>
+ *     <dd>Cavalier Contours, Copyright (c) 2019 Jedidiah Buck McCready, MIT License.
+ *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+ * </dl>
  */
 public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     private static final long serialVersionUID = 1L;
