@@ -13,6 +13,16 @@ import java.util.List;
 
 import static org.jhotdraw8.geom.Geom.lerp;
 
+/**
+ * The code of this class has been derived from intersection.js [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] intersection.js</dt>
+ *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class IntersectCircleCircle {
     private IntersectCircleCircle() {
     }
@@ -115,14 +125,6 @@ public class IntersectCircleCircle {
      *     <dt>{@link IntersectionStatus#NO_INTERSECTION_COINCIDENT}</dt><dd>
      *         Circle 1 is same as circle 2 up to the given epsilon.
      *     </dd>
-     * </dl>
-     * The code of this method has been derived from intersection.js [1].
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>[1] intersection.js</dt>
-     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
-     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
      * </dl>
      *
      * @param c1x the center of circle 1

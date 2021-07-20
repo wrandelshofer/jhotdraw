@@ -6,6 +6,16 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Geom;
 
+/**
+ * The code of this class has been derived from intersection.js [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] intersection.js</dt>
+ *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class IntersectPointRay {
     /**
      * Projects a point on an infinite line defined by the given ray.

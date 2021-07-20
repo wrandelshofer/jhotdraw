@@ -11,6 +11,16 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The code of this class has been derived from intersection.js [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] intersection.js</dt>
+ *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class IntersectCircleRectangle {
     private IntersectCircleRectangle() {
     }
@@ -49,15 +59,6 @@ public class IntersectCircleRectangle {
 
     /**
      * Computes the intersection between a circle and a rectangle.
-     * <p>
-     * The code of this method has been derived from intersection.js [1].
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>[1] intersection.js</dt>
-     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
-     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
-     * </dl>
      *
      * @param c  the center of the circle
      * @param r  the radius of the circle

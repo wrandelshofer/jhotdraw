@@ -12,6 +12,16 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The code of this class has been derived from intersection.js [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] intersection.js</dt>
+ *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class IntersectCircleCubicCurve {
     private IntersectCircleCubicCurve() {
     }

@@ -13,6 +13,16 @@ import java.util.List;
 
 import static org.jhotdraw8.geom.Geom.lerp;
 
+/**
+ * The code of this class has been derived from intersection.js [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] intersection.js</dt>
+ *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class IntersectCirclePoint {
     private IntersectCirclePoint() {
     }
@@ -54,15 +64,6 @@ public class IntersectCirclePoint {
 
     /**
      * Computes the intersection between a point and a circle.
-     * <p>
-     * The code of this method has been derived from intersection.js [1].
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>[1] intersection.js</dt>
-     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
-     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
-     * </dl>
      *
      * @param point  the point
      * @param center the center of the circle

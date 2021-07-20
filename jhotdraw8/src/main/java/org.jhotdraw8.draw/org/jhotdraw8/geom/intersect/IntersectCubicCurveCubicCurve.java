@@ -14,6 +14,16 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The code of this class has been derived from intersection.js [1].
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>[1] intersection.js</dt>
+ *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class IntersectCubicCurveCubicCurve {
     private static final double CURVE_A_B_TOLERANCE = 1e-3;
     private static final double ROOT_X_Y_TOLERANCE = 1e-4;
@@ -377,14 +387,6 @@ public class IntersectCubicCurveCubicCurve {
     }
 
     /**
-     * The code of this method has been derived from intersection.js [1].
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>[1] intersection.js</dt>
-     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
-     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
-     * </dl>
      *
      * @param a0x
      * @param a0y
