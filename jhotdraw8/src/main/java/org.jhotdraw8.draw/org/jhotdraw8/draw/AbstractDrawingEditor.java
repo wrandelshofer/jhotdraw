@@ -45,7 +45,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         @Override
         public void set(double newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(HANDLE_SIZE_PROPERTY, newValue);
+            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(TOLERANCE_PROPERTY, newValue);
             recreateHandles();
         }
     };
