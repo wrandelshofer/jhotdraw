@@ -111,50 +111,6 @@ public class AnyLongShortestPathBuilder<V, A> extends AbstractLongShortestPathBu
         return null;
     }
 
-    public static <V> BackLink<V, Long> searchShortestPathVerticesDouble(@NonNull Iterable<V> starts,
-                                                                         @NonNull Predicate<V> goalPredicate,
-                                                                         long maxCost,
-                                                                         @NonNull Function<V, Iterable<V>> nextf,
-                                                                         @NonNull ToLongBiFunction<V, V> costf) {
-        // Priority queue: back-links with shortest distance from start come first.
-        PriorityQueue<MyBackLinkLong<V, Long>> queue = new PriorityQueue<>();
-
-        // Map with best known costs from start to a specific vertex. If an entry is missing, we assume infinity.
-        Map<V, Long> costMap = new HashMap<>();
-
-        // Insert start itself in priority queue and initialize its cost as 0.
-        for (V start : starts) {
-
-            queue.add(new MyBackLinkLong<>(start, 0L, null, null));
-            costMap.put(start, 0L);
-
-        }
-
-        // Loop until we have reached the goal, or queue is exhausted.
-        while (!queue.isEmpty()) {
-            MyBackLinkLong<V, Long> node = queue.remove();
-            final V u = node.vertex;
-            if (goalPredicate.test(u)) {
-                return node;
-            }
-            long costToU = node.cost;
-
-            for (V v : nextf.apply(u)) {
-                long bestKnownCost = costMap.getOrDefault(v, Long.MAX_VALUE);
-                long costThroughU = costToU + costf.applyAsLong(u, v);
-
-                // If there is a shorter path to v through u.
-                if (costThroughU < bestKnownCost && costThroughU <= maxCost) {
-                    // Update cost to v.
-                    costMap.put(v, costThroughU);
-                    queue.add(new MyBackLinkLong<>(v, costThroughU, node, costThroughU));
-                }
-            }
-        }
-
-        return null;
-    }
-
     public static @Nullable <V> BackLink<V, Long> searchShortestPathVerticesLong(@NonNull Iterable<V> starts,
                                                                                  @NonNull Predicate<V> goalPredicate,
                                                                                  long maxCost,
