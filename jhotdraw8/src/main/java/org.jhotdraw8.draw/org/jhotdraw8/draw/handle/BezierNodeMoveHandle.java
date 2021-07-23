@@ -114,7 +114,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(DrawingView view) {
+    public @NonNull Region getNode(@NonNull DrawingView view) {
         return node;
     }
 

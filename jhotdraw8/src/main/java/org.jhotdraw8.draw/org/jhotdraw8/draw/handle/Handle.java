@@ -8,6 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -49,14 +50,14 @@ public interface Handle {
      * @param view the drawing view
      * @return the node
      */
-    Node getNode(DrawingView view);
+    Node getNode(@NonNull DrawingView view);
 
     /**
      * Updates the node.
      *
      * @param drawingView the drawing view
      */
-    void updateNode(DrawingView drawingView);
+    void updateNode(@NonNull DrawingView drawingView);
 
     /**
      * Whether the handle is selectable.
