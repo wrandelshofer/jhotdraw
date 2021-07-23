@@ -140,7 +140,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }

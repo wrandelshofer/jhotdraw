@@ -121,11 +121,11 @@ public class RelativeControlPointHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
     @Override

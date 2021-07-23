@@ -116,7 +116,7 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         // FIXME fire undoable edit
     }
 

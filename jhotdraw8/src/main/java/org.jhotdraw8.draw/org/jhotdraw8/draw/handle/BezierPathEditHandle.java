@@ -60,7 +60,7 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView view) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }

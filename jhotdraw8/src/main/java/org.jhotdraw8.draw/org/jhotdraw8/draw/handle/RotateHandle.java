@@ -210,7 +210,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         pivotNode.setVisible(true);
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -224,7 +224,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         pivotNode.setVisible(false);
         // FIXME fireDrawingModelEvent undoable edit event
     }

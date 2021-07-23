@@ -192,7 +192,7 @@ public class MoveHandle extends LocatorHandle {
 
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView dv) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         pressed = false;
         // FIXME create undoable edit
     }

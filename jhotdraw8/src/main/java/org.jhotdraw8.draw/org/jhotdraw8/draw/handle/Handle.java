@@ -74,25 +74,25 @@ public interface Handle {
     // ---
     // Event handlers
     // ----
-    default void onMouseDragged(MouseEvent event, DrawingView dv) {
+    default void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
-    default void onMouseReleased(MouseEvent event, DrawingView dv) {
+    default void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
-    default void onMousePressed(MouseEvent event, DrawingView dv) {
+    default void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
     }
 
-    default void onKeyPressed(KeyEvent event, DrawingView dv) {
+    default void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView dv) {
     }
 
-    default void onKeyReleased(KeyEvent event, DrawingView dv) {
+    default void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView dv) {
     }
 
-    default void onKeyTyped(KeyEvent event, DrawingView dv) {
+    default void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView dv) {
     }
 
-    default void onMouseClicked(MouseEvent event, DrawingView dv) {
+    default void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
 
     }
 

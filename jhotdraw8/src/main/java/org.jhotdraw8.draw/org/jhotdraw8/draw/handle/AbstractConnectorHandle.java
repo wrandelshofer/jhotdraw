@@ -199,7 +199,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(MouseEvent event, DrawingView view) {
+    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
@@ -217,7 +217,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(MouseEvent event, DrawingView view) {
+    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
