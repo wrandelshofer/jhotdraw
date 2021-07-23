@@ -6,14 +6,14 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.util.ToDoubleTriFunction;
+import org.jhotdraw8.util.ToLongTriFunction;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.ToDoubleFunction;
+import java.util.function.ToLongFunction;
 
 /**
  * This path builder can be used to find the unique shortest path between
@@ -23,28 +23,28 @@ import java.util.function.ToDoubleFunction;
  * @param <A> the arrow type
  * @author Werner Randelshofer
  */
-public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder<V, A> {
-    public UniqueShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleFunction<A> costf) {
+public class UniqueLongShortestPathBuilder<V, A> extends AbstractLongShortestPathBuilder<V, A> {
+    public UniqueLongShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToLongFunction<A> costf) {
         super(graph, costf);
     }
 
-    public UniqueShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToDoubleTriFunction<V, V, A> costf) {
+    public UniqueLongShortestPathBuilder(@NonNull DirectedGraph<V, A> graph, @NonNull ToLongTriFunction<V, V, A> costf) {
         super(graph, costf);
     }
 
-    public UniqueShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToDoubleFunction<A> costf) {
+    public UniqueLongShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToLongFunction<A> costf) {
         super(nextNodesFunction, costf);
     }
 
-    public UniqueShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToDoubleTriFunction<V, V, A> costf) {
+    public UniqueLongShortestPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull ToLongTriFunction<V, V, A> costf) {
         super(nextNodesFunction, costf);
     }
 
     protected @Nullable BackLink<V, A> search(@NonNull V start,
                                               @NonNull Predicate<V> goalPredicate,
-                                              double maxCost,
+                                              long maxCost,
                                               @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
-                                              @NonNull ToDoubleTriFunction<V, V, A> costf) {
+                                              @NonNull ToLongTriFunction<V, V, A> costf) {
 
         // Priority queue: back-links with shortest distance from start come first.
         PriorityQueue<MyBackLink<V, A>> queue = new PriorityQueue<>();
@@ -53,13 +53,13 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
         Map<V, Integer> numPathsMap = new HashMap<>();
 
         // Map with best known costs from start to a vertex. If an entry is missing, we assume infinity.
-        Map<V, Double> costMap = new HashMap<>();
+        Map<V, Long> costMap = new HashMap<>();
 
         // Insert start itself in priority queue and initialize its cost as 0,
         // and number of paths with 1.
-        queue.add(new MyBackLink<>(start, 0.0, null, null));
+        queue.add(new MyBackLink<>(start, 0L, null, null));
         numPathsMap.put(start, 1);
-        costMap.put(start, 0.0);
+        costMap.put(start, 0L);
 
         // Loop until we have reached the goal, or queue is exhausted.
         MyBackLink<V, A> found = null;
@@ -74,13 +74,13 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
                     return null;
                 }
             }
-            double costToU = node.cost;
+            long costToU = node.cost;
 
             for (Arc<V, A> entry : nextf.apply(u)) {
                 V v = entry.getEnd();
                 A a = entry.getData();
-                double bestKnownCost = costMap.getOrDefault(v, Double.POSITIVE_INFINITY);
-                double costThroughU = costToU + costf.applyAsDouble(u, v, a);
+                long bestKnownCost = costMap.getOrDefault(v, Long.MAX_VALUE);
+                long costThroughU = costToU + costf.applyAsLong(u, v, a);
 
                 // If there is a shorter path to v through u.
                 if (costThroughU < bestKnownCost && costThroughU <= maxCost) {
@@ -108,16 +108,16 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
          * Accumulated cost up to this node.
          * Must increase monotonically.
          */
-        protected double cost;
+        protected long cost;
 
-        public MyBackLink(VV node, double cost, MyBackLink<VV, AA> parent, AA arrow) {
+        public MyBackLink(VV node, long cost, MyBackLink<VV, AA> parent, AA arrow) {
             this.vertex = node;
             this.cost = cost;
             this.parent = parent;
             this.arrow = arrow;
         }
 
-        public double getCost() {
+        public long getCost() {
             return cost;
         }
 
@@ -126,7 +126,7 @@ public class UniqueShortestPathBuilder<V, A> extends AbstractShortestPathBuilder
             return (long) cost;
         }
 
-        public void setCost(double cost) {
+        public void setCost(long cost) {
             this.cost = cost;
         }
 

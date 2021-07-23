@@ -20,30 +20,30 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 
-public abstract class AbstractShortestPathBuilder<V, A> {
+public abstract class AbstractDoubleShortestPathBuilder<V, A> {
     private @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction;
     private @NonNull ToDoubleTriFunction<V, V, A> costf;
 
-    public AbstractShortestPathBuilder() {
+    public AbstractDoubleShortestPathBuilder() {
     }
 
-    public AbstractShortestPathBuilder(final @NonNull DirectedGraph<V, A> graph,
-                                       final @NonNull ToDoubleFunction<A> costf) {
+    public AbstractDoubleShortestPathBuilder(final @NonNull DirectedGraph<V, A> graph,
+                                             final @NonNull ToDoubleFunction<A> costf) {
         this(graph::getNextArcs, costf);
     }
 
-    public AbstractShortestPathBuilder(final @NonNull DirectedGraph<V, A> graph,
-                                       final @NonNull ToDoubleTriFunction<V, V, A> costf) {
+    public AbstractDoubleShortestPathBuilder(final @NonNull DirectedGraph<V, A> graph,
+                                             final @NonNull ToDoubleTriFunction<V, V, A> costf) {
         this(graph::getNextArcs, costf);
     }
 
-    public AbstractShortestPathBuilder(final @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
-                                       final @NonNull ToDoubleFunction<A> costf) {
+    public AbstractDoubleShortestPathBuilder(final @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
+                                             final @NonNull ToDoubleFunction<A> costf) {
         this(nextNodesFunction, (v1, v2, a) -> costf.applyAsDouble(a));
     }
 
-    public AbstractShortestPathBuilder(final @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
-                                       final @NonNull ToDoubleTriFunction<V, V, A> costf) {
+    public AbstractDoubleShortestPathBuilder(final @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
+                                             final @NonNull ToDoubleTriFunction<V, V, A> costf) {
         this.nextNodesFunction = nextNodesFunction;
         this.costf = costf;
     }

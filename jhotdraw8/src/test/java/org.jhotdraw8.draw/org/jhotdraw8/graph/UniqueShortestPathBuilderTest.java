@@ -126,7 +126,7 @@ public class UniqueShortestPathBuilderTest {
         System.out.println("doFindShortestVertexPath start:" + start + " goal:" + goal + " expResult:" + expPath + " expCost: " + expCost);
 
         ToDoubleFunction<Double> costf = arg -> arg;
-        UniqueShortestPathBuilder<Integer, Double> instance = new UniqueShortestPathBuilder<>(graph::getNextArcs, costf);
+        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
         Map.Entry<VertexPath<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
         if (result == null) {
             assertNull(expPath);
@@ -158,7 +158,7 @@ public class UniqueShortestPathBuilderTest {
     public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ArrowPath<Double> expResult) throws Exception {
         System.out.println("doFindShortestEdgeMultiGoalPath start:" + start + " goal:" + multiGoal + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
-        UniqueShortestPathBuilder<Integer, Double> instance = new UniqueShortestPathBuilder<>(graph::getNextArcs, costf);
+        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
 
         // Find shortest path to any of the goals
         Map.Entry<ArrowPath<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
@@ -207,7 +207,7 @@ public class UniqueShortestPathBuilderTest {
         System.out.println("doFindShortestEdgePath start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
-        UniqueShortestPathBuilder<Integer, Double> instance = new UniqueShortestPathBuilder<>(graph::getNextArcs, costf);
+        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
         Map.Entry<ArrowPath<Double>, Double> result = instance.findArrowPath(start, goal::equals);
         assertEquals(expResult, result == null ? null : result.getKey());
     }
@@ -247,7 +247,7 @@ public class UniqueShortestPathBuilderTest {
         System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult + " expCost:" + expCost);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueShortestPathBuilder<Integer, Double> instance = new UniqueShortestPathBuilder<>(graph::getNextArcs, costf);
+        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
         Map.Entry<VertexPath<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
         if (actual == null) {
             assertNull(expResult);
@@ -274,7 +274,7 @@ public class UniqueShortestPathBuilderTest {
         System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueShortestPathBuilder<Integer, Double> instance = new UniqueShortestPathBuilder<>(graph::getNextArcs, costf);
+        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
         Map.Entry<ArrowPath<Double>, Double> actual = instance.findArrowPathOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (actual == null) {
             assertNull(expResult);
