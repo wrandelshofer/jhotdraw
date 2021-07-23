@@ -120,7 +120,7 @@ public class FigureTest {
         public void updateCss(RenderContext ctx) {
         }
 
-        public void addedToDrawing(Drawing drawing) {
+        public void addedToDrawing(@NonNull Drawing drawing) {
         }
 
         public void removedFromDrawing(Drawing drawing) {

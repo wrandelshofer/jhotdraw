@@ -183,7 +183,7 @@ public class LayerFigure extends AbstractCompositeFigure
      * Layers never create handles.
      */
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
         // empty
     }
 

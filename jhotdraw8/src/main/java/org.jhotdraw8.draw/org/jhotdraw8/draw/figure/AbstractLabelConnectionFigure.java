@@ -119,7 +119,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this));
             if (get(LABEL_CONNECTOR) == null) {

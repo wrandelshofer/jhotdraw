@@ -270,7 +270,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         for (Figure f : selection) {
             Bounds fb;
             if (f instanceof Drawing) {
-                fb = (f.getLocalToWorld() == null) ? f.getLayoutBounds() : f.getLocalToWorld().transform(f.getLayoutBounds());
+                fb = f.getLocalToWorld().transform(f.getLayoutBounds());
                 if (b == null) {
                     b = fb;
                 } else {
@@ -319,7 +319,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param newChild the new child
      * @return whether the child was added
      */
-    default boolean addChild(Figure newChild) {
+    default boolean addChild(@NonNull Figure newChild) {
         return getChildren().add(newChild);
     }
 
@@ -328,7 +328,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param drawing the drawing to which this figure has been added
      */
-    default void addedToDrawing(Drawing drawing) {
+    default void addedToDrawing(@NonNull Drawing drawing) {
     }
 
     /**
@@ -338,7 +338,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param handleType The desired handle type
      * @param list       The handles.
      */
-    default void createHandles(HandleType handleType, @NonNull List<Handle> list) {
+    default void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new BoundsInLocalOutlineHandle(this));
         } else if (handleType == HandleType.ANCHOR) {

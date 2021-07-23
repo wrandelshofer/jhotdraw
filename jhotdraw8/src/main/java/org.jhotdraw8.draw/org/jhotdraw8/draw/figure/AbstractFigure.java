@@ -65,15 +65,17 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
 
     /**
      * This method calls {@link #doAddedToDrawing}.
+     *
+     * @param drawing
      */
     @Override
-    public final void addedToDrawing(Drawing drawing) {
+    public final void addedToDrawing(@NonNull Drawing drawing) {
         this.drawing = drawing;
         doAddedToDrawing(drawing);
     }
 
     /**
-     * This method is called by {@link #addedToDrawing}. The implementation of this
+     * This method is called by {@link Figure#addedToDrawing}. The implementation of this
      * class is empty.
      *
      * @param drawing the drawing
