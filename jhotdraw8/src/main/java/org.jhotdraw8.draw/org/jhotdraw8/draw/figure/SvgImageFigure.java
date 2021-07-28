@@ -140,7 +140,7 @@ public class SvgImageFigure extends AbstractLeafFigure
 
         Source source = new StreamSource(absoluteUri.toString());
         try {
-            final String path = absoluteUri.getPath();
+            final String path = absoluteUri.getPath() == null ? absoluteUri.toString() : absoluteUri.getPath();
             if (path != null && path.toLowerCase().endsWith(".svg")) {
                 // must be wrapped in a group, because the node returned
                 // by the reader might have transformations associated to it

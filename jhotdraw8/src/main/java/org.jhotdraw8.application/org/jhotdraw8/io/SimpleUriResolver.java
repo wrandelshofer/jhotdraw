@@ -5,6 +5,7 @@
 package org.jhotdraw8.io;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,9 +20,13 @@ import java.nio.file.Paths;
 public class SimpleUriResolver implements UriResolver {
 
     @Override
-    public @NonNull URI relativize(@NonNull URI base, @NonNull URI uri) {
+    public @NonNull URI relativize(@Nullable URI base, @NonNull URI uri) {
         URI relativized = uri;
         // Paths is better at relativizing URIs than URI.relativize().
+        if (base == null) {
+            return uri;
+        }
+
         if ("file".equals(base.getScheme()) &&
                 ("file".equals(relativized.getScheme()) || relativized.getScheme() == null)) {
             Path other = Paths.get(relativized);
@@ -48,15 +53,42 @@ public class SimpleUriResolver implements UriResolver {
     }
 
     @Override
-    public @NonNull URI absolutize(@NonNull URI base, @NonNull URI uri) {
+    public @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri) {
+        if (base == null) {
+            return uri;
+        }
         URI absolutized = uri;
-        // Paths is better at resolving URIs than URI.relativize().
+        // Paths is better at resolving URIs than URI.resolve().
         if ("file".equals(base.getScheme()) &&
                 ("file".equals(absolutized.getScheme()) || absolutized.getScheme() == null)) {
             absolutized = Paths.get(base).resolve(Paths.get(absolutized.getPath())).normalize().toUri();
+        } else if ("jar".equals(base.getScheme()) && null == uri.getScheme()) {
+            final String baseStr = base.toString();
+            final String uriStr = uri.toString();
+            try {
+                return new URI(baseStr + "/" + uriStr);
+            } catch (URISyntaxException e) {
+                return uri;
+            }
         } else {
             absolutized = base.resolve(absolutized);
         }
+
+        System.err.println("SimpleUriResolver.absolutize base=" + base + "\n uri=" + uri + "\n abs=" + absolutized);
         return absolutized;
+    }
+
+    @Override
+    public @NonNull URI getParent(@NonNull URI uri) {
+        if ("jar".equals(uri.getScheme())) {
+            try {
+                final String str = uri.toString();
+                return new URI(str.substring(0, str.lastIndexOf('/')));
+            } catch (final URISyntaxException e) {
+                return uri;
+            }
+        } else {
+            return uri.resolve(".");
+        }
     }
 }

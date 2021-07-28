@@ -22,6 +22,7 @@ import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.io.SimpleUriResolver;
 
 import java.net.URI;
 
@@ -133,7 +134,7 @@ public class ImageFigure extends AbstractLeafFigure
         }
         Drawing drawing = getDrawing();
         URI documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
-        URI absoluteUri = (documentHome == null) ? uri : documentHome.resolve(uri);
+        URI absoluteUri = new SimpleUriResolver().absolutize(documentHome, uri);
         if (cachedImageUri == null || !cachedImageUri.equals(absoluteUri)) {
             cachedImageUri = absoluteUri;
             try {

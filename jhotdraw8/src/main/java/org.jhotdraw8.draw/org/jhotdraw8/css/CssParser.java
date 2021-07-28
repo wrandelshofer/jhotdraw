@@ -694,7 +694,7 @@ public class CssParser {
         try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             URI documentHome;
             try {
-                documentHome = css.toURI().resolve(".");
+                documentHome = uriResolver.getParent(css.toURI());
             } catch (URISyntaxException e) {
                 documentHome = null;
             }

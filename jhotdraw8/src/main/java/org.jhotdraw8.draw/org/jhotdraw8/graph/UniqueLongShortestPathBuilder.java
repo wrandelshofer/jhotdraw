@@ -123,7 +123,7 @@ public class UniqueLongShortestPathBuilder<V, A> extends AbstractLongShortestPat
 
         @Override
         public long getCostLong() {
-            return (long) cost;
+            return cost;
         }
 
         public void setCost(long cost) {

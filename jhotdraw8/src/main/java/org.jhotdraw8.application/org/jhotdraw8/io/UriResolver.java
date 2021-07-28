@@ -5,6 +5,7 @@
 package org.jhotdraw8.io;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.net.URI;
 
@@ -14,7 +15,9 @@ import java.net.URI;
  * @author Werner Randelshofer
  */
 public interface UriResolver {
-    @NonNull URI relativize(@NonNull URI base, @NonNull URI uri);
+    @NonNull URI relativize(@Nullable URI base, @NonNull URI uri);
 
-    @NonNull URI absolutize(@NonNull URI base, @NonNull URI uri);
+    @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri);
+
+    @NonNull URI getParent(@NonNull URI uri);
 }

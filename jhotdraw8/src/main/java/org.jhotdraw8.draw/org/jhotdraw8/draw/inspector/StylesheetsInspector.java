@@ -30,6 +30,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
+import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.xml.text.XmlUriConverter;
 
@@ -117,8 +118,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                     ClipboardContent content = new ClipboardContent();
                     URI stylesheetUri = items.get(0);
                     URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
-                    if (documentHome != null)
-                        stylesheetUri = documentHome.resolve(stylesheetUri);
+                    stylesheetUri = new SimpleUriResolver().absolutize(documentHome, stylesheetUri);
                     content.putUrl(stylesheetUri.toString());
                     clipboard.setContent(content);
                 }
@@ -137,9 +137,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                         URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
                         for (File f : clipboard.getFiles()) {
                             URI dragboardUri = f.toURI();
-                            URI stylesheetUri = (documentHome != null)
-                                    ? documentHome.resolve(dragboardUri)
-                                    : dragboardUri;
+                            URI stylesheetUri = new SimpleUriResolver().absolutize(documentHome, dragboardUri);
                             list.add(stylesheetUri);
                         }
                     } else {
@@ -211,9 +209,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         }
         URI documentHome = drawing.get(Drawing.DOCUMENT_HOME);
         URI uri = URI.create("stylesheet" + (++counter) + ".css");
-        if (documentHome != null) {
-            uri = documentHome.resolve(uri);
-        }
+        uri = new SimpleUriResolver().absolutize(documentHome, uri);
         listView.getItems().add(uri);
     }
 

@@ -14,6 +14,8 @@ import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.css.function.CssFunction;
+import org.jhotdraw8.io.SimpleUriResolver;
+import org.jhotdraw8.io.UriResolver;
 
 import java.io.IOException;
 import java.net.URI;
@@ -30,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -42,7 +45,8 @@ import java.util.stream.StreamSupport;
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
-    private final @NonNull CssParser parser = new CssParser();
+    private @NonNull Supplier<CssParser> parserFactory = CssParser::new;
+    private @NonNull UriResolver uriResolver = new SimpleUriResolver();
     private @NonNull SelectorModel<E> selectorModel;
     /**
      * Cache for parsed user agent stylesheets.
@@ -101,9 +105,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     @Override
     public void addStylesheet(@NonNull StyleOrigin origin, @Nullable URI documentHome, @NonNull URI uri) {
-        URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
+        URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
         invalidate();
-        getMap(origin).put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
+        getMap(origin).put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri));
     }
 
     @Override
@@ -177,9 +181,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         for (T t : stylesheets) {
             if (t instanceof URI) {
                 URI uri = (URI) t;
-                URI resolvedUri = documentHome == null ? uri : documentHome.resolve(uri);
-                StylesheetEntry old = oldMap.get(resolvedUri);
-                newMap.put(resolvedUri, new StylesheetEntry(origin, resolvedUri));
+                URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
+                StylesheetEntry old = oldMap.get(absolutizedUri);
+                newMap.put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri));
             } else if (t instanceof String) {
                 StylesheetEntry old = oldMap.get(t);
                 if (old != null) {
@@ -220,7 +224,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         final CssFunctionProcessor<E> functionProcessor = functions.isEmpty() ? null : createCssFunctionProcessor(selectorModel, customProperties);
 
         StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
-                .stream().parallel()
+                .stream()
+                .parallel()
                 .forEach(elem -> {
                     // Clear stylesheet values
                     selectorModel.reset(elem);
@@ -259,6 +264,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     }
 
                     // 'inline style attributes' can override all other values
+                    CssParser parser = parserFactory.get();
                     if (selectorModel.hasAttribute(elem, null, "style")) {
                         Map<QualifiedName, ImmutableList<CssToken>> inlineDeclarations = new HashMap<>();
                         String styleValue = selectorModel.getAttributeAsString(elem, null, "style");
@@ -524,7 +530,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.uri = null;
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
-                CssParser p = new CssParser();
+                CssParser p = parserFactory.get();
                 Stylesheet s = p.parseStylesheet(str, documentHome);
                 LOGGER.info("Parsed " + str + "\nRules: " + s.getStyleRules());
                 List<ParseException> parseExceptions = p.getParseExceptions();
@@ -570,5 +576,21 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         list.addAll(authorList.values());
         list.addAll(inlineList.values());
         return list;
+    }
+
+    public Supplier<CssParser> getParserFactory() {
+        return parserFactory;
+    }
+
+    public void setParserFactory(Supplier<CssParser> parserFactory) {
+        this.parserFactory = parserFactory;
+    }
+
+    public UriResolver getUriResolver() {
+        return uriResolver;
+    }
+
+    public void setUriResolver(UriResolver uriResolver) {
+        this.uriResolver = uriResolver;
     }
 }
