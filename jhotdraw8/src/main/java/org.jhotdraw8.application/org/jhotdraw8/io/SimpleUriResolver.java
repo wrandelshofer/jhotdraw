@@ -74,7 +74,6 @@ public class SimpleUriResolver implements UriResolver {
             absolutized = base.resolve(absolutized);
         }
 
-        System.err.println("SimpleUriResolver.absolutize base=" + base + "\n uri=" + uri + "\n abs=" + absolutized);
         return absolutized;
     }
 
