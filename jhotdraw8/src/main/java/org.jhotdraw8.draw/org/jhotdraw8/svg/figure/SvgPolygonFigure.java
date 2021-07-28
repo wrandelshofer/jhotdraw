@@ -49,13 +49,13 @@ public class SvgPolygonFigure extends AbstractLeafFigure
     public static final @NonNull DoubleListStyleableKey POINTS = SvgPolylineFigure.POINTS;
 
     @Override
-    public Node createNode(RenderContext ctx) {
-        Group g=new Group();
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+        Group g = new Group();
         Polygon n0 = new Polygon();
         Polygon n1 = new Polygon();
         n0.setManaged(false);
         n1.setManaged(false);
-        g.getChildren().addAll(n0,n1);
+        g.getChildren().addAll(n0, n1);
         return g;
     }
 

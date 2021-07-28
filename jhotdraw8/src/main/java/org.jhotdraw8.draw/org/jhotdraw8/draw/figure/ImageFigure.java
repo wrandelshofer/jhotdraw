@@ -82,7 +82,7 @@ public class ImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         ImageView n = new ImageView();
         n.setPreserveRatio(false);
         n.setManaged(false);

@@ -148,7 +148,7 @@ public class LayerFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
         Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);

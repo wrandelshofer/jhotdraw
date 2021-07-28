@@ -103,7 +103,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Rectangle node = new Rectangle();
         node.setFill(new Color(0, 1.0, 0, 0.5));
         node.setStroke(Color.DARKRED);

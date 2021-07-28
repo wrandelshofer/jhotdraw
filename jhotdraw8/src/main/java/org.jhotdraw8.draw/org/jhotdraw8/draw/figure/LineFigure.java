@@ -103,7 +103,7 @@ public class LineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Line n = new Line();
         n.setManaged(false);
         return n;

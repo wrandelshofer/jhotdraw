@@ -82,7 +82,7 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Polyline n = new Polyline();
         n.setManaged(false);
         return n;

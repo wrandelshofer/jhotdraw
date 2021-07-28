@@ -45,7 +45,7 @@ public class SvgLineFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey Y2 = new CssSizeStyleableKey("y2", CssSize.ZERO);
 
     @Override
-    public Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
         Line n = new Line();
         n.setManaged(false);
         return n;

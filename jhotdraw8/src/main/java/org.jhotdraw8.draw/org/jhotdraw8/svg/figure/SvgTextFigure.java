@@ -75,7 +75,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Group g = new Group();
         g.setManaged(false);
         g.setAutoSizeChildren(false);

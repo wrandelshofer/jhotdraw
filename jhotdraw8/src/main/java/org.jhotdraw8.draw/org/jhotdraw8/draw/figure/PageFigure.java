@@ -126,7 +126,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
         javafx.scene.Group n = new javafx.scene.Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);

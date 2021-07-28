@@ -44,13 +44,13 @@ public class SvgCircleFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.ONE);
 
     @Override
-    public Node createNode(RenderContext ctx) {
-        Group g=new Group();
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+        Group g = new Group();
         Circle n0 = new Circle();
         Circle n1 = new Circle();
         n0.setManaged(false);
         n1.setManaged(false);
-        g.getChildren().addAll(n0,n1);
+        g.getChildren().addAll(n0, n1);
         return g;
     }
 

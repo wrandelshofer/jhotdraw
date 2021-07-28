@@ -98,7 +98,7 @@ public class MLDiagramFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext ctx) {
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
         Path p = new Path();

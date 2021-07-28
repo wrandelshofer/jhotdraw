@@ -45,15 +45,16 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey RY = new CssSizeStyleableKey("ry", CssSize.ONE);
 
     @Override
-    public Node createNode(RenderContext ctx) {
-        Group g=new Group();
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+        Group g = new Group();
         Ellipse n0 = new Ellipse();
         Ellipse n1 = new Ellipse();
         n0.setManaged(false);
         n1.setManaged(false);
-        g.getChildren().addAll(n0,n1);
+        g.getChildren().addAll(n0, n1);
         return g;
     }
+
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);

@@ -62,7 +62,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Pane g = new Pane();
         g.setManaged(false);
 

@@ -70,7 +70,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         final Polyline line = new Polyline();
         final Path startMarker = new Path();

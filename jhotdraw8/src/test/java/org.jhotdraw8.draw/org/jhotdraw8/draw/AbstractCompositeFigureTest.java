@@ -142,7 +142,7 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public @NonNull Node createNode(RenderContext renderer) {
+        public @NonNull Node createNode(@NonNull RenderContext renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

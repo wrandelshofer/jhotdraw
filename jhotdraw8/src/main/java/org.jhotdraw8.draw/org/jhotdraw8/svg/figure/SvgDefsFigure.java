@@ -41,7 +41,7 @@ public class SvgDefsFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
         g.setAutoSizeChildren(false);
         g.setManaged(false);

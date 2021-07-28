@@ -30,7 +30,7 @@ public class GroupFigure extends AbstractCompositeFigure
     public static final String TYPE_SELECTOR = "Group";
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         javafx.scene.Group n = new javafx.scene.Group();
         n.setAutoSizeChildren(false);
         n.setManaged(false);

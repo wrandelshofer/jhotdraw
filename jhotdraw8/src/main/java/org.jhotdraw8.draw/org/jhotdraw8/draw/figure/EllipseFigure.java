@@ -57,7 +57,7 @@ public class EllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Ellipse n = new Ellipse();
         n.setManaged(false);
         return n;

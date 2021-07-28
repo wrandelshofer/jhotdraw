@@ -402,7 +402,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param ctx the renderer which will use the node
      * @return the newly created node
      */
-    Node createNode(RenderContext ctx);
+    @NonNull Node createNode(@NonNull RenderContext ctx);
 
     /**
      * This method is invoked on a figure by

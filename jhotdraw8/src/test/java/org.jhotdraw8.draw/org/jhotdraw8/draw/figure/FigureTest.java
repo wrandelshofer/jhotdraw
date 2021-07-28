@@ -81,7 +81,7 @@ public class FigureTest {
             // empty
         }
 
-        public @Nullable Node createNode(RenderContext ctx) {
+        public @NonNull Node createNode(@NonNull RenderContext ctx) {
             return null;
         }
 

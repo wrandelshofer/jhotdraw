@@ -52,7 +52,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     public static final String TYPE_SELECTOR = "CombinedPath";
 
     @Override
-    public @NonNull Node createNode(RenderContext drawingView) {
+    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         Path n = new Path();
         n.setManaged(false);
         return n;

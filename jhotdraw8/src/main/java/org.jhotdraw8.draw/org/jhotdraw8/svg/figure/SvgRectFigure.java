@@ -59,15 +59,15 @@ public class SvgRectFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
 
     @Override
-    public Node createNode(RenderContext ctx) {
-        Group g=new Group();
+    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+        Group g = new Group();
         // We cannot use a Rectangle here, because JavaFX does not draw
         // a Rectangle with the same algorithm that SVG uses.
         Path n0 = new Path();
         Path n1 = new Path();
         n0.setManaged(false);
         n1.setManaged(false);
-        g.getChildren().addAll(n0,n1);
+        g.getChildren().addAll(n0, n1);
         return g;
     }
 
