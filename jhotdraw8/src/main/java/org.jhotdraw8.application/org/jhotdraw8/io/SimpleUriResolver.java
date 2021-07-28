@@ -61,7 +61,12 @@ public class SimpleUriResolver implements UriResolver {
         // Paths is better at resolving URIs than URI.resolve().
         if ("file".equals(base.getScheme()) &&
                 ("file".equals(absolutized.getScheme()) || absolutized.getScheme() == null)) {
-            absolutized = Paths.get(base).resolve(Paths.get(absolutized.getPath())).normalize().toUri();
+
+            String pathStr = absolutized.getPath();
+            if (pathStr.startsWith("/") && pathStr.indexOf(':') == 2) {
+                pathStr = pathStr.substring(1);
+            }
+            absolutized = Paths.get(base).resolve(Paths.get(pathStr)).normalize().toUri();
         } else if ("jar".equals(base.getScheme()) && null == uri.getScheme()) {
             final String baseStr = base.toString();
             final String uriStr = uri.toString();
