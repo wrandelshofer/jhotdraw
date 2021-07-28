@@ -24,6 +24,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.svg.io.FXSvgTinyReader;
 
 import javax.xml.transform.Source;
@@ -98,11 +99,14 @@ public class SvgImageFigure extends AbstractLeafFigure
         Group g = (Group) node;
         final Object renderedUri = g.getProperties().get("renderedUri");
         final URI imageUri = getStyled(IMAGE_URI);
+        final Drawing drawing = getDrawing();
+        final URI documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
+        final URI absoluteImageUri = documentHome == null ? imageUri : new SimpleUriResolver().absolutize(documentHome, imageUri);
         Node imageNode = g.getChildren().isEmpty() ? null : g.getChildren().get(0);
-        if (imageNode == null || !Objects.equals(renderedUri, imageUri)) {
+        if (imageNode == null || !Objects.equals(renderedUri, absoluteImageUri)) {
             imageNode = loadImage();
             g.getChildren().setAll(imageNode);
-            g.getProperties().put("renderedUri", imageUri);
+            g.getProperties().put("renderedUri", absoluteImageUri);
         }
         final UnitConverter converter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         final Transform reshapeTransform = FXTransforms.createReshapeTransform(imageNode.getBoundsInLocal(),

@@ -36,6 +36,7 @@ import org.jhotdraw8.css.ast.SubstringMatchSelector;
 import org.jhotdraw8.css.ast.SuffixMatchSelector;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.ast.UniversalSelector;
+import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.io.UriResolver;
 
 import java.io.BufferedReader;
@@ -174,6 +175,8 @@ public class CssParser {
     private final Map<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
     private @Nullable URI documentHome;
+    private @NonNull UriResolver uriResolver = new SimpleUriResolver();
+
     private @NonNull FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
         final @NonNull String ident = tt.currentStringNonNull();
@@ -826,7 +829,7 @@ public class CssParser {
     private String absolutizeUri(@NonNull String relativeUri) {
         if (documentHome == null) return relativeUri;
         try {
-            return UriResolver.absolutize(documentHome, new URI(relativeUri)).toString();
+            return uriResolver.absolutize(documentHome, new URI(relativeUri)).toString();
         } catch (URISyntaxException e) {
             return relativeUri;
         }
@@ -864,5 +867,13 @@ public class CssParser {
 
     public void setDocumentHome(URI documentHome) {
         this.documentHome = documentHome;
+    }
+
+    public @NonNull UriResolver getUriResolver() {
+        return uriResolver;
+    }
+
+    public void setUriResolver(@NonNull UriResolver uriResolver) {
+        this.uriResolver = uriResolver;
     }
 }

@@ -17,9 +17,11 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class SimpleIdFactory implements IdFactory {
-    private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>(128,0.4f);
-    private final @NonNull Map<String, Object> idToObject = new HashMap<>(128,0.4f);
-    private final @NonNull Map<Object, String> objectToId = new HashMap<>(128,0.4f);
+    private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>(128, 0.4f);
+    private final @NonNull Map<String, Object> idToObject = new HashMap<>(128, 0.4f);
+    private final @NonNull Map<Object, String> objectToId = new HashMap<>(128, 0.4f);
+
+    private @NonNull UriResolver uriResolver = new SimpleUriResolver();
 
     @Override
     public void reset() {
@@ -46,7 +48,7 @@ public class SimpleIdFactory implements IdFactory {
 
     @Override
     public @NonNull URI relativize(@NonNull URI uri) {
-        return documentHome==null?uri:UriResolver.relativize(documentHome,uri);
+        return documentHome == null ? uri : uriResolver.relativize(documentHome, uri);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class SimpleIdFactory implements IdFactory {
 
     @Override
     public @NonNull URI absolutize(@NonNull URI uri) {
-        return documentHome==null?uri:UriResolver.absolutize(documentHome,uri);
+        return documentHome == null ? uri : uriResolver.absolutize(documentHome, uri);
     }
 
     public Object putIdAndObject(String id, Object object) {
@@ -113,5 +115,13 @@ public class SimpleIdFactory implements IdFactory {
 
         }
         return existingId;
+    }
+
+    public @NonNull UriResolver getUriResolver() {
+        return uriResolver;
+    }
+
+    public void setUriResolver(@NonNull UriResolver uriResolver) {
+        this.uriResolver = uriResolver;
     }
 }
