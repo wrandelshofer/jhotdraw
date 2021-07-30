@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
 import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
@@ -18,16 +19,16 @@ import java.awt.geom.PathIterator;
  *
  * @author Werner Randelshofer
  */
-public class CutEndPathBuilder extends AbstractPathBuilder {
+public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
 
-    private PathBuilder out;
+    private PathBuilder<T> out;
     private final double radius;
     private double cx;
     private double cy;
 
     private @NonNull PathIteratorPathBuilder path;
 
-    public CutEndPathBuilder(PathBuilder out, double radius) {
+    public CutEndPathBuilder(PathBuilder<T> out, double radius) {
         this.out = out;
         this.radius = radius;
         path = new PathIteratorPathBuilder();
@@ -129,5 +130,10 @@ public class CutEndPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doQuadTo(double x1, double y1, double x2, double y2) {
         path.quadTo(x1, y1, x2, y2);
+    }
+
+    @Override
+    public @Nullable T build() {
+        return out.build();
     }
 }

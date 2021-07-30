@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
 import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
@@ -19,7 +20,7 @@ import java.awt.geom.Point2D;
  *
  * @author Werner Randelshofer
  */
-public class CutStartPathBuilder extends AbstractPathBuilder {
+public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
     /**
      * We need this state machine, so that we can properly
      * handle a path which does not start with a MOVE_TO.
@@ -31,7 +32,7 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
     }
 
     private final double radius;
-    private final PathBuilder out;
+    private final PathBuilder<T> out;
     private double cx;
     private double cy;
     private @NonNull State state = State.EXPECTING_INITIAL_MOVETO;
@@ -141,11 +142,15 @@ public class CutStartPathBuilder extends AbstractPathBuilder {
         case NO_INTERSECTION_OUTSIDE:
         case NO_INTERSECTION_TANGENT:
         default:
-                out.moveTo(getLastX(), getLastY());
-                state = State.CUT_DONE;
-                out.quadTo(x1, y1, x2, y2);
-                break;
+            out.moveTo(getLastX(), getLastY());
+            state = State.CUT_DONE;
+            out.quadTo(x1, y1, x2, y2);
+            break;
         }
     }
 
+    @Override
+    public @Nullable T build() {
+        return out.build();
+    }
 }

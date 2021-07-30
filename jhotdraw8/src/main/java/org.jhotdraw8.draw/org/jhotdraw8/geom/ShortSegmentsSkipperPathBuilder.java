@@ -6,14 +6,15 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Skips lineTo, quadTo and curveTo segments
  * if the distance to the previous segment is less than epsilon.
  */
-public class ShortSegmentsSkipperPathBuilder extends AbstractPathBuilder {
+public class ShortSegmentsSkipperPathBuilder<T> extends AbstractPathBuilder<T> {
 
-    private final @NonNull PathBuilder consumer;
+    private final @NonNull PathBuilder<T> consumer;
 
 
     /**
@@ -21,7 +22,7 @@ public class ShortSegmentsSkipperPathBuilder extends AbstractPathBuilder {
      */
     private final double squaredEpsilon;
 
-    public ShortSegmentsSkipperPathBuilder(@NonNull PathBuilder consumer, double epsilon) {
+    public ShortSegmentsSkipperPathBuilder(@NonNull PathBuilder<T> consumer, double epsilon) {
         this.consumer = consumer;
         this.squaredEpsilon = epsilon * epsilon;
     }
@@ -67,5 +68,10 @@ public class ShortSegmentsSkipperPathBuilder extends AbstractPathBuilder {
 
     private boolean shouldntSkip(double x, double y) {
         return Geom.squaredDistance(getLastX(), getLastY(), x, y) >= squaredEpsilon;
+    }
+
+    @Override
+    public @Nullable T build() {
+        return consumer.build();
     }
 }

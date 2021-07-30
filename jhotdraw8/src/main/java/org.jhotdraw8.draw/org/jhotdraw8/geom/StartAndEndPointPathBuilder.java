@@ -5,12 +5,14 @@
 
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * StartAndEndPointPathBuilder gets the start and end point of a path and their tangents.
  *
  * @author Werner Randelshofer
  */
-public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
+public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     private double startX;
     private double startY;
     private double startTangentX;
@@ -117,4 +119,8 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder {
         return startDone;
     }
 
+    @Override
+    public @Nullable Void build() {
+        return null;
+    }
 }

@@ -7,22 +7,23 @@ package org.jhotdraw8.geom;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * TransformPathBuilder.
  *
  * @author Werner Randelshofer
  */
-public class FXTransformPathBuilder extends AbstractPathBuilder {
+public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 
-    private final @NonNull PathBuilder target;
+    private final @NonNull PathBuilder<T> target;
     private @NonNull Transform transform;
 
-    public FXTransformPathBuilder(@NonNull PathBuilder target) {
+    public FXTransformPathBuilder(@NonNull PathBuilder<T> target) {
         this(target, FXTransforms.IDENTITY);
     }
 
-    public FXTransformPathBuilder(@NonNull PathBuilder target, @NonNull Transform transform) {
+    public FXTransformPathBuilder(@NonNull PathBuilder<T> target, @NonNull Transform transform) {
         this.target = target;
         this.transform = transform;
     }
@@ -72,4 +73,8 @@ public class FXTransformPathBuilder extends AbstractPathBuilder {
         this.transform = transform;
     }
 
+    @Override
+    public @Nullable T build() {
+        return target.build();
+    }
 }

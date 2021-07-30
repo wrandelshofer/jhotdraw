@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.awt.geom.Path2D;
 
@@ -15,17 +16,17 @@ import java.awt.geom.Path2D;
  *
  * @author Werner Randelshofer
  */
-public class MarkerPathBuilder extends AbstractPathBuilder {
+public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private final Path2D.Double startMarker;
     private final Path2D.Double endMarker;
     private final Path2D.Double midMarker;// FIXME support midMarker
-    private PathBuilder out;
+    private PathBuilder<T> out;
     private boolean needsStartMarker;
     private boolean needsEndMarker;
     private double tangentX, tangentY;
 
-    public MarkerPathBuilder(PathBuilder out, Path2D.Double startMarker, Path2D.Double endMarker, Path2D.Double midMarker) {
+    public MarkerPathBuilder(PathBuilder<T> out, Path2D.Double startMarker, Path2D.Double endMarker, Path2D.Double midMarker) {
         this.startMarker = startMarker;
         this.endMarker = endMarker;
         this.midMarker = midMarker;
@@ -104,4 +105,8 @@ public class MarkerPathBuilder extends AbstractPathBuilder {
         needsEndMarker = true;
     }
 
+    @Override
+    public @Nullable T build() {
+        return out.build();
+    }
 }

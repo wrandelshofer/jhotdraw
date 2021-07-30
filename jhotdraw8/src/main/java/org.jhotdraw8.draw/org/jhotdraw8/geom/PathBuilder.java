@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.awt.geom.Point2D;
 
@@ -13,7 +14,7 @@ import java.awt.geom.Point2D;
  *
  * @author Werner Randelshofer
  */
-public interface PathBuilder {
+public interface PathBuilder<T> {
 
     /**
      * Adds an elliptical arc to the path which goes to the specified end point
@@ -271,4 +272,9 @@ public interface PathBuilder {
     }
 
     boolean needsMoveTo();
+
+    /**
+     * Builds something.
+     */
+    @Nullable T build();
 }

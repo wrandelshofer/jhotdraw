@@ -5,11 +5,12 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartAndEndPointsPathBuilder extends AbstractPathBuilder {
+public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
     private final List<PointAndTangent> startPoints = new ArrayList<>();
     private final List<PointAndTangent> endPoints = new ArrayList<>();
 
@@ -97,5 +98,10 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder {
 
     public @NonNull List<PointAndTangent> getEndPoints() {
         return endPoints;
+    }
+
+    @Override
+    public @Nullable Void build() {
+        return null;
     }
 }

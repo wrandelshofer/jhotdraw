@@ -5,17 +5,18 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PolyArcPath;
 import org.jhotdraw8.geom.contour.PolyArcPathBuilder;
 
-public class ContourPathBuilder extends AbstractPathBuilder {
+public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     private final double offset;
 
-    private final @NonNull PathBuilder consumer;
+    private final @NonNull PathBuilder<T> consumer;
     private @NonNull PolyArcPathBuilder papb = new PolyArcPathBuilder();
 
-    public ContourPathBuilder(@NonNull PathBuilder consumer, double offset) {
+    public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset) {
         this.offset = offset;
         this.consumer = consumer;
     }
@@ -29,7 +30,7 @@ public class ContourPathBuilder extends AbstractPathBuilder {
     protected void doPathDone() {
         papb.pathDone();
         ContourBuilder contourBuilder = new ContourBuilder();
-        for (PolyArcPath path : papb.getPaths()) {
+        for (PolyArcPath path : papb.build()) {
             for (PolyArcPath contourPath : contourBuilder.parallelOffset(path, -offset)) {
                 SvgPaths.buildFromPathIterator(consumer, contourPath.getPathIterator(null), false);
             }
@@ -55,5 +56,10 @@ public class ContourPathBuilder extends AbstractPathBuilder {
     @Override
     protected void doQuadTo(double x1, double y1, double x, double y) {
         papb.quadTo(x1, y1, x, y);
+    }
+
+    @Override
+    public @Nullable T build() {
+        return consumer.build();
     }
 }

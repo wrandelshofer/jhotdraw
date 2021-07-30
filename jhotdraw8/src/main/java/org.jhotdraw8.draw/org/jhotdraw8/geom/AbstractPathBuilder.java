@@ -13,7 +13,7 @@ import java.awt.geom.Point2D;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractPathBuilder implements PathBuilder {
+public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 
     private double lastX, lastY;
     private double lastCX, lastCY;

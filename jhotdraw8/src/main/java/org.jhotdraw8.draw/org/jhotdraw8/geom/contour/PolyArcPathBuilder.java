@@ -12,11 +12,12 @@ import java.util.List;
 /**
  * Path builder for {@link PolyArcPath}.
  */
-public class PolyArcPathBuilder extends AbstractPathBuilder {
+public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
     private final List<PolyArcPath> paths = new ArrayList<>();
     private PolyArcPath current;
 
-    public List<PolyArcPath> getPaths() {
+    @Override
+    public List<PolyArcPath> build() {
         return paths;
     }
 

@@ -72,6 +72,21 @@ public class BezierCurves {
         return new Point2D.Double(x0123, y0123);
     }
 
+    /**
+     * Evaluates the tangent (that is the first derivative) of the curve at the
+     * specified time.
+     *
+     * @param x0 point P0 of the curve
+     * @param y0 point P0 of the curve
+     * @param x1 point P1 of the curve
+     * @param y1 point P1 of the curve
+     * @param x2 point P2 of the curve
+     * @param y2 point P2 of the curve
+     * @param x3 point P3 of the curve
+     * @param y3 point P3 of the curve
+     * @param t  the time
+     * @return the point at time t
+     */
     public static Point2D.Double evalCubicCurveTangent(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                                        double t) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123;
@@ -450,7 +465,7 @@ public class BezierCurves {
     }
 
     /**
-     * Extracts the specified segment from the given cubic curve.
+     * Extracts the specified segment [ta,tb] from the given cubic curve.
      *
      * @param x0 point P0 of the curve
      * @param y0 point P0 of the curve
@@ -480,7 +495,7 @@ public class BezierCurves {
     }
 
     /**
-     * Extracts the specified segment from the given quad curve.
+     * Extracts the specified segment [ta,tb] from the given quad curve.
      *
      * @param x0 point P0 of the curve
      * @param y0 point P0 of the curve
