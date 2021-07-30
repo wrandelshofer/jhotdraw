@@ -138,12 +138,12 @@ public class UniqueLongShortestPathBuilder<V, A> extends AbstractLongShortestPat
             this.parent = parent;
         }
 
-        public VV getVertex() {
+        public @NonNull VV getVertex() {
             return vertex;
         }
 
         @Override
-        public AA getArrow() {
+        public @Nullable AA getArrow() {
             return arrow;
         }
 

@@ -21,8 +21,8 @@ import java.util.function.Predicate;
 import java.util.function.ToLongFunction;
 
 public abstract class AbstractLongShortestPathBuilder<V, A> {
-    private @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction;
-    private @NonNull ToLongTriFunction<V, V, A> costf;
+    private @Nullable Function<V, Iterable<Arc<V, A>>> nextNodesFunction;
+    private @Nullable ToLongTriFunction<V, V, A> costf;
 
     public AbstractLongShortestPathBuilder() {
     }
