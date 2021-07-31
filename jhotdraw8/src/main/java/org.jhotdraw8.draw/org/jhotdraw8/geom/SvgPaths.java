@@ -43,7 +43,7 @@ public class SvgPaths {
      * @return the path builder
      * @throws ParseException if the String is not a valid path
      */
-    public static @NonNull PathBuilder buildFromSvgString(@NonNull PathBuilder builder, @NonNull String str) throws ParseException {
+    public static <T> @NonNull PathBuilder<T> buildFromSvgString(@NonNull PathBuilder<T> builder, @NonNull String str) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         try {
 

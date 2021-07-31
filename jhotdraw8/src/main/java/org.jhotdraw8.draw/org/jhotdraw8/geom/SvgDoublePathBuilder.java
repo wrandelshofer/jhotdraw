@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
  *
  * @author Werner Randelshofer
  */
-public class SvgDoublePathBuilder implements PathBuilder {
+public class SvgDoublePathBuilder implements PathBuilder<String> {
 
     private @NonNull StringBuilder buf = new StringBuilder();
 

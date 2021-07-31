@@ -13,6 +13,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * References:
+ * <pre>
+ *     GraphicsGems.c
+ *     2d and 3d Vector C Library
+ *     by Andrew Glassner
+ *     from "Graphics Gems", Academic Press, 1990
+ * </pre>
+ */
 public class BezierFit {
 
     /**
@@ -87,36 +96,36 @@ public class BezierFit {
             boolean first = true;
             for (ArrayList<Point2D> seg : segments) {
                 switch (seg.size()) {
-                    case 0:
-                        break;
-                    case 1:
-                        if (first) {
-                            builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
-                            first = false;
-                        } else {
-                            builder.lineTo(seg.get(0).getX(),seg.get(0).getY());
-                        }
-                        break;
-                    case 2:
-                        if (first) {
-                            builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
-                            first = false;
-                        }
-                        builder.lineTo(seg.get(1).getX(),seg.get(1).getY());
-                        break;
-                    default:
-                        if (first) {
-                            builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
-                            first = false;
-                        }
-                        /*  Unit tangent vectors at endpoints */
-                        Point2D tHat1;
-                        Point2D tHat2;
-                        tHat1 = computeLeftTangent(seg, 0);
-                        tHat2 = computeRightTangent(seg, seg.size() - 1);
+                case 0:
+                    break;
+                case 1:
+                    if (first) {
+                        builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
+                        first = false;
+                    } else {
+                        builder.lineTo(seg.get(0).getX(),seg.get(0).getY());
+                    }
+                    break;
+                case 2:
+                    if (first) {
+                        builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
+                        first = false;
+                    }
+                    builder.lineTo(seg.get(1).getX(),seg.get(1).getY());
+                    break;
+                default:
+                    if (first) {
+                        builder.moveTo(seg.get(0).getX(),seg.get(0).getY());
+                        first = false;
+                    }
+                    /*  Unit tangent vectors at endpoints */
+                    Point2D tHat1;
+                    Point2D tHat2;
+                    tHat1 = computeLeftTangent(seg, 0);
+                    tHat2 = computeRightTangent(seg, seg.size() - 1);
 
-                        fitCubic(builder, seg, 0, seg.size() - 1, tHat1, tHat2, errorSquared);
-                        break;
+                    fitCubic(builder, seg, 0, seg.size() - 1, tHat1, tHat2, errorSquared);
+                    break;
                 }
             }
         }
@@ -708,13 +717,6 @@ public class BezierFit {
         return q;
     }
 
-    /* -------------------------------------------------------------------------
-     * GraphicsGems.c
-     * 2d and 3d Vector C Library
-     * by Andrew Glassner
-     * from "Graphics Gems", Academic Press, 1990
-     * -------------------------------------------------------------------------
-     */
 
     /**
      * Return the distance between two points

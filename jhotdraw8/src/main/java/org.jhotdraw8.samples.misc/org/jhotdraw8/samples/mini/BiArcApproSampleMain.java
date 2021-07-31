@@ -206,7 +206,9 @@ public class BiArcApproSampleMain extends Application {
                 x2, y2, x3, y3
         );
         List<BiArc> biArcs = Bezier2BiArc.approxCubicBezier(cubicBezier, 3, 0.25);
-        System.out.println("biArcs: " + biArcs);
+        System.out.println("#inflectionPoints: " + BezierCurves.inflectionPoints(
+                x, y, x1, y1, x2, y2, x3, y3).size());
+        System.out.println("#biArcs: " + biArcs.size());
         for (BiArc biArc : biArcs) {
             appr.add(appr.isEmpty() ? new MoveTo(biArc.a1.p1.getX(), biArc.a1.p1.getY()) : new LineTo(biArc.a1.p1.getX(), biArc.a1.p1.getY()));
             appr.add(new ArcTo(biArc.a1.r, biArc.a1.r, 0,

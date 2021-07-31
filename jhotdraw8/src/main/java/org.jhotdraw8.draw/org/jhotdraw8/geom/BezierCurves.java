@@ -580,7 +580,7 @@ public class BezierCurves {
      * <p>
      * References:
      * <dl>
-     *     <dt>stackoverflow, Calculating the Inflection Point of a Cubic Bezier Curve</dt>
+     *     <dt>Calculating the Inflection Point of a Cubic Bezier Curve</dt>
      *     <dd><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow.com</a></dd>
      * </dl>
      */

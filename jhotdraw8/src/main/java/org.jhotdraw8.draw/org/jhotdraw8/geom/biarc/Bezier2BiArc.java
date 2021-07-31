@@ -65,7 +65,7 @@ public class Bezier2BiArc {
                     b0, Points2D.subtract(C2, b0));
 
             // Edge case: control lines are parallel
-            if (intersectionResultEx.getStatus() == IntersectionStatus.NO_INTERSECTION_PARALLEL) {
+            if (intersectionResultEx.getStatus() == IntersectionStatus.NO_INTERSECTION_PARALLEL && stack.size() < 4096) {
                 CubicCurve2D.Double first = new CubicCurve2D.Double();
                 CubicCurve2D.Double second = new CubicCurve2D.Double();
                 bezier.subdivide(first, second);
@@ -111,8 +111,13 @@ public class Bezier2BiArc {
     /**
      * G: incenter point of the triangle (P1, V, P2).
      * <p>
-     * Reference:<br>
-     * <a href="http://www.mathopenref.com/coordincenter.html">mathopenref.com</a>
+     * Reference:
+     * <dl>
+     *     <dt>Incenter of a triangle</dt>
+     *     <dd>
+     *      <a href="http://www.mathopenref.com/coordincenter.html">mathopenref.com</a>
+     *      </dd>
+     * </dl>
      *
      * @param a point A of the triangle
      * @param b point B of the triangle
@@ -159,24 +164,23 @@ public class Bezier2BiArc {
     }
 
     public static void splitAtInflectionPoints(CubicCurve2D.Double bezier, ArrayDeque<CubicCurve2D.Double> stack) {
-        CubicCurve2D.Double toSplit = bezier;
 
         // Edge case: P1 == P2 -> Split bezier
-        if (bezier.getP1().equals(bezier.getP2())) {
+        /*if (bezier.getP1().equals(bezier.getP2())) {
             CubicCurve2D.Double first = new CubicCurve2D.Double();
             CubicCurve2D.Double second = new CubicCurve2D.Double();
             bezier.subdivide(first, second);
             stack.push(second);
             stack.push(first);
-        }
+        }*/
         // Edge case -> no inflection points
-        else if (toSplit.getP1().equals(toSplit.getCtrlP1()) || toSplit.getP2().equals(toSplit.getCtrlP2())) {
-            stack.push(toSplit);
+        if (bezier.getP1().equals(bezier.getCtrlP1()) || bezier.getP2().equals(bezier.getCtrlP2())) {
+            stack.push(bezier);
         } else {
-            DoubleArrayList inflex = BezierCurves.inflectionPoints(toSplit);
+            DoubleArrayList inflex = BezierCurves.inflectionPoints(bezier);
 
             if (inflex.size() == 1) {
-                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = BezierCurves.split(toSplit, inflex.get(0));
+                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = BezierCurves.split(bezier, inflex.get(0));
                 stack.push(splitted.second());
                 stack.push(splitted.first());
             } else if (inflex.size() == 2) {
@@ -193,14 +197,14 @@ public class Bezier2BiArc {
                 // Make the first split and save the first new curve.
                 // The second one has to be split again
                 // at the recalculated t2 (it is on a new curve)
-                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted1 = BezierCurves.split(toSplit, t1);
+                OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted1 = BezierCurves.split(bezier, t1);
                 t2 = (1 - t1) * t2;
                 OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted2 = BezierCurves.split(splitted1.second(), t2);
                 stack.push(splitted2.second());
                 stack.push(splitted2.first());
                 stack.push(splitted1.first());
             } else {
-                stack.push(toSplit);
+                stack.push(bezier);
             }
         }
     }

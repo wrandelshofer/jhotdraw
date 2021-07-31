@@ -275,6 +275,8 @@ public interface PathBuilder<T> {
 
     /**
      * Builds something.
+     * <p>
+     * Some implementations may guarantee a non-null return value.
      */
     @Nullable T build();
 }
