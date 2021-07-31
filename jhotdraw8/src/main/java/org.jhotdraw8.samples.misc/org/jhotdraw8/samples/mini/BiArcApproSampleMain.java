@@ -40,8 +40,8 @@ public class BiArcApproSampleMain extends Application {
             110, 200,
             160, 180,
             210, 120,
-            260, 180,
-            310, 200);
+            260, 180
+    );
     private Path bezierPath = new Path();
     private Path approxPath = new Path();
     private Path inflectionPointsPath = new Path();
@@ -195,6 +195,7 @@ public class BiArcApproSampleMain extends Application {
             double r = 2;
             java.awt.geom.Point2D p = BezierCurves.evalCubicCurve(x, y, x1, y1, x2, y2, x3, y3, t);
 
+            // Draw a circle around each inflection point
             inf1.add(new MoveTo(p.getX() - r, p.getY()));
             inf1.add(new ArcTo(r, r, 0, p.getX() + r, p.getY(), false, false));
             inf1.add(new ArcTo(r, r, 0, p.getX() - r, p.getY(), false, false));
@@ -205,7 +206,7 @@ public class BiArcApproSampleMain extends Application {
                 x2, y2, x3, y3
         );
         List<BiArc> biArcs = Bezier2BiArc.approxCubicBezier(cubicBezier, 3, 0.25);
-
+        System.out.println("biArcs: " + biArcs);
         for (BiArc biArc : biArcs) {
             appr.add(appr.isEmpty() ? new MoveTo(biArc.a1.p1.getX(), biArc.a1.p1.getY()) : new LineTo(biArc.a1.p1.getX(), biArc.a1.p1.getY()));
             appr.add(new ArcTo(biArc.a1.r, biArc.a1.r, 0,

@@ -15,8 +15,17 @@ public class ArcToCubicBezier {
     private static final double TAU = Math.PI * 2.0;
 
     /**
-     * Approximate one unit arc segment with bézier curves,
-     * see http://math.stackexchange.com/questions/873224
+     * Approximates one unit arc segment with a bézier curve.
+     * <p>
+     * See discussion in
+     * <a href="http://math.stackexchange.com/questions/873224">math.stackexchange.com</a>
+     * on how to calculate control points of cubic bezier curve approximating a
+     * part of a circle.
+     *
+     * @param theta1      the start angle in radians of the arc on the circle.
+     * @param delta_theta the length of the arc segment in radians,
+     *                    *               must be less than π/2 = 90°.
+     * @return
      */
     private static double[] approximateUnitArc(double theta1, double delta_theta) {
         double alpha = (4 / 3.0) * Math.tan(delta_theta * 0.25);
@@ -32,6 +41,23 @@ public class ArcToCubicBezier {
     /**
      * Converts an arcTo into a sequence of curveTo,
      * or - if the arcTo is degenerate - to a lineTo or to nothing.
+     * <p>
+     * As specified in
+     * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
+     * <p>
+     * This code has been derived from svgpath library [1].
+     * <p>
+     * See <a href="http://math.stackexchange.com/questions/873224">math.stackexchange.com</a>
+     * for a discussion on how to calculate control points of cubic bezier curve
+     * approximating a part of a circle.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>[1] svgpath library</dt>
+     *     <dd>svgpath. Copyright (C) 2013-2015 by Vitaly Puzrin, MIT License.
+     *     <a href="https://github.com/fontello/svgpath/blob/master/lib/a2c.js>github.com</a></dd>
+     * </dl>
+     *
      *
      * @param lastX         the last x coordinate
      * @param lastY         the last y coordinate
@@ -54,14 +80,12 @@ public class ArcToCubicBezier {
             @NonNull Double2Consumer lineTo,
             @NonNull Double6Consumer curveTo
     ) {
-        double x1, y1, x2, y2, rx, ry, phi;
-        boolean fa, fs;
+        final double x1, y1, x2, y2, phi;
+        double rx, ry;
         x1 = lastX;
         y1 = lastY;
         x2 = x;
         y2 = y;
-        fa = largeArcFlag;
-        fs = sweepFlag;
         rx = radiusX;
         ry = radiusY;
         phi = xAxisRotation;
@@ -99,7 +123,7 @@ public class ArcToCubicBezier {
 
 
         // Get center parameters (cx, cy, theta1, delta_theta).
-        ArcCenter cc = getArcCenter(x1, y1, x2, y2, fa, fs, rx, ry, sin_phi, cos_phi);
+        ArcCenter cc = getArcCenter(x1, y1, x2, y2, largeArcFlag, sweepFlag, rx, ry, sin_phi, cos_phi);
 
         ArrayList<double[]> result = new ArrayList<double[]>();
         double theta1 = cc.theta1;
@@ -145,8 +169,10 @@ public class ArcToCubicBezier {
     }
 
     /**
-     * Convert from endpoint to center parameterization,
-     * see http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes
+     * Converts from endpoint to center parameterization.
+     * <p>
+     * See <a href="http://www.w3.org/TR/SVG11/implnote.html#ArcImplementationNotes">
+     *     w3.org</a>
      * <p>
      * Return [cx, cy, theta1, delta_theta]
      */
@@ -211,25 +237,25 @@ public class ArcToCubicBezier {
     }
 
     /**
-     * Calculate an angle between two unit vectors
-     * <p>
+     * Returns the angle in radians between two unit vectors {@code u} and
+     * {@code v}.
+     * <pre>{@literal
+     *  angle = sign * acos( <u,v> )
+     * }</pre>
      * Since we measure angle between radii of circular arcs,
-     * we can use simplified math (without length normalization)
+     * we can use simplified math (without length normalization).
+     *
+     * @param ux x-coordinate of unit vector u
+     * @param uy y-coordinate of unit vector u
+     * @param vx x-coordinate of unit vector v
+     * @param vy y-coordinate of unit vector v
+     * @return angle in radians
      */
     private static double unitVectorAngle(double ux, double uy, double vx, double vy) {
         int sign = (ux * vy - uy * vx < 0) ? -1 : 1;
-        double dot = ux * vx + uy * vy;
-
-        // Add this to work with arbitrary vectors:
-        // dot /= Math.sqrt(ux * ux + uy * uy) * Math.sqrt(vx * vx + vy * vy);
 
         // Rounding errors, e.g. -1.0000000000000002 can screw up this.
-        if (dot > 1.0) {
-            dot = 1.0;
-        }
-        if (dot < -1.0) {
-            dot = -1.0;
-        }
+        double dot = Geom.clamp(ux * vx + uy * vy,-1,1);
 
         return sign * Math.acos(dot);
     }
