@@ -1,4 +1,4 @@
-module org.jhotdraw7.samples.svg {
+/*module org.jhotdraw7.samples.svg {
     exports org.jhotdraw.samples.svg;
     exports org.jhotdraw.samples.svg.action;
     exports org.jhotdraw.samples.svg.figures;
@@ -11,4 +11,4 @@ module org.jhotdraw7.samples.svg {
     requires transitive org.jhotdraw7.nanoxml;
 
     opens org.jhotdraw.samples.svg.action.images;
-}
+}*/

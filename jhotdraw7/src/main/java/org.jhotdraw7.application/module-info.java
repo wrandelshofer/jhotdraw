@@ -1,4 +1,4 @@
-module org.jhotdraw7.application {
+/*module org.jhotdraw7.application {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires java.logging;
@@ -35,4 +35,4 @@ module org.jhotdraw7.application {
     opens org.jhotdraw.app.action.images;
     opens org.jhotdraw.gui.plaf.palette.images;
     exports org.jhotdraw.annotation;
-}
+}*/

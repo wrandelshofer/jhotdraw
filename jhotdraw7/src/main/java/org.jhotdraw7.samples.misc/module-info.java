@@ -1,4 +1,4 @@
-module org.jhotdraw7.samples.misc {
+/*module org.jhotdraw7.samples.misc {
     requires java.desktop;
     requires org.jhotdraw7.draw;
     requires org.jhotdraw7.application;
@@ -6,4 +6,4 @@ module org.jhotdraw7.samples.misc {
     requires org.jhotdraw7.nanoxml;
     requires java.prefs;
     requires net.n3.nanoxml;
-}
+}*/

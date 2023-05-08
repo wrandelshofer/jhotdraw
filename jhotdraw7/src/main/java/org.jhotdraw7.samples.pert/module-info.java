@@ -1,4 +1,4 @@
-module org.jhotdraw7.samples.pert {
+/*module org.jhotdraw7.samples.pert {
     requires org.jhotdraw7.application;
     requires java.desktop;
     requires org.jhotdraw7.draw;
@@ -7,4 +7,4 @@ module org.jhotdraw7.samples.pert {
 
     opens org.jhotdraw.samples.pert to org.jhotdraw7.application;
     opens org.jhotdraw.samples.pert.images to org.jhotdraw7.application;
-}
+}*/

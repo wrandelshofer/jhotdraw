@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BuildServerSettings">
     <option name="LOGIN" value="" />
     <option name="SERVER_URL" value="http://buildserver" />
@@ -23,7 +26,23 @@
     <option name="FILTER_BY_CURRENT_PROJECT" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="" />
+    <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/net.n3.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/net.n3.nanoxml/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.nanoxml/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.draw/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.misc/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.misc/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.net/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.net/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.odg/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.odg/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.pert/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.pert/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.svg/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.svg/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw8/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw8/build.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,24 +52,27 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1SFNWrnEpfQ90kFYDso1EXkCSfe" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="flattenPackages" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RunManager">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
@@ -95,6 +117,7 @@
       <workItem from="1529908369929" duration="688000" />
       <workItem from="1540449059110" duration="47000" />
       <workItem from="1558535558644" duration="28000" />
+      <workItem from="1683579534505" duration="2319000" />
     </task>
     <task id="LOCAL-00001" summary="When an ID of a figure was changed, the drawing view was not always updated.">
       <created>1530563719550</created>
@@ -110,7 +133,7 @@
     <option name="totallyTimeSpent" value="763000" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
