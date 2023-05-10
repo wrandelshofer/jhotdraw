@@ -598,7 +598,7 @@ public class OSXApplication extends AbstractApplication {
                     d.getContentPane().setLayout(new BorderLayout());
                     d.getContentPane().add(tb, BorderLayout.CENTER);
                     d.setAlwaysOnTop(true);
-                    d.setUndecorated(true);
+                    d.setUndecorated(false);
                     d.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
                     d.getRootPane().setFont(
                             new Font("Lucida Grande", Font.PLAIN, 11));
@@ -611,7 +611,10 @@ public class OSXApplication extends AbstractApplication {
                     x += d.getWidth();
 
                     TogglePaletteAction tpa = new TogglePaletteAction(OSXApplication.this, d, tb.getName());
+                    d.setVisible(true);
                     palettes.add(d);
+                    addPalette(d);
+                    tpa.putValue(ActionUtil.SELECTED_KEY, true);
                     if (prefs.getBoolean("toolbar." + i + ".visible", true)) {
                         addPalette(d);
                         tpa.putValue(ActionUtil.SELECTED_KEY, true);

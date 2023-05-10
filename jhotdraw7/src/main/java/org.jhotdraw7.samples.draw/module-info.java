@@ -1,6 +1,6 @@
-module org.jhotdraw7.samples.draw {
+/*module org.jhotdraw.samples.draw {
     requires java.desktop;
-    requires org.jhotdraw7.nanoxml;
-    requires org.jhotdraw7.application;
-    requires org.jhotdraw7.draw;
-}
+    requires org.jhotdraw.nanoxml;
+    requires org.jhotdraw.application;
+    requires org.jhotdraw.draw;
+}*/

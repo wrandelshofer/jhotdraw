@@ -27,25 +27,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/Labels_en_US.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/AbstractViewAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/ColorAttributeIcon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/ColorChooserAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/MoveToBackAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/MoveToFrontAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/ToolBarButtonFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.net/org/jhotdraw/samples/net/Labels_en_US.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.odg/org/jhotdraw/samples/odg/Labels_en_US.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.pert/org/jhotdraw/samples/pert/Labels_en_US.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/gui/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/undo/Labels_en_US.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jhotdraw7/.idea/ant.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/.idea/ant.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jhotdraw7/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/net.n3.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/net.n3.nanoxml/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/AbstractApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/AbstractApplicationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/Labels_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/Labels_en_US.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.nanoxml/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.draw/module-info.java" afterDir="false" />
@@ -84,23 +71,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "11",
-    "last_opened_file_path": "/Users/zantehays/IdeaProjects/jhotdraw/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/org/jhotdraw/samples",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;11&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/zantehays/IdeaProjects/jhotdraw/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/org/jhotdraw/samples&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/org/jhotdraw/samples" />
@@ -164,7 +151,8 @@
       <workItem from="1683594591555" duration="628000" />
       <workItem from="1683646196506" duration="45000" />
       <workItem from="1683646309442" duration="3016000" />
-      <workItem from="1683669562819" duration="3743000" />
+      <workItem from="1683669562819" duration="4066000" />
+      <workItem from="1683692855281" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="When an ID of a figure was changed, the drawing view was not always updated.">
       <created>1530563719550</created>
