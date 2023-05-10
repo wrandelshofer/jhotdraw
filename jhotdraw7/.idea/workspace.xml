@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -47,12 +50,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Updates build scripts.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/AbstractViewAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/ColorAttributeIcon.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/ColorChooserAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/MoveToBackAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/MoveToFrontAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action/ToolBarButtonFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.net/org/jhotdraw/samples/net/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.odg/org/jhotdraw/samples/odg/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.pert/org/jhotdraw/samples/pert/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/Labels_en_US.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ant.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ant.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/build.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/build.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedHashSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedHashSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedArraySet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/tree/ChildList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/main/java/org.jhotdraw8.application/org/jhotdraw8/tree/ChildList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../jhotdraw8/src/test/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedSetTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../jhotdraw8/src/test/java/org.jhotdraw8.application/org/jhotdraw8/collection/IndexedArraySetTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net.n3.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net.n3.nanoxml/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/AbstractApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/AbstractApplicationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/Labels_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/Labels_en_US.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" afterDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,23 +108,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="Downloaded.Files.Path.Enabled" value="true" />
-    <property name="Repository.Attach.JavaDocs" value="true" />
-    <property name="Repository.Attach.Sources" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="SDKs" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.24822696" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="Errors" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/zantehays/IdeaProjects/jhotdraw/jhotdraw7/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/action" />
+      <recent name="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/images" />
+      <recent name="$PROJECT_DIR$/src/jhotdraw.util/classes" />
+      <recent name="$PROJECT_DIR$/src/app/java" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/jhotdraw.samples.teddy/classes/org/jhotdraw/samples/teddy" />
       <recent name="$PROJECT_DIR$/src/jhotdraw.samples.teddy/resources/org/jhotdraw/samples/teddy" />
@@ -114,15 +137,11 @@
       <recent name="org.jhotdraw.nanoxml" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.jhotdraw.draw.action" />
       <recent name="org.jhotdraw.app.action.file" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/jhotdraw.application/org/jhotdraw/gui/plaf/palette/images" />
-      <recent name="$PROJECT_DIR$/src/jhotdraw.util/classes" />
-      <recent name="$PROJECT_DIR$/src/app/java" />
-    </key>
   </component>
-  <component name="RunManager" selected="Application.SVG">
+  <component name="RunManager" selected="Application.Draw">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -138,13 +157,6 @@
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="org.jhotdraw7.nanoxml" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -152,33 +164,6 @@
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <module name="org.jhotdraw7.nanoxml" />
       <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -201,6 +186,7 @@
       <item itemvalue="Application.Teddy" />
     </list>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="StructureViewFactory">
     <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR,SHOW_INHERITED" />
   </component>
@@ -216,6 +202,7 @@
       <option name="presentableId" value="Default" />
       <updated>1537522895444</updated>
       <workItem from="1546867049568" duration="90000" />
+      <workItem from="1683684040341" duration="536000" />
     </task>
     <task id="LOCAL-00001" summary="Updates to Java 11.">
       <created>1538735869492</created>
@@ -420,7 +407,7 @@
     <option name="totallyTimeSpent" value="90000" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ORDER">
@@ -433,15 +420,6 @@
     </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
     <option name="RECENT_FILTERS">
       <map>
         <entry key="Branch">
@@ -456,7 +434,15 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -482,68 +468,6 @@
     <MESSAGE value="Pretty prints SVG when saving." />
     <MESSAGE value="Image output format uses canvas width/height to determine the size of the output image." />
     <option name="LAST_COMMIT_MESSAGE" value="Image output format uses canvas width/height to determine the size of the output image." />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="895" y="258" key="#xdebugger.evaluate" timestamp="1591546642098">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state x="895" y="258" key="#xdebugger.evaluate/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546642098" />
-    <state x="522" y="123" key="CommitChangelistDialog2" timestamp="1591546925404">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state x="522" y="123" key="CommitChangelistDialog2/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546925404" />
-    <state x="536" y="123" width="1193" height="850" key="DiffContextDialog" timestamp="1591546906499">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state x="536" y="123" width="1193" height="850" key="DiffContextDialog/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546906499" />
-    <state width="928" height="346" key="GridCell.Tab.0.bottom" timestamp="1591558403008">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.0.bottom/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
-    <state width="928" height="346" key="GridCell.Tab.0.bottom/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880995" />
-    <state width="928" height="346" key="GridCell.Tab.0.center" timestamp="1591558403007">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.0.center/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403007" />
-    <state width="928" height="346" key="GridCell.Tab.0.center/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880994" />
-    <state width="928" height="346" key="GridCell.Tab.0.left" timestamp="1591558403007">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.0.left/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403007" />
-    <state width="928" height="346" key="GridCell.Tab.0.left/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880994" />
-    <state width="928" height="346" key="GridCell.Tab.0.right" timestamp="1591558403007">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.0.right/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403007" />
-    <state width="928" height="346" key="GridCell.Tab.0.right/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880995" />
-    <state width="928" height="346" key="GridCell.Tab.1.bottom" timestamp="1591558403009">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.1.bottom/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403009" />
-    <state width="928" height="346" key="GridCell.Tab.1.bottom/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880997" />
-    <state width="928" height="346" key="GridCell.Tab.1.center" timestamp="1591558403008">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.1.center/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
-    <state width="928" height="346" key="GridCell.Tab.1.center/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880996" />
-    <state width="928" height="346" key="GridCell.Tab.1.left" timestamp="1591558403008">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.1.left/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
-    <state width="928" height="346" key="GridCell.Tab.1.left/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880996" />
-    <state width="928" height="346" key="GridCell.Tab.1.right" timestamp="1591558403008">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state width="928" height="346" key="GridCell.Tab.1.right/0.23.2048.1129/480.1175.1440.822@0.23.2048.1129" timestamp="1591558403008" />
-    <state width="928" height="346" key="GridCell.Tab.1.right/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546880997" />
-    <state x="732" y="288" key="Vcs.Push.Dialog.v2" timestamp="1591546930519">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state x="732" y="288" key="Vcs.Push.Dialog.v2/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546930519" />
-    <state x="797" y="256" width="670" height="676" key="search.everywhere.popup" timestamp="1591546744183">
-      <screen x="0" y="23" width="2048" height="1129" />
-    </state>
-    <state x="797" y="256" width="670" height="676" key="search.everywhere.popup/0.23.2048.1129/480.1175.1440.823@0.23.2048.1129" timestamp="1591546744183" />
   </component>
   <component name="masterDetails">
     <states>
