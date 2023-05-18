@@ -50,19 +50,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/gui/Labels_en_US.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/undo/Labels_en_US.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net.n3.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net.n3.nanoxml/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/OSXApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/OSXApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/org/jhotdraw/samples/draw/DrawApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/org/jhotdraw/samples/draw/DrawApplicationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/SVGCreateFromFileTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/SVGCreateFromFileTool.java" afterDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -199,6 +188,9 @@
       <workItem from="1683684040341" duration="6056000" />
       <workItem from="1683727117084" duration="2011000" />
       <workItem from="1683731956304" duration="1133000" />
+      <workItem from="1683733197803" duration="11058000" />
+      <workItem from="1684175693757" duration="510000" />
+      <workItem from="1684282391090" duration="1605000" />
     </task>
     <task id="LOCAL-00001" summary="Updates to Java 11.">
       <created>1538735869492</created>
@@ -403,7 +395,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683684620295</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Fixed draw sample palette toolbars to cooperate when utilized in an Intellij plugin">
+      <created>1683733233422</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1683733233422</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -471,7 +470,8 @@
     <MESSAGE value="Pretty prints SVG when saving." />
     <MESSAGE value="Image output format uses canvas width/height to determine the size of the output image." />
     <MESSAGE value="Fixed ToolBarButtonFactory" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed ToolBarButtonFactory" />
+    <MESSAGE value="Fixed draw sample palette toolbars to cooperate when utilized in an Intellij plugin" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed draw sample palette toolbars to cooperate when utilized in an Intellij plugin" />
   </component>
   <component name="masterDetails">
     <states>
