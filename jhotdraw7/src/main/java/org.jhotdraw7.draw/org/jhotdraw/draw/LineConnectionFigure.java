@@ -54,7 +54,7 @@ public class LineConnectionFigure extends LineFigure
      */
     private ConnectionHandler connectionHandler = new ConnectionHandler(this);
 
-    private static class ConnectionHandler extends FigureAdapter implements Serializable {
+    public static class ConnectionHandler extends FigureAdapter implements Serializable {
     private static final long serialVersionUID = 1L;
 
         private LineConnectionFigure owner;
@@ -87,6 +87,10 @@ public class LineConnectionFigure extends LineFigure
                     owner.changed();
                 }
             }
+        }
+
+        public LineConnectionFigure getOwner() {
+            return owner;
         }
     };
 

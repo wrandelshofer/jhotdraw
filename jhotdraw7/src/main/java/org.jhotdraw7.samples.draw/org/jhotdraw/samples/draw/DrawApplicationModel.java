@@ -56,6 +56,7 @@ import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
  * @version $Id$
  */
 public class DrawApplicationModel extends DefaultApplicationModel {
+    private List<JToolBar> list;
     private static final long serialVersionUID = 1L;
 
     /**
@@ -65,6 +66,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
 
     /** Creates a new instance. */
     public DrawApplicationModel() {
+        list = new LinkedList<>();
     }
 
     public DefaultDrawingEditor getSharedEditor() {
@@ -72,6 +74,10 @@ public class DrawApplicationModel extends DefaultApplicationModel {
             sharedEditor = new DefaultDrawingEditor();
         }
         return sharedEditor;
+    }
+
+    public List<JToolBar> getToolBars() {
+        return list;
     }
 
     @Override
@@ -98,7 +104,6 @@ public class DrawApplicationModel extends DefaultApplicationModel {
             editor = p.getEditor();
         }
 
-        LinkedList<JToolBar> list = new LinkedList<JToolBar>();
         JToolBar tb;
         tb = new JToolBar();
         addCreationButtonsTo(tb, editor);

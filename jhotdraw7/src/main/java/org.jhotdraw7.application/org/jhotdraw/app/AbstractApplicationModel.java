@@ -39,6 +39,7 @@ public abstract class AbstractApplicationModel extends AbstractBean
 
     /** Creates a new instance. */
     public AbstractApplicationModel() {
+
     }
 
     public void setName(String newValue) {
@@ -88,6 +89,7 @@ public abstract class AbstractApplicationModel extends AbstractBean
         try {
             return viewFactory.get();
         } catch (Exception e) {
+            e.printStackTrace();
             InternalError error = new InternalError("unable to create view");
             error.initCause(e);
             throw error;

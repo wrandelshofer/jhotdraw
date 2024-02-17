@@ -215,7 +215,7 @@ public class SVGCreateFromFileTool extends CreationTool {
     @Override
     protected Figure createFigure() {
         if (prototype instanceof CompositeFigure) {
-            // we must not apply default attributs to the composite figure,
+            // we must not apply default attributes to the composite figure,
             // because this would change the look of the figures that we
             // read from the SVG file.
             return prototype.clone();

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BuildServerSettings">
     <option name="LOGIN" value="" />
     <option name="SERVER_URL" value="http://buildserver" />
@@ -23,7 +26,19 @@
     <option name="FILTER_BY_CURRENT_PROJECT" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="" />
+    <list default="true" id="d585e6fa-2787-44e2-bd76-a5062a840704" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/gui/Labels_en_US.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/undo/Labels_en_US.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/net.n3.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/net.n3.nanoxml/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.draw/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.nanoxml/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.nanoxml/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.draw/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.draw/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.svg/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.svg/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,23 +48,59 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="dd29e689-97d5-44c9-aff5-e61f0e907316" />
+        <option name="url" value="https://github.com/ZMobile/jhotdraw.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1SFNWrnEpfQ90kFYDso1EXkCSfe" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="flattenPackages" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;11&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/zantehays/IdeaProjects/jhotdraw/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/org/jhotdraw/samples&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/org/jhotdraw/samples" />
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.pert/org/jhotdraw/samples/pert" />
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.odg/org/jhotdraw/samples/odg" />
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.net/org/jhotdraw/samples/net" />
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.samples.teddy/org/jhotdraw/samples/teddy" />
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/app" />
+      <recent name="$PROJECT_DIR$/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/beans" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="Applet">
@@ -95,6 +146,13 @@
       <workItem from="1529908369929" duration="688000" />
       <workItem from="1540449059110" duration="47000" />
       <workItem from="1558535558644" duration="28000" />
+      <workItem from="1683579534505" duration="2319000" />
+      <workItem from="1683581927899" duration="1414000" />
+      <workItem from="1683594591555" duration="628000" />
+      <workItem from="1683646196506" duration="45000" />
+      <workItem from="1683646309442" duration="3016000" />
+      <workItem from="1683669562819" duration="4066000" />
+      <workItem from="1683692855281" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="When an ID of a figure was changed, the drawing view was not always updated.">
       <created>1530563719550</created>
@@ -103,14 +161,21 @@
       <option name="project" value="LOCAL" />
       <updated>1530563719550</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added english labels">
+      <created>1683582140291</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1683582140291</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="763000" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -127,7 +192,8 @@
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="When an ID of a figure was changed, the drawing view was not always updated." />
-    <option name="LAST_COMMIT_MESSAGE" value="When an ID of a figure was changed, the drawing view was not always updated." />
+    <MESSAGE value="Added english labels" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added english labels" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

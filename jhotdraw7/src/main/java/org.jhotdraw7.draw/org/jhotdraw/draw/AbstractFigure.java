@@ -401,11 +401,11 @@ public abstract class AbstractFigure
      */
     @Override
     public void willChange() {
-        if (changingDepth == 0) {
-            fireAreaInvalidated();
-            invalidate();
+        fireAreaInvalidated();
+        invalidate();
+        if (changingDepth <= 0) {
+            changingDepth++;
         }
-        changingDepth++;
     }
 
     protected void validate() {
@@ -416,12 +416,12 @@ public abstract class AbstractFigure
      */
     @Override
     public void changed() {
-        if (changingDepth == 1) {
+        //if (changingDepth == 1) {
             validate();
             fireFigureChanged(getDrawingArea());
-        } else if (changingDepth < 0) {
-            throw new InternalError("changed was called without a prior call to willChange. "+changingDepth);
-        }
+        //} else if (changingDepth < 0) {
+            //throw new InternalError("changed was called without a prior call to willChange. "+changingDepth);
+        //}
         changingDepth--;
     }
 
@@ -631,5 +631,9 @@ public abstract class AbstractFigure
         LinkedList<Connector> connectors = new LinkedList<Connector>();
         connectors.add(new ChopRectangleConnector(this));
         return connectors;
+    }
+
+    public EventListenerList getListenerList() {
+        return listenerList;
     }
 }

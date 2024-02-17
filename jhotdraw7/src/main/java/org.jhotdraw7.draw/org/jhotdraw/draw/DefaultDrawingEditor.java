@@ -3,11 +3,7 @@
  */
 package org.jhotdraw.draw;
 
-import org.jhotdraw.app.action.edit.CopyAction;
-import org.jhotdraw.app.action.edit.CutAction;
-import org.jhotdraw.app.action.edit.DeleteAction;
-import org.jhotdraw.app.action.edit.PasteAction;
-import org.jhotdraw.app.action.edit.SelectAllAction;
+import org.jhotdraw.app.action.edit.*;
 import org.jhotdraw.beans.AbstractBean;
 import org.jhotdraw.draw.action.IncreaseHandleDetailLevelAction;
 import org.jhotdraw.draw.action.MoveAction;
@@ -17,6 +13,8 @@ import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.tool.Tool;
 
 import org.jhotdraw.annotation.Nullable;
+import org.jhotdraw.undo.UndoRedoManager;
+
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -57,6 +55,7 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
     private DrawingView activeView;
     private boolean isEnabled = true;
     private ToolHandler toolHandler;
+    private UndoRedoManager undoRedoManager;
 
     private class ToolHandler extends ToolAdapter {
 
@@ -119,6 +118,11 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
         views = new HashSet<DrawingView>();
         inputMap = createInputMap();
         actionMap = createActionMap();
+    }
+
+    public DefaultDrawingEditor(UndoRedoManager undoRedoManager) {
+        this();
+        this.undoRedoManager = undoRedoManager;
     }
 
     @Override
@@ -364,6 +368,11 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
         m.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.META_DOWN_MASK), PasteAction.ID);
         m.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK), CutAction.ID);
         m.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.META_DOWN_MASK), CutAction.ID);
+
+        m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK), UndoAction.ID);
+        m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.META_DOWN_MASK), UndoAction.ID);
+        m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK), RedoAction.ID);
+        m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.META_DOWN_MASK), RedoAction.ID);
 
 
         return m;
