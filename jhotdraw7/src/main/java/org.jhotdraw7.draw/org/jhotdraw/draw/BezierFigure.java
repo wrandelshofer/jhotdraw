@@ -60,7 +60,7 @@ import static org.jhotdraw.draw.AttributeKeys.WINDING_RULE;
  * Decorator: {@link org.jhotdraw.draw.decoration.LineDecoration}.
  * <hr>
  *
- * @see org.jhotdraw.geom.BezierPath
+ * @see BezierPath
  *
  * @author Werner Randelshofer
  * @version $Id$

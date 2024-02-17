@@ -3,11 +3,6 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;

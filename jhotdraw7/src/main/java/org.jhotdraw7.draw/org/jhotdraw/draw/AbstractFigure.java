@@ -151,7 +151,7 @@ public abstract class AbstractFigure
      *  Notify all listenerList that have registered interest for
      * notification on this event type.
      */
-    protected void fireFigureRequestRemove() {
+    public void fireFigureRequestRemove() {
         if (listenerList.getListenerCount() > 0) {
             FigureEvent event = null;
             // Notify all listeners that have registered interest for
@@ -169,6 +169,29 @@ public abstract class AbstractFigure
                 }
             }
         }
+    }
+
+    protected void fireFigureRequestUndoRemove() {
+        /*if (listenerList.getListenerCount() > 0) {
+            FigureEvent event = null;
+            // Notify all listeners that have registered interest for
+            // Guaranteed to return a non-null array
+            Object[] listeners = listenerList.getListenerList();
+            // Process the listeners last to first, notifying
+            // those that are interested in this event
+            for (int i = listeners.length - 2; i >= 0; i -= 2) {
+                if (listeners[i] == FigureListener.class) {
+                    // Lazily create the event:
+                    if (event == null) {
+                        event = new FigureEvent(this, getBounds());
+                    }
+                    FigureListener listener = (FigureListener) listeners[i + 1];
+                    if (listener instanceof QuadTreeDrawing.QuadTreeEventHandler) {
+                        listener.figureAdded(event);
+                    }
+                }
+            }
+        }*/
     }
 
     /**
@@ -387,7 +410,7 @@ public abstract class AbstractFigure
     protected void invalidate() {
     }
 
-    protected boolean isChanging() {
+    public boolean isChanging() {
         return changingDepth != 0;
     }
 
@@ -403,7 +426,7 @@ public abstract class AbstractFigure
     public void willChange() {
         fireAreaInvalidated();
         invalidate();
-        if (changingDepth <= 0) {
+        if (changingDepth == 0) {
             changingDepth++;
         }
     }
@@ -416,7 +439,8 @@ public abstract class AbstractFigure
      */
     @Override
     public void changed() {
-        //if (changingDepth == 1) {
+        //Bug: for some reason changing depth becomes 2 when a figure is deleted and restored.
+        //if (changingDepth >= 1) {
             validate();
             fireFigureChanged(getDrawingArea());
         //} else if (changingDepth < 0) {
@@ -633,7 +657,7 @@ public abstract class AbstractFigure
         return connectors;
     }
 
-    public EventListenerList getListenerList() {
+    public EventListenerList getEventListenerList() {
         return listenerList;
     }
 }

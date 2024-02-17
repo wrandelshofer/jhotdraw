@@ -48,7 +48,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 /**
  * Provides a view on a ODG drawing.

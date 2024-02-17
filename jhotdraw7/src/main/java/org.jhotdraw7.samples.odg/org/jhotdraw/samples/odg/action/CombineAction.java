@@ -3,11 +3,7 @@
  */
 package org.jhotdraw.samples.odg.action;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.CompositeFigure;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.GroupAction;
 import org.jhotdraw.samples.odg.ODGLabels;
 import org.jhotdraw.samples.odg.figures.ODGPathFigure;
@@ -16,7 +12,6 @@ import org.jhotdraw.util.ResourceBundleUtil;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * CombinePathsAction.

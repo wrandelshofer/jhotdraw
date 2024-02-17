@@ -5,11 +5,12 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.app.Disposable;
 import org.jhotdraw.beans.WeakPropertyChangeListener;
+
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 
-import org.jhotdraw.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.undo.UndoableEdit;
 import java.beans.PropertyChangeEvent;

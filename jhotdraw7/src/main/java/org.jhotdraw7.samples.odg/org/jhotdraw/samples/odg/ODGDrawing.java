@@ -5,6 +5,7 @@
 package org.jhotdraw.samples.odg;
 
 import org.jhotdraw.draw.QuadTreeDrawing;
+
 /**
  * ODGDrawing.
  * <p>

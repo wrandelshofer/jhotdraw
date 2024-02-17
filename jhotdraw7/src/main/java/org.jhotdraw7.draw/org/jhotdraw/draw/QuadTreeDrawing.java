@@ -25,7 +25,7 @@ import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 
 /**
  * An implementation of {@link Drawing} which uses a
- * {@link org.jhotdraw.geom.QuadTree} to provide a good responsiveness for
+ * {@link QuadTree} to provide a good responsiveness for
  * drawings which contain many figures.
  *
  * @author Werner Randelshofer
@@ -306,7 +306,7 @@ public class QuadTreeDrawing extends AbstractDrawing {
     /**
      * Handles all figure events fired by Figures contained in the Drawing.
      */
-    protected class QuadTreeEventHandler extends AbstractCompositeFigure.EventHandler {
+    protected class QuadTreeEventHandler extends EventHandler {
     private static final long serialVersionUID = 1L;
 
         @Override

@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.odg.ODGAttributeKeys.TRANSFORM;
 

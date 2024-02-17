@@ -3,8 +3,6 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.event.CompositeFigureEdit;
 import org.jhotdraw.draw.handle.AbstractHandle;
 import org.jhotdraw.draw.handle.HandleAttributeKeys;

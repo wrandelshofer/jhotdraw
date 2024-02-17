@@ -5,12 +5,7 @@
 
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.DrawLabels;
-import org.jhotdraw.draw.TextHolderFigure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.text.FloatingTextArea;
 import org.jhotdraw.draw.text.FloatingTextField;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -65,7 +60,7 @@ import java.util.Map;
 public class TextCreationTool extends CreationTool implements ActionListener {
     private static final long serialVersionUID = 1L;
     @Nullable private FloatingTextField   textField;
-    @Nullable private TextHolderFigure  typingTarget;
+    @Nullable private TextHolderFigure typingTarget;
     
     /** Creates a new instance. */
     public TextCreationTool(TextHolderFigure prototype) {

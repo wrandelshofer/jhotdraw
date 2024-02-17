@@ -3,8 +3,8 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
 import org.jhotdraw.draw.locator.Locator;
 import org.jhotdraw.draw.locator.RelativeLocator;

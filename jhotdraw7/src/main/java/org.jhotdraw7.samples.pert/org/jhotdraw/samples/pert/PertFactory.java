@@ -4,11 +4,6 @@
 
 package org.jhotdraw.samples.pert;
 
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.GroupFigure;
-import org.jhotdraw.draw.ListFigure;
-import org.jhotdraw.draw.TextAreaFigure;
-import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.decoration.ArrowTip;

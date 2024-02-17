@@ -3,10 +3,10 @@
  */
 package org.jhotdraw.draw.tool;
 
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
-import org.jhotdraw.annotation.Nullable;
 import java.awt.Container;
 import java.awt.dnd.DnDConstants;
 import java.awt.event.MouseEvent;

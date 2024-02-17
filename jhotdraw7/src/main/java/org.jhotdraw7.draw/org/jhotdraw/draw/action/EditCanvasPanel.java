@@ -3,8 +3,8 @@
  */
 package org.jhotdraw.draw.action;
 
-import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.event.DrawingAttributeEditorHandler;
 import org.jhotdraw.draw.gui.JAttributeSlider;
 import org.jhotdraw.gui.Dialogs;

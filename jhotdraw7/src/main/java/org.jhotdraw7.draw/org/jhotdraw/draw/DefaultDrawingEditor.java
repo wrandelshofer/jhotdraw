@@ -55,7 +55,6 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
     private DrawingView activeView;
     private boolean isEnabled = true;
     private ToolHandler toolHandler;
-    private UndoRedoManager undoRedoManager;
 
     private class ToolHandler extends ToolAdapter {
 
@@ -118,11 +117,6 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
         views = new HashSet<DrawingView>();
         inputMap = createInputMap();
         actionMap = createActionMap();
-    }
-
-    public DefaultDrawingEditor(UndoRedoManager undoRedoManager) {
-        this();
-        this.undoRedoManager = undoRedoManager;
     }
 
     @Override
@@ -373,7 +367,6 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor 
         m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.META_DOWN_MASK), UndoAction.ID);
         m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK), RedoAction.ID);
         m.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.META_DOWN_MASK), RedoAction.ID);
-
 
         return m;
     }

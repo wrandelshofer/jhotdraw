@@ -17,7 +17,7 @@ import java.util.EventObject;
  *
  * <p><em>Observer</em><br>
  * Changes in the composition of a composite figure can be observed.<br>
- * Subject: {@link CompositeFigure}; Observer:
+ * Subject: {CompositeFigure}; Observer:
  * {@link CompositeFigureListener}; Event: {@link CompositeFigureEvent}.
  * <hr>
  *

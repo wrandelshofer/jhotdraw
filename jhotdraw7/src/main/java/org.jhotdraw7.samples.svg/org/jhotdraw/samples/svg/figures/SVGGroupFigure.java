@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
+import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK_TARGET;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;

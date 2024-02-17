@@ -5,10 +5,8 @@
 
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.ToolListener;
 
 import org.jhotdraw.annotation.Nullable;
@@ -22,7 +20,7 @@ import java.awt.event.MouseMotionListener;
  * A <em>tool</em> defines an editing mode of a {@link DrawingEditor}.
  * <p>
  * Tools are used for user interaction. Unlike figures, a tool works with
- * the user interface coordinates of a {@link DrawingView}. The user interface
+ * the user interface coordinates of a {DrawingView}. The user interface
  * coordinates are expressed in integer pixels.
  * <p>
  * When a tool is set on a drawing editor using {@code setTool}, the drawing
@@ -51,13 +49,13 @@ import java.awt.event.MouseMotionListener;
  * <p><em>Framework</em><br>
  * The following interfaces define the contracts of a framework for structured
  * drawing editors:<br>
- * Contract: {@link Drawing}, {@link Figure}, {@link DrawingView},
+ * Contract: {Drawing}, {Figure}, {DrawingView},
  * {@link DrawingEditor}, {@link org.jhotdraw.draw.handle.Handle} and {@link Tool}.
  *
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating drawing tools
  * and drawing views:<br>
- * Mediator: {@link DrawingEditor}; Colleagues: {@link DrawingView}, {@link Tool}.
+ * Mediator: {@link DrawingEditor}; Colleagues: {DrawingView}, {@link Tool}.
  *
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating keyboard input from

@@ -4,7 +4,6 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.tool.Tool;
 
@@ -21,7 +20,7 @@ import java.util.EventObject;
  * {@code DrawingEditor} observes area invalidations of tools and repaints
  * its active drawing view accordingly.<br>
  * Subject: {@link Tool}; Observer: {@link ToolListener}; Event:
- * {@link ToolEvent}; Concrete Observer: {@link DrawingEditor}.
+ * {@link ToolEvent}; Concrete Observer: {DrawingEditor}.
  * <hr>
  *
  * @author Werner Randelshofer

@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * A {@link org.jhotdraw.draw.Figure} which groups a collection of figures.
+ * A {@link Figure} which groups a collection of figures.
  *
  * @author Werner Randelshofer
  * @version $Id$

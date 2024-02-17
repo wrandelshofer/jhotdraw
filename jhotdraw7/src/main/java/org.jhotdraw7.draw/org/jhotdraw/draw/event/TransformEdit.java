@@ -5,8 +5,8 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import javax.swing.undo.AbstractUndoableEdit;

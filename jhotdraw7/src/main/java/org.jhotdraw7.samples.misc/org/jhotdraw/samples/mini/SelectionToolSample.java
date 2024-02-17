@@ -3,13 +3,6 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DefaultDrawingEditor;
-import org.jhotdraw.draw.DefaultDrawingView;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.LineFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 import javax.swing.JFrame;

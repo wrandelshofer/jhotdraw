@@ -3,9 +3,9 @@
  */
 package org.jhotdraw.draw.tool;
 
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.TextHolderFigure;
 import org.jhotdraw.draw.text.FloatingTextArea;
 import org.jhotdraw.draw.text.FloatingTextField;

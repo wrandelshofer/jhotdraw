@@ -4,7 +4,6 @@
 package org.jhotdraw.draw.handle;
 
 import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.DrawingEditor;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -14,7 +13,7 @@ import java.awt.Stroke;
  * Defines a put of well known {@link Handle} attributes.
  * <p>
  * If you want different attribute values for your own editor, put
- * the desired values using {@link DrawingEditor#setHandleAttribute(org.jhotdraw.draw.AttributeKey, java.lang.Object)}.
+ * the desired values using {DrawingEditor#setHandleAttribute(org.jhotdraw.draw.AttributeKey, java.lang.Object)}.
  *
  * @author Werner Randelshofer
  * @version $Id$

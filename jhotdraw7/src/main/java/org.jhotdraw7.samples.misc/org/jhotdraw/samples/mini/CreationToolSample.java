@@ -3,14 +3,6 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DefaultDrawingEditor;
-import org.jhotdraw.draw.DefaultDrawingView;
-import org.jhotdraw.draw.DrawLabels;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.io.SerializationInputOutputFormat;
 import org.jhotdraw.draw.tool.CreationTool;
@@ -24,7 +16,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.HashMap;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 

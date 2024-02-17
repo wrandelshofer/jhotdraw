@@ -4,12 +4,12 @@
 
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
-import org.jhotdraw.annotation.Nullable;
 import javax.swing.Icon;
 import java.awt.Color;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class SelectionColorChooserAction extends EditorColorChooserAction {
         this(editor, key, name, icon, new HashMap<AttributeKey<?>,Object>());
     }
     public SelectionColorChooserAction(DrawingEditor editor, final AttributeKey<Color> key, @Nullable String name, @Nullable Icon icon,
-            @Nullable Map<AttributeKey<?>,Object> fixedAttributes) {
+                                       @Nullable Map<AttributeKey<?>,Object> fixedAttributes) {
         super(editor, key, name, icon, fixedAttributes);
     }
     

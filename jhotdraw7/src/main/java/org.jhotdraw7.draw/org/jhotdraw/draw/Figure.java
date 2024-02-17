@@ -33,7 +33,7 @@ import java.util.Map;
  * <li>Figures can have an open ended set of attributes. An attribute is
  * identified by an {@link AttributeKey}.</li>
  * 
- * <li>A figure can have {@link org.jhotdraw.draw.connector.Connector}s that define how to locate a
+ * <li>A figure can have {@link Connector}s that define how to locate a
  * connection point on the figure.</li>
  * 
  * <li>A figure can create a set of {@link Handle}s which can interactively
@@ -65,8 +65,8 @@ import java.util.Map;
  * The following interfaces define the contracts of a framework for structured
  * drawing editors:<br>
  * Contract: {@link Drawing}, {@link Figure}, {@link DrawingView},
- * {@link DrawingEditor}, {@link org.jhotdraw.draw.handle.Handle} and
- * {@link org.jhotdraw.draw.tool.Tool}.
+ * {@link DrawingEditor}, {@link Handle} and
+ * {@link Tool}.
  *
  * <p><em>Composite</em><br>
  * Composite figures can be composed of other figures.<br>
@@ -76,9 +76,9 @@ import java.util.Map;
  * Two figures can be connected using a connection figure.  The location of
  * the start or end point of the connection is handled by a connector object
  * at each connected figure.<br>
- * Contract: {@link org.jhotdraw.draw.Figure},
+ * Contract: {@link Figure},
  * {@link ConnectionFigure},
- * {@link org.jhotdraw.draw.connector.Connector},
+ * {@link Connector},
  * {@link org.jhotdraw.draw.tool.ConnectionTool}.
  *
  * <p><em>Decorator</em><br>
@@ -90,7 +90,7 @@ import java.util.Map;
  * {@code CompositeFigure} observes area invalidations of its child figures. And
  * {@code DrawingView} observers area invalidations of its drawing object.<br>
  * Subject: {@link Figure}; Observer:
- * {@link org.jhotdraw.draw.event.FigureListener}; Event: {@link org.jhotdraw.draw.event.FigureEvent}; Concrete Observer:
+ * {@link FigureListener}; Event: {@link org.jhotdraw.draw.event.FigureEvent}; Concrete Observer:
  * {@link CompositeFigure}, {@link DrawingView}.
  *
  * <p><em>Prototype</em><br>
@@ -103,7 +103,7 @@ import java.util.Map;
  * The location of the start and end points of a connection figure are determined
  * by {@code Connector}s which are owned by the connected figures.<br>
  * Context: {@link Figure}, {@link ConnectionFigure}; 
- * Strategy: {@link org.jhotdraw.draw.connector.Connector}.
+ * Strategy: {@link Connector}.
  *
  * <p><em>Strategy</em><br>
  * {@code Locator} encapsulates a strategy for locating a point on a

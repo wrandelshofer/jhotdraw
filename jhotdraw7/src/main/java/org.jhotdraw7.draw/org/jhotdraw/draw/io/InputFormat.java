@@ -4,9 +4,9 @@
 
 package org.jhotdraw.draw.io;
 
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.Drawing;
 
-import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 /**
- * An <em>input format</em> implements a strategy for reading a {@link Drawing}
+ * An <em>input format</em> implements a strategy for reading a {Drawing}
  * using a specific format from either an {@code InputStream}, an {@code URI} or
  * a {@code Transferable}.
  * <p>
@@ -33,7 +33,7 @@ import java.net.URI;
  * <p><em>Strategy</em><br>
  * {@code InputFormat} encapsulates a strategy for reading drawings from
  * input streams.<br>
- * Strategy: {@link InputFormat}; Context: {@link Drawing}.
+ * Strategy: {@link InputFormat}; Context: {Drawing}.
  * <hr>
  *
  * @author Werner Randelshofer

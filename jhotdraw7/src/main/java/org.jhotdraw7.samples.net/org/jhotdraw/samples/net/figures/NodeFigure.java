@@ -3,11 +3,7 @@
  */
 package org.jhotdraw.samples.net.figures;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.RectangleFigure;
-import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
@@ -28,7 +24,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.draw.AttributeKeys.DECORATOR_INSETS;
 

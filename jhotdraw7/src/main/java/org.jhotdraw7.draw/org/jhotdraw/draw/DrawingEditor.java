@@ -40,19 +40,19 @@ import java.util.Map;
  * drawing editors:<br>
  * Contract: {@link Drawing}, {@link Figure}, {@link DrawingView},
  * {@link DrawingEditor}, {@link org.jhotdraw.draw.handle.Handle} and
- * {@link org.jhotdraw.draw.tool.Tool}.
+ * {@link Tool}.
  *
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating drawing tools
  * and drawing views:<br>
  * Mediator: {@link DrawingEditor}; Colleagues: {@link DrawingView}, 
- * {@link org.jhotdraw.draw.tool.Tool}.
+ * {@link Tool}.
  *
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating keyboard input from
  * {@code Tool}s and Swing action objects:<br>
  * Mediator: {@link DrawingEditor}; Colleagues: 
- * {@link org.jhotdraw.draw.tool.Tool}, javax.swing.Action.
+ * {@link Tool}, javax.swing.Action.
  *
  * <p><em>Model-View-Controller</em><br>
  * The following classes implement together the Model-View-Controller design

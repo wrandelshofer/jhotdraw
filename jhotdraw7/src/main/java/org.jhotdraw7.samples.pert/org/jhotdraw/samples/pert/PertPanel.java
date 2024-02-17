@@ -9,15 +9,7 @@ import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
 import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DefaultDrawingEditor;
-import org.jhotdraw.draw.DrawLabels;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.TextAreaFigure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.action.GroupAction;
@@ -42,7 +34,7 @@ import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.ResourceBundle;
+
 /**
  * PertPanel.
  * 

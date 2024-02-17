@@ -4,8 +4,6 @@
 
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.Drawing;
-
 import javax.swing.JComponent;
 import java.awt.event.ActionListener;
 

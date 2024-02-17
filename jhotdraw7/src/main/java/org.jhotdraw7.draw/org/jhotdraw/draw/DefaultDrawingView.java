@@ -68,7 +68,6 @@ public class DefaultDrawingView
         extends JComponent
         implements DrawingView, EditableComponent {
             private static final long serialVersionUID = 1L;
-
     /**
      * Set this to true to turn on debugging output on System.out.
      */
@@ -312,6 +311,11 @@ public class DefaultDrawingView
 
     /** Creates new instance. */
     public DefaultDrawingView() {
+        try {
+            int impossibleNumber = 10 / 0;
+        } catch (ArithmeticException e) {
+            e.printStackTrace();
+        }
         initComponents();
         eventHandler = createEventHandler();
         setToolTipText("dummy"); // Set a dummy tool tip text to turn tooltips on
@@ -700,7 +704,7 @@ public class DefaultDrawingView
         }
     }
 
-    protected void drawHandles(java.awt.Graphics2D g) {
+    protected void drawHandles(Graphics2D g) {
         if (editor != null && editor.getActiveView() == this) {
             validateHandles();
             for (Handle h : getSelectionHandles()) {
@@ -964,7 +968,7 @@ public class DefaultDrawingView
     /**
      * Gets the currently active selection handles.
      */
-    private java.util.List<Handle> getSelectionHandles() {
+    private List<Handle> getSelectionHandles() {
         validateHandles();
         return Collections.unmodifiableList(selectionHandles);
     }
@@ -972,7 +976,7 @@ public class DefaultDrawingView
     /**
      * Gets the currently active secondary handles.
      */
-    private java.util.List<Handle> getSecondaryHandles() {
+    private List<Handle> getSecondaryHandles() {
         validateHandles();
         return Collections.unmodifiableList(secondaryHandles);
     }
@@ -1384,7 +1388,7 @@ public class DefaultDrawingView
 
     @Override
     public void delete() {
-        final java.util.List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
+        final List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
 
         // Abort, if not all of the selected figures may be removed from the
         // drawing
@@ -1404,18 +1408,18 @@ public class DefaultDrawingView
 
         clearSelection();
         getDrawing().removeAll(deletedFigures);
-        Map<Figure, List<LineConnectionFigure.ConnectionHandler>> connectionHandlersMap = new HashMap<>();
+        Map<Figure, List<ConnectionHandler>> connectionHandlersMap = new HashMap<>();
         for (Figure figure : deletedFigures) {
             if (figure instanceof AbstractFigure) {
                 AbstractFigure abstractFigure = (AbstractFigure) figure;
-                Object[] listeners = abstractFigure.getListenerList().getListenerList();
+                Object[] listeners = abstractFigure.getEventListenerList().getListenerList();
                 for (Object listener : listeners) {
-                    if (listener instanceof LineConnectionFigure.ConnectionHandler) {
-                        List<LineConnectionFigure.ConnectionHandler> list = connectionHandlersMap.get(figure);
+                    if (listener instanceof ConnectionHandler) {
+                        List<ConnectionHandler> list = connectionHandlersMap.get(figure);
                         if (list == null) {
                             list = new ArrayList<>();
                         }
-                        list.add((LineConnectionFigure.ConnectionHandler) listener);
+                        list.add((ConnectionHandler) listener);
                         connectionHandlersMap.put(figure, list);
                     }
                 }
@@ -1444,9 +1448,9 @@ public class DefaultDrawingView
                 addToSelection(deletedFigures);
                 for (Figure deletedFigure : deletedFigures) {
                     //FigureEvent fe = new FigureEvent(deletedFigure, deletedFigure.getBounds());
-                    List<LineConnectionFigure.ConnectionHandler> list = connectionHandlersMap.get(deletedFigure);
+                    List<ConnectionHandler> list = connectionHandlersMap.get(deletedFigure);
                     if (list != null) {
-                        for (LineConnectionFigure.ConnectionHandler handler : list) {
+                        for (ConnectionHandler handler : list) {
                             Figure lf = handler.getOwner();
                             d.add(lf);
                         }
@@ -1462,9 +1466,9 @@ public class DefaultDrawingView
                     drawing.remove(deletedFigures.get(i));
                     for (Figure deletedFigure : deletedFigures) {
                         //FigureEvent fe = new FigureEvent(deletedFigure, deletedFigure.getBounds());
-                        List<LineConnectionFigure.ConnectionHandler> list = connectionHandlersMap.get(deletedFigure);
+                        List<ConnectionHandler> list = connectionHandlersMap.get(deletedFigure);
                         if (list != null) {
-                            for (LineConnectionFigure.ConnectionHandler handler : list) {
+                            for (ConnectionHandler handler : list) {
                                 Figure lf = handler.getOwner();
                                 drawing.remove(lf);
                             }

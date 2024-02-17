@@ -3,12 +3,7 @@
  */
 package org.jhotdraw.samples.odg.figures;
 
-import org.jhotdraw.draw.AbstractAttributedCompositeFigure;
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.TransformHandleKit;

@@ -4,8 +4,8 @@
 package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.event.FigureSelectionEvent;
 import org.jhotdraw.util.ResourceBundleUtil;
 
@@ -54,7 +54,7 @@ public class EditorColorChooserAction extends AttributeAction {
     }
 
     public EditorColorChooserAction(DrawingEditor editor, final AttributeKey<Color> key, @Nullable String name, @Nullable Icon icon,
-            @Nullable Map<AttributeKey<?>, Object> fixedAttributes) {
+                                    @Nullable Map<AttributeKey<?>, Object> fixedAttributes) {
         super(editor, fixedAttributes, name, icon);
         this.key = key;
         putValue(AbstractAction.NAME, name);

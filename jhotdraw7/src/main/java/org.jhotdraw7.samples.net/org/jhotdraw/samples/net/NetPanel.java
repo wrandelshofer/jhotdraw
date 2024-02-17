@@ -9,14 +9,6 @@ import org.jhotdraw.app.action.edit.CutAction;
 import org.jhotdraw.app.action.edit.DuplicateAction;
 import org.jhotdraw.app.action.edit.PasteAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DefaultDrawingEditor;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.action.GroupAction;
@@ -39,7 +31,7 @@ import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.ResourceBundle;
+
 /**
  * NetPanel.
  * 

@@ -4,9 +4,9 @@
 package org.jhotdraw.draw.action;
 
 import org.jhotdraw.app.Application;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.GridConstrainer;
-import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.util.prefs.PreferencesUtil;
 

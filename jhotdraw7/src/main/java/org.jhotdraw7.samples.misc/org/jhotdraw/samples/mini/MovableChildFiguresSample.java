@@ -3,16 +3,7 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DefaultDrawingEditor;
-import org.jhotdraw.draw.DefaultDrawingView;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.EllipseFigure;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.GraphicalCompositeFigure;
-import org.jhotdraw.draw.LabelFigure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.DragHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.MoveHandle;

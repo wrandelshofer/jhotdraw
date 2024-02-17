@@ -3,8 +3,8 @@
  */
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.TransformEdit;
 import org.jhotdraw.draw.event.TransformRestoreEdit;
 import org.jhotdraw.geom.Geom;

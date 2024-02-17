@@ -4,7 +4,6 @@
 
 package org.jhotdraw.draw.event;
 
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.handle.Handle;
 
 import org.jhotdraw.annotation.Nullable;

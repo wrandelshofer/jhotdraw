@@ -51,7 +51,7 @@ import java.util.Set;
  * <li>Invoke {@link Drawing#drawCanvas}.</li>
  * <li>Invoke {@link Constrainer#draw} if a constrainer is set.</li>
  * <li>Invoke {@link Drawing#draw}.</li>
- * <li>Invoke {@link org.jhotdraw.draw.handle.Handle#draw} on the handles
+ * <li>Invoke {@link Handle#draw} on the handles
  * of selected figures.</li>
  * <li>Invoke {@link org.jhotdraw.draw.tool.Tool#draw} if the drawing view
  * is the active view of the {@code DrawingEditor}.</li>
@@ -64,7 +64,7 @@ import java.util.Set;
  * The following interfaces define the contracts of a framework for structured
  * drawing editors:<br>
  * Contract: {@link Drawing}, {@link Figure}, {@link DrawingView},
- * {@link DrawingEditor}, {@link org.jhotdraw.draw.handle.Handle} and
+ * {@link DrawingEditor}, {@link Handle} and
  * {@link org.jhotdraw.draw.tool.Tool}.
  *
  * <p><em>Chain of responsibility</em><br>
@@ -74,7 +74,7 @@ import java.util.Set;
  * turn changes an aspect of a figure.<br>
  * Client: {@link org.jhotdraw.draw.tool.SelectionTool};
  * Handler: {@link org.jhotdraw.draw.tool.DragTracker}, 
- * {@link org.jhotdraw.draw.handle.Handle}.
+ * {@link Handle}.
  * 
  * <p><em>Mediator</em><br>
  * {@code DrawingEditor} acts as a mediator for coordinating drawing tools
@@ -91,8 +91,8 @@ import java.util.Set;
  * <p><em>Observer</em><br>
  * Selection changes of {@code DrawingView} are observed by user interface
  * components which act on selected figures.<br>
- * Subject: {@link org.jhotdraw.draw.DrawingView}; 
- * Observer: {@link org.jhotdraw.draw.event.FigureSelectionListener};
+ * Subject: {@link DrawingView};
+ * Observer: {@link FigureSelectionListener};
  * Event: {@link org.jhotdraw.draw.event.FigureSelectionEvent}.
  * 
  * <p><em>Observer</em><br>

@@ -24,7 +24,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.odg.ODGAttributeKeys.FILL_STYLE;
 import static org.jhotdraw.samples.odg.ODGAttributeKeys.OPACITY;

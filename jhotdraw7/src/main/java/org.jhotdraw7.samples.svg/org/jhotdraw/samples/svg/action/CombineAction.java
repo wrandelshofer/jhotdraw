@@ -3,12 +3,7 @@
  */
 package org.jhotdraw.samples.svg.action;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.CompositeFigure;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.AbstractSelectedAction;
 import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.figures.SVGBezierFigure;

@@ -37,7 +37,7 @@ import org.jhotdraw.geom.Insets2D;
  * <p><em>Observer</em><br>
  * Changes in the composition of a composite figure can be observed.<br>
  * Subject: {@link CompositeFigure}; Observer:
- * {@link org.jhotdraw.draw.event.CompositeFigureListener};
+ * {@link CompositeFigureListener};
  * Event: {@link org.jhotdraw.draw.event.CompositeFigureEvent}.
  *
  * <p><em>Strategy</em><br>

@@ -28,8 +28,6 @@ import org.jhotdraw.samples.svg.figures.SVGTextAreaFigure;
 import org.jhotdraw.samples.svg.figures.SVGTextFigure;
 
 import org.jhotdraw.annotation.Nullable;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import javax.swing.JComponent;
 import javax.swing.text.BadLocationException;

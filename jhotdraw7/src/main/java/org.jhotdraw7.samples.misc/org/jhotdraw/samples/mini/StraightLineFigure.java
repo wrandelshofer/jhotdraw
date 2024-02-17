@@ -3,8 +3,6 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.AbstractAttributedFigure;
-import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.geom.Geom;
 
 import java.awt.Graphics2D;

@@ -3,7 +3,6 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
-import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.action.AbstractSelectedAction;
 import org.jhotdraw.draw.action.BringToFrontAction;
 import org.jhotdraw.draw.action.SendToBackAction;

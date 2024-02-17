@@ -15,7 +15,6 @@ import org.jhotdraw.util.ResourceBundleUtil;
 import javax.swing.JSlider;
 import java.awt.Component;
 import java.awt.Font;
-import java.util.ResourceBundle;
 
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.LINK;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.OPACITY;

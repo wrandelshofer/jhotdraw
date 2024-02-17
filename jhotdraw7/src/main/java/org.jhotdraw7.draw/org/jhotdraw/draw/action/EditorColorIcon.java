@@ -37,7 +37,7 @@ public class EditorColorIcon extends javax.swing.ImageIcon {
      */
     public EditorColorIcon(
             DrawingEditor editor,
-            AttributeKey<Color> key, 
+            AttributeKey<Color> key,
             URL imageLocation,
             Shape colorShape) {
         super(imageLocation);

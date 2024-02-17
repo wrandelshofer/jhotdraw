@@ -5,9 +5,9 @@ package org.jhotdraw.draw.action;
 
 import org.jhotdraw.app.action.ActionUtil;
 import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import org.jhotdraw.annotation.Nullable;

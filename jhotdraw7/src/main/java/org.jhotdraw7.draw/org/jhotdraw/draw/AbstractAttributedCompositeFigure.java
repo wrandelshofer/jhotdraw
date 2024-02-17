@@ -184,7 +184,7 @@ public abstract class AbstractAttributedCompositeFigure extends AbstractComposit
      * object with the FILL_COLOR attribute before calling this method.
      * If the FILL_COLOR attribute is null, this method is not called.
      */
-    protected abstract void drawFill(java.awt.Graphics2D g);
+    protected abstract void drawFill(Graphics2D g);
 
     /**
      * This method is called by method draw() to draw the lines of the figure
@@ -198,9 +198,9 @@ public abstract class AbstractAttributedCompositeFigure extends AbstractComposit
      * the TEXT_COLOR attribute before calling this method.
      * If the TEXT_COLOR attribute is null, this method is not called.
      */
-    protected abstract void drawStroke(java.awt.Graphics2D g);
+    protected abstract void drawStroke(Graphics2D g);
 
-    protected void drawText(java.awt.Graphics2D g) {
+    protected void drawText(Graphics2D g) {
     }
 
     @Override

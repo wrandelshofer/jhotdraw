@@ -3,7 +3,6 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
-import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.ResizeHandleKit;

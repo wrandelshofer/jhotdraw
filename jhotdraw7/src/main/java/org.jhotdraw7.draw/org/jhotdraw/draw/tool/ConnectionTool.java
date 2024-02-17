@@ -3,12 +3,7 @@
  */
 package org.jhotdraw.draw.tool;
 
-import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.util.ResourceBundleUtil;
 

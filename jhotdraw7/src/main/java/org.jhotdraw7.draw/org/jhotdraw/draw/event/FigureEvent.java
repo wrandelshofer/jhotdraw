@@ -4,11 +4,10 @@
 
 package org.jhotdraw.draw.event;
 
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.AttributeKey;
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
-import org.jhotdraw.annotation.Nullable;
 import java.awt.geom.Rectangle2D;
 import java.util.EventObject;
 
@@ -21,11 +20,11 @@ import java.util.EventObject;
  * <p><em>Observer</em><br>
  * State changes of figures can be observed by other objects. Specifically
  * {@code CompositeFigure} observes area invalidations and remove requests
- * of its child figures. {@link DrawingView} also observes area invalidations
+ * of its child figures. {DrawingView} also observes area invalidations
  * of its drawing object.
  * Subject: {@link Figure}; Observer:
  * {@link FigureListener}; Event: {@link FigureEvent}; Concrete Observer:
- * {@link org.jhotdraw.draw.CompositeFigure}, {@link DrawingView}.
+ * {@link org.jhotdraw.draw.CompositeFigure}, {DrawingView}.
  * <hr>
  *
  * @author Werner Randelshofer

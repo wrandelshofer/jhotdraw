@@ -42,8 +42,8 @@ import java.util.List;
  * edit listeners only need to register on the drawing object in order to
  * receive all undoable edit events related to changes made in the drawing.</li>
  *
- * <li>Drawing can hold a number of {@link org.jhotdraw.draw.io.InputFormat}s and
- * {@link org.jhotdraw.draw.io.OutputFormat}s, allowing to read and write a drawing from/to a
+ * <li>Drawing can hold a number of {@link InputFormat}s and
+ * {@link OutputFormat}s, allowing to read and write a drawing from/to a
  * stream, a file or the clipboard.</li>
  * </ul>
  * Note that there are some restrictions too. Here are some things that a
@@ -74,12 +74,12 @@ import java.util.List;
  * <p><em>Strategy</em><br>
  * {@code org.jhotdraw.draw.io.OutputFormat} encapsulates a strategy for writing drawings to
  * output streams.<br>
- * Strategy: {@link org.jhotdraw.draw.io.OutputFormat}; Context: {@link Drawing}.
+ * Strategy: {@link OutputFormat}; Context: {@link Drawing}.
  *
  * <p><em>Strategy</em><br>
  * {@code org.jhotdraw.draw.io.InputFormat} encapsulates a strategy for 
  * reading drawings from input streams.<br>
- * Strategy: {@link org.jhotdraw.draw.io.InputFormat}; Context: {@link Drawing}.
+ * Strategy: {@link InputFormat}; Context: {@link Drawing}.
  * <hr>
  *
  * @author Werner Randelshofer

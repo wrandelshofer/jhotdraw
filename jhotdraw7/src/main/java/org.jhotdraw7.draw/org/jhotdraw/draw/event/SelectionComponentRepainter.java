@@ -4,11 +4,12 @@
 package org.jhotdraw.draw.event;
 
 import org.jhotdraw.app.Disposable;
+
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 
-import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

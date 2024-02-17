@@ -33,7 +33,7 @@ import static org.jhotdraw.draw.AttributeKeys.STROKE_PLACEMENT;
  * Implements a {@link Figure} with a triangular shape.
  * <p>
  * The tip of the triangle points in the direction specified by the attribute
- * {@link org.jhotdraw.draw.AttributeKeys#ORIENTATION}.
+ * {@link AttributeKeys#ORIENTATION}.
  * <p>
  * This figure creates a {@link OrientationHandle} which allows
  * to interactively change the orientation of the triangle.
@@ -72,7 +72,7 @@ public class TriangleFigure extends AbstractAttributedFigure {
     // CONNECTING
     /**
      * Returns the Figures connector for the specified location.
-     * By default a {@link org.jhotdraw.draw.connector.ChopTriangleConnector} is returned.
+     * By default a {@link ChopTriangleConnector} is returned.
      */
     @Override
     public Connector findConnector(Point2D.Double p, ConnectionFigure prototype) {
@@ -80,7 +80,7 @@ public class TriangleFigure extends AbstractAttributedFigure {
     }
     /**
      * Returns a compatible connector.
-     * By default a {@link org.jhotdraw.draw.connector.ChopTriangleConnector} is returned.
+     * By default a {@link ChopTriangleConnector} is returned.
      */
     @Override
     public Connector findCompatibleConnector(Connector c, boolean isStartConnector) {

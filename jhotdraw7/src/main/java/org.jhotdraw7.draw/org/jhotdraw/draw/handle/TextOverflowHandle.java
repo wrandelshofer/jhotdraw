@@ -4,8 +4,8 @@
 
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.DrawLabels;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.TextHolderFigure;
 
 import java.awt.Graphics2D;

@@ -13,7 +13,7 @@ import java.awt.geom.Point2D;
 
 /**
  * A <em>connection figure</em> connects two figures with a 
- * {@link org.jhotdraw.geom.BezierPath}.
+ * {@link BezierPath}.
  * <p>
  * The location of the start and end points of the bezier path is defined by
  * {@link Connector} objects, which are supplied by the connected figures.
@@ -32,9 +32,9 @@ import java.awt.geom.Point2D;
  * Two figures can be connected using a connection figure.  The location of
  * the start or end point of the connection is handled by a connector object
  * at each connected figure.<br>
- * Contract: {@link org.jhotdraw.draw.Figure},
- * {@link org.jhotdraw.draw.ConnectionFigure},
- * {@link org.jhotdraw.draw.connector.Connector},
+ * Contract: {@link Figure},
+ * {@link ConnectionFigure},
+ * {@link Connector},
  * {@link org.jhotdraw.draw.tool.ConnectionTool}.
  *
  * <p><em>Strategy</em><br>

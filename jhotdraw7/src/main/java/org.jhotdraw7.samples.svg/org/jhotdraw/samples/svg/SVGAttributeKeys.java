@@ -14,6 +14,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 
+import static org.jhotdraw.draw.AttributeKeys.*;
+
 /**
  * SVGAttributeKeys.
  *

@@ -5,8 +5,6 @@
 
 package org.jhotdraw.draw.handle;
 
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.event.HandleListener;
@@ -46,8 +44,8 @@ import java.util.Collection;
  * <p><em>Framework</em><br>
  * The following interfaces define the contracts of a framework for structured
  * drawing editors:<br>
- * Contract: {@link Drawing}, {@link Figure}, {@link DrawingView},
- * {@link DrawingEditor}, {@link Handle} and {@link org.jhotdraw.draw.tool.Tool}.
+ * Contract: {Drawing}, {@link Figure}, {@link DrawingView},
+ * {DrawingEditor}, {@link Handle} and {@link org.jhotdraw.draw.tool.Tool}.
  *
  * <p><em>Observer</em><br>
  * State changes of handles can be observed by other objects. Specifically

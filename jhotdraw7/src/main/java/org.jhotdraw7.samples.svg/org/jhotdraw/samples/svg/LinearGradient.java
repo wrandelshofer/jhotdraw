@@ -4,8 +4,6 @@
 
 package org.jhotdraw.samples.svg;
 
-import org.jhotdraw.draw.Figure;
-
 import java.awt.Color;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;

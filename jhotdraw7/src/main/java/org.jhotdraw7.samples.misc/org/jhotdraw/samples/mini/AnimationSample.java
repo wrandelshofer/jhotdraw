@@ -3,11 +3,6 @@
  */
 package org.jhotdraw.samples.mini;
 
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DefaultDrawingView;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.EllipseFigure;
-
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.event.ActionEvent;

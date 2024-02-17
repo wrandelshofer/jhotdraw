@@ -4,11 +4,6 @@
 
 package org.jhotdraw.samples.net;
 
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.GroupFigure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.decoration.ArrowTip;

@@ -9,7 +9,6 @@ import net.n3.nanoxml.IXMLReader;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLException;
 import net.n3.nanoxml.XMLParserFactory;
-import org.jhotdraw.draw.AttributeKey;
 
 import org.jhotdraw.annotation.Nullable;
 import java.awt.Color;

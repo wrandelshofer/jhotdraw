@@ -4,9 +4,9 @@
 package org.jhotdraw.draw.action;
 
 import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.GroupFigure;
-import org.jhotdraw.draw.DrawLabels;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 /**

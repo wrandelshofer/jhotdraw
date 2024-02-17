@@ -4,10 +4,10 @@
 
 package org.jhotdraw.draw.io;
 
+import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.Figure;
 
-import org.jhotdraw.annotation.Nullable;
 import javax.swing.JComponent;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 /**
- * An <em>output format</em> implements a strategy for writing a {@link Drawing}
+ * An <em>output format</em> implements a strategy for writing a {Drawing}
  * using a specific format into an {@code OutputStream}, an {@code URI} or a
  * {@code Transferable}.
  * <p>
@@ -33,7 +33,7 @@ import java.util.List;
  * <p><em>Strategy</em><br>
  * {@code OutputFormat} encapsulates a strategy for writing drawings to output
  * streams.<br>
- * Strategy: {@link OutputFormat}; Context: {@link Drawing}.
+ * Strategy: {@link OutputFormat}; Context: {Drawing}.
  * <hr>
  *
  * @author Werner Randelshofer

@@ -7,7 +7,6 @@ import org.jhotdraw.app.Application;
 import org.jhotdraw.app.Disposable;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
-import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.samples.svg.SVGLabels;
 import org.jhotdraw.samples.svg.SVGView;
 import org.jhotdraw.samples.svg.io.SVGOutputFormat;
