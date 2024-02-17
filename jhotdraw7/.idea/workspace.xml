@@ -49,9 +49,26 @@
     <option name="FILTER_BY_CURRENT_PROJECT" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="">
+    <list default="true" id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="Fixed draw sample palette toolbars to cooperate when utilized in an Intellij plugin">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/SVGCreateFromFileTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/org/jhotdraw/samples/svg/SVGCreateFromFileTool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net.n3.nanoxml/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/AbstractApplicationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.application/org/jhotdraw/app/AbstractApplicationModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/AbstractFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/AbstractFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/DefaultDrawingEditor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/DefaultDrawingEditor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/DefaultDrawingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/DefaultDrawingView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/LineConnectionFigure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.draw/org/jhotdraw/draw/LineConnectionFigure.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.nanoxml/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/org/jhotdraw/samples/draw/DrawView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.draw/org/jhotdraw/samples/draw/DrawView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.misc/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.net/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.odg/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.pert/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.svg/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org.jhotdraw7.samples.teddy/module-info.java" beforeDir="false" />
     </list>
     <list id="6c3f85af-290e-4ea4-a299-932234f5731b" name="IDEA" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -76,6 +93,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="1P5xXk2Vep19FNKYPiO4Br88WBb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -88,9 +109,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/zantehays/IdeaProjects/jhotdraw/jhotdraw7/src/main/java/org.jhotdraw7.application/org/jhotdraw/undo&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/zantehays/IdeaProjects/jhotdraw/jhotdraw7&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -176,6 +198,10 @@
   <component name="SvnConfiguration">
     <configuration />
   </component>
+  <component name="SwiftWorkspaceSettings">
+    <option name="detectedToolchain" value="true" />
+    <option name="toolchainPathValue" value="/Library/Developer/CommandLineTools" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="13fe2693-250d-4562-87a2-5c5fde983d66" name="Default" comment="" />
@@ -191,6 +217,9 @@
       <workItem from="1683733197803" duration="11058000" />
       <workItem from="1684175693757" duration="510000" />
       <workItem from="1684282391090" duration="1605000" />
+      <workItem from="1708136436790" duration="154000" />
+      <workItem from="1708136628431" duration="47000" />
+      <workItem from="1708136688745" duration="1381000" />
     </task>
     <task id="LOCAL-00001" summary="Updates to Java 11.">
       <created>1538735869492</created>

@@ -75,9 +75,9 @@ public class DrawView extends AbstractView {
         
         scrollPane.setLayout(new PlacardScrollPaneLayout());
         scrollPane.setBorder(new EmptyBorder(0,0,0,0));
-        
-        setEditor(new DefaultDrawingEditor());
+
         undo = new UndoRedoManager();
+        setEditor(new DefaultDrawingEditor());
         view.setDrawing(createDrawing());
         view.getDrawing().addUndoableEditListener(undo);
         initActions();
@@ -208,6 +208,8 @@ public class DrawView extends AbstractView {
      * Sets a drawing editor for the view.
      */
     public void setEditor(DrawingEditor newValue) {
+        newValue.getActionMap().put(UndoAction.ID, undo.getUndoAction());
+        newValue.getActionMap().put(RedoAction.ID, undo.getRedoAction());
         if (editor != null) {
             editor.remove(view);
         }
