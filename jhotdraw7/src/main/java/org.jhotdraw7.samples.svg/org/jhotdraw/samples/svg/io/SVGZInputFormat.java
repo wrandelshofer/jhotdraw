@@ -4,6 +4,7 @@
 
 package org.jhotdraw.samples.svg.io;
 
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 
 import java.io.BufferedInputStream;

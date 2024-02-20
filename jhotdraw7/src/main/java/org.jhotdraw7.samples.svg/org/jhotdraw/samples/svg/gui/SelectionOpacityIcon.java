@@ -4,6 +4,11 @@
 package org.jhotdraw.samples.svg.gui;
 
 import org.jhotdraw.annotation.Nullable;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.DrawingView;
+import org.jhotdraw.draw.Figure;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.io.SerializationInputOutputFormat;
 import org.jhotdraw.draw.tool.CreationTool;

@@ -4,6 +4,8 @@
 
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.RectangleFigure;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;

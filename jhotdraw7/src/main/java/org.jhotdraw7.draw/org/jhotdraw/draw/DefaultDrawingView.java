@@ -311,11 +311,6 @@ public class DefaultDrawingView
 
     /** Creates new instance. */
     public DefaultDrawingView() {
-        try {
-            int impossibleNumber = 10 / 0;
-        } catch (ArithmeticException e) {
-            e.printStackTrace();
-        }
         initComponents();
         eventHandler = createEventHandler();
         setToolTipText("dummy"); // Set a dummy tool tip text to turn tooltips on

@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;

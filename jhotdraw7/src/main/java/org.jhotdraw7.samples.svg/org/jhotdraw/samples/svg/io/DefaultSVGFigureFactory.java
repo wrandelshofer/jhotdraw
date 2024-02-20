@@ -4,6 +4,9 @@
 
 package org.jhotdraw.samples.svg.io;
 
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.CompositeFigure;
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.geom.BezierPath;
 import org.jhotdraw.samples.svg.Gradient;
 import org.jhotdraw.samples.svg.LinearGradient;

@@ -4,6 +4,9 @@
 package org.jhotdraw.draw;
 
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.event.FigureAdapter;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.handle.BezierNodeHandle;
 import org.jhotdraw.draw.handle.BezierOutlineHandle;
 import org.jhotdraw.draw.handle.ConnectionEndHandle;
@@ -44,6 +47,8 @@ public class LineConnectionFigure extends LineFigure
     public static final String LINER_PROPERTY = "liner";
     private Connector startConnector;
     private Connector endConnector;
+    private FigureListener startFigureListener;
+    private FigureListener endFigureListener;
     @Nullable private Liner liner;
     /**
      * Handles figure changes in the start and the

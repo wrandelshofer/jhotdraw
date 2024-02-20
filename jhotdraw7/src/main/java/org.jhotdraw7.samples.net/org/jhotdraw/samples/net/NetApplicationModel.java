@@ -13,6 +13,7 @@ import org.jhotdraw.app.action.ActionUtil;
 import org.jhotdraw.app.action.file.ExportFileAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.app.action.view.ViewPropertyAction;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.TextCreationTool;

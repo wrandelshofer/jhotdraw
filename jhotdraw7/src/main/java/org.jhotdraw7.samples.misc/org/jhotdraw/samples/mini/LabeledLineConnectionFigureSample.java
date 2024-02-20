@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.layouter.LocatorLayouter;
 import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.locator.BezierLabelLocator;

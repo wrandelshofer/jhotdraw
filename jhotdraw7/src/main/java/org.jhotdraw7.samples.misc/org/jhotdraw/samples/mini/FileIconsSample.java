@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
 import org.jhotdraw.geom.Dimension2DDouble;

@@ -4,6 +4,7 @@
 
 package org.jhotdraw.samples.pert;
 
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.decoration.ArrowTip;

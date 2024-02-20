@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.samples.svg;
 
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.gui.BackgroundTask;

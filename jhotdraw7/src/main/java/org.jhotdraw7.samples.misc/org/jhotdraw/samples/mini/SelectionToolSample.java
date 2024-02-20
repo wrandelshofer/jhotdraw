@@ -3,6 +3,7 @@
  */
 package org.jhotdraw.samples.mini;
 
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 import javax.swing.JFrame;
